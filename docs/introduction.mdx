@@ -2,26 +2,29 @@
 title: Introduction
 ---
 
+_GOAT is sponsored by [Crossmint](https://www.crossmint.com)_
+
 ## What is Goat 🐐?
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app.
+GOAT 🐐 (Great Onchain Agent Toolkit) is an open-source framework for adding blockchain tools such as wallets, being able to hold or trade tokens, or interacting with blockchain smart contracts, to your AI agent.
 
 **Problem**: 
 
-Today, there are thousands of agents, built across 5+ frameworks (Langchain, Vercel's AI SDK, Eliza, etc) using multiple languages (TypeScript, Python).
+Making agents perform onchain actions is tedious. The ecosystem is heavily fragmented, spanning 5+ popular agent development frameworks, multiple programming languages, and dozens of different blockchains and wallet architectures. 
 
-These agents can connect to various wallets, but programming even a simple onchain action (sending tokens, using a DeFi protocol) requires rebuilding support for each combination of framework, language, and wallet provider.
+For developers without blockchain expertise, finding clear instructions to perform simple actions - like sending USDC payments or placing Polymarket bets - is nearly impossible.
 
 **Solution**: 
 
-Goat solves this by providing an open-source, provider-agnostic framework that abstracts away all these combinations.
+GOAT solves this by providing an open-source, provider-agnostic framework that abstracts away all these combinations.
 
-**Write an onchain action once, and it works across all frameworks, wallets, and languages, supporting both Solana and EVM chains**.
+* For agent developers: goat offers an always-growing catalog of ready made blockchain actions (sending tokens, using a DeFi protocol, ...) that can be imported as tools into your existing agent. It works with the most popular agent frameworks (Langchain, Vercel's AI SDK, Eliza, etc), Typescript and Python, 30+ blockchains (Solana, Base, Polygon, Mode, ...), and many wallet providers.
+* For dApp / smart contract developers: develop a plug-in in goat, and allow agents built with any of the most popular agent develoment frameworks to access your service.
 
 ### Key features
 1. **Works Everywhere**: Compatible with Langchain, Vercel’s AI SDK, Eliza, and more.
-2. **Wallet Agnostic**: Supports all wallets, from key pairs to Crossmint and Coinbase.
+2. **Wallet Agnostic**: Supports all wallets, from your own key pairs to [Crossmint](https://www.crossmint.com) and Coinbase.
 3. **Multi-Chain**: Supports EVM chains and Solana (more coming 👀).
-4. **Customizable**: Use or build plugins for any protocol (Polymarket, Uniswap, etc).
+4. **Customizable**: Use or build plugins for any onchain functionality (sending tokens, checking wallet balance, etc) and protocol (Polymarket, Uniswap, etc).
 
 ### How it works
 Goat plugs into your agents tool calling capabilities adding all the functions your agent needs to interact with blockchain protocols. 
