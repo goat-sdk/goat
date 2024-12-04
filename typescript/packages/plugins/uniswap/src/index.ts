@@ -2,8 +2,6 @@ import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
 import { mainnet } from "viem/chains";
 import {
 	type ApiKeyCredentials,
-	createOrDeriveAPIKey,
-	createOrder,
 } from "./api";
 import { getTools } from "./tools";
 
@@ -26,5 +24,3 @@ export function uniswap({
 		},
 	};
 }
-
-export { createOrDeriveAPIKey, createOrder };
