@@ -23,7 +23,7 @@ export async function getQuote(
 	return await response.json();
 }
 
-export async function getSwap(
+export async function getSwapTransaction(
 	parameters: z.infer<typeof getSwapBodySchema>,
 	// biome-ignore lint/suspicious/noExplicitAny: Need to create a schema for the response
 	apiKey: string,
@@ -43,4 +43,12 @@ export async function getSwap(
 	}
 
 	return await response.json();
+}
+
+export async function sendSwapTransaction(
+	transaction: z.infer<typeof getSwapBodySchema>,
+	walletClient: EVMWalletClient,
+) {
+	
+
 }
