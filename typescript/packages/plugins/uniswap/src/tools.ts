@@ -1,7 +1,7 @@
 import type { DeferredTool, EVMWalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
 import { getQuoteBodySchema, getSwapBodySchema } from "./parameters";
-import { getQuote, getSwap } from "./api";
+import { getQuote, getSwapTransaction } from "./api";
 
 export type UniswapToolsOptions = {
 	apiKey: string;
@@ -26,7 +26,7 @@ export function getTools({
 			description: "This {{tool}} gets the swap for a Uniswap swap",
 			parameters: getSwapBodySchema,
 			method: async (parameters: z.infer<typeof getSwapBodySchema>) => {
-				return getSwap(parameters, apiKey, baseUrl);
+				return getSwapTransaction(parameters, apiKey, baseUrl);
 			},
 		}
 	];
