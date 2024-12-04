@@ -31,26 +31,29 @@ export const PEPE: Token = {
 };
 
 export const USDC: Token = {
-	decimals: 6,
-	symbol: "USDC",
-	name: "USDC",
-	chains: {
-		"1": {
-			contractAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-		},
-		"10": {
-			contractAddress: "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
-		},
-		"8453": {
-			contractAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-		},
-		"84532": {
-			contractAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-		},
-		"11155111": {
-			contractAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
-		},
-	},
+    decimals: 6,
+    symbol: "USDC",
+    name: "USDC",
+    chains: {
+        "1": {
+            contractAddress: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        },
+        "10": {
+            contractAddress: "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+        },
+        "137": {
+            contractAddress: "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+        },
+        "8453": {
+            contractAddress: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        },
+        "84532": {
+            contractAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        },
+        "11155111": {
+            contractAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+        },
+    },
 };
 
 export function getTokensForNetwork(

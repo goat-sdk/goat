@@ -25,6 +25,10 @@
 			"path": "./typescript/packages/plugins/erc20"
 		},
 		{
+			"name": "[Plugin] 🎰 polymarket",
+			"path": "./typescript/packages/plugins/polymarket"
+		},
+		{
 			"name": "[Wallet] 🍀 crossmint",
 			"path": "./typescript/packages/wallets/crossmint"
 		},

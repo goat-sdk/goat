@@ -2,6 +2,7 @@
 	"name": "@ai16z/plugin-goat",
 	"version": "0.0.1",
 	"main": "dist/index.js",
+	"private": true,
 	"type": "module",
 	"types": "dist/index.d.ts",
 	"dependencies": {

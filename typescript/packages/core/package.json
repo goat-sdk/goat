@@ -20,7 +20,7 @@
 		"vitest": "^2.1.5"
 	},
 	"dependencies": {
-		"@solana/web3.js": "1.95.5",
+		"@solana/web3.js": "1.95.8",
 		"abitype": "^1.0.6",
 		"viem": "^2.21.49",
 		"zod": "^3.23.8"

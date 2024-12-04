@@ -40,6 +40,11 @@
 			"icon": "discord",
 			"url": "https://discord.gg/2F8zTVnnFz"
 		},
+        {
+			"name": "X",
+			"icon": "twitter",
+			"url": "https://x.com/goat_sdk"
+		},
 		{
 			"name": "Goats",
 			"icon": "youtube",
