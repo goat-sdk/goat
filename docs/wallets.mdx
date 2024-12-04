@@ -3,7 +3,29 @@ title: Wallets
 ---
 Goat 🐐 is designed to work seamlessly with any wallet provider you use.
 
-Use basic key pair wallets or advanced smart wallets, such as those provided by companies like Crossmint or Coinbase.
+This flexibility allows developers to integrate everything from basic key pair wallets to advanced smart wallets, such as those provided by companies like Crossmint or Coinbase.
+
+## Setting up a Crossmint Smart Wallet
+
+To get started with a Crossmint Smart Wallet on EVM, create a developer account in the Crossmint [Staging Console](https://staging.crossmint.com/console). Open that link, sign in, and accept the dialog to continue.
+
+To create a production account, go to [www](https://www.crossmint.com/console).
+
+Then, navigate to project Settings > General, and change the wallet type to `Smart Wallets`.
+
+Once you log in to the console, the next step is to create an API key.
+
+Click the “Integrate” tab, then select “API Keys” from the top menu.
+
+Within the Server-side keys section, click the “Create new key” button in the top right. Then, select the scopes `wallets.create` and `wallets.read` under the Wallets API category and create your key.
+
+Save this key to use as `const apiKey` later.
+
+Smart Wallets are controlled by one or more secrets that you hold, called the wallet “signers”. 
+
+To generate a test keypair, you may use this [tool](https://www.val.town/v/alfongj/ethereumAddressGenerator). We strongly reccommend you to use passkeys, MPC wallets or some other secret management service to guard these, when deploying your app to production.
+
+## Example scripts
 
 <CodeGroup>
 ```typescript viem
