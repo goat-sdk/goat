@@ -2,7 +2,7 @@ import type { Chain, EVMWalletClient } from "@goat-sdk/core";
 import { polygon } from "viem/chains";
 import type { z } from "zod";
 import type {
-    getEventsParametersSchema,
+    getQuoteParametersSchema,
     getMarketInfoParametersSchema,
     createOrderParametersSchema,
     getOpenOrdersParametersSchema,
@@ -14,6 +14,7 @@ import {
     buildPolyHmacSignature,
     getExpirationTimestamp,
     getOrderRawAmounts,
+    mustBeDefined,
     priceValid,
     ROUNDING_CONFIG,
 } from "./utils";
@@ -27,15 +28,11 @@ import { parseUnits } from "viem";
 const GAMMA_URL = "https://gamma-api.polymarket.com";
 
 function getBaseUrl(chain: Chain): string {
-    return chain.id === polygon.id
-        ? "https://clob.polymarket.com"
-        : "https://clob-staging.polymarket.com";
+    return mustBeDefined(process.env.UNISWAP_BASE_URL);
 }
 
 export type ApiKeyCredentials = {
     key: string;
-    secret: string;
-    passphrase: string;
 };
 
 export enum Side {
@@ -213,7 +210,7 @@ export async function createOrDeriveAPIKey(
 }
 
 export async function getEvents(
-    parameters: z.infer<typeof getEventsParametersSchema>
+    parameters: z.infer<typeof getQuoteParametersSchema>
     // biome-ignore lint/suspicious/noExplicitAny: Need to create a schema for the response
 ): Promise<any> {
     const url = new URL(`${GAMMA_URL}/events`);

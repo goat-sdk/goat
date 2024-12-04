@@ -1,19 +1,19 @@
 import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
 import { getTools } from "./tools";
-import { polygon } from "viem/chains";
+import { mainnet } from "viem/chains";
 import { type ApiKeyCredentials, createOrder, createOrDeriveAPIKey } from "./api";
 
-export type PolymarketOptions = {
+export type UniswapOptions = {
     credentials: ApiKeyCredentials;
 };
 
-export function polymarket({
+export function uniswap({
     credentials,
-}: PolymarketOptions): Plugin<EVMWalletClient> {
+}: UniswapOptions): Plugin<EVMWalletClient> {
     return {
-        name: "Polymarket",
+        name: "Uniswap",
         supportsChain: (chain: Chain) =>
-            chain.type === "evm" && chain.id === polygon.id,
+            chain.type === "evm" && chain.id === mainnet.id,
         supportsSmartWallets: () => false,
         getTools: async () => {
             return getTools({
