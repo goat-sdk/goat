@@ -1,16 +1,15 @@
 import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
 import { mainnet } from "viem/chains";
-import {
-	type ApiKeyCredentials,
-} from "./api";
 import { getTools } from "./tools";
 
 export type UniswapOptions = {
-	credentials: ApiKeyCredentials;
+	apiKey: string;
+	baseUrl: string;
 };
 
 export function uniswap({
-	credentials,
+	apiKey,
+	baseUrl,
 }: UniswapOptions): Plugin<EVMWalletClient> {
 	return {
 		name: "Uniswap",
@@ -19,8 +18,10 @@ export function uniswap({
 		supportsSmartWallets: () => false,
 		getTools: async () => {
 			return getTools({
-				credentials,
+				apiKey,
+				baseUrl,
 			});
 		},
 	};
 }
+
