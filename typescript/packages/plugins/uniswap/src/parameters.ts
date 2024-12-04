@@ -5,7 +5,7 @@ enum SwapType {
 	EXACT_OUT = "EXACT_OUT",
 }
 
-export const getQuoteParametersSchema = z.object({
+export const getQuoteBodySchema = z.object({
 	tokenIn: z.string(),
 	tokenOut: z.string(),
 	amount: z.string(),
