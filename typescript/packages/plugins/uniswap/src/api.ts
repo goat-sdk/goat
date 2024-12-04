@@ -48,6 +48,9 @@ export async function getSwapTransaction(
 export async function sendSwapTransaction(
 	transaction: z.infer<typeof getSwapBodySchema>,
 	walletClient: EVMWalletClient,
+	// biome-ignore lint/suspicious/noExplicitAny: Need to create a schema for the response
+	apiKey: string,
+	baseUrl: string,
 ) {
 	
 
