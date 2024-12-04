@@ -1,11 +1,13 @@
 import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
-import { mainnet } from "viem/chains";
+import { arbitrum, avalanche, base, celo, mainnet, optimism, polygon, zora } from "viem/chains";
 import { getTools } from "./tools";
 
 export type UniswapOptions = {
 	apiKey: string;
 	baseUrl: string;
 };
+
+const SUPPORTED_CHAINS = [mainnet, polygon, avalanche, base, optimism, zora, arbitrum, celo];
 
 export function uniswap({
 	apiKey,
@@ -14,7 +16,7 @@ export function uniswap({
 	return {
 		name: "Uniswap",
 		supportsChain: (chain: Chain) =>
-			chain.type === "evm" && chain.id === mainnet.id,
+			chain.type === "evm" && SUPPORTED_CHAINS.some((c) => c.id === chain.id),
 		supportsSmartWallets: () => false,
 		getTools: async () => {
 			return getTools({
