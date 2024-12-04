@@ -14,9 +14,8 @@ import { uniswap } from "@goat-sdk/plugin-uniswap";
 
 
 const plugin = uniswap({
-    credentials: {
-        key: process.env.UNISWAP_API_KEY as string,
-    },
+    baseUrl: process.env.UNISWAP_BASE_URL as string,
+    apiKey: process.env.UNISWAP_API_KEY as string,
 });
 ```
 
