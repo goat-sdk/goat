@@ -1,30 +1,28 @@
-# Goat Polymarket Plugin 🐐 - TypeScript
+# Goat Uniswap Plugin 🐐 - TypeScript
 
-Polymarket plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Polymarket.
+Uniswap plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Uniswap.
 
 ## Installation
 ```
-npm install @goat-sdk/plugin-polymarket
+npm install @goat-sdk/plugin-uniswap
 ```
 
 ## Usage
 
 ```typescript
-import { polymarket } from "@goat-sdk/plugin-polymarket";
+import { uniswap } from "@goat-sdk/plugin-uniswap";
 
 
-const plugin = polymarket({
+const plugin = uniswap({
     credentials: {
-        key: process.env.POLYMARKET_API_KEY as string,
-        secret: process.env.POLYMARKET_SECRET as string,
-        passphrase: process.env.POLYMARKET_PASSPHRASE as string,
+        key: process.env.UNISWAP_API_KEY as string,
     },
 });
 ```
 
 ## Working example
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/polymarket) for a working example of how to use the Polymarket plugin.
+See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/uniswap) for a working example of how to use the Uniswap plugin.
 
 ## Goat
 
