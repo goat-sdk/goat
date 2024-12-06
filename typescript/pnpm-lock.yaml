@@ -367,25 +367,6 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
-    devDependencies:
-      '@types/node':
-        specifier: ^22.7.4
-        version: 22.9.1
-      globals:
-        specifier: ^15.12.0
-        version: 15.12.0
-      ts-node:
-        specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.9.1)(typescript@5.6.3)
-      tsup:
-        specifier: ^8.3.5
-        version: 8.3.5(jiti@2.4.1)(postcss@8.4.49)(typescript@5.6.3)(yaml@2.6.1)
-      typescript:
-        specifier: ^5.6.3
-        version: 5.6.3
-      vitest:
-        specifier: ^2.1.5
-        version: 2.1.5(@types/node@22.9.1)
 
   packages/plugins/erc20:
     dependencies:
@@ -4947,7 +4928,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
+  '@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
     dependencies:
       '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@types/better-sqlite3': 7.6.11
@@ -4966,6 +4947,7 @@ snapshots:
       - '@langchain/mistralai'
       - '@langchain/ollama'
       - axios
+      - bufferutil
       - cheerio
       - encoding
       - handlebars
@@ -4976,9 +4958,10 @@ snapshots:
       - supports-color
       - svelte
       - typeorm
+      - utf-8-validate
       - vue
 
-  '@ai16z/adapter-sqljs@0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
+  '@ai16z/adapter-sqljs@0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
     dependencies:
       '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@types/sql.js': 1.4.9
@@ -4997,6 +4980,7 @@ snapshots:
       - '@langchain/mistralai'
       - '@langchain/ollama'
       - axios
+      - bufferutil
       - cheerio
       - encoding
       - handlebars
@@ -5007,6 +4991,7 @@ snapshots:
       - supports-color
       - svelte
       - typeorm
+      - utf-8-validate
       - vue
 
   '@ai16z/adapter-supabase@0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
@@ -5047,8 +5032,8 @@ snapshots:
       '@ai-sdk/google-vertex': 0.0.42(@google-cloud/vertexai@1.9.0)(zod@3.23.8)
       '@ai-sdk/groq': 0.0.3(zod@3.23.8)
       '@ai-sdk/openai': 1.0.0-canary.3(zod@3.23.8)
-      '@ai16z/adapter-sqlite': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@ai16z/adapter-sqljs': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+      '@ai16z/adapter-sqlite': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+      '@ai16z/adapter-sqljs': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@ai16z/adapter-supabase': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@anthropic-ai/sdk': 0.30.1
       '@types/uuid': 10.0.0
@@ -9306,6 +9291,7 @@ snapshots:
       typescript: 5.6.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    optional: true
 
   tslib@1.14.1: {}
 
@@ -9502,24 +9488,6 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@2.1.5(@types/node@22.9.1):
-    dependencies:
-      cac: 6.7.14
-      debug: 4.3.7(supports-color@5.5.0)
-      es-module-lexer: 1.5.4
-      pathe: 1.1.2
-      vite: 5.4.11(@types/node@22.9.1)
-    transitivePeerDependencies:
-      - '@types/node'
-      - less
-      - lightningcss
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
   vite@5.4.11(@types/node@22.7.4):
     dependencies:
       esbuild: 0.21.5
@@ -9527,15 +9495,6 @@ snapshots:
       rollup: 4.27.3
     optionalDependencies:
       '@types/node': 22.7.4
-      fsevents: 2.3.3
-
-  vite@5.4.11(@types/node@22.9.1):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.49
-      rollup: 4.27.3
-    optionalDependencies:
-      '@types/node': 22.9.1
       fsevents: 2.3.3
 
   vitest@2.1.5(@types/node@22.7.4):
@@ -9562,41 +9521,6 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.7.4
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - msw
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-
-  vitest@2.1.5(@types/node@22.9.1):
-    dependencies:
-      '@vitest/expect': 2.1.5
-      '@vitest/mocker': 2.1.5(vite@5.4.11(@types/node@22.7.4))
-      '@vitest/pretty-format': 2.1.5
-      '@vitest/runner': 2.1.5
-      '@vitest/snapshot': 2.1.5
-      '@vitest/spy': 2.1.5
-      '@vitest/utils': 2.1.5
-      chai: 5.1.2
-      debug: 4.3.7(supports-color@5.5.0)
-      expect-type: 1.1.0
-      magic-string: 0.30.13
-      pathe: 1.1.2
-      std-env: 3.8.0
-      tinybench: 2.9.0
-      tinyexec: 0.3.1
-      tinypool: 1.0.2
-      tinyrainbow: 1.2.0
-      vite: 5.4.11(@types/node@22.9.1)
-      vite-node: 2.1.5(@types/node@22.9.1)
-      why-is-node-running: 2.3.0
-    optionalDependencies:
-      '@types/node': 22.9.1
     transitivePeerDependencies:
       - less
       - lightningcss
