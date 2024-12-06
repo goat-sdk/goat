@@ -8,7 +8,7 @@
         "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",
         "clean": "pnpm turbo clean",
         "change:add": "pnpm changeset add",
-        "change:publish": "pnpm build && pnpm changeset publish --no-git-tag",
+        "change:publish": "pnpm build:libs:prod && pnpm changeset publish --no-git-tag",
         "change:version": "pnpm changeset version && pnpm lint:fix",
         "lint": "biome check --diagnostic-level=error --max-diagnostics=200",
         "lint:fix": "biome check --write",
