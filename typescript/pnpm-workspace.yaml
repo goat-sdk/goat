@@ -1,6 +1,5 @@
 packages:
-  - 'packages/*'
-  - 'packages/*/*'
-  - "examples/*"
-  - "examples/*/*"
-  
+    - "examples/**/*"
+    - "packages/**/*"
+    - "!**/.next/**"
+    - "!**/dist/**"
