@@ -1,5 +1,11 @@
 import type { Options } from "tsup";
 
+declare const process: {
+    env: {
+        NODE_ENV: string;
+    };
+};
+
 export const treeShakableConfig: Options = {
     splitting: true,
     clean: true,
@@ -11,5 +17,6 @@ export const treeShakableConfig: Options = {
     entry: ["src/**/*.(ts|tsx)", "!src/**/*.test.(ts|tsx)"],
     outDir: "dist",
     dts: true,
-    sourcemap: true,
+    minify: process.env.NODE_ENV === "production",
+    sourcemap: process.env.NODE_ENV !== "production",
 };

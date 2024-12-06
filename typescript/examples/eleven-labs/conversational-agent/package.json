@@ -10,9 +10,9 @@
     },
     "dependencies": {
         "@11labs/react": "^0.0.4",
-        "@goat-sdk/adapter-eleven-labs": "0.1.2",
-        "@goat-sdk/core": "0.3.10",
-        "@goat-sdk/wallet-viem": "0.1.3",
+        "@goat-sdk/adapter-eleven-labs": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-viem": "workspace:*",
         "@goat-sdk/plugin-coingecko": "workspace:*",
         "@tanstack/react-query": "^5.62.2",
         "connectkit": "^1.8.2",
