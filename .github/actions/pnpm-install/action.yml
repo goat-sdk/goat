@@ -16,6 +16,10 @@ inputs:
     install-args:
         description: "Additional args supplied to 'pnpm install'"
         required: false
+    working-directory:
+        description: "Working directory to run the command in"
+        required: false
+        default: ./typescript
 
 runs:
     using: "composite"
@@ -28,7 +32,7 @@ runs:
               echo "PNPM version: ${{ inputs.pnpm-version }}"
               echo "Skip install: ${{ inputs.skip-install }}"
               echo "Install args: ${{ inputs.install-args }}"
-
+              echo "Working directory: ${{ inputs.working-directory }}"
         - uses: actions/checkout@v4
 
         - uses: pnpm/action-setup@v4
@@ -63,4 +67,5 @@ runs:
         - name: Install dependencies
           shell: bash
           if: inputs.skip-install == 'false'
+          working-directory: ${{ inputs.working-directory }}
           run: pnpm install --frozen-lockfile --prefer-offline ${{ inputs.install-args }}
