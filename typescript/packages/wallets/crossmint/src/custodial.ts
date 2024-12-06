@@ -5,9 +5,9 @@ import type {
 } from "@goat-sdk/core";
 import {
 	type Connection,
-	PublicKey,
 	TransactionMessage,
 	VersionedTransaction,
+	PublicKey,
 } from "@solana/web3.js";
 import bs58 from "bs58";
 import { createCrossmintAPI } from "./api";
@@ -53,7 +53,7 @@ export function custodialFactory(apiKey: string) {
 	): Promise<SolanaWalletClient> {
 		const { connection, env = "staging" } = params;
 
-		const locator = `${getLocator(params)}:solana-custodial-wallet`;
+		const locator = `${getLocator(params)}`;
 		const client = createCrossmintAPI(apiKey, env);
 		const { address } = await client.getWallet(locator);
 
@@ -102,9 +102,10 @@ export function custodialFactory(apiKey: string) {
 			async sendTransaction({ instructions }: SolanaTransaction) {
 				const latestBlockhash =
 					await connection.getLatestBlockhash("confirmed");
+				// see https://linear.app/crossmint/issue/WAL-3436/solana-transactions-get-stuck-when-sending-the-dummy-value
+				const publicKey = new PublicKey("11111111111111111111111111111112");
 				const message = new TransactionMessage({
-					// Placeholder payer key since Crossmint will override it
-					payerKey: new PublicKey("placeholder"),
+					payerKey: publicKey,
 					recentBlockhash: latestBlockhash.blockhash,
 					instructions,
 				}).compileToV0Message();
