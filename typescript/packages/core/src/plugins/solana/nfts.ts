@@ -9,7 +9,7 @@ import { fromWeb3JsPublicKey, toWeb3JsInstruction } from "@metaplex-foundation/u
 export function nfts(): Plugin<SolanaWalletClient> {
     return {
         name: "nft_actions",
-        supportsSmartWallets: () => true,
+        supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
         getTools: async () => {
             return [
