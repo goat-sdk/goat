@@ -5,6 +5,10 @@
 			"path": "."
 		},
 		{
+			"name": "📘 Typescript",
+			"path": "./typescript"
+		},
+		{
 			"name": "🌋 Core",
 			"path": "./typescript/packages/core"
 		},

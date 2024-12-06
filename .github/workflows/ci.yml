@@ -17,10 +17,13 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Setup Node.js, PNPM, and install dependencies
+              working-directory: ./typescript
               uses: ./.github/actions/pnpm-install
 
             - name: Build all
+              working-directory: ./typescript
               run: pnpm build
 
             - name: Test all
+              working-directory: ./typescript
               run: pnpm test
