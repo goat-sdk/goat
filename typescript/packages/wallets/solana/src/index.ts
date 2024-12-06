@@ -24,6 +24,7 @@ export function solana({
 	keypair,
 }: SolanaWalletOptions): SolanaWalletClient {
 	return {
+		connection,
 		getAddress: () => keypair.publicKey.toBase58(),
 		getChain() {
 			return {

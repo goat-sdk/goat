@@ -49,7 +49,6 @@ async function transferNFTMethod(
 		"confirmed",
 	);
 	const umi = createUmi(connection);
-	console.log({ assetId, recipientAddress, walletClient });
 	umi.use(mplBubblegum());
 	const assetWithProof = await getAssetWithProof(
 		umi,

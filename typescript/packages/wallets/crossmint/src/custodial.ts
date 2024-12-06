@@ -58,6 +58,7 @@ export function custodialFactory(apiKey: string) {
 		const { address } = await client.getWallet(locator);
 
 		return {
+			connection,
 			getAddress() {
 				return address;
 			},

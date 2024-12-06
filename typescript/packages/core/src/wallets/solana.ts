@@ -1,4 +1,4 @@
-import type { TransactionInstruction } from "@solana/web3.js";
+import type { Connection, TransactionInstruction } from "@solana/web3.js";
 import type { WalletClient } from "./core";
 
 export function isSolanaWalletClient(
@@ -28,4 +28,5 @@ export interface SolanaWalletClient extends WalletClient {
 		transaction: SolanaTransaction,
 	) => Promise<SolanaTransactionResult>;
 	read: (request: SolanaReadRequest) => Promise<SolanaReadResult>;
+	connection: Connection;
 }
