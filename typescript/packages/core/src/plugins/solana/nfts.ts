@@ -1,9 +1,7 @@
-import { Connection, PublicKey } from "@solana/web3.js";
-import { parseUnits } from "viem";
-import type { SolanaWalletClient } from "../wallets";
-import type { Plugin } from "./plugins";
+import { PublicKey } from "@solana/web3.js";
+import type { SolanaWalletClient } from "../../wallets";
+import type { Plugin } from "../plugins";
 import { z } from "zod";
-import { SystemProgram } from "@solana/web3.js";
 import {
 	mplBubblegum,
 	getAssetWithProof,
@@ -15,9 +13,9 @@ import {
 	toWeb3JsInstruction,
 } from "@metaplex-foundation/umi-web3js-adapters";
 
-export function transferNFT(): Plugin<SolanaWalletClient> {
+export function nfts(): Plugin<SolanaWalletClient> {
 	return {
-		name: "transfer_nft",
+		name: "nft_actions",
 		supportsSmartWallets: () => true,
 		supportsChain: (chain) => chain.type === "solana",
 		getTools: async () => {
