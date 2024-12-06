@@ -44,11 +44,7 @@ async function transferNFTMethod(
 	parameters: z.infer<typeof transferNFTParametersSchema>,
 ): Promise<string> {
 	const { recipientAddress, assetId } = parameters;
-	const connection = new Connection(
-		"https://api.devnet.solana.com",
-		"confirmed",
-	);
-	const umi = createUmi(connection);
+	const umi = createUmi(walletClient.connection);
 	umi.use(mplBubblegum());
 	const assetWithProof = await getAssetWithProof(
 		umi,
