@@ -1,32 +1,28 @@
 import type { Connection, TransactionInstruction } from "@solana/web3.js";
 import type { WalletClient } from "./core";
 
-export function isSolanaWalletClient(
-	wallet: WalletClient,
-): wallet is SolanaWalletClient {
-	return wallet.getChain().type === "solana";
+export function isSolanaWalletClient(wallet: WalletClient): wallet is SolanaWalletClient {
+    return wallet.getChain().type === "solana";
 }
 
 export type SolanaTransaction = {
-	instructions: TransactionInstruction[];
+    instructions: TransactionInstruction[];
 };
 
 export type SolanaReadRequest = {
-	accountAddress: string;
+    accountAddress: string;
 };
 
 export type SolanaReadResult = {
-	value: unknown;
+    value: unknown;
 };
 
 export type SolanaTransactionResult = {
-	hash: string;
+    hash: string;
 };
 
 export interface SolanaWalletClient extends WalletClient {
-	sendTransaction: (
-		transaction: SolanaTransaction,
-	) => Promise<SolanaTransactionResult>;
-	read: (request: SolanaReadRequest) => Promise<SolanaReadResult>;
-	connection: Connection;
+    sendTransaction: (transaction: SolanaTransaction) => Promise<SolanaTransactionResult>;
+    read: (request: SolanaReadRequest) => Promise<SolanaReadResult>;
+    connection: Connection;
 }
