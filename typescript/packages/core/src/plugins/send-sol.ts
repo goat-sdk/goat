@@ -1,9 +1,9 @@
 import { PublicKey } from "@solana/web3.js";
+import { SystemProgram } from "@solana/web3.js";
 import { parseUnits } from "viem";
+import { z } from "zod";
 import type { SolanaWalletClient } from "../wallets";
 import type { Plugin } from "./plugins";
-import { z } from "zod";
-import { SystemProgram } from "@solana/web3.js";
 
 export function sendSOL(): Plugin<SolanaWalletClient> {
     return {
@@ -14,8 +14,7 @@ export function sendSOL(): Plugin<SolanaWalletClient> {
             return [
                 {
                     name: "send_sol",
-                    description:
-                        "This {{tool}} sends SOL to an address on a Solana chain.",
+                    description: "This {{tool}} sends SOL to an address on a Solana chain.",
                     parameters: sendSOLParametersSchema,
                     method: sendSOLMethod,
                 },
@@ -31,7 +30,7 @@ const sendSOLParametersSchema = z.object({
 
 async function sendSOLMethod(
     walletClient: SolanaWalletClient,
-    parameters: z.infer<typeof sendSOLParametersSchema>
+    parameters: z.infer<typeof sendSOLParametersSchema>,
 ): Promise<string> {
     try {
         const { to, amount } = parameters;

@@ -15,7 +15,5 @@ export interface Plugin<TWalletClient extends WalletClient = WalletClient> {
     name: string;
     supportsChain: (chain: Chain) => boolean;
     supportsSmartWallets: () => boolean;
-    getTools: (
-        chain: ChainForWalletClient<TWalletClient>
-    ) => Promise<DeferredTool<TWalletClient>[]>;
+    getTools: (chain: ChainForWalletClient<TWalletClient>) => Promise<DeferredTool<TWalletClient>[]>;
 }

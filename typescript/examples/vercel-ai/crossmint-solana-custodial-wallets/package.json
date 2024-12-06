@@ -1,26 +1,23 @@
 {
-	"name": "goat-examples-vercel-ai-crossmint-solana-custodial-wallets",
-	"version": "0.1.0",
-	"description": "",
-	"private": true,
-	"scripts": {
-		"create-wallet": "ts-node create-custodial-wallet.ts",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"author": "",
-	"license": "MIT",
-	"dependencies": {
-		"@ai-sdk/openai": "^1.0.4",
-		"@goat-sdk/adapter-vercel-ai": "0.1.4",
-		"@goat-sdk/core": "0.3.8",
-		"@goat-sdk/plugin-erc20": "0.1.4",
-		"@goat-sdk/crossmint": "0.1.4",
-		"@solana/web3.js": "1.95.8",
-		"ai": "^4.0.3",
-		"dotenv": "^16.4.5",
-		"viem": "2.21.49"
-	},
-	"devDependencies": {
-		"@types/node": "^22.9.1"
-	}
+    "name": "goat-examples-vercel-ai-crossmint-solana-custodial-wallets",
+    "version": "0.1.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "create-wallet": "ts-node create-custodial-wallet.ts",
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "0.1.4",
+        "@goat-sdk/core": "0.3.8",
+        "@goat-sdk/plugin-erc20": "0.1.4",
+        "@goat-sdk/crossmint": "0.1.4",
+        "@solana/web3.js": "1.95.8",
+        "ai": "^4.0.3",
+        "dotenv": "^16.4.5",
+        "viem": "2.21.49"
+    }
 }

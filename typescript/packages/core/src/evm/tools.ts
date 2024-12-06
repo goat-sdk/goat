@@ -1,10 +1,7 @@
 import type { DeferredTool } from "../tools";
 import type { AnyEVMWalletClient } from "../wallets";
 import { getAddress, getBalance } from "./methods";
-import {
-    getAddressParametersSchema,
-    getETHBalanceParametersSchema,
-} from "./parameters";
+import { getAddressParametersSchema, getETHBalanceParametersSchema } from "./parameters";
 
 export const deferredEVMCoreTools: DeferredTool<AnyEVMWalletClient>[] = [
     {

@@ -1,33 +1,33 @@
 export type Token = {
-	decimals: number;
-	symbol: string;
-	name: string;
-	chains: Record<number, { contractAddress: `0x${string}` }>;
+    decimals: number;
+    symbol: string;
+    name: string;
+    chains: Record<number, { contractAddress: `0x${string}` }>;
 };
 
 export type ChainSpecificToken = {
-	chainId: number;
-	decimals: number;
-	symbol: string;
-	name: string;
-	contractAddress: `0x${string}`;
+    chainId: number;
+    decimals: number;
+    symbol: string;
+    name: string;
+    contractAddress: `0x${string}`;
 };
 
 export const PEPE: Token = {
-	decimals: 18,
-	symbol: "PEPE",
-	name: "Pepe",
-	chains: {
-		"1": {
-			contractAddress: "0x6982508145454Ce325dDbE47a25d4ec3d2311933",
-		},
-		"10": {
-			contractAddress: "0xc1c167cc44f7923cd0062c4370df962f9ddb16f5",
-		},
-		"8453": {
-			contractAddress: "0xb4fde59a779991bfb6a52253b51947828b982be3",
-		},
-	},
+    decimals: 18,
+    symbol: "PEPE",
+    name: "Pepe",
+    chains: {
+        "1": {
+            contractAddress: "0x6982508145454Ce325dDbE47a25d4ec3d2311933",
+        },
+        "10": {
+            contractAddress: "0xc1c167cc44f7923cd0062c4370df962f9ddb16f5",
+        },
+        "8453": {
+            contractAddress: "0xb4fde59a779991bfb6a52253b51947828b982be3",
+        },
+    },
 };
 
 export const USDC: Token = {
@@ -56,24 +56,21 @@ export const USDC: Token = {
     },
 };
 
-export function getTokensForNetwork(
-	chainId: number,
-	tokens: Token[],
-): ChainSpecificToken[] {
-	const result: ChainSpecificToken[] = [];
+export function getTokensForNetwork(chainId: number, tokens: Token[]): ChainSpecificToken[] {
+    const result: ChainSpecificToken[] = [];
 
-	for (const token of tokens) {
-		const chainData = token.chains[chainId];
-		if (chainData) {
-			result.push({
-				chainId: chainId,
-				decimals: token.decimals,
-				symbol: token.symbol,
-				name: token.name,
-				contractAddress: chainData.contractAddress,
-			});
-		}
-	}
+    for (const token of tokens) {
+        const chainData = token.chains[chainId];
+        if (chainData) {
+            result.push({
+                chainId: chainId,
+                decimals: token.decimals,
+                symbol: token.symbol,
+                name: token.name,
+                contractAddress: chainData.contractAddress,
+            });
+        }
+    }
 
-	return result;
+    return result;
 }

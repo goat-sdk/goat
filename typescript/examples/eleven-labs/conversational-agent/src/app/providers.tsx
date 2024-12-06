@@ -1,9 +1,9 @@
 "use client";
 
-import { WagmiProvider, createConfig, http } from "wagmi";
-import { sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { http, WagmiProvider, createConfig } from "wagmi";
+import { sepolia } from "wagmi/chains";
 
 const config = createConfig(
     getDefaultConfig({
@@ -15,12 +15,11 @@ const config = createConfig(
         },
 
         // Required API Keys
-        walletConnectProjectId:
-            process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "",
+        walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "",
 
         // Required App Info
         appName: "GOAT Conversational AI",
-    })
+    }),
 );
 
 const queryClient = new QueryClient();

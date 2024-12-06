@@ -4,16 +4,13 @@ import { generateText } from "ai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { solana } from "@goat-sdk/wallet-solana";
 
+import { sendSOL } from "@goat-sdk/core";
 import { Connection, Keypair } from "@solana/web3.js";
 import * as bip39 from "bip39";
-import { sendSOL } from "@goat-sdk/core";
 
 require("dotenv").config();
 
-const connection = new Connection(
-    "https://api.mainnet-beta.solana.com",
-    "confirmed"
-);
+const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
 
 const mnemonic = process.env.WALLET_MNEMONIC;
 

@@ -1,10 +1,7 @@
 import type { DeferredTool } from "../tools";
 import type { SolanaWalletClient } from "../wallets";
 import { getAddress, getBalance } from "./methods";
-import {
-    getAddressParametersSchema,
-    getSOLBalanceParametersSchema,
-} from "./parameters";
+import { getAddressParametersSchema, getSOLBalanceParametersSchema } from "./parameters";
 
 export const deferredSolanaTools: DeferredTool<SolanaWalletClient>[] = [
     {
@@ -15,8 +12,7 @@ export const deferredSolanaTools: DeferredTool<SolanaWalletClient>[] = [
     },
     {
         name: "get_sol_balance",
-        description:
-            "This {{tool}} returns the SOL balance of a Solana wallet.",
+        description: "This {{tool}} returns the SOL balance of a Solana wallet.",
         parameters: getSOLBalanceParametersSchema,
         method: getBalance,
     },

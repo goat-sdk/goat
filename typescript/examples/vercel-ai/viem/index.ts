@@ -9,19 +9,17 @@ import { sepolia } from "viem/chains";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { viem } from "@goat-sdk/wallet-viem";
 import { sendETH } from "@goat-sdk/core";
+import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(
-	process.env.WALLET_PRIVATE_KEY as `0x${string}`,
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const walletClient = createWalletClient({
-	account: account,
-	transport: http(process.env.ALCHEMY_API_KEY),
-	chain: sepolia,
+    account: account,
+    transport: http(process.env.ALCHEMY_API_KEY),
+    chain: sepolia,
 });
 
 (async () => {

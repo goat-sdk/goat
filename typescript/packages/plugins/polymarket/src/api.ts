@@ -1,35 +1,29 @@
 import type { Chain, EVMWalletClient } from "@goat-sdk/core";
+import { parseUnits } from "viem";
 import { polygon } from "viem/chains";
 import type { z } from "zod";
+import { COLLATERAL_TOKEN_DECIMALS, CONDITIONAL_TOKEN_DECIMALS, getContractConfig } from "./contracts";
 import type {
+    cancelOrderParametersSchema,
+    createOrderParametersSchema,
     getEventsParametersSchema,
     getMarketInfoParametersSchema,
-    createOrderParametersSchema,
     getOpenOrdersParametersSchema,
-    cancelOrderParametersSchema,
 } from "./parameters";
 import {
+    ROUNDING_CONFIG,
     appendSearchParams,
     buildClobEip712Signature,
     buildPolyHmacSignature,
     getExpirationTimestamp,
     getOrderRawAmounts,
     priceValid,
-    ROUNDING_CONFIG,
 } from "./utils";
-import {
-    COLLATERAL_TOKEN_DECIMALS,
-    CONDITIONAL_TOKEN_DECIMALS,
-    getContractConfig,
-} from "./contracts";
-import { parseUnits } from "viem";
 
 const GAMMA_URL = "https://gamma-api.polymarket.com";
 
 function getBaseUrl(chain: Chain): string {
-    return chain.id === polygon.id
-        ? "https://clob.polymarket.com"
-        : "https://clob-staging.polymarket.com";
+    return chain.id === polygon.id ? "https://clob.polymarket.com" : "https://clob-staging.polymarket.com";
 }
 
 export type ApiKeyCredentials = {
@@ -95,13 +89,9 @@ async function getHostTimestamp(chain: Chain): Promise<number> {
 async function createL1Headers(
     walletClient: EVMWalletClient,
     timestamp: number,
-    nonce = 0
+    nonce = 0,
 ): Promise<Record<string, string>> {
-    const signature = await buildClobEip712Signature(
-        walletClient,
-        timestamp,
-        nonce
-    );
+    const signature = await buildClobEip712Signature(walletClient, timestamp, nonce);
     const address = walletClient.getAddress();
 
     return {
@@ -115,18 +105,12 @@ async function createL1Headers(
 async function createL2Headers(
     walletClient: EVMWalletClient,
     credentials: ApiKeyCredentials,
-    { method, requestPath, body }: L2HeadersArgs
+    { method, requestPath, body }: L2HeadersArgs,
 ) {
     const address = walletClient.getAddress();
     const timestamp = await getHostTimestamp(walletClient.getChain());
 
-    const sig = buildPolyHmacSignature(
-        credentials.secret,
-        timestamp,
-        method,
-        requestPath,
-        body
-    );
+    const sig = buildPolyHmacSignature(credentials.secret, timestamp, method, requestPath, body);
 
     const headers = {
         POLY_ADDRESS: address,
@@ -155,30 +139,22 @@ async function getNegativeRiskAdapter(chain: Chain, tokenId: string) {
     const response = await fetch(url.toString());
 
     if (!response.ok) {
-        throw new Error(
-            `Failed to fetch negative risk: ${response.statusText}`
-        );
+        throw new Error(`Failed to fetch negative risk: ${response.statusText}`);
     }
 
     const result = await response.json();
     return result.neg_risk as boolean;
 }
 
-export async function createOrDeriveAPIKey(
-    walletClient: EVMWalletClient,
-    nonce?: number
-): Promise<ApiKeyCredentials> {
+export async function createOrDeriveAPIKey(walletClient: EVMWalletClient, nonce?: number): Promise<ApiKeyCredentials> {
     const timestamp = await getHostTimestamp(walletClient.getChain());
     const headers = await createL1Headers(walletClient, timestamp, nonce);
 
     // Try to create a new API key
-    let response = await fetch(
-        `${getBaseUrl(walletClient.getChain())}/auth/api-key`,
-        {
-            method: "POST",
-            headers,
-        }
-    );
+    let response = await fetch(`${getBaseUrl(walletClient.getChain())}/auth/api-key`, {
+        method: "POST",
+        headers,
+    });
 
     if (response.ok) {
         const data = await response.json();
@@ -190,18 +166,13 @@ export async function createOrDeriveAPIKey(
     }
 
     // If creation fails, attempt to derive the API key
-    response = await fetch(
-        `${getBaseUrl(walletClient.getChain())}/auth/derive-api-key`,
-        {
-            method: "GET",
-            headers,
-        }
-    );
+    response = await fetch(`${getBaseUrl(walletClient.getChain())}/auth/derive-api-key`, {
+        method: "GET",
+        headers,
+    });
 
     if (!response.ok) {
-        throw new Error(
-            `Failed to create or derive API key: ${response.statusText}`
-        );
+        throw new Error(`Failed to create or derive API key: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -213,7 +184,7 @@ export async function createOrDeriveAPIKey(
 }
 
 export async function getEvents(
-    parameters: z.infer<typeof getEventsParametersSchema>
+    parameters: z.infer<typeof getEventsParametersSchema>,
     // biome-ignore lint/suspicious/noExplicitAny: Need to create a schema for the response
 ): Promise<any> {
     const url = new URL(`${GAMMA_URL}/events`);
@@ -229,7 +200,7 @@ export async function getEvents(
 
 export async function getMarketInfo(
     walletClient: EVMWalletClient,
-    parameters: z.infer<typeof getMarketInfoParametersSchema>
+    parameters: z.infer<typeof getMarketInfoParametersSchema>,
 ) {
     const chain = walletClient.getChain();
     const url = new URL(`${getBaseUrl(chain)}/markets/${parameters.id}`);
@@ -246,25 +217,20 @@ export async function getMarketInfo(
 export async function createOrder(
     walletClient: EVMWalletClient,
     credentials: ApiKeyCredentials,
-    parameters: z.infer<typeof createOrderParametersSchema>
+    parameters: z.infer<typeof createOrderParametersSchema>,
 ) {
     const chain = walletClient.getChain();
     const tokenId = parameters.tokenId;
     const price = parameters.price;
     const orderType = parameters.type as OrderType;
-    const expiration =
-        orderType === OrderType.GTD
-            ? getExpirationTimestamp(parameters.expiration).toString()
-            : "0";
+    const expiration = orderType === OrderType.GTD ? getExpirationTimestamp(parameters.expiration).toString() : "0";
     const size = parameters.size;
     const side = parameters.side as Side;
     const fees = "0";
     const tickSize = await getTickSize(chain, tokenId);
 
     if (!priceValid(Number(price), tickSize)) {
-        throw new Error(
-            `Invalid price (${price}), min: ${tickSize} - max: ${1 - tickSize}`
-        );
+        throw new Error(`Invalid price (${price}), min: ${tickSize} - max: ${1 - tickSize}`);
     }
 
     const usesNegRiskAdapter = await getNegativeRiskAdapter(chain, tokenId);
@@ -275,21 +241,10 @@ export async function createOrder(
         side: intSide,
         rawMakerAmt,
         rawTakerAmt,
-    } = getOrderRawAmounts(
-        side,
-        Number(size),
-        Number(price),
-        ROUNDING_CONFIG[tickSize as TickSize]
-    );
+    } = getOrderRawAmounts(side, Number(size), Number(price), ROUNDING_CONFIG[tickSize as TickSize]);
 
-    const makerAmount = parseUnits(
-        rawMakerAmt.toString(),
-        COLLATERAL_TOKEN_DECIMALS
-    ).toString();
-    const takerAmount = parseUnits(
-        rawTakerAmt.toString(),
-        CONDITIONAL_TOKEN_DECIMALS
-    ).toString();
+    const makerAmount = parseUnits(rawMakerAmt.toString(), COLLATERAL_TOKEN_DECIMALS).toString();
+    const takerAmount = parseUnits(rawTakerAmt.toString(), CONDITIONAL_TOKEN_DECIMALS).toString();
 
     // Make order public to everyone
     const taker = "0x0000000000000000000000000000000000000000";
@@ -352,13 +307,7 @@ export async function createOrder(
     // Submit order
     const timestamp = await getHostTimestamp(chain);
 
-    const sig = buildPolyHmacSignature(
-        credentials.secret,
-        timestamp,
-        "POST",
-        "/order",
-        JSON.stringify(payload)
-    );
+    const sig = buildPolyHmacSignature(credentials.secret, timestamp, "POST", "/order", JSON.stringify(payload));
 
     const headers = {
         POLY_ADDRESS: walletClient.getAddress(),
@@ -375,9 +324,7 @@ export async function createOrder(
     });
 
     if (!response.ok) {
-        throw new Error(
-            `Failed to create order: ${JSON.stringify(await response.json())}`
-        );
+        throw new Error(`Failed to create order: ${JSON.stringify(await response.json())}`);
     }
 
     return await response.json();
@@ -386,7 +333,7 @@ export async function createOrder(
 export async function getOpenOrders(
     walletClient: EVMWalletClient,
     credentials: ApiKeyCredentials,
-    parameters: z.infer<typeof getOpenOrdersParametersSchema>
+    parameters: z.infer<typeof getOpenOrdersParametersSchema>,
 ) {
     const url = new URL(`${getBaseUrl(walletClient.getChain())}/data/orders`);
     appendSearchParams(url, parameters);
@@ -411,7 +358,7 @@ export async function getOpenOrders(
 export async function cancelOrder(
     walletClient: EVMWalletClient,
     credentials: ApiKeyCredentials,
-    parameters: z.infer<typeof cancelOrderParametersSchema>
+    parameters: z.infer<typeof cancelOrderParametersSchema>,
 ) {
     const body = { orderID: parameters.id };
     const headers = await createL2Headers(walletClient, credentials, {
@@ -420,14 +367,11 @@ export async function cancelOrder(
         body: JSON.stringify(body),
     });
 
-    const response = await fetch(
-        `${getBaseUrl(walletClient.getChain())}/order`,
-        {
-            method: "DELETE",
-            headers,
-            body: JSON.stringify(body),
-        }
-    );
+    const response = await fetch(`${getBaseUrl(walletClient.getChain())}/order`, {
+        method: "DELETE",
+        headers,
+        body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to cancel order: ${response.statusText}`);
@@ -436,22 +380,16 @@ export async function cancelOrder(
     return await response.json();
 }
 
-export async function cancelAllOrders(
-    walletClient: EVMWalletClient,
-    credentials: ApiKeyCredentials
-) {
+export async function cancelAllOrders(walletClient: EVMWalletClient, credentials: ApiKeyCredentials) {
     const headers = await createL2Headers(walletClient, credentials, {
         method: "DELETE",
         requestPath: "/cancel-all",
     });
 
-    const response = await fetch(
-        `${getBaseUrl(walletClient.getChain())}/cancel-all`,
-        {
-            method: "DELETE",
-            headers,
-        }
-    );
+    const response = await fetch(`${getBaseUrl(walletClient.getChain())}/cancel-all`, {
+        method: "DELETE",
+        headers,
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to cancel all orders: ${response.statusText}`);

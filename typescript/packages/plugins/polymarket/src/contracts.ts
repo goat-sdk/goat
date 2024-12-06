@@ -27,10 +27,7 @@ const MATIC_CONTRACTS: ContractConfig = {
     conditionalTokens: "0x4D97DCd97eC945f40cF65F87097ACe5EA0476045",
 };
 
-export function getContractConfig(
-    chain: Chain,
-    usesNegRiskAdapter: boolean
-): string {
+export function getContractConfig(chain: Chain, usesNegRiskAdapter: boolean): string {
     if (chain.id === 137) {
         if (usesNegRiskAdapter) {
             return MATIC_CONTRACTS.negRiskExchange;

@@ -95,6 +95,6 @@ const { faucet } = crossmint(apiKey);
 
 const tools = await getOnChainTools({
     wallet: viem(walletClient),
-    faucet: faucet(),
+    plugins: [faucet()],
 });
 ```

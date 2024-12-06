@@ -7,41 +7,38 @@ const walletAddress = process.env.SIGNER_WALLET_ADDRESS;
 const walletSignerSecretKey = process.env.SIGNER_WALLET_SECRET_KEY;
 
 if (!apiKey || !walletAddress || !walletSignerSecretKey) {
-	throw new Error("Missing environment variables");
+    throw new Error("Missing environment variables");
 }
 
 (async () => {
-	const response = await createWallet(walletAddress as `0x${string}`, apiKey);
+    const response = await createWallet(walletAddress as `0x${string}`, apiKey);
 
-	if (response.error) {
-		console.error(response.error);
-		return;
-	}
+    if (response.error) {
+        console.error(response.error);
+        return;
+    }
 
-	console.log(`Created wallet: ${response.address}`);
-	console.log(`Details: ${JSON.stringify(response, null, 2)}`);
+    console.log(`Created wallet: ${response.address}`);
+    console.log(`Details: ${JSON.stringify(response, null, 2)}`);
 })();
 
 async function createWallet(signerPublicKey: `0x${string}`, apiKey: string) {
-	const response = await fetch(
-		"https://staging.crossmint.com/api/v1-alpha2/wallets",
-		{
-			method: "POST",
-			headers: {
-				"X-API-KEY": apiKey,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				type: "evm-smart-wallet",
-				config: {
-					adminSigner: {
-						type: "evm-keypair",
-						address: signerPublicKey,
-					},
-				},
-			}),
-		},
-	);
+    const response = await fetch("https://staging.crossmint.com/api/v1-alpha2/wallets", {
+        method: "POST",
+        headers: {
+            "X-API-KEY": apiKey,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            type: "evm-smart-wallet",
+            config: {
+                adminSigner: {
+                    type: "evm-keypair",
+                    address: signerPublicKey,
+                },
+            },
+        }),
+    });
 
-	return await response.json();
+    return await response.json();
 }

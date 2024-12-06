@@ -2,8 +2,8 @@ import type { z } from "zod";
 import { deferredEVMCoreTools } from "./evm/tools";
 import type { Plugin } from "./plugins/plugins";
 import { deferredSolanaTools } from "./solana/tools";
-import type { WalletClient, ChainForWalletClient, AnyEVMWalletClient } from "./wallets";
 import { replaceToolPlaceholder } from "./utils";
+import type { AnyEVMWalletClient, ChainForWalletClient, WalletClient } from "./wallets";
 import { isEVMChain, isEVMSmartWalletClient, isSolanaChain } from "./wallets";
 
 export type Tool = {
@@ -26,13 +26,12 @@ export async function getTools<TWalletClient extends WalletClient>({
 }: GetToolsParams<TWalletClient>): Promise<Tool[]> {
     const chain = wallet.getChain() as ChainForWalletClient<TWalletClient>;
 
-    const tools: DeferredTool<TWalletClient>[] =
-        await getDeferredTools<TWalletClient>({
-            chain,
-            plugins,
-            supportsSmartWallets: isEVMSmartWalletClient(wallet),
-            wordForTool,
-        });
+    const tools: DeferredTool<TWalletClient>[] = await getDeferredTools<TWalletClient>({
+        chain,
+        plugins,
+        supportsSmartWallets: isEVMSmartWalletClient(wallet),
+        wordForTool,
+    });
 
     return tools.map((tool) => ({
         ...tool,
@@ -47,10 +46,7 @@ export type DeferredTool<TWalletClient extends WalletClient> = {
     name: string;
     description: string;
     parameters: z.ZodSchema;
-    method: (
-        walletClient: TWalletClient,
-        parameters: z.infer<z.ZodSchema>
-    ) => string | Promise<string>;
+    method: (walletClient: TWalletClient, parameters: z.infer<z.ZodSchema>) => string | Promise<string>;
 };
 
 export type GetDeferredToolsParams<TWalletClient extends WalletClient> = {
@@ -60,44 +56,32 @@ export type GetDeferredToolsParams<TWalletClient extends WalletClient> = {
     wordForTool?: string;
 };
 
-export async function getDeferredTools<
-    TWalletClient extends AnyEVMWalletClient | WalletClient
->({
+export async function getDeferredTools<TWalletClient extends AnyEVMWalletClient | WalletClient>({
     chain,
     supportsSmartWallets = false,
     wordForTool = "tool",
     plugins = [],
-}: GetDeferredToolsParams<TWalletClient>): Promise<
-    DeferredTool<TWalletClient>[]
-> {
+}: GetDeferredToolsParams<TWalletClient>): Promise<DeferredTool<TWalletClient>[]> {
     const tools: DeferredTool<TWalletClient>[] = [];
 
     if (isEVMChain(chain)) {
         // We know that TWalletClient is compatible with EVMWalletClient here
-        tools.push(
-            ...(deferredEVMCoreTools as unknown as DeferredTool<TWalletClient>[])
-        );
+        tools.push(...(deferredEVMCoreTools as unknown as DeferredTool<TWalletClient>[]));
     } else if (isSolanaChain(chain)) {
         // We know that TWalletClient is compatible with SolanaWalletClient here
-        tools.push(
-            ...(deferredSolanaTools as unknown as DeferredTool<TWalletClient>[])
-        );
+        tools.push(...(deferredSolanaTools as unknown as DeferredTool<TWalletClient>[]));
     } else {
         throw new Error(`Unsupported chain type: ${chain.type}`);
     }
 
     for (const plugin of plugins) {
         if (!plugin.supportsChain(chain)) {
-            console.warn(
-                `Plugin ${plugin.name} does not support chain ${chain.type}. Skipping.`
-            );
+            console.warn(`Plugin ${plugin.name} does not support chain ${chain.type}. Skipping.`);
             continue;
         }
 
         if (!plugin.supportsSmartWallets() && supportsSmartWallets) {
-            console.warn(
-                `Plugin ${plugin.name} does not support smart wallets. Skipping.`
-            );
+            console.warn(`Plugin ${plugin.name} does not support smart wallets. Skipping.`);
             continue;
         }
 

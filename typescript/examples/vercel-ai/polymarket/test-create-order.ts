@@ -2,17 +2,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { privateKeyToAccount } from "viem/accounts";
 import { createWalletClient } from "viem";
 import { http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { polygon, polygonAmoy } from "viem/chains";
 
 import { createOrder } from "@goat-sdk/plugin-polymarket";
 import { viem } from "@goat-sdk/wallet-viem";
 
-const account = privateKeyToAccount(
-    process.env.WALLET_PRIVATE_KEY as `0x${string}`
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const walletClient = createWalletClient({
     account: account,
@@ -33,13 +31,12 @@ const wallet = viem(walletClient);
             },
             {
                 type: "GTC",
-                tokenId:
-                    "96937810338362097614741657517268729837129429712920385069363769157847960753005",
+                tokenId: "96937810338362097614741657517268729837129429712920385069363769157847960753005",
                 price: "0.06",
                 size: 10,
                 expiration: 0,
                 side: "BUY",
-            }
+            },
         );
 
         console.log(order);

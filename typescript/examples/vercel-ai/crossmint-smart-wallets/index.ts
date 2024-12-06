@@ -2,9 +2,9 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
+import { sendETH } from "@goat-sdk/core";
 import { crossmint } from "@goat-sdk/crossmint";
 import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { sendETH } from "@goat-sdk/core";
 
 require("dotenv").config();
 
@@ -13,12 +13,7 @@ const walletSignerSecretKey = process.env.SIGNER_WALLET_SECRET_KEY;
 const alchemyApiKey = process.env.ALCHEMY_API_KEY_BASE_SEPOLIA;
 const smartWalletAddress = process.env.SMART_WALLET_ADDRESS;
 
-if (
-    !apiKey ||
-    !walletSignerSecretKey ||
-    !alchemyApiKey ||
-    !smartWalletAddress
-) {
+if (!apiKey || !walletSignerSecretKey || !alchemyApiKey || !smartWalletAddress) {
     throw new Error("Missing environment variables");
 }
 

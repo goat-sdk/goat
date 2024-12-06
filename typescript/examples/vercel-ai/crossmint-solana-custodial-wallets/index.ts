@@ -11,27 +11,27 @@ const apiKey = process.env.CROSSMINT_STAGING_API_KEY;
 const email = process.env.EMAIL;
 
 if (!apiKey || !email) {
-	throw new Error("Missing environment variables");
+    throw new Error("Missing environment variables");
 }
 
 const { custodial } = crossmint(apiKey);
 
 (async () => {
-	const tools = await getOnChainTools({
-		wallet: await custodial({
-			chain: "solana",
-			email: email,
-			env: "staging",
-			connection: new Connection("https://api.devnet.solana.com", "confirmed"),
-		}),
-	});
+    const tools = await getOnChainTools({
+        wallet: await custodial({
+            chain: "solana",
+            email: email,
+            env: "staging",
+            connection: new Connection("https://api.devnet.solana.com", "confirmed"),
+        }),
+    });
 
-	const result = await generateText({
-		model: openai("gpt-4o-mini"),
-		tools: tools,
-		maxSteps: 5,
-		prompt: "Get my balance in SOL",
-	});
+    const result = await generateText({
+        model: openai("gpt-4o-mini"),
+        tools: tools,
+        maxSteps: 5,
+        prompt: "Get my balance in SOL",
+    });
 
-	console.log(result.text);
+    console.log(result.text);
 })();

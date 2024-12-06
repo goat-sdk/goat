@@ -5,6 +5,10 @@
 			"path": "."
 		},
 		{
+			"name": "📘 Typescript",
+			"path": "./typescript"
+		},
+		{
 			"name": "🌋 Core",
 			"path": "./typescript/packages/core"
 		},
@@ -31,6 +35,10 @@
 		{
 			"name": "[Plugin] 🎰 polymarket",
 			"path": "./typescript/packages/plugins/polymarket"
+		},
+		{
+			"name": "[Plugin] 💰 coingecko",
+			"path": "./typescript/packages/plugins/coingecko"
 		},
 		{
 			"name": "[Wallet] 🍀 crossmint",

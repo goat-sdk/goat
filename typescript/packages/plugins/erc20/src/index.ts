@@ -6,23 +6,23 @@ export type { Token };
 export { USDC, PEPE };
 
 export type ERC20Options = {
-	tokens: Token[];
+    tokens: Token[];
 };
 
 export function erc20({ tokens }: ERC20Options): Plugin<EVMWalletClient> {
-	return {
-		name: "ERC20",
-		supportsChain: (chain: Chain) => chain.type === "evm",
-		supportsSmartWallets: () => true,
-		getTools: async (chain: Chain) => {
-			const network = chain;
+    return {
+        name: "ERC20",
+        supportsChain: (chain: Chain) => chain.type === "evm",
+        supportsSmartWallets: () => true,
+        getTools: async (chain: Chain) => {
+            const network = chain;
 
-			if (!network.id) {
-				throw new Error("Network ID is required");
-			}
+            if (!network.id) {
+                throw new Error("Network ID is required");
+            }
 
-			const tokenList = getTokensForNetwork(network.id, tokens);
-			return getTools(tokenList);
-		},
-	};
+            const tokenList = getTokensForNetwork(network.id, tokens);
+            return getTools(tokenList);
+        },
+    };
 }

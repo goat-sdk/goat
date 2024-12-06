@@ -2,17 +2,18 @@ import type { Plugin } from "./plugins/plugins";
 import { sendETH } from "./plugins/send-eth";
 import { sendSOL } from "./plugins/send-sol";
 import {
+    type DeferredTool,
+    type GetDeferredToolsParams,
     type GetToolsParams,
     type Tool,
-    getTools,
-    type DeferredTool,
     getDeferredTools,
-    type GetDeferredToolsParams,
+    getTools,
 } from "./tools";
-import { addParametersToDescription, parametersToJsonExample} from "./utils";
+import { addParametersToDescription, parametersToJsonExample } from "./utils";
 import type {
     Balance,
     Chain,
+    ChainForWalletClient,
     EVMReadRequest,
     EVMSmartWalletClient,
     EVMTransaction,
@@ -26,7 +27,6 @@ import type {
     isEVMSmartWalletClient,
     isEVMWalletClient,
     isSolanaWalletClient,
-    ChainForWalletClient
 } from "./wallets";
 
 export {

@@ -1,7 +1,7 @@
 import { parseEther } from "viem";
+import { z } from "zod";
 import type { EVMWalletClient } from "../wallets";
 import type { Plugin } from "./plugins";
-import { z } from "zod";
 
 export function sendETH(): Plugin<EVMWalletClient> {
     return {
@@ -12,8 +12,7 @@ export function sendETH(): Plugin<EVMWalletClient> {
             return [
                 {
                     name: "send_eth",
-                    description:
-                        "This {{tool}} sends ETH to an address on an EVM chain.",
+                    description: "This {{tool}} sends ETH to an address on an EVM chain.",
                     parameters: sendETHParametersSchema,
                     method: sendETHMethod,
                 },
@@ -27,10 +26,9 @@ const sendETHParametersSchema = z.object({
     amount: z.string().describe("The amount of ETH to send"),
 });
 
-
 async function sendETHMethod(
     walletClient: EVMWalletClient,
-    parameters: z.infer<typeof sendETHParametersSchema>
+    parameters: z.infer<typeof sendETHParametersSchema>,
 ): Promise<string> {
     try {
         const amount = parseEther(parameters.amount);

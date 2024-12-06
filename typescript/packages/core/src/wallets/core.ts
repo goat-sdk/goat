@@ -1,12 +1,12 @@
 export type Signature = {
-	signature: string;
+    signature: string;
 };
 
 export type Balance = {
-	decimals: number;
-	symbol: string;
-	name: string;
-	value: bigint;
+    decimals: number;
+    symbol: string;
+    name: string;
+    value: bigint;
 };
 
 /**
@@ -14,21 +14,21 @@ export type Balance = {
  * @param id - Chain ID, optional for EVM
  */
 export type Chain = {
-	type: "evm" | "solana";
-	id?: number; // optional for EVM
+    type: "evm" | "solana";
+    id?: number; // optional for EVM
 };
 
 export type EVMChain = Chain & {
-	type: "evm";
+    type: "evm";
 };
 
 export type SolanaChain = Chain & {
-	type: "solana";
+    type: "solana";
 };
 
 export interface WalletClient {
-	getAddress: () => string;
-	getChain: () => Chain;
-	signMessage: (message: string) => Promise<Signature>;
-	balanceOf: (address: string) => Promise<Balance>;
+    getAddress: () => string;
+    getChain: () => Chain;
+    signMessage: (message: string) => Promise<Signature>;
+    balanceOf: (address: string) => Promise<Balance>;
 }

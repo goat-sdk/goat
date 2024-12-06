@@ -1,15 +1,5 @@
 import {
-    type WalletClient,
-    type Plugin,
-    getDeferredTools,
-    parametersToJsonExample,
-    addParametersToDescription,
-    type ChainForWalletClient,
-    type DeferredTool,
-} from "@goat-sdk/core";
-import {
     type Action,
-    generateText,
     type HandlerCallback,
     type IAgentRuntime,
     type Memory,
@@ -17,7 +7,17 @@ import {
     type State,
     composeContext,
     generateObject,
+    generateText,
 } from "@ai16z/eliza";
+import {
+    type ChainForWalletClient,
+    type DeferredTool,
+    type Plugin,
+    type WalletClient,
+    addParametersToDescription,
+    getDeferredTools,
+    parametersToJsonExample,
+} from "@goat-sdk/core";
 
 type GetOnChainActionsParams<TWalletClient extends WalletClient> = {
     chain: ChainForWalletClient<TWalletClient>;
@@ -44,7 +44,7 @@ export async function getOnChainActions<TWalletClient extends WalletClient>({
 
 function createAction<TWalletClient extends WalletClient>(
     tool: DeferredTool<TWalletClient>,
-    getWalletClient: (runtime: IAgentRuntime) => Promise<TWalletClient>
+    getWalletClient: (runtime: IAgentRuntime) => Promise<TWalletClient>,
 ): Action {
     return {
         name: tool.name.toUpperCase(),
@@ -56,24 +56,15 @@ function createAction<TWalletClient extends WalletClient>(
             message: Memory,
             state: State | undefined,
             options?: Record<string, unknown>,
-            callback?: HandlerCallback
+            callback?: HandlerCallback,
         ): Promise<boolean> => {
             try {
                 const walletClient = await getWalletClient(runtime);
-                let currentState =
-                    state ?? (await runtime.composeState(message));
-                currentState = await runtime.updateRecentMessageState(
-                    currentState
-                );
+                let currentState = state ?? (await runtime.composeState(message));
+                currentState = await runtime.updateRecentMessageState(currentState);
 
-                const parameterContext = composeParameterContext(
-                    tool,
-                    currentState
-                );
-                const parameters = await generateParameters(
-                    runtime,
-                    parameterContext
-                );
+                const parameterContext = composeParameterContext(tool, currentState);
+                const parameters = await generateParameters(runtime, parameterContext);
 
                 const parsedParameters = tool.parameters.safeParse(parameters);
                 if (!parsedParameters.success) {
@@ -84,25 +75,14 @@ function createAction<TWalletClient extends WalletClient>(
                     return false;
                 }
 
-                const result = await tool.method(
-                    walletClient,
-                    parsedParameters.data
-                );
-                const responseContext = composeResponseContext(
-                    tool,
-                    result,
-                    currentState
-                );
-                const response = await generateResponse(
-                    runtime,
-                    responseContext
-                );
+                const result = await tool.method(walletClient, parsedParameters.data);
+                const responseContext = composeResponseContext(tool, result, currentState);
+                const response = await generateResponse(runtime, responseContext);
 
                 callback?.({ text: response, content: result });
                 return true;
             } catch (error) {
-                const errorMessage =
-                    error instanceof Error ? error.message : String(error);
+                const errorMessage = error instanceof Error ? error.message : String(error);
                 callback?.({
                     text: `Error executing action ${tool.name}: ${errorMessage}`,
                     content: { error: errorMessage },
@@ -116,7 +96,7 @@ function createAction<TWalletClient extends WalletClient>(
 
 function composeParameterContext<TWalletClient extends WalletClient>(
     tool: DeferredTool<TWalletClient>,
-    state: State
+    state: State,
 ): string {
     const contextTemplate = `Respond with a JSON markdown block containing only the extracted values for action "${
         tool.name
@@ -129,18 +109,13 @@ ${parametersToJsonExample(tool.parameters)}
 
 {{recentMessages}}
 
-Given the recent messages, extract the following information for the action "${
-        tool.name
-    }":
+Given the recent messages, extract the following information for the action "${tool.name}":
 ${addParametersToDescription("", tool.parameters)}
 `;
     return composeContext({ state, template: contextTemplate });
 }
 
-async function generateParameters(
-    runtime: IAgentRuntime,
-    context: string
-): Promise<unknown> {
+async function generateParameters(runtime: IAgentRuntime, context: string): Promise<unknown> {
     return generateObject({
         runtime,
         context,
@@ -151,7 +126,7 @@ async function generateParameters(
 function composeResponseContext<TWalletClient extends WalletClient>(
     tool: DeferredTool<TWalletClient>,
     result: unknown,
-    state: State
+    state: State,
 ): string {
     const responseTemplate = `
 The action "${tool.name}" was executed successfully.
@@ -164,10 +139,7 @@ Respond to the message knowing that the action was successful and these were the
     return composeContext({ state, template: responseTemplate });
 }
 
-async function generateResponse(
-    runtime: IAgentRuntime,
-    context: string
-): Promise<string> {
+async function generateResponse(runtime: IAgentRuntime, context: string): Promise<string> {
     return generateText({
         runtime,
         context,

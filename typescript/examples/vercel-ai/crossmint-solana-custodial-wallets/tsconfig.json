@@ -1,8 +1,8 @@
 {
-	"extends": "../../../tsconfig.base.json",
-	"compilerOptions": {
-		"outDir": "dist"
-	},
-	"include": ["index.ts", "create-custodial-wallet.ts"],
-	"exclude": ["node_modules", "dist"]
+    "extends": "../../../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "dist"
+    },
+    "include": ["index.ts", "create-custodial-wallet.ts"],
+    "exclude": ["node_modules", "dist"]
 }

@@ -16,7 +16,7 @@ export type GetOnChainToolsParams<TWalletClient extends WalletClient> = {
 
 type ElevenLabsTool = (
     // biome-ignore lint/suspicious/noExplicitAny: any is returned by the ElevenLabs tools
-    parameters: any
+    parameters: any,
     // biome-ignore lint/suspicious/noConfusingVoidType: void is returned by the ElevenLabs tools
 ) => Promise<string | number | void> | string | number | void;
 
@@ -37,9 +37,7 @@ export async function getOnChainTools<TWalletClient extends WalletClient>({
     }
 
     for (const [index, t] of tools.entries()) {
-        elevenLabsTools[t.name] = async (
-            parameters: z.output<typeof t.parameters>
-        ) => {
+        elevenLabsTools[t.name] = async (parameters: z.output<typeof t.parameters>) => {
             return JSON.stringify(await t.method(parameters));
         };
 
@@ -47,10 +45,7 @@ export async function getOnChainTools<TWalletClient extends WalletClient>({
             console.log(
                 `\n${index + 1}. ${t.name}\n\nDescription: ${
                     t.description
-                }\n\nParameters:\n${addParametersToDescription(
-                    "",
-                    t.parameters
-                )}\n`
+                }\n\nParameters:\n${addParametersToDescription("", t.parameters)}\n`,
             );
         }
     }

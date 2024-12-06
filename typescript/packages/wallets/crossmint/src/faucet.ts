@@ -31,15 +31,11 @@ export function faucetFactory(apiKey: string) {
                         parameters: topUpBalanceParametersSchema,
                         method: async (
                             walletClient: EVMWalletClient,
-                            parameters: z.infer<
-                                typeof topUpBalanceParametersSchema
-                            >
+                            parameters: z.infer<typeof topUpBalanceParametersSchema>,
                         ) => {
-                            const wallet =
-                                parameters.wallet ?? walletClient.getAddress();
+                            const wallet = parameters.wallet ?? walletClient.getAddress();
 
-                            const resolvedWalletAddress =
-                                await walletClient.resolveAddress(wallet);
+                            const resolvedWalletAddress = await walletClient.resolveAddress(wallet);
 
                             const network = walletClient.getChain();
 
@@ -50,9 +46,7 @@ export function faucetFactory(apiKey: string) {
                             const chain = getTestnetChainNameById(network.id);
 
                             if (!chain) {
-                                throw new Error(
-                                    `Failed to top up balance: Unsupported chain ${network}`
-                                );
+                                throw new Error(`Failed to top up balance: Unsupported chain ${network}`);
                             }
 
                             const options = {
@@ -70,16 +64,14 @@ export function faucetFactory(apiKey: string) {
 
                             const response = await fetch(
                                 `https://staging.crossmint.com/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
-                                options
+                                options,
                             );
 
                             if (response.ok) {
                                 return "Balance topped up successfully";
                             }
 
-                            throw new Error(
-                                `Failed to top up balance: ${await response.text()}`
-                            );
+                            throw new Error(`Failed to top up balance: ${await response.text()}`);
                         },
                     },
                 ];

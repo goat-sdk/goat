@@ -1,6 +1,6 @@
+import crypto from "node:crypto";
 import type { EVMWalletClient } from "@goat-sdk/core";
 import { polygon } from "viem/chains";
-import crypto from "node:crypto";
 import { IntSide, Side, type TickSize } from "./api";
 
 export function camelToSnake(str: string): string {
@@ -12,7 +12,7 @@ export function buildPolyHmacSignature(
     timestamp: number,
     method: string,
     requestPath: string,
-    body?: string
+    body?: string,
 ): string {
     const message = `${timestamp}${method}${requestPath}${body ?? ""}`;
     const base64Secret = Buffer.from(secret, "base64");
@@ -28,7 +28,7 @@ const MSG_TO_SIGN = "This message attests that I control the given wallet";
 export async function buildClobEip712Signature(
     walletClient: EVMWalletClient,
     timestamp: number,
-    nonce: number
+    nonce: number,
 ): Promise<string> {
     const address = walletClient.getAddress();
     const domain = {
@@ -65,10 +65,7 @@ export async function buildClobEip712Signature(
 
 export function appendSearchParams(
     url: URL,
-    parameters: Record<
-        string,
-        string | number | boolean | (string | number | boolean)[]
-    >
+    parameters: Record<string, string | number | boolean | (string | number | boolean)[]>,
 ) {
     for (const [key, value] of Object.entries(parameters)) {
         if (value !== undefined) {
@@ -121,7 +118,7 @@ export function getOrderRawAmounts(
     side: Side,
     size: number,
     price: number,
-    roundConfig: RoundConfig
+    roundConfig: RoundConfig,
 ): { side: IntSide; rawMakerAmt: number; rawTakerAmt: number } {
     const rawPrice = roundNormal(price, roundConfig.price);
 
@@ -165,21 +162,21 @@ export function roundNormal(num: number, decimals: number) {
         return num;
     }
     return Math.round((num + Number.EPSILON) * 10 ** decimals) / 10 ** decimals;
-};
+}
 
 export function roundDown(num: number, decimals: number) {
     if (decimalPlaces(num) <= decimals) {
         return num;
     }
     return Math.floor(num * 10 ** decimals) / 10 ** decimals;
-};
+}
 
 export function roundUp(num: number, decimals: number) {
     if (decimalPlaces(num) <= decimals) {
         return num;
     }
     return Math.ceil(num * 10 ** decimals) / 10 ** decimals;
-};
+}
 
 export function decimalPlaces(num: number) {
     if (Number.isInteger(num)) {
@@ -192,7 +189,7 @@ export function decimalPlaces(num: number) {
     }
 
     return arr[1].length;
-};
+}
 
 export function getExpirationTimestamp(secondsToAdd: number) {
     const currentUnixTimestamp = Math.floor(Date.now() / 1000);

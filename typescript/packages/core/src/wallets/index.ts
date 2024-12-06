@@ -5,10 +5,7 @@ import {
     type EVMWalletClient,
     isEVMWalletClient,
 } from "./evm";
-import {
-    type EVMSmartWalletClient,
-    isEVMSmartWalletClient,
-} from "./evm-smart-wallet";
+import { type EVMSmartWalletClient, isEVMSmartWalletClient } from "./evm-smart-wallet";
 import {
     type SolanaReadRequest,
     type SolanaTransaction,
@@ -17,12 +14,7 @@ import {
 } from "./solana";
 
 import type { Balance, Chain, Signature, WalletClient } from "./core";
-import {
-    type ChainForWalletClient,
-    isEVMChain,
-    isSolanaChain,
-    type AnyEVMWalletClient,
-} from "./utils";
+import { type AnyEVMWalletClient, type ChainForWalletClient, isEVMChain, isSolanaChain } from "./utils";
 
 export type {
     EVMWalletClient,

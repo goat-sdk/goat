@@ -1,7 +1,7 @@
-import { ChatOpenAI } from "@langchain/openai";
 import type { ChatPromptTemplate } from "@langchain/core/prompts";
-import { pull } from "langchain/hub";
+import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
+import { pull } from "langchain/hub";
 
 import { http } from "viem";
 import { createWalletClient } from "viem";
@@ -11,14 +11,12 @@ import { sepolia } from "viem/chains";
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { viem } from "@goat-sdk/wallet-viem";
 import { sendETH } from "@goat-sdk/core";
+import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(
-    process.env.WALLET_PRIVATE_KEY as `0x${string}`
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const walletClient = createWalletClient({
     account: account,
@@ -31,9 +29,7 @@ const llm = new ChatOpenAI({
 });
 
 (async (): Promise<void> => {
-    const prompt = await pull<ChatPromptTemplate>(
-        "hwchase17/structured-chat-agent"
-    );
+    const prompt = await pull<ChatPromptTemplate>("hwchase17/structured-chat-agent");
 
     const tools = await getOnChainTools({
         wallet: viem(walletClient),

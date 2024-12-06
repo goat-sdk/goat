@@ -2,32 +2,17 @@
 	"name": "@goat-sdk/crossmint",
 	"version": "0.1.5",
 	"sideEffects": false,
-	"files": [
-		"dist/**/*",
-		"README.md",
-		"package.json"
-	],
+	"files": ["dist/**/*", "README.md", "package.json"],
 	"scripts": {
 		"build": "tsup",
 		"clean": "rm -rf dist",
-		"test": "vitest"
+		"test": "vitest run --passWithNoTests"
 	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
-	"devDependencies": {
-		"@types/node": "^22.7.4",
-		"globals": "^15.12.0",
-		"ts-node": "^10.9.2",
-		"tsup": "^8.3.5",
-		"typescript": "^5.6.3",
-		"vitest": "^2.1.5"
-	},
 	"dependencies": {
 		"@goat-sdk/core": "workspace:*",
-		"@metaplex-foundation/mpl-bubblegum": "^4.2.1",
-		"@metaplex-foundation/umi": "^0.9.2",
-		"@metaplex-foundation/umi-bundle-defaults": "^0.9.2",
 		"@solana/web3.js": "1.95.8",
 		"abitype": "^1.0.6",
 		"bs58": "^6.0.0",
@@ -36,12 +21,6 @@
 	},
 	"peerDependencies": {
 		"@goat-sdk/core": "workspace:*"
-	},
-	"engines": {
-		"node": ">=20.12.2 <21",
-		"npm": "please-use-pnpm",
-		"pnpm": ">=9",
-		"yarn": "please-use-pnpm"
 	},
 	"homepage": "https://ohmygoat.dev",
 	"repository": {
@@ -52,10 +31,5 @@
 	"bugs": {
 		"url": "https://github.com/goat-sdk/goat/issues"
 	},
-	"keywords": [
-		"ai",
-		"agents",
-		"web3"
-	],
-	"packageManager": "pnpm@9.14.2"
+	"keywords": ["ai", "agents", "web3"]
 }

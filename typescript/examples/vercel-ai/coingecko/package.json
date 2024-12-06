@@ -1,0 +1,25 @@
+{
+	"name": "goat-examples-vercel-ai-coingecko",
+	"version": "0.1.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"@ai-sdk/openai": "^1.0.4",
+		"@goat-sdk/adapter-vercel-ai": "workspace:*",
+		"@goat-sdk/core": "workspace:*",
+		"@goat-sdk/plugin-coingecko": "workspace:*",
+		"@goat-sdk/plugin-erc20": "workspace:*", 
+		"@goat-sdk/wallet-viem": "workspace:*",
+		"ai": "^4.0.3",
+		"dotenv": "^16.4.5",
+		"viem": "2.21.49"
+	},
+	"devDependencies": {
+		"@types/node": "^22.7.4"
+	}
+}

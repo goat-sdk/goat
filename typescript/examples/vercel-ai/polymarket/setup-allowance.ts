@@ -2,12 +2,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { privateKeyToAccount } from "viem/accounts";
+import { viem } from "@goat-sdk/wallet-viem";
 import { createWalletClient } from "viem";
 import { http } from "viem";
-import { polygon } from "viem/chains";
-import { viem } from "@goat-sdk/wallet-viem";
 import { parseAbi } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { polygon } from "viem/chains";
 
 export const ERC20_ABI = parseAbi([
     "function allowance(address owner, address spender) external view returns (uint256)",
@@ -19,8 +19,7 @@ const ERC1155_ABI = parseAbi([
     "function setApprovalForAll(address operator, bool approved) external",
 ]);
 
-const MAX_ALLOWANCE =
-    "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+const MAX_ALLOWANCE = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
 
 // Define the contract configurations
 type ContractConfig = {
@@ -41,9 +40,7 @@ const POLYGON_CONTRACTS: ContractConfig = {
 };
 
 // Initialize the wallet client
-const account = privateKeyToAccount(
-    process.env.WALLET_PRIVATE_KEY as `0x${string}`
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const chain = polygon;
 
@@ -79,16 +76,13 @@ const wallet = viem(walletClient);
                 if (value === 0n) {
                     console.log(`Approving USDC for ${address}`);
                     // Approve USDC
-                    const { hash: usdcApproveHash } =
-                        await wallet.sendTransaction({
-                            to: contractConfig.usdc,
-                            abi: ERC20_ABI,
-                            functionName: "approve",
-                            args: [address, MAX_ALLOWANCE],
-                        });
-                    console.log(
-                        `Approved USDC for ${address}: ${usdcApproveHash}`
-                    );
+                    const { hash: usdcApproveHash } = await wallet.sendTransaction({
+                        to: contractConfig.usdc,
+                        abi: ERC20_ABI,
+                        functionName: "approve",
+                        args: [address, MAX_ALLOWANCE],
+                    });
+                    console.log(`Approved USDC for ${address}: ${usdcApproveHash}`);
                 } else {
                     console.log(`USDC already approved for ${address}`);
                 }
@@ -108,17 +102,14 @@ const wallet = viem(walletClient);
                 if (!isApprovedForAll) {
                     console.log(`Approving CTF for ${address}`);
                     // Approve CTF
-                    const { hash: ctfApproveHash } =
-                        await wallet.sendTransaction({
-                            to: contractConfig.ctf,
-                            abi: ERC1155_ABI,
-                            functionName: "setApprovalForAll",
-                            args: [address, true],
-                        });
+                    const { hash: ctfApproveHash } = await wallet.sendTransaction({
+                        to: contractConfig.ctf,
+                        abi: ERC1155_ABI,
+                        functionName: "setApprovalForAll",
+                        args: [address, true],
+                    });
 
-                    console.log(
-                        `Approved CTF for ${address}: ${ctfApproveHash}`
-                    );
+                    console.log(`Approved CTF for ${address}: ${ctfApproveHash}`);
                 } else {
                     console.log(`CTF already approved for ${address}`);
                 }
