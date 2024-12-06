@@ -150,10 +150,6 @@ importers:
       viem:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-    devDependencies:
-      '@types/node':
-        specifier: ^22.7.4
-        version: 22.9.1
 
   examples/vercel-ai/crossmint-smart-wallets:
     dependencies:
@@ -6466,6 +6462,7 @@ snapshots:
   '@types/node@22.9.1':
     dependencies:
       undici-types: 6.19.8
+    optional: true
 
   '@types/phoenix@1.6.6': {}
 
