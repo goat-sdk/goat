@@ -4,19 +4,27 @@
     "version": "0.1.1",
     "scripts": {
         "build": "pnpm turbo build",
+        "build:libs": "pnpm turbo --filter \"./packages/**\" build",
+        "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",
         "clean": "pnpm turbo clean",
-        "lint": "pnpm biome check --write",
+        "change:add": "pnpm changeset add",
+        "change:publish": "pnpm build:libs:prod && pnpm changeset publish --no-git-tag",
+        "change:version": "pnpm changeset version && pnpm lint:fix",
+        "lint": "biome check --diagnostic-level=error --max-diagnostics=200",
+        "lint:fix": "biome check --write",
         "test": "pnpm turbo test"
     },
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
-        "@types/node": "^22.7.4",
-        "globals": "^15.12.0",
-        "ts-node": "^10.9.2",
-        "tsup": "^8.3.5",
-        "typescript": "^5.6.3",
+        "@changesets/cli": "2.27.10",
+        "@types/node": "22.7.4",
+        "cross-env": "7.0.3",
+        "globals": "15.12.0",
+        "ts-node": "10.9.2",
+        "tsup": "8.3.5",
         "turbo": "2.3.1",
-        "vitest": "^2.1.5"
+        "typescript": "5.6.3",
+        "vitest": "2.1.5"
     },
     "engines": {
         "node": ">=20.12.2 <21",
@@ -34,6 +42,5 @@
         "url": "https://github.com/crossmint/goat/issues"
     },
     "keywords": ["ai", "agents", "web3"],
-    "packageManager": "pnpm@9.14.2",
-    "workspaces": ["packages/*", "examples/*"]
+    "packageManager": "pnpm@9.14.2"
 }

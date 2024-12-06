@@ -2,6 +2,8 @@
     "$schema": "https://turbo.build/schema.json",
     "tasks": {
         "build": {
+            "env": ["NODE_ENV"],
+            "outputLogs": "new-only",
             "dependsOn": ["^build"],
             "outputs": ["dist/**"]
         },

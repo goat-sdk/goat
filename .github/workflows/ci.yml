@@ -1,7 +1,9 @@
-name: CI
+name: CI-PR
 
 on:
     push:
+        branches-ignore:
+            - main
 
 jobs:
     build-and-test:
