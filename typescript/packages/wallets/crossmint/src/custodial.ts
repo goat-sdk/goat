@@ -84,12 +84,10 @@ export function custodialFactory(apiKey: string) {
                 }
             },
             async sendTransaction({ instructions }: SolanaTransaction) {
-                const latestBlockhash = await connection.getLatestBlockhash("confirmed");
-                // see https://linear.app/crossmint/issue/WAL-3436/solana-transactions-get-stuck-when-sending-the-dummy-value
                 const publicKey = new PublicKey("11111111111111111111111111111112");
                 const message = new TransactionMessage({
                     payerKey: publicKey,
-                    recentBlockhash: latestBlockhash.blockhash,
+                    recentBlockhash: "11111111111111111111111111111111",
                     instructions,
                 }).compileToV0Message();
                 const transaction = new VersionedTransaction(message);
