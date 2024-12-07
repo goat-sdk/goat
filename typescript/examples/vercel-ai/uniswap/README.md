@@ -28,6 +28,7 @@ Some examples:
 
 - `Get Quote`: Get a quote for a swap
 - `Get Swap Transaction`: Get the transaction details for a swap
-- `Send swap transaction`: Send a swap transaction
+- `Send Transaction`: Send a transaction
+- `Check Approval`: Check if the wallet has enough approval for a token and returns the transaction to approve the token. The approval must takes place before the swap transaction.
 
 Want support for more actions? [Open an issue](https://github.com/goat-sdk/goat-sdk/issues) and let us know!
