@@ -1,41 +1,38 @@
 import type { DeferredTool, EVMWalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
-import { getQuoteBodySchema, getSwapBodySchema } from "./parameters";
 import { getQuote, getSwapTransaction, sendSwapTransaction } from "./api";
+import { GetQuoteBodySchema, GetSwapBodySchema, SendSwapBodySchema } from "./types";
 
 export type UniswapToolsOptions = {
-	apiKey: string;
-	baseUrl: string;
+    apiKey: string;
+    baseUrl: string;
 };
 
-export function getTools({
-	apiKey,
-	baseUrl,
-}: UniswapToolsOptions): DeferredTool<EVMWalletClient>[] {
-	return [
-		{
-			name: "get_uniswap_quote",
-			description: "This {{tool}} gets the quotei for a Uniswap swap",
-			parameters: getQuoteBodySchema,
-			method: async (parameters: z.infer<typeof getQuoteBodySchema>) => {
-				return getQuote(parameters, apiKey, baseUrl);
-			},
-		},
-		{
-			name: "get_uniswap_swap",
-			description: "This {{tool}} gets the swap for a Uniswap swap",
-			parameters: getSwapBodySchema,
-			method: async (parameters: z.infer<typeof getSwapBodySchema>) => {
-				return getSwapTransaction(parameters, apiKey, baseUrl);
-			},
-		},
-		{
-			name: "sign_and_send_uniswap_swap",
-			description: "This {{tool}} signs and sends a Uniswap swap",
-			parameters: getSwapBodySchema,
-			method: async (parameters: z.infer<typeof getSwapBodySchema>, walletClient: EVMWalletClient	) => {
-				return sendSwapTransaction(parameters, walletClient, apiKey, baseUrl);
-			},
-		}
-	];
+export function getTools({ apiKey, baseUrl }: UniswapToolsOptions): DeferredTool<EVMWalletClient>[] {
+    return [
+        {
+            name: "get_quote",
+            description: "This {{tool}} gets the quote for a swap",
+            parameters: GetQuoteBodySchema,
+            method: async (walletClient: EVMWalletClient, parameters: z.infer<typeof GetQuoteBodySchema>) => {
+                return getQuote(parameters, apiKey, baseUrl);
+            },
+        },
+        {
+            name: "get_swap_transaction",
+            description: "This {{tool}} gets the swap transaction for a swap",
+            parameters: GetSwapBodySchema,
+            method: async (walletClient: EVMWalletClient, parameters: z.infer<typeof GetSwapBodySchema>) => {
+                return getSwapTransaction(parameters, apiKey, baseUrl);
+            },
+        },
+        {
+            name: "send_swap_transaction",
+            description: "This {{tool}} signs and sends a swap transaction",
+            parameters: SendSwapBodySchema,
+            method: async (walletClient: EVMWalletClient, parameters: z.infer<typeof SendSwapBodySchema>) => {
+                return sendSwapTransaction(parameters, walletClient);
+            },
+        },
+    ];
 }
