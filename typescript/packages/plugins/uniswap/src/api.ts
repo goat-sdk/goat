@@ -1,10 +1,6 @@
 import type { EVMWalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
-import type {
-    GetQuoteBodySchema,
-    GetSwapBodySchema,
-    SendSwapBodySchema,
-} from "./types";
+import type { GetQuoteBodySchema, GetSwapBodySchema, SendSwapBodySchema } from "./types";
 
 export async function getQuote(
     parameters: z.infer<typeof GetQuoteBodySchema>,
