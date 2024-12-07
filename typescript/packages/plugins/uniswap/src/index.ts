@@ -3,27 +3,22 @@ import { arbitrum, avalanche, base, celo, mainnet, optimism, polygon, zora } fro
 import { getTools } from "./tools";
 
 export type UniswapOptions = {
-	apiKey: string;
-	baseUrl: string;
+    apiKey: string;
+    baseUrl: string;
 };
 
 const SUPPORTED_CHAINS = [mainnet, polygon, avalanche, base, optimism, zora, arbitrum, celo];
 
-export function uniswap({
-	apiKey,
-	baseUrl,
-}: UniswapOptions): Plugin<EVMWalletClient> {
-	return {
-		name: "Uniswap",
-		supportsChain: (chain: Chain) =>
-			chain.type === "evm" && SUPPORTED_CHAINS.some((c) => c.id === chain.id),
-		supportsSmartWallets: () => false,
-		getTools: async () => {
-			return getTools({
-				apiKey,
-				baseUrl,
-			});
-		},
-	};
+export function uniswap({ apiKey, baseUrl }: UniswapOptions): Plugin<EVMWalletClient> {
+    return {
+        name: "Uniswap",
+        supportsChain: (chain: Chain) => chain.type === "evm" && SUPPORTED_CHAINS.some((c) => c.id === chain.id),
+        supportsSmartWallets: () => false,
+        getTools: async () => {
+            return getTools({
+                apiKey,
+                baseUrl,
+            });
+        },
+    };
 }
-
