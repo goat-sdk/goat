@@ -11,7 +11,6 @@ export type SolanaWalletOptions = {
 
 export function solana({ connection, keypair }: SolanaWalletOptions): SolanaWalletClient {
     return {
-        connection,
         getAddress: () => keypair.publicKey.toBase58(),
         getChain() {
             return {

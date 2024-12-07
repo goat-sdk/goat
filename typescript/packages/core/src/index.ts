@@ -1,6 +1,6 @@
 import type { Plugin } from "./plugins/plugins";
 import { sendETH } from "./plugins/send-eth";
-import { sendSOL } from "./plugins/solana/send-sol";
+import { sendSOL } from "./plugins/send-sol";
 import {
     type DeferredTool,
     type GetDeferredToolsParams,

@@ -2,8 +2,8 @@ import { PublicKey } from "@solana/web3.js";
 import { SystemProgram } from "@solana/web3.js";
 import { parseUnits } from "viem";
 import { z } from "zod";
-import type { SolanaWalletClient } from "../../wallets";
-import type { Plugin } from "../plugins";
+import type { SolanaWalletClient } from "../wallets";
+import type { Plugin } from "./plugins";
 
 export function sendSOL(): Plugin<SolanaWalletClient> {
     return {

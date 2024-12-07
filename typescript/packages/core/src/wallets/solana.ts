@@ -24,5 +24,4 @@ export type SolanaTransactionResult = {
 export interface SolanaWalletClient extends WalletClient {
     sendTransaction: (transaction: SolanaTransaction) => Promise<SolanaTransactionResult>;
     read: (request: SolanaReadRequest) => Promise<SolanaReadResult>;
-    connection: Connection;
 }
