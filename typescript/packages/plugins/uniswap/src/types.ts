@@ -61,6 +61,12 @@ export const SwapResponseSchema = z.object({
 
 export const TxHashSchema = z.string();
 
+export const CheckApprovalBodySchema = z.object({
+    token: z.string(),
+    amount: z.string(),
+    walletAddress: z.string(),
+});
+
 export const GetQuoteBodySchema = z.object({
     tokenIn: z.string(),
     tokenOut: z.string(),
@@ -77,4 +83,4 @@ export const GetSwapBodySchema = z.object({
     simulateTransaction: z.boolean().optional(),
 });
 
-export const SendSwapBodySchema = TransactionSchema;
+export const SendTransactionBodySchema = TransactionSchema;
