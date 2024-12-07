@@ -1,6 +1,11 @@
 import type { EVMWalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
-import type { CheckApprovalBodySchema, GetQuoteBodySchema, GetSwapBodySchema, SendTransactionBodySchema } from "./types";
+import type {
+    CheckApprovalBodySchema,
+    GetQuoteBodySchema,
+    GetSwapBodySchema,
+    SendTransactionBodySchema,
+} from "./types";
 
 export async function getApprovalTransaction(
     parameters: z.infer<typeof CheckApprovalBodySchema>,

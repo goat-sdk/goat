@@ -36,14 +36,16 @@ export const QuoteSchema = z.object({
     priceImpact: z.number(),
 });
 
+export const PermitDataSchema = z.object({
+    domain: z.string(),
+    types: z.record(z.string(), z.any()),
+    primaryType: z.string(),
+    message: z.record(z.string(), z.any()),
+});
+
 export const QuoteResponseSchema = z.object({
     routing: z.nativeEnum(Routing),
-    permitData: z.object({
-        domain: z.string(),
-        types: z.record(z.string(), z.any()),
-        primaryType: z.string(),
-        message: z.record(z.string(), z.any()),
-    }),
+    permitData: PermitDataSchema.optional(),
     quote: QuoteSchema,
 });
 
@@ -80,6 +82,8 @@ export const GetQuoteBodySchema = z.object({
 
 export const GetSwapBodySchema = z.object({
     quote: QuoteResponseSchema,
+    permitData: z.any().optional(),
+    signature: z.string().optional(),
     simulateTransaction: z.boolean().optional(),
 });
 
