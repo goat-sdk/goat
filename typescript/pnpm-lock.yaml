@@ -400,8 +400,8 @@ importers:
         specifier: workspace:*
         version: link:../../core
       '@metaplex-foundation/digital-asset-standard-api':
-        specifier: 1.0.2
-        version: 1.0.2(@metaplex-foundation/umi@0.9.2)
+        specifier: 1.0.0
+        version: 1.0.0(@metaplex-foundation/umi@0.9.2)
       '@metaplex-foundation/mpl-bubblegum':
         specifier: 3.1.0
         version: 3.1.0(@metaplex-foundation/umi@0.9.2)
@@ -1448,11 +1448,10 @@ packages:
     resolution: {integrity: sha512-w8CVbdkDrVXFJbfBSlDfafDR6BAkpDmv1bC1UJVCoVny5tW2RKAdn9i68Xf7asYT4TnUhl/hN4zfUiKQq9II4g==}
     engines: {node: '>=16.0.0'}
 
-  '@metaplex-foundation/digital-asset-standard-api@1.0.2':
-    resolution: {integrity: sha512-aJ4PM3Xmvh6MlPYe9dymgdIgXC5c4MZD9wNnIJrG0bjknmJ2ajU3sYV9pi6QD8cNXlcoyb+hsg4lpSt4abA/Sg==}
-    deprecated: this package is broken
+  '@metaplex-foundation/digital-asset-standard-api@1.0.0':
+    resolution: {integrity: sha512-RShZFkLa3SKl8Rs13okG9vG3N3ZfRrcHBImEEds3Rb8mghHWGU3IL2+X9FdIRMnE44jNJ3vZlVeEBU3kIZPBvw==}
     peerDependencies:
-      '@metaplex-foundation/umi': '>= 0.8.2 < 1'
+      '@metaplex-foundation/umi': ^0.8.2
 
   '@metaplex-foundation/mpl-bubblegum@3.1.0':
     resolution: {integrity: sha512-iwwOD723ISHjc5V8+aEWy8qujO11giwzqr0CCGai5efxowZKAkmlqZEWaq7o5F8DBVJZwwT33LYiO4RVBiHaxg==}
@@ -6284,13 +6283,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@metaplex-foundation/digital-asset-standard-api@1.0.2(@metaplex-foundation/umi@0.9.2)':
+  '@metaplex-foundation/digital-asset-standard-api@1.0.0(@metaplex-foundation/umi@0.9.2)':
     dependencies:
       '@metaplex-foundation/umi': 0.9.2
 
   '@metaplex-foundation/mpl-bubblegum@3.1.0(@metaplex-foundation/umi@0.9.2)':
     dependencies:
-      '@metaplex-foundation/digital-asset-standard-api': 1.0.2(@metaplex-foundation/umi@0.9.2)
+      '@metaplex-foundation/digital-asset-standard-api': 1.0.0(@metaplex-foundation/umi@0.9.2)
       '@metaplex-foundation/mpl-token-metadata': 3.0.0-alpha.27(@metaplex-foundation/umi@0.9.2)
       '@metaplex-foundation/mpl-toolbox': 0.9.4(@metaplex-foundation/umi@0.9.2)
       '@metaplex-foundation/umi': 0.9.2
