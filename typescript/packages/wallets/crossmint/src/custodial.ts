@@ -42,7 +42,7 @@ export function custodialFactory(apiKey: string) {
     return async function custodial(params: CustodialOptions): Promise<SolanaWalletClient> {
         const { connection, env = "staging" } = params;
 
-        const locator = `${getLocator(params)}:solana-custodial-wallet`;
+        const locator = `${getLocator(params)}`;
         const client = createCrossmintAPI(apiKey, env);
         const { address } = await client.getWallet(locator);
 
@@ -83,11 +83,10 @@ export function custodialFactory(apiKey: string) {
                 }
             },
             async sendTransaction({ instructions }: SolanaTransaction) {
-                const latestBlockhash = await connection.getLatestBlockhash("confirmed");
+                const publicKey = new PublicKey("11111111111111111111111111111112");
                 const message = new TransactionMessage({
-                    // Placeholder payer key since Crossmint will override it
-                    payerKey: new PublicKey("placeholder"),
-                    recentBlockhash: latestBlockhash.blockhash,
+                    payerKey: publicKey,
+                    recentBlockhash: "11111111111111111111111111111111",
                     instructions,
                 }).compileToV0Message();
                 const transaction = new VersionedTransaction(message);
