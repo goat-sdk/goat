@@ -11,20 +11,27 @@ import {
 } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
-import { eip712WalletActions } from "viem/zksync";
+import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
+
 
 export type ViemOptions = {
-    // Only used for zkSync Stack networks
-    defaultPaymaster?: string;
-    defaultPaymasterInput?: string;
+    paymaster?: {
+        defaultAddress: `0x${string}`;
+        defaultInput: `0x${string}`;
+    };
 };
 
 export function viem(
     client: ViemWalletClient,
     options?: ViemOptions
 ): EVMWalletClient {
-    const defaultPaymaster = options?.defaultPaymaster;
-    const defaultPaymasterInput = options?.defaultPaymasterInput;
+    const defaultPaymaster = options?.paymaster?.defaultAddress ?? "";
+    const defaultPaymasterInput =
+        options?.paymaster?.defaultInput ??
+        getGeneralPaymasterInput({
+            innerInput: "0x",
+        });
+
 
     const publicClient = client.extend(publicActions);
 
@@ -85,13 +92,13 @@ export function viem(
 
             const toAddress = await this.resolveAddress(to);
 
-            const paymaster = options?.paymaster ?? defaultPaymaster;
+            const paymaster = options?.paymaster?.address ?? defaultPaymaster;
             const paymasterInput =
-                options?.paymasterInput ?? defaultPaymasterInput;
-            const isPaymasterTx = !!paymaster || !!paymasterInput;
+                options?.paymaster?.input ?? defaultPaymasterInput;
+            const txHasPaymaster = !!paymaster || !!paymasterInput;
 
             // If paymaster params exist, extend with EIP712 actions
-            const sendingClient = isPaymasterTx
+            const sendingClient = txHasPaymaster
                 ? client.extend(eip712WalletActions())
                 : client;
 
@@ -102,7 +109,7 @@ export function viem(
                     to: toAddress,
                     chain: client.chain,
                     value,
-                    ...(isPaymasterTx ? { paymaster, paymasterInput } : {}),
+                    ...(txHasPaymaster ? { paymaster, paymasterInput } : {}),
                 };
 
                 const txHash = await sendingClient.sendTransaction(txParams);
@@ -130,7 +137,7 @@ export function viem(
                 args,
             });
 
-            if (isPaymasterTx) {
+            if (txHasPaymaster) {
                 // With paymaster, we must use sendTransaction() directly
                 const txParams = {
                     account: client.account,

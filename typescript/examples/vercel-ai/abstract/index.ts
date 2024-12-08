@@ -27,7 +27,10 @@ const walletClient = createWalletClient({
 (async () => {
     const tools = await getOnChainTools({
         wallet: viem(walletClient, {
-            defaultPaymaster: process.env.PAYMASTER_ADDRESS as `0x${string}`,
+            paymaster: {
+                defaultPaymaster:
+                    process.env.PAYMASTER_ADDRESS as `0x${string}`,
+            },
         }),
         plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
     });
@@ -36,7 +39,8 @@ const walletClient = createWalletClient({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Send 1 USDC to 0x016c0803FFC6880a9a871ba104709cDBf341A90a",
+        prompt:
+            "Send 0.000001 ETH to <address> and return the tx id",
     });
 
     console.log(result.text);

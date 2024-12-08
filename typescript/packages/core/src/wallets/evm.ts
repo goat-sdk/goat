@@ -15,8 +15,10 @@ export type EVMTransaction = {
 };
 
 export type EVMTransactionOptions = {
-    paymaster?: string;
-    paymasterInput?: string;
+    paymaster?: {
+        address: `0x${string}`;
+        input: `0x${string}`;
+    };
 };
 
 export type EVMReadRequest = {
