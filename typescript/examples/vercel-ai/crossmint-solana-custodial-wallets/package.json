@@ -7,6 +7,7 @@
         "create-wallet": "ts-node create-custodial-wallet.ts",
         "test": "vitest run --passWithNoTests"
     },
+    "main": "index.ts",
     "author": "",
     "license": "MIT",
     "dependencies": {
@@ -15,6 +16,7 @@
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",
         "@goat-sdk/crossmint": "workspace:*",
+        "@goat-sdk/plugin-solana-nfts": "workspace:*",
         "@solana/web3.js": "1.95.8",
         "ai": "^4.0.3",
         "dotenv": "^16.4.5",
