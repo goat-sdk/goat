@@ -1,11 +1,37 @@
-import type { EVMReadRequest, EVMTransaction, EVMTypedData, EVMWalletClient } from "@goat-sdk/core";
-
-import { publicActions } from "viem";
-import type { WalletClient as ViemWalletClient } from "viem";
+import type {
+    EVMReadRequest,
+    EVMTransaction,
+    EVMTypedData,
+    EVMWalletClient,
+} from "@goat-sdk/core";
+import {
+    publicActions,
+    encodeFunctionData,
+    type WalletClient as ViemWalletClient,
+} from "viem";
+import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
+import { eip712WalletActions } from "viem/zksync";
 
-export function viem(client: ViemWalletClient): EVMWalletClient {
+export type ViemOptions = {
+    // Only used for zkSync Stack networks
+    defaultPaymaster?: string;
+    defaultPaymasterInput?: string;
+};
+
+export function viem(
+    client: ViemWalletClient,
+    options?: ViemOptions
+): EVMWalletClient {
+    const defaultPaymaster = options?.defaultPaymaster;
+    const defaultPaymasterInput = options?.defaultPaymasterInput;
+
     const publicClient = client.extend(publicActions);
+
+    const waitForReceipt = async (hash: `0x${string}`) => {
+        const receipt = await publicClient.waitForTransactionReceipt({ hash });
+        return { hash: receipt.transactionHash, status: receipt.status };
+    };
 
     return {
         getAddress: () => client.account?.address ?? "",
@@ -16,9 +42,8 @@ export function viem(client: ViemWalletClient): EVMWalletClient {
             };
         },
         async resolveAddress(address: string) {
-            if (/^0x[a-fA-F0-9]{40}$/.test(address)) {
+            if (/^0x[a-fA-F0-9]{40}$/.test(address))
                 return address as `0x${string}`;
-            }
 
             try {
                 const resolvedAddress = (await publicClient.getEnsAddress({
@@ -39,9 +64,7 @@ export function viem(client: ViemWalletClient): EVMWalletClient {
                 account: client.account,
             });
 
-            return {
-                signature,
-            };
+            return { signature };
         },
         async signTypedData(data: EVMTypedData) {
             if (!client.account) throw new Error("No account connected");
@@ -54,68 +77,82 @@ export function viem(client: ViemWalletClient): EVMWalletClient {
                 account: client.account,
             });
 
-            return {
-                signature,
-            };
+            return { signature };
         },
         async sendTransaction(transaction: EVMTransaction) {
-            const { to, abi, functionName, args, value } = transaction;
-
-            const toAddress = await this.resolveAddress(to);
+            const { to, abi, functionName, args, value, options } = transaction;
             if (!client.account) throw new Error("No account connected");
 
+            const toAddress = await this.resolveAddress(to);
+
+            const paymaster = options?.paymaster ?? defaultPaymaster;
+            const paymasterInput =
+                options?.paymasterInput ?? defaultPaymasterInput;
+            const isPaymasterTx = !!paymaster || !!paymasterInput;
+
+            // If paymaster params exist, extend with EIP712 actions
+            const sendingClient = isPaymasterTx
+                ? client.extend(eip712WalletActions())
+                : client;
+
+            // Simple ETH transfer (no ABI)
             if (!abi) {
-                const tx = await client.sendTransaction({
+                const txParams = {
                     account: client.account,
                     to: toAddress,
                     chain: client.chain,
                     value,
-                });
-
-                const transaction = await publicClient.waitForTransactionReceipt({
-                    hash: tx,
-                });
-
-                return {
-                    hash: transaction.transactionHash,
-                    status: transaction.status,
+                    ...(isPaymasterTx ? { paymaster, paymasterInput } : {}),
                 };
+
+                const txHash = await sendingClient.sendTransaction(txParams);
+                return waitForReceipt(txHash);
             }
 
+            // Contract call
             if (!functionName) {
-                throw new Error("Function name is required");
+                throw new Error("Function name is required for contract calls");
             }
 
-            await publicClient.simulateContract({
+            const { request } = await publicClient.simulateContract({
                 account: client.account,
                 address: toAddress,
-                abi,
+                abi: abi,
                 functionName,
                 args,
                 chain: client.chain,
             });
-            const hash = await client.writeContract({
-                account: client.account,
-                address: toAddress,
-                abi,
+
+            // Encode the call data ourselves
+            const data = encodeFunctionData({
+                abi: abi,
                 functionName,
                 args,
-                chain: client.chain,
-                value,
             });
 
-            const t = await publicClient.waitForTransactionReceipt({
-                hash: hash,
-            });
+            if (isPaymasterTx) {
+                // With paymaster, we must use sendTransaction() directly
+                const txParams = {
+                    account: client.account,
+                    chain: client.chain,
+                    to: request.address,
+                    data,
+                    value: request.value,
+                    paymaster,
+                    paymasterInput,
+                };
+                const txHash = await sendingClient.sendTransaction(txParams);
+                return waitForReceipt(txHash);
+            }
 
-            return {
-                hash: t.transactionHash,
-                status: t.status,
-            };
+            // Without paymaster, use writeContract which handles encoding too,
+            // but since we already have request, let's let writeContract do its thing.
+            // However, writeContract expects the original request format (with abi, functionName, args).
+            const txHash = await client.writeContract(request);
+            return waitForReceipt(txHash);
         },
         async read(request: EVMReadRequest) {
             const { address, abi, functionName, args } = request;
-
             if (!abi) throw new Error("Read request must include ABI for EVM");
 
             const result = await publicClient.readContract({
@@ -125,22 +162,21 @@ export function viem(client: ViemWalletClient): EVMWalletClient {
                 args,
             });
 
-            return {
-                value: result,
-            };
+            return { value: result };
         },
         async balanceOf(address: string) {
             const resolvedAddress = await this.resolveAddress(address);
-
             const balance = await publicClient.getBalance({
                 address: resolvedAddress,
             });
 
+            const chain = client.chain ?? mainnet;
+
             return {
                 value: balance,
-                decimals: 18,
-                symbol: "ETH",
-                name: "Ether",
+                decimals: chain.nativeCurrency.decimals,
+                symbol: chain.nativeCurrency.symbol,
+                name: chain.nativeCurrency.name,
             };
         },
     };
