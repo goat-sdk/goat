@@ -1,4 +1,5 @@
 import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
+<<<<<<< HEAD
 import { getTools } from "./tools";
 
 export function superfluid(): Plugin<EVMWalletClient> {
@@ -24,6 +25,22 @@ export function superfluid(): Plugin<EVMWalletClient> {
                 534351, // Scroll Sepolia
                 84532, // Base Sepolia
             ].includes(chain.id as number),
+=======
+import { PEPE, type Token, USDC, getTokensForNetwork } from "./token";
+import { getTools } from "./tools";
+
+export type { Token };
+export { USDC, PEPE };
+
+export type ERC20Options = {
+    tokens: Token[];
+};
+
+export function erc20({ tokens }: ERC20Options): Plugin<EVMWalletClient> {
+    return {
+        name: "ERC20",
+        supportsChain: (chain: Chain) => chain.type === "evm",
+>>>>>>> 906163d (start superfluid plugin)
         supportsSmartWallets: () => true,
         getTools: async (chain: Chain) => {
             const network = chain;
@@ -31,7 +48,13 @@ export function superfluid(): Plugin<EVMWalletClient> {
             if (!network.id) {
                 throw new Error("Network ID is required");
             }
+<<<<<<< HEAD
             return getTools();
+=======
+
+            const tokenList = getTokensForNetwork(network.id, tokens);
+            return getTools(tokenList);
+>>>>>>> 906163d (start superfluid plugin)
         },
     };
 }

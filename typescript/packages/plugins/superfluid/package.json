@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "name": "@goat-sdk/plugin-superfluid",
+=======
+    "name": "@goat-sdk/plugin-erc20",
+>>>>>>> 906163d (start superfluid plugin)
     "version": "0.1.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
