@@ -195,9 +195,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
-      '@goat-sdk/plugin-solana-actions':
+      '@goat-sdk/plugin-solana-nfts':
         specifier: workspace:*
-        version: link:../../../packages/plugins/solana
+        version: link:../../../packages/plugins/solana-nfts
       '@solana/web3.js':
         specifier: 1.95.8
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -394,7 +394,7 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
 
-  packages/plugins/solana:
+  packages/plugins/solana-nfts:
     dependencies:
       '@goat-sdk/core':
         specifier: workspace:*
