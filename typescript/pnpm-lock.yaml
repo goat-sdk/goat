@@ -121,36 +121,6 @@ importers:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
-  examples/vercel-ai/coingecko:
-    dependencies:
-      '@ai-sdk/openai':
-        specifier: ^1.0.4
-        version: 1.0.4(zod@3.23.8)
-      '@goat-sdk/adapter-vercel-ai':
-        specifier: workspace:*
-        version: link:../../../packages/adapters/vercel-ai
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../../../packages/core
-      '@goat-sdk/plugin-coingecko':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/coingecko
-      '@goat-sdk/plugin-erc20':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/erc20
-      '@goat-sdk/wallet-viem':
-        specifier: workspace:*
-        version: link:../../../packages/wallets/viem
-      ai:
-        specifier: ^4.0.3
-        version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
-      viem:
-        specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-
   examples/vercel-ai/crossmint-smart-wallets:
     dependencies:
       '@ai-sdk/openai':
@@ -292,6 +262,33 @@ importers:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
+  examples/vercel-ai/worldstore:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.4(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/vercel-ai
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/plugin-worldstore':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/worldstore
+      '@goat-sdk/wallet-viem':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/viem
+      ai:
+        specifier: ^4.0.3
+        version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      viem:
+        specifier: 2.21.49
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+
   packages/adapters/eleven-labs:
     dependencies:
       '@goat-sdk/core':
@@ -387,6 +384,15 @@ importers:
       viem:
         specifier: ^2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+
+  packages/plugins/worldstore:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
       zod:
         specifier: ^3.23.8
         version: 3.23.8

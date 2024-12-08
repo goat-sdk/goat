@@ -1,0 +1,290 @@
+{
+  "text": "Here are some options for red snowboards:\n\n1. **Red Snowboard**\n   - **Price:** $100 USD\n   - **Stock:** 20 available\n   - **Description:** (No description available)\n   - **Image:** (No image available)\n\n2. **The Hidden Snowboard**\n   - **Price:** $749.95 USD\n   - **Stock:** 9 available\n   - **Description:** (No description available)\n   - **Image:** ![The Hidden Snowboard](https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855)\n\nUnfortunately, the second option is a green snowboard and is out of stock. Would you like to purchase one of the available options?",
+  "toolCalls": [],
+  "toolResults": [],
+  "finishReason": "stop",
+  "usage": {
+    "completionTokens": 196,
+    "promptTokens": 1078,
+    "totalTokens": 1274
+  },
+  "warnings": [],
+  "request": {
+    "body": "{\"model\":\"gpt-4o-mini\",\"temperature\":0,\"messages\":[{\"role\":\"user\",\"content\":\"\\nI'm looking to buy a new snowboard, my favorite color is red\\n\"},{\"role\":\"assistant\",\"content\":\"\",\"tool_calls\":[{\"id\":\"call_p5TBAFMDzStr2WeqCUTj4aOs\",\"type\":\"function\",\"function\":{\"name\":\"search_products\",\"arguments\":\"{\\\"query\\\":\\\"red snowboard\\\",\\\"limit\\\":3}\"}}]},{\"role\":\"tool\",\"tool_call_id\":\"call_p5TBAFMDzStr2WeqCUTj4aOs\",\"content\":\"\\\"[{\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226da\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49272933450032\\\\\\\",\\\\\\\"stock\\\\\\\":20,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":100,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226db\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"Red Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226dc\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.962293267250061},{\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226de\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49273094242608\\\\\\\",\\\\\\\"stock\\\\\\\":0,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":0,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226df\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"Green Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226e0\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.8938595056533813},{\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e22261f\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49270055239984\\\\\\\",\\\\\\\"stock\\\\\\\":9,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":749.95,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e222620\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"The Hidden Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e222621\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.823348879814148}]\\\"\"}],\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_address\",\"description\":\"This tool returns the address of the EVM wallet.\\n\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"get_eth_balance\",\"description\":\"This tool returns the ETH balance of an EVM wallet.\\n- address (optional) (string): The address to get the balance of, defaults to the address of the wallet\",\"parameters\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"string\",\"description\":\"The address to get the balance of, defaults to the address of the wallet\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"search_products\",\"description\":\"This tool searches for products on all stores within the WorldStore\\n- query (string): The search query to find products by\\n- limit (optional) (unknown): The number of products to return. Defaults to 3.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"The search query to find products by\"},\"limit\":{\"type\":\"number\",\"default\":3,\"description\":\"The number of products to return. Defaults to 3.\"}},\"required\":[\"query\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"buy_product\",\"description\":\"This tool buys a product from the WorldStore\\n- productId (string): The ID of the product to buy\\n- quantity (number): The quantity of the product to buy\",\"parameters\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"string\",\"description\":\"The ID of the product to buy\"},\"quantity\":{\"type\":\"number\",\"description\":\"The quantity of the product to buy\"}},\"required\":[\"productId\",\"quantity\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}}],\"tool_choice\":\"auto\"}"
+  },
+  "response": {
+    "id": "chatcmpl-AbdIYbeOimdm5z6QA8D38mZGyVya0",
+    "timestamp": "2024-12-07T00:49:22.000Z",
+    "modelId": "gpt-4o-mini-2024-07-18",
+    "headers": {
+      "access-control-expose-headers": "X-Request-ID",
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "8ee083f17f3e2588-MIA",
+      "connection": "keep-alive",
+      "content-encoding": "br",
+      "content-type": "application/json",
+      "date": "Sat, 07 Dec 2024 00:49:24 GMT",
+      "openai-organization": "paella-inc",
+      "openai-processing-ms": "1783",
+      "openai-version": "2020-10-01",
+      "server": "cloudflare",
+      "set-cookie": "_cfuvid=75soBbf2bVKzlA7rueaqS05mMGkf_b0SDV.VdSHCavs-1733532564049-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "transfer-encoding": "chunked",
+      "x-content-type-options": "nosniff",
+      "x-ratelimit-limit-requests": "30000",
+      "x-ratelimit-limit-tokens": "150000000",
+      "x-ratelimit-remaining-requests": "29999",
+      "x-ratelimit-remaining-tokens": "149999635",
+      "x-ratelimit-reset-requests": "2ms",
+      "x-ratelimit-reset-tokens": "0s",
+      "x-request-id": "req_2e2bd53902e66ef3835becb2fc9339e1"
+    },
+    "messages": [
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": ""
+          },
+          {
+            "type": "tool-call",
+            "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+            "toolName": "search_products",
+            "args": {
+              "query": "red snowboard",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "content": [
+          {
+            "type": "tool-result",
+            "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+            "toolName": "search_products",
+            "result": "[{\"_id\":\"675389a17b0c75195e2226da\",\"id\":\"gid://shopify/ProductVariant/49272933450032\",\"stock\":20,\"price\":{\"amount\":100,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226db\"},\"metadata\":{\"name\":\"Red Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226dc\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.962293267250061},{\"_id\":\"675389a17b0c75195e2226de\",\"id\":\"gid://shopify/ProductVariant/49273094242608\",\"stock\":0,\"price\":{\"amount\":0,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226df\"},\"metadata\":{\"name\":\"Green Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226e0\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.8938595056533813},{\"_id\":\"675389997b0c75195e22261f\",\"id\":\"gid://shopify/ProductVariant/49270055239984\",\"stock\":9,\"price\":{\"amount\":749.95,\"currency\":\"usd\",\"_id\":\"675389997b0c75195e222620\"},\"metadata\":{\"name\":\"The Hidden Snowboard\",\"imageUrl\":\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\",\"description\":\"\",\"_id\":\"675389997b0c75195e222621\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.823348879814148}]"
+          }
+        ]
+      },
+      {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "text",
+            "text": "Here are some options for red snowboards:\n\n1. **Red Snowboard**\n   - **Price:** $100 USD\n   - **Stock:** 20 available\n   - **Description:** (No description available)\n   - **Image:** (No image available)\n\n2. **The Hidden Snowboard**\n   - **Price:** $749.95 USD\n   - **Stock:** 9 available\n   - **Description:** (No description available)\n   - **Image:** ![The Hidden Snowboard](https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855)\n\nUnfortunately, the second option is a green snowboard and is out of stock. Would you like to purchase one of the available options?"
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "stepType": "initial",
+      "text": "",
+      "toolCalls": [
+        {
+          "type": "tool-call",
+          "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+          "toolName": "search_products",
+          "args": {
+            "query": "red snowboard",
+            "limit": 3
+          }
+        }
+      ],
+      "toolResults": [
+        {
+          "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+          "toolName": "search_products",
+          "args": {
+            "query": "red snowboard",
+            "limit": 3
+          },
+          "result": "[{\"_id\":\"675389a17b0c75195e2226da\",\"id\":\"gid://shopify/ProductVariant/49272933450032\",\"stock\":20,\"price\":{\"amount\":100,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226db\"},\"metadata\":{\"name\":\"Red Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226dc\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.962293267250061},{\"_id\":\"675389a17b0c75195e2226de\",\"id\":\"gid://shopify/ProductVariant/49273094242608\",\"stock\":0,\"price\":{\"amount\":0,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226df\"},\"metadata\":{\"name\":\"Green Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226e0\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.8938595056533813},{\"_id\":\"675389997b0c75195e22261f\",\"id\":\"gid://shopify/ProductVariant/49270055239984\",\"stock\":9,\"price\":{\"amount\":749.95,\"currency\":\"usd\",\"_id\":\"675389997b0c75195e222620\"},\"metadata\":{\"name\":\"The Hidden Snowboard\",\"imageUrl\":\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\",\"description\":\"\",\"_id\":\"675389997b0c75195e222621\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.823348879814148}]"
+        }
+      ],
+      "finishReason": "tool-calls",
+      "usage": {
+        "promptTokens": 293,
+        "completionTokens": 15,
+        "totalTokens": 308
+      },
+      "warnings": [],
+      "request": {
+        "body": "{\"model\":\"gpt-4o-mini\",\"temperature\":0,\"messages\":[{\"role\":\"user\",\"content\":\"\\nI'm looking to buy a new snowboard, my favorite color is red\\n\"}],\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_address\",\"description\":\"This tool returns the address of the EVM wallet.\\n\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"get_eth_balance\",\"description\":\"This tool returns the ETH balance of an EVM wallet.\\n- address (optional) (string): The address to get the balance of, defaults to the address of the wallet\",\"parameters\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"string\",\"description\":\"The address to get the balance of, defaults to the address of the wallet\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"search_products\",\"description\":\"This tool searches for products on all stores within the WorldStore\\n- query (string): The search query to find products by\\n- limit (optional) (unknown): The number of products to return. Defaults to 3.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"The search query to find products by\"},\"limit\":{\"type\":\"number\",\"default\":3,\"description\":\"The number of products to return. Defaults to 3.\"}},\"required\":[\"query\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"buy_product\",\"description\":\"This tool buys a product from the WorldStore\\n- productId (string): The ID of the product to buy\\n- quantity (number): The quantity of the product to buy\",\"parameters\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"string\",\"description\":\"The ID of the product to buy\"},\"quantity\":{\"type\":\"number\",\"description\":\"The quantity of the product to buy\"}},\"required\":[\"productId\",\"quantity\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}}],\"tool_choice\":\"auto\"}"
+      },
+      "response": {
+        "id": "chatcmpl-AbdIX7eexFS78qzMMfaRGEy228Wqi",
+        "timestamp": "2024-12-07T00:49:21.000Z",
+        "modelId": "gpt-4o-mini-2024-07-18",
+        "headers": {
+          "access-control-expose-headers": "X-Request-ID",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "8ee083ea6c4e2588-MIA",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Sat, 07 Dec 2024 00:49:21 GMT",
+          "openai-organization": "paella-inc",
+          "openai-processing-ms": "427",
+          "openai-version": "2020-10-01",
+          "server": "cloudflare",
+          "set-cookie": "_cfuvid=kvESreVqkMcxh6X2U27ZVFtSj534xeEspfMXDtVqZCg-1733532561612-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+          "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+          "transfer-encoding": "chunked",
+          "x-content-type-options": "nosniff",
+          "x-ratelimit-limit-requests": "30000",
+          "x-ratelimit-limit-tokens": "150000000",
+          "x-ratelimit-remaining-requests": "29999",
+          "x-ratelimit-remaining-tokens": "149999967",
+          "x-ratelimit-reset-requests": "2ms",
+          "x-ratelimit-reset-tokens": "0s",
+          "x-request-id": "req_a80340d56a88d41b871a159a1d1e7e0d"
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": ""
+              },
+              {
+                "type": "tool-call",
+                "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+                "toolName": "search_products",
+                "args": {
+                  "query": "red snowboard",
+                  "limit": 3
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": [
+              {
+                "type": "tool-result",
+                "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+                "toolName": "search_products",
+                "result": "[{\"_id\":\"675389a17b0c75195e2226da\",\"id\":\"gid://shopify/ProductVariant/49272933450032\",\"stock\":20,\"price\":{\"amount\":100,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226db\"},\"metadata\":{\"name\":\"Red Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226dc\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.962293267250061},{\"_id\":\"675389a17b0c75195e2226de\",\"id\":\"gid://shopify/ProductVariant/49273094242608\",\"stock\":0,\"price\":{\"amount\":0,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226df\"},\"metadata\":{\"name\":\"Green Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226e0\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.8938595056533813},{\"_id\":\"675389997b0c75195e22261f\",\"id\":\"gid://shopify/ProductVariant/49270055239984\",\"stock\":9,\"price\":{\"amount\":749.95,\"currency\":\"usd\",\"_id\":\"675389997b0c75195e222620\"},\"metadata\":{\"name\":\"The Hidden Snowboard\",\"imageUrl\":\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\",\"description\":\"\",\"_id\":\"675389997b0c75195e222621\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.823348879814148}]"
+              }
+            ]
+          }
+        ]
+      },
+      "experimental_providerMetadata": {
+        "openai": {
+          "reasoningTokens": 0,
+          "cachedPromptTokens": 0
+        }
+      },
+      "isContinued": false
+    },
+    {
+      "stepType": "tool-result",
+      "text": "Here are some options for red snowboards:\n\n1. **Red Snowboard**\n   - **Price:** $100 USD\n   - **Stock:** 20 available\n   - **Description:** (No description available)\n   - **Image:** (No image available)\n\n2. **The Hidden Snowboard**\n   - **Price:** $749.95 USD\n   - **Stock:** 9 available\n   - **Description:** (No description available)\n   - **Image:** ![The Hidden Snowboard](https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855)\n\nUnfortunately, the second option is a green snowboard and is out of stock. Would you like to purchase one of the available options?",
+      "toolCalls": [],
+      "toolResults": [],
+      "finishReason": "stop",
+      "usage": {
+        "promptTokens": 785,
+        "completionTokens": 181,
+        "totalTokens": 966
+      },
+      "warnings": [],
+      "request": {
+        "body": "{\"model\":\"gpt-4o-mini\",\"temperature\":0,\"messages\":[{\"role\":\"user\",\"content\":\"\\nI'm looking to buy a new snowboard, my favorite color is red\\n\"},{\"role\":\"assistant\",\"content\":\"\",\"tool_calls\":[{\"id\":\"call_p5TBAFMDzStr2WeqCUTj4aOs\",\"type\":\"function\",\"function\":{\"name\":\"search_products\",\"arguments\":\"{\\\"query\\\":\\\"red snowboard\\\",\\\"limit\\\":3}\"}}]},{\"role\":\"tool\",\"tool_call_id\":\"call_p5TBAFMDzStr2WeqCUTj4aOs\",\"content\":\"\\\"[{\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226da\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49272933450032\\\\\\\",\\\\\\\"stock\\\\\\\":20,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":100,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226db\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"Red Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226dc\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.962293267250061},{\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226de\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49273094242608\\\\\\\",\\\\\\\"stock\\\\\\\":0,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":0,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226df\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"Green Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389a17b0c75195e2226e0\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.8938595056533813},{\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e22261f\\\\\\\",\\\\\\\"id\\\\\\\":\\\\\\\"gid://shopify/ProductVariant/49270055239984\\\\\\\",\\\\\\\"stock\\\\\\\":9,\\\\\\\"price\\\\\\\":{\\\\\\\"amount\\\\\\\":749.95,\\\\\\\"currency\\\\\\\":\\\\\\\"usd\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e222620\\\\\\\"},\\\\\\\"metadata\\\\\\\":{\\\\\\\"name\\\\\\\":\\\\\\\"The Hidden Snowboard\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\\\\\\\",\\\\\\\"description\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"_id\\\\\\\":\\\\\\\"675389997b0c75195e222621\\\\\\\"},\\\\\\\"shopExternalId\\\\\\\":\\\\\\\"90c8531f-49a2-4f93-8f52-a37ab3687718\\\\\\\",\\\\\\\"score\\\\\\\":0.823348879814148}]\\\"\"}],\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_address\",\"description\":\"This tool returns the address of the EVM wallet.\\n\",\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"get_eth_balance\",\"description\":\"This tool returns the ETH balance of an EVM wallet.\\n- address (optional) (string): The address to get the balance of, defaults to the address of the wallet\",\"parameters\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"string\",\"description\":\"The address to get the balance of, defaults to the address of the wallet\"}},\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"search_products\",\"description\":\"This tool searches for products on all stores within the WorldStore\\n- query (string): The search query to find products by\\n- limit (optional) (unknown): The number of products to return. Defaults to 3.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"description\":\"The search query to find products by\"},\"limit\":{\"type\":\"number\",\"default\":3,\"description\":\"The number of products to return. Defaults to 3.\"}},\"required\":[\"query\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}},{\"type\":\"function\",\"function\":{\"name\":\"buy_product\",\"description\":\"This tool buys a product from the WorldStore\\n- productId (string): The ID of the product to buy\\n- quantity (number): The quantity of the product to buy\",\"parameters\":{\"type\":\"object\",\"properties\":{\"productId\":{\"type\":\"string\",\"description\":\"The ID of the product to buy\"},\"quantity\":{\"type\":\"number\",\"description\":\"The quantity of the product to buy\"}},\"required\":[\"productId\",\"quantity\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}}}],\"tool_choice\":\"auto\"}"
+      },
+      "response": {
+        "id": "chatcmpl-AbdIYbeOimdm5z6QA8D38mZGyVya0",
+        "timestamp": "2024-12-07T00:49:22.000Z",
+        "modelId": "gpt-4o-mini-2024-07-18",
+        "headers": {
+          "access-control-expose-headers": "X-Request-ID",
+          "alt-svc": "h3=\":443\"; ma=86400",
+          "cf-cache-status": "DYNAMIC",
+          "cf-ray": "8ee083f17f3e2588-MIA",
+          "connection": "keep-alive",
+          "content-encoding": "br",
+          "content-type": "application/json",
+          "date": "Sat, 07 Dec 2024 00:49:24 GMT",
+          "openai-organization": "paella-inc",
+          "openai-processing-ms": "1783",
+          "openai-version": "2020-10-01",
+          "server": "cloudflare",
+          "set-cookie": "_cfuvid=75soBbf2bVKzlA7rueaqS05mMGkf_b0SDV.VdSHCavs-1733532564049-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+          "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+          "transfer-encoding": "chunked",
+          "x-content-type-options": "nosniff",
+          "x-ratelimit-limit-requests": "30000",
+          "x-ratelimit-limit-tokens": "150000000",
+          "x-ratelimit-remaining-requests": "29999",
+          "x-ratelimit-remaining-tokens": "149999635",
+          "x-ratelimit-reset-requests": "2ms",
+          "x-ratelimit-reset-tokens": "0s",
+          "x-request-id": "req_2e2bd53902e66ef3835becb2fc9339e1"
+        },
+        "messages": [
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": ""
+              },
+              {
+                "type": "tool-call",
+                "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+                "toolName": "search_products",
+                "args": {
+                  "query": "red snowboard",
+                  "limit": 3
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "content": [
+              {
+                "type": "tool-result",
+                "toolCallId": "call_p5TBAFMDzStr2WeqCUTj4aOs",
+                "toolName": "search_products",
+                "result": "[{\"_id\":\"675389a17b0c75195e2226da\",\"id\":\"gid://shopify/ProductVariant/49272933450032\",\"stock\":20,\"price\":{\"amount\":100,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226db\"},\"metadata\":{\"name\":\"Red Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226dc\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.962293267250061},{\"_id\":\"675389a17b0c75195e2226de\",\"id\":\"gid://shopify/ProductVariant/49273094242608\",\"stock\":0,\"price\":{\"amount\":0,\"currency\":\"usd\",\"_id\":\"675389a17b0c75195e2226df\"},\"metadata\":{\"name\":\"Green Snowboard\",\"imageUrl\":\"\",\"description\":\"\",\"_id\":\"675389a17b0c75195e2226e0\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.8938595056533813},{\"_id\":\"675389997b0c75195e22261f\",\"id\":\"gid://shopify/ProductVariant/49270055239984\",\"stock\":9,\"price\":{\"amount\":749.95,\"currency\":\"usd\",\"_id\":\"675389997b0c75195e222620\"},\"metadata\":{\"name\":\"The Hidden Snowboard\",\"imageUrl\":\"https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855\",\"description\":\"\",\"_id\":\"675389997b0c75195e222621\"},\"shopExternalId\":\"90c8531f-49a2-4f93-8f52-a37ab3687718\",\"score\":0.823348879814148}]"
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "Here are some options for red snowboards:\n\n1. **Red Snowboard**\n   - **Price:** $100 USD\n   - **Stock:** 20 available\n   - **Description:** (No description available)\n   - **Image:** (No image available)\n\n2. **The Hidden Snowboard**\n   - **Price:** $749.95 USD\n   - **Stock:** 9 available\n   - **Description:** (No description available)\n   - **Image:** ![The Hidden Snowboard](https://cdn.shopify.com/s/files/1/0900/5799/8640/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1732149855)\n\nUnfortunately, the second option is a green snowboard and is out of stock. Would you like to purchase one of the available options?"
+              }
+            ]
+          }
+        ]
+      },
+      "experimental_providerMetadata": {
+        "openai": {
+          "reasoningTokens": 0,
+          "cachedPromptTokens": 0
+        }
+      },
+      "isContinued": false
+    }
+  ],
+  "experimental_providerMetadata": {
+    "openai": {
+      "reasoningTokens": 0,
+      "cachedPromptTokens": 0
+    }
+  }
+}
