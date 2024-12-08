@@ -6,11 +6,12 @@ import { replaceToolPlaceholder } from "./utils";
 import type { AnyEVMWalletClient, ChainForWalletClient, WalletClient } from "./wallets";
 import { isEVMChain, isEVMSmartWalletClient, isSolanaChain } from "./wallets";
 
-export type Tool = {
+// biome-ignore lint/suspicious/noExplicitAny: Tools can return any type
+export type Tool<TResult = any> = {
     name: string;
     description: string;
     parameters: z.ZodSchema;
-    method: (parameters: z.infer<z.ZodSchema>) => string | Promise<string>;
+    method: (parameters: z.infer<z.ZodSchema>) => TResult | Promise<TResult>;
 };
 
 export type GetToolsParams<TWalletClient extends WalletClient> = {
@@ -42,11 +43,12 @@ export async function getTools<TWalletClient extends WalletClient>({
 /**
  * Deferred tools defer which wallet client to be passed to the method until the tool is called.
  */
-export type DeferredTool<TWalletClient extends WalletClient> = {
+// biome-ignore lint/suspicious/noExplicitAny: Tools can return any type
+export type DeferredTool<TWalletClient extends WalletClient, TResult = any> = {
     name: string;
     description: string;
     parameters: z.ZodSchema;
-    method: (walletClient: TWalletClient, parameters: z.infer<z.ZodSchema>) => string | Promise<string>;
+    method: (walletClient: TWalletClient, parameters: z.infer<z.ZodSchema>) => TResult | Promise<TResult>;
 };
 
 export type GetDeferredToolsParams<TWalletClient extends WalletClient> = {
