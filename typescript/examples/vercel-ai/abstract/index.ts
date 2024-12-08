@@ -28,7 +28,7 @@ const walletClient = createWalletClient({
     const tools = await getOnChainTools({
         wallet: viem(walletClient, {
             paymaster: {
-                defaultPaymaster:
+                defaultAddress:
                     process.env.PAYMASTER_ADDRESS as `0x${string}`,
             },
         }),

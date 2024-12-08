@@ -17,7 +17,7 @@ import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 export type ViemOptions = {
     paymaster?: {
         defaultAddress: `0x${string}`;
-        defaultInput: `0x${string}`;
+        defaultInput?: `0x${string}`;
     };
 };
 
@@ -95,7 +95,7 @@ export function viem(
             const paymaster = options?.paymaster?.address ?? defaultPaymaster;
             const paymasterInput =
                 options?.paymaster?.input ?? defaultPaymasterInput;
-            const txHasPaymaster = !!paymaster || !!paymasterInput;
+            const txHasPaymaster = !!paymaster && !!paymasterInput;
 
             // If paymaster params exist, extend with EIP712 actions
             const sendingClient = txHasPaymaster
