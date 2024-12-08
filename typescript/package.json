@@ -27,9 +27,9 @@
         "vitest": "2.1.5"
     },
     "engines": {
-        "node": ">=20.12.2 <21",
+        "node": ">=20.12.2",
         "npm": "please-use-pnpm",
-        "pnpm": ">=9",
+        "pnpm": ">=8",
         "yarn": "please-use-pnpm"
     },
     "homepage": "https://github.com/crossmint/goat",
