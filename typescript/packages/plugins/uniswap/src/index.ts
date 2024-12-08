@@ -13,7 +13,7 @@ export function uniswap({ apiKey, baseUrl }: UniswapOptions): Plugin<EVMWalletCl
     return {
         name: "Uniswap",
         supportsChain: (chain: Chain) => chain.type === "evm" && SUPPORTED_CHAINS.some((c) => c.id === chain.id),
-        supportsSmartWallets: () => false,
+        supportsSmartWallets: () => true,
         getTools: async () => {
             return getTools({
                 apiKey,
