@@ -19,7 +19,7 @@
         "next": "15.0.3",
         "react": "19.0.0-rc-66855b96-20241106",
         "react-dom": "19.0.0-rc-66855b96-20241106",
-        "viem": "^2.21.49",
+        "viem": "catalog:",
         "wagmi": "^2.13.3"
     },
     "devDependencies": {

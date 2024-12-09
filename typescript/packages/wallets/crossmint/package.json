@@ -13,11 +13,11 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@solana/web3.js": "1.95.8",
+        "@solana/web3.js": "catalog:",
         "abitype": "^1.0.6",
         "bs58": "^6.0.0",
-        "viem": "^2.21.49",
-        "zod": "^3.23.8"
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
