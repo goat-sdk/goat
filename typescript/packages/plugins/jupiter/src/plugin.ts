@@ -2,6 +2,7 @@ import type { Plugin, SolanaWalletClient } from "@goat-sdk/core";
 import { createJupiterApiClient } from "@jup-ag/api";
 import type { z } from "zod";
 import { getQuoteParametersSchema, quoteResponseSchema } from "./parameters";
+import { TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 
 export function jupiter(): Plugin<SolanaWalletClient> {
     return {
@@ -21,13 +22,28 @@ export function jupiter(): Plugin<SolanaWalletClient> {
                     name: "get_swap_transaction",
                     description: "This {{tool}} returns a transaction to swap tokens on the Jupiter DEX.",
                     parameters: quoteResponseSchema,
-                    method: (walletClient, parameters: z.infer<typeof quoteResponseSchema>) =>
-                        createJupiterApiClient().swapPost({
+                    method: async (walletClient, parameters: z.infer<typeof quoteResponseSchema>) => {
+                        const response = await createJupiterApiClient().swapPost({
                             swapRequest: {
                                 userPublicKey: walletClient.getAddress(),
                                 quoteResponse: parameters,
                             },
-                        }),
+                        });
+
+                        const serializedTransaction = response.swapTransaction;
+                        const deserializedTransaction = VersionedTransaction.deserialize(
+                            Buffer.from(serializedTransaction, "base64"),
+                        );
+                        const instructions = TransactionMessage.decompile(deserializedTransaction.message).instructions;
+
+                        return {
+                            serializedTransaction,
+                            instructions,
+                            lastValidBlockHeight: response.lastValidBlockHeight,
+                            prioritizationFeeLamports: response.prioritizationFeeLamports,
+                            dynamicSlippageReport: response.dynamicSlippageReport,
+                        };
+                    },
                 },
             ];
         },

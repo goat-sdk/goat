@@ -432,6 +432,9 @@ importers:
       '@jup-ag/api':
         specifier: 6.0.31
         version: 6.0.31
+      '@solana/web3.js':
+        specifier: 'catalog:'
+        version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       zod:
         specifier: 'catalog:'
         version: 3.23.8

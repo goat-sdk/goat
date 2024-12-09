@@ -14,7 +14,8 @@
     "dependencies": {
         "@jup-ag/api": "6.0.31",
         "@goat-sdk/core": "workspace:*",
-        "zod": "catalog:"
+        "zod": "catalog:",
+        "@solana/web3.js": "catalog:"
     },
     "peerDependencies": {
         "@jup-ag/api": "6.0.31",
