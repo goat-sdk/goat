@@ -1,5 +1,6 @@
 import { custodialFactory } from "./custodial";
 import { faucetFactory } from "./faucet";
+import { mintingAPIFactory } from "./mintingAPI";
 import { smartWalletFactory } from "./smart-wallet";
 
 function crossmint(apiKey: string) {
@@ -7,6 +8,7 @@ function crossmint(apiKey: string) {
         custodial: custodialFactory(apiKey),
         smartwallet: smartWalletFactory(apiKey),
         faucet: faucetFactory(apiKey),
+        mintingAPI: mintingAPIFactory(apiKey),
     };
 }
 

@@ -2,30 +2,32 @@ import { z } from "zod";
 import type { Plugin, WalletClient } from "@goat-sdk/core";
 import { randomUUID } from "node:crypto";
 
-export function mintAPI(apiKey: string): Plugin<WalletClient> {
-    return {
+export const mintingAPIFactory = (
+    apiKey: string,
+): ((options: { env: "production" | "staging" }) => Plugin<WalletClient>) => {
+    return ({ env }) => ({
         name: "minting_api",
         supportsSmartWallets: () => true,
-        supportsChain: (chain) => chain.type === "solana" || chain.type === "evm",
+        supportsChain: (chain) => chain.type === "solana" || chain.type === "evm" || chain.type === "aptos",
         getTools: async () => {
             return [
                 {
-                    name: "create_collection",
+                    name: "create_nft_collection",
                     description: "This {{tool}} creates an NFT collection and returns the ID of the collection.",
                     parameters: createCollectionParametersSchema,
-                    method: createCollectionMethod(apiKey),
+                    method: createCollectionMethod(apiKey, env),
                 },
                 {
                     name: "mint_nft",
                     description:
                         "This {{tool}} mints an NFT to a recipient from a collection and returns the transaction hash. Requires a collection ID of an already deployed collection.",
                     parameters: mintNFTParametersSchema,
-                    method: mintNFTMethod(apiKey),
+                    method: mintNFTMethod(apiKey, env),
                 },
             ];
         },
-    };
-}
+    });
+};
 
 const createCollectionParametersSchema = z.object({
     metadata: z
@@ -57,10 +59,10 @@ const mintNFTParametersSchema = z.object({
         .describe("The metadata of the NFT"),
 });
 
-function createCollectionMethod(apiKey: string) {
+function createCollectionMethod(apiKey: string, env: "staging" | "production") {
     return async (_walletClient: WalletClient, parameters: z.infer<typeof createCollectionParametersSchema>) => {
         const id = randomUUID().toString();
-        await fetch(`https://staging.crossmint.com/api/2022-06-09/collections/${id}`, {
+        await fetch(`${getBaseUrl(env)}/collections/${id}`, {
             method: "PUT",
             body: JSON.stringify({
                 ...parameters,
@@ -70,15 +72,19 @@ function createCollectionMethod(apiKey: string) {
                 "Content-Type": "application/json",
             },
         });
-        await waitForAction(id, apiKey);
-        return id;
+        const body = await waitForAction(id, apiKey, env);
+        return {
+            collectionId: id,
+            chain: parameters.chain,
+            contractAddress: body.data.collection.contractAddress,
+        };
     };
 }
 
-function mintNFTMethod(apiKey: string) {
+function mintNFTMethod(apiKey: string, env: "staging" | "production") {
     return async (_walletClient: WalletClient, parameters: z.infer<typeof mintNFTParametersSchema>) => {
         const id = randomUUID().toString();
-        await fetch(`https://staging.crossmint.com/api/2022-06-09/collections/${parameters.collectionId}/nfts/${id}`, {
+        await fetch(`${getBaseUrl(env)}/collections/${parameters.collectionId}/nfts/${id}`, {
             method: "PUT",
             body: JSON.stringify({
                 recipient: parameters.recipient,
@@ -89,16 +95,16 @@ function mintNFTMethod(apiKey: string) {
                 "Content-Type": "application/json",
             },
         });
-        const body = await waitForAction(id, apiKey);
+        const body = await waitForAction(id, apiKey, env);
         return body.data.txId as string;
     };
 }
 
-async function waitForAction(actionId: string, apiKey: string) {
+async function waitForAction(actionId: string, apiKey: string, env: "staging" | "production") {
     let attempts = 0;
     while (true) {
         attempts++;
-        const response = await fetch(`https://staging.crossmint.com/api/2022-06-09/actions/${actionId}`, {
+        const response = await fetch(`${getBaseUrl(env)}/actions/${actionId}`, {
             headers: {
                 "x-api-key": apiKey,
             },
@@ -113,4 +119,10 @@ async function waitForAction(actionId: string, apiKey: string) {
             throw new Error(`Timed out waiting for action ${actionId} after ${attempts} attempts`);
         }
     }
+}
+
+function getBaseUrl(env: "staging" | "production") {
+    return env === "staging"
+        ? "https://staging.crossmint.com/api/2022-06-09"
+        : "https://www.crossmint.com/api/2022-06-09";
 }
