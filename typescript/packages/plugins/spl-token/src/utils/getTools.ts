@@ -3,7 +3,11 @@ import type { Connection } from "@solana/web3.js";
 import type { z } from "zod";
 import { balanceOf } from "../methods/balance";
 import { transfer } from "../methods/transfer";
-import { getBalanceParametersSchema, transferParametersSchema } from "../parameters";
+import {
+    getBalanceParametersSchema,
+    getTokenBalanceByMintAddressParametersSchema,
+    transferParametersSchema,
+} from "../parameters";
 import type { NetworkSpecificToken } from "../tokens";
 
 export function getTools(
@@ -14,15 +18,15 @@ export function getTools(
 
     for (const token of tokenList) {
         const balanceTool: DeferredTool<SolanaWalletClient> = {
-            name: `get_${token.symbol}_balance`,
+            name: `get_solana_${token.symbol}_balance`,
             description: `This {{tool}} gets the balance of ${token.symbol}`,
             parameters: getBalanceParametersSchema,
             method: async (walletClient: SolanaWalletClient, parameters: z.infer<typeof getBalanceParametersSchema>) =>
-                balanceOf(connection, parameters.wallet, token),
+                balanceOf(connection, parameters.wallet, token.mintAddress),
         };
 
         const transferTool: DeferredTool<SolanaWalletClient> = {
-            name: `transfer_${token.symbol}`,
+            name: `transfer_solana_${token.symbol}`,
             description: `This {{tool}} transfers ${token.symbol}`,
             parameters: transferParametersSchema,
             method: async (walletClient: SolanaWalletClient, parameters: z.infer<typeof transferParametersSchema>) =>
@@ -31,6 +35,16 @@ export function getTools(
 
         tools.push(balanceTool, transferTool);
     }
+
+    tools.push({
+        name: "get_solana_token_balance_by_mint_address",
+        description: "This {{tool}} gets the balance of an SPL token by its mint address",
+        parameters: getTokenBalanceByMintAddressParametersSchema,
+        method: async (
+            walletClient: SolanaWalletClient,
+            parameters: z.infer<typeof getTokenBalanceByMintAddressParametersSchema>,
+        ) => balanceOf(connection, parameters.wallet, parameters.mintAddress),
+    });
 
     return tools;
 }
