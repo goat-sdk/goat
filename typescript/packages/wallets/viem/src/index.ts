@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import type { EVMReadRequest, EVMTransaction, EVMTypedData, EVMWalletClient } from "@goat-sdk/core";
 
 import { publicActions } from "viem";
@@ -15,11 +16,14 @@ import {
     encodeFunctionData,
     type WalletClient as ViemWalletClient,
 } from "viem";
+=======
+import type { EVMReadRequest, EVMTransaction, EVMTypedData, EVMWalletClient } from "@goat-sdk/core";
+import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
+>>>>>>> 8d194ff (Release packages (#25))
 import { mainnet } from "viem/chains";
 >>>>>>> f5ea302 ( feat: add support for paymasters in zk stack networks (#19))
 import { normalize } from "viem/ens";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
-
 
 export type ViemOptions = {
     paymaster?: {
@@ -28,17 +32,13 @@ export type ViemOptions = {
     };
 };
 
-export function viem(
-    client: ViemWalletClient,
-    options?: ViemOptions
-): EVMWalletClient {
+export function viem(client: ViemWalletClient, options?: ViemOptions): EVMWalletClient {
     const defaultPaymaster = options?.paymaster?.defaultAddress ?? "";
     const defaultPaymasterInput =
         options?.paymaster?.defaultInput ??
         getGeneralPaymasterInput({
             innerInput: "0x",
         });
-
 
     const publicClient = client.extend(publicActions);
 
@@ -56,8 +56,7 @@ export function viem(
             };
         },
         async resolveAddress(address: string) {
-            if (/^0x[a-fA-F0-9]{40}$/.test(address))
-                return address as `0x${string}`;
+            if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
 
             try {
                 const resolvedAddress = (await publicClient.getEnsAddress({
@@ -100,14 +99,11 @@ export function viem(
             const toAddress = await this.resolveAddress(to);
 
             const paymaster = options?.paymaster?.address ?? defaultPaymaster;
-            const paymasterInput =
-                options?.paymaster?.input ?? defaultPaymasterInput;
+            const paymasterInput = options?.paymaster?.input ?? defaultPaymasterInput;
             const txHasPaymaster = !!paymaster && !!paymasterInput;
 
             // If paymaster params exist, extend with EIP712 actions
-            const sendingClient = txHasPaymaster
-                ? client.extend(eip712WalletActions())
-                : client;
+            const sendingClient = txHasPaymaster ? client.extend(eip712WalletActions()) : client;
 
             // Simple ETH transfer (no ABI)
             if (!abi) {

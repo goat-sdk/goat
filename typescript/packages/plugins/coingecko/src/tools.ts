@@ -1,10 +1,7 @@
 import type { DeferredTool, WalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
 
-import {
-    getTrendingCoinsParametersSchema,
-    getCoinPriceParametersSchema,
-} from "./parameters";
+import { getCoinPriceParametersSchema, getTrendingCoinsParametersSchema } from "./parameters";
 
 // Define methods to interact with CoinGecko API
 async function fetchTrendingCoins(apiKey: string) {
@@ -15,12 +12,17 @@ async function fetchTrendingCoins(apiKey: string) {
     return await response.json();
 }
 
-async function fetchCoinPrice(coinId: string, vsCurrency: string, apiKey: string, options: {
-    includeMarketCap: boolean;
-    include24hrVol: boolean;
-    include24hrChange: boolean;
-    includeLastUpdatedAt: boolean;
-}) {
+async function fetchCoinPrice(
+    coinId: string,
+    vsCurrency: string,
+    apiKey: string,
+    options: {
+        includeMarketCap: boolean;
+        include24hrVol: boolean;
+        include24hrChange: boolean;
+        includeLastUpdatedAt: boolean;
+    },
+) {
     const params = new URLSearchParams({
         ids: coinId,
         vs_currencies: vsCurrency,
@@ -29,7 +31,9 @@ async function fetchCoinPrice(coinId: string, vsCurrency: string, apiKey: string
         include_24hr_change: options.include24hrChange.toString(),
         include_last_updated_at: options.includeLastUpdatedAt.toString(),
     });
-    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?${params.toString()}&x_cg_demo_api_key=${apiKey}`);
+    const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?${params.toString()}&x_cg_demo_api_key=${apiKey}`,
+    );
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -37,41 +41,31 @@ async function fetchCoinPrice(coinId: string, vsCurrency: string, apiKey: string
 }
 
 export function getTools(credentials: {
-	apiKey: string;
+    apiKey: string;
 }): DeferredTool<WalletClient>[] {
     const tools: DeferredTool<WalletClient>[] = [];
 
     const getTrendingCoinsTool: DeferredTool<WalletClient> = {
-        name: 'get_trending_coins',
-        description: 'This {{tool}} fetches the list of trending coins from CoinGecko',
+        name: "get_trending_coins",
+        description: "This {{tool}} fetches the list of trending coins from CoinGecko",
         parameters: getTrendingCoinsParametersSchema,
         method: async () => fetchTrendingCoins(credentials.apiKey),
     };
 
     const getCoinPriceTool: DeferredTool<WalletClient> = {
-        name: 'get_coin_price',
-        description: 'This {{tool}} fetches the price of a specific coin from CoinGecko',
+        name: "get_coin_price",
+        description: "This {{tool}} fetches the price of a specific coin from CoinGecko",
         parameters: getCoinPriceParametersSchema,
-        method: async (
-            _client: WalletClient,
-            parameters: z.infer<typeof getCoinPriceParametersSchema>
-        ) => fetchCoinPrice(
-            parameters.coinId,
-            parameters.vsCurrency,
-            credentials.apiKey,
-            {
+        method: async (_client: WalletClient, parameters: z.infer<typeof getCoinPriceParametersSchema>) =>
+            fetchCoinPrice(parameters.coinId, parameters.vsCurrency, credentials.apiKey, {
                 includeMarketCap: parameters.includeMarketCap,
                 include24hrVol: parameters.include24hrVol,
                 include24hrChange: parameters.include24hrChange,
                 includeLastUpdatedAt: parameters.includeLastUpdatedAt,
-            }
-        ),
+            }),
     };
 
-    tools.push(
-        getTrendingCoinsTool,
-        getCoinPriceTool
-    );
+    tools.push(getTrendingCoinsTool, getCoinPriceTool);
 
     return tools;
 }
