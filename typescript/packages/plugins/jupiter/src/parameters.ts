@@ -1,9 +1,9 @@
 import {
+    type QuoteGetRequest,
     QuoteGetSwapModeEnum,
     type QuoteResponse,
     type SwapInfo,
     type SwapPostRequest,
-    type QuoteGetRequest,
 } from "@jup-ag/api";
 import { z } from "zod";
 

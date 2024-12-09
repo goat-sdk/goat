@@ -1,7 +1,7 @@
 import type { Plugin, SolanaWalletClient } from "@goat-sdk/core";
+import { createJupiterApiClient } from "@jup-ag/api";
 import type { z } from "zod";
 import { getQuoteParametersSchema, quoteResponseSchema } from "./parameters";
-import { createJupiterApiClient } from "@jup-ag/api";
 
 export function jupiter(): Plugin<SolanaWalletClient> {
     return {
