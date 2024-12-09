@@ -1,5 +1,5 @@
 {
-    "name": "@goat-sdk/plugin-spl-token",
+    "name": "@goat-sdk/plugin-tensor",
     "version": "0.0.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
