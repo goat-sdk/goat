@@ -2,21 +2,27 @@ import type { SolanaWalletClient } from "@goat-sdk/core";
 import {
     createAssociatedTokenAccountInstruction,
     createTransferCheckedInstruction,
-    createTransferInstruction,
     getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
 import { type Connection, PublicKey, type TransactionInstruction } from "@solana/web3.js";
-import type { NetworkSpecificToken } from "../tokens";
+import type { SolanaNetwork } from "../tokens";
 import { doesAccountExist } from "../utils/doesAccountExist";
+import { getTokenByMintAddress } from "../utils/getTokenByMintAddress";
 
 export async function transfer(
     connection: Connection,
+    network: SolanaNetwork,
     walletClient: SolanaWalletClient,
     to: string,
-    token: NetworkSpecificToken,
+    tokenMintAddress: string,
     amount: string,
 ) {
-    const tokenMintPublicKey = new PublicKey(token.mintAddress);
+    const token = getTokenByMintAddress(tokenMintAddress, network);
+    if (!token) {
+        throw new Error(`Token with mint address ${tokenMintAddress} not found`);
+    }
+
+    const tokenMintPublicKey = new PublicKey(tokenMintAddress);
     const fromPublicKey = new PublicKey(walletClient.getAddress());
     const toPublicKey = new PublicKey(to);
 

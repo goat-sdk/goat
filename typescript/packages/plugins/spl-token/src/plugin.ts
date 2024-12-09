@@ -5,17 +5,13 @@ import { getTokensForNetwork } from "./utils/getTokensForNetwork";
 import { getTools } from "./utils/getTools";
 
 export function splToken({
-    tokens,
     connection,
     network,
-}: { tokens: Token[]; connection: Connection; network: SolanaNetwork }): Plugin<SolanaWalletClient> {
+}: { connection: Connection; network: SolanaNetwork }): Plugin<SolanaWalletClient> {
     return {
         name: "splToken",
         supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => {
-            const tokenList = getTokensForNetwork(network, tokens);
-            return getTools(tokenList, connection);
-        },
+        getTools: async () => getTools(connection, network),
     };
 }
