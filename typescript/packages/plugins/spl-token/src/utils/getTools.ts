@@ -1,10 +1,10 @@
 import type { DeferredTool, SolanaWalletClient } from "@goat-sdk/core";
-import type { NetworkSpecificToken } from "../tokens";
-import { getBalanceParametersSchema, transferParametersSchema } from "../parameters";
 import type { Connection } from "@solana/web3.js";
 import type { z } from "zod";
-import { transfer } from "../methods/transfer";
 import { balanceOf } from "../methods/balance";
+import { transfer } from "../methods/transfer";
+import { getBalanceParametersSchema, transferParametersSchema } from "../parameters";
+import type { NetworkSpecificToken } from "../tokens";
 
 export function getTools(
     tokenList: NetworkSpecificToken[],

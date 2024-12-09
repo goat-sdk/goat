@@ -1,4 +1,4 @@
-import type { SolanaNetwork, Token, NetworkSpecificToken } from "../tokens";
+import type { NetworkSpecificToken, SolanaNetwork, Token } from "../tokens";
 
 export function getTokensForNetwork(network: SolanaNetwork, tokens: Token[]) {
     const result: NetworkSpecificToken[] = [];

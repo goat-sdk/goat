@@ -1,12 +1,12 @@
 import type { SolanaWalletClient } from "@goat-sdk/core";
-import type { NetworkSpecificToken } from "../tokens";
-import { type Connection, PublicKey, type TransactionInstruction } from "@solana/web3.js";
 import {
     createAssociatedTokenAccountInstruction,
     createTransferCheckedInstruction,
     createTransferInstruction,
     getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
+import { type Connection, PublicKey, type TransactionInstruction } from "@solana/web3.js";
+import type { NetworkSpecificToken } from "../tokens";
 import { doesAccountExist } from "../utils/doesAccountExist";
 
 export async function transfer(
