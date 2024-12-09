@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-solana-nfts",
-    "version": "0.1.1",
+    "name": "@goat-sdk/plugin-spl-token",
+    "version": "0.0.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,12 +13,8 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@metaplex-foundation/digital-asset-standard-api": "1.0.0",
-        "@metaplex-foundation/mpl-bubblegum": "3.1.0",
-        "@metaplex-foundation/umi": "^0.9.2",
-        "@metaplex-foundation/umi-bundle-defaults": "0.9.2",
-        "@metaplex-foundation/umi-web3js-adapters": "0.8.10",
         "@solana/web3.js": "catalog:",
+        "@solana/spl-token": "0.4.9",
         "zod": "catalog:"
     },
     "peerDependencies": {
