@@ -424,6 +424,18 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/jupiter:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@jup-ag/api':
+        specifier: 6.0.31
+        version: 6.0.31
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/polymarket:
     dependencies:
       '@goat-sdk/core':
@@ -1410,6 +1422,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@jup-ag/api@6.0.31':
+    resolution: {integrity: sha512-MNzK/dEkQ6pHChcu7abRzIbgNrEJdzckeuCQNt46B96Hvzqb9T/m05WBUKjputVY9SrRYslZ2QwFRYsHlv+g9Q==}
 
   '@langchain/core@0.3.18':
     resolution: {integrity: sha512-IEZCrFs1Xd0J2FTH1D3Lnm3/Yk2r8LSpwDeLYwcCom3rNAK5k4mKQ2rwIpNq3YuqBdrTNMKRO+PopjkP1SB17A==}
@@ -6174,6 +6189,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@jup-ag/api@6.0.31': {}
 
   '@langchain/core@0.3.18(openai@4.69.0(zod@3.23.8))':
     dependencies:
