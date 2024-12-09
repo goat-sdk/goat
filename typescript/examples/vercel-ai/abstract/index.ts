@@ -14,9 +14,7 @@ import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(
-    process.env.WALLET_PRIVATE_KEY as `0x${string}`
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const walletClient = createWalletClient({
     account: account,
@@ -28,8 +26,7 @@ const walletClient = createWalletClient({
     const tools = await getOnChainTools({
         wallet: viem(walletClient, {
             paymaster: {
-                defaultAddress:
-                    process.env.PAYMASTER_ADDRESS as `0x${string}`,
+                defaultAddress: process.env.PAYMASTER_ADDRESS as `0x${string}`,
             },
         }),
         plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
@@ -39,8 +36,7 @@ const walletClient = createWalletClient({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt:
-            "Send 0.000001 ETH to <address> and return the tx id",
+        prompt: "Send 0.000001 ETH to <address> and return the tx id",
     });
 
     console.log(result.text);
