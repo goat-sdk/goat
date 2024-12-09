@@ -23,19 +23,17 @@ const walletClient = createWalletClient({
 });
 
 (async () => {
-	const tools = await getOnChainTools({
-		wallet: viem(walletClient),
-		plugins: [
-			sendETH(),
-			erc20({ tokens: [USDC, PEPE] })],
-	});
+    const tools = await getOnChainTools({
+        wallet: viem(walletClient),
+        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+    });
 
-	const result = await generateText({
-		model: openai("gpt-4o-mini"),
-		tools: tools,
-		maxSteps: 5,
-		prompt: "Get my balance in USDC",
-	});
+    const result = await generateText({
+        model: openai("gpt-4o-mini"),
+        tools: tools,
+        maxSteps: 5,
+        prompt: "Get my balance in USDC",
+    });
 
-	console.log(result.text);
+    console.log(result.text);
 })();

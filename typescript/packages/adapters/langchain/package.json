@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-langchain",
-    "version": "0.1.4",
+    "version": "1.0.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

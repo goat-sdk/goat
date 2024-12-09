@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-eleven-labs",
-    "version": "0.1.2",
+    "version": "1.0.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
