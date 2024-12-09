@@ -11,6 +11,14 @@ export type EVMTransaction = {
     args?: unknown[];
     value?: bigint;
     abi?: Abi;
+    options?: EVMTransactionOptions;
+};
+
+export type EVMTransactionOptions = {
+    paymaster?: {
+        address: `0x${string}`;
+        input: `0x${string}`;
+    };
 };
 
 export type EVMReadRequest = {

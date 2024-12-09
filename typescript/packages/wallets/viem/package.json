@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-viem",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,11 +13,11 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "^2.21.49"
+        "viem": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "^2.21.49"
+        "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

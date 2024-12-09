@@ -6,8 +6,9 @@
 - [Viem](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/viem)
 - [Crossmint Smart Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/crossmint-smart-wallets)
 
-### Protocols
+### Plugins
 - [Polymarket](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/polymarket)
+- [Coingecko](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/coingecko)
 
 ### Solana
 - [Solana web3](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/solana)

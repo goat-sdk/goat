@@ -1,9 +1,9 @@
-import { type Connection, PublicKey } from "@solana/web3.js";
-import { z } from "zod";
 import type { Plugin, SolanaWalletClient } from "@goat-sdk/core";
 import { getAssetWithProof, mplBubblegum, transfer } from "@metaplex-foundation/mpl-bubblegum";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
 import { fromWeb3JsPublicKey, toWeb3JsInstruction } from "@metaplex-foundation/umi-web3js-adapters";
+import { type Connection, PublicKey } from "@solana/web3.js";
+import { z } from "zod";
 
 export function nfts(connection: Connection): Plugin<SolanaWalletClient> {
     return {

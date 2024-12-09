@@ -6,10 +6,10 @@ https://github.com/user-attachments/assets/67c7f2d2-0b6a-4e0a-b24b-423e35a94c69
 
 ## Setup
 
-1. Copy the `.env.template` and populate with your values.
+1. Copy the `.example.env` and populate with your values.
 
 ```
-cp .env.template .env
+cp .example.env .env
 ```
 
 2. Create an ElevenLabs agent and get the agent ID. You can follow this guide: https://elevenlabs.io/docs/conversational-ai/docs/agent-setup

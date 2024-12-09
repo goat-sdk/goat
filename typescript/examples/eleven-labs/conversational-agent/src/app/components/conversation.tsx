@@ -4,11 +4,11 @@ import { useConversation } from "@11labs/react";
 import { getOnChainTools } from "@goat-sdk/adapter-eleven-labs";
 import { useCallback } from "react";
 
+import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
 import { ConnectKitButton } from "connectkit";
 import { useAccount, useWalletClient } from "wagmi";
 import { sendETH } from "../../../../../../packages/core/dist/plugins/send-eth";
-import { coingecko } from "@goat-sdk/plugin-coingecko";
 
 export function Conversation() {
     const { isConnected } = useAccount();
