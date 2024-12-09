@@ -38,17 +38,17 @@ async function fetchCoinPrice(coinId: string, vsCurrency: string, apiKey: string
 
 export function getTools(credentials: {
 	apiKey: string;
-}): DeferredTool<any>[] {
-    const tools: DeferredTool<any>[] = [];
+}): DeferredTool<WalletClient>[] {
+    const tools: DeferredTool<WalletClient>[] = [];
 
-    const getTrendingCoinsTool: DeferredTool<any> = {
+    const getTrendingCoinsTool: DeferredTool<WalletClient> = {
         name: 'get_trending_coins',
         description: 'This {{tool}} fetches the list of trending coins from CoinGecko',
         parameters: getTrendingCoinsParametersSchema,
         method: async () => fetchTrendingCoins(credentials.apiKey),
     };
 
-    const getCoinPriceTool: DeferredTool<any> = {
+    const getCoinPriceTool: DeferredTool<WalletClient> = {
         name: 'get_coin_price',
         description: 'This {{tool}} fetches the price of a specific coin from CoinGecko',
         parameters: getCoinPriceParametersSchema,
