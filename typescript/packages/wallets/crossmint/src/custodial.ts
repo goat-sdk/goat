@@ -33,9 +33,9 @@ type CustodialOptions =
 
 function getLocator(params: CustodialOptions): string | number {
     if ("address" in params) return params.address;
-    if ("email" in params) return `email:${params.email}`;
-    if ("phone" in params) return `phone:${params.phone}`;
-    return `userId:${params.userId}`;
+    if ("email" in params) return `email:${params.email}:solana-custodial-wallet`;
+    if ("phone" in params) return `phone:${params.phone}:solana-custodial-wallet`;
+    return `userId:${params.userId}:solana-custodial-wallet`;
 }
 
 export function custodialFactory(apiKey: string) {
