@@ -1,7 +1,6 @@
 ---
-"goat-examples-vercel-ai-abstract": minor
-"@goat-sdk/wallet-viem": minor
-"@goat-sdk/core": minor
+"@goat-sdk/wallet-viem": patch
+"@goat-sdk/core": patch
 ---
 
 add support for paymasters in zk stack networks
