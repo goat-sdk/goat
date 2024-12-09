@@ -13,11 +13,11 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "^2.21.49"
+        "viem": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "^2.21.49"
+        "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

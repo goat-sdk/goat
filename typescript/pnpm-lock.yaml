@@ -4,6 +4,24 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@langchain/core':
+      specifier: 0.3.6
+      version: 0.3.6
+    '@solana/web3.js':
+      specifier: 1.95.8
+      version: 1.95.8
+    ai:
+      specifier: 4.0.3
+      version: 4.0.3
+    viem:
+      specifier: 2.21.49
+      version: 2.21.49
+    zod:
+      specifier: 3.23.8
+      version: 3.23.8
+
 importers:
 
   .:
@@ -72,7 +90,7 @@ importers:
         specifier: 19.0.0-rc-66855b96-20241106
         version: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       wagmi:
         specifier: ^2.13.3
@@ -106,17 +124,17 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
       '@langchain/core':
-        specifier: ^0.3.6
-        version: 0.3.18(openai@4.73.0(zod@3.23.8))
+        specifier: 'catalog:'
+        version: 0.3.6(openai@4.73.0(zod@3.23.8))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8))
       viem:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -139,7 +157,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -169,7 +187,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -196,7 +214,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -226,10 +244,10 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/plugins/solana-nfts
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -256,7 +274,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -283,10 +301,10 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       bip39:
         specifier: ^3.1.0
@@ -313,7 +331,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
@@ -328,7 +346,7 @@ importers:
         specifier: workspace:*
         version: link:../../core
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/adapters/eliza:
@@ -340,7 +358,7 @@ importers:
         specifier: workspace:*
         version: link:../../core
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/adapters/langchain:
@@ -349,10 +367,10 @@ importers:
         specifier: workspace:*
         version: link:../../core
       '@langchain/core':
-        specifier: ^0.3.6
-        version: 0.3.18(openai@4.73.0(zod@3.23.8))
+        specifier: 'catalog:'
+        version: 0.3.6(openai@4.73.0(zod@3.23.8))
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/adapters/vercel-ai:
@@ -361,25 +379,25 @@ importers:
         specifier: workspace:*
         version: link:../../core
       ai:
-        specifier: ^4.0.3
+        specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/core:
     dependencies:
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       abitype:
         specifier: ^1.0.6
         version: 1.0.6(typescript@5.6.3)(zod@3.23.8)
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/plugins/coingecko:
@@ -388,10 +406,10 @@ importers:
         specifier: workspace:*
         version: link:../../core
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/plugins/erc20:
@@ -400,10 +418,10 @@ importers:
         specifier: workspace:*
         version: link:../../core
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/plugins/polymarket:
@@ -415,10 +433,10 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/plugins/solana-nfts:
@@ -442,13 +460,13 @@ importers:
         specifier: 0.8.10
         version: 0.8.10(@metaplex-foundation/umi@0.9.2)(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/wallets/crossmint:
@@ -457,7 +475,7 @@ importers:
         specifier: workspace:*
         version: link:../../core
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       abitype:
         specifier: ^1.0.6
@@ -466,10 +484,10 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
+        specifier: 'catalog:'
         version: 3.23.8
 
   packages/wallets/solana:
@@ -478,7 +496,7 @@ importers:
         specifier: workspace:*
         version: link:../../core
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       bs58:
         specifier: ^6.0.0
@@ -493,7 +511,7 @@ importers:
         specifier: workspace:*
         version: link:../../core
       viem:
-        specifier: ^2.21.49
+        specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
 packages:
@@ -1383,6 +1401,10 @@ packages:
 
   '@langchain/core@0.3.18':
     resolution: {integrity: sha512-IEZCrFs1Xd0J2FTH1D3Lnm3/Yk2r8LSpwDeLYwcCom3rNAK5k4mKQ2rwIpNq3YuqBdrTNMKRO+PopjkP1SB17A==}
+    engines: {node: '>=18'}
+
+  '@langchain/core@0.3.6':
+    resolution: {integrity: sha512-VFMB7m1RDDaslCRuoFoGHLesLp7qKYWufCAgUtNcVfcrSeL7cuoOHE97rlnknzAhmYNcOKonYdZ0t9HpL9d1pg==}
     engines: {node: '>=18'}
 
   '@langchain/openai@0.3.14':
@@ -3466,6 +3488,14 @@ packages:
       peggy:
         optional: true
       typeorm:
+        optional: true
+
+  langsmith@0.1.68:
+    resolution: {integrity: sha512-otmiysWtVAqzMx3CJ4PrtUBhWRG5Co8Z4o7hSZENPjlit9/j3/vm3TSvbaxpDYakZxtMjhkcJTqrdYFipISEiQ==}
+    peerDependencies:
+      openai: '*'
+    peerDependenciesMeta:
+      openai:
         optional: true
 
   langsmith@0.2.7:
@@ -6086,13 +6116,13 @@ snapshots:
     transitivePeerDependencies:
       - openai
 
-  '@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8))':
+  '@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8))':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.15
-      langsmith: 0.2.7(openai@4.73.0(zod@3.23.8))
+      langsmith: 0.1.68(openai@4.73.0(zod@3.23.8))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -6112,9 +6142,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@langchain/openai@0.3.14(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))':
+  '@langchain/openai@0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))':
     dependencies:
-      '@langchain/core': 0.3.18(openai@4.73.0(zod@3.23.8))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
       js-tiktoken: 1.0.15
       openai: 4.73.0(zod@3.23.8)
       zod: 3.23.8
@@ -6127,9 +6157,9 @@ snapshots:
       '@langchain/core': 0.3.18(openai@4.69.0(zod@3.23.8))
       js-tiktoken: 1.0.15
 
-  '@langchain/textsplitters@0.1.0(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))':
+  '@langchain/textsplitters@0.1.0(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))':
     dependencies:
-      '@langchain/core': 0.3.18(openai@4.73.0(zod@3.23.8))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
       js-tiktoken: 1.0.15
 
   '@lit-labs/ssr-dom-shim@1.2.1': {}
@@ -8653,11 +8683,11 @@ snapshots:
       - encoding
       - openai
 
-  langchain@0.3.6(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8)):
+  langchain@0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8)):
     dependencies:
-      '@langchain/core': 0.3.18(openai@4.73.0(zod@3.23.8))
-      '@langchain/openai': 0.3.14(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))
-      '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
+      '@langchain/openai': 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
+      '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
       js-tiktoken: 1.0.15
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
@@ -8671,6 +8701,17 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - openai
+
+  langsmith@0.1.68(openai@4.73.0(zod@3.23.8)):
+    dependencies:
+      '@types/uuid': 10.0.0
+      commander: 10.0.1
+      p-queue: 6.6.2
+      p-retry: 4.6.2
+      semver: 7.6.3
+      uuid: 10.0.0
+    optionalDependencies:
+      openai: 4.73.0(zod@3.23.8)
 
   langsmith@0.2.7(openai@4.69.0(zod@3.23.8)):
     dependencies:

@@ -13,12 +13,12 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@langchain/core": "^0.3.6",
-        "zod": "^3.23.8"
+        "@langchain/core": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@langchain/core": "^0.3.6"
+        "@langchain/core": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

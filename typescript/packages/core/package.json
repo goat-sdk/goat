@@ -12,10 +12,10 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@solana/web3.js": "1.95.8",
+        "@solana/web3.js": "catalog:",
         "abitype": "^1.0.6",
-        "viem": "^2.21.49",
-        "zod": "^3.23.8"
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

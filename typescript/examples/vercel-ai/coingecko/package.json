@@ -15,7 +15,7 @@
         "@goat-sdk/plugin-coingecko": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
-        "ai": "^4.0.3",
+        "ai": "catalog:",
         "dotenv": "^16.4.5",
         "viem": "2.21.49"
     }
