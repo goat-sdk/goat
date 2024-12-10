@@ -1,9 +1,7 @@
 name: CI-PR
 
 on:
-    push:
-        branches-ignore:
-            - main
+  pull_request:
 
 jobs:
     build-and-test:
