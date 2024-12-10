@@ -1,13 +1,14 @@
 import type { Chain, EVMWalletClient, Plugin } from "@goat-sdk/core";
 import { z } from "zod";
 import { isChainSupportedByFaucet } from "./chains";
+import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 
 export const topUpBalanceParametersSchema = z.object({
     wallet: z.string().optional().describe("The address to top up the balance of"),
     amount: z.number().min(1).max(100).describe("The amount of tokens to top up"),
 });
 
-export function faucetFactory(apiKey: string) {
+export function faucetFactory(client: CrossmintApiClient) {
     return function faucet(): Plugin<EVMWalletClient> {
         return {
             name: "Crossmint Faucet",
@@ -51,10 +52,7 @@ export function faucetFactory(apiKey: string) {
 
                             const options = {
                                 method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-API-KEY": apiKey,
-                                },
+                                headers: client.authHeaders,
                                 body: JSON.stringify({
                                     amount: parameters.amount,
                                     currency: "usdc",
@@ -63,7 +61,7 @@ export function faucetFactory(apiKey: string) {
                             };
 
                             const response = await fetch(
-                                `https://staging.crossmint.com/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
+                                `${client.baseUrl}/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
                                 options,
                             );
 

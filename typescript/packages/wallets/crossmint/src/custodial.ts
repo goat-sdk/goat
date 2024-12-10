@@ -2,11 +2,11 @@ import type { SolanaReadRequest, SolanaTransaction, SolanaWalletClient } from "@
 import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import { createCrossmintAPI } from "./api";
+import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 
 type CommonParameters = {
     chain: "solana";
     connection: Connection;
-    env?: "staging" | "production";
 };
 
 type EmailLocatorParameters = CommonParameters & {
@@ -38,12 +38,12 @@ function getLocator(params: CustodialOptions): string | number {
     return `userId:${params.userId}:solana-custodial-wallet`;
 }
 
-export function custodialFactory(apiKey: string) {
+export function custodialFactory(crossmintClient: CrossmintApiClient) {
     return async function custodial(params: CustodialOptions): Promise<SolanaWalletClient> {
-        const { connection, env = "staging" } = params;
+        const { connection } = params;
 
         const locator = `${getLocator(params)}`;
-        const client = createCrossmintAPI(apiKey, env);
+        const client = createCrossmintAPI(crossmintClient);
         const { address } = await client.getWallet(locator);
 
         return {
@@ -102,7 +102,6 @@ export function custodialFactory(apiKey: string) {
                     const latestTransaction = await client.checkTransactionStatus(locator, transactionId);
 
                     if (latestTransaction.status === "success") {
-                        console.log(`Transaction ${latestTransaction.status}`);
                         return {
                             hash: latestTransaction.onChain?.txId ?? "",
                         };

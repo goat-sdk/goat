@@ -21,7 +21,6 @@ const { custodial } = crossmint(apiKey);
         wallet: await custodial({
             chain: "solana",
             email: email,
-            env: "staging",
             connection: new Connection("https://api.devnet.solana.com", "confirmed"),
         }),
     });

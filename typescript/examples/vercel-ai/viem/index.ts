@@ -32,7 +32,7 @@ const walletClient = createWalletClient({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Get my balance in USDC",
+        prompt: "Get the balance of the USDC token",
     });
 
     console.log(result.text);

@@ -12,6 +12,7 @@
             "name": "🌋 Core",
             "path": "./typescript/packages/core"
         },
+        // Adapters
         {
             "name": "[Adapter] 🎧 eleven-labs",
             "path": "./typescript/packages/adapters/eleven-labs"
@@ -28,6 +29,7 @@
             "name": "[Adapter] 🤖 vercel-ai",
             "path": "./typescript/packages/adapters/vercel-ai"
         },
+        // Plugins
         {
             "name": "[Plugin] 💰 erc20",
             "path": "./typescript/packages/plugins/erc20"
@@ -41,6 +43,11 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
+            "name": "[Plugin] 🌐 Solana NFTs",
+            "path": "./typescript/packages/plugins/solana-nfts"
+        },
+        // Wallets
+        {
             "name": "[Wallet] 🍀 crossmint",
             "path": "./typescript/packages/wallets/crossmint"
         },
@@ -49,21 +56,15 @@
             "path": "./typescript/packages/wallets/solana"
         },
         {
-            "name": "[Plugin] 🌐 Solana NFTs",
-            "path": "./typescript/packages/plugins/solana-nfts"
-        },
-        {
-            "name": "[Plugin] 🌐 Minting API",
-            "path": "./typescript/packages/plugins/minting-api"
-        },
-        {
             "name": "[Wallet] 💳 viem",
             "path": "./typescript/packages/wallets/viem"
         },
+        // Docs
         {
             "name": "📚 Docs",
             "path": "./docs"
         },
+        // Examples
         {
             "name": "🚀 Examples",
             "path": "./typescript/examples"
