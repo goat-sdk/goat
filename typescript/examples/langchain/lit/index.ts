@@ -18,6 +18,7 @@ import {
     createLitNodeClient,
     generateWrappedKey,
     getPKPSessionSigs,
+    getWrappedKeyMetadata,
     lit,
     mintCapacityCredit,
     mintPKP
@@ -57,6 +58,9 @@ const llm = new ChatOpenAI({
     console.log('🔄 Generating Wrapped Key...');
     const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "evm");
 
+    console.log('🔄 Getting Wrapped Key Metadata...');
+    const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
+
     console.log('ℹ️  Finished Lit Setup!')
 
     const viemWalletClient = createWalletClient({
@@ -66,13 +70,12 @@ const llm = new ChatOpenAI({
     const litWallet = lit({
         litNodeClient,
         pkpSessionSigs,
-        wrappedKeyId: wrappedKey.id,
+        wrappedKeyMetadata,
         network: "evm",
         chainId: 11155111,
         litEVMChainIdentifier: 'sepolia',
         viemWalletClient,
     });
-    await litWallet.getWrappedKeyMetadata();
 
     const prompt = await pull<ChatPromptTemplate>("hwchase17/structured-chat-agent");
 

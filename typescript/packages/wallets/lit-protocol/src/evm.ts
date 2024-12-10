@@ -4,27 +4,24 @@ import type {
     EVMTransaction,
     EVMTransactionResult,
     EVMTypedData,
+    EVMWalletClient,
     Signature,
 } from "@goat-sdk/core";
-import { api, EthereumLitTransaction, type StoredKeyData } from "@lit-protocol/wrapped-keys";
+import { api, EthereumLitTransaction } from "@lit-protocol/wrapped-keys";
 import type { AccsDefaultParams } from "@lit-protocol/types";
 import { mainnet } from "viem/chains";
-import { isAddress, formatEther, getAddress, publicActions } from "viem";
-import { publicKeyToAddress } from "viem/accounts";
+import { isAddress, formatEther, publicActions } from "viem";
 import { normalize } from "viem/ens";
 
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
-import type { LitEVMWalletClient, LitEVMWalletOptions } from "./types";
+import type { LitEVMWalletOptions } from "./types";
 
-const { getEncryptedKey, signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
+const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
-export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClient {
-    const { litNodeClient, pkpSessionSigs, wrappedKeyId, chainId, litEVMChainIdentifier, viemWalletClient } = options;
+export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
+    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chainId, litEVMChainIdentifier, viemWalletClient } = options;
 
     const viemPublicClient = viemWalletClient.extend(publicActions);
-
-    let WRAPPED_KEY_METADATA: StoredKeyData | undefined;
-    let WRAPPED_KEY_ETH_ADDRESS: string | undefined;
 
     function getPkpAccessControlCondition(
         pkpAddress: string
@@ -46,22 +43,6 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
                 value: pkpAddress,
             },
         };
-    }
-
-    async function getWrappedKeyMetadata(): Promise<StoredKeyData> {
-        if (!WRAPPED_KEY_METADATA) {
-            try {
-                WRAPPED_KEY_METADATA = await getEncryptedKey({
-                    litNodeClient,
-                    pkpSessionSigs,
-                    id: wrappedKeyId,
-                });
-                WRAPPED_KEY_ETH_ADDRESS = publicKeyToAddress(WRAPPED_KEY_METADATA.publicKey as `0x${string}`);
-            } catch (error) {
-                throw new Error(`Failed to get wrapped key metadata: ${error}`);
-            }
-        }
-        return WRAPPED_KEY_METADATA;
     }
 
     async function resolveAddress(address: string) {
@@ -86,15 +67,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
     };
 
     return {
-        async getWrappedKeyMetadata() {
-            return await getWrappedKeyMetadata();
-        },
-        getAddress() {
-            if (!WRAPPED_KEY_ETH_ADDRESS) {
-                throw new Error("Wallet not initialized. Call getWrappedKeyMetadata first.");
-            }
-            return getAddress(WRAPPED_KEY_ETH_ADDRESS);
-        },
+        getAddress: () => wrappedKeyMetadata.ethAddress,
         getChain() {
             return {
                 type: "evm",
@@ -103,28 +76,26 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
         },
         resolveAddress,
         async signMessage(message: string): Promise<Signature> {
-            await getWrappedKeyMetadata();
             return {
                 signature: await signMessageWithEncryptedKey({
                     pkpSessionSigs,
                     network: "evm",
-                    id: wrappedKeyId,
+                    id: wrappedKeyMetadata.id,
                     messageToSign: message,
                     litNodeClient,
                 })
             }
         },
         async signTypedData(data: EVMTypedData): Promise<Signature> {
-            const metadata = await getWrappedKeyMetadata();
             const response = await litNodeClient.executeJs({
                 sessionSigs: pkpSessionSigs,
                 code: signEip712MessageLitActionCode,
                 jsParams: {
                     accessControlConditions: [
-                        getPkpAccessControlCondition(metadata.pkpAddress),
+                        getPkpAccessControlCondition(wrappedKeyMetadata.pkpAddress),
                     ],
-                    ciphertext: metadata.ciphertext,
-                    dataToEncryptHash: metadata.dataToEncryptHash,
+                    ciphertext: wrappedKeyMetadata.ciphertext,
+                    dataToEncryptHash: wrappedKeyMetadata.dataToEncryptHash,
                     messageToSign: JSON.stringify(data),
                 },
             });
@@ -134,7 +105,6 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
             };
         },
         async sendTransaction(transaction: EVMTransaction): Promise<EVMTransactionResult> {
-            const metadata = await getWrappedKeyMetadata();
             const { to, abi, functionName, args, value } = transaction;
             const toAddress = await resolveAddress(to);
 
@@ -151,7 +121,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
                     litNodeClient,
                     pkpSessionSigs,
                     network: "evm",
-                    id: metadata.id,
+                    id: wrappedKeyMetadata.id,
                     unsignedTransaction: litTransaction,
                     broadcast: true,
                 });
@@ -164,7 +134,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): LitEVMWalletClien
             }
             
             const { request } = await viemPublicClient.simulateContract({
-                account: WRAPPED_KEY_ETH_ADDRESS as `0x${string}`,
+                account: wrappedKeyMetadata.ethAddress,
                 address: toAddress as `0x${string}`,
                 abi,
                 functionName,

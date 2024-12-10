@@ -10,7 +10,7 @@ import type {
 import type { LitSolanaWalletOptions } from "./types";
 
 export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalletClient {
-    const { pkpSessionSigs, litNodeClient, wrappedKeyId } = options;
+    const { pkpSessionSigs, litNodeClient, wrappedKeyMetadata } = options;
     
     return {
         getChain: () => ({

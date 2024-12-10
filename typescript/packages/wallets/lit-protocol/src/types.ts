@@ -1,4 +1,3 @@
-import { EVMWalletClient, SolanaWalletClient } from "@goat-sdk/core";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import type { SessionSigsMap } from "@lit-protocol/types";
 import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
@@ -7,7 +6,7 @@ import { type WalletClient } from "viem";
 export type LitWalletOptions = {
     litNodeClient: LitNodeClient;
     pkpSessionSigs: SessionSigsMap;
-    wrappedKeyId: string;
+    wrappedKeyMetadata: StoredKeyData & { ethAddress: `0x${string}` };
 };
 
 export type LitEVMWalletOptions = LitWalletOptions & {
@@ -21,9 +20,3 @@ export type LitEVMWalletOptions = LitWalletOptions & {
 export type LitSolanaWalletOptions = LitWalletOptions & {
     network: "solana";
 };
-
-export interface LitEVMWalletClient extends EVMWalletClient {
-    getWrappedKeyMetadata(): Promise<StoredKeyData>;
-}
-
-export type LitWalletClient = LitEVMWalletClient | SolanaWalletClient;
