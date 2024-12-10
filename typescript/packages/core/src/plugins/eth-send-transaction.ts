@@ -2,9 +2,9 @@ import { z } from "zod";
 import type { EVMWalletClient } from "../wallets";
 import type { Plugin } from "./plugins";
 
-export function eth_sendTransaction(): Plugin<EVMWalletClient> {
+export function ethSendTransaction(): Plugin<EVMWalletClient> {
     return {
-        name: "eth_sendTransaction",
+        name: "ethSendTransaction",
         supportsSmartWallets: () => true,
         supportsChain: (chain) => chain.type === "evm",
         getTools: async () => {
@@ -17,7 +17,7 @@ export function eth_sendTransaction(): Plugin<EVMWalletClient> {
                         walletClient: EVMWalletClient,
                         parameters: z.infer<typeof EthSendTransactionSchema>,
                     ) => {
-                        return eth_sendTransactionMethod(parameters, walletClient);
+                        return ethSendTransactionMethod(parameters, walletClient);
                     },
                 },
             ];
@@ -32,7 +32,7 @@ export const EthSendTransactionSchema = z.object({
     token: z.string(),
 });
 
-export async function eth_sendTransactionMethod(
+export async function ethSendTransactionMethod(
     transaction: z.infer<typeof EthSendTransactionSchema>,
     walletClient: EVMWalletClient,
 ): Promise<string> {
