@@ -49,12 +49,6 @@ export const getNftInfoResponseSchema = z.array(
     }),
 );
 
-export const getBuyListingTransactionParametersSchema = z.object({
-    mintHash: z.string(),
-    owner: z.string(),
-    maxPrice: z.string(),
-});
-
 export const getBuyListingTransactionResponseSchema = z.object({
     txs: z.array(
         z.object({
