@@ -72,6 +72,7 @@ const llm = new ChatOpenAI({
         litEVMChainIdentifier: 'sepolia',
         viemWalletClient,
     });
+    await litWallet.getWrappedKeyMetadata();
 
     const prompt = await pull<ChatPromptTemplate>("hwchase17/structured-chat-agent");
 
@@ -89,6 +90,8 @@ const llm = new ChatOpenAI({
     const agentExecutor = new AgentExecutor({
         agent,
         tools,
+        // Enable this to see the agent's thought process
+        // verbose: true,
     });
 
     const response = await agentExecutor.invoke({
