@@ -1,4 +1,4 @@
-# Langchain with viem Example
+# Langchain with Lit Example
 
 ## Setup
 
