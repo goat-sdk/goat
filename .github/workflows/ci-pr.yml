@@ -2,6 +2,10 @@ name: CI-PR
 
 on:
   pull_request:
+  
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
     build-and-test:
