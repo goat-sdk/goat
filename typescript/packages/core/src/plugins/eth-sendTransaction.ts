@@ -1,4 +1,3 @@
-import { parseEther } from "viem";
 import { z } from "zod";
 import type { EVMWalletClient } from "../wallets";
 import type { Plugin } from "./plugins";
