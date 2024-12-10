@@ -1,5 +1,16 @@
 # goat-examples-vercel-ai-coingecko
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [bf161b7]
+  - @goat-sdk/core@0.3.12
+  - @goat-sdk/adapter-vercel-ai@0.1.6
+  - @goat-sdk/plugin-coingecko@0.1.2
+  - @goat-sdk/plugin-erc20@0.1.9
+  - @goat-sdk/wallet-viem@0.1.5
+
 ## 0.1.1
 
 ### Patch Changes

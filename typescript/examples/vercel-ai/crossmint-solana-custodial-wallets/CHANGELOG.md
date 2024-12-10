@@ -1,5 +1,17 @@
 # goat-examples-vercel-ai-crossmint-solana-custodial-wallets
 
+## 0.1.3
+
+### Patch Changes
+
+- bf161b7: Add mint plugin to Crossmint
+- Updated dependencies [bf161b7]
+  - @goat-sdk/crossmint@0.2.0
+  - @goat-sdk/core@0.3.12
+  - @goat-sdk/adapter-vercel-ai@0.1.6
+  - @goat-sdk/plugin-erc20@0.1.9
+  - @goat-sdk/plugin-solana-nfts@0.1.2
+
 ## 0.1.2
 
 ### Patch Changes
