@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"folders": [
 		{
 			"name": "🐐 GOAT",
@@ -66,6 +67,80 @@
 		}
 	],
 	"settings": {
+=======
+    "folders": [
+        {
+            "name": "🐐 GOAT",
+            "path": "."
+        },
+        {
+            "name": "📘 Typescript",
+            "path": "./typescript"
+        },
+        {
+            "name": "🌋 Core",
+            "path": "./typescript/packages/core"
+        },
+        // Adapters
+        {
+            "name": "[Adapter] 🎧 eleven-labs",
+            "path": "./typescript/packages/adapters/eleven-labs"
+        },
+        {
+            "name": "[Adapter] 🟠 eliza",
+            "path": "./typescript/packages/adapters/eliza"
+        },
+        {
+            "name": "[Adapter] 🦜 langchain",
+            "path": "./typescript/packages/adapters/langchain"
+        },
+        {
+            "name": "[Adapter] 🤖 vercel-ai",
+            "path": "./typescript/packages/adapters/vercel-ai"
+        },
+        // Plugins
+        {
+            "name": "[Plugin] 💰 erc20",
+            "path": "./typescript/packages/plugins/erc20"
+        },
+        {
+            "name": "[Plugin] 🎰 polymarket",
+            "path": "./typescript/packages/plugins/polymarket"
+        },
+        {
+            "name": "[Plugin] 💰 coingecko",
+            "path": "./typescript/packages/plugins/coingecko"
+        },
+        {
+            "name": "[Plugin] 🌐 Solana NFTs",
+            "path": "./typescript/packages/plugins/solana-nfts"
+        },
+        // Wallets
+        {
+            "name": "[Wallet] 🍀 crossmint",
+            "path": "./typescript/packages/wallets/crossmint"
+        },
+        {
+            "name": "[Wallet] 🌞 solana",
+            "path": "./typescript/packages/wallets/solana"
+        },
+        {
+            "name": "[Wallet] 💳 viem",
+            "path": "./typescript/packages/wallets/viem"
+        },
+        // Docs
+        {
+            "name": "📚 Docs",
+            "path": "./docs"
+        },
+        // Examples
+        {
+            "name": "🚀 Examples",
+            "path": "./typescript/examples"
+        }
+    ],
+    "settings": {
+>>>>>>> bf161b7 (Plugin: Crossmint Minting API (#23))
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "biomejs.biome"
     }

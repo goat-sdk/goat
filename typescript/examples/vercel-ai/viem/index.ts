@@ -40,10 +40,14 @@ const walletClient = createWalletClient({
         tools: tools,
         maxSteps: 5,
 <<<<<<< HEAD
+<<<<<<< HEAD
         prompt: " make sure you are on OP Sepolia (11155420), create a new flow for the super token fDAIx of the address 0xD6FAF98BeFA647403cc56bDB598690660D5257d2 and the receiver should be the address 0x6caf4a402452f5108890dc50b58646c2a8730123 and the flow rate is 5555 wei/second ",
 =======
         prompt: "Get my balance in USDC",
 >>>>>>> 8d194ff (Release packages (#25))
+=======
+        prompt: "Get the balance of the USDC token",
+>>>>>>> bf161b7 (Plugin: Crossmint Minting API (#23))
     });
 
     console.log(result.text);
