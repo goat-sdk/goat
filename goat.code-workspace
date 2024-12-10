@@ -53,6 +53,10 @@
 			"path": "./typescript/packages/wallets/viem"
 		},
 		{
+			"name": "[Wallet] 🔥 lit",
+			"path": "./typescript/packages/wallets/lit-protocol"
+		},
+		{
 			"name": "📚 Docs",
 			"path": "./docs"
 		},

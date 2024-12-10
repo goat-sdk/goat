@@ -1,14 +1,19 @@
 import {
     type EVMReadRequest,
+    type EVMReadResult,
     type EVMTransaction,
+    type EVMTransactionResult,
     type EVMTypedData,
     type EVMWalletClient,
     isEVMWalletClient,
 } from "./evm";
 import { type EVMSmartWalletClient, isEVMSmartWalletClient } from "./evm-smart-wallet";
+import { type LitEVMWalletOptions, type LitSolanaWalletOptions, type LitWalletOptions } from "./lit";
 import {
     type SolanaReadRequest,
+    type SolanaReadResult,
     type SolanaTransaction,
+    type SolanaTransactionResult,
     type SolanaWalletClient,
     isSolanaWalletClient,
 } from "./solana";
@@ -23,13 +28,20 @@ export type {
     Chain,
     EVMTransaction,
     EVMReadRequest,
+    EVMReadResult,
+    EVMTransactionResult,
     SolanaTransaction,
     SolanaReadRequest,
+    SolanaReadResult,
+    SolanaTransactionResult,
     Signature,
     Balance,
     EVMSmartWalletClient,
     ChainForWalletClient,
     EVMTypedData,
+    LitWalletOptions,
+    LitEVMWalletOptions,
+    LitSolanaWalletOptions,
 };
 
 export {
