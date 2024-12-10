@@ -1,11 +1,9 @@
+import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { Plugin, WalletClient } from "@goat-sdk/core";
 import { z } from "zod";
 import { getCrossmintChainString, isChainSupportedByMinting } from "./chains";
-import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 
-export const mintingFactory = (
-    client: CrossmintApiClient
-): (() => Plugin<WalletClient>) => {
+export const mintingFactory = (client: CrossmintApiClient): (() => Plugin<WalletClient>) => {
     return () => ({
         name: "minting",
         supportsSmartWallets: () => true,
@@ -24,15 +22,13 @@ export const mintingFactory = (
             return [
                 {
                     name: "create_nft_collection",
-                    description:
-                        "This {{tool}} creates an NFT collection and returns the ID of the collection.",
+                    description: "This {{tool}} creates an NFT collection and returns the ID of the collection.",
                     parameters: createCollectionParametersSchema,
                     method: createCollectionMethod(client),
                 },
                 {
                     name: "get_all_collections",
-                    description:
-                        "This {{tool}} gets all the collections created by the user.",
+                    description: "This {{tool}} gets all the collections created by the user.",
                     parameters: getAllCollectionsParametersSchema,
                     method: getAllCollectionsMethod(client),
                 },
@@ -52,21 +48,12 @@ const createCollectionParametersSchema = z.object({
     metadata: z
         .object({
             name: z.string().describe("The name of the collection"),
-            description: z
-                .string()
-                .describe("A description of the NFT collection"),
-            image: z
-                .string()
-                .optional()
-                .describe(
-                    "URL pointing to an image that represents the collection"
-                ),
+            description: z.string().describe("A description of the NFT collection"),
+            image: z.string().optional().describe("URL pointing to an image that represents the collection"),
             symbol: z
                 .string()
                 .optional()
-                .describe(
-                    "Shorthand identifier for the NFT collection (Max length: 10). Defaults to 'TOKEN'"
-                ),
+                .describe("Shorthand identifier for the NFT collection (Max length: 10). Defaults to 'TOKEN'"),
         })
         .default({
             name: "My first Minting API Collection",
@@ -79,55 +66,37 @@ const createCollectionParametersSchema = z.object({
         .enum(["semi-fungible", "non-fungible"])
         .optional()
         .default("non-fungible")
-        .describe(
-            "Whether or not this collection is fungible (e.g ERC-1155 vs ERC-721)"
-        ),
+        .describe("Whether or not this collection is fungible (e.g ERC-1155 vs ERC-721)"),
     transferable: z
         .boolean()
         .optional()
         .default(true)
-        .describe(
-            "Whether or not the NFTs in this collection are transferable"
-        ),
+        .describe("Whether or not the NFTs in this collection are transferable"),
 });
 
 const getAllCollectionsParametersSchema = z.object({});
 
 const mintNFTParametersSchema = z.object({
-    collectionId: z
-        .string()
-        .describe("The ID of the collection to mint the NFT in"),
+    collectionId: z.string().describe("The ID of the collection to mint the NFT in"),
     recipient: z
         .string()
         .describe(
-            "A locator for the recipient of the NFT, in the format `<address>` if it's a wallet or `email:<email_address>` if it's an email"
+            "A locator for the recipient of the NFT, in the format `<address>` if it's a wallet or `email:<email_address>` if it's an email",
         ),
     metadata: z
         .object({
             name: z.string().describe("The name of the NFT"),
-            description: z
-                .string()
-                .max(64)
-                .describe("The description of the NFT"),
+            description: z.string().max(64).describe("The description of the NFT"),
             image: z.string().describe("URL pointing to the NFT image"),
-            animation_url: z
-                .string()
-                .optional()
-                .describe("URL pointing to the NFT animation"),
+            animation_url: z.string().optional().describe("URL pointing to the NFT animation"),
             attributes: z
                 .array(
                     z.object({
                         display_type: z
-                            .enum([
-                                "number",
-                                "boost_number",
-                                "boost_percentage",
-                            ])
-                            .describe(
-                                "The type of the attribute, if it's a number or a percentage"
-                            ),
+                            .enum(["number", "boost_number", "boost_percentage"])
+                            .describe("The type of the attribute, if it's a number or a percentage"),
                         value: z.string().describe("The trait value"),
-                    })
+                    }),
                 )
                 .optional()
                 .describe("The attributes of the NFT"),
@@ -146,21 +115,15 @@ function getAllCollectionsMethod(client: CrossmintApiClient) {
 }
 
 function createCollectionMethod(client: CrossmintApiClient) {
-    return async (
-        walletClient: WalletClient,
-        parameters: z.infer<typeof createCollectionParametersSchema>
-    ) => {
-        const response = await fetch(
-            `${client.baseUrl}/api/2022-06-09/collections/`,
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    ...parameters,
-                    chain: getCrossmintChainString(walletClient.getChain()),
-                }),
-                headers: client.authHeaders,
-            }
-        );
+    return async (walletClient: WalletClient, parameters: z.infer<typeof createCollectionParametersSchema>) => {
+        const response = await fetch(`${client.baseUrl}/api/2022-06-09/collections/`, {
+            method: "POST",
+            body: JSON.stringify({
+                ...parameters,
+                chain: getCrossmintChainString(walletClient.getChain()),
+            }),
+            headers: client.authHeaders,
+        });
 
         const result = await response.json();
 
@@ -183,35 +146,26 @@ function createCollectionMethod(client: CrossmintApiClient) {
 }
 
 function mintNFTMethod(client: CrossmintApiClient) {
-    return async (
-        walletClient: WalletClient,
-        parameters: z.infer<typeof mintNFTParametersSchema>
-    ) => {
+    return async (walletClient: WalletClient, parameters: z.infer<typeof mintNFTParametersSchema>) => {
         let recipient: string;
 
         if (parameters.recipient.startsWith("email:")) {
-            recipient = `${parameters.recipient}:${getCrossmintChainString(
-                walletClient.getChain()
-            )}`;
+            recipient = `${parameters.recipient}:${getCrossmintChainString(walletClient.getChain())}`;
         } else {
-            recipient = `${getCrossmintChainString(
-                walletClient.getChain())}:${parameters.recipient}`
+            recipient = `${getCrossmintChainString(walletClient.getChain())}:${parameters.recipient}`;
         }
 
-        const response = await fetch(
-            `${client.baseUrl}/api/2022-06-09/collections/${parameters.collectionId}/nfts`,
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    recipient,
-                    metadata: parameters.metadata,
-                }),
-                headers: {
-                    ...client.authHeaders,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        const response = await fetch(`${client.baseUrl}/api/2022-06-09/collections/${parameters.collectionId}/nfts`, {
+            method: "POST",
+            body: JSON.stringify({
+                recipient,
+                metadata: parameters.metadata,
+            }),
+            headers: {
+                ...client.authHeaders,
+                "Content-Type": "application/json",
+            },
+        });
 
         const result = await response.json();
 
@@ -232,19 +186,13 @@ function mintNFTMethod(client: CrossmintApiClient) {
     };
 }
 
-async function waitForAction(
-    actionId: string,
-    client: CrossmintApiClient
-) {
+async function waitForAction(actionId: string, client: CrossmintApiClient) {
     let attempts = 0;
     while (true) {
         attempts++;
-        const response = await fetch(
-            `${client.baseUrl}/api/2022-06-09/actions/${actionId}`,
-            {
-                headers: client.authHeaders,
-            }
-        );
+        const response = await fetch(`${client.baseUrl}/api/2022-06-09/actions/${actionId}`, {
+            headers: client.authHeaders,
+        });
 
         const body = await response.json();
 
@@ -253,9 +201,7 @@ async function waitForAction(
         }
         await new Promise((resolve) => setTimeout(resolve, 1000));
         if (attempts >= 60) {
-            throw new Error(
-                `Timed out waiting for action ${actionId} after ${attempts} attempts`
-            );
+            throw new Error(`Timed out waiting for action ${actionId} after ${attempts} attempts`);
         }
     }
 }

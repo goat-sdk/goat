@@ -1,32 +1,32 @@
+import type { Chain as GoatChain } from "@goat-sdk/core";
 import {
     type Chain,
     arbitrum,
     arbitrumSepolia,
+    astarZkEVM,
+    astarZkyoto,
+    avalanche,
     avalancheFuji,
     base,
     baseSepolia,
+    bsc,
+    chiliz,
+    mainnet,
     optimism,
     optimismSepolia,
     polygon,
     polygonAmoy,
     sepolia,
-    skaleNebulaTestnet,
-    victionTestnet,
-    astarZkEVM,
-    bsc,
-    chiliz,
-    mainnet,
     shape,
     shapeSepolia,
     skaleNebula,
+    skaleNebulaTestnet,
+    victionTestnet,
     xai,
     xaiTestnet,
-    astarZkyoto,
     zora,
     zoraSepolia,
-    avalanche,
 } from "viem/chains";
-import type { Chain as GoatChain } from "@goat-sdk/core";
 
 const faucetChains = [
     "arbitrum-sepolia",
@@ -85,10 +85,7 @@ export const mintingChains = [
 
 export type SupportedMintingChains = (typeof mintingChains)[number];
 
-const chainMap: Record<
-    SupportedFaucetChains | SupportedSmartWalletChains | SupportedMintingChains,
-    Chain
-> = {
+const chainMap: Record<SupportedFaucetChains | SupportedSmartWalletChains | SupportedMintingChains, Chain> = {
     arbitrum,
     "arbitrum-sepolia": arbitrumSepolia,
     "astar-zkevm": astarZkEVM,
@@ -122,9 +119,7 @@ const chainMap: Record<
     } as Chain,
 };
 
-export function getViemChain(
-    chain: SupportedSmartWalletChains | SupportedFaucetChains
-): Chain {
+export function getViemChain(chain: SupportedSmartWalletChains | SupportedFaucetChains): Chain {
     const viemChain = chainMap[chain];
     if (!viemChain) {
         throw new Error(`Unsupported chain: ${chain}`);
@@ -143,8 +138,7 @@ export function getCrossmintChainString(chain: GoatChain): string {
     if (chain.type === "evm") {
         // from chain.id figure out the chain name
         const chainName = Object.keys(chainMap).find(
-            (key): key is keyof typeof chainMap =>
-                chainMap[key as keyof typeof chainMap].id === chain.id
+            (key): key is keyof typeof chainMap => chainMap[key as keyof typeof chainMap].id === chain.id,
         );
         if (!chainName) {
             throw new Error(`Unsupported chain: ${chain.id}`);
@@ -155,24 +149,15 @@ export function getCrossmintChainString(chain: GoatChain): string {
     throw new Error(`Unsupported chain: ${chain.type}`);
 }
 
-const testnetChains = [
-    "arbitrum-sepolia",
-    "base-sepolia",
-    "optimism-sepolia",
-    "polygon-amoy",
-] as const;
+const testnetChains = ["arbitrum-sepolia", "base-sepolia", "optimism-sepolia", "polygon-amoy"] as const;
 
-const faucetChainIds = new Set(
-    faucetChains.map((chainName) => chainMap[chainName].id)
-);
+const faucetChainIds = new Set(faucetChains.map((chainName) => chainMap[chainName].id));
 
 export function isChainSupportedByFaucet(chainId: number): boolean {
     return faucetChainIds.has(chainId);
 }
 
-const mintingChainIds = new Set(
-    mintingChains.map((chainName) => chainMap[chainName].id)
-);
+const mintingChainIds = new Set(mintingChains.map((chainName) => chainMap[chainName].id));
 
 export function isChainSupportedByMinting(chainId: number): boolean {
     return mintingChainIds.has(chainId);
