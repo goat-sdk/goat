@@ -1,12 +1,13 @@
 import type { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/core";
 
+import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { Abi } from "abitype";
 import { http, createPublicClient, encodeFunctionData } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 import { createCrossmintAPI } from "./api";
-import { type SupportedSmartWalletChains, getEnv, getViemChain } from "./chains";
+import { type SupportedSmartWalletChains, getViemChain } from "./chains";
 
 export type CustodialSigner = `0x${string}`;
 
@@ -37,7 +38,7 @@ export type SmartWalletOptions = {
     };
 };
 
-export function smartWalletFactory(apiKey: string) {
+export function smartWalletFactory(crossmintClient: CrossmintApiClient) {
     return async function smartwallet(params: SmartWalletOptions): Promise<EVMSmartWalletClient> {
         const { signer, linkedUser, chain, provider, address: providedAddress } = params;
 
@@ -63,7 +64,7 @@ export function smartWalletFactory(apiKey: string) {
         };
 
         const locator = getLocator();
-        const client = createCrossmintAPI(apiKey, getEnv(chain));
+        const client = createCrossmintAPI(crossmintClient);
         const { address } = await client.getWallet(locator);
 
         const viemClient = createPublicClient({
@@ -79,7 +80,6 @@ export function smartWalletFactory(apiKey: string) {
         });
 
         const resolveAddressImpl = async (address: string) => {
-            console.log("Address", address);
             if (/^0x[a-fA-F0-9]{40}$/.test(address)) {
                 return address as `0x${string}`;
             }

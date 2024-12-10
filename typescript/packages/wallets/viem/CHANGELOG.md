@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-viem
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [bf161b7]
+  - @goat-sdk/core@0.3.12
+
 ## 0.1.4
 
 ### Patch Changes

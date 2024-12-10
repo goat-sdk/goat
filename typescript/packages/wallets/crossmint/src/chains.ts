@@ -1,17 +1,31 @@
+import type { Chain as GoatChain } from "@goat-sdk/core";
 import {
     type Chain,
     arbitrum,
     arbitrumSepolia,
+    astarZkEVM,
+    astarZkyoto,
+    avalanche,
     avalancheFuji,
     base,
     baseSepolia,
+    bsc,
+    chiliz,
+    mainnet,
     optimism,
     optimismSepolia,
     polygon,
     polygonAmoy,
     sepolia,
+    shape,
+    shapeSepolia,
+    skaleNebula,
     skaleNebulaTestnet,
     victionTestnet,
+    xai,
+    xaiTestnet,
+    zora,
+    zoraSepolia,
 } from "viem/chains";
 
 const faucetChains = [
@@ -40,19 +54,69 @@ const smartWalletChains = [
 
 export type SupportedSmartWalletChains = (typeof smartWalletChains)[number];
 
-const chainMap: Record<SupportedFaucetChains | SupportedSmartWalletChains, Chain> = {
-    arbitrum: arbitrum,
+export const mintingChains = [
+    "arbitrum",
+    "arbitrum-sepolia",
+    "astar-zkevm",
+    "avalanche",
+    "avalanche-fuji",
+    "base",
+    "base-sepolia",
+    "bsc",
+    "chiliz",
+    "chiliz-spicy-testnet",
+    "ethereum",
+    "ethereum-sepolia",
+    "optimism",
+    "optimism-sepolia",
+    "polygon",
+    "polygon-amoy",
+    "shape",
+    "shape-sepolia",
+    "skale-nebula",
+    "skale-nebula-testnet",
+    "soneium-minato-testnet",
+    "xai",
+    "xai-sepolia-testnet",
+    "zkyoto",
+    "zora",
+    "zora-sepolia",
+] as const;
+
+export type SupportedMintingChains = (typeof mintingChains)[number];
+
+const chainMap: Record<SupportedFaucetChains | SupportedSmartWalletChains | SupportedMintingChains, Chain> = {
+    arbitrum,
     "arbitrum-sepolia": arbitrumSepolia,
-    base: base,
-    "base-sepolia": baseSepolia,
-    optimism: optimism,
-    "optimism-sepolia": optimismSepolia,
-    polygon: polygon,
-    "polygon-amoy": polygonAmoy,
+    "astar-zkevm": astarZkEVM,
+    avalanche,
     "avalanche-fuji": avalancheFuji,
+    base,
+    "base-sepolia": baseSepolia,
+    bsc,
+    chiliz,
+    ethereum: mainnet,
+    optimism,
+    "optimism-sepolia": optimismSepolia,
+    polygon,
+    "polygon-amoy": polygonAmoy,
     "ethereum-sepolia": sepolia,
+    shape,
+    "shape-sepolia": shapeSepolia,
+    "skale-nebula": skaleNebula,
     "skale-nebula-testnet": skaleNebulaTestnet,
     "viction-testnet": victionTestnet,
+    xai,
+    "xai-sepolia-testnet": xaiTestnet,
+    zkyoto: astarZkyoto,
+    zora,
+    "zora-sepolia": zoraSepolia,
+    "chiliz-spicy-testnet": {
+        id: 88882,
+    } as Chain,
+    "soneium-minato-testnet": {
+        id: 88882,
+    } as Chain,
 };
 
 export function getViemChain(chain: SupportedSmartWalletChains | SupportedFaucetChains): Chain {
@@ -63,14 +127,38 @@ export function getViemChain(chain: SupportedSmartWalletChains | SupportedFaucet
     return viemChain;
 }
 
-const testnetChains = ["arbitrum-sepolia", "base-sepolia", "optimism-sepolia", "polygon-amoy"] as const;
+export function getCrossmintChainString(chain: GoatChain): string {
+    if (chain.type === "solana") {
+        return "solana";
+    }
+    if (chain.type === "aptos") {
+        return "aptos";
+    }
 
-export function getEnv(chain: SupportedSmartWalletChains): "staging" | "production" {
-    return (testnetChains as readonly string[]).includes(chain) ? "staging" : "production";
+    if (chain.type === "evm") {
+        // from chain.id figure out the chain name
+        const chainName = Object.keys(chainMap).find(
+            (key): key is keyof typeof chainMap => chainMap[key as keyof typeof chainMap].id === chain.id,
+        );
+        if (!chainName) {
+            throw new Error(`Unsupported chain: ${chain.id}`);
+        }
+        return chainName;
+    }
+
+    throw new Error(`Unsupported chain: ${chain.type}`);
 }
+
+const testnetChains = ["arbitrum-sepolia", "base-sepolia", "optimism-sepolia", "polygon-amoy"] as const;
 
 const faucetChainIds = new Set(faucetChains.map((chainName) => chainMap[chainName].id));
 
 export function isChainSupportedByFaucet(chainId: number): boolean {
     return faucetChainIds.has(chainId);
+}
+
+const mintingChainIds = new Set(mintingChains.map((chainName) => chainMap[chainName].id));
+
+export function isChainSupportedByMinting(chainId: number): boolean {
+    return mintingChainIds.has(chainId);
 }
