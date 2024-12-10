@@ -1,4 +1,3 @@
-import type { EVMWalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
 import type { CheckApprovalBodySchema, GetQuoteBodySchema, GetSwapBodySchema } from "./types";
 

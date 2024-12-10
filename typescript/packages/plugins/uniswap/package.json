@@ -5,7 +5,7 @@
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
-        "test": "vitest"
+        "test": "vitest run --passWithNoTests"
     },
     "sideEffects": false,
     "main": "./dist/index.js",
