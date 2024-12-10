@@ -1,5 +1,12 @@
 # @goat-sdk/crossmint
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [cad06c0]
+  - @goat-sdk/core@0.3.13
+
 ## 0.2.0
 
 ### Minor Changes

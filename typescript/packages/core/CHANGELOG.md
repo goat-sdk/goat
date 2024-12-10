@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.3.13
+
+### Patch Changes
+
+- cad06c0: uniswap package and example
+
 ## 0.3.12
 
 ### Patch Changes
