@@ -69,11 +69,3 @@ export async function getSwapTransaction(
 
     return await response.json();
 }
-
-export async function sendTransaction(
-    transaction: z.infer<typeof SendTransactionBodySchema>,
-    walletClient: EVMWalletClient,
-): Promise<string> {
-    const txHash = await walletClient.sendTransaction(transaction);
-    return txHash.hash;
-}

@@ -86,5 +86,3 @@ export const GetSwapBodySchema = z.object({
     signature: z.string().optional(),
     simulateTransaction: z.boolean().optional(),
 });
-
-export const SendTransactionBodySchema = TransactionSchema;
