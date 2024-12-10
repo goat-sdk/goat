@@ -8,7 +8,6 @@ import {
     isEVMWalletClient,
 } from "./evm";
 import { type EVMSmartWalletClient, isEVMSmartWalletClient } from "./evm-smart-wallet";
-import { type LitEVMWalletClient, type LitEVMWalletOptions, type LitSolanaWalletOptions, type LitWalletOptions } from "./lit";
 import {
     type SolanaReadRequest,
     type SolanaReadResult,
@@ -39,10 +38,6 @@ export type {
     EVMSmartWalletClient,
     ChainForWalletClient,
     EVMTypedData,
-    LitWalletOptions,
-    LitEVMWalletClient,
-    LitEVMWalletOptions,
-    LitSolanaWalletOptions,
 };
 
 export {

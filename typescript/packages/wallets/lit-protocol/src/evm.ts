@@ -4,18 +4,17 @@ import type {
     EVMTransaction,
     EVMTransactionResult,
     EVMTypedData,
-    LitEVMWalletClient,
-    LitEVMWalletOptions,
     Signature,
 } from "@goat-sdk/core";
 import { api, EthereumLitTransaction, type StoredKeyData } from "@lit-protocol/wrapped-keys";
 import type { AccsDefaultParams } from "@lit-protocol/types";
 import { mainnet } from "viem/chains";
-import { isAddress, formatEther, getAddress, encodeFunctionData, publicActions } from "viem";
+import { isAddress, formatEther, getAddress, publicActions } from "viem";
 import { publicKeyToAddress } from "viem/accounts";
 import { normalize } from "viem/ens";
 
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
+import type { LitEVMWalletClient, LitEVMWalletOptions } from "./types";
 
 const { getEncryptedKey, signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 

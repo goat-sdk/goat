@@ -1,10 +1,8 @@
+import { EVMWalletClient, SolanaWalletClient } from "@goat-sdk/core";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import type { SessionSigsMap } from "@lit-protocol/types";
 import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
 import { type WalletClient } from "viem";
-
-import { EVMWalletClient } from "./evm";
-import { SolanaWalletClient } from "./solana";
 
 export type LitWalletOptions = {
     litNodeClient: LitNodeClient;

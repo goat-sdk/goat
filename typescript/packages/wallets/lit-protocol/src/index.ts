@@ -1,11 +1,10 @@
 import type {
-    LitEVMWalletClient,
-    LitEVMWalletOptions,
-    LitSolanaWalletOptions,
     SolanaWalletClient,
 } from "@goat-sdk/core";
+
 import { createEVMWallet } from "./evm";
 import { createSolanaWallet } from "./solana";
+import type { LitEVMWalletClient, LitEVMWalletOptions, LitSolanaWalletOptions } from "./types";
 
 export function lit(options: LitEVMWalletOptions): LitEVMWalletClient;
 export function lit(options: LitSolanaWalletOptions): SolanaWalletClient;

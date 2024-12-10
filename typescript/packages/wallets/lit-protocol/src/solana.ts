@@ -1,5 +1,4 @@
 import type {
-    LitSolanaWalletOptions,
     Signature,
     SolanaReadRequest,
     SolanaReadResult,
@@ -7,6 +6,8 @@ import type {
     SolanaTransactionResult,
     SolanaWalletClient,
 } from "@goat-sdk/core";
+
+import type { LitSolanaWalletOptions } from "./types";
 
 export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalletClient {
     const { pkpSessionSigs, litNodeClient, wrappedKeyId } = options;
