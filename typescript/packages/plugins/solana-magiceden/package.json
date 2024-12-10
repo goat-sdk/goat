@@ -1,5 +1,5 @@
 {
-    "name": "@goat-sdk/plugin-tensor",
+    "name": "@goat-sdk/plugin-solana-magiceden",
     "version": "0.0.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
