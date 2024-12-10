@@ -2,9 +2,9 @@ import type { SolanaWalletClient } from "@goat-sdk/core";
 
 import type { DeferredTool } from "@goat-sdk/core";
 import type { Connection } from "@solana/web3.js";
-import { getNftInfoParametersSchema } from "./parameters";
-import { getNftInfo } from "./methods/getNftInfo";
 import { getBuyListingTransaction } from "./methods/getBuyListingTransaction";
+import { getNftInfo } from "./methods/getNftInfo";
+import { getNftInfoParametersSchema } from "./parameters";
 
 export function getTools({
     apiKey,
