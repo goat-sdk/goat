@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-erc20
 
+## 0.1.10
+
+### Patch Changes
+
+- Updated dependencies [cad06c0]
+  - @goat-sdk/core@0.3.13
+
 ## 0.1.9
 
 ### Patch Changes
