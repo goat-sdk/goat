@@ -62,7 +62,10 @@ export function viem(client: ViemWalletClient, options?: ViemOptions): EVMWallet
             if (!client.account) throw new Error("No account connected");
 
             const signature = await client.signTypedData({
-                domain: data.domain,
+                domain: {
+                    ...data.domain,
+                    chainId: typeof data.domain.chainId === 'bigint' ? Number(data.domain.chainId) : data.domain.chainId,
+                },
                 types: data.types,
                 primaryType: data.primaryType,
                 message: data.message,

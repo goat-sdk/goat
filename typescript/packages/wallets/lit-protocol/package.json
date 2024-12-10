@@ -17,11 +17,21 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@lit-protocol/lit-node-client": "7.0.2",
-        "@lit-protocol/wrapped-keys": "7.0.2"
+        "@lit-protocol/lit-node-client": "catalog:",
+        "@lit-protocol/lit-auth-client": "catalog:",
+        "@lit-protocol/auth-helpers": "catalog:",
+        "@lit-protocol/constants": "catalog:",
+        "@lit-protocol/contracts-sdk": "catalog:",
+        "@lit-protocol/misc": "catalog:",
+        "@lit-protocol/wrapped-keys": "catalog:",
+        "viem": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*"
+        "@goat-sdk/core": "workspace:*",
+        "viem": "catalog:"
+    },
+    "devDependencies": {
+        "@lit-protocol/types": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

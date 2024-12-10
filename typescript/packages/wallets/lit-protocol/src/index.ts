@@ -1,5 +1,5 @@
 import type {
-    EVMWalletClient,
+    LitEVMWalletClient,
     LitEVMWalletOptions,
     LitSolanaWalletOptions,
     SolanaWalletClient,
@@ -7,9 +7,9 @@ import type {
 import { createEVMWallet } from "./evm";
 import { createSolanaWallet } from "./solana";
 
-export function lit(options: LitEVMWalletOptions): EVMWalletClient;
+export function lit(options: LitEVMWalletOptions): LitEVMWalletClient;
 export function lit(options: LitSolanaWalletOptions): SolanaWalletClient;
-export function lit(options: LitEVMWalletOptions | LitSolanaWalletOptions): EVMWalletClient | SolanaWalletClient {
+export function lit(options: LitEVMWalletOptions | LitSolanaWalletOptions): LitEVMWalletClient | SolanaWalletClient {
     if (options.network === "evm") {
         return createEVMWallet(options);
     } else {
