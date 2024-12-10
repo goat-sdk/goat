@@ -18,11 +18,18 @@ const config = createConfig({
 const queryClient = new QueryClient();
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
+    const environmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID ?? "";
+
+
+    if (!environmentId) {
+        return <div>Environment ID is not set</div>;
+    }
+
     return (
         <DynamicContextProvider
             settings={{
                 // Find your environment id at https://app.dynamic.xyz/dashboard/developer
-                environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID ?? "",
+                environmentId,
                 walletConnectors: [EthereumWalletConnectors],
             }}
         >

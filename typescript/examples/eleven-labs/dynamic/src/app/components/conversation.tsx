@@ -4,13 +4,18 @@ import { useConversation } from "@11labs/react";
 import { getOnChainTools } from "@goat-sdk/adapter-eleven-labs";
 import { useCallback, useEffect } from "react";
 
-import { isEthereumWallet } from "@dynamic-labs/ethereum";
-import { DynamicWidget, getNetwork, useDynamicContext, useSwitchNetwork } from "@dynamic-labs/sdk-react-core";
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
-import { sepolia } from "viem/chains";
+import {
+    DynamicWidget,
+    getNetwork,
+    useSwitchNetwork,
+    useDynamicContext,
+} from "@dynamic-labs/sdk-react-core";
+import { isEthereumWallet } from "@dynamic-labs/ethereum";
 import { useAccount, useWalletClient } from "wagmi";
-import { sendETH } from "../../../../../../packages/core/dist/plugins/send-eth";
+import { sendETH } from "@goat-sdk/core";
+import { sepolia } from "viem/chains";
 
 export function Conversation() {
     const { primaryWallet, sdkHasLoaded } = useDynamicContext();
@@ -36,7 +41,7 @@ export function Conversation() {
         if (primaryWallet) {
             checkAndSwitchNetwork();
         }
-    }, [primaryWallet]);
+    }, [primaryWallet,]);
 
     const { isConnected } = useAccount();
     const { data: wallet } = useWalletClient(); // Get the viem wallet client from Wagmi
@@ -93,15 +98,23 @@ export function Conversation() {
 
     return (
         <div className="flex flex-col items-center gap-4">
-            <h1 className="text-2xl font-bold">{isConnected ? "1. You're Connected" : "1. Connect Wallet to start"}</h1>
+            <h1 className="text-2xl font-bold">
+                {isConnected
+                    ? "1. You're Connected"
+                    : "1. Connect Wallet to start"}
+            </h1>
             <DynamicWidget />
 
-            <h1 className="text-2xl font-bold">2. Start Conversation with Agent</h1>
+            <h1 className="text-2xl font-bold">
+                2. Start Conversation with Agent
+            </h1>
             <div className="flex flex-col items-center gap-4">
                 <div className="flex gap-2">
                     <button
                         onClick={startConversation}
-                        disabled={conversation.status === "connected" || !isConnected}
+                        disabled={
+                            conversation.status === "connected" || !isConnected
+                        }
                         className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
                         type="button"
                     >
@@ -120,10 +133,14 @@ export function Conversation() {
                 <div className="flex flex-col items-center">
                     <p>Status: {conversation.status}</p>
                     {conversation.status === "connected" && (
-                        <p>Agent is {conversation.isSpeaking ? "speaking" : "listening"}</p>
+                        <p>
+                            Agent is{" "}
+                            {conversation.isSpeaking ? "speaking" : "listening"}
+                        </p>
                     )}
                 </div>
             </div>
         </div>
     );
 }
+
