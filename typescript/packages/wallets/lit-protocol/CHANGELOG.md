@@ -1,7 +1,0 @@
-# @goat-sdk/wallet-lit
-
-## 0.0.1
-
-### Initial release
-
-🚀
