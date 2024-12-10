@@ -545,23 +545,8 @@ importers:
         specifier: 0.8.10
         version: 0.8.10(@metaplex-foundation/umi@0.9.2)(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@solana/web3.js':
-        specifier: 1.95.8
+        specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      viem:
-        specifier: ^2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
-
-  packages/plugins/uniswap:
-    dependencies:
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../../core
-      viem:
-        specifier: ^2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -579,6 +564,18 @@ importers:
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       zod:
         specifier: 'catalog:'
+        version: 3.23.8
+
+  packages/plugins/uniswap:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      viem:
+        specifier: ^2.21.49
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@types/node':
