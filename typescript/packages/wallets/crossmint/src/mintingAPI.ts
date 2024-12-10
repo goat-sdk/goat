@@ -1,6 +1,6 @@
-import { z } from "zod";
-import type { Plugin, WalletClient } from "@goat-sdk/core";
 import { randomUUID } from "node:crypto";
+import type { Plugin, WalletClient } from "@goat-sdk/core";
+import { z } from "zod";
 
 export const mintingAPIFactory = (
     apiKey: string,
