@@ -17,8 +17,9 @@ export async function buyListing(
         buyer: walletClient.getAddress(),
         seller: nftInfo.seller,
         tokenMint: parameters.mintHash,
-        tokenATA: nftInfo.pdaAddress,
+        tokenATA: nftInfo.tokenAddress,
         price: nftInfo.price.toString(),
+        ...(nftInfo.auctionHouse ? { auctionHouseAddress: nftInfo.auctionHouse } : {}),
     });
 
     let data: z.infer<typeof getBuyListingTransactionResponseSchema>;

@@ -8,7 +8,7 @@ export const getNftInfoResponseSchema = z.array(
     z.object({
         pdaAddress: z.string(),
         auctionHouse: z.string().optional(),
-        tokenAddress: z.string().optional(),
+        tokenAddress: z.string(),
         tokenMint: z.string().optional(),
         seller: z.string(),
         sellerReferral: z.string().optional(),
