@@ -1,7 +1,7 @@
+import { ethSendTransaction } from "./plugins/eth-send-transaction";
 import type { Plugin } from "./plugins/plugins";
 import { sendETH } from "./plugins/send-eth";
 import { sendSOL } from "./plugins/send-sol";
-import { ethSendTransaction } from "./plugins/eth-send-transaction";
 import {
     type DeferredTool,
     type GetDeferredToolsParams,

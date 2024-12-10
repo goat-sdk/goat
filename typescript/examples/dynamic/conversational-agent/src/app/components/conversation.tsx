@@ -4,13 +4,13 @@ import { useConversation } from "@11labs/react";
 import { getOnChainTools } from "@goat-sdk/adapter-eleven-labs";
 import { useCallback, useEffect } from "react";
 
+import { isEthereumWallet } from "@dynamic-labs/ethereum";
+import { DynamicWidget, getNetwork, useDynamicContext, useSwitchNetwork } from "@dynamic-labs/sdk-react-core";
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
-import { DynamicWidget, getNetwork, useSwitchNetwork, useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { isEthereumWallet } from "@dynamic-labs/ethereum";
+import { sepolia } from "viem/chains";
 import { useAccount, useWalletClient } from "wagmi";
 import { sendETH } from "../../../../../../packages/core/dist/plugins/send-eth";
-import { sepolia } from "viem/chains";
 
 export function Conversation() {
     const { primaryWallet, sdkHasLoaded } = useDynamicContext();
@@ -34,7 +34,7 @@ export function Conversation() {
 
     useEffect(() => {
         if (primaryWallet) {
-        checkAndSwitchNetwork();
+            checkAndSwitchNetwork();
         }
     }, [primaryWallet]);
 
