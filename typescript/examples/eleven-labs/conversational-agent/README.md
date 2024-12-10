@@ -4,6 +4,8 @@ This example builds a conversational agent with ElevenLabs that can read your wa
 
 This example uses the ElevenLabs base project described [here](https://elevenlabs.io/docs/conversational-ai/guides/conversational-ai-guide-nextjs) and implements both functionalities using tool calling described [here](https://elevenlabs.io/docs/conversational-ai/customization/client-tools).
 
+**Note**: An [issue](https://github.com/goat-sdk/goat/issues/39) to support Solana wallets / balance has been opened.
+
 https://github.com/user-attachments/assets/81a3837e-ad05-4e29-b6c7-0a14318f7b8e
 
 ## Setup
