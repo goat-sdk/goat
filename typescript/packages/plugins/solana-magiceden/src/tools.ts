@@ -9,7 +9,7 @@ import { getNftInfoParametersSchema } from "./parameters";
 export function getTools({
     apiKey,
     connection,
-}: { apiKey?: string; connection: Connection }): DeferredTool<SolanaWalletClient>[] {
+}: { apiKey: string; connection: Connection }): DeferredTool<SolanaWalletClient>[] {
     const getNftListingsTool: DeferredTool<SolanaWalletClient> = {
         name: "get_nft_listings",
         description: "Gets information about a Solana NFT, from the Magic Eden API",

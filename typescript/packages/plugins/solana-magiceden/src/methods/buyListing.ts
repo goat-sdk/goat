@@ -6,7 +6,7 @@ import { decompileVersionedTransactionToInstructions } from "../utils/decompileV
 import { getNftListings } from "./getNftListings";
 
 export async function buyListing(
-    apiKey: string | undefined,
+    apiKey: string,
     connection: Connection,
     walletClient: SolanaWalletClient,
     parameters: z.infer<typeof getNftInfoParametersSchema>,
