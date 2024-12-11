@@ -1,8 +1,7 @@
 import { z } from "zod";
-import { splTokenSymbolSchema } from "./tokens";
 
 export const getTokenMintAddressBySymbolParametersSchema = z.object({
-    symbol: splTokenSymbolSchema.describe("The symbol of the token to get the mint address of"),
+    symbol: z.string().describe("The symbol of the token to get the mint address of"),
 });
 
 export const getTokenBalanceByMintAddressParametersSchema = z.object({
