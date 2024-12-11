@@ -4,9 +4,12 @@ A GOAT wallet client implementation for Lit Protocol, supporting both EVM and So
 
 ## Features
 
-- 🔐 Secure key management using Lit Protocol's PKP (Programmable Key Pair) system
+- 🔐 Secure key management leveraging Lit Protocol's [Wrapped Keys](https://developer.litprotocol.com/user-wallets/wrapped-keys/overview)
+  - The private key the Agent uses to sign is only ever exposed in clear text within the Lit node's [Trusted Execution Environment (TEE)](https://developer.litprotocol.com/resources/how-it-works)
 - ⛓️ Multi-chain support (EVM and Solana)
+  - Can be extended to support additional chains and signing capabilities by implementing custom [Lit Actions](https://developer.litprotocol.com/sdk/serverless-signing/overview)
 - 📝 Session-based authentication
+  - The wallet client can be extended with additional authentication capabilities such as Google and Discord OAuth, Passkeys, and more
 
 ## Installation
 
