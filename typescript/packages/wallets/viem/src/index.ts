@@ -88,7 +88,8 @@ export function viem(client: ViemWalletClient, options?: ViemOptions): EVMWallet
 =======
                 domain: {
                     ...data.domain,
-                    chainId: typeof data.domain.chainId === 'bigint' ? Number(data.domain.chainId) : data.domain.chainId,
+                    chainId:
+                        typeof data.domain.chainId === "bigint" ? Number(data.domain.chainId) : data.domain.chainId,
                 },
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
                 types: data.types,

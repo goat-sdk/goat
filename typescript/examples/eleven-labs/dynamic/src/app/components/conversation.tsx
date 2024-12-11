@@ -31,7 +31,7 @@ export function Conversation() {
             await switchNetwork({ wallet: primaryWallet, network: sepolia.id });
         }
     };
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: checkAndSwitchNetwork changes on every render
     useEffect(() => {
         if (primaryWallet) {
             checkAndSwitchNetwork();

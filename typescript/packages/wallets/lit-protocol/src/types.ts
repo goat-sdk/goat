@@ -1,8 +1,8 @@
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import type { LitNodeClient } from "@lit-protocol/lit-node-client";
 import type { SessionSigsMap } from "@lit-protocol/types";
 import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
-import { type Connection } from "@solana/web3.js";
-import { type WalletClient } from "viem";
+import type { Connection } from "@solana/web3.js";
+import type { WalletClient } from "viem";
 
 export type LitWalletOptions = {
     litNodeClient: LitNodeClient;
@@ -17,7 +17,7 @@ export type LitEVMWalletOptions = LitWalletOptions & {
     litEVMChainIdentifier: string;
     viemWalletClient: WalletClient;
 };
- 
+
 export type LitSolanaWalletOptions = LitWalletOptions & {
     network: "solana";
     connection: Connection;

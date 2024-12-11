@@ -8,10 +8,9 @@ import { createWalletClient } from "viem";
 import { sepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { sendETH } from "@goat-sdk/core";
+import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
 import {
     createEthersWallet,
     createLitContractsClient,
@@ -21,8 +20,9 @@ import {
     getWrappedKeyMetadata,
     lit,
     mintCapacityCredit,
-    mintPKP
+    mintPKP,
 } from "@goat-sdk/wallet-lit";
+import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
 
 import { ethers } from "ethers";
 
@@ -37,30 +37,36 @@ const llm = new ChatOpenAI({
 });
 
 (async (): Promise<void> => {
-    console.log('🔄 Creating Lit Node Client...');
+    console.log("🔄 Creating Lit Node Client...");
     const litNodeClient = await createLitNodeClient(LIT_NETWORK);
 
-    console.log('🔄 Creating Ethers Wallet...');
+    console.log("🔄 Creating Ethers Wallet...");
     const ethersWallet = createEthersWallet(WALLET_PRIVATE_KEY);
-    
-    console.log('🔄 Creating Lit Contracts Client...');
+
+    console.log("🔄 Creating Lit Contracts Client...");
     const litContractsClient = await createLitContractsClient(ethersWallet, LIT_NETWORK);
-    
-    console.log('🔄 Minting Capacity Credit...');
+
+    console.log("🔄 Minting Capacity Credit...");
     const capacityCredit = await mintCapacityCredit(litContractsClient, 10, 30);
     console.log(`ℹ️  Minted Capacity Credit with token id: ${capacityCredit.capacityTokenId}`);
-    
-    console.log('🔄 Minting PKP...');
+
+    console.log("🔄 Minting PKP...");
     const pkp = await mintPKP(litContractsClient);
     console.log(`ℹ️  Minted PKP with public key: ${JSON.stringify(pkp, null, 2)}`);
-    
-    console.log('🔄 Getting PKP Session Sigs...');
-    const pkpSessionSigs = await getPKPSessionSigs(litNodeClient, pkp.publicKey, pkp.ethAddress, ethersWallet, capacityCredit.capacityTokenId);
-    
-    console.log('🔄 Generating Wrapped Key...');
+
+    console.log("🔄 Getting PKP Session Sigs...");
+    const pkpSessionSigs = await getPKPSessionSigs(
+        litNodeClient,
+        pkp.publicKey,
+        pkp.ethAddress,
+        ethersWallet,
+        capacityCredit.capacityTokenId,
+    );
+
+    console.log("🔄 Generating Wrapped Key...");
     const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "evm");
 
-    console.log('🔄 Getting Wrapped Key Metadata...');
+    console.log("🔄 Getting Wrapped Key Metadata...");
     const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
 
     const transferAmount = ethers.utils.parseEther("0.01");
@@ -68,25 +74,22 @@ const llm = new ChatOpenAI({
         transport: http(RPC_PROVIDER_URL),
         chain: sepolia,
     });
-    const fundingWallet = new ethers.Wallet(
-        WALLET_PRIVATE_KEY,
-        new ethers.providers.JsonRpcProvider(RPC_PROVIDER_URL)
-    );
+    const fundingWallet = new ethers.Wallet(WALLET_PRIVATE_KEY, new ethers.providers.JsonRpcProvider(RPC_PROVIDER_URL));
     console.log(
-      `🔄 Using ${
-        fundingWallet.address
-      } to fund ${wrappedKeyMetadata.wrappedKeyAddress} (the Wrapped Key) with ${ethers.utils.formatEther(
-        transferAmount
-      )} ether for transfer test...`
+        `🔄 Using ${
+            fundingWallet.address
+        } to fund ${wrappedKeyMetadata.wrappedKeyAddress} (the Wrapped Key) with ${ethers.utils.formatEther(
+            transferAmount,
+        )} ether for transfer test...`,
     );
     const txResponse = await fundingWallet.sendTransaction({
-      to: wrappedKeyMetadata.wrappedKeyAddress,
-      value: transferAmount,
+        to: wrappedKeyMetadata.wrappedKeyAddress,
+        value: transferAmount,
     });
     await txResponse.wait();
     console.log(`💰 Funded Wrapped Key tx hash: ${txResponse.hash}`);
 
-    console.log('ℹ️  Finished Lit Setup!')
+    console.log("ℹ️  Finished Lit Setup!");
 
     const litWallet = lit({
         litNodeClient,
@@ -94,7 +97,7 @@ const llm = new ChatOpenAI({
         wrappedKeyMetadata,
         network: "evm",
         chainId: 11155111,
-        litEVMChainIdentifier: 'sepolia',
+        litEVMChainIdentifier: "sepolia",
         viemWalletClient,
     });
 
@@ -130,11 +133,11 @@ const llm = new ChatOpenAI({
 
     console.log("Response:", ethBalanceResponse);
 
-    const transferPrompt =  `Transfer ${ethers.utils.formatEther(transferAmount.div(100))} ETH to ${wrappedKeyMetadata.wrappedKeyAddress}`;
+    const transferPrompt = `Transfer ${ethers.utils.formatEther(transferAmount.div(100))} ETH to ${wrappedKeyMetadata.wrappedKeyAddress}`;
     console.log(`🤖 Attempting to: ${transferPrompt}`);
     const transferResponse = await agentExecutor.invoke({
         input: transferPrompt,
     });
 
     console.log("Transfer Response:", transferResponse);
-})(); 
+})();

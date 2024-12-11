@@ -1,7 +1,4 @@
-import type {
-    EVMWalletClient,
-    SolanaWalletClient,
-} from "@goat-sdk/core";
+import type { EVMWalletClient, SolanaWalletClient } from "@goat-sdk/core";
 
 import { createEVMWallet } from "./evm";
 import { createSolanaWallet } from "./solana";
@@ -12,9 +9,9 @@ export function lit(options: LitSolanaWalletOptions): SolanaWalletClient;
 export function lit(options: LitEVMWalletOptions | LitSolanaWalletOptions): EVMWalletClient | SolanaWalletClient {
     if (options.network === "evm") {
         return createEVMWallet(options);
-    } else {
-        return createSolanaWallet(options);
     }
+
+    return createSolanaWallet(options);
 }
 
 export * from "./setup";

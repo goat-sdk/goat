@@ -7,10 +7,10 @@ import type {
     EVMWalletClient,
     Signature,
 } from "@goat-sdk/core";
-import { api, EthereumLitTransaction } from "@lit-protocol/wrapped-keys";
 import type { AccsDefaultParams } from "@lit-protocol/types";
+import { type EthereumLitTransaction, api } from "@lit-protocol/wrapped-keys";
+import { formatEther, isAddress, publicActions } from "viem";
 import { mainnet } from "viem/chains";
-import { isAddress, formatEther, publicActions } from "viem";
 import { normalize } from "viem/ens";
 
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
@@ -19,17 +19,14 @@ import type { LitEVMWalletOptions } from "./types";
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
 export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
-    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chainId, litEVMChainIdentifier, viemWalletClient } = options;
+    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chainId, litEVMChainIdentifier, viemWalletClient } =
+        options;
 
     const viemPublicClient = viemWalletClient.extend(publicActions);
 
-    function getPkpAccessControlCondition(
-        pkpAddress: string
-    ): AccsDefaultParams {
+    function getPkpAccessControlCondition(pkpAddress: string): AccsDefaultParams {
         if (!isAddress(pkpAddress)) {
-            throw new Error(
-                `pkpAddress is not a valid Ethereum Address: ${pkpAddress}`
-            );
+            throw new Error(`pkpAddress is not a valid Ethereum Address: ${pkpAddress}`);
         }
 
         return {
@@ -83,17 +80,15 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
                     id: wrappedKeyMetadata.id,
                     messageToSign: message,
                     litNodeClient,
-                })
-            }
+                }),
+            };
         },
         async signTypedData(data: EVMTypedData): Promise<Signature> {
             const response = await litNodeClient.executeJs({
                 sessionSigs: pkpSessionSigs,
                 code: signEip712MessageLitActionCode,
                 jsParams: {
-                    accessControlConditions: [
-                        getPkpAccessControlCondition(wrappedKeyMetadata.pkpAddress),
-                    ],
+                    accessControlConditions: [getPkpAccessControlCondition(wrappedKeyMetadata.pkpAddress)],
                     ciphertext: wrappedKeyMetadata.ciphertext,
                     dataToEncryptHash: wrappedKeyMetadata.dataToEncryptHash,
                     messageToSign: JSON.stringify(data),
@@ -115,8 +110,8 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
                     chain: litEVMChainIdentifier,
                     toAddress,
                     value: formatEther(value ?? 0n),
-                }
-                
+                };
+
                 const txHash = await signTransactionWithEncryptedKey({
                     litNodeClient,
                     pkpSessionSigs,
@@ -132,7 +127,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
             if (!functionName) {
                 throw new Error("Function name is required for contract calls");
             }
-            
+
             const { request } = await viemPublicClient.simulateContract({
                 account: wrappedKeyMetadata.wrappedKeyAddress as `0x${string}`,
                 address: toAddress as `0x${string}`,
@@ -177,4 +172,4 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
             };
         },
     };
-} 
+}

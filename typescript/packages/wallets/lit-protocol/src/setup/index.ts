@@ -1,11 +1,11 @@
-import { LitNodeClient } from "@lit-protocol/lit-node-client";
-import { LitContracts } from '@lit-protocol/contracts-sdk';
-import { ethers } from "ethers";
-import { LIT_ABILITY, LIT_NETWORK, LIT_RPC } from '@lit-protocol/constants';
-import type { AuthSig, MintCapacityCreditsRes, SessionSigsMap } from '@lit-protocol/types';
-import { EthWalletProvider } from "@lit-protocol/lit-auth-client";
 import { LitActionResource, LitPKPResource } from "@lit-protocol/auth-helpers";
-import { api, StoredKeyData, type GeneratePrivateKeyResult } from "@lit-protocol/wrapped-keys";
+import { LIT_ABILITY, type LIT_NETWORK, LIT_RPC } from "@lit-protocol/constants";
+import { LitContracts } from "@lit-protocol/contracts-sdk";
+import { EthWalletProvider } from "@lit-protocol/lit-auth-client";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import type { AuthSig, MintCapacityCreditsRes, SessionSigsMap } from "@lit-protocol/types";
+import { type GeneratePrivateKeyResult, type StoredKeyData, api } from "@lit-protocol/wrapped-keys";
+import { ethers } from "ethers";
 
 const { generatePrivateKey, getEncryptedKey } = api;
 
@@ -18,7 +18,7 @@ export type LIT_NETWORKS_KEYS = (typeof LIT_NETWORK)[keyof typeof LIT_NETWORK];
  * @returns Promise resolving to a connected LitNodeClient instance
  * @throws Error if connection fails
  */
-export async function createLitNodeClient(network: LIT_NETWORKS_KEYS, debug: boolean = false): Promise<LitNodeClient> {
+export async function createLitNodeClient(network: LIT_NETWORKS_KEYS, debug = false): Promise<LitNodeClient> {
     const litNodeClient = new LitNodeClient({
         litNetwork: network,
         debug,
@@ -34,10 +34,13 @@ export async function createLitNodeClient(network: LIT_NETWORKS_KEYS, debug: boo
  * @returns Promise resolving to a connected LitContracts instance
  * @throws Error if connection fails
  */
-export async function createLitContractsClient(ethersWallet: ethers.Wallet, network: LIT_NETWORKS_KEYS): Promise<LitContracts> {
+export async function createLitContractsClient(
+    ethersWallet: ethers.Wallet,
+    network: LIT_NETWORKS_KEYS,
+): Promise<LitContracts> {
     const litContractClient = new LitContracts({
-      signer: ethersWallet,
-      network,
+        signer: ethersWallet,
+        network,
     });
     await litContractClient.connect();
     return litContractClient;
@@ -49,10 +52,7 @@ export async function createLitContractsClient(ethersWallet: ethers.Wallet, netw
  * @returns Configured Ethers wallet instance connected to Lit RPC
  */
 export function createEthersWallet(privateKey: string): ethers.Wallet {
-    return new ethers.Wallet(
-        privateKey,
-        new ethers.providers.JsonRpcProvider(LIT_RPC.CHRONICLE_YELLOWSTONE)
-    );
+    return new ethers.Wallet(privateKey, new ethers.providers.JsonRpcProvider(LIT_RPC.CHRONICLE_YELLOWSTONE));
 }
 
 /**
@@ -63,10 +63,14 @@ export function createEthersWallet(privateKey: string): ethers.Wallet {
  * @returns Promise resolving to minting transaction result with capacity token details
  * @throws Error if minting fails
  */
-export async function mintCapacityCredit(litContractClient: LitContracts, requestsPerSecond: number, daysUntilUTCMidnightExpiration: number): Promise<MintCapacityCreditsRes> {
+export async function mintCapacityCredit(
+    litContractClient: LitContracts,
+    requestsPerSecond: number,
+    daysUntilUTCMidnightExpiration: number,
+): Promise<MintCapacityCreditsRes> {
     return litContractClient.mintCapacityCreditsNFT({
-      requestsPerSecond: requestsPerSecond,
-      daysUntilUTCMidnightExpiration: daysUntilUTCMidnightExpiration,
+        requestsPerSecond: requestsPerSecond,
+        daysUntilUTCMidnightExpiration: daysUntilUTCMidnightExpiration,
     });
 }
 
@@ -79,17 +83,22 @@ export async function mintCapacityCredit(litContractClient: LitContracts, reques
  * @returns Promise resolving to AuthSig for delegation
  * @throws Error if signature creation fails
  */
-export async function createCapacityCreditDelegationAuthSig(litNodeClient: LitNodeClient, ethersWallet: ethers.Wallet, capacityTokenId: string, pkpEthAddress: string): Promise<AuthSig> {
+export async function createCapacityCreditDelegationAuthSig(
+    litNodeClient: LitNodeClient,
+    ethersWallet: ethers.Wallet,
+    capacityTokenId: string,
+    pkpEthAddress: string,
+): Promise<AuthSig> {
     const { capacityDelegationAuthSig } = await litNodeClient.createCapacityDelegationAuthSig({
-      dAppOwnerWallet: ethersWallet,
-      capacityTokenId,
-      delegateeAddresses: [pkpEthAddress],
-      uses: "2",
-      expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
+        dAppOwnerWallet: ethersWallet,
+        capacityTokenId,
+        delegateeAddresses: [pkpEthAddress],
+        uses: "2",
+        expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
     });
 
     return capacityDelegationAuthSig;
-};
+}
 
 /**
  * Mints a new Programmable Key Pair (PKP) NFT
@@ -98,7 +107,7 @@ export async function createCapacityCreditDelegationAuthSig(litNodeClient: LitNo
  * @throws Error if minting fails
  */
 export async function mintPKP(litContractClient: LitContracts): Promise<{
-    tokenId: any;
+    tokenId: string;
     publicKey: string;
     ethAddress: string;
 }> {
@@ -115,35 +124,36 @@ export async function mintPKP(litContractClient: LitContracts): Promise<{
  * @returns Promise resolving to session signatures
  * @throws Error if signature generation fails
  */
-export async function getPKPSessionSigs(litNodeClient: LitNodeClient, pkpPublicKey: string, pkpEthAddress: string, ethersWallet: ethers.Wallet, capacityTokenId: string): Promise<SessionSigsMap> {
+export async function getPKPSessionSigs(
+    litNodeClient: LitNodeClient,
+    pkpPublicKey: string,
+    pkpEthAddress: string,
+    ethersWallet: ethers.Wallet,
+    capacityTokenId: string,
+): Promise<SessionSigsMap> {
     return litNodeClient.getPkpSessionSigs({
-      pkpPublicKey,
-      capabilityAuthSigs: [
-        await createCapacityCreditDelegationAuthSig(
-          litNodeClient,
-          ethersWallet,
-          capacityTokenId,
-          pkpEthAddress,
-        ),
-      ],
-      authMethods: [
-        await EthWalletProvider.authenticate({
-          signer: ethersWallet,
-          litNodeClient,
-          expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
-        }),
-      ],
-      resourceAbilityRequests: [
-        {
-          resource: new LitPKPResource("*"),
-          ability: LIT_ABILITY.PKPSigning,
-        },
-        {
-            resource: new LitActionResource('*'),
-            ability: LIT_ABILITY.LitActionExecution,
-        },
-      ],
-      expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
+        pkpPublicKey,
+        capabilityAuthSigs: [
+            await createCapacityCreditDelegationAuthSig(litNodeClient, ethersWallet, capacityTokenId, pkpEthAddress),
+        ],
+        authMethods: [
+            await EthWalletProvider.authenticate({
+                signer: ethersWallet,
+                litNodeClient,
+                expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
+            }),
+        ],
+        resourceAbilityRequests: [
+            {
+                resource: new LitPKPResource("*"),
+                ability: LIT_ABILITY.PKPSigning,
+            },
+            {
+                resource: new LitActionResource("*"),
+                ability: LIT_ABILITY.LitActionExecution,
+            },
+        ],
+        expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
     });
 }
 
@@ -156,7 +166,12 @@ export async function getPKPSessionSigs(litNodeClient: LitNodeClient, pkpPublicK
  * @returns Promise resolving to wrapped key generation result
  * @throws Error if key generation fails
  */
-export async function generateWrappedKey(litNodeClient: LitNodeClient, pkpSessionSigs: SessionSigsMap, network: "evm" | "solana", memo?: string): Promise<GeneratePrivateKeyResult> {
+export async function generateWrappedKey(
+    litNodeClient: LitNodeClient,
+    pkpSessionSigs: SessionSigsMap,
+    network: "evm" | "solana",
+    memo?: string,
+): Promise<GeneratePrivateKeyResult> {
     return generatePrivateKey({
         litNodeClient,
         pkpSessionSigs,
@@ -173,7 +188,11 @@ export async function generateWrappedKey(litNodeClient: LitNodeClient, pkpSessio
  * @returns Promise resolving to wrapped key metadata with normalized Ethereum address
  * @throws Error if metadata retrieval fails
  */
-export async function getWrappedKeyMetadata(litNodeClient: LitNodeClient, pkpSessionSigs: SessionSigsMap, wrappedKeyId: string): Promise<StoredKeyData & { wrappedKeyAddress: string }> {
+export async function getWrappedKeyMetadata(
+    litNodeClient: LitNodeClient,
+    pkpSessionSigs: SessionSigsMap,
+    wrappedKeyId: string,
+): Promise<StoredKeyData & { wrappedKeyAddress: string }> {
     const keyMetadata = await getEncryptedKey({
         litNodeClient,
         pkpSessionSigs,
@@ -183,5 +202,5 @@ export async function getWrappedKeyMetadata(litNodeClient: LitNodeClient, pkpSes
     return {
         ...keyMetadata,
         wrappedKeyAddress: ethers.utils.computeAddress(keyMetadata.publicKey),
-    }
+    };
 }

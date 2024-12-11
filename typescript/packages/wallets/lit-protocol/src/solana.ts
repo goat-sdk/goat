@@ -6,7 +6,7 @@ import type {
     SolanaTransactionResult,
     SolanaWalletClient,
 } from "@goat-sdk/core";
-import { api, SerializedTransaction } from "@lit-protocol/wrapped-keys";
+import { type SerializedTransaction, api } from "@lit-protocol/wrapped-keys";
 import { PublicKey, Transaction } from "@solana/web3.js";
 
 import type { LitSolanaWalletOptions } from "./types";
@@ -29,12 +29,10 @@ export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalle
                     id: wrappedKeyMetadata.id,
                     messageToSign: message,
                     litNodeClient,
-                })
-            }
+                }),
+            };
         },
-        async sendTransaction(
-            { instructions }: SolanaTransaction
-        ): Promise<SolanaTransactionResult> {
+        async sendTransaction({ instructions }: SolanaTransaction): Promise<SolanaTransactionResult> {
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
             const tx = new Transaction();
             tx.recentBlockhash = latestBlockhash.blockhash;
@@ -51,7 +49,7 @@ export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalle
                 serializedTransaction,
                 chain,
             };
-            
+
             const signedTransaction = await signTransactionWithEncryptedKey({
                 litNodeClient,
                 pkpSessionSigs,
@@ -60,7 +58,7 @@ export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalle
                 unsignedTransaction: litTransaction,
                 broadcast: true,
             });
-            
+
             return {
                 hash: signedTransaction,
             };
@@ -91,4 +89,4 @@ export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalle
             };
         },
     };
-} 
+}

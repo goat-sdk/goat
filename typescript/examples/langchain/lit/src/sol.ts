@@ -3,7 +3,16 @@ import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
-import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction } from "@solana/web3.js";
+import {
+    Connection,
+    Keypair,
+    LAMPORTS_PER_SOL,
+    PublicKey,
+    SystemProgram,
+    Transaction,
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+} from "@solana/web3.js";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 import { sendSOL } from "@goat-sdk/core";
@@ -16,7 +25,7 @@ import {
     getWrappedKeyMetadata,
     lit,
     mintCapacityCredit,
-    mintPKP
+    mintPKP,
 } from "@goat-sdk/wallet-lit";
 
 import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
@@ -33,66 +42,64 @@ const llm = new ChatOpenAI({
 });
 
 (async (): Promise<void> => {
-    console.log('🔄 Creating Lit Node Client...');
+    console.log("🔄 Creating Lit Node Client...");
     const litNodeClient = await createLitNodeClient(LIT_NETWORK);
 
-    console.log('🔄 Creating Ethers Wallet...');
+    console.log("🔄 Creating Ethers Wallet...");
     const ethersWallet = createEthersWallet(WALLET_PRIVATE_KEY);
-    
-    console.log('🔄 Creating Lit Contracts Client...');
+
+    console.log("🔄 Creating Lit Contracts Client...");
     const litContractsClient = await createLitContractsClient(ethersWallet, LIT_NETWORK);
-    
-    console.log('🔄 Minting Capacity Credit...');
+
+    console.log("🔄 Minting Capacity Credit...");
     const capacityCredit = await mintCapacityCredit(litContractsClient, 10, 30);
     console.log(`ℹ️  Minted Capacity Credit with token id: ${capacityCredit.capacityTokenId}`);
-    
-    console.log('🔄 Minting PKP...');
+
+    console.log("🔄 Minting PKP...");
     const pkp = await mintPKP(litContractsClient);
     console.log(`ℹ️  Minted PKP with public key: ${JSON.stringify(pkp, null, 2)}`);
-    
-    console.log('🔄 Getting PKP Session Sigs...');
-    const pkpSessionSigs = await getPKPSessionSigs(litNodeClient, pkp.publicKey, pkp.ethAddress, ethersWallet, capacityCredit.capacityTokenId);
-    
-    console.log('🔄 Generating Wrapped Key...');
+
+    console.log("🔄 Getting PKP Session Sigs...");
+    const pkpSessionSigs = await getPKPSessionSigs(
+        litNodeClient,
+        pkp.publicKey,
+        pkp.ethAddress,
+        ethersWallet,
+        capacityCredit.capacityTokenId,
+    );
+
+    console.log("🔄 Generating Wrapped Key...");
     const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "solana");
 
-    console.log('🔄 Getting Wrapped Key Metadata...');
+    console.log("🔄 Getting Wrapped Key Metadata...");
     const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
 
     const transferAmount = LAMPORTS_PER_SOL / 100; // 0.01 SOL
     const fundingSolanaWallet = Keypair.fromSecretKey(
-      ethers.utils.base58.decode(process.env.SOLANA_PRIVATE_KEY as string)
+        ethers.utils.base58.decode(process.env.SOLANA_PRIVATE_KEY as string),
     );
-    const solanaConnection = new Connection(
-      clusterApiUrl("devnet"),
-      "confirmed"
-    );
+    const solanaConnection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
     console.log(
-      `🔄 Using ${fundingSolanaWallet.publicKey.toBase58()} to send ${
-        transferAmount / LAMPORTS_PER_SOL
-      } SOL to ${wrappedKeyMetadata.publicKey} for transfer test...`
+        `🔄 Using ${fundingSolanaWallet.publicKey.toBase58()} to send ${
+            transferAmount / LAMPORTS_PER_SOL
+        } SOL to ${wrappedKeyMetadata.publicKey} for transfer test...`,
     );
     const solanaTransaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: fundingSolanaWallet.publicKey,
-        toPubkey: new PublicKey(wrappedKeyMetadata.publicKey),
-        lamports: transferAmount,
-      })
+        SystemProgram.transfer({
+            fromPubkey: fundingSolanaWallet.publicKey,
+            toPubkey: new PublicKey(wrappedKeyMetadata.publicKey),
+            lamports: transferAmount,
+        }),
     );
-    const fundingSignature = await sendAndConfirmTransaction(
-      solanaConnection,
-      solanaTransaction,
-      [fundingSolanaWallet]
-    );
+    const fundingSignature = await sendAndConfirmTransaction(solanaConnection, solanaTransaction, [
+        fundingSolanaWallet,
+    ]);
     console.log(`💰 Funded Wrapped Key tx signature: ${fundingSignature}`);
 
-    console.log('ℹ️  Finished Lit Setup!')
+    console.log("ℹ️  Finished Lit Setup!");
 
-    const connection = new Connection(
-      clusterApiUrl("devnet"),
-      "confirmed"
-    );
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
     const litWallet = lit({
         litNodeClient,
         pkpSessionSigs,
@@ -128,12 +135,11 @@ const llm = new ChatOpenAI({
 
     console.log("Response:", balanceResponse);
 
-    const transferPrompt =  `Transfer ${(transferAmount / LAMPORTS_PER_SOL) / 10} SOL to ${wrappedKeyMetadata.publicKey}`;
+    const transferPrompt = `Transfer ${transferAmount / LAMPORTS_PER_SOL / 10} SOL to ${wrappedKeyMetadata.publicKey}`;
     console.log(`🤖 Attempting to: ${transferPrompt}`);
     const transferResponse = await agentExecutor.invoke({
         input: transferPrompt,
     });
 
     console.log("Transfer Response:", transferResponse);
-})(); 
-
+})();
