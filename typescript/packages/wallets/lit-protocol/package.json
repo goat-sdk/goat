@@ -1,8 +1,12 @@
 {
-    "name": "@goat-sdk/core",
-    "version": "0.3.12",
+    "name": "@goat-sdk/wallet-lit",
+    "version": "0.0.1",
     "sideEffects": false,
-    "files": ["dist/**/*", "README.md", "package.json"],
+    "files": [
+        "dist/**/*",
+        "README.md",
+        "package.json"
+    ],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
@@ -12,12 +16,20 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@goat-sdk/core": "workspace:*",
         "@lit-protocol/lit-node-client": "catalog:",
+        "@lit-protocol/lit-auth-client": "catalog:",
+        "@lit-protocol/auth-helpers": "catalog:",
+        "@lit-protocol/constants": "catalog:",
+        "@lit-protocol/contracts-sdk": "catalog:",
+        "@lit-protocol/misc": "catalog:",
         "@lit-protocol/wrapped-keys": "catalog:",
         "@solana/web3.js": "catalog:",
-        "abitype": "^1.0.6",
-        "viem": "catalog:",
-        "zod": "catalog:"
+        "viem": "catalog:"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "viem": "catalog:"
     },
     "devDependencies": {
         "@lit-protocol/types": "catalog:"
@@ -31,5 +43,9 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": [
+        "ai",
+        "agents",
+        "web3"
+    ]
 }
