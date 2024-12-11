@@ -1,6 +1,6 @@
 ---
-"goat-examples-vercel-ai-uniswap": minor
-"@goat-sdk/plugin-uniswap": minor
+"goat-examples-vercel-ai-uniswap": patch
+"@goat-sdk/plugin-uniswap": patch
 "@goat-sdk/core": patch
 ---
 

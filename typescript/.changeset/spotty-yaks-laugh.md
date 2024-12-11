@@ -1,7 +1,7 @@
 ---
-"goat-examples-vercel-ai-chromia": minor
-"@goat-sdk/wallet-chromia": minor
-"@goat-sdk/core": minor
+"goat-examples-vercel-ai-chromia": patch
+"@goat-sdk/wallet-chromia": patch
+"@goat-sdk/core": patch
 ---
 
 Added Chromia and send-chr tools
