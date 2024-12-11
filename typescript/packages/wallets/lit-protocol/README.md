@@ -1,6 +1,34 @@
+<!-- omit in toc -->
 # Lit Protocol Wallet Client
 
 A GOAT wallet client implementation for Lit Protocol, supporting both EVM and Solana chains.
+
+<!-- omit in toc -->
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Chain Support](#chain-support)
+  - [EVM](#evm)
+  - [Solana](#solana)
+- [Quick Start](#quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Lit EVM Wallet Client](#lit-evm-wallet-client)
+  - [Lit Solana Wallet Client](#lit-solana-wallet-client)
+- [API Reference](#api-reference)
+  - [Setup Functions](#setup-functions)
+    - [createLitNodeClient](#createlitnodeclient)
+    - [createLitContractsClient](#createlitcontractsclient)
+    - [createEthersWallet](#createetherswallet)
+    - [mintCapacityCredit](#mintcapacitycredit)
+    - [createCapacityCreditDelegationAuthSig](#createcapacitycreditdelegationauthsig)
+    - [mintPKP](#mintpkp)
+    - [getPKPSessionSigs](#getpkpsessionsigs)
+    - [generateWrappedKey](#generatewrappedkey)
+    - [getWrappedKeyMetadata](#getwrappedkeymetadata)
+  - [Wallet Client Creation](#wallet-client-creation)
+    - [LitEVMWalletClient](#litevmwalletclient)
+    - [LitSolWalletClient](#litsolwalletclient)
 
 ## Features
 
@@ -16,6 +44,26 @@ A GOAT wallet client implementation for Lit Protocol, supporting both EVM and So
 ```bash
 npm install @goat-sdk/wallet-lit
 ```
+
+## Chain Support
+
+### EVM
+
+An example of how to use the Lit EVM wallet client can be found [here](../../../examples/langchain/lit/src/evm.ts).
+
+- Support for many EVM-compatible chains
+  - Go [here](https://developer.litprotocol.com/resources/supported-chains#access-control-conditions) for a list of supported chains
+- Transaction signing and sending
+- Message signing (EIP-191 and EIP-712)
+- Contract interactions
+
+### Solana
+
+An example of how to use the Lit Solana wallet client can be found [here](../../../examples/langchain/lit/src/sol.ts).
+
+- Transaction signing and sending
+- Message signing
+- Contract interactions
 
 ## Quick Start
 
@@ -339,23 +387,3 @@ type LitSolanaWalletOptions = {
 
 const litWallet = lit(options: LitSolanaWalletOptions);
 ```
-
-## Chain Support
-
-### EVM
-
-An example of how to use the Lit EVM wallet client can be found [here](../../../examples/langchain/lit/src/evm.ts).
-
-- Support for many EVM-compatible chains
-  - Go [here](https://developer.litprotocol.com/resources/supported-chains#access-control-conditions) for a list of supported chains
-- Transaction signing and sending
-- Message signing (EIP-191 and EIP-712)
-- Contract interactions
-
-### Solana
-
-An example of how to use the Lit Solana wallet client can be found [here](../../../examples/langchain/lit/src/sol.ts).
-
-- Transaction signing and sending
-- Message signing
-- Contract interactions
