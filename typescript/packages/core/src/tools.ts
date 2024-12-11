@@ -1,11 +1,11 @@
 import type { z } from "zod";
+import { deferredChromiaTools } from "./chromia/tools";
 import { deferredEVMCoreTools } from "./evm/tools";
 import type { Plugin } from "./plugins/plugins";
 import { deferredSolanaTools } from "./solana/tools";
 import { replaceToolPlaceholder } from "./utils";
 import type { AnyEVMWalletClient, ChainForWalletClient, WalletClient } from "./wallets";
-import { isEVMChain, isEVMSmartWalletClient, isSolanaChain, isChromiaChain } from "./wallets";
-import { deferredChromiaTools } from "./chromia/tools";
+import { isChromiaChain, isEVMChain, isEVMSmartWalletClient, isSolanaChain } from "./wallets";
 
 // biome-ignore lint/suspicious/noExplicitAny: Tools can return any type
 export type Tool<TResult = any> = {

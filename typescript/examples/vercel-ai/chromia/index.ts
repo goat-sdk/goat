@@ -1,10 +1,10 @@
 import { openai } from "@ai-sdk/openai";
-import { generateText } from "ai";
-import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { createClient } from "postchain-client";
-import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
 import { createConnection, createInMemoryEvmKeyStore, createKeyStoreInteractor } from "@chromia/ft4";
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { sendCHR } from "@goat-sdk/core";
+import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
+import { generateText } from "ai";
+import { type KeyPair, createClient } from "postchain-client";
 
 require("dotenv").config();
 
@@ -17,27 +17,25 @@ if (!privateKey) {
 (async () => {
     const chromiaClient = await createClient({
         nodeUrlPool: ["https://system.chromaway.com:7740"],
-        blockchainRid: CHROMIA_MAINNET_BRID.ECONOMY_CHAIN
+        blockchainRid: CHROMIA_MAINNET_BRID.ECONOMY_CHAIN,
     });
     const connection = createConnection(chromiaClient);
     const evmKeyStore = createInMemoryEvmKeyStore({
-        privKey: privateKey,
-    } as any);
-    const keystoreInteractor = createKeyStoreInteractor(chromiaClient, evmKeyStore)
-    const accounts =  await keystoreInteractor.getAccounts();
+        privKey: Buffer.from(privateKey, "hex"),
+    } as KeyPair);
+    const keystoreInteractor = createKeyStoreInteractor(chromiaClient, evmKeyStore);
+    const accounts = await keystoreInteractor.getAccounts();
     const accountAddress = accounts[0].id.toString("hex");
     console.log("ACCOUNT ADDRESS: ", accountAddress);
-    
+
     const tools = await getOnChainTools({
         wallet: chromia({
             client: chromiaClient,
             accountAddress,
             keystoreInteractor,
-            connection
+            connection,
         }),
-        plugins: [
-            sendCHR()
-        ],
+        plugins: [sendCHR()],
     });
 
     const result = await generateText({

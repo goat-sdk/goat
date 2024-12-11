@@ -1,24 +1,17 @@
 import {
-    DictPair,
-    IClient,
-    QueryObject,
-    RawGtv,
-    SignatureProvider,
-} from "postchain-client";
-import {
-    Connection,
+    type Connection,
+    type KeyStoreInteractor,
+    Session,
     createAmount,
     createInMemoryFtKeyStore,
     createKeyStoreInteractor,
-    KeyStoreInteractor,
-    Session,
 } from "@chromia/ft4";
+import { type DictPair, type IClient, type QueryObject, type RawGtv, SignatureProvider } from "postchain-client";
 
 export enum CHROMIA_MAINNET_BRID {
     ECONOMY_CHAIN = "15C0CA99BEE60A3B23829968771C50E491BD00D2E3AE448580CD48A8D71E7BBA",
 }
-export const CHR_ASSET_ID =
-    "5f16d1545a0881f971b164f1601cbbf51c29efd0633b2730da18c403c3b428b5";
+export const CHR_ASSET_ID = "5f16d1545a0881f971b164f1601cbbf51c29efd0633b2730da18c403c3b428b5";
 
 export type ChromiaWalletOptions = {
     client: IClient;
@@ -33,12 +26,7 @@ export type ChromiaTransaction = {
     amount: string;
 };
 
-export function chromia({
-    client,
-    keystoreInteractor,
-    accountAddress,
-    connection,
-}: ChromiaWalletOptions) {
+export function chromia({ client, keystoreInteractor, accountAddress, connection }: ChromiaWalletOptions) {
     return {
         getAddress: () => {
             return accountAddress;

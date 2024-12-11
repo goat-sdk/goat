@@ -1,6 +1,5 @@
-
-import { DictPair, QueryObject, RawGtv } from "postchain-client";
-import { TransactionWithReceipt } from "@chromia/ft4";
+import type { TransactionWithReceipt } from "@chromia/ft4";
+import type { DictPair, QueryObject, RawGtv } from "postchain-client";
 import type { WalletClient } from "./core";
 
 export function isChromiaWalletClient(wallet: WalletClient): wallet is ChromiaWalletClient {
@@ -13,7 +12,7 @@ export type ChromiaTransaction = {
     amount: string;
 };
 
-export type ChromiaReadRequest =  string | QueryObject<RawGtv | DictPair>;
+export type ChromiaReadRequest = string | QueryObject<RawGtv | DictPair>;
 
 export type ChromiaReadResult = RawGtv;
 
