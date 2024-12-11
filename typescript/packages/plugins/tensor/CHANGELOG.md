@@ -1,4 +1,4 @@
-# @goat-sdk/plugin-spl-token
+# @goat-sdk/plugin-tensor
 
 ## 1.0.0
 
@@ -7,10 +7,3 @@
 - Updated dependencies [cad06c0]
 - Updated dependencies [ad45f94]
   - @goat-sdk/core@0.4.0
-
-## 0.0.2
-
-### Patch Changes
-
-- Updated dependencies [bf161b7]
-  - @goat-sdk/core@0.3.12
