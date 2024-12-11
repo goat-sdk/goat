@@ -344,13 +344,17 @@ const litWallet = lit(options: LitSolanaWalletOptions);
 
 ### EVM
 
+An example of how to use the Lit EVM wallet client can be found [here](../../../examples/langchain/lit/src/evm.ts).
+
 - Support for many EVM-compatible chains
   - Go [here](https://developer.litprotocol.com/resources/supported-chains#access-control-conditions) for a list of supported chains
 - Transaction signing and sending
 - Message signing (EIP-191 and EIP-712)
 - Contract interactions
 
-### Solana (Coming Soon)
+### Solana
+
+An example of how to use the Lit Solana wallet client can be found [here](../../../examples/langchain/lit/src/sol.ts).
 
 - Transaction signing and sending
 - Message signing
