@@ -121,6 +121,10 @@
             "path": "./typescript/packages/wallets/crossmint"
         },
         {
+			      "name": "[Wallet] 🪪 chromia",
+			      "path": "./typescript/packages/wallets/chromia"
+		    },
+        {
             "name": "[Wallet] 🌞 solana",
             "path": "./typescript/packages/wallets/solana"
         },

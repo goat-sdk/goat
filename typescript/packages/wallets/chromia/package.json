@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/core",
-    "version": "0.3.12",
+    "name": "@goat-sdk/wallet-chromia",
+    "version": "0.1.4",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,17 +12,14 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@lit-protocol/lit-node-client": "catalog:",
-        "@lit-protocol/wrapped-keys": "catalog:",
-        "@solana/web3.js": "catalog:",
-        "@chromia/ft4": "catalog:",
-        "abitype": "^1.0.6",
-        "postchain-client": "catalog:",
-        "viem": "catalog:",
-        "zod": "catalog:"
+        "@goat-sdk/core": "workspace:*",
+        "@chromia/ft4": "1.0.1",
+        "postchain-client": "1.20.1"
     },
-    "devDependencies": {
-        "@lit-protocol/types": "catalog:"
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@chromia/ft4": "1.0.1",
+        "postchain-client": "1.20.1"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

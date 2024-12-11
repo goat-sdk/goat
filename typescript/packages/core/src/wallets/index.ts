@@ -16,9 +16,15 @@ import {
     type SolanaWalletClient,
     isSolanaWalletClient,
 } from "./solana";
+import {
+    type ChromiaReadRequest,
+    type ChromiaTransaction,
+    type ChromiaWalletClient,
+    isChromiaWalletClient,
+} from "./chromia";
 
 import type { Balance, Chain, Signature, WalletClient } from "./core";
-import { type AnyEVMWalletClient, type ChainForWalletClient, isEVMChain, isSolanaChain } from "./utils";
+import { type AnyEVMWalletClient, type ChainForWalletClient, isEVMChain, isSolanaChain, isChromiaChain } from "./utils";
 
 export type {
     EVMWalletClient,
@@ -35,6 +41,9 @@ export type {
     SolanaTransactionResult,
     Signature,
     Balance,
+    ChromiaWalletClient,
+    ChromiaReadRequest,
+    ChromiaTransaction,
     EVMSmartWalletClient,
     ChainForWalletClient,
     EVMTypedData,
@@ -46,5 +55,6 @@ export {
     isEVMSmartWalletClient,
     isEVMChain,
     isSolanaChain,
+    isChromiaChain,
     type AnyEVMWalletClient,
 };

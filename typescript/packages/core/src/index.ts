@@ -2,6 +2,7 @@ import { ethSendTransaction } from "./plugins/eth-send-transaction";
 import type { Plugin } from "./plugins/plugins";
 import { sendETH } from "./plugins/send-eth";
 import { sendSOL } from "./plugins/send-sol";
+import { sendCHR } from "./plugins/send-chr";
 import {
     type DeferredTool,
     type GetDeferredToolsParams,
@@ -40,6 +41,7 @@ export {
     sendETH,
     sendSOL,
     ethSendTransaction,
+    sendCHR,
     addParametersToDescription,
     parametersToJsonExample,
     type Tool,

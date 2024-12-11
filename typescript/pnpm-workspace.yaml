@@ -10,6 +10,8 @@ catalog:
     "@solana/web3.js": 1.95.8
     ai: 4.0.3
     "@langchain/core": 0.3.6
+    postchain-client: 1.20.1
+    "@chromia/ft4": 1.0.1
     "@lit-protocol/lit-node-client": "7.0.2"
     "@lit-protocol/types": "7.0.2"
     "@lit-protocol/lit-auth-client": "7.0.2"
