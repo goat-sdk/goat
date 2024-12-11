@@ -1,10 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { z } from "zod";
-import {
-    addParametersToDescription,
-    replaceToolPlaceholder,
-    parametersToJsonExample,
-} from "./utils";
+import { addParametersToDescription, parametersToJsonExample, replaceToolPlaceholder } from "./utils";
 
 // Note: getTypeString is an internal helper, indirectly tested by addParametersToDescription
 // and parametersToJsonExample. However, we can still test it directly by importing if needed.
@@ -135,6 +131,7 @@ describe("parametersToJsonExample", () => {
     it("should return null for unknown types", () => {
         // Construct a schema that will return default case
         // We'll simulate by casting or creating a custom Zod type
+        // biome-ignore lint/suspicious/noExplicitAny: Just testing
         const UnknownSchema = z.string().transform((val) => val)._def as any;
         UnknownSchema.typeName = "ZodUnknown"; // Simulate unknown type
         const schema = { ...z.string(), _def: UnknownSchema } as z.ZodTypeAny;

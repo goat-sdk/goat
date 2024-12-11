@@ -1,12 +1,12 @@
-import { z } from "zod";
+import type { z } from "zod";
 import type { ZodTypeAny } from "zod";
 
 function getTypeString(schema: z.ZodTypeAny): string {
     const typeName = schema._def?.typeName;
-    
+
     switch (typeName) {
         case "ZodOptional":
-            return getTypeString((schema as z.ZodOptional<any>).unwrap());
+            return getTypeString((schema as z.ZodOptional<ZodTypeAny>).unwrap());
         case "ZodString":
             return "string";
         case "ZodNumber":
@@ -50,7 +50,7 @@ export function parametersToJsonExample(parameters: z.ZodTypeAny): string {
 
     function generateExample(schema: z.ZodTypeAny): unknown {
         const typeName = schema._def?.typeName;
-        
+
         switch (typeName) {
             case "ZodString":
                 return "string";
@@ -70,7 +70,7 @@ export function parametersToJsonExample(parameters: z.ZodTypeAny): string {
             }
             case "ZodOptional":
             case "ZodNullable":
-                return generateExample((schema as z.ZodOptional<any>).unwrap());
+                return generateExample((schema as z.ZodOptional<ZodTypeAny>).unwrap());
             case "ZodUnion":
                 return generateExample(schema._def.options[0]); // Use first option
             case "ZodLiteral":
