@@ -22,7 +22,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "viem": "^2.21.49",
-        "zod": "^3.23.8"
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",

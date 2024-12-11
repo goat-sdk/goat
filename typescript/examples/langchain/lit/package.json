@@ -1,0 +1,24 @@
+{
+    "name": "goat-examples-langchain-lit",
+    "version": "0.0.1",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@goat-sdk/adapter-langchain": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-erc20": "workspace:*",
+        "@goat-sdk/wallet-lit": "workspace:*",
+        "@langchain/core": "catalog:",
+        "@langchain/openai": "^0.3.5",
+        "@lit-protocol/constants": "catalog:",
+        "@solana/web3.js": "catalog:",
+        "dotenv": "^16.4.5",
+        "langchain": "^0.3.2",
+        "viem": "2.21.49"
+    }
+}

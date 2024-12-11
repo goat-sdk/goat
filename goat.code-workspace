@@ -59,6 +59,10 @@
             "name": "[Wallet] 💳 viem",
             "path": "./typescript/packages/wallets/viem"
         },
+        {
+            "name": "[Wallet] 🔥 lit",
+            "path": "./typescript/packages/wallets/lit-protocol"
+        },
         // Docs
         {
             "name": "📚 Docs",
