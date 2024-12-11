@@ -1,5 +1,12 @@
 # @goat-sdk/core
 
+## 0.3.13
+
+### Patch Changes
+
+- cad06c0: uniswap package and example
+- ad45f94: Added Chromia and send-chr tools
+
 ## 0.3.12
 
 ### Patch Changes
