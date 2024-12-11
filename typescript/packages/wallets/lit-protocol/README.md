@@ -21,6 +21,68 @@ npm install @goat-sdk/wallet-lit
 - The corresponding wallet for `process.env.WALLET_PRIVATE_KEY` must have Lit test tokens in order to mint a PKP and capacity credit
   - You can get test tokens from the [Lit Testnet Faucet](https://chronicle-yellowstone-faucet.getlit.dev/)
 
+### Lit EVM Wallet Client
+
+```typescript
+import { 
+    createLitNodeClient,
+    createEthersWallet,
+    createLitContractsClient,
+    mintCapacityCredit,
+    mintPKP,
+    getPKPSessionSigs,
+    generateWrappedKey,
+    lit 
+} from "@goat-sdk/wallet-lit";
+import { LIT_NETWORK } from "@lit-protocol/constants";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
+
+// Initialize Lit components
+const litNodeClient = await createLitNodeClient(LIT_NETWORK.DatilTest);
+const ethersWallet = createEthersWallet(process.env.WALLET_PRIVATE_KEY);
+const litContractsClient = await createLitContractsClient(ethersWallet, LIT_NETWORK.DatilTest);
+
+// Mint capacity credit and PKP
+const capacityCredit = await mintCapacityCredit(
+    litContractsClient, 
+    10, // requests per second
+    30 // days until expiration
+);
+const pkp = await mintPKP(litContractsClient);
+
+// Get session signatures
+const pkpSessionSigs = await getPKPSessionSigs(
+    litNodeClient,
+    pkp.publicKey,
+    pkp.ethAddress,
+    ethersWallet,
+    capacityCredit.capacityTokenId
+);
+
+// Generate wrapped key and get metadata
+const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "evm");
+const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
+
+// Create viem wallet client
+const viemWalletClient = createWalletClient({
+    transport: http(process.env.RPC_URL),
+    chain: sepolia,
+});
+
+// Initialize Lit wallet client
+const litWallet = lit({
+    litNodeClient,
+    pkpSessionSigs,
+    wrappedKeyMetadata,
+    network: "evm",
+    chainId: 11155111,
+    litEVMChainIdentifier: 'sepolia',
+    viemWalletClient,
+});
+```
+
+### Lit Solana Wallet Client
+
 ```typescript
 import { 
     createLitNodeClient,
@@ -62,21 +124,20 @@ const pkpSessionSigs = await getPKPSessionSigs(
 const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "evm");
 const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
 
-// Create viem wallet client
-const viemWalletClient = createWalletClient({
-    transport: http(process.env.RPC_URL),
-    chain: sepolia,
-});
+// Create Solana connection
+const connection = new Connection(
+    clusterApiUrl("devnet"),
+    "confirmed"
+);
 
 // Initialize Lit wallet client
 const litWallet = lit({
     litNodeClient,
     pkpSessionSigs,
     wrappedKeyMetadata,
-    network: "evm", // or "solana"
-    chainId: 11155111,
-    litEVMChainIdentifier: 'sepolia',
-    viemWalletClient,
+    network: "solana",
+    connection,
+    chain: "devnet",
 });
 ```
 
@@ -242,10 +303,12 @@ async function getWrappedKeyMetadata(
 You can create a Lit EVM wallet client by passing the following options to the `lit` function:
 
 ```typescript
+import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
+
 type LitEVMWalletOptions = {
     litNodeClient: LitNodeClient;
     pkpSessionSigs: SessionSigsMap;
-    wrappedKeyId: string;
+    wrappedKeyMetadata: StoredKeyData & { wrappedKeyAddress: string };
     network: "evm";
     chainId: number;
     litEVMChainIdentifier: string;
@@ -253,6 +316,25 @@ type LitEVMWalletOptions = {
 };
 
 const litWallet = lit(options: LitEVMWalletOptions);
+```
+
+#### LitSolWalletClient
+
+You can create a Lit Solana wallet client by passing the following options to the `lit` function:
+
+```typescript
+import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
+
+type LitSolanaWalletOptions = {
+    litNodeClient: LitNodeClient;
+    pkpSessionSigs: SessionSigsMap;
+    wrappedKeyMetadata: StoredKeyData & { wrappedKeyAddress: string };
+    network: "solana";
+    connection: Connection;
+    chain: "devnet" | "mainnet-beta" | "testnet";
+};
+
+const litWallet = lit(options: LitSolanaWalletOptions);
 ```
 
 ## Chain Support
@@ -267,6 +349,6 @@ const litWallet = lit(options: LitEVMWalletOptions);
 
 ### Solana (Coming Soon)
 
-- Basic wallet functionality
 - Transaction signing and sending
 - Message signing
+- Contract interactions

@@ -1,12 +1,13 @@
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 import type { SessionSigsMap } from "@lit-protocol/types";
 import type { StoredKeyData } from "@lit-protocol/wrapped-keys";
+import { type Connection } from "@solana/web3.js";
 import { type WalletClient } from "viem";
 
 export type LitWalletOptions = {
     litNodeClient: LitNodeClient;
     pkpSessionSigs: SessionSigsMap;
-    wrappedKeyMetadata: StoredKeyData & { ethAddress: `0x${string}` };
+    wrappedKeyMetadata: StoredKeyData & { wrappedKeyAddress: string };
 };
 
 export type LitEVMWalletOptions = LitWalletOptions & {
@@ -19,4 +20,6 @@ export type LitEVMWalletOptions = LitWalletOptions & {
  
 export type LitSolanaWalletOptions = LitWalletOptions & {
     network: "solana";
+    connection: Connection;
+    chain: "devnet" | "mainnet-beta" | "testnet";
 };

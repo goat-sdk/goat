@@ -3,15 +3,10 @@ import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
-import { sepolia } from "viem/chains";
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction } from "@solana/web3.js";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { sendETH } from "@goat-sdk/core";
-
-import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
+import { sendSOL } from "@goat-sdk/core";
 import {
     createEthersWallet,
     createLitContractsClient,
@@ -24,10 +19,13 @@ import {
     mintPKP
 } from "@goat-sdk/wallet-lit";
 
+import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
+
+import { ethers } from "ethers";
+
 require("dotenv").config();
 
 const WALLET_PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY as `0x${string}`;
-const RPC_PROVIDER_URL = process.env.RPC_PROVIDER_URL as string;
 const LIT_NETWORK = _LIT_NETWORK.DatilTest;
 
 const llm = new ChatOpenAI({
@@ -56,32 +54,59 @@ const llm = new ChatOpenAI({
     const pkpSessionSigs = await getPKPSessionSigs(litNodeClient, pkp.publicKey, pkp.ethAddress, ethersWallet, capacityCredit.capacityTokenId);
     
     console.log('🔄 Generating Wrapped Key...');
-    const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "evm");
+    const wrappedKey = await generateWrappedKey(litNodeClient, pkpSessionSigs, "solana");
 
     console.log('🔄 Getting Wrapped Key Metadata...');
     const wrappedKeyMetadata = await getWrappedKeyMetadata(litNodeClient, pkpSessionSigs, wrappedKey.id);
 
+    const transferAmount = LAMPORTS_PER_SOL / 100; // 0.01 SOL
+    const fundingSolanaWallet = Keypair.fromSecretKey(
+      ethers.utils.base58.decode(process.env.SOLANA_PRIVATE_KEY as string)
+    );
+    const solanaConnection = new Connection(
+      clusterApiUrl("devnet"),
+      "confirmed"
+    );
+
+    console.log(
+      `🔄 Using ${fundingSolanaWallet.publicKey.toBase58()} to send ${
+        transferAmount / LAMPORTS_PER_SOL
+      } SOL to ${wrappedKeyMetadata.publicKey} for transfer test...`
+    );
+    const solanaTransaction = new Transaction().add(
+      SystemProgram.transfer({
+        fromPubkey: fundingSolanaWallet.publicKey,
+        toPubkey: new PublicKey(wrappedKeyMetadata.publicKey),
+        lamports: transferAmount,
+      })
+    );
+    const fundingSignature = await sendAndConfirmTransaction(
+      solanaConnection,
+      solanaTransaction,
+      [fundingSolanaWallet]
+    );
+    console.log(`💰 Funded Wrapped Key tx signature: ${fundingSignature}`);
+
     console.log('ℹ️  Finished Lit Setup!')
 
-    const viemWalletClient = createWalletClient({
-        transport: http(RPC_PROVIDER_URL),
-        chain: sepolia,
-    });
+    const connection = new Connection(
+      clusterApiUrl("devnet"),
+      "confirmed"
+    );
     const litWallet = lit({
         litNodeClient,
         pkpSessionSigs,
         wrappedKeyMetadata,
-        network: "evm",
-        chainId: 11155111,
-        litEVMChainIdentifier: 'sepolia',
-        viemWalletClient,
+        network: "solana",
+        connection,
+        chain: "devnet",
     });
 
     const prompt = await pull<ChatPromptTemplate>("hwchase17/structured-chat-agent");
 
     const tools = await getOnChainTools({
         wallet: litWallet,
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        plugins: [sendSOL()],
     });
 
     const agent = await createStructuredChatAgent({
@@ -97,9 +122,18 @@ const llm = new ChatOpenAI({
         // verbose: true,
     });
 
-    const response = await agentExecutor.invoke({
-        input: "Get my balance in USDC",
+    const balanceResponse = await agentExecutor.invoke({
+        input: "Get my balance in SOL",
     });
 
-    console.log("Response:", response);
+    console.log("Response:", balanceResponse);
+
+    const transferPrompt =  `Transfer ${(transferAmount / LAMPORTS_PER_SOL) / 10} SOL to ${wrappedKeyMetadata.publicKey}`;
+    console.log(`🤖 Attempting to: ${transferPrompt}`);
+    const transferResponse = await agentExecutor.invoke({
+        input: transferPrompt,
+    });
+
+    console.log("Transfer Response:", transferResponse);
 })(); 
+

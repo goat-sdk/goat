@@ -9,42 +9,12 @@ catalogs:
     '@langchain/core':
       specifier: 0.3.6
       version: 0.3.6
-    '@lit-protocol/auth-helpers':
-      specifier: 7.0.2
-      version: 7.0.2
     '@lit-protocol/constants':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/contracts-sdk':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/lit-auth-client':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/lit-node-client':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/misc':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/types':
-      specifier: 7.0.2
-      version: 7.0.2
-    '@lit-protocol/wrapped-keys':
       specifier: 7.0.2
       version: 7.0.2
     '@solana/web3.js':
       specifier: 1.95.8
       version: 1.95.8
-    ai:
-      specifier: 4.0.3
-      version: 4.0.3
-    viem:
-      specifier: 2.21.49
-      version: 2.21.49
-    zod:
-      specifier: 3.23.8
-      version: 3.23.8
 
 importers:
 
@@ -214,6 +184,9 @@ importers:
       '@lit-protocol/constants':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@solana/web3.js':
+        specifier: 'catalog:'
+        version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
@@ -679,10 +652,10 @@ importers:
         version: link:../../core
       viem:
         specifier: ^2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
-        specifier: ^3.23.8
-        version: 3.24.0
+        specifier: 'catalog:'
+        version: 3.23.8
     devDependencies:
       '@types/node':
         specifier: ^22.7.4
@@ -753,6 +726,9 @@ importers:
       '@lit-protocol/wrapped-keys':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@solana/web3.js':
+        specifier: 'catalog:'
+        version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       viem:
         specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)
@@ -8159,7 +8135,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
+  '@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
     dependencies:
       '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@types/better-sqlite3': 7.6.11
@@ -8178,6 +8154,7 @@ snapshots:
       - '@langchain/mistralai'
       - '@langchain/ollama'
       - axios
+      - bufferutil
       - cheerio
       - encoding
       - handlebars
@@ -8188,9 +8165,10 @@ snapshots:
       - supports-color
       - svelte
       - typeorm
+      - utf-8-validate
       - vue
 
-  '@ai16z/adapter-sqljs@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
+  '@ai16z/adapter-sqljs@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
     dependencies:
       '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@types/sql.js': 1.4.9
@@ -8209,6 +8187,7 @@ snapshots:
       - '@langchain/mistralai'
       - '@langchain/ollama'
       - axios
+      - bufferutil
       - cheerio
       - encoding
       - handlebars
@@ -8219,6 +8198,7 @@ snapshots:
       - supports-color
       - svelte
       - typeorm
+      - utf-8-validate
       - vue
 
   '@ai16z/adapter-supabase@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
@@ -8259,8 +8239,8 @@ snapshots:
       '@ai-sdk/google-vertex': 0.0.42(@google-cloud/vertexai@1.9.2)(zod@3.23.8)
       '@ai-sdk/groq': 0.0.3(zod@3.23.8)
       '@ai-sdk/openai': 1.0.0-canary.3(zod@3.23.8)
-      '@ai16z/adapter-sqlite': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@ai16z/adapter-sqljs': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+      '@ai16z/adapter-sqlite': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+      '@ai16z/adapter-sqljs': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@ai16z/adapter-supabase': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
       '@anthropic-ai/sdk': 0.30.1
       '@types/uuid': 10.0.0

@@ -16,8 +16,9 @@
         "@langchain/core": "catalog:",
         "@langchain/openai": "^0.3.5",
         "@lit-protocol/constants": "catalog:",
+        "@solana/web3.js": "catalog:",
         "dotenv": "^16.4.5",
-        "viem": "2.21.49",
-        "langchain": "^0.3.2"
+        "langchain": "^0.3.2",
+        "viem": "2.21.49"
     }
-} 
+}

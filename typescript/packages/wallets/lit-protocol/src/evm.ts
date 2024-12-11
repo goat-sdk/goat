@@ -67,7 +67,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
     };
 
     return {
-        getAddress: () => wrappedKeyMetadata.ethAddress,
+        getAddress: () => wrappedKeyMetadata.wrappedKeyAddress,
         getChain() {
             return {
                 type: "evm",
@@ -134,7 +134,7 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
             }
             
             const { request } = await viemPublicClient.simulateContract({
-                account: wrappedKeyMetadata.ethAddress,
+                account: wrappedKeyMetadata.wrappedKeyAddress as `0x${string}`,
                 address: toAddress as `0x${string}`,
                 abi,
                 functionName,

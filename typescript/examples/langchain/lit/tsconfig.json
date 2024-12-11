@@ -3,6 +3,6 @@
     "compilerOptions": {
         "outDir": "dist"
     },
-    "include": ["index.ts"],
+    "include": ["src/evm.ts", "src/solana.ts"],
     "exclude": ["node_modules", "dist"]
 }

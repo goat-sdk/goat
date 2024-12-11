@@ -6,34 +6,89 @@ import type {
     SolanaTransactionResult,
     SolanaWalletClient,
 } from "@goat-sdk/core";
+import { api, SerializedTransaction } from "@lit-protocol/wrapped-keys";
+import { PublicKey, Transaction } from "@solana/web3.js";
 
 import type { LitSolanaWalletOptions } from "./types";
 
+const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
+
 export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalletClient {
-    const { pkpSessionSigs, litNodeClient, wrappedKeyMetadata } = options;
-    
+    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, connection, chain } = options;
+
     return {
+        getAddress: () => wrappedKeyMetadata.publicKey,
         getChain: () => ({
             type: "solana",
         }),
-        getAddress: () => "", // TODO: Get address from wrapped key metadata
         async signMessage(message: string): Promise<Signature> {
-            // TODO: Implement Solana message signing using Lit Action
-            throw new Error("Not implemented");
+            return {
+                signature: await signMessageWithEncryptedKey({
+                    pkpSessionSigs,
+                    network: "solana",
+                    id: wrappedKeyMetadata.id,
+                    messageToSign: message,
+                    litNodeClient,
+                })
+            }
         },
         async sendTransaction(
-            transaction: SolanaTransaction
+            { instructions }: SolanaTransaction
         ): Promise<SolanaTransactionResult> {
-            // TODO: Implement Solana transaction signing and sending using Lit Action
-            throw new Error("Not implemented");
+            const latestBlockhash = await connection.getLatestBlockhash("confirmed");
+            const tx = new Transaction();
+            tx.recentBlockhash = latestBlockhash.blockhash;
+            tx.feePayer = new PublicKey(wrappedKeyMetadata.publicKey);
+            tx.add(...instructions);
+
+            const serializedTransaction = tx
+                .serialize({
+                    requireAllSignatures: false,
+                    verifySignatures: false,
+                })
+                .toString("base64");
+            const litTransaction: SerializedTransaction = {
+                serializedTransaction,
+                chain,
+            };
+            
+            const signedTransaction = await signTransactionWithEncryptedKey({
+                litNodeClient,
+                pkpSessionSigs,
+                network: "solana",
+                id: wrappedKeyMetadata.id,
+                unsignedTransaction: litTransaction,
+                broadcast: true,
+            });
+            
+            return {
+                hash: signedTransaction,
+            };
         },
         async read(request: SolanaReadRequest): Promise<SolanaReadResult> {
-            // TODO: Implement Solana read using connection
-            throw new Error("Not implemented");
+            const { accountAddress } = request;
+
+            const pubkey = new PublicKey(accountAddress);
+            const accountInfo = await connection.getAccountInfo(pubkey);
+
+            if (!accountInfo) {
+                throw new Error(`Account ${accountAddress} not found`);
+            }
+
+            return {
+                value: accountInfo,
+            };
         },
         async balanceOf(address: string) {
-            // TODO: Implement balance check using connection
-            throw new Error("Not implemented");
+            const pubkey = new PublicKey(address);
+            const balance = await connection.getBalance(pubkey);
+
+            return {
+                decimals: 9,
+                symbol: "SOL",
+                name: "Solana",
+                value: BigInt(balance),
+            };
         },
     };
 } 

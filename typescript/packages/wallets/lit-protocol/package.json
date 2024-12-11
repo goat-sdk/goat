@@ -24,6 +24,7 @@
         "@lit-protocol/contracts-sdk": "catalog:",
         "@lit-protocol/misc": "catalog:",
         "@lit-protocol/wrapped-keys": "catalog:",
+        "@solana/web3.js": "catalog:",
         "viem": "catalog:"
     },
     "peerDependencies": {

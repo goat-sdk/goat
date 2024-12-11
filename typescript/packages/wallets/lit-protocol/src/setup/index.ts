@@ -173,7 +173,7 @@ export async function generateWrappedKey(litNodeClient: LitNodeClient, pkpSessio
  * @returns Promise resolving to wrapped key metadata with normalized Ethereum address
  * @throws Error if metadata retrieval fails
  */
-export async function getWrappedKeyMetadata(litNodeClient: LitNodeClient, pkpSessionSigs: SessionSigsMap, wrappedKeyId: string): Promise<StoredKeyData & { ethAddress: `0x${string}` }> {
+export async function getWrappedKeyMetadata(litNodeClient: LitNodeClient, pkpSessionSigs: SessionSigsMap, wrappedKeyId: string): Promise<StoredKeyData & { wrappedKeyAddress: string }> {
     const keyMetadata = await getEncryptedKey({
         litNodeClient,
         pkpSessionSigs,
@@ -182,6 +182,6 @@ export async function getWrappedKeyMetadata(litNodeClient: LitNodeClient, pkpSes
 
     return {
         ...keyMetadata,
-        ethAddress: ethers.utils.getAddress(keyMetadata.pkpAddress) as `0x${string}`,
+        wrappedKeyAddress: ethers.utils.computeAddress(keyMetadata.publicKey),
     }
 }
