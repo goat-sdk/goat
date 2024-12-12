@@ -59,7 +59,8 @@
 				"chains-wallets-plugins",
 				"examples",
 				"plugins",
-				"wallets"
+				"wallets",
+				"chains"
 			]
 		}
 	],
