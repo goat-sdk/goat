@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-crossmint-solana-custodial-wallets
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [fad74d5]
+  - @goat-sdk/crossmint@0.2.3
+
 ## 0.1.5
 
 ### Patch Changes
