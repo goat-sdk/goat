@@ -13,8 +13,5 @@ export type UnwrappedTool<TWalletClient extends WalletClient> = {
     name: string;
     description: string;
     parameters: z.ZodSchema;
-    method: (
-        walletClient: TWalletClient,
-        parameters: z.infer<z.ZodSchema>
-    ) => string | Promise<string>;
+    method: (walletClient: TWalletClient, parameters: z.infer<z.ZodSchema>) => string | Promise<string>;
 };

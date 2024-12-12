@@ -19,14 +19,12 @@ export function getTools({
         name: "get_nft_info",
         description: "Gets information about a Solana NFT, from the Tensor API",
         parameters: getNftInfoParametersSchema,
-        method: async (parameters) =>
-            getNftInfo({ mintHash: parameters.mintHash, apiKey }),
+        method: async (parameters) => getNftInfo({ mintHash: parameters.mintHash, apiKey }),
     };
 
     const buyListingTool: Tool = {
         name: "get_buy_listing_transaction",
-        description:
-            "Gets a transaction to buy an NFT from a listing from the Tensor API",
+        description: "Gets a transaction to buy an NFT from a listing from the Tensor API",
         parameters: getNftInfoParametersSchema,
         method: async (parameters) =>
             getBuyListingTransaction({

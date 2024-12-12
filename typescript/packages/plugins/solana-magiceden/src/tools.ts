@@ -16,19 +16,16 @@ export function getTools({
 }): Tool[] {
     const getNftListingsTool: Tool = {
         name: "get_nft_listings",
-        description:
-            "Gets information about a Solana NFT, from the Magic Eden API",
+        description: "Gets information about a Solana NFT, from the Magic Eden API",
         parameters: getNftInfoParametersSchema,
         method: async (parameters) => getNftListings(apiKey, parameters),
     };
 
     const buyListingTool: Tool = {
         name: "get_buy_listing_transaction",
-        description:
-            "Gets a transaction to buy a Solana NFT from a listing from the Magic Eden API",
+        description: "Gets a transaction to buy a Solana NFT from a listing from the Magic Eden API",
         parameters: getNftInfoParametersSchema,
-        method: async (parameters) =>
-            buyListing(apiKey, connection, walletClient, parameters),
+        method: async (parameters) => buyListing(apiKey, connection, walletClient, parameters),
     };
 
     return [getNftListingsTool, buyListingTool];

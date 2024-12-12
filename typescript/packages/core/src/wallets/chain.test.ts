@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { type Chain, getChainToken } from "./chain";
 
 describe("getChainToken", () => {
@@ -48,15 +48,11 @@ describe("getChainToken", () => {
 
     it("throws error for EVM chain without ID", () => {
         const chain: Chain = { type: "evm" };
-        expect(() => getChainToken(chain)).toThrow(
-            "Chain ID is required for EVM chains"
-        );
+        expect(() => getChainToken(chain)).toThrow("Chain ID is required for EVM chains");
     });
 
     it("throws error for unsupported EVM chain ID", () => {
         const chain: Chain = { type: "evm", id: 912341342342349 };
-        expect(() => getChainToken(chain)).toThrow(
-            "Unsupported EVM chain ID: 912341342342349"
-        );
+        expect(() => getChainToken(chain)).toThrow("Unsupported EVM chain ID: 912341342342349");
     });
 });

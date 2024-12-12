@@ -25,7 +25,7 @@ export function getChainToken(chain: Chain): ChainToken {
             const allChains = Object.values(allEVMChains);
             // Find matching chain by ID
             const viemChain = allChains.find((c) => c.id === chain.id);
-            
+
             if (!viemChain) {
                 throw new Error(`Unsupported EVM chain ID: ${chain.id}`);
             }
@@ -39,7 +39,7 @@ export function getChainToken(chain: Chain): ChainToken {
         case "solana":
             return {
                 symbol: "SOL",
-                name: "Solana", 
+                name: "Solana",
                 decimals: 9,
             };
         case "aptos":
@@ -55,10 +55,6 @@ export function getChainToken(chain: Chain): ChainToken {
                 decimals: 6,
             };
         default:
-            throw new Error(
-                `Unsupported chain type: ${chain.type} ${
-                    chain.id ? `with id: ${chain.id}` : ""
-                }`
-            );
+            throw new Error(`Unsupported chain type: ${chain.type} ${chain.id ? `with id: ${chain.id}` : ""}`);
     }
 }

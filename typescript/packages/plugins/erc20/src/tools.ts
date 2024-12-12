@@ -28,16 +28,14 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
             name: `transfer_${token.symbol}`,
             description: `This {{tool}} transfers ${token.symbol} to the specified address`,
             parameters: transferParametersSchema,
-            method: (parameters: z.infer<typeof transferParametersSchema>) =>
-                transfer(walletClient, token, parameters),
+            method: (parameters: z.infer<typeof transferParametersSchema>) => transfer(walletClient, token, parameters),
         };
 
         const totalSupplyTool: Tool = {
             name: `get_${token.symbol}_total_supply`,
             description: `This {{tool}} gets the total supply of ${token.symbol}`,
             parameters: totalSupplyParametersSchema,
-            method: (parameters: z.infer<typeof totalSupplyParametersSchema>) =>
-                totalSupply(walletClient, token),
+            method: (parameters: z.infer<typeof totalSupplyParametersSchema>) => totalSupply(walletClient, token),
         };
 
         const allowanceTool: Tool = {
@@ -52,8 +50,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
             name: `approve_${token.symbol}`,
             description: `This {{tool}} approves the allowance of ${token.symbol}`,
             parameters: approveParametersSchema,
-            method: (parameters: z.infer<typeof approveParametersSchema>) =>
-                approve(walletClient, token, parameters),
+            method: (parameters: z.infer<typeof approveParametersSchema>) => approve(walletClient, token, parameters),
         };
 
         const transferFromTool: Tool = {

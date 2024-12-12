@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { getTools } from "./get-tools";
 import { sendETH } from "./core-plugins/send-eth";
-import type { EVMSmartWalletClient, EVMWalletClient } from "./wallets";
+import { getTools } from "./get-tools";
 import type { Plugin } from "./plugins";
+import type { EVMSmartWalletClient, EVMWalletClient } from "./wallets";
 
 describe("getTools", () => {
     test("returns core tools for any wallet", async () => {
@@ -66,7 +66,6 @@ describe("getTools", () => {
             supportsSmartWallets: () => false,
             getTools: async () => [],
         } as Plugin<EVMWalletClient>;
-
 
         const tools = await getTools({
             wallet: mockWallet,

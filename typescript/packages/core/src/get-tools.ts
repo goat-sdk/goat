@@ -1,8 +1,8 @@
-import type { Plugin } from "./plugins";
-import { replaceToolPlaceholder } from "./utils";
-import type { Tool } from "./tool";
 import { getCoreTools } from "./core-tools";
-import { isEVMSmartWalletClient, type WalletClient } from "./wallets";
+import type { Plugin } from "./plugins";
+import type { Tool } from "./tool";
+import { replaceToolPlaceholder } from "./utils";
+import { type WalletClient, isEVMSmartWalletClient } from "./wallets";
 
 export type GetToolsParams<TWalletClient extends WalletClient> = {
     wallet: TWalletClient;
@@ -28,15 +28,13 @@ export async function getTools<TWalletClient extends WalletClient>({
             console.warn(
                 `Plugin ${plugin.name} does not support ${chain.type}${
                     chain.id ? ` chain id ${chain.id}` : ""
-                }. Skipping.`
+                }. Skipping.`,
             );
             continue;
         }
 
         if (!plugin.supportsSmartWallets() && isEVMSmartWalletClient(wallet)) {
-            console.warn(
-                `Plugin ${plugin.name} does not support smart wallets. Skipping.`
-            );
+            console.warn(`Plugin ${plugin.name} does not support smart wallets. Skipping.`);
             continue;
         }
 

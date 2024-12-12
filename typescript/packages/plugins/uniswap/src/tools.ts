@@ -1,30 +1,21 @@
 import type { Tool } from "@goat-sdk/core";
 import type { z } from "zod";
 import { getApprovalTransaction, getQuote, getSwapTransaction } from "./api";
-import {
-    CheckApprovalBodySchema,
-    GetQuoteBodySchema,
-    GetSwapBodySchema,
-} from "./types";
+import { CheckApprovalBodySchema, GetQuoteBodySchema, GetSwapBodySchema } from "./types";
 
 export type UniswapToolsOptions = {
     apiKey: string;
     baseUrl: string;
 };
 
-export function getTools({
-    apiKey,
-    baseUrl,
-}: UniswapToolsOptions): Tool[] {
+export function getTools({ apiKey, baseUrl }: UniswapToolsOptions): Tool[] {
     return [
         {
             name: "check_approval",
             description:
                 "This {{tool}} checks if the wallet has enough approval for a token and returns the transaction to approve the token. The approval must takes place before the swap transaction.",
             parameters: CheckApprovalBodySchema,
-            method: async (
-                parameters: z.infer<typeof CheckApprovalBodySchema>
-            ) => {
+            method: async (parameters: z.infer<typeof CheckApprovalBodySchema>) => {
                 return getApprovalTransaction(parameters, apiKey, baseUrl);
             },
         },

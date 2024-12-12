@@ -1,13 +1,5 @@
 import {
-    type WalletClient,
-    type Plugin,
-    addParametersToDescription,
-    type Tool,
-    getTools,
-} from "@goat-sdk/core";
-import {
     type Action,
-    generateText,
     type HandlerCallback,
     type IAgentRuntime,
     type Memory,
@@ -15,7 +7,9 @@ import {
     type State,
     composeContext,
     generateObjectV2,
+    generateText,
 } from "@ai16z/eliza";
+import { type Plugin, type Tool, type WalletClient, addParametersToDescription, getTools } from "@goat-sdk/core";
 
 type GetOnChainActionsParams<TWalletClient extends WalletClient> = {
     wallet: TWalletClient;
@@ -59,24 +53,14 @@ function createAction(tool: Tool): Action {
             message: Memory,
             state: State | undefined,
             options?: Record<string, unknown>,
-            callback?: HandlerCallback
+            callback?: HandlerCallback,
         ): Promise<boolean> => {
             try {
-                let currentState =
-                    state ?? (await runtime.composeState(message));
-                currentState = await runtime.updateRecentMessageState(
-                    currentState
-                );
+                let currentState = state ?? (await runtime.composeState(message));
+                currentState = await runtime.updateRecentMessageState(currentState);
 
-                const parameterContext = composeParameterContext(
-                    tool,
-                    currentState
-                );
-                const parameters = await generateParameters(
-                    runtime,
-                    parameterContext,
-                    tool
-                );
+                const parameterContext = composeParameterContext(tool, currentState);
+                const parameters = await generateParameters(runtime, parameterContext, tool);
 
                 const parsedParameters = tool.parameters.safeParse(parameters);
                 if (!parsedParameters.success) {
@@ -88,21 +72,13 @@ function createAction(tool: Tool): Action {
                 }
 
                 const result = await tool.method(parsedParameters.data);
-                const responseContext = composeResponseContext(
-                    tool,
-                    result,
-                    currentState
-                );
-                const response = await generateResponse(
-                    runtime,
-                    responseContext
-                );
+                const responseContext = composeResponseContext(tool, result, currentState);
+                const response = await generateResponse(runtime, responseContext);
 
                 callback?.({ text: response, content: result });
                 return true;
             } catch (error) {
-                const errorMessage =
-                    error instanceof Error ? error.message : String(error);
+                const errorMessage = error instanceof Error ? error.message : String(error);
                 callback?.({
                     text: `Error executing action ${tool.name}: ${errorMessage}`,
                     content: { error: errorMessage },
@@ -117,19 +93,13 @@ function createAction(tool: Tool): Action {
 function composeParameterContext(tool: Tool, state: State): string {
     const contextTemplate = `{{recentMessages}}
 
-Given the recent messages, extract the following information for the action "${
-        tool.name
-    }":
+Given the recent messages, extract the following information for the action "${tool.name}":
 ${addParametersToDescription("", tool.parameters)}
 `;
     return composeContext({ state, template: contextTemplate });
 }
 
-async function generateParameters(
-    runtime: IAgentRuntime,
-    context: string,
-    tool: Tool
-): Promise<unknown> {
+async function generateParameters(runtime: IAgentRuntime, context: string, tool: Tool): Promise<unknown> {
     const { object } = await generateObjectV2({
         runtime,
         context,
@@ -140,11 +110,7 @@ async function generateParameters(
     return object;
 }
 
-function composeResponseContext(
-    tool: Tool,
-    result: unknown,
-    state: State
-): string {
+function composeResponseContext(tool: Tool, result: unknown, state: State): string {
     const responseTemplate = `
     # Action Examples
 {{actionExamples}}
@@ -177,10 +143,7 @@ Respond to the message knowing that the action was successful and these were the
     return composeContext({ state, template: responseTemplate });
 }
 
-async function generateResponse(
-    runtime: IAgentRuntime,
-    context: string
-): Promise<string> {
+async function generateResponse(runtime: IAgentRuntime, context: string): Promise<string> {
     return generateText({
         runtime,
         context,

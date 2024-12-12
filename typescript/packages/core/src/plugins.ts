@@ -1,5 +1,5 @@
-import type { Chain, WalletClient } from "./wallets";
 import type { Tool } from "./tool";
+import type { Chain, WalletClient } from "./wallets";
 
 /**
  * Plugin interface that can be chain-specific or chain-agnostic.

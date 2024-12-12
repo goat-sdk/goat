@@ -1,7 +1,7 @@
 import { parseEther } from "viem";
 import { z } from "zod";
-import type { Chain, EVMWalletClient } from "../wallets";
 import type { Plugin } from "../plugins";
+import type { Chain, EVMWalletClient } from "../wallets";
 import { getChainToken } from "../wallets";
 
 export function sendETH(): Plugin<EVMWalletClient> {
@@ -13,20 +13,15 @@ export function sendETH(): Plugin<EVMWalletClient> {
             return [
                 {
                     name: "send_{{token}}"
-                        .replace(
-                            "{{token}}",
-                            getChainToken(walletClient.getChain()).symbol
-                        )
+                        .replace("{{token}}", getChainToken(walletClient.getChain()).symbol)
                         .toLowerCase(),
-                    description:
-                        "This {{tool}} sends {{token}} to an address.".replace(
-                            "{{token}}",
-                            getChainToken(walletClient.getChain()).symbol
-                        ),
+                    description: "This {{tool}} sends {{token}} to an address.".replace(
+                        "{{token}}",
+                        getChainToken(walletClient.getChain()).symbol,
+                    ),
                     parameters: sendETHParametersSchema,
-                    method: (
-                        parameters: z.infer<typeof sendETHParametersSchema>
-                    ) => sendETHMethod(walletClient, parameters),
+                    method: (parameters: z.infer<typeof sendETHParametersSchema>) =>
+                        sendETHMethod(walletClient, parameters),
                 },
             ];
         },
@@ -40,7 +35,7 @@ const sendETHParametersSchema = z.object({
 
 async function sendETHMethod(
     walletClient: EVMWalletClient,
-    parameters: z.infer<typeof sendETHParametersSchema>
+    parameters: z.infer<typeof sendETHParametersSchema>,
 ): Promise<string> {
     try {
         const amount = parseEther(parameters.amount);
