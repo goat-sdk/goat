@@ -11,7 +11,7 @@
 "@goat-sdk/adapter-eliza": patch
 "@goat-sdk/plugin-tensor": patch
 "@goat-sdk/plugin-erc20": patch
-"@goat-sdk/core": minor
+"@goat-sdk/core": patch
 "dynamic-conversational-agent": patch
 "goat-examples-langchain-lit": patch
 "goat-examples-langchain-viem": patch
