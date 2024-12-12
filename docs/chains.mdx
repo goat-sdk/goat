@@ -45,17 +45,56 @@ Create a new file in the [wallets](https://github.com/goat-sdk/goat/tree/main/ty
 In it you will define the interface for your chain's wallet client which will extend the `WalletClient` interface defined in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets/core.ts).
 
 WalletClient only includes the methods that are supported by all chains such as:
-1. getAddress
-2. getChain
-3. signMessage
-4. balanceOf
+1. `getAddress`
+2. `getChain`
+3. `signMessage`
+4. `balanceOf`
 
 ```typescript
 export interface MyAwesomeChainWalletClient extends WalletClient {
 
-    //...
+    // Add your chain's methods here
+    sendTransaction: (transaction: AwesomeChainTransaction) => Promise<Transaction>;
+    read: (query: AwesomeChainQuery) => Promise<AwesomeChainResponse>;
 }
 ```
 </Step>
 
+<Step>
+Create a core plugin to allow sending your native token to a wallet. Go into the [core-plugins directory in core](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/core-plugins) and create a new file like `send-<native-token>.ts`.
+
+Implement the core plugin.
+
+
+```typescript
+xport function send{Native-Token}(): Plugin<MyAwesomeChainWalletClient> {
+    return {
+        name: "send_<native-token>",
+        supportsSmartWallets: () => false, // or true if your chain supports smart wallets
+        supportsChain: (chain: Chain) => chain.type === "my-awesome-chain",
+        getTools: async (walletClient: MyAwesomeChainWalletClient) => {
+            return [
+                {
+                    name: "send_<native-token>",
+                    description: "This {{tool}} sends <native-token> to an address.",
+                    parameters: ...,
+                    method: (parameters: z.infer<typeof sendETHParametersSchema>) =>
+                        ...,
+                },
+            ];
+        },
+    };
+}
+```
+</Step>
+<Step>
+Import your core plugin in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/index.ts).
+
+```typescript
+export * from "./core-plugins/send-<native-token>";
+```
+</Step>
+<Step>
+And you're done! Now you can go and implement [wallet clients](/wallets) and [plugins](/plugins) for your chain!
+</Step>
 </Steps>
