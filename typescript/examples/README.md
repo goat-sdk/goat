@@ -20,3 +20,6 @@
 
 ## Eliza
 - [Plugin Goat](https://github.com/ai16z/eliza/tree/main/packages/plugin-goat)
+
+## ElevenLabs
+- [Conversational Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/eleven-labs/conversational-agent)

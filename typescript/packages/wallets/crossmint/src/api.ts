@@ -1,3 +1,4 @@
+import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { EVMTypedData } from "@goat-sdk/core";
 import type { SupportedSmartWalletChains } from "./chains";
 
@@ -191,10 +192,8 @@ type APIResponse =
     | SignTypedDataResponse
     | ApproveSignatureResponse;
 
-export function createCrossmintAPI(apiKey: string, env: "staging" | "production") {
-    const baseUrl =
-        env === "staging" ? "https://staging.crossmint.com/api/v1-alpha2" : "https://wwww.crossmint.com/api/v1-alpha2";
-
+export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
+    const baseUrl = `${crossmintClient.baseUrl}/api/v1-alpha2`;
     /**
      * Makes an HTTP request to the Crossmint API.
      *
@@ -208,8 +207,7 @@ export function createCrossmintAPI(apiKey: string, env: "staging" | "production"
 
         // Set default headers and merge with any additional headers
         const headers = new Headers({
-            "X-API-KEY": apiKey,
-            "Content-Type": "application/json",
+            ...crossmintClient.authHeaders,
             ...(options.headers || {}),
         });
 

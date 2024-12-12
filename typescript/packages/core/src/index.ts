@@ -1,4 +1,6 @@
+import { ethSendTransaction } from "./plugins/eth-send-transaction";
 import type { Plugin } from "./plugins/plugins";
+import { sendCHR } from "./plugins/send-chr";
 import { sendETH } from "./plugins/send-eth";
 import { sendSOL } from "./plugins/send-sol";
 import {
@@ -15,13 +17,17 @@ import type {
     Chain,
     ChainForWalletClient,
     EVMReadRequest,
+    EVMReadResult,
     EVMSmartWalletClient,
     EVMTransaction,
+    EVMTransactionResult,
     EVMTypedData,
     EVMWalletClient,
     Signature,
     SolanaReadRequest,
+    SolanaReadResult,
     SolanaTransaction,
+    SolanaTransactionResult,
     SolanaWalletClient,
     WalletClient,
     isEVMSmartWalletClient,
@@ -34,6 +40,8 @@ export {
     getDeferredTools,
     sendETH,
     sendSOL,
+    ethSendTransaction,
+    sendCHR,
     addParametersToDescription,
     parametersToJsonExample,
     type Tool,
@@ -44,10 +52,14 @@ export {
     type WalletClient,
     type EVMTransaction,
     type EVMReadRequest,
+    type EVMReadResult,
+    type EVMTransactionResult,
     type EVMWalletClient,
     type EVMSmartWalletClient,
     type SolanaTransaction,
     type SolanaReadRequest,
+    type SolanaReadResult,
+    type SolanaTransactionResult,
     type SolanaWalletClient,
     type Signature,
     type Balance,

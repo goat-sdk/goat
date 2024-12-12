@@ -14,7 +14,7 @@ export type Balance = {
  * @param id - Chain ID, optional for EVM
  */
 export type Chain = {
-    type: "evm" | "solana";
+    type: "evm" | "solana" | "aptos" | "chromia";
     id?: number; // optional for EVM
 };
 
@@ -24,6 +24,14 @@ export type EVMChain = Chain & {
 
 export type SolanaChain = Chain & {
     type: "solana";
+};
+
+export type AptosChain = Chain & {
+    type: "aptos";
+};
+
+export type ChromiaChain = Chain & {
+    type: "chromia";
 };
 
 export interface WalletClient {

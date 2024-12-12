@@ -1,67 +1,84 @@
 {
-	"folders": [
-		{
-			"name": "🐐 GOAT",
-			"path": "."
-		},
-		{
-			"name": "📘 Typescript",
-			"path": "./typescript"
-		},
-		{
-			"name": "🌋 Core",
-			"path": "./typescript/packages/core"
-		},
-		{
-			"name": "[Adapter] 🎧 eleven-labs",
-			"path": "./typescript/packages/adapters/eleven-labs"
-		},
-		{
-			"name": "[Adapter] 🟠 eliza",
-			"path": "./typescript/packages/adapters/eliza"
-		},
-		{
-			"name": "[Adapter] 🦜 langchain",
-			"path": "./typescript/packages/adapters/langchain"
-		},
-		{
-			"name": "[Adapter] 🤖 vercel-ai",
-			"path": "./typescript/packages/adapters/vercel-ai"
-		},
-		{
-			"name": "[Plugin] 💰 erc20",
-			"path": "./typescript/packages/plugins/erc20"
-		},
-		{
-			"name": "[Plugin] 🎰 polymarket",
-			"path": "./typescript/packages/plugins/polymarket"
-		},
-		{
-			"name": "[Plugin] 💰 coingecko",
-			"path": "./typescript/packages/plugins/coingecko"
-		},
-		{
-			"name": "[Wallet] 🍀 crossmint",
-			"path": "./typescript/packages/wallets/crossmint"
-		},
-		{
-			"name": "[Wallet] 🌞 solana",
-			"path": "./typescript/packages/wallets/solana"
-		},
-		{
-			"name": "[Wallet] 💳 viem",
-			"path": "./typescript/packages/wallets/viem"
-		},
-		{
-			"name": "📚 Docs",
-			"path": "./docs"
-		},
-		{
-			"name": "🚀 Examples",
-			"path": "./typescript/examples"
-		}
-	],
-	"settings": {
+    "folders": [
+        {
+            "name": "🐐 GOAT",
+            "path": "."
+        },
+        {
+            "name": "📘 Typescript",
+            "path": "./typescript"
+        },
+        {
+            "name": "🌋 Core",
+            "path": "./typescript/packages/core"
+        },
+        // Adapters
+        {
+            "name": "[Adapter] 🎧 eleven-labs",
+            "path": "./typescript/packages/adapters/eleven-labs"
+        },
+        {
+            "name": "[Adapter] 🟠 eliza",
+            "path": "./typescript/packages/adapters/eliza"
+        },
+        {
+            "name": "[Adapter] 🦜 langchain",
+            "path": "./typescript/packages/adapters/langchain"
+        },
+        {
+            "name": "[Adapter] 🤖 vercel-ai",
+            "path": "./typescript/packages/adapters/vercel-ai"
+        },
+        // Plugins
+        {
+            "name": "[Plugin] 💰 erc20",
+            "path": "./typescript/packages/plugins/erc20"
+        },
+        {
+            "name": "[Plugin] 🎰 polymarket",
+            "path": "./typescript/packages/plugins/polymarket"
+        },
+        {
+            "name": "[Plugin] 💰 coingecko",
+            "path": "./typescript/packages/plugins/coingecko"
+        },
+        {
+            "name": "[Plugin] 🌐 Solana NFTs",
+            "path": "./typescript/packages/plugins/solana-nfts"
+        },
+        // Wallets
+        {
+            "name": "[Wallet] 🍀 crossmint",
+            "path": "./typescript/packages/wallets/crossmint"
+        },
+        {
+			      "name": "[Wallet] 🪪 chromia",
+			      "path": "./typescript/packages/wallets/chromia"
+		    },
+        {
+            "name": "[Wallet] 🌞 solana",
+            "path": "./typescript/packages/wallets/solana"
+        },
+        {
+            "name": "[Wallet] 💳 viem",
+            "path": "./typescript/packages/wallets/viem"
+        },
+        {
+            "name": "[Wallet] 🔥 lit",
+            "path": "./typescript/packages/wallets/lit-protocol"
+        },
+        // Docs
+        {
+            "name": "📚 Docs",
+            "path": "./docs"
+        },
+        // Examples
+        {
+            "name": "🚀 Examples",
+            "path": "./typescript/examples"
+        }
+    ],
+    "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "biomejs.biome"
     }

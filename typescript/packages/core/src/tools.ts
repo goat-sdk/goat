@@ -1,10 +1,11 @@
 import type { z } from "zod";
+import { deferredChromiaTools } from "./chromia/tools";
 import { deferredEVMCoreTools } from "./evm/tools";
 import type { Plugin } from "./plugins/plugins";
 import { deferredSolanaTools } from "./solana/tools";
 import { replaceToolPlaceholder } from "./utils";
 import type { AnyEVMWalletClient, ChainForWalletClient, WalletClient } from "./wallets";
-import { isEVMChain, isEVMSmartWalletClient, isSolanaChain } from "./wallets";
+import { isChromiaChain, isEVMChain, isEVMSmartWalletClient, isSolanaChain } from "./wallets";
 
 // biome-ignore lint/suspicious/noExplicitAny: Tools can return any type
 export type Tool<TResult = any> = {
@@ -72,6 +73,9 @@ export async function getDeferredTools<TWalletClient extends AnyEVMWalletClient 
     } else if (isSolanaChain(chain)) {
         // We know that TWalletClient is compatible with SolanaWalletClient here
         tools.push(...(deferredSolanaTools as unknown as DeferredTool<TWalletClient>[]));
+    } else if (isChromiaChain(chain)) {
+        // We know that TWalletClient is compatible with ChromiaWalletClient here
+        tools.push(...(deferredChromiaTools as unknown as DeferredTool<TWalletClient>[]));
     } else {
         throw new Error(`Unsupported chain type: ${chain.type}`);
     }
