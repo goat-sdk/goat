@@ -1,7 +1,11 @@
 {
     "name": "@goat-sdk/plugin-spl-token",
     "version": "0.0.3",
-    "files": ["dist/**/*", "README.md", "package.json"],
+    "files": [
+        "dist/**/*",
+        "README.md",
+        "package.json"
+    ],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
@@ -13,8 +17,9 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@solana/web3.js": "catalog:",
         "@solana/spl-token": "0.4.9",
+        "@solana/web3.js": "catalog:",
+        "@solflare-wallet/utl-sdk": "1.4.0",
         "zod": "catalog:"
     },
     "peerDependencies": {
@@ -29,5 +34,9 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": [
+        "ai",
+        "agents",
+        "web3"
+    ]
 }

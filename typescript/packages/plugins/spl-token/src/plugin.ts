@@ -1,13 +1,12 @@
 import type { Plugin, SolanaWalletClient } from "@goat-sdk/core";
-import type { Connection } from "@solana/web3.js";
-import type { SolanaNetwork, Token } from "./tokens";
-import { getTokensForNetwork } from "./utils/getTokensForNetwork";
+import type { Cluster, Connection } from "@solana/web3.js";
+
 import { getTools } from "./utils/getTools";
 
 export function splToken({
     connection,
     network,
-}: { connection: Connection; network: SolanaNetwork }): Plugin<SolanaWalletClient> {
+}: { connection: Connection; network: Cluster }): Plugin<SolanaWalletClient> {
     return {
         name: "splToken",
         supportsSmartWallets: () => false,

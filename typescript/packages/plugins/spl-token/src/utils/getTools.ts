@@ -1,6 +1,7 @@
 import type { DeferredTool, SolanaWalletClient } from "@goat-sdk/core";
-import type { Connection } from "@solana/web3.js";
+import type { Cluster, Connection } from "@solana/web3.js";
 import type { z } from "zod";
+
 import { balanceOf } from "../methods/balance";
 import { transfer } from "../methods/transfer";
 import {
@@ -8,10 +9,9 @@ import {
     getTokenMintAddressBySymbolParametersSchema,
     transferTokenByMintAddressParametersSchema,
 } from "../parameters";
-import type { SolanaNetwork } from "../tokens";
-import { getTokenMintAddressBySymbol } from "./getTokenMintAddressBySymbol";
+import { getTokenMintAddressBySymbol } from "../token/getToken";
 
-export function getTools(connection: Connection, network: SolanaNetwork): DeferredTool<SolanaWalletClient>[] {
+export function getTools(connection: Connection, network: Cluster): DeferredTool<SolanaWalletClient>[] {
     const tools: DeferredTool<SolanaWalletClient>[] = [];
 
     tools.push({
@@ -21,7 +21,7 @@ export function getTools(connection: Connection, network: SolanaNetwork): Deferr
         method: async (
             walletClient: SolanaWalletClient,
             parameters: z.infer<typeof getTokenMintAddressBySymbolParametersSchema>,
-        ) => getTokenMintAddressBySymbol(parameters.symbol, network),
+        ) => getTokenMintAddressBySymbol(parameters.symbol, connection, network),
     });
 
     tools.push({
