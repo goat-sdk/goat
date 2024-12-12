@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-chromia
 
+## 0.1.3
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.3.14
+  - @goat-sdk/adapter-vercel-ai@0.1.8
+  - @goat-sdk/wallet-chromia@0.1.6
+
 ## 0.1.2
 
 ### Patch Changes

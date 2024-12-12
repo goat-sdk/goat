@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-spl-token
 
+## 0.0.4
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.3.14
+
 ## 0.0.3
 
 ### Patch Changes

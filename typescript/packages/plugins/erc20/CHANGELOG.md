@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-erc20
 
+## 0.1.11
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.3.14
+
 ## 0.1.10
 
 ### Patch Changes
