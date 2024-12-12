@@ -1,5 +1,13 @@
 # @goat-sdk/wallet-chromia
 
+## 1.0.0
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.4.0
+
 ## 0.1.5
 
 ### Patch Changes

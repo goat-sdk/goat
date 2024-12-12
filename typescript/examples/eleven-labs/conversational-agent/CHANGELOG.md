@@ -1,5 +1,16 @@
 # conversational-agent
 
+## 0.1.4
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/plugin-coingecko@1.0.0
+  - @goat-sdk/core@0.4.0
+  - @goat-sdk/adapter-eleven-labs@1.0.0
+  - @goat-sdk/wallet-viem@1.0.0
+
 ## 0.1.3
 
 ### Patch Changes

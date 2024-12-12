@@ -1,5 +1,13 @@
 # @goat-sdk/adapter-eliza
 
+## 1.0.0
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.4.0
+
 ## 0.1.8
 
 ### Patch Changes
