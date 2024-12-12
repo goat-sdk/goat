@@ -7,6 +7,7 @@ export function tensor(params: { connection: Connection; apiKey: string }): Plug
         name: "tensor",
         supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => getTools(params),
+        getTools: async (walletClient: SolanaWalletClient) =>
+            getTools({ walletClient, connection: params.connection, apiKey: params.apiKey }),
     };
 }

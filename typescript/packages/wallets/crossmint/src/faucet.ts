@@ -4,8 +4,15 @@ import { z } from "zod";
 import { isChainSupportedByFaucet } from "./chains";
 
 export const topUpBalanceParametersSchema = z.object({
-    wallet: z.string().optional().describe("The address to top up the balance of"),
-    amount: z.number().min(1).max(100).describe("The amount of tokens to top up"),
+    wallet: z
+        .string()
+        .optional()
+        .describe("The address to top up the balance of"),
+    amount: z
+        .number()
+        .min(1)
+        .max(100)
+        .describe("The amount of tokens to top up"),
 });
 
 export function faucetFactory(client: CrossmintApiClient) {
@@ -24,19 +31,22 @@ export function faucetFactory(client: CrossmintApiClient) {
                 return isChainSupportedByFaucet(chain.id);
             },
             supportsSmartWallets: () => true,
-            getTools: async () => {
+            getTools: async (walletClient: EVMWalletClient) => {
                 return [
                     {
                         name: "top_up_usdc",
                         description: "This {{tool}} tops up your USDC balance",
                         parameters: topUpBalanceParametersSchema,
                         method: async (
-                            walletClient: EVMWalletClient,
-                            parameters: z.infer<typeof topUpBalanceParametersSchema>,
+                            parameters: z.infer<
+                                typeof topUpBalanceParametersSchema
+                            >
                         ) => {
-                            const wallet = parameters.wallet ?? walletClient.getAddress();
+                            const wallet =
+                                parameters.wallet ?? walletClient.getAddress();
 
-                            const resolvedWalletAddress = await walletClient.resolveAddress(wallet);
+                            const resolvedWalletAddress =
+                                await walletClient.resolveAddress(wallet);
 
                             const network = walletClient.getChain();
 
@@ -47,7 +57,9 @@ export function faucetFactory(client: CrossmintApiClient) {
                             const chain = getTestnetChainNameById(network.id);
 
                             if (!chain) {
-                                throw new Error(`Failed to top up balance: Unsupported chain ${network}`);
+                                throw new Error(
+                                    `Failed to top up balance: Unsupported chain ${network}`
+                                );
                             }
 
                             const options = {
@@ -62,14 +74,16 @@ export function faucetFactory(client: CrossmintApiClient) {
 
                             const response = await fetch(
                                 `${client.baseUrl}/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
-                                options,
+                                options
                             );
 
                             if (response.ok) {
                                 return "Balance topped up successfully";
                             }
 
-                            throw new Error(`Failed to top up balance: ${await response.text()}`);
+                            throw new Error(
+                                `Failed to top up balance: ${await response.text()}`
+                            );
                         },
                     },
                 ];

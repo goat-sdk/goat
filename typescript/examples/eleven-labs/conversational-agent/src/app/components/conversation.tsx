@@ -8,7 +8,7 @@ import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
 import { ConnectKitButton } from "connectkit";
 import { useAccount, useWalletClient } from "wagmi";
-import { sendETH } from "../../../../../../packages/core/dist/plugins/send-eth";
+import { sendETH } from "@goat-sdk/core";
 
 export function Conversation() {
     const { isConnected } = useAccount();

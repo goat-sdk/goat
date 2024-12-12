@@ -1,7 +1,14 @@
 import type { Plugin, SolanaWalletClient } from "@goat-sdk/core";
-import { getAssetWithProof, mplBubblegum, transfer } from "@metaplex-foundation/mpl-bubblegum";
+import {
+    getAssetWithProof,
+    mplBubblegum,
+    transfer,
+} from "@metaplex-foundation/mpl-bubblegum";
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
-import { fromWeb3JsPublicKey, toWeb3JsInstruction } from "@metaplex-foundation/umi-web3js-adapters";
+import {
+    fromWeb3JsPublicKey,
+    toWeb3JsInstruction,
+} from "@metaplex-foundation/umi-web3js-adapters";
 import { type Connection, PublicKey } from "@solana/web3.js";
 import { z } from "zod";
 
@@ -10,13 +17,14 @@ export function nfts(connection: Connection): Plugin<SolanaWalletClient> {
         name: "nfts",
         supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => {
+        getTools: async (walletClient: SolanaWalletClient) => {
             return [
                 {
                     name: "transfer_nft",
-                    description: "This {{tool}} sends an NFT from your wallet to an address on a Solana chain.",
+                    description:
+                        "This {{tool}} sends an NFT from your wallet to an address on a Solana chain.",
                     parameters: transferNFTParametersSchema,
-                    method: transferNFTMethod(connection),
+                    method: transferNFTMethod(connection, walletClient),
                 },
             ];
         },
@@ -29,18 +37,22 @@ const transferNFTParametersSchema = z.object({
 });
 
 const transferNFTMethod =
-    (connection: Connection) =>
+    (connection: Connection, walletClient: SolanaWalletClient) =>
     async (
-        walletClient: SolanaWalletClient,
-        parameters: z.infer<typeof transferNFTParametersSchema>,
+        parameters: z.infer<typeof transferNFTParametersSchema>
     ): Promise<string> => {
         const { recipientAddress, assetId } = parameters;
         const umi = createUmi(connection);
         umi.use(mplBubblegum());
-        const assetWithProof = await getAssetWithProof(umi, fromWeb3JsPublicKey(new PublicKey(assetId)));
+        const assetWithProof = await getAssetWithProof(
+            umi,
+            fromWeb3JsPublicKey(new PublicKey(assetId))
+        );
         const instructions = transfer(umi, {
             ...assetWithProof,
-            leafOwner: fromWeb3JsPublicKey(new PublicKey(walletClient.getAddress())),
+            leafOwner: fromWeb3JsPublicKey(
+                new PublicKey(walletClient.getAddress())
+            ),
             newLeafOwner: fromWeb3JsPublicKey(new PublicKey(recipientAddress)),
         }).getInstructions();
 

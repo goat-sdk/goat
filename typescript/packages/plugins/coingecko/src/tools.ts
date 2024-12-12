@@ -1,4 +1,4 @@
-import type { DeferredTool, WalletClient } from "@goat-sdk/core";
+import type { Tool, WalletClient } from "@goat-sdk/core";
 import type { z } from "zod";
 
 import { getCoinPriceParametersSchema, getTrendingCoinsParametersSchema } from "./parameters";
@@ -42,21 +42,21 @@ async function fetchCoinPrice(
 
 export function getTools(credentials: {
     apiKey: string;
-}): DeferredTool<WalletClient>[] {
-    const tools: DeferredTool<WalletClient>[] = [];
+}): Tool<WalletClient>[] {
+    const tools: Tool<WalletClient>[] = [];
 
-    const getTrendingCoinsTool: DeferredTool<WalletClient> = {
+    const getTrendingCoinsTool: Tool<WalletClient> = {
         name: "get_trending_coins",
         description: "This {{tool}} fetches the list of trending coins from CoinGecko",
         parameters: getTrendingCoinsParametersSchema,
         method: async () => fetchTrendingCoins(credentials.apiKey),
     };
 
-    const getCoinPriceTool: DeferredTool<WalletClient> = {
+    const getCoinPriceTool: Tool<WalletClient> = {
         name: "get_coin_price",
         description: "This {{tool}} fetches the price of a specific coin from CoinGecko",
         parameters: getCoinPriceParametersSchema,
-        method: async (_client: WalletClient, parameters: z.infer<typeof getCoinPriceParametersSchema>) =>
+        method: async (parameters: z.infer<typeof getCoinPriceParametersSchema>) =>
             fetchCoinPrice(parameters.coinId, parameters.vsCurrency, credentials.apiKey, {
                 includeMarketCap: parameters.includeMarketCap,
                 include24hrVol: parameters.include24hrVol,
