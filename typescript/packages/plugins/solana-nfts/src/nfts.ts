@@ -37,7 +37,9 @@ const transferNFTMethod =
         const { recipientAddress, assetId } = parameters;
         const umi = createUmi(connection);
         umi.use(mplBubblegum());
-        const assetWithProof = await getAssetWithProof(umi, fromWeb3JsPublicKey(new PublicKey(assetId)));
+        const assetWithProof = await getAssetWithProof(umi, fromWeb3JsPublicKey(new PublicKey(assetId)), {
+            truncateCanopy: true,
+        });
         const instructions = transfer(umi, {
             ...assetWithProof,
             leafOwner: fromWeb3JsPublicKey(new PublicKey(walletClient.getAddress())),
