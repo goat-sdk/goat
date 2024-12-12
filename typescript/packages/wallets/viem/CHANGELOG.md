@@ -1,5 +1,13 @@
 # @goat-sdk/wallet-viem
 
+## 0.1.7
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.3.14
+
 ## 0.1.6
 
 ### Patch Changes

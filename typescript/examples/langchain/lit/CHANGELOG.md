@@ -1,5 +1,16 @@
 # goat-examples-langchain-lit
 
+## 0.0.3
+
+### Patch Changes
+
+- 16271ab: Simplify core architecture
+- Updated dependencies [16271ab]
+  - @goat-sdk/plugin-erc20@0.1.11
+  - @goat-sdk/core@0.3.14
+  - @goat-sdk/adapter-langchain@0.1.8
+  - @goat-sdk/wallet-lit@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

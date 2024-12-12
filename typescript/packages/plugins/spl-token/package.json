@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-spl-token",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
