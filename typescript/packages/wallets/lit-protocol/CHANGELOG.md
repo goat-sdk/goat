@@ -1,5 +1,16 @@
 # @goat-sdk/wallet-lit
 
+## 1.0.0
+
+### Minor Changes
+
+- 16271ab: Simplify core architecture
+
+### Patch Changes
+
+- Updated dependencies [16271ab]
+  - @goat-sdk/core@0.4.0
+
 ## 0.0.2
 
 ### Patch Changes

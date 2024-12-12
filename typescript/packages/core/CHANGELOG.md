@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.0
+
+### Minor Changes
+
+- 16271ab: Simplify core architecture
+
 ## 0.3.13
 
 ### Patch Changes
