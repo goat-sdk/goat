@@ -2,21 +2,22 @@ import { PublicKey } from "@solana/web3.js";
 import { SystemProgram } from "@solana/web3.js";
 import { parseUnits } from "viem";
 import { z } from "zod";
+import type { Plugin } from "../plugins";
 import type { SolanaWalletClient } from "../wallets";
-import type { Plugin } from "./plugins";
 
 export function sendSOL(): Plugin<SolanaWalletClient> {
     return {
         name: "send_sol",
         supportsSmartWallets: () => true,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => {
+        getTools: async (walletClient: SolanaWalletClient) => {
             return [
                 {
                     name: "send_sol",
-                    description: "This {{tool}} sends SOL to an address on a Solana chain.",
+                    description: "This {{tool}} sends SOL to an address.",
                     parameters: sendSOLParametersSchema,
-                    method: sendSOLMethod,
+                    method: (parameters: z.infer<typeof sendSOLParametersSchema>) =>
+                        sendSOLMethod(walletClient, parameters),
                 },
             ];
         },

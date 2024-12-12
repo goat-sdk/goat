@@ -12,8 +12,8 @@ export function polymarket({ credentials }: PolymarketOptions): Plugin<EVMWallet
         name: "Polymarket",
         supportsChain: (chain: Chain) => chain.type === "evm" && chain.id === polygon.id,
         supportsSmartWallets: () => false,
-        getTools: async () => {
-            return getTools({
+        getTools: async (walletClient: EVMWalletClient) => {
+            return getTools(walletClient, {
                 credentials,
             });
         },

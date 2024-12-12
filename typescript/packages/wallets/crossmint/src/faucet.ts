@@ -24,16 +24,13 @@ export function faucetFactory(client: CrossmintApiClient) {
                 return isChainSupportedByFaucet(chain.id);
             },
             supportsSmartWallets: () => true,
-            getTools: async () => {
+            getTools: async (walletClient: EVMWalletClient) => {
                 return [
                     {
                         name: "top_up_usdc",
                         description: "This {{tool}} tops up your USDC balance",
                         parameters: topUpBalanceParametersSchema,
-                        method: async (
-                            walletClient: EVMWalletClient,
-                            parameters: z.infer<typeof topUpBalanceParametersSchema>,
-                        ) => {
+                        method: async (parameters: z.infer<typeof topUpBalanceParametersSchema>) => {
                             const wallet = parameters.wallet ?? walletClient.getAddress();
 
                             const resolvedWalletAddress = await walletClient.resolveAddress(wallet);

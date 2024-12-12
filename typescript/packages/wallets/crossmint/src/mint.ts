@@ -18,26 +18,26 @@ export const mintingFactory = (client: CrossmintApiClient): (() => Plugin<Wallet
 
             return false;
         },
-        getTools: async () => {
+        getTools: async (walletClient: WalletClient) => {
             return [
                 {
                     name: "create_nft_collection",
                     description: "This {{tool}} creates an NFT collection and returns the ID of the collection.",
                     parameters: createCollectionParametersSchema,
-                    method: createCollectionMethod(client),
+                    method: createCollectionMethod(client, walletClient),
                 },
                 {
                     name: "get_all_collections",
                     description: "This {{tool}} gets all the collections created by the user.",
                     parameters: getAllCollectionsParametersSchema,
-                    method: getAllCollectionsMethod(client),
+                    method: getAllCollectionsMethod(client, walletClient),
                 },
                 {
                     name: "mint_nft",
                     description:
                         "This {{tool}} mints an NFT to a recipient from a collection and returns the transaction hash. Requires a collection ID of an already deployed collection.",
                     parameters: mintNFTParametersSchema,
-                    method: mintNFTMethod(client),
+                    method: mintNFTMethod(client, walletClient),
                 },
             ];
         },
@@ -104,8 +104,8 @@ const mintNFTParametersSchema = z.object({
         .describe("The metadata of the NFT"),
 });
 
-function getAllCollectionsMethod(client: CrossmintApiClient) {
-    return async (walletClient: WalletClient) => {
+function getAllCollectionsMethod(client: CrossmintApiClient, walletClient: WalletClient) {
+    return async () => {
         const response = await fetch(`${client.baseUrl}/collections/`, {
             headers: client.authHeaders,
         });
@@ -114,8 +114,8 @@ function getAllCollectionsMethod(client: CrossmintApiClient) {
     };
 }
 
-function createCollectionMethod(client: CrossmintApiClient) {
-    return async (walletClient: WalletClient, parameters: z.infer<typeof createCollectionParametersSchema>) => {
+function createCollectionMethod(client: CrossmintApiClient, walletClient: WalletClient) {
+    return async (parameters: z.infer<typeof createCollectionParametersSchema>) => {
         const response = await fetch(`${client.baseUrl}/api/2022-06-09/collections/`, {
             method: "POST",
             body: JSON.stringify({
@@ -145,8 +145,8 @@ function createCollectionMethod(client: CrossmintApiClient) {
     };
 }
 
-function mintNFTMethod(client: CrossmintApiClient) {
-    return async (walletClient: WalletClient, parameters: z.infer<typeof mintNFTParametersSchema>) => {
+function mintNFTMethod(client: CrossmintApiClient, walletClient: WalletClient) {
+    return async (parameters: z.infer<typeof mintNFTParametersSchema>) => {
         let recipient: string;
 
         if (parameters.recipient.startsWith("email:")) {

@@ -7,6 +7,6 @@ export function solanaMagicEden(params: { connection: Connection; apiKey: string
         name: "solana-magiceden",
         supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => getTools(params),
+        getTools: async (walletClient: SolanaWalletClient) => getTools({ walletClient, ...params }),
     };
 }

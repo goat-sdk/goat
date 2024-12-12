@@ -186,6 +186,7 @@ importers:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 3.4.16(ts-node@10.9.2)
 =======
         version: 3.4.16(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3))
@@ -201,6 +202,9 @@ importers:
 =======
         version: 3.4.16(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3))
 >>>>>>> 281b9dc (Solana cNFT transfers: Use tree canopy option to reduce transaction size (#54))
+=======
+        version: 3.4.16(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3))
+>>>>>>> 16271ab (feat: simplify core (#57))
 
   examples/eleven-labs/dynamic:
     dependencies:
@@ -260,6 +264,7 @@ importers:
         specifier: ^3.4.1
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: 3.4.16(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3))
 >>>>>>> d68925f (Move dynamic example to elevenlabs)
 =======
@@ -268,6 +273,9 @@ importers:
 =======
         version: 3.4.16(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3))
 >>>>>>> 281b9dc (Solana cNFT transfers: Use tree canopy option to reduce transaction size (#54))
+=======
+        version: 3.4.16(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3))
+>>>>>>> 16271ab (feat: simplify core (#57))
 
   examples/langchain/lit:
     dependencies:
@@ -732,12 +740,17 @@ importers:
   packages/adapters/eliza:
     dependencies:
       '@ai16z/eliza':
+<<<<<<< HEAD
         specifier: 0.1.4-alpha.3
 <<<<<<< HEAD
         version: 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.22)(react@18.3.1)(svelte@5.9.0)(vue@3.5.13)(whatwg-url@7.1.0)
 =======
         version: 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
+=======
+        specifier: 0.1.5-alpha.5
+        version: 0.1.5-alpha.5(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))
+>>>>>>> 16271ab (feat: simplify core (#57))
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
@@ -1155,8 +1168,13 @@ packages:
     resolution: {integrity: sha512-/3DDPKHqqIqxUULp8yP4zODUY1i+2xvVWsv8A79xGWdCAG+8sb0hRh0Rk2QyOJUnnbyPUAZYcpBuRe3nS2OIUg==}
     dev: false
 
+<<<<<<< HEAD
   /@ai-sdk/anthropic@0.0.53(zod@3.23.8):
     resolution: {integrity: sha512-33w5pmQINRRYwppgMhXY/y5ZIW6cbIhbuKbZQmy8SKZvtLBI2gM7H0QN/cH3nv0OmR4YsUw8L3DYUNlQs5hfEA==}
+=======
+  '@ai-sdk/anthropic@0.0.56':
+    resolution: {integrity: sha512-FC/XbeFANFp8rHH+zEZF34cvRu9T42rQxw9QnUzJ1LXTi1cWjxYOx2Zo4vfg0iofxxqgOe4fT94IdT2ERQ89bA==}
+>>>>>>> 16271ab (feat: simplify core (#57))
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -1166,6 +1184,7 @@ packages:
       zod: 3.23.8
     dev: false
 
+<<<<<<< HEAD
   /@ai-sdk/google-vertex@0.0.42(@google-cloud/vertexai@1.9.2)(zod@3.23.8):
     resolution: {integrity: sha512-CwV01ijarrBirYj+x1kXKVA8+JNQdZASbOvjYAxIQnMcEXG/IQ7AvDcI6URLRsveCkb5QsYuRRlz75wugxIv4A==}
     engines: {node: '>=18'}
@@ -1178,6 +1197,14 @@ packages:
     transitivePeerDependencies:
       - zod
     dev: false
+=======
+  '@ai-sdk/google-vertex@0.0.43':
+    resolution: {integrity: sha512-lmZukH74m6MUl4fbyfz3T4qs5ukDUJ6YB5Dedtu+aK+Mdp05k9qTHAXxWiB8i/VdZqWlS+DEo/+b7pOPX0V7wA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@google-cloud/vertexai': ^1.6.0
+      zod: ^3.0.0
+>>>>>>> 16271ab (feat: simplify core (#57))
 
   /@ai-sdk/google@0.0.55(zod@3.23.8):
     resolution: {integrity: sha512-dvEMS8Ex2H0OeuFBiT4Q1Kfrxi1ckjooy/PazNLjRQ3w9o9VQq4O24eMQGCuW1Z47qgMdXjhDzsH6qD0HOX6Cw==}
@@ -1201,8 +1228,13 @@ packages:
       zod: 3.23.8
     dev: false
 
+<<<<<<< HEAD
   /@ai-sdk/openai@1.0.0-canary.3(zod@3.23.8):
     resolution: {integrity: sha512-5xtkCL5ObmGCaGbk19AGnr5gGdFGd22JhSq9CmeuvjyeKy5xSU9Qc2PaXwx6GsKEYSFC72IT1U9TYxo+n5HRCg==}
+=======
+  '@ai-sdk/openai@1.0.5':
+    resolution: {integrity: sha512-JDCPBJQx9o3LgboBPaA55v+9EZ7Vm/ozy0+J5DIr2jJF8WETjeCnigdxixyzEy/Od4wX871jOTSuGffwNIi0kA==}
+>>>>>>> 16271ab (feat: simplify core (#57))
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -1259,6 +1291,7 @@ packages:
       zod: 3.23.8
     dev: false
 
+<<<<<<< HEAD
   /@ai-sdk/provider-utils@2.0.0-canary.3(zod@3.23.8):
     resolution: {integrity: sha512-2kxAkaESSm3295tJRs77NmCCi9Ty7eaEOpqA0xinEmYjobAP/VrzaGthvAVXIzjbQj6ndabDGsVzdnNkhLr1zQ==}
     engines: {node: '>=18'}
@@ -1277,6 +1310,10 @@ packages:
 
   /@ai-sdk/provider-utils@2.0.3(zod@3.23.8):
     resolution: {integrity: sha512-Cyk7GlFEse2jQ4I3FWYuZ1Zhr5w1mD9SHMJTYm/in1rd7r89nmEoQiOy3h8YV2ZvTa2/6aR10xZ4M0k4B3BluA==}
+=======
+  '@ai-sdk/provider-utils@2.0.2':
+    resolution: {integrity: sha512-IAvhKhdlXqiSmvx/D4uNlFYCl8dWT+M9K+IuEcSgnE2Aj27GWu8sDIpAf4r4Voc+wOUkOECVKQhFo8g9pozdjA==}
+>>>>>>> 16271ab (feat: simplify core (#57))
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -1318,6 +1355,7 @@ packages:
       json-schema: 0.4.0
     dev: false
 
+<<<<<<< HEAD
   /@ai-sdk/provider@1.0.0-canary.0:
     resolution: {integrity: sha512-NyYVTM8veeOLUNcY+2bGQ359AEWm/P3FgNVweGR8dNfihFXYxsBQhB58RhcVnKgWzlUgNFGi9tajgbSKkImTTg==}
     engines: {node: '>=18'}
@@ -1326,6 +1364,9 @@ packages:
     dev: false
 
   /@ai-sdk/provider@1.0.1:
+=======
+  '@ai-sdk/provider@1.0.1':
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-mV+3iNDkzUsZ0pR2jG0sVzU6xtQY5DtSCBy3JFycLp6PwjyLw/iodfL3MwdmMCRJWgs3dadcHejRnMvF9nGTBg==}
     engines: {node: '>=18'}
     dependencies:
@@ -1453,6 +1494,7 @@ packages:
       - zod
     dev: false
 
+<<<<<<< HEAD
   /@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.22)(react@18.3.1)(svelte@5.9.0)(vue@3.5.13)(whatwg-url@7.1.0):
     resolution: {integrity: sha512-EIz2lJtueAmDpUAZh+Pz+bEABkqLzch8TwtjWIyaVB80rNX0vjZZ6+AZz90sLKMpLgZs6ZpGHQxwsQa56YVEpw==}
     peerDependencies:
@@ -1618,6 +1660,10 @@ packages:
       - vue
       - whatwg-url
     dev: false
+=======
+  '@ai16z/eliza@0.1.5-alpha.5':
+    resolution: {integrity: sha512-08EFPlfhE1p5IsacR0Kh2MZOBxKnOoWTE4vZ9cz3V9f/Ka0760p5sNzna4pfKlXUFBZlKfWDnbTXEDcjNOc20Q==}
+>>>>>>> 16271ab (feat: simplify core (#57))
 
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -3539,6 +3585,10 @@ packages:
   '@ethersproject/wordlists@5.7.0':
     resolution: {integrity: sha512-S2TFNJNfHWVHNE6cNDjbVlZ6MgE17MIxMbMg2zv3wn+3XSJGosL1m9ZVv3GXCf/2ymSsQ+hRI5IzoMJTG6aoVA==}
 
+  '@fal-ai/client@1.2.0':
+    resolution: {integrity: sha512-MNCnE5icY+OM5ahgYJItmydZ7AxhtzhgA5tQI13jVntzhLT0z+tetHIlAL1VA0XFZgldDzqxeTf9Pr5TW3VErg==}
+    engines: {node: '>=18.0.0'}
+
   '@google-cloud/vertexai@1.9.2':
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
     resolution: {integrity: sha512-pJSUG3r5QIvCFNfkz7/y7kEqvEJaVAk0jZbZoKbcPCRUnXaUeAq7p8I0oklqetGyxbUcZ2FOGpt+Y+4uIltVPg==}
@@ -4604,7 +4654,15 @@ packages:
       tslib: 2.8.1
     dev: false
 
+<<<<<<< HEAD
   /@next/env@15.0.3:
+=======
+  '@msgpack/msgpack@3.0.0-beta2':
+    resolution: {integrity: sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==}
+    engines: {node: '>= 14'}
+
+  '@next/env@15.0.3':
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-t9Xy32pjNOvVn2AS+Utt6VmyrshbpfUMhIjFO60gI58deSo/KgLOp31XZ4O+kY/Is8WAGYwA5gR7kOb1eORDBA==}
     dev: false
 
@@ -5642,6 +5700,7 @@ packages:
       '@stablelib/wipe': 1.0.1
     dev: false
 
+<<<<<<< HEAD
   /@supabase/auth-js@2.65.1:
     resolution: {integrity: sha512-IA7i2Xq2SWNCNMKxwmPlHafBQda0qtnFr8QnyyBr+KaSxoXXqEzFCnQ1dGTy6bsZjVBgXu++o3qrDypTspaAPw==}
     dependencies:
@@ -5700,6 +5759,9 @@ packages:
     dev: false
 
   /@swc/counter@0.1.3:
+=======
+  '@swc/counter@0.1.3':
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
     dev: false
 
@@ -5808,6 +5870,7 @@ packages:
     resolution: {integrity: sha512-iUbTUwD4f4ibdLy5PWWb7ITEz4S4VAP9/mNjFhoRY3cKVVTDfmykrVTKjPOIHWzDgAmLtgrLvySIIC9ZBVENBw==}
     engines: {node: '>=18.0.0'}
 
+<<<<<<< HEAD
   '@types/better-sqlite3@7.6.11':
 >>>>>>> c33f8f7 (feat: dynamic example (#27))
     resolution: {integrity: sha512-i8KcD3PgGtGBLl3+mMYA8PdKkButvPyARxA7IQAd6qeslht13qxb1zzO8dRCtE7U3IoJS782zDBAeoKiM695kg==}
@@ -5818,6 +5881,8 @@ packages:
 <<<<<<< HEAD
   /@types/connect@3.4.38:
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   '@types/bn.js@5.1.6':
     resolution: {integrity: sha512-Xh8vSwUeMKeYYrj3cX4lGQgFSF/N03r+tv4AiLl1SucqV+uTQpxRcnM8AkXKHwYP9ZPXOYXRr2KPXpVlIvqh9w==}
 
@@ -5838,11 +5903,15 @@ packages:
     resolution: {integrity: sha512-xFdR6tkm0MWvBfO8xXCSsinYxHcqkQUlcHeSpMC2ukzOb6lwQAfDmW+Qt0AvlGd8HpsS28qKsB+oPeJn9I39jg==}
     dev: false
 
+<<<<<<< HEAD
   /@types/emscripten@1.39.13:
     resolution: {integrity: sha512-cFq+fO/isvhvmuP/+Sl4K4jtU6E23DoivtbO4r50e3odaxAiVdbfSYRDdJ4gCdxx+3aRjhphS5ZMwIH4hFy/Cw==}
     dev: false
 
   /@types/estree@1.0.6:
+=======
+  '@types/estree@1.0.6':
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
 <<<<<<< HEAD
@@ -5918,6 +5987,7 @@ packages:
   '@types/node@22.7.5':
     resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
 
+<<<<<<< HEAD
 >>>>>>> ad45f94 (Chromia Integration (#42))
   '@types/phoenix@1.6.6':
 >>>>>>> 5805130 (Plugin: Solana cNFT Transfers (#13))
@@ -5942,6 +6012,8 @@ packages:
       '@types/prop-types': 15.7.14
       csstype: 3.1.3
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
 =======
@@ -5983,6 +6055,7 @@ packages:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
     dev: false
 
+<<<<<<< HEAD
   /@types/sql.js@1.4.9:
     resolution: {integrity: sha512-ep8b36RKHlgWPqjNG9ToUrPiwkhwh0AEzy883mO5Xnd+cL6VBH1EvSjBAAuxLUFF2Vn/moE3Me6v9E1Lo+48GQ==}
     dependencies:
@@ -5993,6 +6066,8 @@ packages:
 <<<<<<< HEAD
   /@types/trusted-types@2.0.7:
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
 
@@ -7188,6 +7263,7 @@ packages:
       is-windows: 1.0.2
     dev: true
 
+<<<<<<< HEAD
   /better-sqlite3@11.5.0:
     resolution: {integrity: sha512-e/6eggfOutzoK0JWiU36jsisdWoHOfN9iWiW/SieKvb7SAa6aGNmBM/UKyp+/wWSXpLlWNN8tCPwoDNPhzUvuQ==}
     requiresBuild: true
@@ -7197,6 +7273,9 @@ packages:
     dev: false
 
   /bigint-buffer@1.1.5:
+=======
+  bigint-buffer@1.1.5:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-trfYco6AoZ+rKhKnxA0hgX0HAbVP/s808/EuDSe2JDzUnCp/xAsli35Orvk67UrTEcwuxZqYZDmfA2RXJgxVvA==}
     engines: {node: '>= 10.0.0'}
     requiresBuild: true
@@ -7571,11 +7650,15 @@ packages:
       readdirp: 4.0.2
     dev: true
 
+<<<<<<< HEAD
   /chownr@1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
     dev: false
 
   /chownr@2.0.0:
+=======
+  chownr@2.0.0:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
     dev: false
@@ -8048,6 +8131,7 @@ packages:
     engines: {node: '>=0.10'}
     dev: false
 
+<<<<<<< HEAD
   /decompress-response@6.0.0:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
     engines: {node: '>=10'}
@@ -8056,6 +8140,9 @@ packages:
     dev: false
 
   /deep-eql@5.0.2:
+=======
+  deep-eql@5.0.2:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
     dev: true
@@ -8721,12 +8808,16 @@ packages:
       strip-final-newline: 3.0.0
     dev: false
 
+<<<<<<< HEAD
   /expand-template@2.0.3:
     resolution: {integrity: sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==}
     engines: {node: '>=6'}
     dev: false
 
   /expect-type@1.1.0:
+=======
+  expect-type@1.1.0:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-bFi65yM+xZgk+u/KRIpekdSYkTB5W1pEf0Lt8Q8Msh7b+eQ7LXVtIB1Bkm4fvclDEL1b2CZkMhv2mOeF8tMdkA==}
     engines: {node: '>=12.0.0'}
     dev: true
@@ -8985,12 +9076,16 @@ packages:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
 
+<<<<<<< HEAD
   fs-constants@1.0.0:
 >>>>>>> c33f8f7 (feat: dynamic example (#27))
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
     dev: false
 
   /fs-extra@7.0.1:
+=======
+  fs-extra@7.0.1:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
     engines: {node: '>=6 <7 || >=8'}
     dependencies:
@@ -9134,12 +9229,16 @@ packages:
   git-url-parse@5.0.1:
     resolution: {integrity: sha512-4uSiOgrryNEMBX+gTWogenYRUh2j1D+95STTSEF2RCTgLkfJikl8c7BGr0Bn274hwuxTsbS2/FQ5pVS9FoXegQ==}
 
+<<<<<<< HEAD
   github-from-package@0.0.0:
 >>>>>>> 281b9dc (Solana cNFT transfers: Use tree canopy option to reduce transaction size (#54))
     resolution: {integrity: sha512-SyHy3T1v2NUXn29OsWdxmK6RwHD+vkj3v8en8AOBZ1wBQ/hCAQ5bAQTD02kW4W9tUp/3Qh6J8r9EvntiyCmOOw==}
     dev: false
 
   /glob-parent@5.1.2:
+=======
+  glob-parent@5.1.2:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
     dependencies:
@@ -10573,12 +10672,16 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+<<<<<<< HEAD
   /mimic-response@3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
     dev: false
 
   /minimalistic-assert@1.0.1:
+=======
+  minimalistic-assert@1.0.1:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: false
 
@@ -10646,6 +10749,7 @@ packages:
       typescript: 5.6.3
     dev: false
 
+<<<<<<< HEAD
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: false
@@ -10653,6 +10757,8 @@ packages:
 <<<<<<< HEAD
   /mkdirp@1.0.4:
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
@@ -10746,6 +10852,7 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+<<<<<<< HEAD
   /nanoid@5.0.9:
     resolution: {integrity: sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==}
     engines: {node: ^18 || >=20}
@@ -10776,6 +10883,8 @@ packages:
 >>>>>>> d68925f (Move dynamic example to elevenlabs)
 =======
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
@@ -10840,6 +10949,7 @@ packages:
     resolution: {integrity: sha512-WDD0bdg9mbq6F4mRxEYcPWwfA1vxd0mrvKOyxI7Xj/atfRHVeutzuWByG//jfm4uPzp0y4Kj051EORCBSQMycw==}
     engines: {node: '>=12.0.0'}
 
+<<<<<<< HEAD
   node-abi@3.71.0:
 >>>>>>> c33f8f7 (feat: dynamic example (#27))
     resolution: {integrity: sha512-SZ40vRiy/+wRTf21hxkkEjPJZpARzUMVcJoQse2EF8qkUWbbO2z7vd5oA/H6bVH6SZQ5STGcu0KRDS7biNRfxw==}
@@ -10851,6 +10961,8 @@ packages:
 <<<<<<< HEAD
   /node-addon-api@2.0.2:
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
 
@@ -11103,9 +11215,14 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
+<<<<<<< HEAD
   openai@4.69.0:
 >>>>>>> c33f8f7 (feat: dynamic example (#27))
     resolution: {integrity: sha512-S3hOHSkk609KqwgH+7dwFrSvO3Gm3Nk0YWGyPHNscoMH/Y2tH1qunMi7gtZnLbUv4/N1elqCp6bDior2401kCQ==}
+=======
+  openai@4.73.0:
+    resolution: {integrity: sha512-NZstV77w3CEol9KQTRBRQ15+Sw6nxVTicAULSjYO4wn9E5gw72Mtp3fAVaBFXyyVPws4241YmFG6ya4L8v03tA==}
+>>>>>>> 16271ab (feat: simplify core (#57))
     hasBin: true
     peerDependencies:
       zod: ^3.23.8
@@ -11666,6 +11783,7 @@ packages:
     resolution: {integrity: sha512-frxeZV2vhQSohQwJ7FvlqC40ze89+8friponWUFeVEkaCfhC6Eu4V0iND5C9CXz8JLndV07QRDeXzH1+Anz5Og==}
     dev: false
 
+<<<<<<< HEAD
   /prebuild-install@7.1.2:
     resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
     engines: {node: '>=10'}
@@ -11688,6 +11806,8 @@ packages:
 <<<<<<< HEAD
   /prettier@2.8.8:
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   prepend-http@1.0.4:
     resolution: {integrity: sha512-PhmXi5XmoyKw1Un4E+opM2KcsJInDvKyuOumcjjw3waw86ZNjHwVUOOWLc4bCzLdcKNaWBH9e99sbWzDQsVaYg==}
     engines: {node: '>=0.10.0'}
@@ -12272,7 +12392,13 @@ packages:
   ripemd160@2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
 
+<<<<<<< HEAD
 >>>>>>> ad45f94 (Chromia Integration (#42))
+=======
+  robot3@0.4.1:
+    resolution: {integrity: sha512-hzjy826lrxzx8eRgv80idkf8ua1JAepRc9Efdtj03N3KNJuznQCPlyCJ7gnUmDFwZCLQjxy567mQVKmdv2BsXQ==}
+
+>>>>>>> 16271ab (feat: simplify core (#57))
   rollup@4.28.1:
     resolution: {integrity: sha512-61fXYl/qNVinKmGSTHAZ6Yy8I3YIJC/r2m9feHo6SwVAVcLT5MPwOUFe7EuURA/4m0NR8lXG4BBXuo/IZEsjMg==}
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
@@ -12557,6 +12683,7 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+<<<<<<< HEAD
   /simple-concat@1.0.1:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
     dev: false
@@ -12570,6 +12697,9 @@ packages:
     dev: false
 
   /simple-swizzle@0.2.2:
+=======
+  simple-swizzle@0.2.2:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
     requiresBuild: true
     dependencies:
@@ -12713,6 +12843,7 @@ packages:
   sprintf-js@1.1.3:
     resolution: {integrity: sha512-Oo+0REFV59/rz3gfJNKQiBlwfHaSESl1pcGyABQsnnIfWOFt6JNj5gCog2U6MLZ//IGYD+nA8nI+mTShREReaA==}
 
+<<<<<<< HEAD
   sql.js@1.12.0:
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
     resolution: {integrity: sha512-Bi+43yMx/tUFZVYD4AUscmdL6NHn3gYQ+CM+YheFWLftOmrEC/Mz6Yh7E96Y2WDHYz3COSqT+LP6Z79zgrwJlA==}
@@ -12760,6 +12891,9 @@ packages:
     dev: false
 
   /sswr@2.1.0(svelte@5.9.0):
+=======
+  sswr@2.1.0:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-Cqc355SYlTAaUt8iDPaC/4DPPXK925PePLMxyBKuWd5kKc5mwsG3nT9+Mq2tyguL5s7b4Jg+IRMpTRsNTAfpSQ==}
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0-next.0
@@ -13095,6 +13229,7 @@ packages:
       - ts-node
     dev: true
 
+<<<<<<< HEAD
   /tar-fs@2.1.1:
     resolution: {integrity: sha512-V0r2Y9scmbDRLCNex/+hYzvp/zyYjvFbHPNgVTKfQvVrb6guiE/fxP+XblDNR011utopbkex2nM4dHNV6GDsng==}
     dependencies:
@@ -13116,6 +13251,9 @@ packages:
     dev: false
 
   /tar@6.2.1:
+=======
+  tar@6.2.1:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
     dependencies:
@@ -13199,6 +13337,7 @@ packages:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: false
 
+<<<<<<< HEAD
   /tiktoken@1.0.17:
     resolution: {integrity: sha512-UuFHqpy/DxOfNiC3otsqbx3oS6jr5uKdQhB/CvDEroZQbVHt+qAK+4JbIooabUWKU9g6PpsFylNu9Wcg4MxSGA==}
     dev: false
@@ -13208,6 +13347,8 @@ packages:
   /tinybench@2.9.0:
 =======
 =======
+=======
+>>>>>>> 16271ab (feat: simplify core (#57))
   timed-out@2.0.0:
     resolution: {integrity: sha512-pqqJOi1rF5zNs/ps4vmbE4SFCrM4iR7LW+GHAsHqO/EumqbIWceioevYLM5xZRgQSH6gFgL9J/uB7EcJhQ9niQ==}
     engines: {node: '>=0.10.0'}
@@ -13432,6 +13573,7 @@ packages:
       - yaml
     dev: true
 
+<<<<<<< HEAD
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
     dependencies:
@@ -13439,6 +13581,9 @@ packages:
     dev: false
 
   /turbo-darwin-64@2.3.1:
+=======
+  turbo-darwin-64@2.3.1:
+>>>>>>> 16271ab (feat: simplify core (#57))
     resolution: {integrity: sha512-tjHfjW/Gs8Q9IO+9gPdIsSStZ8I09QYDRT/SyhFTPLnc7O2ZlxHPBVFfjUkHUjanHNYO8CpRGt+zdp1PaMCruw==}
     cpu: [x64]
     os: [darwin]
@@ -13810,8 +13955,13 @@ packages:
     hasBin: true
     dev: false
 
+<<<<<<< HEAD
   /uuid@11.0.2:
     resolution: {integrity: sha512-14FfcOJmqdjbBPdDjFQyk/SdT4NySW4eM0zcG+HqbHP5jzuH56xO3J1DGhgs/cEMCfwYi3HQI1gnTO62iaG+tQ==}
+=======
+  uuid@11.0.3:
+    resolution: {integrity: sha512-d0z310fCWv5dJwnX1Y/MncBAqGMKEzlBb1AOf7z9K8ALnd0utBX/msg/fA0+sbyN1ihbMsLhrBlnl1ak7Wa0rg==}
+>>>>>>> 16271ab (feat: simplify core (#57))
     hasBin: true
     dev: false
 
@@ -14250,37 +14400,36 @@ snapshots:
 
   '@adraffy/ens-normalize@1.11.0': {}
 
-  '@ai-sdk/anthropic@0.0.53(zod@3.24.0)':
+  '@ai-sdk/anthropic@0.0.56(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      zod: 3.24.0
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      zod: 3.23.8
 
-  '@ai-sdk/google-vertex@0.0.42(@google-cloud/vertexai@1.9.2)(zod@3.24.0)':
+  '@ai-sdk/google-vertex@0.0.43(@google-cloud/vertexai@1.9.2)(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       '@google-cloud/vertexai': 1.9.2
-    transitivePeerDependencies:
-      - zod
+      zod: 3.23.8
 
-  '@ai-sdk/google@0.0.55(zod@3.24.0)':
+  '@ai-sdk/google@0.0.55(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      zod: 3.24.0
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      zod: 3.23.8
 
-  '@ai-sdk/groq@0.0.3(zod@3.24.0)':
+  '@ai-sdk/groq@0.0.3(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      zod: 3.24.0
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      zod: 3.23.8
 
-  '@ai-sdk/openai@1.0.0-canary.3(zod@3.24.0)':
+  '@ai-sdk/openai@1.0.5(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider': 1.0.0-canary.0
-      '@ai-sdk/provider-utils': 2.0.0-canary.3(zod@3.24.0)
-      zod: 3.24.0
+      '@ai-sdk/provider': 1.0.1
+      '@ai-sdk/provider-utils': 2.0.2(zod@3.23.8)
+      zod: 3.23.8
 
   '@ai-sdk/openai@1.0.7(zod@3.24.0)':
     dependencies:
@@ -14288,32 +14437,23 @@ snapshots:
       '@ai-sdk/provider-utils': 2.0.3(zod@3.24.0)
       zod: 3.24.0
 
-  '@ai-sdk/provider-utils@1.0.20(zod@3.24.0)':
+  '@ai-sdk/provider-utils@1.0.20(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.24
       eventsource-parser: 1.1.2
       nanoid: 3.3.6
       secure-json-parse: 2.7.0
     optionalDependencies:
-      zod: 3.24.0
+      zod: 3.23.8
 
-  '@ai-sdk/provider-utils@1.0.22(zod@3.24.0)':
+  '@ai-sdk/provider-utils@1.0.22(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
       eventsource-parser: 1.1.2
       nanoid: 3.3.8
       secure-json-parse: 2.7.0
     optionalDependencies:
-      zod: 3.24.0
-
-  '@ai-sdk/provider-utils@2.0.0-canary.3(zod@3.24.0)':
-    dependencies:
-      '@ai-sdk/provider': 1.0.0-canary.0
-      eventsource-parser: 3.0.0
-      nanoid: 5.0.9
-      secure-json-parse: 2.7.0
-    optionalDependencies:
-      zod: 3.24.0
+      zod: 3.23.8
 
   '@ai-sdk/provider-utils@2.0.2(zod@3.23.8)':
     dependencies:
@@ -14350,23 +14490,19 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/provider@1.0.0-canary.0':
-    dependencies:
-      json-schema: 0.4.0
-
   '@ai-sdk/provider@1.0.1':
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@0.0.70(react@19.0.0-rc-66855b96-20241106)(zod@3.24.0)':
+  '@ai-sdk/react@0.0.70(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
       swr: 2.2.5(react@19.0.0-rc-66855b96-20241106)
       throttleit: 2.1.0
     optionalDependencies:
       react: 19.0.0-rc-66855b96-20241106
-      zod: 3.24.0
+      zod: 3.23.8
 
   '@ai-sdk/react@1.0.2(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)':
     dependencies:
@@ -14388,32 +14524,32 @@ snapshots:
       react: 19.0.0-rc-66855b96-20241106
       zod: 3.24.0
 
-  '@ai-sdk/solid@0.0.54(zod@3.24.0)':
+  '@ai-sdk/solid@0.0.54(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
     transitivePeerDependencies:
       - zod
 
-  '@ai-sdk/svelte@0.0.57(svelte@5.10.0)(zod@3.24.0)':
+  '@ai-sdk/svelte@0.0.57(svelte@5.10.0)(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
       sswr: 2.1.0(svelte@5.10.0)
     optionalDependencies:
       svelte: 5.10.0
     transitivePeerDependencies:
       - zod
 
-  '@ai-sdk/ui-utils@0.0.50(zod@3.24.0)':
+  '@ai-sdk/ui-utils@0.0.50(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       json-schema: 0.4.0
       secure-json-parse: 2.7.0
-      zod-to-json-schema: 3.23.5(zod@3.24.0)
+      zod-to-json-schema: 3.23.5(zod@3.23.8)
     optionalDependencies:
-      zod: 3.24.0
+      zod: 3.23.8
 
   '@ai-sdk/ui-utils@1.0.2(zod@3.23.8)':
     dependencies:
@@ -14431,141 +14567,42 @@ snapshots:
     optionalDependencies:
       zod: 3.24.0
 
-  '@ai-sdk/vue@0.0.59(vue@3.5.13(typescript@5.6.3))(zod@3.24.0)':
+  '@ai-sdk/vue@0.0.59(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
       swrv: 1.0.4(vue@3.5.13(typescript@5.6.3))
     optionalDependencies:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - zod
 
-  '@ai16z/adapter-sqlite@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
+  '@ai16z/eliza@0.1.5-alpha.5(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))':
     dependencies:
-      '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@types/better-sqlite3': 7.6.11
-      better-sqlite3: 11.5.0
-      sqlite-vec: 0.1.4-alpha.2
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - '@langchain/anthropic'
-      - '@langchain/aws'
-      - '@langchain/cohere'
-      - '@langchain/core'
-      - '@langchain/google-genai'
-      - '@langchain/google-vertexai'
-      - '@langchain/groq'
-      - '@langchain/mistralai'
-      - '@langchain/ollama'
-      - axios
-      - bufferutil
-      - cheerio
-      - encoding
-      - handlebars
-      - peggy
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - typeorm
-      - utf-8-validate
-      - vue
-
-  '@ai16z/adapter-sqljs@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@types/sql.js': 1.4.9
-      sql.js: 1.12.0
-      uuid: 11.0.2
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - '@langchain/anthropic'
-      - '@langchain/aws'
-      - '@langchain/cohere'
-      - '@langchain/core'
-      - '@langchain/google-genai'
-      - '@langchain/google-vertexai'
-      - '@langchain/groq'
-      - '@langchain/mistralai'
-      - '@langchain/ollama'
-      - axios
-      - bufferutil
-      - cheerio
-      - encoding
-      - handlebars
-      - peggy
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - typeorm
-      - utf-8-validate
-      - vue
-
-  '@ai16z/adapter-supabase@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai16z/eliza': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@supabase/supabase-js': 2.46.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      whatwg-url: 7.1.0
-    transitivePeerDependencies:
-      - '@google-cloud/vertexai'
-      - '@langchain/anthropic'
-      - '@langchain/aws'
-      - '@langchain/cohere'
-      - '@langchain/core'
-      - '@langchain/google-genai'
-      - '@langchain/google-vertexai'
-      - '@langchain/groq'
-      - '@langchain/mistralai'
-      - '@langchain/ollama'
-      - axios
-      - bufferutil
-      - cheerio
-      - encoding
-      - handlebars
-      - peggy
-      - react
-      - solid-js
-      - sswr
-      - supports-color
-      - svelte
-      - typeorm
-      - utf-8-validate
-      - vue
-
-  '@ai16z/eliza@0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)':
-    dependencies:
-      '@ai-sdk/anthropic': 0.0.53(zod@3.24.0)
-      '@ai-sdk/google': 0.0.55(zod@3.24.0)
-      '@ai-sdk/google-vertex': 0.0.42(@google-cloud/vertexai@1.9.2)(zod@3.24.0)
-      '@ai-sdk/groq': 0.0.3(zod@3.24.0)
-      '@ai-sdk/openai': 1.0.0-canary.3(zod@3.24.0)
-      '@ai16z/adapter-sqlite': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@ai16z/adapter-sqljs': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
-      '@ai16z/adapter-supabase': 0.1.4-alpha.3(@google-cloud/vertexai@1.9.2)(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(bufferutil@4.0.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(utf-8-validate@5.0.10)(vue@3.5.13(typescript@5.6.3))(whatwg-url@7.1.0)
+      '@ai-sdk/anthropic': 0.0.56(zod@3.23.8)
+      '@ai-sdk/google': 0.0.55(zod@3.23.8)
+      '@ai-sdk/google-vertex': 0.0.43(@google-cloud/vertexai@1.9.2)(zod@3.23.8)
+      '@ai-sdk/groq': 0.0.3(zod@3.23.8)
+      '@ai-sdk/openai': 1.0.5(zod@3.23.8)
       '@anthropic-ai/sdk': 0.30.1
+      '@fal-ai/client': 1.2.0
       '@types/uuid': 10.0.0
-      ai: 3.4.33(openai@4.69.0(zod@3.24.0))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(zod@3.24.0)
-      anthropic-vertex-ai: 1.0.2(zod@3.24.0)
+      ai: 3.4.33(openai@4.73.0(zod@3.23.8))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
+      anthropic-vertex-ai: 1.0.2(zod@3.23.8)
       fastembed: 1.14.1
       fastestsmallesttextencoderdecoder: 1.0.22
       gaxios: 6.7.1
       glob: 11.0.0
       js-sha1: 0.7.0
-      langchain: 0.3.6(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(openai@4.69.0(zod@3.24.0))
-      ollama-ai-provider: 0.16.1(zod@3.24.0)
-      openai: 4.69.0(zod@3.24.0)
-      tiktoken: 1.0.17
+      js-tiktoken: 1.0.15
+      langchain: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8))
+      ollama-ai-provider: 0.16.1(zod@3.23.8)
+      openai: 4.73.0(zod@3.23.8)
       tinyld: 1.3.4
       together-ai: 0.7.0
       unique-names-generator: 4.7.1
-      uuid: 11.0.2
-      zod: 3.24.0
+      uuid: 11.0.3
+      zod: 3.23.8
     transitivePeerDependencies:
       - '@google-cloud/vertexai'
       - '@langchain/anthropic'
@@ -14578,7 +14615,6 @@ snapshots:
       - '@langchain/mistralai'
       - '@langchain/ollama'
       - axios
-      - bufferutil
       - cheerio
       - encoding
       - handlebars
@@ -14589,9 +14625,7 @@ snapshots:
       - supports-color
       - svelte
       - typeorm
-      - utf-8-validate
       - vue
-      - whatwg-url
 
   '@alloc/quick-lru@5.2.0': {}
 
@@ -16410,6 +16444,12 @@ snapshots:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
 
+  '@fal-ai/client@1.2.0':
+    dependencies:
+      '@msgpack/msgpack': 3.0.0-beta2
+      eventsource-parser: 1.1.2
+      robot3: 0.4.1
+
   '@google-cloud/vertexai@1.9.2':
     dependencies:
       google-auth-library: 9.15.0
@@ -16683,13 +16723,13 @@ snapshots:
 
   '@jup-ag/api@6.0.31': {}
 
-  '@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8))':
+  '@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8))':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.15
-      langsmith: 0.1.68(openai@4.69.0(zod@3.23.8))
+      langsmith: 0.1.68(openai@4.73.0(zod@3.23.8))
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -16731,9 +16771,9 @@ snapshots:
     transitivePeerDependencies:
       - openai
 
-  '@langchain/openai@0.3.14(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))':
+  '@langchain/openai@0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))':
     dependencies:
-      '@langchain/core': 0.3.6(openai@4.69.0(zod@3.23.8))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
       js-tiktoken: 1.0.15
       openai: 4.76.0(zod@3.24.0)
       zod: 3.24.0
@@ -16751,9 +16791,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@langchain/textsplitters@0.1.0(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))':
+  '@langchain/textsplitters@0.1.0(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))':
     dependencies:
-      '@langchain/core': 0.3.6(openai@4.69.0(zod@3.23.8))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
       js-tiktoken: 1.0.15
 
   '@langchain/textsplitters@0.1.0(@langchain/core@0.3.6(openai@4.76.0(zod@3.24.0)))':
@@ -17653,6 +17693,8 @@ snapshots:
       '@motionone/dom': 10.18.0
       tslib: 2.8.1
 
+  '@msgpack/msgpack@3.0.0-beta2': {}
+
   '@next/env@15.0.3': {}
 
   '@next/swc-darwin-arm64@15.0.3':
@@ -18445,48 +18487,6 @@ snapshots:
       '@stablelib/random': 1.0.2
       '@stablelib/wipe': 1.0.1
 
-  '@supabase/auth-js@2.65.1':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/functions-js@2.4.3':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/node-fetch@2.6.15':
-    dependencies:
-      whatwg-url: 5.0.0
-
-  '@supabase/postgrest-js@1.16.3':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/realtime-js@2.10.7(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-      '@types/phoenix': 1.6.6
-      '@types/ws': 8.5.13
-      ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
-  '@supabase/storage-js@2.7.1':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/supabase-js@2.46.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
-    dependencies:
-      '@supabase/auth-js': 2.65.1
-      '@supabase/functions-js': 2.4.3
-      '@supabase/node-fetch': 2.6.15
-      '@supabase/postgrest-js': 1.16.3
-      '@supabase/realtime-js': 2.10.7(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@supabase/storage-js': 2.7.1
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
   '@swc/counter@0.1.3': {}
 
   '@swc/helpers@0.5.13':
@@ -18613,10 +18613,6 @@ snapshots:
     dependencies:
       sha256-uint8array: 0.10.7
 
-  '@types/better-sqlite3@7.6.11':
-    dependencies:
-      '@types/node': 22.7.4
-
   '@types/bn.js@5.1.6':
     dependencies:
       '@types/node': 22.7.4
@@ -18630,8 +18626,6 @@ snapshots:
       '@types/ms': 0.7.34
 
   '@types/diff-match-patch@1.0.36': {}
-
-  '@types/emscripten@1.39.13': {}
 
   '@types/estree@1.0.6': {}
 
@@ -18676,8 +18670,6 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
-  '@types/phoenix@1.6.6': {}
-
   '@types/prop-types@15.7.14': {}
 
   '@types/react-dom@18.3.3(@types/react@18.3.14)':
@@ -18694,11 +18686,6 @@ snapshots:
       '@types/node': 22.7.4
 
   '@types/retry@0.12.0': {}
-
-  '@types/sql.js@1.4.9':
-    dependencies:
-      '@types/emscripten': 1.39.13
-      '@types/node': 22.7.4
 
   '@types/stack-utils@2.0.3': {}
 
@@ -18824,13 +18811,13 @@ snapshots:
 
   '@vue/shared@3.5.13': {}
 
-  '@wagmi/connectors@5.5.3(@types/react@18.3.14)(@wagmi/core@2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.2.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)))(bufferutil@4.0.8)(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))(zod@3.24.0)':
+  '@wagmi/connectors@5.5.3(@types/react@18.3.14)(@wagmi/core@2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)))(bufferutil@4.0.8)(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))(zod@3.24.0)':
     dependencies:
       '@coinbase/wallet-sdk': 4.2.3
       '@metamask/sdk': 0.31.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-provider': 0.18.4(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)
       '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)
-      '@wagmi/core': 2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.2.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))
+      '@wagmi/core': 2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))
       '@walletconnect/ethereum-provider': 2.17.0(@types/react@18.3.14)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)
       cbw-sdk: '@coinbase/wallet-sdk@3.9.3'
       viem: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)
@@ -19789,27 +19776,27 @@ snapshots:
     dependencies:
       humanize-ms: 1.2.1
 
-  ai@3.4.33(openai@4.69.0(zod@3.24.0))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(zod@3.24.0):
+  ai@3.4.33(openai@4.73.0(zod@3.23.8))(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.10.0))(svelte@5.10.0)(vue@3.5.13(typescript@5.6.3))(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
-      '@ai-sdk/react': 0.0.70(react@19.0.0-rc-66855b96-20241106)(zod@3.24.0)
-      '@ai-sdk/solid': 0.0.54(zod@3.24.0)
-      '@ai-sdk/svelte': 0.0.57(svelte@5.10.0)(zod@3.24.0)
-      '@ai-sdk/ui-utils': 0.0.50(zod@3.24.0)
-      '@ai-sdk/vue': 0.0.59(vue@3.5.13(typescript@5.6.3))(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
+      '@ai-sdk/react': 0.0.70(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
+      '@ai-sdk/solid': 0.0.54(zod@3.23.8)
+      '@ai-sdk/svelte': 0.0.57(svelte@5.10.0)(zod@3.23.8)
+      '@ai-sdk/ui-utils': 0.0.50(zod@3.23.8)
+      '@ai-sdk/vue': 0.0.59(vue@3.5.13(typescript@5.6.3))(zod@3.23.8)
       '@opentelemetry/api': 1.9.0
       eventsource-parser: 1.1.2
       json-schema: 0.4.0
       jsondiffpatch: 0.6.0
       secure-json-parse: 2.7.0
-      zod-to-json-schema: 3.23.5(zod@3.24.0)
+      zod-to-json-schema: 3.23.5(zod@3.23.8)
     optionalDependencies:
-      openai: 4.69.0(zod@3.24.0)
+      openai: 4.73.0(zod@3.23.8)
       react: 19.0.0-rc-66855b96-20241106
       sswr: 2.1.0(svelte@5.10.0)
       svelte: 5.10.0
-      zod: 3.24.0
+      zod: 3.23.8
     transitivePeerDependencies:
       - solid-js
       - vue
@@ -19875,12 +19862,12 @@ snapshots:
 
   ansi-styles@6.2.1: {}
 
-  anthropic-vertex-ai@1.0.2(zod@3.24.0):
+  anthropic-vertex-ai@1.0.2(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.24
-      '@ai-sdk/provider-utils': 1.0.20(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.20(zod@3.23.8)
       google-auth-library: 9.15.0
-      zod: 3.24.0
+      zod: 3.23.8
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -20011,11 +19998,6 @@ snapshots:
   better-path-resolve@1.0.0:
     dependencies:
       is-windows: 1.0.2
-
-  better-sqlite3@11.5.0:
-    dependencies:
-      bindings: 1.5.0
-      prebuild-install: 7.1.2
 
   bigint-buffer@1.1.5:
     dependencies:
@@ -20244,8 +20226,6 @@ snapshots:
   chokidar@4.0.1:
     dependencies:
       readdirp: 4.0.2
-
-  chownr@1.1.4: {}
 
   chownr@2.0.0: {}
 
@@ -20532,10 +20512,6 @@ snapshots:
   decamelize@1.2.0: {}
 
   decode-uri-component@0.2.2: {}
-
-  decompress-response@6.0.0:
-    dependencies:
-      mimic-response: 3.1.0
 
   deep-eql@5.0.2: {}
 
@@ -20950,8 +20926,6 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
 
-  expand-template@2.0.3: {}
-
   expect-type@1.1.0: {}
 
   exponential-backoff@3.1.1: {}
@@ -21118,8 +21092,6 @@ snapshots:
 
   fresh@0.5.2: {}
 
-  fs-constants@1.0.0: {}
-
   fs-extra@7.0.1:
     dependencies:
       graceful-fs: 4.2.11
@@ -21211,8 +21183,6 @@ snapshots:
   git-url-parse@5.0.1:
     dependencies:
       git-up: 1.2.1
-
-  github-from-package@0.0.0: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -21793,15 +21763,15 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  langchain@0.3.6(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))(openai@4.69.0(zod@3.24.0)):
+  langchain@0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(openai@4.73.0(zod@3.23.8)):
     dependencies:
-      '@langchain/core': 0.3.6(openai@4.69.0(zod@3.23.8))
-      '@langchain/openai': 0.3.14(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))
-      '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.6(openai@4.69.0(zod@3.23.8)))
+      '@langchain/core': 0.3.6(openai@4.73.0(zod@3.23.8))
+      '@langchain/openai': 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
+      '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
       js-tiktoken: 1.0.15
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
-      langsmith: 0.2.11(openai@4.69.0(zod@3.24.0))
+      langsmith: 0.2.11(openai@4.73.0(zod@3.23.8))
       openapi-types: 12.1.3
       p-retry: 4.6.2
       uuid: 10.0.0
@@ -21831,7 +21801,7 @@ snapshots:
       - encoding
       - openai
 
-  langsmith@0.1.68(openai@4.69.0(zod@3.23.8)):
+  langsmith@0.1.68(openai@4.73.0(zod@3.23.8)):
     dependencies:
       '@types/uuid': 10.0.0
       commander: 10.0.1
@@ -21840,7 +21810,7 @@ snapshots:
       semver: 7.6.3
       uuid: 10.0.0
     optionalDependencies:
-      openai: 4.69.0(zod@3.24.0)
+      openai: 4.73.0(zod@3.23.8)
 
   langsmith@0.1.68(openai@4.76.0(zod@3.23.8)):
     dependencies:
@@ -21864,7 +21834,7 @@ snapshots:
     optionalDependencies:
       openai: 4.76.0(zod@3.24.0)
 
-  langsmith@0.2.11(openai@4.69.0(zod@3.24.0)):
+  langsmith@0.2.11(openai@4.73.0(zod@3.23.8)):
     dependencies:
       '@types/uuid': 10.0.0
       commander: 10.0.1
@@ -21873,7 +21843,7 @@ snapshots:
       semver: 7.6.3
       uuid: 10.0.0
     optionalDependencies:
-      openai: 4.69.0(zod@3.24.0)
+      openai: 4.73.0(zod@3.23.8)
 
   langsmith@0.2.11(openai@4.76.0(zod@3.24.0)):
     dependencies:
@@ -22241,8 +22211,6 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
-  mimic-response@3.1.0: {}
-
   minimalistic-assert@1.0.1: {}
 
   minimalistic-crypto-utils@1.0.1: {}
@@ -22277,8 +22245,6 @@ snapshots:
   mipd@0.0.7(typescript@5.6.3):
     optionalDependencies:
       typescript: 5.6.3
-
-  mkdirp-classic@0.5.3: {}
 
   mkdirp@0.5.6:
     dependencies:
@@ -22325,10 +22291,6 @@ snapshots:
   nanoid@3.3.6: {}
 
   nanoid@3.3.8: {}
-
-  nanoid@5.0.9: {}
-
-  napi-build-utils@1.0.2: {}
 
   negotiator@0.6.3: {}
 
@@ -22389,10 +22351,6 @@ snapshots:
       - babel-plugin-macros
 
   nocache@3.0.4: {}
-
-  node-abi@3.71.0:
-    dependencies:
-      semver: 7.6.3
 
   node-abort-controller@3.1.1: {}
 
@@ -22483,13 +22441,13 @@ snapshots:
 
   ohash@1.1.4: {}
 
-  ollama-ai-provider@0.16.1(zod@3.24.0):
+  ollama-ai-provider@0.16.1(zod@3.23.8):
     dependencies:
       '@ai-sdk/provider': 0.0.26
-      '@ai-sdk/provider-utils': 1.0.22(zod@3.24.0)
+      '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       partial-json: 0.1.7
     optionalDependencies:
-      zod: 3.24.0
+      zod: 3.23.8
 
   on-exit-leak-free@0.2.0: {}
 
@@ -22535,7 +22493,7 @@ snapshots:
       is-docker: 2.2.1
       is-wsl: 2.2.0
 
-  openai@4.69.0(zod@3.24.0):
+  openai@4.73.0(zod@3.23.8):
     dependencies:
       '@types/node': 18.19.67
       '@types/node-fetch': 2.6.12
@@ -22545,7 +22503,7 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0
     optionalDependencies:
-      zod: 3.24.0
+      zod: 3.23.8
     transitivePeerDependencies:
       - encoding
 
@@ -22844,13 +22802,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.49
 
-  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3)):
+  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.6.1
     optionalDependencies:
       postcss: 8.4.49
-      ts-node: 10.9.2(@types/node@22.7.4)(typescript@5.6.3)
+      ts-node: 10.9.2(@types/node@22.7.5)(typescript@5.6.3)
 
   postcss-load-config@6.0.1(jiti@2.4.1)(postcss@8.4.49)(yaml@2.6.1):
     dependencies:
@@ -22885,21 +22843,6 @@ snapshots:
       source-map-js: 1.2.1
 
   preact@10.25.1: {}
-
-  prebuild-install@7.1.2:
-    dependencies:
-      detect-libc: 2.0.3
-      expand-template: 2.0.3
-      github-from-package: 0.0.0
-      minimist: 1.2.8
-      mkdirp-classic: 0.5.3
-      napi-build-utils: 1.0.2
-      node-abi: 3.71.0
-      pump: 3.0.2
-      rc: 1.2.8
-      simple-get: 4.0.1
-      tar-fs: 2.1.1
-      tunnel-agent: 0.6.0
 
   prepend-http@1.0.4: {}
 
@@ -23302,6 +23245,8 @@ snapshots:
       hash-base: 3.0.5
       inherits: 2.0.4
 
+  robot3@0.4.1: {}
+
   rollup@4.28.1:
     dependencies:
       '@types/estree': 1.0.6
@@ -23505,14 +23450,6 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  simple-concat@1.0.1: {}
-
-  simple-get@4.0.1:
-    dependencies:
-      decompress-response: 6.0.0
-      once: 1.4.0
-      simple-concat: 1.0.1
-
   simple-swizzle@0.2.2:
     dependencies:
       is-arrayish: 0.3.2
@@ -23609,27 +23546,6 @@ snapshots:
   sprintf-js@1.0.3: {}
 
   sprintf-js@1.1.3: {}
-
-  sql.js@1.12.0: {}
-
-  sqlite-vec-darwin-arm64@0.1.4-alpha.2:
-    optional: true
-
-  sqlite-vec-darwin-x64@0.1.4-alpha.2:
-    optional: true
-
-  sqlite-vec-linux-x64@0.1.4-alpha.2:
-    optional: true
-
-  sqlite-vec-windows-x64@0.1.4-alpha.2:
-    optional: true
-
-  sqlite-vec@0.1.4-alpha.2:
-    optionalDependencies:
-      sqlite-vec-darwin-arm64: 0.1.4-alpha.2
-      sqlite-vec-darwin-x64: 0.1.4-alpha.2
-      sqlite-vec-linux-x64: 0.1.4-alpha.2
-      sqlite-vec-windows-x64: 0.1.4-alpha.2
 
   sswr@2.1.0(svelte@5.10.0):
     dependencies:
@@ -23808,7 +23724,7 @@ snapshots:
 
   system-architecture@0.1.0: {}
 
-  tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3)):
+  tailwindcss@3.4.16(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -23827,28 +23743,13 @@ snapshots:
       postcss: 8.4.49
       postcss-import: 15.1.0(postcss@8.4.49)
       postcss-js: 4.0.1(postcss@8.4.49)
-      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.7.4)(typescript@5.6.3))
+      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3))
       postcss-nested: 6.2.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
-
-  tar-fs@2.1.1:
-    dependencies:
-      chownr: 1.1.4
-      mkdirp-classic: 0.5.3
-      pump: 3.0.2
-      tar-stream: 2.2.0
-
-  tar-stream@2.2.0:
-    dependencies:
-      bl: 4.1.0
-      end-of-stream: 1.4.4
-      fs-constants: 1.0.0
-      inherits: 2.0.4
-      readable-stream: 3.6.2
 
   tar@6.2.1:
     dependencies:
@@ -23898,8 +23799,6 @@ snapshots:
       xtend: 4.0.2
 
   through@2.3.8: {}
-
-  tiktoken@1.0.17: {}
 
   timed-out@2.0.0: {}
 
@@ -23988,6 +23887,25 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
+  ts-node@10.9.2(@types/node@22.7.5)(typescript@5.6.3):
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 22.7.5
+      acorn: 8.14.0
+      acorn-walk: 8.3.4
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 5.6.3
+      v8-compile-cache-lib: 3.0.1
+      yn: 3.1.1
+    optional: true
+
   tslib@1.14.1: {}
 
   tslib@2.4.1: {}
@@ -24022,10 +23940,6 @@ snapshots:
       - supports-color
       - tsx
       - yaml
-
-  tunnel-agent@0.6.0:
-    dependencies:
-      safe-buffer: 5.2.1
 
   turbo-darwin-64@2.3.1:
     optional: true
@@ -24209,7 +24123,7 @@ snapshots:
 
   uuid@10.0.0: {}
 
-  uuid@11.0.2: {}
+  uuid@11.0.3: {}
 
   uuid@8.3.2: {}
 
@@ -24406,7 +24320,7 @@ snapshots:
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
     dependencies:
       '@tanstack/react-query': 5.62.3(react@18.3.1)
-      '@wagmi/connectors': 5.5.3(@types/react@18.3.14)(@wagmi/core@2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.2.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)))(bufferutil@4.0.8)(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))(zod@3.24.0)
+      '@wagmi/connectors': 5.5.3(@types/react@18.3.14)(@wagmi/core@2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.4.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0)))(bufferutil@4.0.8)(react@18.3.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))(zod@3.24.0)
       '@wagmi/core': 2.15.2(@tanstack/query-core@5.62.3)(@types/react@18.3.14)(react@18.3.1)(typescript@5.6.3)(use-sync-external-store@1.2.0(react@18.3.1))(viem@2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.0))
       react: 18.3.1
       use-sync-external-store: 1.2.0(react@18.3.1)

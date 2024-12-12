@@ -1,6 +1,6 @@
-import type { DeferredTool } from "../tools";
-import type { Chain, WalletClient } from "../wallets";
-import type { ChainForWalletClient } from "../wallets/utils";
+import type { Tool } from "./tool";
+import type { Chain, WalletClient } from "./wallets";
+
 /**
  * Plugin interface that can be chain-specific or chain-agnostic.
  * Defaults to WalletClient for chain-agnostic plugins.
@@ -15,5 +15,5 @@ export interface Plugin<TWalletClient extends WalletClient = WalletClient> {
     name: string;
     supportsChain: (chain: Chain) => boolean;
     supportsSmartWallets: () => boolean;
-    getTools: (chain: ChainForWalletClient<TWalletClient>) => Promise<DeferredTool<TWalletClient>[]>;
+    getTools: (wallet: TWalletClient) => Promise<Tool[]>;
 }

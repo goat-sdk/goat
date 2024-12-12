@@ -35,13 +35,12 @@ Plugins implement the `Plugin` interface defined in the [core package](https://g
  * @param getTools - A function that returns the tools provided by the plugin.
  */
 export interface Plugin<TWalletClient extends WalletClient = WalletClient> {
-    name: string; // send_eth
+    name: string;
     supportsChain: (chain: Chain) => boolean;
     supportsSmartWallets: () => boolean;
-    getTools: (
-        chain: ChainForWalletClient<TWalletClient>
-    ) => Promise<DeferredTool<TWalletClient>[]>;
+    getTools: (wallet: TWalletClient) => Promise<Tool[]>;
 }
+
 ```
 
 Plugins get passed a [WalletClient](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets/core.ts) interface that can be EVM/Solana specific or chain-agnostic.
@@ -74,7 +73,7 @@ function baaaSigner(): Plugin<WalletClient> { // We use the WalletClient interfa
         name: "Sign Message with BAAAA",
         supportsChain: (chain: Chain) => ["evm", "solana"].includes(chain.type),
         supportsSmartWallets: () => true,
-        getTools: async () => {
+        getTools: async (walletClient: WalletClient) => {
             return [];
         },
     };
@@ -82,27 +81,18 @@ function baaaSigner(): Plugin<WalletClient> { // We use the WalletClient interfa
 ```
   </Step>
   <Step title="Add tools to the plugin">
-    The `getTools` method returns an array of DeferredTools that will be added to the agent.
+    The `getTools` method returns an array of tools that will be added to the agent.
 
-    DeferredTools have the following interface:
+    Tools have the following interface:
     <Note>
     It's important to note that the description uses `{{tool}}` to refer to the tool name. This is a placeholder gets replaced by the words action or tool depending on the adapter being used.
     </Note>
     ```typescript
-    import { z } from "zod";
-    import type { WalletClient } from "@goat-sdk/core";
-
-    /**
-     * Deferred tools defer which wallet client to be passed to the method until the tool is called.
-     */
-    export type DeferredTool<TWalletClient extends WalletClient> = {
-        name: string; // Send ETH
-        description: string; // This {{tool}} sends ETH to an address.
-        parameters: z.ZodSchema; // { to: z.string(), amount: z.string() }
-        method: (
-            walletClient: TWalletClient,
-            parameters: z.infer<z.ZodSchema>
-        ) => string | Promise<string>;
+    export type Tool<TResult = any> = {
+        name: string;
+        description: string;
+        parameters: z.ZodSchema;
+        method: (parameters: z.infer<z.ZodSchema>) => TResult | Promise<TResult>;
     };
     ```
 

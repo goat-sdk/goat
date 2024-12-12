@@ -9,20 +9,20 @@ export function jupiter(): Plugin<SolanaWalletClient> {
         name: "jupiter",
         supportsSmartWallets: () => false,
         supportsChain: (chain) => chain.type === "solana",
-        getTools: async () => {
+        getTools: async (walletClient) => {
             return [
                 {
                     name: "get_quote",
                     description: "This {{tool}} gets a quote for a swap on the Jupiter DEX.",
                     parameters: getQuoteParametersSchema,
-                    method: (walletClient, parameters: z.infer<typeof getQuoteParametersSchema>) =>
+                    method: (parameters: z.infer<typeof getQuoteParametersSchema>) =>
                         createJupiterApiClient().quoteGet(parameters),
                 },
                 {
                     name: "get_swap_transaction",
                     description: "This {{tool}} returns a transaction to swap tokens on the Jupiter DEX.",
                     parameters: quoteResponseSchema,
-                    method: async (walletClient, parameters: z.infer<typeof quoteResponseSchema>) => {
+                    method: async (parameters: z.infer<typeof quoteResponseSchema>) => {
                         const response = await createJupiterApiClient().swapPost({
                             swapRequest: {
                                 userPublicKey: walletClient.getAddress(),

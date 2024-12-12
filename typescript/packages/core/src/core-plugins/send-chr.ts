@@ -1,6 +1,6 @@
 import { z } from "zod";
-import type { ChromiaWalletClient } from "../wallets";
-import type { Plugin } from "./plugins";
+import type { Plugin } from "../plugins";
+import type { Chain, ChromiaWalletClient } from "../wallets";
 
 export const CHR_ASSET_ID = "5f16d1545a0881f971b164f1601cbbf51c29efd0633b2730da18c403c3b428b5";
 
@@ -8,14 +8,15 @@ export function sendCHR(): Plugin<ChromiaWalletClient> {
     return {
         name: "send_chr",
         supportsSmartWallets: () => false,
-        supportsChain: (chain) => chain.type === "chromia",
-        getTools: async () => {
+        supportsChain: (chain: Chain) => chain.type === "chromia",
+        getTools: async (walletClient: ChromiaWalletClient) => {
             return [
                 {
                     name: "send_chr",
                     description: "This {{tool}} sends CHR to an address on a Chromia chain.",
                     parameters: sendCHRParametersSchema,
-                    method: sendCHRMethod,
+                    method: (parameters: z.infer<typeof sendCHRParametersSchema>) =>
+                        sendCHRMethod(walletClient, parameters),
                 },
             ];
         },

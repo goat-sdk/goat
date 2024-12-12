@@ -112,8 +112,28 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
-            "name": "[Plugin] 🌐 Solana NFTs",
+            "name": "[Plugin] 🌐 solana nfts",
             "path": "./typescript/packages/plugins/solana-nfts"
+        },
+        {
+            "name": "[Plugin] 🪐 jupiter",
+            "path": "./typescript/packages/plugins/jupiter"
+        },
+        {
+            "name": "[Plugin] 🪙 spl token",
+            "path": "./typescript/packages/plugins/spl-token"
+        },
+        {
+            "name": "[Plugin] ⛓️‍💥 tensor",
+            "path": "./typescript/packages/plugins/tensor"
+        },
+        {
+            "name": "[Plugin] 🪄 magic eden",
+            "path": "./typescript/packages/plugins/solana-magiceden"
+        },
+        {
+            "name": "[Plugin] 🦄 uniswap",
+            "path": "./typescript/packages/plugins/uniswap"
         },
         // Wallets
         {
@@ -121,9 +141,9 @@
             "path": "./typescript/packages/wallets/crossmint"
         },
         {
-			      "name": "[Wallet] 🪪 chromia",
-			      "path": "./typescript/packages/wallets/chromia"
-		    },
+            "name": "[Wallet] 🪪 chromia",
+            "path": "./typescript/packages/wallets/chromia"
+        },
         {
             "name": "[Wallet] 🌞 solana",
             "path": "./typescript/packages/wallets/solana"

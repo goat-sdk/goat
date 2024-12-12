@@ -1,20 +1,27 @@
 import { parseEther } from "viem";
 import { z } from "zod";
-import type { EVMWalletClient } from "../wallets";
-import type { Plugin } from "./plugins";
+import type { Plugin } from "../plugins";
+import type { Chain, EVMWalletClient } from "../wallets";
+import { getChainToken } from "../wallets";
 
 export function sendETH(): Plugin<EVMWalletClient> {
     return {
         name: "send_eth",
         supportsSmartWallets: () => true,
-        supportsChain: (chain) => chain.type === "evm",
-        getTools: async () => {
+        supportsChain: (chain: Chain) => chain.type === "evm",
+        getTools: async (walletClient: EVMWalletClient) => {
             return [
                 {
-                    name: "send_eth",
-                    description: "This {{tool}} sends ETH to an address on an EVM chain.",
+                    name: "send_{{token}}"
+                        .replace("{{token}}", getChainToken(walletClient.getChain()).symbol)
+                        .toLowerCase(),
+                    description: "This {{tool}} sends {{token}} to an address.".replace(
+                        "{{token}}",
+                        getChainToken(walletClient.getChain()).symbol,
+                    ),
                     parameters: sendETHParametersSchema,
-                    method: sendETHMethod,
+                    method: (parameters: z.infer<typeof sendETHParametersSchema>) =>
+                        sendETHMethod(walletClient, parameters),
                 },
             ];
         },
