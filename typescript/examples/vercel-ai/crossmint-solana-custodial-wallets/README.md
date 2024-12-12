@@ -13,7 +13,7 @@ cp .env.template .env
 1. Create a custodial wallet attached to an email address.
 
 ```
-npx ts-node create-smart-wallet.ts
+npx ts-node create-custodial-wallet.ts
 ```
 
 3. Get the custodial wallet address and add it to the `.env` file.
