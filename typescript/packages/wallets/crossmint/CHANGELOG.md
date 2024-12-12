@@ -1,6 +1,6 @@
 # @goat-sdk/crossmint
 
-## 0.2.3
+## 0.2.5
 
 ### Patch Changes
 
