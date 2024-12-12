@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.2.3
+
+### Patch Changes
+
+- fad74d5: Fix content type headers missing on api calls
+
 ## 0.2.2
 
 ### Patch Changes
