@@ -12,7 +12,7 @@
 
 ### Solana
 - [Solana web3](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/solana)
-- [Crossmint Custodial Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/crossmint-custodial-wallets)
+- [Crossmint Solana Custodial Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/crossmint-solana-custodial-wallets)
 
 
 ## Langchain
