@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-solana
 
+## 0.1.8
+
+### Patch Changes
+
+- d289856: Fix send transaction options
+
 ## 0.1.7
 
 ### Patch Changes
