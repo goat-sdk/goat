@@ -295,7 +295,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -450,7 +450,7 @@ importers:
         version: link:../../../packages/plugins/coingecko
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -522,7 +522,7 @@ importers:
         version: link:../../../packages/wallets/crossmint
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       ai:
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -591,7 +591,7 @@ importers:
         version: link:../../../packages/wallets/crossmint
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@solana/web3.js':
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -823,10 +823,14 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
 <<<<<<< HEAD
+<<<<<<< HEAD
         version: link:../../../packages/plugins/erc20
       '@goat-sdk/plugin-superfluid':
 =======
         version: link:../../../packages/plugins/superfluid
+=======
+        version: link:../../../packages/plugins/erc20
+>>>>>>> 4e5c6e8 (add first commits)
       '@goat-sdk/wallet-solana':
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
@@ -856,6 +860,9 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-erc20':
 >>>>>>> 906163d (start superfluid plugin)
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc20
+      '@goat-sdk/plugin-superfluid':
         specifier: workspace:*
         version: link:../../../packages/plugins/superfluid
       '@goat-sdk/wallet-viem':

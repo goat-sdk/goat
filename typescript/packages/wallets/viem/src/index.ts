@@ -18,10 +18,19 @@ import {
 } from "viem";
 =======
 import type { EVMReadRequest, EVMTransaction, EVMTypedData, EVMWalletClient } from "@goat-sdk/core";
+<<<<<<< HEAD
 import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
 >>>>>>> 8d194ff (Release packages (#25))
 import { mainnet } from "viem/chains";
+<<<<<<< HEAD
 >>>>>>> f5ea302 ( feat: add support for paymasters in zk stack networks (#19))
+=======
+=======
+
+import { publicActions } from "viem";
+import type { TypedDataDomain, WalletClient as ViemWalletClient } from "viem";
+>>>>>>> 7703f48 (add first commits)
+>>>>>>> 4e5c6e8 (add first commits)
 import { normalize } from "viem/ens";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
@@ -84,14 +93,23 @@ export function viem(client: ViemWalletClient, options?: ViemOptions): EVMWallet
 
             const signature = await client.signTypedData({
 <<<<<<< HEAD
+<<<<<<< HEAD
                 domain: data.domain as TypedDataDomain,
 =======
+=======
+>>>>>>> 4e5c6e8 (add first commits)
                 domain: {
                     ...data.domain,
                     chainId:
                         typeof data.domain.chainId === "bigint" ? Number(data.domain.chainId) : data.domain.chainId,
                 },
+<<<<<<< HEAD
 >>>>>>> dcea7f4 (Lit EVM and SOL Wallet Clients (#43))
+=======
+=======
+                domain: data.domain as TypedDataDomain,
+>>>>>>> 7703f48 (add first commits)
+>>>>>>> 4e5c6e8 (add first commits)
                 types: data.types,
                 primaryType: data.primaryType,
                 message: data.message,

@@ -1,5 +1,6 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"folders": [
 		{
 			"name": "🐐 GOAT",
@@ -68,6 +69,8 @@
 	],
 	"settings": {
 =======
+=======
+>>>>>>> 4e5c6e8 (add first commits)
     "folders": [
         {
             "name": "🐐 GOAT",
@@ -168,7 +171,79 @@
         }
     ],
     "settings": {
+<<<<<<< HEAD
 >>>>>>> bf161b7 (Plugin: Crossmint Minting API (#23))
+=======
+=======
+	"folders": [
+		{
+			"name": "🐐 GOAT",
+			"path": "."
+		},
+		{
+			"name": "📘 Typescript",
+			"path": "./typescript"
+		},
+		{
+			"name": "🌋 Core",
+			"path": "./typescript/packages/core"
+		},
+		{
+			"name": "[Adapter] 🎧 eleven-labs",
+			"path": "./typescript/packages/adapters/eleven-labs"
+		},
+		{
+			"name": "[Adapter] 🟠 eliza",
+			"path": "./typescript/packages/adapters/eliza"
+		},
+		{
+			"name": "[Adapter] 🦜 langchain",
+			"path": "./typescript/packages/adapters/langchain"
+		},
+		{
+			"name": "[Adapter] 🤖 vercel-ai",
+			"path": "./typescript/packages/adapters/vercel-ai"
+		},
+		{
+			"name": "[Plugin] 💰 erc20",
+			"path": "./typescript/packages/plugins/erc20"
+		},
+		{
+			"name": "[Plugin] 🎰 polymarket",
+			"path": "./typescript/packages/plugins/polymarket"
+		},
+		{
+			"name": "[Plugin] 💰 coingecko",
+			"path": "./typescript/packages/plugins/coingecko"
+		},
+		{
+			"name": "[Plugin] 💰 superfluid",
+			"path": "./typescript/packages/plugins/superfluid"
+		},
+		{
+			"name": "[Wallet] 🍀 crossmint",
+			"path": "./typescript/packages/wallets/crossmint"
+		},
+		{
+			"name": "[Wallet] 🌞 solana",
+			"path": "./typescript/packages/wallets/solana"
+		},
+		{
+			"name": "[Wallet] 💳 viem",
+			"path": "./typescript/packages/wallets/viem"
+		},
+		{
+			"name": "📚 Docs",
+			"path": "./docs"
+		},
+		{
+			"name": "🚀 Examples",
+			"path": "./typescript/examples"
+		}
+	],
+	"settings": {
+>>>>>>> 7703f48 (add first commits)
+>>>>>>> 4e5c6e8 (add first commits)
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "biomejs.biome"
     }

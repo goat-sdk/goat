@@ -29,16 +29,24 @@ const walletClient = createWalletClient({
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
 <<<<<<< HEAD
+<<<<<<< HEAD
         plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] }), superfluid()],
 =======
         plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
 >>>>>>> 8d194ff (Release packages (#25))
+=======
+        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+=======
+        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] }), superfluid()],
+>>>>>>> 7703f48 (add first commits)
+>>>>>>> 4e5c6e8 (add first commits)
     });
 
     const result = await generateText({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         prompt: " make sure you are on OP Sepolia (11155420), create a new flow for the super token fDAIx of the address 0xD6FAF98BeFA647403cc56bDB598690660D5257d2 and the receiver should be the address 0x6caf4a402452f5108890dc50b58646c2a8730123 and the flow rate is 5555 wei/second ",
@@ -48,6 +56,12 @@ const walletClient = createWalletClient({
 =======
         prompt: "Get the balance of the USDC token",
 >>>>>>> bf161b7 (Plugin: Crossmint Minting API (#23))
+=======
+        prompt: "Get the balance of the USDC token",
+=======
+        prompt: " make sure you are on OP Sepolia (11155420), create a new flow for the super token fDAIx of the address 0xD6FAF98BeFA647403cc56bDB598690660D5257d2 and the receiver should be the address 0x6caf4a402452f5108890dc50b58646c2a8730123 and the flow rate is 5555 wei/second ",
+>>>>>>> 7703f48 (add first commits)
+>>>>>>> 4e5c6e8 (add first commits)
     });
 
     console.log(result.text);

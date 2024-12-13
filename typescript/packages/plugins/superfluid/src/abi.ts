@@ -242,6 +242,9 @@ export const CFA_FORWARDER_ABI = [
     },
 ];
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4e5c6e8 (add first commits)
 
 export const POOL_ABI = [
     {
@@ -883,5 +886,8 @@ export const POOL_ABI = [
         type: "function",
     },
 ];
+<<<<<<< HEAD
 =======
 >>>>>>> 906163d (start superfluid plugin)
+=======
+>>>>>>> 4e5c6e8 (add first commits)

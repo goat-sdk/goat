@@ -1,9 +1,13 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "name": "@goat-sdk/plugin-superfluid",
 =======
     "name": "@goat-sdk/plugin-erc20",
 >>>>>>> 906163d (start superfluid plugin)
+=======
+    "name": "@goat-sdk/plugin-superfluid",
+>>>>>>> 4e5c6e8 (add first commits)
     "version": "0.1.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
