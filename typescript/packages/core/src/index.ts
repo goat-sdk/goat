@@ -7,3 +7,4 @@ export * from "./core-plugins/send-chr";
 export * from "./core-plugins/send-eth";
 export * from "./core-plugins/send-sol";
 export * from "./core-plugins/evm-send-transaction";
+export * from "./core-plugins/send-apt";
