@@ -1,4 +1,4 @@
-# Vercel AI with viem Example
+# Vercel AI Coingecko Example
 
 ## Setup
 
