@@ -1,5 +1,5 @@
 {
-    "name": "@goat-sdk/plugin-erc20",
+    "name": "@goat-sdk/plugin-superfluid",
     "version": "0.1.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:packages/core
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -101,7 +105,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -137,7 +141,7 @@ importers:
         version: link:../../../packages/plugins/coingecko
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -167,7 +171,7 @@ importers:
         version: link:../../../packages/wallets/crossmint
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       ai:
         specifier: ^4.0.3
         version: 4.0.13(react@18.3.1)(zod@3.23.8)
@@ -194,7 +198,7 @@ importers:
         version: link:../../../packages/wallets/crossmint
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@solana/web3.js':
         specifier: 1.95.8
         version: 1.95.8
@@ -248,7 +252,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-solana':
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
@@ -277,6 +281,9 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/core
       '@goat-sdk/plugin-erc20':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc20
+      '@goat-sdk/plugin-superfluid':
         specifier: workspace:*
         version: link:../../../packages/plugins/superfluid
       '@goat-sdk/wallet-viem':

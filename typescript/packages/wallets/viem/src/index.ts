@@ -1,7 +1,7 @@
 import type { EVMReadRequest, EVMTransaction, EVMTypedData, EVMWalletClient } from "@goat-sdk/core";
 
 import { publicActions } from "viem";
-import type { WalletClient as ViemWalletClient } from "viem";
+import type { TypedDataDomain, WalletClient as ViemWalletClient } from "viem";
 import { normalize } from "viem/ens";
 
 export function viem(client: ViemWalletClient): EVMWalletClient {
@@ -47,7 +47,7 @@ export function viem(client: ViemWalletClient): EVMWalletClient {
             if (!client.account) throw new Error("No account connected");
 
             const signature = await client.signTypedData({
-                domain: data.domain,
+                domain: data.domain as TypedDataDomain,
                 types: data.types,
                 primaryType: data.primaryType,
                 message: data.message,

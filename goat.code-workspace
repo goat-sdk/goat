@@ -41,6 +41,10 @@
 			"path": "./typescript/packages/plugins/coingecko"
 		},
 		{
+			"name": "[Plugin] 💰 superfluid",
+			"path": "./typescript/packages/plugins/superfluid"
+		},
+		{
 			"name": "[Wallet] 🍀 crossmint",
 			"path": "./typescript/packages/wallets/crossmint"
 		},

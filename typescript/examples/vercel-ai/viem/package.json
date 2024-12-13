@@ -13,6 +13,7 @@
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",
+        "@goat-sdk/plugin-superfluid": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
         "ai": "^4.0.3",
         "dotenv": "^16.4.5",
