@@ -37,6 +37,7 @@ export function solana({ connection, keypair }: SolanaWalletOptions): SolanaWall
 
             const txid = await connection.sendTransaction(transaction, {
                 maxRetries: 5,
+                preflightCommitment: "confirmed",
             });
 
             return {
