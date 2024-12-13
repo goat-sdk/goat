@@ -1,20 +1,13 @@
-import type {
-    AptosReadRequest,
-    AptosTransaction,
-    AptosWalletClient,
-} from "@goat-sdk/core";
+import type { AptosReadRequest, AptosTransaction, AptosWalletClient } from "@goat-sdk/core";
 
-import { Account, Aptos } from "@aptos-labs/ts-sdk";
+import type { Account, Aptos } from "@aptos-labs/ts-sdk";
 
 export type AptosWalletOptions = {
     aptosAccount: Account;
     aptosClient: Aptos;
 };
 
-export function aptos({
-    aptosAccount,
-    aptosClient,
-}: AptosWalletOptions): AptosWalletClient {
+export function aptos({ aptosAccount, aptosClient }: AptosWalletOptions): AptosWalletClient {
     return {
         getAddress: () => aptosAccount.accountAddress.toStringLong(),
         getChain() {
@@ -38,9 +31,7 @@ export function aptos({
                     signer: aptosAccount,
                     transaction,
                 })
-                .then((tx) =>
-                    aptosClient.waitForTransaction({ transactionHash: tx.hash })
-                );
+                .then((tx) => aptosClient.waitForTransaction({ transactionHash: tx.hash }));
             return {
                 hash: response.hash,
             };

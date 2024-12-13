@@ -1,14 +1,12 @@
-import type { WalletClient } from "./core";
 import {
     Aptos,
-    InputGenerateTransactionPayloadData,
-    InputViewFunctionData,
-    LedgerVersionArg,
+    type InputGenerateTransactionPayloadData,
+    type InputViewFunctionData,
+    type LedgerVersionArg,
 } from "@aptos-labs/ts-sdk";
+import type { WalletClient } from "./core";
 
-export function isAptosWalletClient(
-    wallet: WalletClient
-): wallet is AptosWalletClient {
+export function isAptosWalletClient(wallet: WalletClient): wallet is AptosWalletClient {
     return wallet.getChain().type === "aptos";
 }
 
@@ -30,8 +28,6 @@ export type AptosTransactionResult = {
 };
 
 export interface AptosWalletClient extends WalletClient {
-    sendTransaction: (
-        transaction: AptosTransaction
-    ) => Promise<AptosTransactionResult>;
+    sendTransaction: (transaction: AptosTransaction) => Promise<AptosTransactionResult>;
     read: (request: AptosReadRequest) => Promise<AptosReadResult>;
 }

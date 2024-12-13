@@ -14,9 +14,8 @@ export function sendAPT(): Plugin<AptosWalletClient> {
                     name: "send_apt",
                     description: "This {{tool}} sends APT to an address.",
                     parameters: sendAPTParametersSchema,
-                    method: (
-                        parameters: z.infer<typeof sendAPTParametersSchema>
-                    ) => sendAPTMethod(walletClient, parameters),
+                    method: (parameters: z.infer<typeof sendAPTParametersSchema>) =>
+                        sendAPTMethod(walletClient, parameters),
                 },
             ];
         },
@@ -30,7 +29,7 @@ const sendAPTParametersSchema = z.object({
 
 async function sendAPTMethod(
     walletClient: AptosWalletClient,
-    parameters: z.infer<typeof sendAPTParametersSchema>
+    parameters: z.infer<typeof sendAPTParametersSchema>,
 ): Promise<string> {
     try {
         const { to, amount } = parameters;
