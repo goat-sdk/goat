@@ -1,6 +1,6 @@
 import type { Chain, WalletClient } from "@goat-sdk/core";
-import { createTool, type ToolBase } from "./ToolBase";
 import { type StoredToolMetadataMap, toolMetadataKey } from "../decorators/Tool";
+import { type ToolBase, createTool } from "./ToolBase";
 
 /**
  * Abstract base class for plugins that provide tools for wallet interactions.

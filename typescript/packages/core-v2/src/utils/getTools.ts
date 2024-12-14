@@ -1,7 +1,7 @@
-import type { ToolBase } from "../classes/ToolBase";
 import type { PluginBase } from "../classes/PluginBase";
+import type { ToolBase } from "../classes/ToolBase";
 
-import { isEVMSmartWalletClient, type WalletClient } from "@goat-sdk/core";
+import { type WalletClient, isEVMSmartWalletClient } from "@goat-sdk/core";
 
 export type GetToolsParams<TWalletClient extends WalletClient> = {
     wallet: TWalletClient;
