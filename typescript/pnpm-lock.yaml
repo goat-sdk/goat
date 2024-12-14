@@ -562,9 +562,6 @@ importers:
 
   packages/core-v2:
     dependencies:
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../core
       zod:
         specifier: 'catalog:'
         version: 3.23.8
