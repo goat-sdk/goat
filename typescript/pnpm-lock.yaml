@@ -560,6 +560,15 @@ importers:
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
 
+  packages/core-v2:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/coingecko:
     dependencies:
       '@goat-sdk/core':
