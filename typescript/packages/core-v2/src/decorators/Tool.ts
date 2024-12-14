@@ -1,6 +1,6 @@
+import type { z } from "zod";
 import type { ClassMethodDecorator } from "../types/ClassMethodDecorator";
 import { snakeCase } from "../utils/snakeCase";
-import type { z } from "zod";
 
 import "../symbol-polyfill";
 

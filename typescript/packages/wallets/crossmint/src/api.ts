@@ -46,10 +46,7 @@ interface GetWalletResponse extends CreateWalletResponse {}
 // Create Transaction
 ////////////////////////////////////////////////////////////////////
 interface TransactionApprovals {
-    pending: Omit<
-        ApprovalSubmission,
-        "signature" | "submittedAt" | "metadata"
-    >[];
+    pending: Omit<ApprovalSubmission, "signature" | "submittedAt" | "metadata">[];
     submitted: ApprovalSubmission[];
     required?: number; // For multisig scenarios, tentative until we support
 }
@@ -205,10 +202,7 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
      * @returns The parsed JSON response.
      * @throws An error if the response is not OK.
      */
-    const request = async (
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<APIResponse> => {
+    const request = async (endpoint: string, options: RequestInit = {}): Promise<APIResponse> => {
         const url = `${baseUrl}${endpoint}`;
 
         // Set default headers and merge with any additional headers
@@ -225,18 +219,14 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
         responseBody = await response.json();
 
         if (!response.ok) {
-            throw new Error(
-                `Error ${response.status}: ${JSON.stringify(responseBody)}`
-            );
+            throw new Error(`Error ${response.status}: ${JSON.stringify(responseBody)}`);
         }
 
         return responseBody;
     };
 
     return {
-        createSmartWallet: async (
-            adminSigner?: AdminSigner
-        ): Promise<CreateWalletResponse> => {
+        createSmartWallet: async (adminSigner?: AdminSigner): Promise<CreateWalletResponse> => {
             const endpoint = "/wallets";
             const payload = {
                 type: "evm-smart-wallet",
@@ -250,9 +240,7 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
                 body: JSON.stringify(payload),
             })) as CreateWalletResponse;
         },
-        createCustodialWallet: async (
-            linkedUser: string
-        ): Promise<CreateWalletResponse> => {
+        createCustodialWallet: async (linkedUser: string): Promise<CreateWalletResponse> => {
             const endpoint = "/wallets";
             const payload = {
                 type: "solana-custodial-wallet",
@@ -270,13 +258,8 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
                 method: "GET",
             })) as GetWalletResponse;
         },
-        signMessageForCustodialWallet: async (
-            locator: string,
-            message: string
-        ): Promise<SignMessageResponse> => {
-            const endpoint = `/wallets/${encodeURIComponent(
-                locator
-            )}/signatures`;
+        signMessageForCustodialWallet: async (locator: string, message: string): Promise<SignMessageResponse> => {
+            const endpoint = `/wallets/${encodeURIComponent(locator)}/signatures`;
 
             const payload = {
                 type: "solana-message",
@@ -294,11 +277,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
             walletAddress: string,
             message: string,
             chain: SupportedSmartWalletChains,
-            signer?: string
+            signer?: string,
         ): Promise<SignMessageResponse> => {
-            const endpoint = `/wallets/${encodeURIComponent(
-                walletAddress
-            )}/signatures`;
+            const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/signatures`;
 
             const payload = {
                 type: "evm-message",
@@ -318,11 +299,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
             walletAddress: string,
             typedData: EVMTypedData,
             chain: SupportedSmartWalletChains,
-            signer?: string
+            signer?: string,
         ): Promise<SignTypedDataResponse> => {
-            const endpoint = `/wallets/${encodeURIComponent(
-                walletAddress
-            )}/signatures`;
+            const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/signatures`;
 
             const payload = {
                 type: "evm-typed-data",
@@ -338,12 +317,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
                 body: JSON.stringify(payload),
             })) as SignTypedDataResponse;
         },
-        checkSignatureStatus: async (
-            signatureId: string,
-            walletAddress: string
-        ): Promise<ApproveSignatureResponse> => {
+        checkSignatureStatus: async (signatureId: string, walletAddress: string): Promise<ApproveSignatureResponse> => {
             const endpoint = `/wallets/${encodeURIComponent(
-                walletAddress
+                walletAddress,
             )}/signatures/${encodeURIComponent(signatureId)}`;
 
             return (await request(endpoint, {
@@ -354,10 +330,10 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
             signatureId: string,
             locator: string,
             signer: string,
-            signature: string
+            signature: string,
         ): Promise<ApproveSignatureResponse> => {
             const endpoint = `/wallets/${encodeURIComponent(
-                locator
+                locator,
             )}/signatures/${encodeURIComponent(signatureId)}/approvals`;
 
             const payload = {
@@ -376,11 +352,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
         },
         createTransactionForCustodialWallet: async (
             locator: string,
-            transaction: string
+            transaction: string,
         ): Promise<CreateTransactionResponse> => {
-            const endpoint = `/wallets/${encodeURIComponent(
-                locator
-            )}/transactions`;
+            const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions`;
             const payload = {
                 params: {
                     transaction: transaction,
@@ -396,11 +370,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
             walletAddress: string,
             calls: Call[],
             chain: SupportedSmartWalletChains,
-            signer?: string
+            signer?: string,
         ): Promise<CreateTransactionResponse> => {
-            const endpoint = `/wallets/${encodeURIComponent(
-                walletAddress
-            )}/transactions`;
+            const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/transactions`;
             const payload = {
                 params: {
                     calls: calls,
@@ -417,10 +389,10 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
         approveTransaction: async (
             locator: string,
             transactionId: string,
-            approvals: Approval[]
+            approvals: Approval[],
         ): Promise<SubmitApprovalResponse> => {
             const endpoint = `/wallets/${encodeURIComponent(
-                locator
+                locator,
             )}/transactions/${encodeURIComponent(transactionId)}/approvals`;
 
             const payload = {
@@ -432,12 +404,9 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
                 body: JSON.stringify(payload),
             })) as SubmitApprovalResponse;
         },
-        checkTransactionStatus: async (
-            locator: string,
-            transactionId: string
-        ): Promise<TransactionStatusResponse> => {
+        checkTransactionStatus: async (locator: string, transactionId: string): Promise<TransactionStatusResponse> => {
             const endpoint = `/wallets/${encodeURIComponent(
-                locator
+                locator,
             )}/transactions/${encodeURIComponent(transactionId)}`;
 
             return (await request(endpoint, {
