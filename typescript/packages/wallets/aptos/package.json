@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/core",
-    "version": "0.3.14",
+    "name": "@goat-sdk/wallet-aptos",
+    "version": "0.1.7",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,18 +12,14 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@goat-sdk/core": "workspace:*",
         "@aptos-labs/ts-sdk": "^1.33.1",
-        "@lit-protocol/lit-node-client": "catalog:",
-        "@lit-protocol/wrapped-keys": "catalog:",
-        "@solana/web3.js": "catalog:",
-        "@chromia/ft4": "catalog:",
-        "abitype": "^1.0.6",
-        "postchain-client": "catalog:",
-        "viem": "catalog:",
-        "zod": "catalog:"
+        "bs58": "^6.0.0",
+        "tweetnacl": "^1.0.3"
     },
-    "devDependencies": {
-        "@lit-protocol/types": "catalog:"
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@aptos-labs/ts-sdk": "^1.33.1"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
