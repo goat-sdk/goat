@@ -762,6 +762,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/core-v2':
+        specifier: workspace:*
+        version: link:../../core-v2
       postchain-client:
         specifier: 1.20.1
         version: 1.20.1(buffer@6.0.3)(events@3.3.0)
