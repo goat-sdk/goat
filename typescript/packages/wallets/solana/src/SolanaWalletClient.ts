@@ -1,5 +1,5 @@
 import { WalletClientBase } from "@goat-sdk/core-v2";
-import { PublicKey, type Connection } from "@solana/web3.js";
+import { type Connection, PublicKey } from "@solana/web3.js";
 import type { SolanaTransaction } from "./types";
 
 export type SolanWalletClientCtorParams = {

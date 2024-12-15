@@ -1,4 +1,4 @@
-import { type Signature, WalletClientBase, type EvmChain } from "@goat-sdk/core-v2";
+import { type EvmChain, type Signature, WalletClientBase } from "@goat-sdk/core-v2";
 import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "./types";
 
 export abstract class EVMWalletClient extends WalletClientBase {
