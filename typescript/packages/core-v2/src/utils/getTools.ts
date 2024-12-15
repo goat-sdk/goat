@@ -1,13 +1,12 @@
 import type { PluginBase } from "../classes/PluginBase";
 import type { ToolBase } from "../classes/ToolBase";
+import type { WalletClientBase } from "../classes/WalletClientBase";
 
-import { type WalletClient, isEVMSmartWalletClient } from "@goat-sdk/core";
-
-export type GetToolsParams<TWalletClient extends WalletClient> = {
+export type GetToolsParams<TWalletClient extends WalletClientBase> = {
     wallet: TWalletClient;
-    plugins?: (PluginBase<TWalletClient> | PluginBase<WalletClient>)[];
+    plugins?: (PluginBase<TWalletClient> | PluginBase<WalletClientBase>)[];
 };
-export async function getTools<TWalletClient extends WalletClient>({
+export async function getTools<TWalletClient extends WalletClientBase>({
     wallet,
     plugins = [],
 }: GetToolsParams<TWalletClient>) {
@@ -24,10 +23,11 @@ export async function getTools<TWalletClient extends WalletClient>({
             );
         }
 
-        if (!plugin.supportsSmartWallets() && isEVMSmartWalletClient(wallet)) {
-            console.warn(`Plugin ${plugin.name} does not support smart wallets. Skipping.`);
-            continue;
-        }
+        // TODO: Figure out how to do this without importing evm smart wallet package
+        // if (!plugin.supportsSmartWallets() && isEVMSmartWalletClient(wallet)) {
+        //     console.warn(`Plugin ${plugin.name} does not support smart wallets. Skipping.`);
+        //     continue;
+        // }
 
         const pluginTools = await plugin.getTools(wallet);
 
