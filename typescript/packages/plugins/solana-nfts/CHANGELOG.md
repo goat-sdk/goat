@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-solana-nfts
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.1.4
 
 ### Patch Changes

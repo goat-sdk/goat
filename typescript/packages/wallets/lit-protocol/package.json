@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-lit",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-spl-token
 
+## 0.0.5
+
+### Patch Changes
+
+- a66ceec: Fix jupiter swap tokens tx
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.0.4
 
 ### Patch Changes
