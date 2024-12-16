@@ -1,7 +1,7 @@
 import {
     type GetToolsParams,
-    type Tool,
-    type WalletClient,
+    type ToolBase,
+    type WalletClientBase,
     addParametersToDescription,
     getTools,
 } from "@goat-sdk/core";
@@ -9,18 +9,18 @@ import {
 import { tool } from "@langchain/core/tools";
 import type { z } from "zod";
 
-export type GetOnChainToolsParams<TWalletClient extends WalletClient> = GetToolsParams<TWalletClient>;
+export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = GetToolsParams<TWalletClient>;
 
-export async function getOnChainTools<TWalletClient extends WalletClient>({
+export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     wallet,
     plugins,
 }: GetOnChainToolsParams<TWalletClient>) {
-    const tools: Tool[] = await getTools({ wallet, plugins });
+    const tools: ToolBase[] = await getTools({ wallet, plugins });
 
     return tools.map((t) =>
         tool(
             async (arg: z.output<typeof t.parameters>) => {
-                return await t.method(arg);
+                return await t.execute(arg);
             },
             {
                 name: t.name,

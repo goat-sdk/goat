@@ -1,15 +1,15 @@
-import { type GetToolsParams, type Tool, type WalletClient, getTools } from "@goat-sdk/core";
+import { type GetToolsParams, type ToolBase, type WalletClientBase, getTools } from "@goat-sdk/core";
 
 import { type CoreTool, tool } from "ai";
 import type { z } from "zod";
 
-export type GetOnChainToolsParams<TWalletClient extends WalletClient> = GetToolsParams<TWalletClient>;
+export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = GetToolsParams<TWalletClient>;
 
-export async function getOnChainTools<TWalletClient extends WalletClient>({
+export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     wallet,
     plugins,
 }: GetOnChainToolsParams<TWalletClient>) {
-    const tools: Tool[] = await getTools<TWalletClient>({
+    const tools: ToolBase[] = await getTools<TWalletClient>({
         wallet,
         plugins,
     });
@@ -21,7 +21,7 @@ export async function getOnChainTools<TWalletClient extends WalletClient>({
             description: t.description,
             parameters: t.parameters,
             execute: async (arg: z.output<typeof t.parameters>) => {
-                return await t.method(arg);
+                return await t.execute(arg);
             },
         });
     }
