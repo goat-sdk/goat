@@ -30,6 +30,10 @@ export class ChromiaWalletClient extends WalletClientBase {
     }
 
     async sendTransaction({ to, assetId, amount }: ChromiaTransaction) {
+        if (!to.match(/^[a-f0-9]{64}$/i)) {
+            throw new Error("Invalid Address");
+        }
+
         const { keystoreInteractor, connection } = this.params;
         const accounts = await keystoreInteractor.getAccounts();
         const session = await keystoreInteractor.getSession(accounts[0].id);

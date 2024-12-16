@@ -781,7 +781,7 @@ importers:
         version: link:../../core-v2
       abitype:
         specifier: ^1.0.6
-        version: 1.0.7(typescript@5.6.3)(zod@3.24.0)
+        version: 1.0.6(typescript@5.6.3)(zod@3.23.8)
 
   packages/wallets/lit-protocol:
     dependencies:
