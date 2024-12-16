@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-chromia
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [6134b87]
+  - @goat-sdk/wallet-chromia@0.1.7
+
 ## 0.1.3
 
 ### Patch Changes
