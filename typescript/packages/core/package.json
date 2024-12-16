@@ -12,18 +12,7 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@aptos-labs/ts-sdk": "^1.33.1",
-        "@lit-protocol/lit-node-client": "catalog:",
-        "@lit-protocol/wrapped-keys": "catalog:",
-        "@solana/web3.js": "catalog:",
-        "@chromia/ft4": "catalog:",
-        "abitype": "^1.0.6",
-        "postchain-client": "catalog:",
-        "viem": "catalog:",
         "zod": "catalog:"
-    },
-    "devDependencies": {
-        "@lit-protocol/types": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
