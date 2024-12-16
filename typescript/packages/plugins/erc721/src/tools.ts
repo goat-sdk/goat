@@ -4,7 +4,7 @@ import {
     getBalanceParametersSchema,
     totalSupplyParametersSchema,
     transferFromParametersSchema,
-    transferParametersSchema
+    transferParametersSchema,
 } from "./parameters";
 
 import type { EVMWalletClient, Tool } from "@goat-sdk/core";
@@ -27,24 +27,21 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
             name: `transfer_${token.symbol}`,
             description: `This {{tool}} transfers a ${token.symbol} NFT to the specified address`,
             parameters: transferParametersSchema,
-            method: (parameters: z.infer<typeof transferParametersSchema>) =>
-                transfer(walletClient, token, parameters),
+            method: (parameters: z.infer<typeof transferParametersSchema>) => transfer(walletClient, token, parameters),
         };
 
         const totalSupplyTool: Tool = {
             name: `get_${token.symbol}_total_supply`,
             description: `This {{tool}} gets the total supply of ${token.symbol} NFTs`,
             parameters: totalSupplyParametersSchema,
-            method: (parameters: z.infer<typeof totalSupplyParametersSchema>) =>
-                totalSupply(walletClient, token),
+            method: (parameters: z.infer<typeof totalSupplyParametersSchema>) => totalSupply(walletClient, token),
         };
 
         const approveTool: Tool = {
             name: `approve_${token.symbol}`,
             description: `This {{tool}} approves an address to transfer a specific ${token.symbol} NFT`,
             parameters: approveParametersSchema,
-            method: (parameters: z.infer<typeof approveParametersSchema>) =>
-                approve(walletClient, token, parameters),
+            method: (parameters: z.infer<typeof approveParametersSchema>) => approve(walletClient, token, parameters),
         };
 
         const transferFromTool: Tool = {
@@ -55,13 +52,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 transferFrom(walletClient, token, parameters),
         };
 
-        tools.push(
-            balanceTool,
-            transferTool,
-            totalSupplyTool,
-            approveTool,
-            transferFromTool
-        );
+        tools.push(balanceTool, transferTool, totalSupplyTool, approveTool, transferFromTool);
     }
 
     return tools;
