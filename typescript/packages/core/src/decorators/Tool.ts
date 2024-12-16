@@ -2,7 +2,7 @@ import type { z } from "zod";
 import { snakeCase } from "../utils/snakeCase";
 
 import "reflect-metadata";
-import { createTool, type ToolBase } from "../classes";
+import { type ToolBase, createTool } from "../classes";
 
 /**
  * Parameters for the Tool decorator
