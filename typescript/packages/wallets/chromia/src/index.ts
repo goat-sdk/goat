@@ -1,11 +1,4 @@
-import {
-    type Connection,
-    type KeyStoreInteractor,
-    Session,
-    createAmount,
-    createInMemoryFtKeyStore,
-    createKeyStoreInteractor,
-} from "@chromia/ft4";
+import { type Connection, type KeyStoreInteractor, createAmount } from "@chromia/ft4";
 import { type DictPair, type IClient, type QueryObject, type RawGtv, SignatureProvider } from "postchain-client";
 
 export enum CHROMIA_MAINNET_BRID {
@@ -41,6 +34,9 @@ export function chromia({ client, keystoreInteractor, accountAddress, connection
             return { signature: "" };
         },
         async sendTransaction({ to, assetId, amount }: ChromiaTransaction) {
+            if (!to.match(/^[a-f0-9]{64}$/i)) {
+                throw new Error("Invalid Address");
+            }
             const accounts = await keystoreInteractor.getAccounts();
             const session = await keystoreInteractor.getSession(accounts[0].id);
             const asset = await connection.getAssetById(assetId);

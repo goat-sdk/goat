@@ -42,7 +42,7 @@ if (!privateKey) {
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "send 0.0001 CHR to <recipient address>",
+        prompt: "send 0.0001 CHR to <recipient_address>, and please attach the transaction explorer link",
     });
 
     console.log(result.text);
