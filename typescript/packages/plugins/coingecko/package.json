@@ -13,12 +13,10 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:"
+        "@goat-sdk/core": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
