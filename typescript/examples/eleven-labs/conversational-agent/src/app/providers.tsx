@@ -1,35 +1,18 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConnectKitProvider, getDefaultConfig } from "connectkit";
-import { http, WagmiProvider, createConfig } from "wagmi";
-import { sepolia } from "wagmi/chains";
-
-const config = createConfig(
-    getDefaultConfig({
-        // Your dApps chains
-        chains: [sepolia],
-        transports: {
-            // RPC URL for each chain
-            [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL ?? ""),
-        },
-
-        // Required API Keys
-        walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "",
-
-        // Required App Info
-        appName: "GOAT Conversational AI",
-    }),
-);
-
-const queryClient = new QueryClient();
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     return (
-        <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-                <ConnectKitProvider>{children}</ConnectKitProvider>
-            </QueryClientProvider>
-        </WagmiProvider>
+        <DynamicContextProvider
+            settings={{
+                environmentId: "f268a013-0fa0-4d9d-9314-c6919e2dfde7", // TODO replace in prod
+                walletConnectors: [EthereumWalletConnectors, SolanaWalletConnectors],
+            }}
+        >
+            {children}
+        </DynamicContextProvider>
     );
 };

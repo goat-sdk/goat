@@ -4,15 +4,21 @@ import { useConversation } from "@11labs/react";
 import { getOnChainTools } from "@goat-sdk/adapter-eleven-labs";
 import { useCallback } from "react";
 
+import { isEthereumWallet } from "@dynamic-labs/ethereum";
+import { DynamicWidget, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { isSolanaWallet } from "@dynamic-labs/solana";
+
 import { sendETH } from "@goat-sdk/core";
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
-import { ConnectKitButton } from "connectkit";
-import { useAccount, useWalletClient } from "wagmi";
+import { createSolanaWalletFromDynamic } from "../utils";
 
 export function Conversation() {
-    const { isConnected } = useAccount();
-    const { data: wallet } = useWalletClient(); // Get the viem wallet client from Wagmi
+    const isLoggedIn = useIsLoggedIn();
+    const { primaryWallet, sdkHasLoaded } = useDynamicContext();
+
+    const isConnected = sdkHasLoaded && isLoggedIn && primaryWallet;
 
     const conversation = useConversation({
         onConnect: () => console.log("Connected"),
@@ -26,42 +32,69 @@ export function Conversation() {
             // Request microphone permission
             await navigator.mediaDevices.getUserMedia({ audio: true });
 
-            if (!wallet) {
+            if (!primaryWallet) {
                 throw new Error("Wallet not connected");
             }
 
-            // const wallet = viem Client
-            const tools = await getOnChainTools({
-                wallet: viem(wallet),
-                plugins: [
-                    sendETH(),
-                    coingecko({
-                        apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "",
-                    }),
-                ],
-                options: {
-                    logTools: true,
-                },
-            });
+            let tools = null;
+
+            if (isSolanaWallet(primaryWallet)) {
+                const connection = await primaryWallet.getConnection();
+                const signer = await primaryWallet.getSigner();
+
+                tools = await getOnChainTools({
+                    wallet: createSolanaWalletFromDynamic(connection, signer),
+                    plugins: [
+                        coingecko({
+                            apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "",
+                        }),
+                    ],
+                });
+            } else if (isEthereumWallet(primaryWallet)) {
+                tools = await getOnChainTools({
+                    wallet: viem(await primaryWallet.getWalletClient()),
+                    plugins: [
+                        sendETH(),
+                        coingecko({
+                            apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "",
+                        }),
+                    ],
+                    options: {
+                        logTools: true,
+                    },
+                });
+            } else {
+                throw new Error("Unsupported wallet type");
+            }
+
+            if (!tools) {
+                throw new Error("Failed to initialize tools");
+            }
+
+            console.log("tools", tools);
 
             // Start the conversation with your agent
             await conversation.startSession({
-                agentId: process.env.NEXT_PUBLIC_ELEVEN_LABS_AGENT_ID ?? "", // Replace with your agent ID
+                agentId: process.env.NEXT_PUBLIC_ELEVEN_LABS_AGENT_ID ?? "",
                 clientTools: tools,
             });
         } catch (error) {
             console.error("Failed to start conversation:", error);
         }
-    }, [conversation, wallet]);
+    }, [conversation, primaryWallet]);
 
     const stopConversation = useCallback(async () => {
         await conversation.endSession();
     }, [conversation]);
 
+    if (!sdkHasLoaded) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="flex flex-col items-center gap-4">
             <h1 className="text-2xl font-bold">1. Connect Wallet to start</h1>
-            <ConnectKitButton />
+            <DynamicWidget />
 
             <h1 className="text-2xl font-bold">2. Start Conversation with Agent</h1>
             <div className="flex flex-col items-center gap-4">
