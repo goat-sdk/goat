@@ -7,7 +7,6 @@ export class CoinGeckoPlugin extends PluginBase {
     }
 
     supportsChain = () => true;
-    supportsSmartWallets = () => true;
 }
 
 export function coingecko(apiKey: string) {

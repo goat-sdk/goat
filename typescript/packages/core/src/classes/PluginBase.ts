@@ -26,12 +26,6 @@ export abstract class PluginBase<TWalletClient extends WalletClientBase = Wallet
     abstract supportsChain(chain: Chain): boolean;
 
     /**
-     * Checks if the plugin supports smart wallets.
-     * @returns True if smart wallets are supported, false otherwise
-     */
-    abstract supportsSmartWallets(): boolean;
-
-    /**
      * Retrieves the tools provided by the plugin.
      * @param wallet - The wallet client to use for tool execution
      * @returns An array of tools

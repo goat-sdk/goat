@@ -22,15 +22,7 @@ export async function getTools<TWalletClient extends WalletClientBase>({
                 }. Skipping.`,
             );
         }
-
-        // TODO: Figure out how to do this without importing evm smart wallet package
-        // if (!plugin.supportsSmartWallets() && isEVMSmartWalletClient(wallet)) {
-        //     console.warn(`Plugin ${plugin.name} does not support smart wallets. Skipping.`);
-        //     continue;
-        // }
-
         const pluginTools = await plugin.getTools(wallet);
-
         tools.push(...pluginTools);
     }
 
