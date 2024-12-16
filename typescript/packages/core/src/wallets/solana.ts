@@ -7,6 +7,7 @@ export function isSolanaWalletClient(wallet: WalletClient): wallet is SolanaWall
 
 export type SolanaTransaction = {
     instructions: TransactionInstruction[];
+    addressLookupTableAddresses?: string[];
 };
 
 export type SolanaReadRequest = {

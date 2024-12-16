@@ -1,13 +1,8 @@
-import { z } from "zod";
-
 export type SolanaNetwork = "devnet" | "mainnet";
-
-export const splTokenSymbolSchema = z.enum(["USDC"]);
-export type SplTokenSymbol = z.infer<typeof splTokenSymbolSchema>;
 
 export type Token = {
     decimals: number;
-    symbol: SplTokenSymbol;
+    symbol: string;
     name: string;
     mintAddresses: Record<SolanaNetwork, string | null>;
 };
@@ -19,7 +14,7 @@ export type NetworkSpecificToken = Omit<Token, "mintAddresses"> & {
 
 export const USDC: Token = {
     decimals: 6,
-    symbol: splTokenSymbolSchema.Enum.USDC,
+    symbol: "USDC",
     name: "USDC",
     mintAddresses: {
         devnet: "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
@@ -27,4 +22,24 @@ export const USDC: Token = {
     },
 };
 
-export const SPL_TOKENS: Token[] = [USDC];
+export const GOAT: Token = {
+    decimals: 6,
+    symbol: "GOAT",
+    name: "GOAT",
+    mintAddresses: {
+        mainnet: "CzLSujWBLFsSjncfkh59rUFqvafWcY5tzedWJSuypump",
+        devnet: null,
+    },
+};
+
+export const SOL: Token = {
+    decimals: 9,
+    symbol: "SOL",
+    name: "Wrapped SOL",
+    mintAddresses: {
+        mainnet: "So11111111111111111111111111111111111111112",
+        devnet: "So11111111111111111111111111111111111111112",
+    },
+};
+
+export const SPL_TOKENS: Token[] = [USDC, GOAT, SOL];
