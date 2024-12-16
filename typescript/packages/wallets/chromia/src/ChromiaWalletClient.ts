@@ -4,7 +4,7 @@ import type { DictPair, IClient, QueryObject, RawGtv } from "postchain-client";
 import { CHR_ASSET_ID } from "./consts";
 import type { ChromiaTransaction } from "./types/ChromiaTransaction";
 
-export type ChromiaWalletParams = {
+export type ChromiaWalletCtorParams = {
     client: IClient;
     keystoreInteractor: KeyStoreInteractor;
     accountAddress: string;
@@ -12,7 +12,7 @@ export type ChromiaWalletParams = {
 };
 
 export class ChromiaWalletClient extends WalletClientBase {
-    constructor(public readonly params: ChromiaWalletParams) {
+    constructor(public readonly params: ChromiaWalletCtorParams) {
         super();
     }
 
