@@ -1,5 +1,5 @@
 import { type Connection, type KeyStoreInteractor, createAmount } from "@chromia/ft4";
-import { WalletClientBase } from "@goat-sdk/core-v2";
+import { WalletClientBase } from "@goat-sdk/core";
 import type { DictPair, IClient, QueryObject, RawGtv } from "postchain-client";
 import { CHR_ASSET_ID } from "./consts";
 import type { ChromiaTransaction } from "./types/ChromiaTransaction";

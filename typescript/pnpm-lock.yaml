@@ -528,40 +528,6 @@ importers:
 
   packages/core:
     dependencies:
-      '@aptos-labs/ts-sdk':
-        specifier: ^1.33.1
-        version: 1.33.1
-      '@chromia/ft4':
-        specifier: 'catalog:'
-        version: 1.0.1(buffer@6.0.3)(bufferutil@4.0.8)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)
-      '@lit-protocol/lit-node-client':
-        specifier: 'catalog:'
-        version: 7.0.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.8)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
-      '@lit-protocol/wrapped-keys':
-        specifier: 'catalog:'
-        version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@solana/web3.js':
-        specifier: 'catalog:'
-        version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      abitype:
-        specifier: ^1.0.6
-        version: 1.0.6(typescript@5.6.3)(zod@3.23.8)
-      postchain-client:
-        specifier: 'catalog:'
-        version: 1.20.1(buffer@6.0.3)(events@3.3.0)
-      viem:
-        specifier: 'catalog:'
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zod:
-        specifier: 'catalog:'
-        version: 3.23.8
-    devDependencies:
-      '@lit-protocol/types':
-        specifier: 'catalog:'
-        version: 7.0.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-
-  packages/core-v2:
-    dependencies:
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -743,9 +709,6 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-      '@goat-sdk/core-v2':
-        specifier: workspace:*
-        version: link:../../core-v2
       postchain-client:
         specifier: 1.20.1
         version: 1.20.1(buffer@6.0.3)(events@3.3.0)
@@ -776,9 +739,9 @@ importers:
 
   packages/wallets/evm:
     dependencies:
-      '@goat-sdk/core-v2':
+      '@goat-sdk/core':
         specifier: workspace:*
-        version: link:../../core-v2
+        version: link:../../core
       abitype:
         specifier: ^1.0.6
         version: 1.0.6(typescript@5.6.3)(zod@3.23.8)
@@ -825,9 +788,9 @@ importers:
 
   packages/wallets/solana:
     dependencies:
-      '@goat-sdk/core-v2':
+      '@goat-sdk/core':
         specifier: workspace:*
-        version: link:../../core-v2
+        version: link:../../core
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)

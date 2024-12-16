@@ -2,5 +2,8 @@
     "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "../../tsconfig.base.json",
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist"]
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {
+        "lib": ["DOM", "ES6", "esnext.decorators"]
+    }
 }

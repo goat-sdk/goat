@@ -12,12 +12,12 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core-v2": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
         "@solana/web3.js": "catalog:",
         "tweetnacl": "^1.0.3"
     },
     "peerDependencies": {
-        "@goat-sdk/core-v2": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
         "@solana/web3.js": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
