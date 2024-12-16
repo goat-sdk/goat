@@ -14,7 +14,7 @@ if (!apiKey || !email) {
     throw new Error("Missing environment variables");
 }
 
-const { custodial } = crossmint(apiKey);
+const { custodial, balance } = crossmint(apiKey);
 
 (async () => {
     const tools = await getOnChainTools({
@@ -23,13 +23,14 @@ const { custodial } = crossmint(apiKey);
             email: email,
             connection: new Connection("https://api.devnet.solana.com", "confirmed"),
         }),
+        plugins: [balance()],
     });
 
     const result = await generateText({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Get my balance in SOL",
+        prompt: "Get my balance in BONK",
     });
 
     console.log(result.text);

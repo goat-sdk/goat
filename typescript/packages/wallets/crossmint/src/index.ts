@@ -3,6 +3,7 @@ import { custodialFactory } from "./custodial";
 import { faucetFactory } from "./faucet";
 import { mintingFactory } from "./mint";
 import { smartWalletFactory } from "./smart-wallet";
+import { balanceFactory } from "./balance";
 
 function crossmint(apiKey: string) {
     const apiClient = new CrossmintApiClient(
@@ -24,6 +25,7 @@ function crossmint(apiKey: string) {
         smartwallet: smartWalletFactory(apiClient),
         faucet: faucetFactory(apiClient),
         mint: mintingFactory(apiClient),
+        balance: balanceFactory(apiClient),
     };
 }
 

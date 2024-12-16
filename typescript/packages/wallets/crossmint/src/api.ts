@@ -180,6 +180,46 @@ interface ApproveSignatureResponse {
 }
 
 ////////////////////////////////////////////////////////////////////
+// Get Wallet Balance
+////////////////////////////////////////////////////////////////////
+interface WalletBalance {
+    currency: string;
+    decimals: number;
+    balances: {
+        [chain: string]: string;
+        total: string;
+    };
+}
+
+export const SOLANA_SUPPORTED_CURRENCIES = [
+    "eurc", "bonk", "wif", "mother", "sol", "usdc"
+] as const;
+
+export const EVM_SUPPORTED_CURRENCIES = [
+    "eth", "matic", "pol", "sei", "chz", "avax", "xai", "fuel", 
+    "vic", "usdc", "usdce", "busd", "usdxm", "weth", "degen", 
+    "brett", "toshi", "eurc", "bnb", "sui", "sfuel"
+] as const;
+
+export const SUPPORTED_CURRENCIES = [
+    ...EVM_SUPPORTED_CURRENCIES,
+    ...SOLANA_SUPPORTED_CURRENCIES
+] as const;
+
+export type SupportedEVMCurrency = typeof EVM_SUPPORTED_CURRENCIES[number];
+export type SupportedSolanaCurrency = typeof SOLANA_SUPPORTED_CURRENCIES[number];
+export type SupportedCurrency = SupportedEVMCurrency | SupportedSolanaCurrency;
+
+interface GetWalletBalanceParams {
+    currencies: SupportedCurrency[];
+    chains?: string[];
+}
+
+export interface GetWalletBalanceResponse {
+    balances: WalletBalance[];
+}
+
+////////////////////////////////////////////////////////////////////
 // API
 ////////////////////////////////////////////////////////////////////
 
@@ -190,7 +230,8 @@ type APIResponse =
     | SubmitApprovalResponse
     | SignMessageResponse
     | SignTypedDataResponse
-    | ApproveSignatureResponse;
+    | ApproveSignatureResponse
+    | GetWalletBalanceResponse;
 
 export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
     const baseUrl = `${crossmintClient.baseUrl}/api/v1-alpha2`;
@@ -412,6 +453,21 @@ export function createCrossmintAPI(crossmintClient: CrossmintApiClient) {
             return (await request(endpoint, {
                 method: "GET",
             })) as TransactionStatusResponse;
+        },
+        getWalletBalance: async (
+            locator: string, 
+            params: GetWalletBalanceParams
+        ): Promise<GetWalletBalanceResponse> => {
+            const queryParams = new URLSearchParams();
+            queryParams.append('currencies', params.currencies.join(','));
+            if (params.chains) {
+                queryParams.append('chains', params.chains.join(','));
+            }
+            
+            const endpoint = `/wallets/${encodeURIComponent(locator)}/balances?${queryParams}`;
+            return (await request(endpoint, {
+                method: "GET",
+            })) as GetWalletBalanceResponse;
         },
     };
 }

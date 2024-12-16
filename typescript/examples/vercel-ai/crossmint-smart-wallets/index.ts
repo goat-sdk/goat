@@ -4,7 +4,6 @@ import { generateText } from "ai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { sendETH } from "@goat-sdk/core";
 import { crossmint } from "@goat-sdk/crossmint";
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
 require("dotenv").config();
 
@@ -17,7 +16,7 @@ if (!apiKey || !walletSignerSecretKey || !alchemyApiKey || !smartWalletAddress) 
     throw new Error("Missing environment variables");
 }
 
-const { smartwallet, faucet } = crossmint(apiKey);
+const { smartwallet, faucet, balance } = crossmint(apiKey);
 
 (async () => {
     const tools = await getOnChainTools({
@@ -29,14 +28,14 @@ const { smartwallet, faucet } = crossmint(apiKey);
             chain: "base-sepolia",
             provider: alchemyApiKey,
         }),
-        plugins: [sendETH(), erc20({ tokens: [USDC] }), faucet()],
+        plugins: [sendETH(), balance(), faucet()],
     });
 
     const result1 = await generateText({
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Top up my wallet with USDC",
+        prompt: "Fund my wallet with 5 USDC",
     });
 
     console.log(result1.text);
@@ -45,7 +44,7 @@ const { smartwallet, faucet } = crossmint(apiKey);
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Get my balance in USDC",
+        prompt: "Fetch my USDC balance on base-sepolia",
     });
 
     console.log(result2.text);

@@ -2,7 +2,7 @@ import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { SolanaReadRequest, SolanaTransaction, SolanaWalletClient } from "@goat-sdk/core";
 import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
-import { createCrossmintAPI } from "./api";
+import { createCrossmintAPI, GetWalletBalanceResponse, SupportedSolanaCurrency } from "./api";
 
 type CommonParameters = {
     chain: "solana";
@@ -38,8 +38,12 @@ function getLocator(params: CustodialOptions): string | number {
     return `userId:${params.userId}:solana-custodial-wallet`;
 }
 
+export interface CrossmintSolanaCustodialWalletClient extends SolanaWalletClient {
+    tokenBalanceOf: (currencies: SupportedSolanaCurrency[], address: string) => Promise<GetWalletBalanceResponse>
+}
+
 export function custodialFactory(crossmintClient: CrossmintApiClient) {
-    return async function custodial(params: CustodialOptions): Promise<SolanaWalletClient> {
+    return async function custodial(params: CustodialOptions): Promise<CrossmintSolanaCustodialWalletClient> {
         const { connection } = params;
 
         const locator = `${getLocator(params)}`;
@@ -138,6 +142,11 @@ export function custodialFactory(crossmintClient: CrossmintApiClient) {
                     symbol: "SOL",
                     name: "Solana",
                 };
+            },
+            async tokenBalanceOf(currencies: SupportedSolanaCurrency[], address: string) {
+                return await client.getWalletBalance(address, {
+                    currencies: currencies
+                });
             },
         };
     };
