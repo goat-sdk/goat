@@ -1,42 +1,39 @@
-# Goat ERC20 Plugin 🐐 - TypeScript
+# Goat ERC721 Plugin 🐐 - TypeScript
 
-ERC20 plugin for Goat. Allows you to create tools for transferring and getting the balance of ERC20 tokens.
+ERC721 plugin for Goat. Allows you to create tools for transferring and getting the balance of ERC721 tokens.
 
 ## Installation
 ```
-npm install @goat-sdk/plugin-erc20
+npm install @goat-sdk/plugin-erc721
 ```
 
 ## Usage
 
 ```typescript
-import { erc20 } from "@goat-sdk/plugin-erc20";
+import { erc721, BAYC } from "@goat-sdk/plugin-erc721";
 
-
-const plugin = erc20({
-    tokens: [USDC, PEPE],
+const plugin = erc721({
+    tokens: [BAYC],
 });
 ```
 
 ### Adding custom tokens
 ```typescript
-import { erc20 } from "@goat-sdk/plugin-erc20";
+import { erc721, BAYC } from "@goat-sdk/plugin-erc721";
 
-
-const plugin = erc20({
-    tokens: [
-        USDC,
-        {
-            decimals: 18,
-            symbol: "SHIB",
-            name: "Shiba Inu",
-            chains: {
-                "1": {
-                    contractAddress: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
-                },
-            },
+const plugin = erc721({
+  tokens: [
+    BAYC,
+    {
+      symbol: "PUNK",
+      name: "CryptoPunks",
+      chains: {
+        "1": {
+          contractAddress: "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB",
         },
-    ],
+      },
+    },
+  ],
 });
 ```
 
