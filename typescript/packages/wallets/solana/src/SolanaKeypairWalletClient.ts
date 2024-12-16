@@ -1,6 +1,6 @@
-import { TransactionMessage, VersionedTransaction, type Keypair } from "@solana/web3.js";
-import { SolanaWalletClient, type SolanWalletClientCtorParams } from "./SolanaWalletClient";
+import { type Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import nacl from "tweetnacl";
+import { type SolanWalletClientCtorParams, SolanaWalletClient } from "./SolanaWalletClient";
 import type { SolanaTransaction } from "./types";
 
 export type SolanaKeypairWalletClientCtorParams = SolanWalletClientCtorParams & {

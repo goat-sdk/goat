@@ -18,7 +18,7 @@ export async function getTools<TWalletClient extends WalletClientBase>({
         if (!plugin.supportsChain(chain)) {
             console.warn(
                 `Plugin ${plugin.name} does not support ${chain.type}${
-                    chain.id ? ` chain id ${chain.id}` : ""
+                    "id" in chain ? ` chain id ${chain.id}` : ""
                 }. Skipping.`,
             );
         }
