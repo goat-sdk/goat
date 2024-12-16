@@ -30,12 +30,14 @@ export abstract class PluginBase<TWalletClient extends WalletClientBase = Wallet
      * @param wallet - The wallet client to use for tool execution
      * @returns An array of tools
      */
-    getTools(wallet: TWalletClient): ToolBase[] | Promise<ToolBase[]> {
+    getTools(): ToolBase[] | Promise<ToolBase[]> {
         const tools: ToolBase[] = [];
 
         for (const toolProvider of this.toolProviders) {
-            const metadata = toolProvider.constructor[Symbol.metadata];
-            const toolsMap = metadata?.[toolMetadataKey] as StoredToolMetadataMap | undefined;
+            const toolsMap = Reflect.getMetadata(toolMetadataKey, toolProvider.constructor) as
+                | StoredToolMetadataMap
+                | undefined;
+
             if (!toolsMap) {
                 const constructorName = toolProvider.constructor.name;
                 if (constructorName === "Function") {
@@ -51,22 +53,7 @@ export abstract class PluginBase<TWalletClient extends WalletClientBase = Wallet
             }
 
             for (const tool of toolsMap.values()) {
-                if (typeof tool.target === "function") {
-                    tools.push(
-                        createTool(
-                            {
-                                name: tool.name,
-                                description: tool.description,
-                                parameters: tool.parameters,
-                            },
-                            tool.target.bind(toolProvider),
-                        ),
-                    );
-                } else {
-                    console.warn(
-                        "Detected a non-function tool. Please ensure the '@Tool' decorator is being used on a class method",
-                    );
-                }
+                tools.push(tool);
             }
         }
 
