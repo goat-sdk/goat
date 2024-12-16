@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-chromia
 
+## 0.1.7
+
+### Patch Changes
+
+- 6134b87: Add wallet check before send
+
 ## 0.1.6
 
 ### Patch Changes
