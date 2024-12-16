@@ -13,6 +13,7 @@ export async function getTools<TWalletClient extends WalletClientBase>({
     const tools: ToolBase[] = [];
 
     const chain = wallet.getChain();
+    const coreTools = wallet.getCoreTools();
 
     for (const plugin of plugins) {
         if (!plugin.supportsChain(chain)) {
@@ -26,5 +27,5 @@ export async function getTools<TWalletClient extends WalletClientBase>({
         tools.push(...pluginTools);
     }
 
-    return tools;
+    return [...coreTools, ...tools];
 }
