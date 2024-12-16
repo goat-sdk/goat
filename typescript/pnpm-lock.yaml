@@ -445,9 +445,12 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../../packages/core
-      '@goat-sdk/plugin-erc20':
+      '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
-        version: link:../../../packages/plugins/erc20
+        version: link:../../../packages/plugins/jupiter
+      '@goat-sdk/plugin-spl-token':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/spl-token
       '@goat-sdk/wallet-solana':
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
@@ -460,6 +463,9 @@ importers:
       bip39:
         specifier: ^3.1.0
         version: 3.1.0
+      bs58:
+        specifier: ^6.0.0
+        version: 6.0.0
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7

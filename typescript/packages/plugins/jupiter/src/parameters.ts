@@ -8,9 +8,9 @@ import {
 import { z } from "zod";
 
 export const getQuoteParametersSchema: z.ZodType<QuoteGetRequest> = z.object({
-    inputMint: z.string().describe("The token to swap from"),
-    outputMint: z.string().describe("The token to swap to"),
-    amount: z.number().describe("The amount of tokens to swap"),
+    inputMint: z.string().describe("The token address of the token to swap from"),
+    outputMint: z.string().describe("The token address of the token to swap to"),
+    amount: z.number().describe("The amount of tokens to swap in the tokens base unit"),
     slippageBps: z.number().optional().describe("The slippage in bps"),
     autoSlippage: z.boolean().optional().describe("Whether to use auto slippage"),
     autoSlippageCollisionUsdValue: z.number().optional().describe("The collision USD value for auto slippage"),
@@ -44,11 +44,11 @@ export const swapInfoSchema: z.ZodType<SwapInfo> = z.object({
 });
 
 export const quoteResponseSchema: z.ZodType<QuoteResponse> = z.object({
-    inputMint: z.string().describe("The token to swap from"),
-    inAmount: z.string().describe("The amount of tokens to swap"),
-    outputMint: z.string().describe("The token to swap to"),
-    outAmount: z.string().describe("The amount of tokens to swap"),
-    otherAmountThreshold: z.string().describe("The amount of tokens to swap"),
+    inputMint: z.string().describe("The token address of the token to swap from"),
+    inAmount: z.string().describe("The amount of tokens to swap in the tokens base unit"),
+    outputMint: z.string().describe("The token address of the token to swap to"),
+    outAmount: z.string().describe("The amount of tokens to swap in the tokens base unit"),
+    otherAmountThreshold: z.string().describe("The amount of tokens to swap in the tokens base unit"),
     swapMode: z.enum(["ExactIn", "ExactOut"]).describe("The swap mode"),
     slippageBps: z.number().describe("The slippage in bps"),
     computedAutoSlippage: z.number().optional().describe("The computed auto slippage"),

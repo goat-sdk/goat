@@ -1,6 +1,13 @@
 import type { SolanaReadRequest, SolanaTransaction, SolanaWalletClient } from "@goat-sdk/core";
 
-import { type Connection, type Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import {
+    AddressLookupTableAccount,
+    type Connection,
+    type Keypair,
+    PublicKey,
+    TransactionMessage,
+    VersionedTransaction,
+} from "@solana/web3.js";
 
 import nacl from "tweetnacl";
 
@@ -10,6 +17,25 @@ export type SolanaWalletOptions = {
 };
 
 export function solana({ connection, keypair }: SolanaWalletOptions): SolanaWalletClient {
+    async function getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
+        const addressLookupTableAccountInfos = await connection.getMultipleAccountsInfo(
+            keys.map((key) => new PublicKey(key)),
+        );
+
+        return addressLookupTableAccountInfos.reduce((acc, accountInfo, index) => {
+            const addressLookupTableAddress = keys[index];
+            if (accountInfo) {
+                const addressLookupTableAccount = new AddressLookupTableAccount({
+                    key: new PublicKey(addressLookupTableAddress),
+                    state: AddressLookupTableAccount.deserialize(accountInfo.data),
+                });
+                acc.push(addressLookupTableAccount);
+            }
+
+            return acc;
+        }, new Array<AddressLookupTableAccount>());
+    }
+
     return {
         getAddress: () => keypair.publicKey.toBase58(),
         getChain() {
@@ -24,13 +50,13 @@ export function solana({ connection, keypair }: SolanaWalletOptions): SolanaWall
                 signature: Buffer.from(signature).toString("hex"),
             };
         },
-        async sendTransaction({ instructions }: SolanaTransaction) {
+        async sendTransaction({ instructions, addressLookupTableAddresses = [] }: SolanaTransaction) {
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
             const message = new TransactionMessage({
                 payerKey: keypair.publicKey,
                 recentBlockhash: latestBlockhash.blockhash,
                 instructions,
-            }).compileToV0Message();
+            }).compileToV0Message(await getAddressLookupTableAccounts(addressLookupTableAddresses));
             const transaction = new VersionedTransaction(message);
 
             transaction.sign([keypair]);

@@ -12,11 +12,13 @@
         "@ai-sdk/openai": "^1.0.4",
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/plugin-erc20": "workspace:*",
+        "@goat-sdk/plugin-spl-token": "workspace:*",
+        "@goat-sdk/plugin-jupiter": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
         "ai": "catalog:",
         "bip39": "^3.1.0",
+        "bs58": "^6.0.0",
         "dotenv": "^16.4.5"
     }
 }
