@@ -1,5 +1,13 @@
 # @goat-sdk/adapter-vercel-ai
 
+## 0.1.9
+
+### Patch Changes
+
+- a66ceec: Fix jupiter swap tokens tx
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.1.8
 
 ### Patch Changes

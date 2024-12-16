@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.2.4
 
 ### Patch Changes

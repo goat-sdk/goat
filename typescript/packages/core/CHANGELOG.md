@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.3.15
+
+### Patch Changes
+
+- a66ceec: Fix jupiter swap tokens tx
+
 ## 0.3.14
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # goat-examples-vercel-ai-solana
 
+## 0.1.6
+
+### Patch Changes
+
+- a66ceec: Fix jupiter swap tokens tx
+- Updated dependencies [a66ceec]
+  - @goat-sdk/adapter-vercel-ai@0.1.9
+  - @goat-sdk/plugin-spl-token@0.0.5
+  - @goat-sdk/plugin-jupiter@0.0.4
+  - @goat-sdk/wallet-solana@0.1.9
+  - @goat-sdk/core@0.3.15
+
 ## 0.1.5
 
 ### Patch Changes

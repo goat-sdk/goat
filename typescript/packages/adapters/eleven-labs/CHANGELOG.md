@@ -1,5 +1,12 @@
 # @goat-sdk/adapter-eleven-labs
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.1.6
 
 ### Patch Changes

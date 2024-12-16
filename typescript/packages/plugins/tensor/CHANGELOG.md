@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-tensor
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [a66ceec]
+  - @goat-sdk/core@0.3.15
+
 ## 0.0.3
 
 ### Patch Changes
