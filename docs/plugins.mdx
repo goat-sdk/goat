@@ -21,29 +21,23 @@ See all available plugins [here](/chains-wallets-plugins#plugins).
 ----
 
 ## Plugin Architecture
-Plugins implement the `Plugin` interface defined in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/plugins/plugins.ts):
+Plugins extend the `PluginBase` class defined in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/classes/PluginBase.ts):
 
 ```typescript
-/**
- * Plugin interface that can be chain-specific or chain-agnostic.
- * Defaults to WalletClient for chain-agnostic plugins.
- *
- * @param TWalletClient - The type of wallet client to support. Defaults to WalletClient for chain-agnostic plugins.
- * @param name - The name of the plugin.
- * @param supportsChain - A function that returns true if the plugin supports the given chain.
- * @param supportsSmartWallets - A function that returns true if the plugin supports smart wallets.
- * @param getTools - A function that returns the tools provided by the plugin.
- */
-export interface Plugin<TWalletClient extends WalletClient = WalletClient> {
-    name: string;
-    supportsChain: (chain: Chain) => boolean;
-    supportsSmartWallets: () => boolean;
-    getTools: (wallet: TWalletClient) => Promise<Tool[]>;
+import { PluginBase } from "@goat-sdk/core";
+
+export class YourPlugin extends PluginBase<EVMWalletClient> {
+    constructor(params: YourPluginParams) {
+        super("yourPlugin", []);
+    }
+
+    supportsChain = (chain: Chain) => chain.type === "evm";
 }
 
+export const yourPlugin = (params: YourPluginParams) => new YourPlugin(params);
 ```
 
-Plugins get passed a [WalletClient](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets/core.ts) interface that can be EVM/Solana specific or chain-agnostic.
+Plugins get passed a [WalletClient](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/classes/WalletClientBase.ts) that can be chain-specific or chain-agnostic.
 
 The WalletClient abstracts the underlying wallet implementation and provides a common interface to:
 1. Get wallet information
@@ -61,85 +55,133 @@ Building a custom GOAT plugin is straightforward. Below, we'll walk you through 
 
 <Steps>
   <Step title="Define the plugin interface">
-  Start by defining your plugin using the [Plugin](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/plugins/plugins.ts) interface.
+  Start by defining your plugin extending the [PluginBase](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/classes/PluginBase.ts) class.
 
   Since we are just signing messages, we will create a chain-agnostic plugin that works both on EVM and Solana chains.
 
 ```typescript
-import type { Plugin, WalletClient, Chain } from '@goat-sdk/core';
+import { PluginBase, WalletClientBase } from "@goat-sdk/core";
 
-function baaaSigner(): Plugin<WalletClient> { // We use the WalletClient interface for chain-agnostic plugins
-    return {
-        name: "Sign Message with BAAAA",
-        supportsChain: (chain: Chain) => ["evm", "solana"].includes(chain.type),
-        supportsSmartWallets: () => true,
-        getTools: async (walletClient: WalletClient) => {
-            return [];
-        },
-    };
+// Since we are creating a chain-agnostic plugin, we can use the WalletClientBase interface
+export class BAAAASigner extends PluginBase<WalletClientBase> {
+    constructor() {
+        // We define the name of the plugin
+        super("baaaSigner", []);
+    }
+
+    // We define the chain support for the plugin, in this case we support all chains
+    supportsChain = (chain: Chain) => true;
 }
+
+// We export a factory function to create a new instance of the plugin
+export const baaaSigner = () => new BAAAASigner();
 ```
   </Step>
   <Step title="Add tools to the plugin">
-    The `getTools` method returns an array of tools that will be added to the agent.
+    There are two ways to add tools to the plugin:
+    1. Using the `getTools` and `createTool` functions
+    2. Using the `@Tool` decorator on our own class
 
-    Tools have the following interface:
-    <Note>
-    It's important to note that the description uses `{{tool}}` to refer to the tool name. This is a placeholder gets replaced by the words action or tool depending on the adapter being used.
-    </Note>
+    #### Option 1: Using the `getTools` and `createTool` functions
+    We will start by implementing the `getTools` method in our plugin class.
+
+    Inside the method, we will return an array of tools created using the `createTool` function.
     ```typescript
-    export type Tool<TResult = any> = {
-        name: string;
-        description: string;
-        parameters: z.ZodSchema;
-        method: (parameters: z.infer<z.ZodSchema>) => TResult | Promise<TResult>;
-    };
-    ```
+    import { PluginBase, WalletClientBase, createTool } from "@goat-sdk/core";
 
-    For our example, we will create a tool that signs a message with "BAAAA" 🐐 prefixed to it.
+// Since we are creating a chain-agnostic plugin, we can use the WalletClientBase interface
+export class BAAAASigner extends PluginBase<WalletClientBase> {
+        constructor() {
+            // We define the name of the plugin
+            super("baaaSigner", []);
+        }
 
-    ```typescript
-    import { z } from "zod";
-    import type { Plugin, WalletClient, Chain } from "@goat-sdk/core";
+        // We define the chain support for the plugin, in this case we support all chains
+        supportsChain = (chain: Chain) => true;
 
-    export function signMessagePlugin(): Plugin<WalletClient> {
-        return {
-            name: "Sign Message with BAAAA",
-            supportsChain: (chain: Chain) => ["evm", "solana"].includes(chain.type),
-            supportsSmartWallets: () => true,
-            getTools: async (walletClient: WalletClient) => {
-                return [
+        getTools(walletClient: WalletClientBase) {
+            return [
+                // Create tool requires two arguments:
+                // 1. The tool metadata (name, description, parameters)
+                // 2. The tool method (the function that will be executed when the tool is used)
+                createTool(
                     {
                         name: "sign_message_baaaa",
-                        description: "This {{tool}} signs a message with 'BAAAA' prefix",
+                        description: "Sign a message with 'BAAAA' prefix",
                         parameters: z.object({
                             message: z.string(),
                         }),
-                        method: async (parameters) => {
-                            const originalMessage: string = parameters.message;
-                            const prefixedMessage = `BAAAA${originalMessage}`;
-                            const signed = await walletClient.signMessage(prefixedMessage);
-                            return signed.signedMessage;
-                        },
                     },
-                ];
-            },
-        };
+                    async (parameters) => {
+                        const originalMessage: string = parameters.message;
+                        const prefixedMessage = `BAAAA${originalMessage}`;
+                        const signed = await walletClient.signMessage(prefixedMessage);
+                        return signed.signedMessage;
+                    },
+                ),
+            ];
+        }
+}
+
+// We export a factory function to create a new instance of the plugin
+export const baaaSigner = () => new BAAAASigner();
+    ```
+
+    #### Option 2: Using the `@Tool` decorator
+    The `@Tool` decorator is a way to create tools in a more declarative way.
+    You can create a class and decorate its methods with the `@Tool` decorator to create tools.
+    The tool methods will receive the wallet client as the first argument and the parameters as the second argument.
+
+    ```typescript
+    import { Tool } from "@goat-sdk/core";
+
+    class MyTools {
+        @Tool({
+            name: "sign_message_baaaa",
+            description: "Sign a message with 'BAAAA' prefix",
+            parameters: z.object({
+                message: z.string(),
+            }),
+        })
+        async signMessage(walletClient: WalletClientBase, parameters: z.infer<typeof parameters>) {
+            const originalMessage: string = parameters.message;
+            const prefixedMessage = `BAAAA${originalMessage}`;
+            const signed = await walletClient.signMessage(prefixedMessage);
+            return signed.signedMessage;
+        }
     }
+    ```
+
+    Once we have our class we now need to import it in our plugin class.
+
+ ```typescript
+    import { PluginBase, WalletClientBase } from "@goat-sdk/core";
+    import { MyTools } from "./my-tools.service.ts";
+
+export class BAAAASigner extends PluginBase<WalletClientBase> {
+        constructor() {
+            // Import the tools we created in the previous step here
+            super("baaaSigner", [new MyTools()]);
+        }
+
+        supportsChain = (chain: Chain) => true;
+}
+
+export const baaaSigner = () => new BAAAASigner();
     ```
   </Step>
   <Step title="Add the plugin to the agent">
 
     ```typescript
 import { getOnChainTools } from '@goat-sdk/adapter-vercel-ai';
-import { signMessagePlugin } from './your-plugin-path/signMessagePlugin'; // Path to your plugin
+import { baaaSigner } from './your-plugin-path/signMessagePlugin'; // Path to your plugin
 
 const wallet = /* Initialize your wallet client */;
 
 const tools = getOnChainTools({
     wallet: viem(wallet), // or smartwallet(wallet), solana(wallet), etc.
     plugins: [
-        signMessagePlugin(),
+        baaaSigner(),
         // ...other plugins
     ],
 });

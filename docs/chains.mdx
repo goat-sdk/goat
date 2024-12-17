@@ -9,51 +9,37 @@ Here are the changes you need to make to support a new chain:
 
 <Steps>
 <Step>
-Add your chain to the `chain.ts` file in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets/chain.ts).
+Add your chain to the `Chain.ts` file in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/types/Chain.ts).
 
 ```typescript
 /**
  * @param type - "evm" or "solana", extend this union as needed (e.g., "sui")
  * @param id - Chain ID, optional for EVM
  */
-export type Chain = {
-    type: "evm" | "solana" | "aptos" | "chromia" | "my-awesome-chain";
-    id?: number; // optional for EVM
+export type Chain = EvmChain | SolanaChain | AptosChain | ChromiaChain | MyAwesomeChain;
+
+export type MyAwesomeChain = {
+    type: "my-awesome-chain";
 };
 ```
 </Step>
 
 <Step>
-In the same file, update the `getChainToken` function to return the token for your chain.
+Create a new package in the [wallets directory](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets) with the name of your chain (e.g. `my-awesome-chain`) or copy an existing one (e.g. `evm`).
+In this package you will define the abstract class for your chain's wallet client which will extend the `WalletClientBase` class defined in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/classes/WalletClientBase.ts).
 
-```typescript
-export function getChainToken(chain: Chain): ChainToken {
-    //...
-    case "my-awesome-chain":
-        return {
-            symbol: "AWESOME",
-            name: "Awesome Token",
-            decimals: 13,
-        };
-    //...
-}
-```
-</Step>
-
-<Step>
-Create a new file in the [wallets](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets) directory with the name of your chain (e.g. `my-awesome-chain.ts`). 
-In it you will define the interface for your chain's wallet client which will extend the `WalletClient` interface defined in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/wallets/core.ts).
-
-WalletClient only includes the methods that are supported by all chains such as:
+WalletClientBase only includes the methods that are supported by all chains such as:
 1. `getAddress`
 2. `getChain`
 3. `signMessage`
 4. `balanceOf`
 
-```typescript
-export interface MyAwesomeChainWalletClient extends WalletClient {
+As well as includes the `getCoreTools` method which returns the core tools for the chain.
 
+```typescript
+export abstract class MyAwesomeChainWalletClient extends WalletClientBase {
     // Add your chain's methods here
+    abstract getChain(): MyAwesomeChain;
     sendTransaction: (transaction: AwesomeChainTransaction) => Promise<Transaction>;
     read: (query: AwesomeChainQuery) => Promise<AwesomeChainResponse>;
 }
@@ -61,40 +47,47 @@ export interface MyAwesomeChainWalletClient extends WalletClient {
 </Step>
 
 <Step>
-Create a core plugin to allow sending your native token to a wallet. Go into the [core-plugins directory in core](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/core-plugins) and create a new file like `send-<native-token>.ts`.
+Create a plugin to allow sending your native token to a wallet. Create a file in the same package as your wallet client and create a new file like `send<native-token>.plugin.ts`.
 
 Implement the core plugin.
 
 
 ```typescript
-xport function send{Native-Token}(): Plugin<MyAwesomeChainWalletClient> {
-    return {
-        name: "send_<native-token>",
-        supportsSmartWallets: () => false, // or true if your chain supports smart wallets
-        supportsChain: (chain: Chain) => chain.type === "my-awesome-chain",
-        getTools: async (walletClient: MyAwesomeChainWalletClient) => {
-            return [
-                {
-                    name: "send_<native-token>",
-                    description: "This {{tool}} sends <native-token> to an address.",
-                    parameters: ...,
-                    method: (parameters: z.infer<typeof sendETHParametersSchema>) =>
-                        ...,
-                },
-            ];
-        },
-    };
+export class SendAWESOMETOKENPlugin extends PluginBase<MyAwesomeChainWalletClient> {
+    constructor() {
+        super("sendAWESOMETOKEN", []);
+    }
+
+    supportsChain = (chain: Chain) => chain.type === "my-awesome-chain";
+
+    getTools(walletClient: MyAwesomeChainWalletClient) {
+        const sendTool = createTool(
+            {
+                name: `send_myawesometoken`,
+                description: `Send MYAWESOMETOKEN to an address.`,
+                parameters: sendAWESOMETOKENParametersSchema, // Define the parameters schema
+            },
+            // Implement the method
+            (parameters: z.infer<typeof sendAWESOMETOKENParametersSchema>) => sendAWESOMETOKENMethod(walletClient, parameters),
+        );
+        return [sendTool];
+    }
 }
 ```
 </Step>
 <Step>
-Import your core plugin in the [core package](https://github.com/goat-sdk/goat/tree/main/typescript/packages/core/src/index.ts).
+Extend your abstract class with the methods you need to implement and create your first wallet client! (e.g `MyAwesomeChainKeyPairWalletClient`)
 
 ```typescript
-export * from "./core-plugins/send-<native-token>";
+export class MyAwesomeChainKeyPairWalletClient extends MyAwesomeChainWalletClient {
+    // Implement the methods here
+}
+
+// Export the wallet client with a factory function
+export const myAwesomeChain = () => new MyAwesomeChainKeyPairWalletClient();
 ```
 </Step>
 <Step>
-And you're done! Now you can go and implement [wallet clients](/wallets) and [plugins](/plugins) for your chain!
+And you're done! Now you can go and implement other [wallet clients](/wallets) and [plugins](/plugins) for your chain!
 </Step>
 </Steps>
