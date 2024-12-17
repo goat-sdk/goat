@@ -1,5 +1,21 @@
 # goat-examples-langchain-lit
 
+## 0.1.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/wallet-lit@1.0.0
+  - @goat-sdk/adapter-langchain@1.0.0
+  - @goat-sdk/wallet-solana@1.0.0
+  - @goat-sdk/plugin-erc20@1.0.0
+  - @goat-sdk/wallet-evm@1.0.0
+  - @goat-sdk/core@0.4.0
+
 ## 0.0.4
 
 ### Patch Changes
