@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "crypto": "^1.0.1",
         "viem": "catalog:",
         "zod": "catalog:"

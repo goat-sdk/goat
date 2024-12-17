@@ -1,4 +1,4 @@
-import type { EVMWalletClient, Tool } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import type { z } from "zod";
 
 import type { ApiKeyCredentials } from "./api";
@@ -11,61 +11,62 @@ import {
     getOpenOrdersParametersSchema,
 } from "./parameters";
 
+import { ToolBase, createTool } from "@goat-sdk/core";
 import { cancelAllOrders, cancelOrder, createOrder, getEvents, getMarketInfo, getOpenOrders } from "./api";
 
 export type PolymarketToolsOptions = {
     credentials: ApiKeyCredentials;
 };
 
-export function getTools(walletClient: EVMWalletClient, { credentials }: PolymarketToolsOptions): Tool[] {
+export function getTools(walletClient: EVMWalletClient, { credentials }: PolymarketToolsOptions): ToolBase[] {
     return [
-        {
-            name: "get_polymarket_events",
-            description: "This {{tool}} gets the events on Polymarket including their markets",
-            parameters: getEventsParametersSchema,
-            method: async (parameters: z.infer<typeof getEventsParametersSchema>) => {
-                return getEvents(parameters);
+        createTool(
+            {
+                name: "get_polymarket_events",
+                description: "This {{tool}} gets the events on Polymarket including their markets",
+                parameters: getEventsParametersSchema,
             },
-        },
-        {
-            name: "get_polymarket_market_info",
-            description: "This {{tool}} gets the info of a specific market on Polymarket",
-            parameters: getMarketInfoParametersSchema,
-            method: async (parameters: z.infer<typeof getMarketInfoParametersSchema>) => {
-                return getMarketInfo(walletClient, parameters);
+            (parameters) => getEvents(parameters),
+        ),
+        createTool(
+            {
+                name: "get_polymarket_market_info",
+                description: "This {{tool}} gets the info of a specific market on Polymarket",
+                parameters: getMarketInfoParametersSchema,
             },
-        },
-        {
-            name: "create_order_on_polymarket",
-            description: "This {{tool}} creates an order on Polymarket",
-            parameters: createOrderParametersSchema,
-            method: async (parameters: z.infer<typeof createOrderParametersSchema>) => {
-                return createOrder(walletClient, credentials, parameters);
+            (parameters) => getMarketInfo(walletClient, parameters),
+        ),
+        createTool(
+            {
+                name: "create_order_on_polymarket",
+                description: "This {{tool}} creates an order on Polymarket",
+                parameters: createOrderParametersSchema,
             },
-        },
-        {
-            name: "get_active_polymarket_orders",
-            description: "This {{tool}} gets the active orders on Polymarket",
-            parameters: getOpenOrdersParametersSchema,
-            method: async (parameters: z.infer<typeof getOpenOrdersParametersSchema>) => {
-                return getOpenOrders(walletClient, credentials, parameters);
+            (parameters) => createOrder(walletClient, credentials, parameters),
+        ),
+        createTool(
+            {
+                name: "get_active_polymarket_orders",
+                description: "This {{tool}} gets the active orders on Polymarket",
+                parameters: getOpenOrdersParametersSchema,
             },
-        },
-        {
-            name: "cancel_polymarket_order",
-            description: "This {{tool}} cancels an order on Polymarket",
-            parameters: cancelOrderParametersSchema,
-            method: async (parameters: z.infer<typeof cancelOrderParametersSchema>) => {
-                return cancelOrder(walletClient, credentials, parameters);
+            (parameters) => getOpenOrders(walletClient, credentials, parameters),
+        ),
+        createTool(
+            {
+                name: "cancel_polymarket_order",
+                description: "This {{tool}} cancels an order on Polymarket",
+                parameters: cancelOrderParametersSchema,
             },
-        },
-        {
-            name: "cancel_all_polymarket_orders",
-            description: "This {{tool}} cancels all orders on Polymarket",
-            parameters: cancelAllOrdersParametersSchema,
-            method: async (_parameters: z.infer<typeof cancelAllOrdersParametersSchema>) => {
-                return cancelAllOrders(walletClient, credentials);
+            (parameters) => cancelOrder(walletClient, credentials, parameters),
+        ),
+        createTool(
+            {
+                name: "cancel_all_polymarket_orders",
+                description: "This {{tool}} cancels all orders on Polymarket",
+                parameters: cancelAllOrdersParametersSchema,
             },
-        },
+            (_parameters) => cancelAllOrders(walletClient, credentials),
+        ),
     ];
 }

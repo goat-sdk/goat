@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import type { EVMWalletClient } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { polygon } from "viem/chains";
 import { IntSide, Side, type TickSize } from "./api";
 

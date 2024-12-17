@@ -1,4 +1,5 @@
-import type { Chain, EVMWalletClient } from "@goat-sdk/core";
+import type { Chain, EvmChain } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { parseUnits } from "viem";
 import { polygon } from "viem/chains";
 import type { z } from "zod";
@@ -22,7 +23,7 @@ import {
 
 const GAMMA_URL = "https://gamma-api.polymarket.com";
 
-function getBaseUrl(chain: Chain): string {
+function getBaseUrl(chain: EvmChain): string {
     return chain.id === polygon.id ? "https://clob.polymarket.com" : "https://clob-staging.polymarket.com";
 }
 
@@ -80,7 +81,7 @@ export const ORDER_STRUCTURE = [
 export const PROTOCOL_NAME = "Polymarket CTF Exchange";
 export const PROTOCOL_VERSION = "1";
 
-async function getHostTimestamp(chain: Chain): Promise<number> {
+async function getHostTimestamp(chain: EvmChain): Promise<number> {
     const response = await fetch(`${getBaseUrl(chain)}/time`);
     const data = await response.text();
     return Number.parseInt(data, 10);
@@ -123,7 +124,7 @@ async function createL2Headers(
     return headers;
 }
 
-async function getTickSize(chain: Chain, tokenId: string) {
+async function getTickSize(chain: EvmChain, tokenId: string) {
     const url = `${getBaseUrl(chain)}/tick-size/${tokenId}`;
     const response = await fetch(url.toString());
     if (!response.ok) {
@@ -134,7 +135,7 @@ async function getTickSize(chain: Chain, tokenId: string) {
     return result.minimum_tick_size;
 }
 
-async function getNegativeRiskAdapter(chain: Chain, tokenId: string) {
+async function getNegativeRiskAdapter(chain: EvmChain, tokenId: string) {
     const url = `${getBaseUrl(chain)}/neg-risk/${tokenId}`;
     const response = await fetch(url.toString());
 

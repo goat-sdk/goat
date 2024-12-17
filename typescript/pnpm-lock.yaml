@@ -591,6 +591,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
       crypto:
         specifier: ^1.0.1
         version: 1.0.1
