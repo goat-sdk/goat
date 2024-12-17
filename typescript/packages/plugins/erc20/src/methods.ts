@@ -1,4 +1,4 @@
-import type { EVMWalletClient } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { formatUnits, parseUnits } from "viem";
 import type { z } from "zod";
 import { ERC20_ABI } from "./abi";
