@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
-import { UniswapCtorParams } from "./types/UniswapCtorParams";
 import { CheckApprovalBodySchema, GetQuoteBodySchema, GetSwapBodySchema } from "./parameters";
+import { UniswapCtorParams } from "./types/UniswapCtorParams";
 
 export class UniswapService {
     constructor(private readonly params: UniswapCtorParams) {}
