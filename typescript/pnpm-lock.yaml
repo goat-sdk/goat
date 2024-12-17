@@ -177,9 +177,15 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       '@goat-sdk/wallet-lit':
         specifier: workspace:*
         version: link:../../../packages/wallets/lit-protocol
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/solana
       '@langchain/core':
         specifier: 'catalog:'
         version: 0.3.6(openai@4.73.0(zod@3.23.8))
@@ -195,6 +201,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      ethers:
+        specifier: 5.7.2
+        version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       langchain:
         specifier: ^0.3.2
         version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(openai@4.73.0(zod@3.23.8))
@@ -213,6 +222,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -303,9 +315,6 @@ importers:
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
         version: link:../../../packages/plugins/coingecko
-      '@goat-sdk/plugin-erc20':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/erc20
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem

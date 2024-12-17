@@ -1,7 +1,7 @@
 import { WalletClientBase } from "@goat-sdk/core";
 import { AddressLookupTableAccount, type Connection, PublicKey } from "@solana/web3.js";
-import type { SolanaTransaction } from "./types";
 import { formatUnits } from "viem";
+import type { SolanaTransaction } from "./types";
 
 export type SolanWalletClientCtorParams = {
     connection: Connection;

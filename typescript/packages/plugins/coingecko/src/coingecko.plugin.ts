@@ -1,14 +1,18 @@
 import { PluginBase } from "@goat-sdk/core";
 import { CoinGeckoService } from "./coingecko.service";
 
+interface CoingeckoPluginOptions {
+    apiKey: string;
+}
+
 export class CoinGeckoPlugin extends PluginBase {
-    constructor(apiKey: string) {
+    constructor({ apiKey }: CoingeckoPluginOptions) {
         super("coingecko", [new CoinGeckoService(apiKey)]);
     }
 
     supportsChain = () => true;
 }
 
-export function coingecko(apiKey: string) {
-    return new CoinGeckoPlugin(apiKey);
+export function coingecko(options: CoingeckoPluginOptions) {
+    return new CoinGeckoPlugin(options);
 }

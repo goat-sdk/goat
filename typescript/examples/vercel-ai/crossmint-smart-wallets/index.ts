@@ -2,9 +2,9 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { crossmint } from "@goat-sdk/crossmint";
 import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
+import { sendETH } from "@goat-sdk/wallet-evm";
 
 require("dotenv").config();
 

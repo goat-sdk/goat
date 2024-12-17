@@ -2,7 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { solana, sendSOL } from "@goat-sdk/wallet-solana";
+import { sendSOL, solana } from "@goat-sdk/wallet-solana";
 
 import { Connection, Keypair } from "@solana/web3.js";
 
@@ -13,9 +13,7 @@ import base58 from "bs58";
 require("dotenv").config();
 
 const connection = new Connection(process.env.SOLANA_RPC_URL as string);
-const keypair = Keypair.fromSecretKey(
-    base58.decode(process.env.SOLANA_PRIVATE_KEY as string)
-);
+const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_KEY as string));
 
 (async () => {
     const tools = await getOnChainTools({
@@ -23,11 +21,7 @@ const keypair = Keypair.fromSecretKey(
             keypair,
             connection,
         }),
-        plugins: [
-            sendSOL(),
-            jupiter(),
-            splToken({ connection, network: "mainnet" }),
-        ],
+        plugins: [sendSOL(), jupiter(), splToken({ connection, network: "mainnet" })],
     });
 
     const result = await generateText({

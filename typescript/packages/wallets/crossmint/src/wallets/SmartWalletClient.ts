@@ -1,6 +1,6 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
-import { http, Abi, PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
+import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
@@ -272,22 +272,17 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     }
 
     async read(request: EVMReadRequest) {
-        const { address: contractAddress, abi, functionName, args } = request;
-
-        const resolvedContractAddress = await this.resolveAddress(contractAddress);
-
+        const { address, abi, functionName, args } = request;
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
         const result = await this.#viemClient.readContract({
-            address: resolvedContractAddress,
+            address: await this.resolveAddress(address),
             abi,
             functionName,
             args,
         });
 
-        return {
-            value: result,
-        };
+        return { value: result };
     }
 
     async balanceOf(address: string) {

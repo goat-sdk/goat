@@ -1,8 +1,8 @@
 import type { Account, Aptos } from "@aptos-labs/ts-sdk";
 import { WalletClientBase } from "@goat-sdk/core";
+import { formatUnits } from "viem";
 import type { AptosReadRequest } from "./types/AptosReadRequest";
 import type { AptosTransaction } from "./types/AptosTransaction";
-import { formatUnits } from "viem";
 
 export type AptosWalletCtorParams = {
     aptosAccount: Account;
@@ -66,7 +66,7 @@ export class AptosWalletClient extends WalletClientBase {
         const balance = await this.aptosClient.getAccountAPTAmount({
             accountAddress: address,
         });
-        
+
         return {
             decimals: 8,
             symbol: "APT",
