@@ -1,92 +1,98 @@
-import type {
-    Signature,
-    SolanaReadRequest,
-    SolanaReadResult,
-    SolanaTransaction,
-    SolanaTransactionResult,
-    SolanaWalletClient,
-} from "@goat-sdk/core";
-import { type SerializedTransaction, api } from "@lit-protocol/wrapped-keys";
+import { StoredKeyData, api } from "@lit-protocol/wrapped-keys";
 import { PublicKey, Transaction } from "@solana/web3.js";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+import type { SessionSigsMap } from "@lit-protocol/types";
 
 import type { LitSolanaWalletOptions } from "./types";
+import {
+    type SolanaTransaction,
+    SolanaWalletClient,
+} from "@goat-sdk/wallet-solana";
 
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
-export function createSolanaWallet(options: LitSolanaWalletOptions): SolanaWalletClient {
-    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, connection, chain } = options;
+export class LitSolanaWallet extends SolanaWalletClient {
+    private litNodeClient: LitNodeClient;
+    private pkpSessionSigs: SessionSigsMap;
+    private wrappedKeyMetadata: StoredKeyData & { wrappedKeyAddress: string };
+    private chain: "devnet" | "mainnet-beta" | "testnet";
 
-    return {
-        getAddress: () => wrappedKeyMetadata.publicKey,
-        getChain: () => ({
-            type: "solana",
-        }),
-        async signMessage(message: string): Promise<Signature> {
-            return {
-                signature: await signMessageWithEncryptedKey({
-                    pkpSessionSigs,
-                    network: "solana",
-                    id: wrappedKeyMetadata.id,
-                    messageToSign: message,
-                    litNodeClient,
-                }),
-            };
-        },
-        async sendTransaction({ instructions }: SolanaTransaction): Promise<SolanaTransactionResult> {
-            const latestBlockhash = await connection.getLatestBlockhash("confirmed");
-            const tx = new Transaction();
-            tx.recentBlockhash = latestBlockhash.blockhash;
-            tx.feePayer = new PublicKey(wrappedKeyMetadata.publicKey);
-            tx.add(...instructions);
+    constructor(options: LitSolanaWalletOptions) {
+        super({ connection: options.connection });
+        const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chain } =
+            options;
+        this.litNodeClient = litNodeClient;
+        this.pkpSessionSigs = pkpSessionSigs;
+        this.wrappedKeyMetadata = wrappedKeyMetadata;
+        this.chain = chain;
+    }
 
-            const serializedTransaction = tx
-                .serialize({
-                    requireAllSignatures: false,
-                    verifySignatures: false,
-                })
-                .toString("base64");
-            const litTransaction: SerializedTransaction = {
-                serializedTransaction,
-                chain,
-            };
+    getAddress(): string {
+        return this.wrappedKeyMetadata.publicKey;
+    }
 
-            const signedTransaction = await signTransactionWithEncryptedKey({
-                litNodeClient,
-                pkpSessionSigs,
-                network: "solana",
-                id: wrappedKeyMetadata.id,
-                unsignedTransaction: litTransaction,
-                broadcast: true,
-            });
+    async signMessage(message: string): Promise<{ signature: string }> {
+        const signature = await signMessageWithEncryptedKey({
+            pkpSessionSigs: this.pkpSessionSigs,
+            network: "solana",
+            id: this.wrappedKeyMetadata.id,
+            messageToSign: message,
+            litNodeClient: this.litNodeClient,
+        });
 
-            return {
-                hash: signedTransaction,
-            };
-        },
-        async read(request: SolanaReadRequest): Promise<SolanaReadResult> {
-            const { accountAddress } = request;
+        return { signature };
+    }
 
-            const pubkey = new PublicKey(accountAddress);
-            const accountInfo = await connection.getAccountInfo(pubkey);
+    async sendTransaction({
+        instructions,
+    }: SolanaTransaction): Promise<{ hash: string }> {
+        const latestBlockhash = await this.connection.getLatestBlockhash(
+            "confirmed"
+        );
+        const tx = new Transaction();
+        tx.recentBlockhash = latestBlockhash.blockhash;
+        tx.feePayer = new PublicKey(this.wrappedKeyMetadata.publicKey);
+        tx.add(...instructions);
 
-            if (!accountInfo) {
-                throw new Error(`Account ${accountAddress} not found`);
-            }
+        const serializedTransaction = tx
+            .serialize({
+                requireAllSignatures: false,
+                verifySignatures: false,
+            })
+            .toString("base64");
 
-            return {
-                value: accountInfo,
-            };
-        },
-        async balanceOf(address: string) {
-            const pubkey = new PublicKey(address);
-            const balance = await connection.getBalance(pubkey);
+        const litTransaction = {
+            serializedTransaction,
+            chain: this.chain,
+        };
 
-            return {
-                decimals: 9,
-                symbol: "SOL",
-                name: "Solana",
-                value: BigInt(balance),
-            };
-        },
-    };
+        const signedTransaction = await signTransactionWithEncryptedKey({
+            litNodeClient: this.litNodeClient,
+            pkpSessionSigs: this.pkpSessionSigs,
+            network: "solana",
+            id: this.wrappedKeyMetadata.id,
+            unsignedTransaction: litTransaction,
+            broadcast: true,
+        });
+
+        return {
+            hash: signedTransaction,
+        };
+    }
+
+    async balanceOf(address: string) {
+        const pubkey = new PublicKey(address);
+        const balance = await this.connection.getBalance(pubkey);
+
+        return {
+            decimals: 9,
+            symbol: "SOL",
+            name: "Solana",
+            value: BigInt(balance),
+        };
+    }
+}
+
+export function createSolanaWallet(options: LitSolanaWalletOptions) {
+    return new LitSolanaWallet(options);
 }

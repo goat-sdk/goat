@@ -1,4 +1,5 @@
-import type { EVMWalletClient, SolanaWalletClient } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import type { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 
 import { createEVMWallet } from "./evm";
 import { createSolanaWallet } from "./solana";

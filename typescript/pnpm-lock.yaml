@@ -768,6 +768,12 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../evm
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../solana
       '@lit-protocol/auth-helpers':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)

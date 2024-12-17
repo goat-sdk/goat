@@ -80,6 +80,10 @@
             "path": "./typescript/packages/wallets/solana"
         },
         {
+            "name": "[Wallet] 🪨 evm",
+            "path": "./typescript/packages/wallets/evm"
+        },
+        {
             "name": "[Wallet] 💳 viem",
             "path": "./typescript/packages/wallets/viem"
         },
