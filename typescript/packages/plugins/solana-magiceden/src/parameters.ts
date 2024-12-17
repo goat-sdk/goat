@@ -1,8 +1,11 @@
+import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
-export const getNftInfoParametersSchema = z.object({
-    mintHash: z.string(),
-});
+export class GetNftInfoParametersSchema extends createToolParameters(
+    z.object({
+        mintHash: z.string(),
+    }),
+) {}
 
 export const getNftInfoResponseSchema = z.array(
     z.object({

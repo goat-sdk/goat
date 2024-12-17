@@ -1,1 +1,2 @@
-export * from "./plugin";
+export * from "./magic-eden.plugin";
+export * from "./parameters";

@@ -558,6 +558,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
       viem:
         specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -570,6 +573,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@jup-ag/api':
         specifier: 6.0.31
         version: 6.0.31
@@ -585,6 +591,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
       crypto:
         specifier: ^1.0.1
         version: 1.0.1
@@ -600,6 +609,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -612,6 +624,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@metaplex-foundation/digital-asset-standard-api':
         specifier: 1.0.0
         version: 1.0.0(@metaplex-foundation/umi@0.9.2)
@@ -642,6 +657,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@solana/spl-token':
         specifier: 0.4.9
         version: 0.4.9(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -657,6 +675,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)

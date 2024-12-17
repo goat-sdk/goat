@@ -1,1 +1,2 @@
-export * from "./plugin";
+export * from "./jupiter.plugin";
+export * from "./parameters";

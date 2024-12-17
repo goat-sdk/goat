@@ -1,0 +1,11 @@
+import { Chain, PluginBase } from "@goat-sdk/core";
+import { TensorService } from "./tensor.service";
+import { TensorPluginCtorParams } from "./types";
+
+export class TensorPlugin extends PluginBase {
+    constructor(params: TensorPluginCtorParams) {
+        super("tensor", [new TensorService(params.apiKey)]);
+    }
+
+    supportsChain = (chain: Chain) => chain.type === "solana";
+}

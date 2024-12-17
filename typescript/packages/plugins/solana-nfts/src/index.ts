@@ -1,1 +1,2 @@
-export * from "./nfts";
+export * from "./solana-nfts.plugin";
+export * from "./parameters";
