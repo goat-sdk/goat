@@ -44,12 +44,12 @@ export function Conversation() {
 
                 tools = await getOnChainTools({
                     wallet: createSolanaWalletFromDynamic(connection, signer),
-                    plugins: [coingecko(process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "")],
+                    plugins: [coingecko({ apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "" })],
                 });
             } else if (isEthereumWallet(primaryWallet)) {
                 tools = await getOnChainTools({
                     wallet: viem(await primaryWallet.getWalletClient()),
-                    plugins: [sendETH(), coingecko(process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "")],
+                    plugins: [sendETH(), coingecko({ apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "" })],
                     options: {
                         logTools: true,
                     },

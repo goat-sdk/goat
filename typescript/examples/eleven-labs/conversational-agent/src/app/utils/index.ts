@@ -1,6 +1,7 @@
 import type { ISolana } from "@dynamic-labs/solana-core";
 import { SolanWalletClientCtorParams, SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { formatUnits } from "viem";
 
 export function createSolanaWalletFromDynamic(connection: Connection, signer: ISolana): SolanaWalletClient {
     const publicKey = signer.publicKey;
@@ -66,7 +67,8 @@ export function createSolanaWalletFromDynamic(connection: Connection, signer: IS
                 decimals: 9,
                 symbol: "SOL",
                 name: "Solana",
-                value: BigInt(balance),
+                value: formatUnits(BigInt(balance), 9),
+                inBaseUnits: balance.toString(),
             };
         }
     }
