@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
         "zod": "catalog:"
     },
