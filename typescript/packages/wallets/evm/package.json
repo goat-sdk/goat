@@ -13,7 +13,9 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "abitype": "^1.0.6"
+        "abitype": "^1.0.6",
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"

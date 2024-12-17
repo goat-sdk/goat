@@ -14,7 +14,9 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@solana/web3.js": "catalog:",
-        "tweetnacl": "^1.0.3"
+        "tweetnacl": "^1.0.3",
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",

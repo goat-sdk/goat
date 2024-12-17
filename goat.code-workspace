@@ -68,6 +68,10 @@
         },
         // Wallets
         {
+            "name": "[Wallet] 🅰 aptos",
+            "path": "./typescript/packages/wallets/aptos"
+        },
+        {
             "name": "[Wallet] 🍀 crossmint",
             "path": "./typescript/packages/wallets/crossmint"
         },

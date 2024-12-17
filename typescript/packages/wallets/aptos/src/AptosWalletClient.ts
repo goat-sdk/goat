@@ -8,7 +8,7 @@ export type AptosWalletCtorParams = {
     aptosClient: Aptos;
 };
 
-export abstract class AptosWalletClient extends WalletClientBase {
+export class AptosWalletClient extends WalletClientBase {
     private aptosAccount: Account;
     aptosClient: Aptos;
 
@@ -16,6 +16,10 @@ export abstract class AptosWalletClient extends WalletClientBase {
         super();
         this.aptosAccount = params.aptosAccount;
         this.aptosClient = params.aptosClient;
+    }
+
+    getAddress() {
+        return this.aptosAccount.accountAddress.toStringLong();
     }
 
     getChain() {
@@ -68,4 +72,8 @@ export abstract class AptosWalletClient extends WalletClientBase {
             value: BigInt(balance),
         };
     }
+}
+
+export function aptos({ aptosAccount, aptosClient }: AptosWalletCtorParams) {
+    return new AptosWalletClient({ aptosAccount, aptosClient });
 }

@@ -14,8 +14,8 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@aptos-labs/ts-sdk": "^1.33.1",
-        "bs58": "^6.0.0",
-        "tweetnacl": "^1.0.3"
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",

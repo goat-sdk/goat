@@ -477,6 +477,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -705,12 +708,12 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-      bs58:
-        specifier: ^6.0.0
-        version: 6.0.0
-      tweetnacl:
-        specifier: ^1.0.3
-        version: 1.0.3
+      viem:
+        specifier: 'catalog:'
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/wallets/chromia:
     dependencies:
@@ -723,6 +726,9 @@ importers:
       postchain-client:
         specifier: 1.20.1
         version: 1.20.1(buffer@6.0.3)(events@3.3.0)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/wallets/crossmint:
     dependencies:
@@ -762,6 +768,12 @@ importers:
       abitype:
         specifier: ^1.0.6
         version: 1.0.6(typescript@5.6.3)(zod@3.23.8)
+      viem:
+        specifier: 'catalog:'
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/wallets/lit-protocol:
     dependencies:
@@ -820,6 +832,12 @@ importers:
       tweetnacl:
         specifier: ^1.0.3
         version: 1.0.3
+      viem:
+        specifier: 'catalog:'
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/wallets/viem:
     dependencies:
