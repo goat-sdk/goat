@@ -1,8 +1,8 @@
 import { Tool } from "@goat-sdk/core";
-import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import type { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { VersionedTransaction } from "@solana/web3.js";
-import { z } from "zod";
-import {
+import type { z } from "zod";
+import type {
     GetNftInfoParametersSchema,
     getBuyListingTransactionResponseSchema,
     getNftInfoResponseSchema,
@@ -13,7 +13,8 @@ export class MagicEdenService {
     constructor(private readonly apiKey?: string) {}
 
     @Tool({
-        description: "Get information about a Solana NFT from the Magic Eden API",
+        description:
+            "Get information about a Solana NFT from the Magic Eden API",
     })
     async getNftListings(parameters: GetNftInfoParametersSchema) {
         let nftInfo: z.infer<typeof getNftInfoResponseSchema>;
@@ -24,12 +25,16 @@ export class MagicEdenService {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
+                        ...(this.apiKey
+                            ? { Authorization: `Bearer ${this.apiKey}` }
+                            : {}),
                     },
-                },
+                }
             );
 
-            nftInfo = (await response.json()) as z.infer<typeof getNftInfoResponseSchema>;
+            nftInfo = (await response.json()) as z.infer<
+                typeof getNftInfoResponseSchema
+            >;
         } catch (error) {
             throw new Error(`Failed to get NFT listings: ${error}`);
         }
@@ -38,9 +43,13 @@ export class MagicEdenService {
     }
 
     @Tool({
-        description: "Gets a transaction to buy a Solana NFT from a listing from the Magic Eden API",
+        description:
+            "Gets a transaction to buy a Solana NFT from a listing from the Magic Eden API",
     })
-    async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParametersSchema) {
+    async getBuyListingTransaction(
+        walletClient: SolanaWalletClient,
+        parameters: GetNftInfoParametersSchema
+    ) {
         const nftInfo = await this.getNftListings(parameters);
 
         const queryParams = new URLSearchParams({
@@ -49,7 +58,9 @@ export class MagicEdenService {
             tokenMint: parameters.mintHash,
             tokenATA: nftInfo.tokenAddress,
             price: nftInfo.price.toString(),
-            ...(nftInfo.auctionHouse ? { auctionHouseAddress: nftInfo.auctionHouse } : {}),
+            ...(nftInfo.auctionHouse
+                ? { auctionHouseAddress: nftInfo.auctionHouse }
+                : {}),
         });
 
         let data: z.infer<typeof getBuyListingTransactionResponseSchema>;
@@ -59,24 +70,31 @@ export class MagicEdenService {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
+                        ...(this.apiKey
+                            ? { Authorization: `Bearer ${this.apiKey}` }
+                            : {}),
                     },
-                },
+                }
             );
 
-            data = (await response.json()) as z.infer<typeof getBuyListingTransactionResponseSchema>;
+            data = (await response.json()) as z.infer<
+                typeof getBuyListingTransactionResponseSchema
+            >;
         } catch (error) {
             throw new Error(`Failed to get buy listing transaction: ${error}`);
         }
 
-        const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(data.v0.tx.data));
+        const versionedTransaction = VersionedTransaction.deserialize(
+            Buffer.from(data.v0.tx.data)
+        );
         const instructions = await decompileVersionedTransactionToInstructions(
             walletClient.connection,
-            versionedTransaction,
+            versionedTransaction
         );
-        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey,
-        );
+        const lookupTableAddresses =
+            versionedTransaction.message.addressTableLookups.map(
+                (lookup) => lookup.accountKey
+            );
 
         return { versionedTransaction, instructions, lookupTableAddresses };
     }

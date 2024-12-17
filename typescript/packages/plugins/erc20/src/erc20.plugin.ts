@@ -1,6 +1,6 @@
-import { Chain, PluginBase } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { Token, getTokensForNetwork } from "./token";
+import { type Chain, PluginBase } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { type Token, getTokensForNetwork } from "./token";
 import { getTools } from "./tools";
 
 export type ERC20PluginCtorParams = {

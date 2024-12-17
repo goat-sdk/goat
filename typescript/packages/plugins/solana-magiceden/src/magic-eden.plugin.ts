@@ -1,4 +1,4 @@
-import { Chain, PluginBase } from "@goat-sdk/core";
+import { type Chain, PluginBase } from "@goat-sdk/core";
 import { MagicEdenService } from "./magic-eden.service";
 
 export class MagicEdenPlugin extends PluginBase {

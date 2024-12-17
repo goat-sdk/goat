@@ -162,3 +162,15 @@ const mintingChainIds = new Set(mintingChains.map((chainName) => chainMap[chainN
 export function isChainSupportedByMinting(chainId: number): boolean {
     return mintingChainIds.has(chainId);
 }
+
+export function getTestnetChainNameById(chainId: number): string | null {
+    const testnetChainIdMap: Record<number, string> = {
+        421614: "arbitrum-sepolia",
+        84532: "base-sepolia",
+        11155111: "ethereum-sepolia",
+        11155420: "optimism-sepolia",
+        999999999: "zora-sepolia",
+    };
+
+    return testnetChainIdMap[chainId] || null;
+}

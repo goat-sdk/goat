@@ -13,7 +13,8 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@crossmint/common-sdk-base": "0.3.1",
-        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
         "abitype": "^1.0.6",
         "bs58": "^6.0.0",

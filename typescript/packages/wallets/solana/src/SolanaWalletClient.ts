@@ -1,5 +1,5 @@
 import { WalletClientBase } from "@goat-sdk/core";
-import { type Connection, PublicKey } from "@solana/web3.js";
+import { AddressLookupTableAccount, type Connection, PublicKey } from "@solana/web3.js";
 import type { SolanaTransaction } from "./types";
 
 export type SolanWalletClientCtorParams = {
@@ -32,5 +32,35 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         };
     }
 
-    abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;
+    abstract sendTransaction(
+        transaction: SolanaTransaction
+    ): Promise<{ hash: string }>;
+
+    protected async getAddressLookupTableAccounts(
+        keys: string[]
+    ): Promise<AddressLookupTableAccount[]> {
+        const addressLookupTableAccountInfos =
+            await this.connection.getMultipleAccountsInfo(
+                keys.map((key) => new PublicKey(key))
+            );
+
+        return addressLookupTableAccountInfos.reduce(
+            (acc, accountInfo, index) => {
+                const addressLookupTableAddress = keys[index];
+                if (accountInfo) {
+                    const addressLookupTableAccount =
+                        new AddressLookupTableAccount({
+                            key: new PublicKey(addressLookupTableAddress),
+                            state: AddressLookupTableAccount.deserialize(
+                                accountInfo.data
+                            ),
+                        });
+                    acc.push(addressLookupTableAccount);
+                }
+
+                return acc;
+            },
+            new Array<AddressLookupTableAccount>()
+        );
+    }
 }

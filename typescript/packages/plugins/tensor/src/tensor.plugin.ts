@@ -1,6 +1,6 @@
-import { Chain, PluginBase } from "@goat-sdk/core";
+import { type Chain, PluginBase } from "@goat-sdk/core";
 import { TensorService } from "./tensor.service";
-import { TensorPluginCtorParams } from "./types";
+import type { TensorPluginCtorParams } from "./types";
 
 export class TensorPlugin extends PluginBase {
     constructor(params: TensorPluginCtorParams) {

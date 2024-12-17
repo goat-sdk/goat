@@ -732,6 +732,12 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../evm
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../solana
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -811,9 +817,9 @@ importers:
 
   packages/wallets/viem:
     dependencies:
-      '@goat-sdk/core':
+      '@goat-sdk/wallet-evm':
         specifier: workspace:*
-        version: link:../../core
+        version: link:../evm
       viem:
         specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)

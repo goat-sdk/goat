@@ -1,8 +1,8 @@
 import { Tool } from "@goat-sdk/core";
-import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import type { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { createJupiterApiClient } from "@jup-ag/api";
-import { ComputeBudgetProgram, Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
-import { GetQuoteParameters } from "./parameters";
+import { ComputeBudgetProgram, PublicKey, TransactionInstruction } from "@solana/web3.js";
+import type { GetQuoteParameters } from "./parameters";
 
 export class JupiterService {
     private readonly jupiterApiClient: ReturnType<typeof createJupiterApiClient>;

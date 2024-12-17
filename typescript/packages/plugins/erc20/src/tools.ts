@@ -1,4 +1,11 @@
-import { allowance, approve, balanceOf, totalSupply, transfer, transferFrom } from "./methods";
+import {
+    allowance,
+    approve,
+    balanceOf,
+    totalSupply,
+    transfer,
+    transferFrom,
+} from "./methods";
 import {
     allowanceParametersSchema,
     approveParametersSchema,
@@ -8,12 +15,15 @@ import {
     transferParametersSchema,
 } from "./parameters";
 
-import { ToolBase, createTool } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { type ToolBase, createTool } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import type { z } from "zod";
 import type { ChainSpecificToken } from "./token";
 
-export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecificToken[]): ToolBase[] {
+export function getTools(
+    walletClient: EVMWalletClient,
+    tokenList: ChainSpecificToken[]
+): ToolBase[] {
     const tools: ToolBase[] = [];
 
     for (const token of tokenList) {
@@ -23,7 +33,8 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} gets the balance of ${token.symbol}`,
                 parameters: getBalanceParametersSchema,
             },
-            (parameters: z.infer<typeof getBalanceParametersSchema>) => balanceOf(walletClient, token, parameters),
+            (parameters: z.infer<typeof getBalanceParametersSchema>) =>
+                balanceOf(walletClient, token, parameters)
         );
 
         const transferTool = createTool(
@@ -32,7 +43,8 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} transfers ${token.symbol} to the specified address`,
                 parameters: transferParametersSchema,
             },
-            (parameters: z.infer<typeof transferParametersSchema>) => transfer(walletClient, token, parameters),
+            (parameters: z.infer<typeof transferParametersSchema>) =>
+                transfer(walletClient, token, parameters)
         );
 
         const totalSupplyTool = createTool(
@@ -41,7 +53,8 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} gets the total supply of ${token.symbol}`,
                 parameters: totalSupplyParametersSchema,
             },
-            (parameters: z.infer<typeof totalSupplyParametersSchema>) => totalSupply(walletClient, token),
+            (parameters: z.infer<typeof totalSupplyParametersSchema>) =>
+                totalSupply(walletClient, token)
         );
 
         const allowanceTool = createTool(
@@ -50,7 +63,8 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} gets the allowance of ${token.symbol}`,
                 parameters: allowanceParametersSchema,
             },
-            (parameters: z.infer<typeof allowanceParametersSchema>) => allowance(walletClient, token, parameters),
+            (parameters: z.infer<typeof allowanceParametersSchema>) =>
+                allowance(walletClient, token, parameters)
         );
 
         const approveTool = createTool(
@@ -59,7 +73,8 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} approves the allowance of ${token.symbol}`,
                 parameters: approveParametersSchema,
             },
-            (parameters: z.infer<typeof approveParametersSchema>) => approve(walletClient, token, parameters),
+            (parameters: z.infer<typeof approveParametersSchema>) =>
+                approve(walletClient, token, parameters)
         );
 
         const transferFromTool = createTool(
@@ -68,10 +83,18 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
                 description: `This {{tool}} transfers ${token.symbol} from the specified address`,
                 parameters: transferFromParametersSchema,
             },
-            (parameters: z.infer<typeof transferFromParametersSchema>) => transferFrom(walletClient, token, parameters),
+            (parameters: z.infer<typeof transferFromParametersSchema>) =>
+                transferFrom(walletClient, token, parameters)
         );
 
-        tools.push(balanceTool, transferTool, totalSupplyTool, allowanceTool, approveTool, transferFromTool);
+        tools.push(
+            balanceTool,
+            transferTool,
+            totalSupplyTool,
+            allowanceTool,
+            approveTool,
+            transferFromTool
+        );
     }
 
     return tools;

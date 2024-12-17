@@ -12,11 +12,11 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",

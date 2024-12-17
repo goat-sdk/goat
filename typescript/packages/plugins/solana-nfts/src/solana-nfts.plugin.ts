@@ -1,5 +1,5 @@
-import { Chain, PluginBase } from "@goat-sdk/core";
-import { Connection } from "@solana/web3.js";
+import { type Chain, PluginBase } from "@goat-sdk/core";
+import type { Connection } from "@solana/web3.js";
 import { SolanaNftsService } from "./solana-nfts.service";
 
 export class SolanaNftsPlugin extends PluginBase {
