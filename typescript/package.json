@@ -6,7 +6,8 @@
         "build": "pnpm turbo build",
         "build:libs": "pnpm turbo --filter \"./packages/**\" build",
         "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",
-        "clean": "pnpm turbo clean",
+        "clean:dist": "pnpm rimraf \"**/dist\" --glob",
+        "clean:node_modules": "pnpm rimraf \"**/node_modules\" --glob",
         "change:add": "pnpm changeset add",
         "change:publish": "pnpm build:libs:prod && pnpm changeset publish --no-git-tag",
         "change:version": "pnpm changeset version && pnpm lint:fix",
@@ -21,6 +22,7 @@
         "@types/node": "22.7.4",
         "cross-env": "7.0.3",
         "globals": "15.12.0",
+        "rimraf": "6.0.1",
         "ts-node": "10.9.2",
         "tsc-alias": "1.8.10",
         "tsup": "8.3.5",
@@ -43,10 +45,6 @@
     "bugs": {
         "url": "https://github.com/crossmint/goat/issues"
     },
-    "keywords": [
-        "ai",
-        "agents",
-        "web3"
-    ],
+    "keywords": ["ai", "agents", "web3"],
     "packageManager": "pnpm@9.14.2"
 }

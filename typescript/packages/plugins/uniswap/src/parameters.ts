@@ -1,3 +1,4 @@
+import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
 enum SwapType {
@@ -63,26 +64,32 @@ export const SwapResponseSchema = z.object({
 
 export const TxHashSchema = z.string();
 
-export const CheckApprovalBodySchema = z.object({
-    token: z.string(),
-    amount: z.string(),
-    walletAddress: z.string(),
-});
+export class CheckApprovalBodySchema extends createToolParameters(
+    z.object({
+        token: z.string(),
+        amount: z.string(),
+        walletAddress: z.string(),
+    }),
+) {}
 
-export const GetQuoteBodySchema = z.object({
-    tokenIn: z.string(),
-    tokenOut: z.string(),
-    tokenInChainId: z.number(),
-    tokenOutChainId: z.number(),
-    amount: z.string(),
-    swapper: z.string(),
-    type: z.nativeEnum(SwapType),
-    protocols: z.array(z.nativeEnum(Protocol)),
-});
+export class GetQuoteBodySchema extends createToolParameters(
+    z.object({
+        tokenIn: z.string(),
+        tokenOut: z.string(),
+        tokenInChainId: z.number(),
+        tokenOutChainId: z.number(),
+        amount: z.string(),
+        swapper: z.string(),
+        type: z.nativeEnum(SwapType),
+        protocols: z.array(z.nativeEnum(Protocol)),
+    }),
+) {}
 
-export const GetSwapBodySchema = z.object({
-    quote: QuoteResponseSchema,
-    permitData: z.any().optional(),
-    signature: z.string().optional(),
-    simulateTransaction: z.boolean().optional(),
-});
+export class GetSwapBodySchema extends createToolParameters(
+    z.object({
+        quote: QuoteResponseSchema,
+        permitData: z.any().optional(),
+        signature: z.string().optional(),
+        simulateTransaction: z.boolean().optional(),
+    }),
+) {}
