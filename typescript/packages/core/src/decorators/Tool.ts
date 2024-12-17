@@ -70,6 +70,9 @@ function validateMethodParameters(target: Object, propertyKey: string, descripto
 
     const methodParameters = Reflect.getMetadata("design:paramtypes", target, propertyKey);
 
+    if (methodParameters == null) {
+        throw new Error(`Failed to get parameters for ${logPrefix}.`);
+    }
     if (methodParameters.length === 0) {
         throw new Error(`${logPrefix} has no parameters. ${explainer}`);
     }
@@ -78,10 +81,12 @@ function validateMethodParameters(target: Object, propertyKey: string, descripto
     }
 
     const firstParameter = methodParameters[0];
-    const zodSchema = firstParameter.prototype.constructor.schema as z.ZodSchema | undefined;
 
+    const zodSchema = firstParameter.prototype.constructor.schema as z.ZodSchema | undefined;
     if (zodSchema == null) {
-        throw new Error(`${logPrefix} has a parameter that is not a Zod schema. ${explainer}`);
+        throw new Error(
+            `${logPrefix} has a parameter that is not a Zod schema.\n\n1.) ${explainer}\n\n2.) Ensure that you are not using 'import type' for the parameters.`,
+        );
     }
 
     return zodSchema;
