@@ -1,9 +1,9 @@
 import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
 import { z } from "zod";
+import { ChromiaWalletClient } from "./ChromiaWalletClient";
 import { CHROMIA_MAINNET_BRID } from "./consts";
 import { CHR_ASSET_ID } from "./consts";
-import { ChromiaWalletClient } from "./ChromiaWalletClient";
 
 export class SendCHRPlugin extends PluginBase<ChromiaWalletClient> {
     constructor() {
@@ -21,8 +21,7 @@ export class SendCHRPlugin extends PluginBase<ChromiaWalletClient> {
                 description: "Send CHR to an address.",
                 parameters: sendCHRParametersSchema,
             },
-            (parameters: z.infer<typeof sendCHRParametersSchema>) =>
-                sendCHRMethod(walletClient, parameters)
+            (parameters: z.infer<typeof sendCHRParametersSchema>) => sendCHRMethod(walletClient, parameters),
         );
         return [sendTool];
     }
@@ -37,7 +36,7 @@ const sendCHRParametersSchema = z.object({
 
 async function sendCHRMethod(
     walletClient: ChromiaWalletClient,
-    parameters: z.infer<typeof sendCHRParametersSchema>
+    parameters: z.infer<typeof sendCHRParametersSchema>,
 ): Promise<string> {
     try {
         const { to, amount } = parameters;

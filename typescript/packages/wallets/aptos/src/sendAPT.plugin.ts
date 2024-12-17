@@ -1,8 +1,8 @@
-import { AptosWalletClient } from "./AptosWalletClient";
 import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
-import { z } from "zod";
 import { parseUnits } from "viem";
+import { z } from "zod";
+import { AptosWalletClient } from "./AptosWalletClient";
 
 export class SendAPTPlugin extends PluginBase<AptosWalletClient> {
     constructor() {
@@ -20,8 +20,7 @@ export class SendAPTPlugin extends PluginBase<AptosWalletClient> {
                 description: "Send APT to an address.",
                 parameters: sendAPTParametersSchema,
             },
-            (parameters: z.infer<typeof sendAPTParametersSchema>) =>
-                sendAPTMethod(walletClient, parameters)
+            (parameters: z.infer<typeof sendAPTParametersSchema>) => sendAPTMethod(walletClient, parameters),
         );
         return [sendTool];
     }
@@ -36,7 +35,7 @@ const sendAPTParametersSchema = z.object({
 
 async function sendAPTMethod(
     walletClient: AptosWalletClient,
-    parameters: z.infer<typeof sendAPTParametersSchema>
+    parameters: z.infer<typeof sendAPTParametersSchema>,
 ): Promise<string> {
     try {
         const { to, amount } = parameters;

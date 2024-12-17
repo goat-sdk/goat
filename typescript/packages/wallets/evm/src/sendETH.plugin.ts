@@ -1,8 +1,8 @@
-import { Chain, createTool, PluginBase } from "@goat-sdk/core";
-import { EVMWalletClient } from "./EVMWalletClient";
-import { z } from "zod";
+import { Chain, PluginBase, createTool } from "@goat-sdk/core";
 import { parseEther } from "viem";
 import * as allEVMChains from "viem/chains";
+import { z } from "zod";
+import { EVMWalletClient } from "./EVMWalletClient";
 
 export class SendETHPlugin extends PluginBase<EVMWalletClient> {
     constructor() {
@@ -12,13 +12,13 @@ export class SendETHPlugin extends PluginBase<EVMWalletClient> {
     supportsChain = (chain: Chain) => chain.type === "evm";
 
     getTools(walletClient: EVMWalletClient) {
-        const sendTool = createTool({
-            name: `send_${getChainToken(walletClient.getChain().id).symbol}`,
-            description: `Send ${getChainToken(walletClient.getChain().id).symbol} to an address.`,
-            parameters: sendETHParametersSchema,
-        },
-        (parameters: z.infer<typeof sendETHParametersSchema>) =>
-            sendETHMethod(walletClient, parameters)
+        const sendTool = createTool(
+            {
+                name: `send_${getChainToken(walletClient.getChain().id).symbol}`,
+                description: `Send ${getChainToken(walletClient.getChain().id).symbol} to an address.`,
+                parameters: sendETHParametersSchema,
+            },
+            (parameters: z.infer<typeof sendETHParametersSchema>) => sendETHMethod(walletClient, parameters),
         );
         return [sendTool];
     }
@@ -33,7 +33,7 @@ const sendETHParametersSchema = z.object({
 
 async function sendETHMethod(
     walletClient: EVMWalletClient,
-    parameters: z.infer<typeof sendETHParametersSchema>
+    parameters: z.infer<typeof sendETHParametersSchema>,
 ): Promise<string> {
     try {
         const amount = parseEther(parameters.amount);

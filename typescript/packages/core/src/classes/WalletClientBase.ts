@@ -27,7 +27,7 @@ export abstract class WalletClientBase {
                     description: "Get the address of the wallet",
                     parameters: z.object({}),
                 },
-                () => this.getAddress()
+                () => this.getAddress(),
             ),
             createTool(
                 {
@@ -35,7 +35,7 @@ export abstract class WalletClientBase {
                     description: "Get the chain of the wallet",
                     parameters: z.object({}),
                 },
-                () => this.getChain()
+                () => this.getChain(),
             ),
             createTool(
                 {
@@ -43,7 +43,7 @@ export abstract class WalletClientBase {
                     description: "Get the balance of the wallet",
                     parameters: z.object({ address: z.string() }),
                 },
-                (parameters) => this.balanceOf(parameters.address)
+                (parameters) => this.balanceOf(parameters.address),
             ),
         ];
     }

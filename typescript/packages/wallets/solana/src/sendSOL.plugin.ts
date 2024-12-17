@@ -1,10 +1,10 @@
 import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
-import { z } from "zod";
-import { parseUnits } from "viem";
-import { SolanaWalletClient } from "./SolanaWalletClient";
 import { SystemProgram } from "@solana/web3.js";
 import { PublicKey } from "@solana/web3.js";
+import { parseUnits } from "viem";
+import { z } from "zod";
+import { SolanaWalletClient } from "./SolanaWalletClient";
 
 export class SendSOLPlugin extends PluginBase<SolanaWalletClient> {
     constructor() {
@@ -22,8 +22,7 @@ export class SendSOLPlugin extends PluginBase<SolanaWalletClient> {
                 description: "Send SOL to an address.",
                 parameters: sendSOLParametersSchema,
             },
-            (parameters: z.infer<typeof sendSOLParametersSchema>) =>
-                sendSOLMethod(walletClient, parameters)
+            (parameters: z.infer<typeof sendSOLParametersSchema>) => sendSOLMethod(walletClient, parameters),
         );
         return [sendTool];
     }
@@ -38,7 +37,7 @@ const sendSOLParametersSchema = z.object({
 
 async function sendSOLMethod(
     walletClient: SolanaWalletClient,
-    parameters: z.infer<typeof sendSOLParametersSchema>
+    parameters: z.infer<typeof sendSOLParametersSchema>,
 ): Promise<string> {
     try {
         const { to, amount } = parameters;
