@@ -600,6 +600,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
