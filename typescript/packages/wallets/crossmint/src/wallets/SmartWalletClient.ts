@@ -4,7 +4,7 @@ import { http, Abi, PublicClient, createPublicClient, encodeFunctionData } from 
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
-import { SupportedSmartWalletChains, getViemChain } from "../Chains";
+import { SupportedSmartWalletChains, getViemChain } from "../chains";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
 
 export type CustodialSigner = `0x${string}`;
