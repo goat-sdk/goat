@@ -432,9 +432,6 @@ importers:
       '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
         version: link:../../../packages/plugins/jupiter
-      '@goat-sdk/plugin-meteora':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/meteora
       '@goat-sdk/plugin-spl-token':
         specifier: workspace:*
         version: link:../../../packages/plugins/spl-token
