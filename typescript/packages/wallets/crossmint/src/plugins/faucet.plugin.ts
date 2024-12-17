@@ -1,7 +1,7 @@
-import { Chain, PluginBase } from "@goat-sdk/core";
 import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
+import { Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { isChainSupportedByFaucet } from "../Chains";
+import { isChainSupportedByFaucet } from "../chains";
 import { CrossmintFaucetService } from "./faucet.service";
 
 export class FaucetPlugin extends PluginBase<EVMWalletClient> {

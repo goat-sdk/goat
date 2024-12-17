@@ -1,9 +1,5 @@
 import { Tool } from "@goat-sdk/core";
-import type {
-    CheckApprovalBodySchema,
-    GetQuoteBodySchema,
-    GetSwapBodySchema,
-} from "./parameters";
+import { CheckApprovalBodySchema, GetQuoteBodySchema, GetSwapBodySchema } from "./parameters";
 import type { UniswapCtorParams } from "./types/UniswapCtorParams";
 
 export class UniswapService {

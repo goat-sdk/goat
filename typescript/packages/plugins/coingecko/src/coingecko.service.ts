@@ -1,5 +1,5 @@
 import { Tool } from "@goat-sdk/core";
-import type { GetCoinPriceParameters, GetTrendingCoinsParameters } from "./parameters";
+import { GetCoinPriceParameters, GetTrendingCoinsParameters } from "./parameters";
 
 export class CoinGeckoService {
     constructor(private readonly apiKey: string) {}

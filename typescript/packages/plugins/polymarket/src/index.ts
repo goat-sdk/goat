@@ -1,11 +1,7 @@
 import { type Chain, PluginBase, type ToolBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { polygon } from "viem/chains";
-import {
-    type ApiKeyCredentials,
-    createOrDeriveAPIKey,
-    createOrder,
-} from "./api";
+import { type ApiKeyCredentials, createOrDeriveAPIKey, createOrder } from "./api";
 import { getTools } from "./tools";
 
 export type PolymarketOptions = {

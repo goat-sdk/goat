@@ -1,9 +1,4 @@
-import type {
-    EVMReadRequest,
-    EVMReadResult,
-    EVMTransaction,
-    EVMTypedData,
-} from "@goat-sdk/wallet-evm";
+import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
 import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
 import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
 import { formatEther, isAddress, publicActions } from "viem";
@@ -42,13 +37,9 @@ export class LitEVMWalletClient extends EVMWalletClient {
         this.viemWalletClient = options.viemWalletClient;
     }
 
-    private getPkpAccessControlCondition(
-        pkpAddress: string
-    ): AccsDefaultParams {
+    private getPkpAccessControlCondition(pkpAddress: string): AccsDefaultParams {
         if (!isAddress(pkpAddress)) {
-            throw new Error(
-                `pkpAddress is not a valid Ethereum Address: ${pkpAddress}`
-            );
+            throw new Error(`pkpAddress is not a valid Ethereum Address: ${pkpAddress}`);
         }
 
         return {
@@ -65,8 +56,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
     }
 
     async resolveAddress(address: string): Promise<`0x${string}`> {
-        if (/^0x[a-fA-F0-9]{40}$/.test(address))
-            return address as `0x${string}`;
+        if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
 
         try {
             const resolvedAddress = (await this.viemPublicClient.getEnsAddress({
@@ -81,9 +71,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
         }
     }
 
-    private async waitForReceipt(
-        hash: `0x${string}`
-    ): Promise<{ hash: string; status: string }> {
+    private async waitForReceipt(hash: `0x${string}`): Promise<{ hash: string; status: string }> {
         const receipt = await this.viemPublicClient.waitForTransactionReceipt({
             hash,
         });
@@ -120,11 +108,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
             sessionSigs: this.pkpSessionSigs,
             code: signEip712MessageLitActionCode,
             jsParams: {
-                accessControlConditions: [
-                    this.getPkpAccessControlCondition(
-                        this.wrappedKeyMetadata.pkpAddress
-                    ),
-                ],
+                accessControlConditions: [this.getPkpAccessControlCondition(this.wrappedKeyMetadata.pkpAddress)],
                 ciphertext: this.wrappedKeyMetadata.ciphertext,
                 dataToEncryptHash: this.wrappedKeyMetadata.dataToEncryptHash,
                 messageToSign: JSON.stringify(data),
@@ -136,9 +120,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
         };
     }
 
-    async sendTransaction(
-        transaction: EVMTransaction
-    ): Promise<{ hash: string }> {
+    async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
         const { to, abi, functionName, args, value } = transaction;
         const toAddress = await this.resolveAddress(to);
 

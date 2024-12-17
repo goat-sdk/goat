@@ -10,41 +10,29 @@ import {
 
 import { type ToolBase, createTool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import {
-    cancelAllOrders,
-    cancelOrder,
-    createOrder,
-    getEvents,
-    getMarketInfo,
-    getOpenOrders,
-} from "./api";
+import { cancelAllOrders, cancelOrder, createOrder, getEvents, getMarketInfo, getOpenOrders } from "./api";
 
 export type PolymarketToolsOptions = {
     credentials: ApiKeyCredentials;
 };
 
-export function getTools(
-    walletClient: EVMWalletClient,
-    { credentials }: PolymarketToolsOptions
-): ToolBase[] {
+export function getTools(walletClient: EVMWalletClient, { credentials }: PolymarketToolsOptions): ToolBase[] {
     return [
         createTool(
             {
                 name: "get_polymarket_events",
-                description:
-                    "This {{tool}} gets the events on Polymarket including their markets",
+                description: "This {{tool}} gets the events on Polymarket including their markets",
                 parameters: getEventsParametersSchema,
             },
-            (parameters) => getEvents(parameters)
+            (parameters) => getEvents(parameters),
         ),
         createTool(
             {
                 name: "get_polymarket_market_info",
-                description:
-                    "This {{tool}} gets the info of a specific market on Polymarket",
+                description: "This {{tool}} gets the info of a specific market on Polymarket",
                 parameters: getMarketInfoParametersSchema,
             },
-            (parameters) => getMarketInfo(walletClient, parameters)
+            (parameters) => getMarketInfo(walletClient, parameters),
         ),
         createTool(
             {
@@ -52,16 +40,15 @@ export function getTools(
                 description: "This {{tool}} creates an order on Polymarket",
                 parameters: createOrderParametersSchema,
             },
-            (parameters) => createOrder(walletClient, credentials, parameters)
+            (parameters) => createOrder(walletClient, credentials, parameters),
         ),
         createTool(
             {
                 name: "get_active_polymarket_orders",
-                description:
-                    "This {{tool}} gets the active orders on Polymarket",
+                description: "This {{tool}} gets the active orders on Polymarket",
                 parameters: getOpenOrdersParametersSchema,
             },
-            (parameters) => getOpenOrders(walletClient, credentials, parameters)
+            (parameters) => getOpenOrders(walletClient, credentials, parameters),
         ),
         createTool(
             {
@@ -69,7 +56,7 @@ export function getTools(
                 description: "This {{tool}} cancels an order on Polymarket",
                 parameters: cancelOrderParametersSchema,
             },
-            (parameters) => cancelOrder(walletClient, credentials, parameters)
+            (parameters) => cancelOrder(walletClient, credentials, parameters),
         ),
         createTool(
             {
@@ -77,7 +64,7 @@ export function getTools(
                 description: "This {{tool}} cancels all orders on Polymarket",
                 parameters: cancelAllOrdersParametersSchema,
             },
-            (_parameters) => cancelAllOrders(walletClient, credentials)
+            (_parameters) => cancelAllOrders(walletClient, credentials),
         ),
     ];
 }

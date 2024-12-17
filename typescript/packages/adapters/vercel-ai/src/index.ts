@@ -1,15 +1,9 @@
-import {
-    type GetToolsParams,
-    type ToolBase,
-    type WalletClientBase,
-    getTools,
-} from "@goat-sdk/core";
+import { type GetToolsParams, type ToolBase, type WalletClientBase, getTools } from "@goat-sdk/core";
 
 import { type CoreTool, tool } from "ai";
 import type { z } from "zod";
 
-export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> =
-    GetToolsParams<TWalletClient>;
+export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = GetToolsParams<TWalletClient>;
 
 export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     wallet,

@@ -14,12 +14,10 @@ import type { ChainSpecificToken } from "./token";
 export async function balanceOf(
     walletClient: EVMWalletClient,
     token: ChainSpecificToken,
-    parameters: z.infer<typeof getBalanceParametersSchema>
+    parameters: z.infer<typeof getBalanceParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedWalletAddress = await walletClient.resolveAddress(
-            parameters.wallet
-        );
+        const resolvedWalletAddress = await walletClient.resolveAddress(parameters.wallet);
 
         const rawBalance = await walletClient.read({
             address: token.contractAddress,
@@ -37,14 +35,12 @@ export async function balanceOf(
 export async function transfer(
     walletClient: EVMWalletClient,
     token: ChainSpecificToken,
-    parameters: z.infer<typeof transferParametersSchema>
+    parameters: z.infer<typeof transferParametersSchema>,
 ): Promise<string> {
     try {
         const amountInBaseUnits = parseUnits(parameters.amount, token.decimals);
 
-        const resolvedRecipientAddress = await walletClient.resolveAddress(
-            parameters.to
-        );
+        const resolvedRecipientAddress = await walletClient.resolveAddress(parameters.to);
 
         const hash = await walletClient.sendTransaction({
             to: token.contractAddress,
@@ -59,10 +55,7 @@ export async function transfer(
     }
 }
 
-export async function totalSupply(
-    walletClient: EVMWalletClient,
-    token: ChainSpecificToken
-): Promise<string> {
+export async function totalSupply(walletClient: EVMWalletClient, token: ChainSpecificToken): Promise<string> {
     try {
         const rawTotalSupply = await walletClient.read({
             address: token.contractAddress,
@@ -79,16 +72,12 @@ export async function totalSupply(
 export async function allowance(
     walletClient: EVMWalletClient,
     token: ChainSpecificToken,
-    parameters: z.infer<typeof allowanceParametersSchema>
+    parameters: z.infer<typeof allowanceParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedOwnerAddress = await walletClient.resolveAddress(
-            parameters.owner
-        );
+        const resolvedOwnerAddress = await walletClient.resolveAddress(parameters.owner);
 
-        const resolvedSpenderAddress = await walletClient.resolveAddress(
-            parameters.spender
-        );
+        const resolvedSpenderAddress = await walletClient.resolveAddress(parameters.spender);
 
         const rawAllowance = await walletClient.read({
             address: token.contractAddress,
@@ -106,12 +95,10 @@ export async function allowance(
 export async function approve(
     walletClient: EVMWalletClient,
     token: ChainSpecificToken,
-    parameters: z.infer<typeof approveParametersSchema>
+    parameters: z.infer<typeof approveParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedSpenderAddress = await walletClient.resolveAddress(
-            parameters.spender
-        );
+        const resolvedSpenderAddress = await walletClient.resolveAddress(parameters.spender);
 
         const amountInBaseUnits = parseUnits(parameters.amount, token.decimals);
 
@@ -131,16 +118,12 @@ export async function approve(
 export async function transferFrom(
     walletClient: EVMWalletClient,
     token: ChainSpecificToken,
-    parameters: z.infer<typeof transferFromParametersSchema>
+    parameters: z.infer<typeof transferFromParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedFromAddress = await walletClient.resolveAddress(
-            parameters.from
-        );
+        const resolvedFromAddress = await walletClient.resolveAddress(parameters.from);
 
-        const resolvedToAddress = await walletClient.resolveAddress(
-            parameters.to
-        );
+        const resolvedToAddress = await walletClient.resolveAddress(parameters.to);
 
         const amountInBaseUnits = parseUnits(parameters.amount, token.decimals);
 
