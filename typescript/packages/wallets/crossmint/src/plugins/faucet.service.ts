@@ -2,13 +2,20 @@ import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Tool, createToolParameters } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { z } from "zod";
-import { getTestnetChainNameById } from "../Chains";
+import { getTestnetChainNameById } from "../chains";
 
 export class TopUpBalanceParameters extends createToolParameters(
     z.object({
-        wallet: z.string().optional().describe("The address to top up the balance of"),
-        amount: z.number().min(1).max(100).describe("The amount of tokens to top up"),
-    }),
+        wallet: z
+            .string()
+            .optional()
+            .describe("The address to top up the balance of"),
+        amount: z
+            .number()
+            .min(1)
+            .max(100)
+            .describe("The amount of tokens to top up"),
+    })
 ) {}
 
 export class CrossmintFaucetService {
@@ -17,7 +24,10 @@ export class CrossmintFaucetService {
     @Tool({
         description: "Top up your USDC balance",
     })
-    async topUpUsdc(walletClient: EVMWalletClient, parameters: TopUpBalanceParameters) {
+    async topUpUsdc(
+        walletClient: EVMWalletClient,
+        parameters: TopUpBalanceParameters
+    ) {
         const wallet = parameters.wallet ?? walletClient.getAddress();
         const resolvedWalletAddress = await walletClient.resolveAddress(wallet);
 
@@ -30,7 +40,9 @@ export class CrossmintFaucetService {
         const chain = getTestnetChainNameById(network.id);
 
         if (!chain) {
-            throw new Error(`Failed to top up balance: Unsupported chain ${network}`);
+            throw new Error(
+                `Failed to top up balance: Unsupported chain ${network}`
+            );
         }
 
         const options = {
@@ -45,7 +57,7 @@ export class CrossmintFaucetService {
 
         const response = await fetch(
             `${this.client.baseUrl}/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
-            options,
+            options
         );
 
         if (response.ok) {
