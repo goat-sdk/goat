@@ -18,6 +18,7 @@
         "@goat-sdk/adapter-eleven-labs": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-coingecko": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
         "@tanstack/react-query": "^5.62.2",

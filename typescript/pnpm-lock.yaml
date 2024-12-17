@@ -125,6 +125,9 @@ importers:
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
         version: link:../../../packages/plugins/coingecko
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       '@goat-sdk/wallet-solana':
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
