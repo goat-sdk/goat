@@ -1,8 +1,8 @@
 import { Tool } from "@goat-sdk/core";
-import { getBuyListingTransactionResponseSchema, GetNftInfoParameters, getNftInfoResponseSchema } from "./parameters";
-import { z } from "zod";
-import { deserializeTxResponseToInstructions } from "./utils/deserializeTxResponseToInstructions";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import { z } from "zod";
+import { GetNftInfoParameters, getBuyListingTransactionResponseSchema, getNftInfoResponseSchema } from "./parameters";
+import { deserializeTxResponseToInstructions } from "./utils/deserializeTxResponseToInstructions";
 
 export class TensorService {
     constructor(private readonly apiKey: string) {}

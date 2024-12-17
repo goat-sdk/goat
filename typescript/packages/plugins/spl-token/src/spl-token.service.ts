@@ -1,21 +1,21 @@
 import { Tool } from "@goat-sdk/core";
-import {
-    ConvertToBaseUnitParameters,
-    GetTokenBalanceByMintAddressParameters,
-    GetTokenMintAddressBySymbolParameters,
-    TransferTokenByMintAddressParameters,
-} from "./parameters";
-import { SplTokenPluginCtorParams } from "./types/SplTokenPluginCtorParams";
-import { SolanaNetwork, SPL_TOKENS, Token } from "./tokens";
+import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import {
     createAssociatedTokenAccountInstruction,
     createTransferCheckedInstruction,
     getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
 import { Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
-import { getTokenByMintAddress } from "./utils/getTokenByMintAddress";
+import {
+    ConvertToBaseUnitParameters,
+    GetTokenBalanceByMintAddressParameters,
+    GetTokenMintAddressBySymbolParameters,
+    TransferTokenByMintAddressParameters,
+} from "./parameters";
+import { SPL_TOKENS, SolanaNetwork, Token } from "./tokens";
+import { SplTokenPluginCtorParams } from "./types/SplTokenPluginCtorParams";
 import { doesAccountExist } from "./utils/doesAccountExist";
-import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import { getTokenByMintAddress } from "./utils/getTokenByMintAddress";
 
 export class SplTokenService {
     private connection: Connection;
