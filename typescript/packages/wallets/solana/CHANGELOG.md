@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.1
+
+### Patch Changes
+
+- ab3b1dc: Add accountsToSign to Solana tx
+
 ## 0.2.0
 
 ### Minor Changes
