@@ -1,15 +1,13 @@
 import { Tool } from "@goat-sdk/core";
-import type { z } from "zod";
-import { getCoinPriceParametersSchema, getTrendingCoinsParametersSchema } from "./parameters";
+import { GetCoinPriceParameters, GetTrendingCoinsParameters } from "./parameters";
 
 export class CoinGeckoService {
     constructor(private readonly apiKey: string) {}
 
     @Tool({
         description: "Get the list of trending coins from CoinGecko",
-        parameters: getTrendingCoinsParametersSchema,
     })
-    async getTrendingCoins(parameters: z.infer<typeof getTrendingCoinsParametersSchema>) {
+    async getTrendingCoins(parameters: GetTrendingCoinsParameters) {
         const response = await fetch(
             `https://api.coingecko.com/api/v3/search/trending?x_cg_demo_api_key=${this.apiKey}`,
         );
@@ -21,9 +19,8 @@ export class CoinGeckoService {
 
     @Tool({
         description: "Get the price of a specific coin from CoinGecko",
-        parameters: getCoinPriceParametersSchema,
     })
-    async getCoinPrice(parameters: z.infer<typeof getCoinPriceParametersSchema>) {
+    async getCoinPrice(parameters: GetCoinPriceParameters) {
         const { coinId, vsCurrency, includeMarketCap, include24hrVol, include24hrChange, includeLastUpdatedAt } =
             parameters;
         const params = new URLSearchParams({

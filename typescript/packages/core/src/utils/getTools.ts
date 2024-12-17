@@ -23,7 +23,7 @@ export async function getTools<TWalletClient extends WalletClientBase>({
                 }. Skipping.`,
             );
         }
-        const pluginTools = await plugin.getTools(wallet);
+        const pluginTools = await plugin.getTools();
         tools.push(...pluginTools);
     }
 
