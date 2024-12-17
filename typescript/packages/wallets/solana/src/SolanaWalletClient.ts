@@ -21,6 +21,10 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         } as const;
     }
 
+    getConnection() {
+        return this.connection;
+    }
+
     async balanceOf(address: string) {
         const pubkey = new PublicKey(address);
         const balance = await this.connection.getBalance(pubkey);
