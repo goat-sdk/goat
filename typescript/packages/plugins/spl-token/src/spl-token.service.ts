@@ -1,0 +1,115 @@
+import { Tool } from "@goat-sdk/core";
+import {
+    ConvertToBaseUnitParameters,
+    GetTokenBalanceByMintAddressParameters,
+    GetTokenMintAddressBySymbolParameters,
+    TransferTokenByMintAddressParameters,
+} from "./parameters";
+import { SplTokenPluginCtorParams } from "./types/SplTokenPluginCtorParams";
+import { SolanaNetwork, SPL_TOKENS, Token } from "./tokens";
+import {
+    createAssociatedTokenAccountInstruction,
+    createTransferCheckedInstruction,
+    getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
+import { Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
+import { getTokenByMintAddress } from "./utils/getTokenByMintAddress";
+import { doesAccountExist } from "./utils/doesAccountExist";
+import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+
+export class SplTokenService {
+    private connection: Connection;
+    private network: SolanaNetwork;
+    private tokens: Token[];
+
+    constructor({ network, tokens = SPL_TOKENS, connection }: SplTokenPluginCtorParams) {
+        this.network = network;
+        this.tokens = tokens;
+        this.connection = connection;
+    }
+
+    @Tool({
+        description: "Gets the SPL token info by its symbol, including the mint address, decimals, and name",
+    })
+    async getTokenInfoBySymbol(parameters: GetTokenMintAddressBySymbolParameters) {
+        const token = this.tokens.find((token) =>
+            [token.symbol, token.symbol.toLowerCase()].includes(parameters.symbol),
+        );
+        return {
+            symbol: token?.symbol,
+            mintAddress: token?.mintAddresses[this.network],
+            decimals: token?.decimals,
+            name: token?.name,
+        };
+    }
+
+    @Tool({
+        description:
+            "Gets the balance of an SPL token by its mint address. Use get_token_mint_address_by_symbol to get the mint address first.",
+    })
+    async getTokenBalanceByMintAddress(parameters: GetTokenBalanceByMintAddressParameters) {
+        const { walletAddress, mintAddress } = parameters;
+        const tokenAccount = getAssociatedTokenAddressSync(new PublicKey(mintAddress), new PublicKey(walletAddress));
+        const balance = await this.connection.getTokenAccountBalance(tokenAccount);
+        return balance;
+    }
+
+    @Tool({
+        description:
+            "Transfers an SPL token by its mint address. Use get_token_mint_address_by_symbol to get the mint address first.",
+    })
+    async transferTokenByMintAddress(
+        walletClient: SolanaWalletClient,
+        parameters: TransferTokenByMintAddressParameters,
+    ) {
+        const { to, mintAddress, amount } = parameters;
+
+        const token = getTokenByMintAddress(mintAddress, this.network);
+        if (!token) {
+            throw new Error(`Token with mint address ${mintAddress} not found`);
+        }
+
+        const tokenMintPublicKey = new PublicKey(mintAddress);
+        const fromPublicKey = new PublicKey(walletClient.getAddress());
+        const toPublicKey = new PublicKey(to);
+
+        const fromTokenAccount = getAssociatedTokenAddressSync(tokenMintPublicKey, fromPublicKey);
+        const toTokenAccount = getAssociatedTokenAddressSync(tokenMintPublicKey, toPublicKey);
+
+        const fromAccountExists = await doesAccountExist(this.connection, fromTokenAccount);
+        const toAccountExists = await doesAccountExist(this.connection, toTokenAccount);
+
+        if (!fromAccountExists) {
+            throw new Error(`From account ${fromTokenAccount.toBase58()} does not exist`);
+        }
+
+        const instructions: TransactionInstruction[] = [];
+
+        if (!toAccountExists) {
+            instructions.push(
+                createAssociatedTokenAccountInstruction(fromPublicKey, toTokenAccount, toPublicKey, tokenMintPublicKey),
+            );
+        }
+        instructions.push(
+            createTransferCheckedInstruction(
+                fromTokenAccount,
+                tokenMintPublicKey,
+                toTokenAccount,
+                fromPublicKey,
+                BigInt(amount) * BigInt(10) ** BigInt(token.decimals),
+                token.decimals,
+            ),
+        );
+
+        return await walletClient.sendTransaction({ instructions });
+    }
+
+    @Tool({
+        description: "Converts an amount of an SPL token to its base unit",
+    })
+    async convertToBaseUnit(parameters: ConvertToBaseUnitParameters) {
+        const { amount, decimals } = parameters;
+        const baseUnit = amount * 10 ** decimals;
+        return baseUnit;
+    }
+}
