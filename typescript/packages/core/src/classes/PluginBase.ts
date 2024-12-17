@@ -30,7 +30,7 @@ export abstract class PluginBase<TWalletClient extends WalletClientBase = Wallet
      * @param wallet - The wallet client to use for tool execution
      * @returns An array of tools
      */
-    getTools(): ToolBase[] | Promise<ToolBase[]> {
+    getTools(walletClient: TWalletClient): ToolBase[] | Promise<ToolBase[]> {
         const tools: ToolBase[] = [];
 
         for (const toolProvider of this.toolProviders) {
@@ -53,7 +53,24 @@ export abstract class PluginBase<TWalletClient extends WalletClientBase = Wallet
             }
 
             for (const tool of toolsMap.values()) {
-                tools.push(tool);
+                tools.push(
+                    createTool(
+                        {
+                            name: tool.name,
+                            description: tool.description,
+                            parameters: tool.parameters.schema,
+                        },
+                        (params) => {
+                            const args = [];
+                            if (tool.walletClient) {
+                                args[tool.walletClient.index] = walletClient;
+                            }
+                            args[tool.parameters.index] = params;
+
+                            return tool.target.apply(toolProvider, args);
+                        },
+                    ),
+                );
             }
         }
 
