@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/core",
-    "version": "0.3.15",
+    "name": "@goat-sdk/wallet-sui",
+    "version": "0.1.8",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,19 +12,12 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@aptos-labs/ts-sdk": "^1.33.1",
-        "@chromia/ft4": "catalog:",
-        "@lit-protocol/lit-node-client": "catalog:",
-        "@lit-protocol/wrapped-keys": "catalog:",
-        "@mysten/sui": "1.17.0",
-        "@solana/web3.js": "catalog:",
-        "abitype": "^1.0.6",
-        "postchain-client": "catalog:",
-        "viem": "catalog:",
-        "zod": "catalog:"
+        "@goat-sdk/core": "workspace:*",
+        "@mysten/sui": "1.17.0"
     },
-    "devDependencies": {
-        "@lit-protocol/types": "catalog:"
+    "peerDependencies": {
+        "@aptos-labs/ts-sdk": "^1.33.1",
+        "@goat-sdk/core": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

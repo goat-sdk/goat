@@ -5,3 +5,4 @@ export * from "./solana";
 export * from "./chain";
 export * from "./core";
 export * from "./aptos";
+export * from "./sui";

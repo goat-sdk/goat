@@ -5,7 +5,7 @@ import * as allEVMChains from "viem/chains";
  * @param id - Chain ID, optional for EVM
  */
 export type Chain = {
-    type: "evm" | "solana" | "aptos" | "chromia";
+    type: "evm" | "solana" | "aptos" | "chromia" | "sui";
     id?: number; // optional for EVM
 };
 
@@ -53,6 +53,12 @@ export function getChainToken(chain: Chain): ChainToken {
                 symbol: "CHR",
                 name: "Chroma",
                 decimals: 6,
+            };
+        case "sui":
+            return {
+                symbol: "SUI",
+                name: "Sui Coin",
+                decimals: 9,
             };
         default:
             throw new Error(`Unsupported chain type: ${chain.type} ${chain.id ? `with id: ${chain.id}` : ""}`);
