@@ -47,3 +47,5 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
         };
     }
 }
+
+export const solana = (params: SolanaKeypairWalletClientCtorParams) => new SolanaKeypairWalletClient(params);

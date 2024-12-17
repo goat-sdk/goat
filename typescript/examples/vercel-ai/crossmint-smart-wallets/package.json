@@ -15,6 +15,7 @@
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",
         "@goat-sdk/crossmint": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "ai": "catalog:",
         "dotenv": "^16.4.5",
         "viem": "2.21.49"

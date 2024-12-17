@@ -5,6 +5,7 @@ import { PublicKey, Transaction } from "@solana/web3.js";
 
 import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import type { LitSolanaWalletOptions } from "./types";
+import { formatUnits } from "viem/_types/utils/unit/formatUnits";
 
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
@@ -80,7 +81,8 @@ export class LitSolanaWallet extends SolanaWalletClient {
             decimals: 9,
             symbol: "SOL",
             name: "Solana",
-            value: BigInt(balance),
+            value: formatUnits(BigInt(balance), 9),
+            inBaseUnits: balance.toString(),
         };
     }
 }

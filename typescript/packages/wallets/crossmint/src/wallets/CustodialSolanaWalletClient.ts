@@ -3,6 +3,7 @@ import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-sol
 import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
+import { formatUnits } from "viem";
 
 type CommonParameters = {
     chain: "solana";
@@ -120,7 +121,8 @@ export class CustodialSolanaWalletClient extends SolanaWalletClient {
         const balance = await this.connection.getBalance(pubkey);
 
         return {
-            value: BigInt(balance),
+            value: formatUnits(BigInt(balance), 9),
+            inBaseUnits: balance.toString(),
             decimals: 9,
             symbol: "SOL",
             name: "Solana",

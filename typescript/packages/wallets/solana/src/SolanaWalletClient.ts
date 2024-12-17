@@ -1,6 +1,7 @@
 import { WalletClientBase } from "@goat-sdk/core";
 import { AddressLookupTableAccount, type Connection, PublicKey } from "@solana/web3.js";
 import type { SolanaTransaction } from "./types";
+import { formatUnits } from "viem";
 
 export type SolanWalletClientCtorParams = {
     connection: Connection;
@@ -28,7 +29,8 @@ export abstract class SolanaWalletClient extends WalletClientBase {
             decimals: 9,
             symbol: "SOL",
             name: "Solana",
-            value: BigInt(balance),
+            value: formatUnits(BigInt(balance), 9),
+            inBaseUnits: balance.toString(),
         };
     }
 

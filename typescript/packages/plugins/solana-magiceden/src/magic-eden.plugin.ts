@@ -8,3 +8,5 @@ export class MagicEdenPlugin extends PluginBase {
 
     supportsChain = (chain: Chain) => chain.type === "solana";
 }
+
+export const magicEden = (apiKey?: string) => new MagicEdenPlugin(apiKey);

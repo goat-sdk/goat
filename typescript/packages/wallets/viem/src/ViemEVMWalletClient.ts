@@ -1,5 +1,5 @@
 import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
+import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
@@ -178,10 +178,11 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         const chain = this.#client.chain ?? mainnet;
 
         return {
-            value: balance,
+            value: formatUnits(BigInt(balance), chain.nativeCurrency.decimals),
             decimals: chain.nativeCurrency.decimals,
             symbol: chain.nativeCurrency.symbol,
             name: chain.nativeCurrency.name,
+            inBaseUnits: balance.toString(),
         };
     }
 

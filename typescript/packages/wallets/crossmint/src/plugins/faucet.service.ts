@@ -2,7 +2,7 @@ import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Tool, createToolParameters } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { z } from "zod";
-import { getTestnetChainNameById } from "../chains";
+import { getTestnetChainNameById } from "../Chains";
 
 export class TopUpBalanceParameters extends createToolParameters(
     z.object({

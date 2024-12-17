@@ -17,8 +17,6 @@ export class JupiterService {
     async getQuote(parameters: GetQuoteParameters) {
         try {
             const response = this.jupiterApiClient.quoteGet(parameters);
-
-            console.log(JSON.stringify(response, null, 2));
             return response;
         } catch (error: unknown) {
             if (error && typeof error === "object" && "response" in error) {
@@ -33,10 +31,11 @@ export class JupiterService {
     }
 
     @Tool({
-        description: "Swaps tokens on the Jupiter DEX.",
+        description: "Swap an SPL token for another token on the Jupiter DEX.",
     })
     async swapTokens(walletClient: SolanaWalletClient, parameters: GetQuoteParameters) {
         const quoteResponse = await this.getQuote(parameters);
+
         const { swapInstruction, addressLookupTableAddresses } = await this.jupiterApiClient.swapInstructionsPost({
             swapRequest: {
                 userPublicKey: walletClient.getAddress(),

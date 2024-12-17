@@ -9,3 +9,5 @@ export class TensorPlugin extends PluginBase {
 
     supportsChain = (chain: Chain) => chain.type === "solana";
 }
+
+export const tensor = (apiKey: string) => new TensorPlugin({ apiKey });

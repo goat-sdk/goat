@@ -10,7 +10,8 @@ export type Balance = {
     decimals: number;
     symbol: string;
     name: string;
-    value: bigint;
+    value: string;
+    inBaseUnits: string;
 };
 
 export abstract class WalletClientBase {

@@ -1,7 +1,7 @@
 import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
 import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
 import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
-import { formatEther, isAddress, publicActions } from "viem";
+import { formatEther, formatUnits, isAddress, publicActions } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
@@ -186,10 +186,11 @@ export class LitEVMWalletClient extends EVMWalletClient {
         const chain = this.viemWalletClient.chain ?? mainnet;
 
         return {
-            value: balance,
+            value: formatUnits(balance, chain.nativeCurrency.decimals),
             decimals: chain.nativeCurrency.decimals,
             symbol: chain.nativeCurrency.symbol,
             name: chain.nativeCurrency.name,
+            inBaseUnits: balance.toString(),
         };
     }
 }

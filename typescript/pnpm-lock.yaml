@@ -246,6 +246,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -333,6 +336,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
       ai:
         specifier: 'catalog:'
         version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.23.8)
@@ -357,12 +363,12 @@ importers:
       '@goat-sdk/crossmint':
         specifier: workspace:*
         version: link:../../../packages/wallets/crossmint
-      '@goat-sdk/plugin-erc20':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/erc20
       '@goat-sdk/plugin-solana-nfts':
         specifier: workspace:*
         version: link:../../../packages/plugins/solana-nfts
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/solana
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -729,6 +735,9 @@ importers:
       postchain-client:
         specifier: 1.20.1
         version: 1.20.1(buffer@6.0.3)(events@3.3.0)
+      viem:
+        specifier: 'catalog:'
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8

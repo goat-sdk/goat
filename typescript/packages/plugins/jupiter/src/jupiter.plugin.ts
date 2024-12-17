@@ -1,10 +1,12 @@
 import { type Chain, PluginBase } from "@goat-sdk/core";
-import type { Connection } from "@solana/web3.js";
+import { JupiterService } from "./jupiter.service";
 
 export class JupiterPlugin extends PluginBase {
-    constructor(connection: Connection) {
-        super("jupiter", []);
+    constructor() {
+        super("jupiter", [new JupiterService()]);
     }
 
     supportsChain = (chain: Chain) => chain.type === "solana";
 }
+
+export const jupiter = () => new JupiterPlugin();

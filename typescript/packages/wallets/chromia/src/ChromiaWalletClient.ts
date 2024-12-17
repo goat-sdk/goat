@@ -3,6 +3,7 @@ import { WalletClientBase } from "@goat-sdk/core";
 import type { DictPair, IClient, QueryObject, RawGtv } from "postchain-client";
 import { CHR_ASSET_ID } from "./consts";
 import type { ChromiaTransaction } from "./types/ChromiaTransaction";
+import { formatUnits } from "viem";
 
 export type ChromiaWalletCtorParams = {
     client: IClient;
@@ -58,7 +59,8 @@ export class ChromiaWalletClient extends WalletClientBase {
                     decimals: balance.asset.decimals,
                     symbol: balance.asset.symbol,
                     name: balance.asset.name,
-                    value: BigInt(balance.amount.value),
+                    value: formatUnits(BigInt(balance.amount.value), balance.asset.decimals),
+                    inBaseUnits: balance.amount.value.toString(),
                 };
             }
         }
@@ -66,7 +68,12 @@ export class ChromiaWalletClient extends WalletClientBase {
             decimals: 0,
             symbol: "CHR",
             name: "Chromia",
-            value: BigInt(0),
+            value: "0",
+            inBaseUnits: "0",
         };
     }
 }
+
+export const chromia = (params: ChromiaWalletCtorParams) => {
+    return new ChromiaWalletClient(params);
+};

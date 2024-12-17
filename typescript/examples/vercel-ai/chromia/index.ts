@@ -1,7 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { createConnection, createInMemoryEvmKeyStore, createKeyStoreInteractor } from "@chromia/ft4";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { sendCHR } from "@goat-sdk/core";
+import { sendCHR } from "@goat-sdk/wallet-chromia";
 import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
 import { generateText } from "ai";
 import { type KeyPair, createClient } from "postchain-client";

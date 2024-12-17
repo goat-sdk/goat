@@ -11,3 +11,5 @@ export class UniswapPlugin extends PluginBase {
 
     supportsChain = (chain: Chain) => chain.type === "evm" && SUPPORTED_CHAINS.some((c) => c.id === chain.id);
 }
+
+export const uniswap = (params: UniswapCtorParams) => new UniswapPlugin(params);

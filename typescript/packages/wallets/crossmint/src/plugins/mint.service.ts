@@ -1,7 +1,7 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { getCrossmintChainString } from "../chains";
+import { getCrossmintChainString } from "../Chains";
 import { GetAllCollectionsParameters, MintNFTParameters } from "./mint.parameters";
 
 export class CrossmintMintService {

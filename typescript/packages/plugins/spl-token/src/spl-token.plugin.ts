@@ -9,3 +9,5 @@ export class SplTokenPlugin extends PluginBase {
 
     supportsChain = (chain: Chain) => chain.type === "solana";
 }
+
+export const splToken = (params: SplTokenPluginCtorParams) => new SplTokenPlugin(params);

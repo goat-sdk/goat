@@ -1,7 +1,7 @@
 import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { isChainSupportedByMinting } from "../chains";
+import { isChainSupportedByMinting } from "../Chains";
 import { CrossmintMintService } from "./mint.service";
 
 export class MintPlugin extends PluginBase<EVMWalletClient> {
@@ -23,5 +23,7 @@ export class MintPlugin extends PluginBase<EVMWalletClient> {
 }
 
 export function mintPlugin(client: CrossmintApiClient) {
-    return new MintPlugin(client);
+    return () => {
+        return new MintPlugin(client);
+    };
 }

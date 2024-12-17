@@ -1,6 +1,6 @@
 import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { EVMTypedData } from "@goat-sdk/wallet-evm";
-import type { SupportedSmartWalletChains } from "../chains";
+import type { SupportedSmartWalletChains } from "../Chains";
 
 type CoreSignerType =
     | "evm-keypair"

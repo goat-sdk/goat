@@ -1,10 +1,10 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
-import { http, Abi, PublicClient, createPublicClient, encodeFunctionData } from "viem";
+import { http, Abi, PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
-import { SupportedSmartWalletChains, getViemChain } from "../chains";
+import { SupportedSmartWalletChains, getViemChain } from "../Chains";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
 
 export type CustodialSigner = `0x${string}`;
@@ -300,7 +300,8 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             decimals: 18,
             symbol: "ETH",
             name: "Ethereum",
-            value: balance,
+            value: formatUnits(balance, 18),
+            inBaseUnits: balance.toString(),
         };
     }
 

@@ -9,3 +9,5 @@ export class SolanaNftsPlugin extends PluginBase {
 
     supportsChain = (chain: Chain) => chain.type === "solana";
 }
+
+export const nfts = (connection: Connection) => new SolanaNftsPlugin(connection);
