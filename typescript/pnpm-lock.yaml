@@ -495,6 +495,9 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
+      '@goat-sdk/plugin-erc721':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc721
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -594,6 +597,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
       viem:
         specifier: 'catalog:'
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)

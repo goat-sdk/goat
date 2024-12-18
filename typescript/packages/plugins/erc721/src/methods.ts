@@ -1,4 +1,4 @@
-import type { EVMWalletClient } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import type { z } from "zod";
 import { ERC721_ABI } from "./abi";
 import type {
