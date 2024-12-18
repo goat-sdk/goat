@@ -1,5 +1,12 @@
 # goat-examples-langchain-lit
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [f10e6d1]
+  - @goat-sdk/adapter-langchain@0.2.1
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @goat-sdk/adapter-langchain
 
+## 0.2.1
+
+### Patch Changes
+
+- f10e6d1: Remove parameters from descriptions
+
 ## 0.2.0
 
 ### Minor Changes
