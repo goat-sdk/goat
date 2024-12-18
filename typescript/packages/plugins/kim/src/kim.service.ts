@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema, decreaseLiquiditySchema } from "./parameters";
+import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema, decreaseLiquiditySchema, collectSchema } from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from './abi/factory';
 import { POSITION_MANAGER_ABI } from './abi/positionManager';
@@ -381,6 +381,48 @@ export class KimService {
             return hash.hash;
         } catch (error) {
             throw new Error(`Failed to decrease liquidity: ${error}`);
+        }
+    }
+
+    @Tool({
+        name: "kim_collect",
+        description: "Collects tokens from a liquidity position",
+    })
+    async collect(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof collectSchema>
+    ): Promise<string> {
+        try {
+            const recipient = await walletClient.resolveAddress(parameters.recipient);
+
+            const [token0Decimals, token1Decimals] = await Promise.all([
+                Number(await walletClient.read({
+                    address: parameters.token0 as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })),
+                Number(await walletClient.read({
+                    address: parameters.token1 as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })),
+            ]);
+
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.positionManager,
+                abi: POSITION_MANAGER_ABI,
+                functionName: "collect",
+                args: [{
+                    tokenId: parameters.tokenId,
+                    recipient,
+                    amount0Max: parseUnits(parameters.amount0Max, token0Decimals),
+                    amount1Max: parseUnits(parameters.amount1Max, token1Decimals),
+                }],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to collect: ${error}`);
         }
     }
 
