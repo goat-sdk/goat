@@ -8,6 +8,7 @@ import { SWAP_ROUTER_ABI } from './abi/swaprouter';
 import { z } from "zod";
 import { ERC20_ABI } from "./abi/erc20";
 import { parseUnits } from "viem";
+import { decodeEventLog, formatUnits } from "viem";
 
 export class KimService {
     constructor(private readonly addresses: KimContractAddresses) {}
@@ -21,22 +22,21 @@ export class KimService {
         parameters: z.infer<typeof exactInputSingleSchema>
     ): Promise<string> {
         try {
-            const walletAddress = await walletClient.resolveAddress(parameters.wallet);
             const tokenIn = await walletClient.resolveAddress(parameters.tokenIn);
             const tokenOut = await walletClient.resolveAddress(parameters.tokenOut);
             const recipient = await walletClient.resolveAddress(parameters.recipient);
 
-            const tokenInDecimals = await walletClient.read({
+            const tokenInDecimals = Number(await walletClient.read({
                 address: parameters.tokenIn as `0x${string}`,
                 abi: ERC20_ABI,
                 functionName: "decimals",
-            });
+            }));
 
-            const tokenOutDecimals = await walletClient.read({
+            const tokenOutDecimals = Number(await walletClient.read({
                 address: parameters.tokenOut as `0x${string}`,
                 abi: ERC20_ABI,
                 functionName: "decimals",
-            });
+            }));
 
             const amountIn = parseUnits(parameters.amountIn, tokenInDecimals);
             const amountOutMinimum = parseUnits(parameters.amountOutMinimum, tokenOutDecimals);
@@ -50,9 +50,61 @@ export class KimService {
                     tokenIn,
                     tokenOut,
                     recipient,
-                    deadline,
+                    parameters.deadline,
                     amountIn,
                     amountOutMinimum,
+                    limitSqrtPrice,
+                ],
+            });
+
+            return hash.hash;
+
+            // TODO get the amountOut
+        } catch (error) {
+            throw Error(`Failed to swap: ${error}`);
+        }
+    }
+
+    @Tool({
+        name: "kim_swap_exact_output_single_hop",
+        description: "Swaps an exact amount of output tokens for a single hop",
+    })
+    async swapExactOutputSingleHop(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof exactOutputSingleSchema>
+    ): Promise<string> {
+        try {
+            const tokenIn = await walletClient.resolveAddress(parameters.tokenIn);
+            const tokenOut = await walletClient.resolveAddress(parameters.tokenOut);
+            const recipient = await walletClient.resolveAddress(parameters.recipient);
+
+            const tokenInDecimals = Number(await walletClient.read({
+                address: parameters.tokenIn as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            const tokenOutDecimals = Number(await walletClient.read({
+                address: parameters.tokenOut as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            const amountOut = parseUnits(parameters.amountOut, tokenOutDecimals);
+            const amountInMaximum = parseUnits(parameters.amountInMaximum, tokenInDecimals);
+            const limitSqrtPrice = parseUnits(parameters.limitSqrtPrice, 96);
+
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.swapRouter,
+                abi: SWAP_ROUTER_ABI,
+                functionName: "exactOutputSingle",
+                args: [
+                    tokenIn,
+                    tokenOut,
+                    recipient,
+                    parameters.deadline,
+                    amountOut,
+                    amountInMaximum,
                     limitSqrtPrice,
                 ],
             });
@@ -62,4 +114,5 @@ export class KimService {
             throw Error(`Failed to swap: ${error}`);
         }
     }
+
 }

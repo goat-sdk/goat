@@ -11,25 +11,22 @@ import { createToolParameters } from "@goat-sdk/core";
 // });
 
 
-export class exactInput extends createToolParameters(
-    z.object({
-        path: z.any().describe("The path of the swap"),
-        recipient: z.string().describe("The address to receive the output tokens"),
-        deadline: z.number().describe("The deadline for the swap"),
-        amountIn: z.string().describe("The amount of tokens to swap in"),
-        amountOutMinimum: z.string().describe("The minimum amount of tokens to receive"),
-    })
-) {}
+export const exactInputSchema = z.object({
+    path: z.any().describe("The path of the swap"),
+    recipient: z.string().describe("The address to receive the output tokens"),
+    deadline: z.number().describe("The deadline for the swap"),
+    amountIn: z.string().describe("The amount of tokens to swap in"),
+    amountOutMinimum: z.string().describe("The minimum amount of tokens to receive"),
+});
 
-export class exactOutput extends createToolParameters(
-    z.object({
-        path: z.any().describe("The path of the swap"),
-        recipient: z.string().describe("The address to receive the output tokens"),
-        deadline: z.number().describe("The deadline for the swap"),
-        amountOut: z.string().describe("The amount of tokens to swap out"),
-        amountInMaximum: z.string().describe("The maximum amount of tokens to swap in"),
-    })
-) {}
+
+export const exactOutputSchema = z.object({
+    path: z.any().describe("The path of the swap"),
+    recipient: z.string().describe("The address to receive the output tokens"),
+    deadline: z.number().describe("The deadline for the swap"),
+    amountOut: z.string().describe("The amount of tokens to swap out"),
+    amountInMaximum: z.string().describe("The maximum amount of tokens to swap in"),
+});
 
 
 export const exactInputSingleSchema = z.object({
@@ -42,17 +39,15 @@ export const exactInputSingleSchema = z.object({
     limitSqrtPrice: z.string().describe("The limit price for the swap"),
 });
 
-export class exactOutputSingleSchema extends createToolParameters(
-    z.object({
-        tokenIn: z.string().describe("The token to swap in"),
-        tokenOut: z.string().describe("The token to swap out"),
-        recipient: z.string().describe("The address to receive the output tokens"),
-        deadline: z.number().describe("The deadline for the swap"),
-        amountOut: z.string().describe("The amount of tokens to swap out"),
-        amountInMaximum: z.string().describe("The maximum amount of tokens to swap in"),
-        limitSqrtPrice: z.string().describe("The limit price for the swap"),
-    })
-) {}
+export const exactOutputSingleSchema = z.object({
+    tokenIn: z.string().describe("The token to swap in"),
+    tokenOut: z.string().describe("The token to swap out"),
+    recipient: z.string().describe("The address to receive the output tokens"),
+    deadline: z.number().describe("The deadline for the swap"),
+    amountOut: z.string().describe("The amount of tokens to swap out"),
+    amountInMaximum: z.string().describe("The maximum amount of tokens to swap in"),
+    limitSqrtPrice: z.string().describe("The limit price for the swap"),
+});
 
 
 export class defaultConfigurationForPoolSchema extends createToolParameters(
