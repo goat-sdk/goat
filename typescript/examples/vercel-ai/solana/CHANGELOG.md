@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-solana
 
+## 0.2.3
+
+### Patch Changes
+
+- b9cb39c: Wait for transaction confirmation
+- Updated dependencies [b9cb39c]
+  - @goat-sdk/wallet-solana@0.2.3
+  - @goat-sdk/plugin-jupiter@0.2.3
+  - @goat-sdk/plugin-spl-token@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes

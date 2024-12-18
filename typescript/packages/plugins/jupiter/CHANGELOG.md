@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-jupiter
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [b9cb39c]
+  - @goat-sdk/wallet-solana@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes
