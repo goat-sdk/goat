@@ -6,7 +6,8 @@ import { KIM_FACTORY_ABI } from './abi/factory';
 import { POSITION_MANAGER_ABI } from './abi/positionManager';
 import { SWAP_ROUTER_ABI } from './abi/swaprouter';
 import { z } from "zod";
-import { ERC20_ABI } from "@goat-sdk/plugin-erc20";
+import { ERC20_ABI } from "./abi/erc20";
+import { parseUnits } from "viem";
 
 export class KimService {
     constructor(private readonly addresses: KimContractAddresses) {}
