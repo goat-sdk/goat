@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-abstract
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [608f9f1]
+  - @goat-sdk/plugin-erc20@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

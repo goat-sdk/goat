@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.3.1
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
 ## 0.3.0
 
 ### Minor Changes

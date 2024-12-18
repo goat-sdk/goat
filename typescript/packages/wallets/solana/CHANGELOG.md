@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.2
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
 ## 0.2.1
 
 ### Patch Changes

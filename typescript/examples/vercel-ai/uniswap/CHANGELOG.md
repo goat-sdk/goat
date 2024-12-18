@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-uniswap
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [608f9f1]
+  - @goat-sdk/plugin-uniswap@0.2.1
+
 ## 0.1.0
 
 ### Minor Changes

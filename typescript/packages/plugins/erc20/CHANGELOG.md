@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-erc20
 
+## 0.2.1
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
 ## 0.2.0
 
 ### Minor Changes
