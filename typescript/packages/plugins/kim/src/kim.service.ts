@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema } from "./parameters";
+import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema } from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from './abi/factory';
 import { POSITION_MANAGER_ABI } from './abi/positionManager';
@@ -295,9 +295,54 @@ export class KimService {
             });
 
             return hash.hash;
+            // TODO get the liquidity and tokenId
         } catch (error) {
             throw new Error(`Failed to mint position: ${error}`);
         }
     }
+
+    @Tool({
+        name: "kim_increase_liquidity",
+        description: "Increases liquidity in an existing position",
+    })
+    async increaseLiquidity(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof increaseLiquiditySchema>
+    ): Promise<string> {
+        try {
+            const [token0Decimals, token1Decimals] = await Promise.all([
+                Number(await walletClient.read({
+                    address: parameters.token0 as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })),
+                Number(await walletClient.read({
+                    address: parameters.token1 as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })),
+            ]);
+
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.positionManager,
+                abi: POSITION_MANAGER_ABI,
+                functionName: "increaseLiquidity",
+                args: [{
+                    tokenId: parameters.tokenId,
+                    amount0Desired: parseUnits(parameters.amount0Desired, token0Decimals),
+                    amount1Desired: parseUnits(parameters.amount1Desired, token1Decimals),
+                    amount0Min: parseUnits(parameters.amount0Min, token0Decimals),
+                    amount1Min: parseUnits(parameters.amount1Min, token1Decimals),
+                    deadline: parameters.deadline,
+                }],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to increase liquidity: ${error}`);
+        }
+    }
+
+
 
 }
