@@ -255,9 +255,9 @@ export class KimService {
             const currentTick = globalState.tick;
 
             // Calculate ticks around current price
-            const tickLower = Math.floor(currentTick / tickSpacing)
+            const tickLower = parameters.tickLower ? parameters.tickLower : Math.floor(currentTick / tickSpacing)
                 * tickSpacing - tickSpacing * 2;
-            const tickUpper = Math.floor(currentTick / tickSpacing)
+            const tickUpper = parameters.tickUpper ? parameters.tickUpper : Math.floor(currentTick / tickSpacing)
                 * tickSpacing + tickSpacing * 2;
 
             const [token0Decimals, token1Decimals] = await Promise.all([
