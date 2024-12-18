@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema, decreaseLiquiditySchema, collectSchema } from "./parameters";
+import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema, decreaseLiquiditySchema, collectSchema, burnSchema } from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from './abi/factory';
 import { POSITION_MANAGER_ABI } from './abi/positionManager';
@@ -423,6 +423,28 @@ export class KimService {
             return hash.hash;
         } catch (error) {
             throw new Error(`Failed to collect: ${error}`);
+        }
+    }
+
+    @Tool({
+        name: "kim_burn",
+        description: "Burns a liquidity position NFT after all tokens have been collected",
+    })
+    async burn(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof burnSchema>
+    ): Promise<string> {
+        try {
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.positionManager,
+                abi: POSITION_MANAGER_ABI,
+                functionName: "burn",
+                args: [parameters.tokenId],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to burn position: ${error}`);
         }
     }
 
