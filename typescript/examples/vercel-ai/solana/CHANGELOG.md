@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-solana
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [3d946d4]
+  - @goat-sdk/plugin-spl-token@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes
