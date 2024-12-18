@@ -7,7 +7,7 @@ export class UniswapService {
 
     @Tool({
         description:
-            "Checks if the wallet has enough approval for a token and returns the transaction to approve the token. The approval must takes place before the swap transaction.",
+            "Check if the wallet has enough approval for a token and return the transaction to approve the token. The approval must takes place before the swap transaction.",
     })
     async checkApproval(parameters: CheckApprovalBodySchema) {
         const url = new URL(`${this.params.baseUrl}/check_approval`);
@@ -28,7 +28,7 @@ export class UniswapService {
 
     @Tool({
         description:
-            "Gets the quote for a swap. If permitData is returned, it needs to be signed using the signedTypedData tool.",
+            "Get the quote for a swap. If permitData is returned, it needs to be signed using the signedTypedData tool.",
     })
     async getQuote(parameters: GetQuoteBodySchema) {
         const url = new URL(`${this.params.baseUrl}/quote`);
@@ -49,7 +49,7 @@ export class UniswapService {
 
     @Tool({
         description:
-            "Gets the swap transaction for a swap. If permitData was returned from the get_quote tool, it needs to be signed using the signedTypedData tool before calling this function.",
+            "Get the swap transaction for a swap. If permitData was returned from the get_quote tool, it needs to be signed using the signedTypedData tool before calling this function.",
     })
     async getSwapTransaction(parameters: GetSwapBodySchema) {
         const url = new URL(`${this.params.baseUrl}/swap`);

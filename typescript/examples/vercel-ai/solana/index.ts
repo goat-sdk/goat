@@ -21,7 +21,7 @@ const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_K
             keypair,
             connection,
         }),
-        plugins: [sendSOL(), jupiter(), splToken({ connection, network: "mainnet" })],
+        plugins: [sendSOL(), jupiter(), splToken()],
     });
 
     const result = await generateText({

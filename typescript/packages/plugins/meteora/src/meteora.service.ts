@@ -7,7 +7,7 @@ import { CreateDLMMPositionParameters } from "./parameters";
 
 export class MeteoraService {
     @Tool({
-        description: "Creates a position on the Meteora DEX.",
+        description: "Create a position on the Meteora DEX",
     })
     async createDLMMPosition(walletClient: SolanaWalletClient, parameters: CreateDLMMPositionParameters) {
         const newPosition = new Keypair();

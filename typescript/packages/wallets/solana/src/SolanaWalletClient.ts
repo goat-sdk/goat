@@ -8,7 +8,7 @@ export type SolanWalletClientCtorParams = {
 };
 
 export abstract class SolanaWalletClient extends WalletClientBase {
-    connection: Connection;
+    protected connection: Connection;
 
     constructor(params: SolanWalletClientCtorParams) {
         super();
