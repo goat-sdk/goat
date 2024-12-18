@@ -32,7 +32,7 @@ export class exactOutput extends createToolParameters(
 ) {}
 
 
-export class exactInputSingle extends createToolParameters(
+export class exactInputSingleSchema extends createToolParameters(
     z.object({
         tokenIn: z.string().describe("The token to swap in"),
         tokenOut: z.string().describe("The token to swap out"),
@@ -44,7 +44,7 @@ export class exactInputSingle extends createToolParameters(
     })
 ) {}
 
-export class exactOutputSingle extends createToolParameters(
+export class exactOutputSingleSchema extends createToolParameters(
     z.object({
         tokenIn: z.string().describe("The token to swap in"),
         tokenOut: z.string().describe("The token to swap out"),
