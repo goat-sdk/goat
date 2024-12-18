@@ -809,4 +809,4 @@ export const KIM_FACTORY_ABI = [
         "stateMutability": "view",
         "type": "function"
     }
-]
+] as const;

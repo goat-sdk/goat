@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema } from "./parameters";
+import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema } from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from './abi/factory';
 import { POSITION_MANAGER_ABI } from './abi/positionManager';
@@ -9,6 +9,7 @@ import { z } from "zod";
 import { ERC20_ABI } from "./abi/erc20";
 import { parseUnits } from "viem";
 import { decodeEventLog, formatUnits } from "viem";
+import { encodeAbiParameters } from "viem";
 
 export class KimService {
     constructor(private readonly addresses: KimContractAddresses) {}
@@ -114,5 +115,112 @@ export class KimService {
             throw Error(`Failed to swap: ${error}`);
         }
     }
+
+    @Tool({
+        name: "kim_swap_exact_input_multi_hop",
+        description: "Swaps an exact amount of input tokens in multiple hops",
+    })
+    async swapExactInputMultiHop(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof exactInputSchema>
+    ): Promise<string> {
+        try {
+            const recipient = await walletClient.resolveAddress(parameters.recipient);
+
+            // Get first and last token decimals
+            const tokenInDecimals = Number(await walletClient.read({
+                address: parameters.path.tokenIn as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            const tokenOutDecimals = Number(await walletClient.read({
+                address: parameters.path.tokenOut as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            // Encode the path
+            const encodedPath = encodeAbiParameters(
+                [{ type: 'address[]' }, { type: 'uint24[]' }],
+                [[
+                    parameters.path.tokenIn as `0x${string}`,
+                    ...parameters.path.intermediateTokens.map(t => t as `0x${string}`),
+                    parameters.path.tokenOut as `0x${string}`
+                ], parameters.path.fees]
+            );
+
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.swapRouter,
+                abi: SWAP_ROUTER_ABI,
+                functionName: "exactInput",
+                args: [
+                    encodedPath,
+                    recipient,
+                    parameters.deadline,
+                    parseUnits(parameters.amountIn, tokenInDecimals),
+                    parseUnits(parameters.amountOutMinimum, tokenOutDecimals),
+                ],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to swap: ${error}`);
+        }
+    }
+
+    @Tool({
+        name: "kim_swap_exact_output_multi_hop",
+        description: "Swaps tokens to receive an exact amount of output tokens in multiple hops",
+    })
+    async swapExactOutputMultiHop(
+        walletClient: EVMWalletClient,
+        parameters: z.infer<typeof exactOutputSchema>
+    ): Promise<string> {
+        try {
+            const recipient = await walletClient.resolveAddress(parameters.recipient);
+
+            // Get first and last token decimals
+            const tokenInDecimals = Number(await walletClient.read({
+                address: parameters.path.tokenIn as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            const tokenOutDecimals = Number(await walletClient.read({
+                address: parameters.path.tokenOut as `0x${string}`,
+                abi: ERC20_ABI,
+                functionName: "decimals",
+            }));
+
+            // Encode the path
+            const encodedPath = encodeAbiParameters(
+                [{ type: 'address[]' }, { type: 'uint24[]' }],
+                [[
+                    parameters.path.tokenIn as `0x${string}`,
+                    ...parameters.path.intermediateTokens.map((t: string) => t as `0x${string}`),
+                    parameters.path.tokenOut as `0x${string}`
+                ], parameters.path.fees]
+            );
+
+            const hash = await walletClient.sendTransaction({
+                to: this.addresses.swapRouter,
+                abi: SWAP_ROUTER_ABI,
+                functionName: "exactOutput",
+                args: [
+                    encodedPath,
+                    recipient,
+                    parameters.deadline,
+                    parseUnits(parameters.amountOut, tokenOutDecimals),
+                    parseUnits(parameters.amountInMaximum, tokenInDecimals),
+                ],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to swap: ${error}`);
+        }
+    }
+
 
 }

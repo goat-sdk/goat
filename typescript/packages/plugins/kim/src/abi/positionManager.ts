@@ -1393,4 +1393,4 @@ export const POSITION_MANAGER_ABI = [
         "stateMutability": "payable",
         "type": "receive"
     }
-]
+] as const;

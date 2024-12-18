@@ -626,4 +626,4 @@ export const SWAP_ROUTER_ABI = [
         "stateMutability": "payable",
         "type": "receive"
     }
-]
+] as const;
