@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.4
+
+### Patch Changes
+
+- de8533d: Fix transaction instructions
+
 ## 0.2.3
 
 ### Patch Changes

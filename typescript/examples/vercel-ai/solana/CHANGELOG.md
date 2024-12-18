@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-solana
 
+## 0.2.5
+
+### Patch Changes
+
+- de8533d: Fix transaction instructions
+- Updated dependencies [de8533d]
+  - @goat-sdk/plugin-jupiter@0.2.4
+  - @goat-sdk/wallet-solana@0.2.4
+  - @goat-sdk/plugin-spl-token@0.2.5
+
 ## 0.2.4
 
 ### Patch Changes

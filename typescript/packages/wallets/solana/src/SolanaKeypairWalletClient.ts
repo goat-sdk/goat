@@ -30,7 +30,7 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
 
     async sendTransaction({ instructions, addressLookupTableAddresses = [], accountsToSign = [] }: SolanaTransaction) {
         const latestBlockhash = await this.connection.getLatestBlockhash();
-        
+
         const message = new TransactionMessage({
             payerKey: this.#keypair.publicKey,
             recentBlockhash: latestBlockhash.blockhash,
