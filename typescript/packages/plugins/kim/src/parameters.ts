@@ -91,8 +91,6 @@ export const increaseLiquiditySchema = z.object({
 });
 
 export const decreaseLiquidityResponseSchema = z.object({
-    token0: z.string().describe("The first token in the pair"),
-    token1: z.string().describe("The second token in the pair"),
     tokenId: z.string().describe("The token id of the liquidity"),
     liquidity: z.string().describe("The amount of liquidity removed"),
     amount0: z.string().describe("The amount of token0 used"),
@@ -100,6 +98,8 @@ export const decreaseLiquidityResponseSchema = z.object({
 });
 
 export const decreaseLiquiditySchema = z.object({
+    token0: z.string().describe("The first token in the pair"),
+    token1: z.string().describe("The second token in the pair"),
     tokenId: z.string().describe("The token id of the liquidity"),
     liquidity: z.string().describe("The amount of liquidity to remove"),
     amount0Min: z.string().describe("The minimum amount of token0 to remove"),
