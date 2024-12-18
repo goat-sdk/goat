@@ -1,4 +1,4 @@
-import { type Keypair, TransactionMessage, TransactionSignature, VersionedTransaction } from "@solana/web3.js";
+import { type Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import { type SolanWalletClientCtorParams, SolanaWalletClient } from "./SolanaWalletClient";
 import type { SolanaTransaction } from "./types";
@@ -46,11 +46,14 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
 
         const newLatestBlockhash = await this.connection.getLatestBlockhash();
 
-        await this.connection.confirmTransaction({
-            blockhash: newLatestBlockhash.blockhash,
-            lastValidBlockHeight: newLatestBlockhash.lastValidBlockHeight,
-            signature: hash,
-        }, "confirmed");
+        await this.connection.confirmTransaction(
+            {
+                blockhash: newLatestBlockhash.blockhash,
+                lastValidBlockHeight: newLatestBlockhash.lastValidBlockHeight,
+                signature: hash,
+            },
+            "confirmed",
+        );
 
         return {
             hash,
