@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.3.2
+
+### Patch Changes
+
+- 0927d9c: Add content type to API calls
+
 ## 0.3.1
 
 ### Patch Changes
