@@ -118,4 +118,13 @@ export const burnSchema = z.object({
     tokenId: z.string().describe("The token id of the liquidity position to be burned"),
 });
 
+export const globalStateResponseSchema = z.object({
+    price: z.string().describe("The current price of the pool"),
+    tick: z.number().describe("The current tick of the pool"),
+    lastFee: z.number().describe("The current (last known) fee in hundredths of a bip"),
+    pluginCongig: z.number().describe("The current plugin config as bitmap"),
+    communityFee: z.number().describe("The community fee represented as a percent of all collected fee in thousandths"),
+    unlocked: z.boolean().describe("Whether the pool is unlocked"),
+})
+
 
