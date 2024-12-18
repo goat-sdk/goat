@@ -17,7 +17,10 @@ export class CrossmintMintService {
                 ...parameters,
                 chain: getCrossmintChainString(walletClient.getChain()),
             }),
-            headers: this.client.authHeaders,
+            headers: {
+                ...this.client.authHeaders,
+                "Content-Type": "application/json",
+            },
         });
 
         const result = await response.json();
@@ -44,7 +47,10 @@ export class CrossmintMintService {
     })
     async getAllCollections(walletClient: EVMWalletClient, parameters: GetAllCollectionsParameters) {
         const response = await fetch(`${this.client.baseUrl}/collections/`, {
-            headers: this.client.authHeaders,
+            headers: {
+                ...this.client.authHeaders,
+                "Content-Type": "application/json",
+            },
         });
 
         return await response.json();
@@ -101,7 +107,10 @@ export class CrossmintMintService {
         while (true) {
             attempts++;
             const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/actions/${actionId}`, {
-                headers: this.client.authHeaders,
+                headers: {
+                    ...this.client.authHeaders,
+                    "Content-Type": "application/json",
+                },
             });
 
             const body = await response.json();

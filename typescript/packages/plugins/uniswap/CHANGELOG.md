@@ -1,5 +1,22 @@
 # @goat-sdk/plugin-uniswap
 
+## 0.2.1
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
+## 0.2.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/core@0.4.0
+
 ## 0.0.3
 
 ### Patch Changes

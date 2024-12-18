@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-vercel-ai",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

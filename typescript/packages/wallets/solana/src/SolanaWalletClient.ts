@@ -8,7 +8,7 @@ export type SolanWalletClientCtorParams = {
 };
 
 export abstract class SolanaWalletClient extends WalletClientBase {
-    connection: Connection;
+    protected connection: Connection;
 
     constructor(params: SolanWalletClientCtorParams) {
         super();
@@ -19,6 +19,10 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         return {
             type: "solana",
         } as const;
+    }
+
+    getConnection() {
+        return this.connection;
     }
 
     async balanceOf(address: string) {

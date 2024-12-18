@@ -13,7 +13,7 @@ export class MagicEdenService {
     constructor(private readonly apiKey?: string) {}
 
     @Tool({
-        description: "Get information about a Solana NFT from the Magic Eden API",
+        description: "Get information about an NFT from the Magic Eden API",
     })
     async getNftListings(parameters: GetNftInfoParametersSchema) {
         let nftInfo: z.infer<typeof getNftInfoResponseSchema>;
@@ -38,7 +38,7 @@ export class MagicEdenService {
     }
 
     @Tool({
-        description: "Gets a transaction to buy a Solana NFT from a listing from the Magic Eden API",
+        description: "Get a transaction to buy an NFT from a listing from the Magic Eden API",
     })
     async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParametersSchema) {
         const nftInfo = await this.getNftListings(parameters);
@@ -71,7 +71,7 @@ export class MagicEdenService {
 
         const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(data.v0.tx.data));
         const instructions = await decompileVersionedTransactionToInstructions(
-            walletClient.connection,
+            walletClient.getConnection(),
             versionedTransaction,
         );
         const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(

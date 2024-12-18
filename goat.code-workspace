@@ -51,6 +51,10 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ☄️ meteora",
+            "path": "./typescript/packages/plugins/meteora"
+        },
+        {
             "name": "[Plugin] 🪙 spl token",
             "path": "./typescript/packages/plugins/spl-token"
         },

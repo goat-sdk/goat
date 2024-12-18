@@ -1,5 +1,23 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.3.1
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
+## 0.3.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/wallet-evm@1.0.0
+  - @goat-sdk/core@0.4.0
+
 ## 0.2.5
 
 ### Patch Changes

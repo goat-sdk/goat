@@ -28,7 +28,7 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
         };
     }
 
-    async sendTransaction({ instructions, addressLookupTableAddresses = [] }: SolanaTransaction) {
+    async sendTransaction({ instructions, addressLookupTableAddresses = [], accountsToSign = [] }: SolanaTransaction) {
         const latestBlockhash = await this.connection.getLatestBlockhash();
         const message = new TransactionMessage({
             payerKey: this.#keypair.publicKey,
@@ -37,11 +37,24 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
         }).compileToV0Message(await this.getAddressLookupTableAccounts(addressLookupTableAddresses));
         const transaction = new VersionedTransaction(message);
 
-        transaction.sign([this.#keypair]);
+        transaction.sign([this.#keypair, ...accountsToSign]);
 
         const hash = await this.connection.sendTransaction(transaction, {
             maxRetries: 5,
+            preflightCommitment: "confirmed",
         });
+
+        const newLatestBlockhash = await this.connection.getLatestBlockhash();
+
+        await this.connection.confirmTransaction(
+            {
+                blockhash: newLatestBlockhash.blockhash,
+                lastValidBlockHeight: newLatestBlockhash.lastValidBlockHeight,
+                signature: hash,
+            },
+            "confirmed",
+        );
+
         return {
             hash,
         };

@@ -35,13 +35,18 @@ export class CrossmintFaucetService {
 
         const options = {
             method: "POST",
-            headers: this.client.authHeaders,
+            headers: {
+                ...this.client.authHeaders,
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({
-                amount: parameters.amount,
+                amount: 10,
                 currency: "usdc",
                 chain,
             }),
         };
+
+        console.log("options", options);
 
         const response = await fetch(
             `${this.client.baseUrl}/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,

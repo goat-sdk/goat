@@ -1,5 +1,16 @@
 # @goat-sdk/wallet-viem
 
+## 0.2.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/wallet-evm@1.0.0
+
 ## 0.1.8
 
 ### Patch Changes

@@ -1,5 +1,5 @@
 {
-    "name": "@goat-sdk/plugin-spl-token",
+    "name": "@goat-sdk/plugin-meteora",
     "version": "0.2.3",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,10 +12,12 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@coral-xyz/anchor": "0.30.1",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
+        "@meteora-ag/dlmm": "1.3.4",
         "@solana/web3.js": "catalog:",
-        "@solana/spl-token": "0.4.9",
+        "bn.js": "5.2.1",
         "zod": "catalog:"
     },
     "peerDependencies": {
@@ -30,5 +32,8 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": ["ai", "agents", "web3"],
+    "devDependencies": {
+        "@types/bn.js": "5.1.6"
+    }
 }

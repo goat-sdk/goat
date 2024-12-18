@@ -12,7 +12,7 @@ export class JupiterService {
     }
 
     @Tool({
-        description: "Gets a quote for a swap on the Jupiter DEX.",
+        description: "Get a quote for a swap on the Jupiter DEX",
     })
     async getQuote(parameters: GetQuoteParameters) {
         try {
@@ -31,7 +31,7 @@ export class JupiterService {
     }
 
     @Tool({
-        description: "Swap an SPL token for another token on the Jupiter DEX.",
+        description: "Swap an SPL token for another token on the Jupiter DEX",
     })
     async swapTokens(walletClient: SolanaWalletClient, parameters: GetQuoteParameters) {
         const quoteResponse = await this.getQuote(parameters);

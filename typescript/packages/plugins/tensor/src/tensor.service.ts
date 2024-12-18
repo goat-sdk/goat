@@ -8,7 +8,7 @@ export class TensorService {
     constructor(private readonly apiKey: string) {}
 
     @Tool({
-        description: "Gets information about a Solana NFT, from the Tensor API",
+        description: "Get information about an NFT from the Tensor API",
     })
     async getNftInfo(parameters: GetNftInfoParameters) {
         let nftInfo: z.infer<typeof getNftInfoResponseSchema>;
@@ -29,7 +29,7 @@ export class TensorService {
     }
 
     @Tool({
-        description: "Gets a transaction to buy an NFT from a listing from the Tensor API",
+        description: "Get a transaction to buy an NFT from a listing from the Tensor API",
     })
     async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParameters) {
         const nftInfo = await this.getNftInfo(parameters);
@@ -65,7 +65,7 @@ export class TensorService {
         }
 
         const { versionedTransaction, instructions } = await deserializeTxResponseToInstructions(
-            walletClient.connection,
+            walletClient.getConnection(),
             data,
         );
         const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(

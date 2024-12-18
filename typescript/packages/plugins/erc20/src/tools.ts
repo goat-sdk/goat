@@ -20,7 +20,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const balanceTool = createTool(
             {
                 name: `get_${token.symbol}_balance`,
-                description: `This {{tool}} gets the balance of ${token.symbol}`,
+                description: `Get the balance of ${token.symbol}`,
                 parameters: getBalanceParametersSchema,
             },
             (parameters: z.infer<typeof getBalanceParametersSchema>) => balanceOf(walletClient, token, parameters),
@@ -29,7 +29,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const transferTool = createTool(
             {
                 name: `transfer_${token.symbol}`,
-                description: `This {{tool}} transfers ${token.symbol} to the specified address`,
+                description: `Transfer ${token.symbol} to the specified address`,
                 parameters: transferParametersSchema,
             },
             (parameters: z.infer<typeof transferParametersSchema>) => transfer(walletClient, token, parameters),
@@ -38,7 +38,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const totalSupplyTool = createTool(
             {
                 name: `get_${token.symbol}_total_supply`,
-                description: `This {{tool}} gets the total supply of ${token.symbol}`,
+                description: `Get the total supply of ${token.symbol}`,
                 parameters: totalSupplyParametersSchema,
             },
             (parameters: z.infer<typeof totalSupplyParametersSchema>) => totalSupply(walletClient, token),
@@ -47,7 +47,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const allowanceTool = createTool(
             {
                 name: `get_${token.symbol}_allowance`,
-                description: `This {{tool}} gets the allowance of ${token.symbol}`,
+                description: `Get the allowance of ${token.symbol}`,
                 parameters: allowanceParametersSchema,
             },
             (parameters: z.infer<typeof allowanceParametersSchema>) => allowance(walletClient, token, parameters),
@@ -56,7 +56,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const approveTool = createTool(
             {
                 name: `approve_${token.symbol}`,
-                description: `This {{tool}} approves the allowance of ${token.symbol}`,
+                description: `Approve the allowance of ${token.symbol}`,
                 parameters: approveParametersSchema,
             },
             (parameters: z.infer<typeof approveParametersSchema>) => approve(walletClient, token, parameters),
@@ -65,7 +65,7 @@ export function getTools(walletClient: EVMWalletClient, tokenList: ChainSpecific
         const transferFromTool = createTool(
             {
                 name: `transfer_${token.symbol}_from`,
-                description: `This {{tool}} transfers ${token.symbol} from the specified address`,
+                description: `Transfer ${token.symbol} from the specified address`,
                 parameters: transferFromParametersSchema,
             },
             (parameters: z.infer<typeof transferFromParametersSchema>) => transferFrom(walletClient, token, parameters),
