@@ -873,8 +873,8 @@ importers:
   packages/wallets/solana:
     dependencies:
       '@goat-sdk/core':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: workspace:*
+        version: link:../../core
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -2468,9 +2468,6 @@ packages:
   '@fal-ai/client@1.2.0':
     resolution: {integrity: sha512-MNCnE5icY+OM5ahgYJItmydZ7AxhtzhgA5tQI13jVntzhLT0z+tetHIlAL1VA0XFZgldDzqxeTf9Pr5TW3VErg==}
     engines: {node: '>=18.0.0'}
-
-  '@goat-sdk/core@0.4.0':
-    resolution: {integrity: sha512-x7TVQ+3IS8bS+44O+ZkbS2R6IDXO0dOcRNWe5psU8Aqrb7/48Fe1ILN2Pif0sv34y1WkPYPlqoPINl/TiatIVQ==}
 
   '@google-cloud/vertexai@1.9.0':
     resolution: {integrity: sha512-8brlcJwFXI4fPuBtsDNQqCdWZmz8gV9jeEKOU0vc5H2SjehCQpXK/NwuSEr916zbhlBHtg/sU37qQQdgvh5BRA==}
@@ -10942,11 +10939,6 @@ snapshots:
       '@msgpack/msgpack': 3.0.0-beta2
       eventsource-parser: 1.1.2
       robot3: 0.4.1
-
-  '@goat-sdk/core@0.4.0':
-    dependencies:
-      reflect-metadata: 0.2.2
-      zod: 3.23.8
 
   '@google-cloud/vertexai@1.9.0':
     dependencies:
