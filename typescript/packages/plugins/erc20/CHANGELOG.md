@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-erc20
 
+## 0.2.2
+
+### Patch Changes
+
+- c565119: Improve tool calling
+
 ## 0.2.1
 
 ### Patch Changes
