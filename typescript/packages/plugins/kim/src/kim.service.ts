@@ -1,19 +1,16 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import {
-    MintResponseSchema,
-    increaseLiquidityResponseSchema,
-    decreaseLiquidityResponseSchema,
-    collectResponseSchema,
-    exactInputSingleSchema,
-    exactOutputSingleSchema,
-    exactInputSchema,
-    exactOutputSchema,
-    mintSchema,
-    increaseLiquiditySchema,
-    decreaseLiquiditySchema,
-    collectSchema,
-    burnSchema,
+    ExactInputSingleParams,
+    ExactOutputSingleParams,
+    ExactInputParams,
+    ExactOutputParams,
+    MintParams,
+    IncreaseLiquidityParams,
+    DecreaseLiquidityParams,
+    CollectParams,
+    BurnParams,
+    GlobalStateResponseParams,
 } from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from "./abi/factory";
@@ -25,10 +22,13 @@ import { parseUnits } from "viem";
 import { decodeEventLog, formatUnits } from "viem";
 import { encodeAbiParameters } from "viem";
 import { POOL_ABI } from "./abi/pool";
-import { globalStateResponseSchema } from "./parameters";
+
+const SWAP_ROUTER_ADDRESS = "0xAc48FcF1049668B285f3dC72483DF5Ae2162f7e8";
+const POSITION_MANAGER_ADDRESS = "0x2e8614625226D26180aDf6530C3b1677d3D7cf10";
+const FACTORY_ADDRESS = "0xB5F00c2C5f8821155D8ed27E31932CFD9DB3C5D5";
 
 export class KimService {
-    constructor(private readonly addresses: KimContractAddresses) {}
+    constructor() {}
 
     @Tool({
         name: "kim_swap_exact_input_single_hop",
@@ -36,7 +36,7 @@ export class KimService {
     })
     async swapExactInputSingleHop(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof exactInputSingleSchema>
+        parameters: ExactInputSingleParams
     ): Promise<string> {
         try {
             const tokenIn = await walletClient.resolveAddress(
@@ -73,7 +73,7 @@ export class KimService {
             const limitSqrtPrice = parseUnits(parameters.limitSqrtPrice, 96);
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.swapRouter,
+                to: SWAP_ROUTER_ADDRESS,
                 abi: SWAP_ROUTER_ABI,
                 functionName: "exactInputSingle",
                 args: [
@@ -101,7 +101,7 @@ export class KimService {
     })
     async swapExactOutputSingleHop(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof exactOutputSingleSchema>
+        parameters: ExactOutputSingleParams
     ): Promise<string> {
         try {
             const tokenIn = await walletClient.resolveAddress(
@@ -141,7 +141,7 @@ export class KimService {
             const limitSqrtPrice = parseUnits(parameters.limitSqrtPrice, 96);
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.swapRouter,
+                to: SWAP_ROUTER_ADDRESS,
                 abi: SWAP_ROUTER_ABI,
                 functionName: "exactOutputSingle",
                 args: [
@@ -167,72 +167,7 @@ export class KimService {
     })
     async swapExactInputMultiHop(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof exactInputSchema>
-    ): Promise<string> {
-        try {
-            const recipient = await walletClient.resolveAddress(
-                parameters.recipient
-            );
-
-            // Get first and last token decimals
-            const tokenInDecimals = Number(
-                await walletClient.read({
-                    address: parameters.path.tokenIn as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })
-            );
-
-            const tokenOutDecimals = Number(
-                await walletClient.read({
-                    address: parameters.path.tokenOut as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })
-            );
-
-            // Encode the path
-            const encodedPath = encodeAbiParameters(
-                [{ type: "address[]" }, { type: "uint24[]" }],
-                [
-                    [
-                        parameters.path.tokenIn as `0x${string}`,
-                        ...parameters.path.intermediateTokens.map(
-                            (t) => t as `0x${string}`
-                        ),
-                        parameters.path.tokenOut as `0x${string}`,
-                    ],
-                    parameters.path.fees,
-                ]
-            );
-
-            const hash = await walletClient.sendTransaction({
-                to: this.addresses.swapRouter,
-                abi: SWAP_ROUTER_ABI,
-                functionName: "exactInput",
-                args: [
-                    encodedPath,
-                    recipient,
-                    parameters.deadline,
-                    parseUnits(parameters.amountIn, tokenInDecimals),
-                    parseUnits(parameters.amountOutMinimum, tokenOutDecimals),
-                ],
-            });
-
-            return hash.hash;
-        } catch (error) {
-            throw new Error(`Failed to swap: ${error}`);
-        }
-    }
-
-    @Tool({
-        name: "kim_swap_exact_output_multi_hop",
-        description:
-            "Swap tokens to receive an exact amount of output tokens in multiple hops",
-    })
-    async swapExactOutputMultiHop(
-        walletClient: EVMWalletClient,
-        parameters: z.infer<typeof exactOutputSchema>
+        parameters: ExactInputParams
     ): Promise<string> {
         try {
             const recipient = await walletClient.resolveAddress(
@@ -272,7 +207,72 @@ export class KimService {
             );
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.swapRouter,
+                to: SWAP_ROUTER_ADDRESS,
+                abi: SWAP_ROUTER_ABI,
+                functionName: "exactInput",
+                args: [
+                    encodedPath,
+                    recipient,
+                    parameters.deadline,
+                    parseUnits(parameters.amountIn, tokenInDecimals),
+                    parseUnits(parameters.amountOutMinimum, tokenOutDecimals),
+                ],
+            });
+
+            return hash.hash;
+        } catch (error) {
+            throw new Error(`Failed to swap: ${error}`);
+        }
+    }
+
+    @Tool({
+        name: "kim_swap_exact_output_multi_hop",
+        description:
+            "Swap tokens to receive an exact amount of output tokens in multiple hops",
+    })
+    async swapExactOutputMultiHop(
+        walletClient: EVMWalletClient,
+        parameters: ExactOutputParams
+    ): Promise<string> {
+        try {
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
+
+            // Get first and last token decimals
+            const tokenInDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenIn as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
+
+            const tokenOutDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenOut as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
+
+            // Encode the path
+            const encodedPath = encodeAbiParameters(
+                [{ type: "address[]" }, { type: "uint24[]" }],
+                [
+                    [
+                        parameters.path.tokenIn as `0x${string}`,
+                        ...parameters.path.intermediateTokens.map(
+                            (t: string) => t as `0x${string}`
+                        ),
+                        parameters.path.tokenOut as `0x${string}`,
+                    ],
+                    parameters.path.fees,
+                ]
+            );
+
+            const hash = await walletClient.sendTransaction({
+                to: SWAP_ROUTER_ADDRESS,
                 abi: SWAP_ROUTER_ABI,
                 functionName: "exactOutput",
                 args: [
@@ -296,7 +296,7 @@ export class KimService {
     })
     async mintPosition(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof mintSchema>
+        parameters: MintParams
     ): Promise<string> {
         try {
             const tickSpacing = 60; // This should come from the pool fee tier
@@ -308,7 +308,7 @@ export class KimService {
 
             // Get current tick from globalState
             const poolAddress = await walletClient.read({
-                address: this.addresses.factory as `0x${string}`,
+                address: FACTORY_ADDRESS as `0x${string}`,
                 abi: KIM_FACTORY_ABI,
                 functionName: "getPool",
                 args: [token0, token1],
@@ -318,7 +318,7 @@ export class KimService {
                 address: poolAddress as unknown as `0x${string}`,
                 abi: POOL_ABI,
                 functionName: "globalState",
-            })) as any as z.infer<typeof globalStateResponseSchema>;
+            })) as any as GlobalStateResponseParams;
 
             const currentTick = globalState.tick;
 
@@ -355,7 +355,7 @@ export class KimService {
             );
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.positionManager,
+                to: POSITION_MANAGER_ADDRESS,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "mint",
                 args: [
@@ -387,7 +387,7 @@ export class KimService {
     })
     async increaseLiquidity(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof increaseLiquiditySchema>
+        parameters: IncreaseLiquidityParams
     ): Promise<string> {
         try {
             const [token0Decimals, token1Decimals] = await Promise.all([
@@ -408,7 +408,7 @@ export class KimService {
             ]);
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.positionManager,
+                to: POSITION_MANAGER_ADDRESS,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "increaseLiquidity",
                 args: [
@@ -447,7 +447,7 @@ export class KimService {
     })
     async decreaseLiquidity(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof decreaseLiquiditySchema>
+        parameters: DecreaseLiquidityParams
     ): Promise<string> {
         try {
             const [token0Decimals, token1Decimals] = await Promise.all([
@@ -468,7 +468,7 @@ export class KimService {
             ]);
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.positionManager,
+                to: POSITION_MANAGER_ADDRESS,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "decreaseLiquidity",
                 args: [
@@ -500,7 +500,7 @@ export class KimService {
     })
     async collect(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof collectSchema>
+        parameters: CollectParams
     ): Promise<string> {
         try {
             const recipient = await walletClient.resolveAddress(
@@ -525,7 +525,7 @@ export class KimService {
             ]);
 
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.positionManager,
+                to: POSITION_MANAGER_ADDRESS,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "collect",
                 args: [
@@ -557,11 +557,11 @@ export class KimService {
     })
     async burn(
         walletClient: EVMWalletClient,
-        parameters: z.infer<typeof burnSchema>
+        parameters: BurnParams
     ): Promise<string> {
         try {
             const hash = await walletClient.sendTransaction({
-                to: this.addresses.positionManager,
+                to: POSITION_MANAGER_ADDRESS,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "burn",
                 args: [parameters.tokenId],
