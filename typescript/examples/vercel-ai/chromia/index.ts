@@ -67,7 +67,7 @@ async function chat(tools: object) {
                 .join("\n"),
         });
 
-        console.log(chalk.blue.bold("AI Assistant:"), result.text);
+        console.log(chalk.blue.bold("CHRA:"), result.text);
 
         const userInput = await askQuestion("You: ");
         if (userInput.toLowerCase() === "exit") {
