@@ -1,14 +1,14 @@
+import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
 import { createConnection, createInMemoryEvmKeyStore, createKeyStoreInteractor } from "@chromia/ft4";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { sendCHR } from "@goat-sdk/wallet-chromia";
 import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
 import { generateText } from "ai";
+import chalk from "chalk";
 import { type KeyPair, createClient } from "postchain-client";
-import { MASTER_PROMPT, getLiveTokenPrice } from './tools';
 import { z } from "zod";
-import readline from 'readline';
-import chalk from 'chalk';
+import { MASTER_PROMPT, getLiveTokenPrice } from "./tools";
 require("dotenv").config();
 
 const privateKey = process.env.EVM_PRIVATE_KEY;
@@ -17,10 +17,10 @@ if (!privateKey) {
     throw new Error("EVM_PRIVATE_KEY is not set in the environment");
 }
 
-async function chat(tools: any) {
+async function chat(tools: object) {
     const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout
+        output: process.stdout,
     });
 
     const askQuestion = (query: string): Promise<string> => {
@@ -32,23 +32,29 @@ async function chat(tools: any) {
     };
 
     const initialPriceData = await getLiveTokenPrice();
-    
-    let conversation = [{ 
-        role: "system", 
-        content: MASTER_PROMPT(JSON.stringify(initialPriceData)) 
-    }];
+    const formattedPriceData = `CHR Price: $${initialPriceData.chromaway.usd.toFixed(3)}
+    Market Cap: $${(initialPriceData.chromaway.usd_market_cap / 1000000).toFixed(2)}M
+    24h Volume: $${(initialPriceData.chromaway.usd_24h_vol / 1000000).toFixed(2)}M
+    24h Change: ${initialPriceData.chromaway.usd_24h_change.toFixed(2)}%`;
+
+    let conversation = [
+        {
+            role: "system",
+            content: MASTER_PROMPT(formattedPriceData),
+        },
+    ];
 
     const enhancedTools = {
         ...tools,
         getLiveTokenPrice: {
-            name: 'getLiveTokenPrice',
-            description: 'Gets the current CHR token price',
+            name: "getLiveTokenPrice",
+            description: "Gets the current CHR token price",
             parameters: z.object({}),
             execute: async () => {
                 const price = await getLiveTokenPrice();
-                return `The current price of CHR is $${JSON.stringify(price)}`;
-            }
-        }
+                return `The current price of CHR is $${formattedPriceData}`;
+            },
+        },
     };
 
     while (true) {
@@ -56,24 +62,24 @@ async function chat(tools: any) {
             model: openai("gpt-4o-mini"),
             tools: enhancedTools,
             maxSteps: 10,
-            prompt: conversation.map(msg => 
-                `${msg.role === 'system' ? '' : msg.role + ': '}${msg.content}`
-            ).join('\n'),
+            prompt: conversation
+                .map((msg) => `${msg.role === "system" ? "" : `${msg.role}: `}${msg.content}`)
+                .join("\n"),
         });
 
         console.log(chalk.blue.bold("AI Assistant:"), result.text);
-        
+
         const userInput = await askQuestion("You: ");
-        if (userInput.toLowerCase() === 'exit') {
+        if (userInput.toLowerCase() === "exit") {
             rl.close();
             break;
         }
-        
+
         conversation = [
             conversation[0],
-            ...conversation.slice(-3).filter(msg => msg.role !== 'system'),
+            ...conversation.slice(-3).filter((msg) => msg.role !== "system"),
             { role: "user", content: userInput },
-            { role: "assistant", content: result.text }
+            { role: "assistant", content: result.text },
         ];
     }
 }
@@ -105,16 +111,16 @@ async function chat(tools: any) {
     const enhancedTools = {
         ...baseTools,
         getTransactionLink: {
-            name: 'getTransactionLink',
-            description: 'Gets the transaction explorer link',
+            name: "getTransactionLink",
+            description: "Gets the transaction explorer link",
             parameters: z.object({
-                txHash: z.string()
+                txHash: z.string(),
             }),
             execute: async ({ txHash }: { txHash: string }) => {
                 return `https://explorer.chromia.com/tx/${txHash}`;
-            }
-        }
+            },
+        },
     };
-    
+
     await chat(enhancedTools);
 })();
