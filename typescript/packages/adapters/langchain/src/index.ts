@@ -1,10 +1,4 @@
-import {
-    type GetToolsParams,
-    type ToolBase,
-    type WalletClientBase,
-    addParametersToDescription,
-    getTools,
-} from "@goat-sdk/core";
+import { type GetToolsParams, type ToolBase, type WalletClientBase, getTools } from "@goat-sdk/core";
 
 import { tool } from "@langchain/core/tools";
 import type { z } from "zod";
@@ -24,7 +18,7 @@ export async function getOnChainTools<TWalletClient extends WalletClientBase>({
             },
             {
                 name: t.name,
-                description: addParametersToDescription(t.description, t.parameters),
+                description: t.description,
                 schema: t.parameters,
             },
         ),

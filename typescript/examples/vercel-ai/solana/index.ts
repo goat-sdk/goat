@@ -28,7 +28,7 @@ const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_K
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 10,
-        prompt: "Swap 0.05 USDC to GOAT, return the transaction hash, make sure you check i have enough USDC to cover the swap",
+        prompt: "Swap 0.05 USDC to SOL, return the transaction hash, make sure you check i have enough USDC to cover the swap",
     });
 
     console.log(result.text);

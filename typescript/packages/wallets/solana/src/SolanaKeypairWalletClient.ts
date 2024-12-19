@@ -30,6 +30,7 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
 
     async sendTransaction({ instructions, addressLookupTableAddresses = [], accountsToSign = [] }: SolanaTransaction) {
         const latestBlockhash = await this.connection.getLatestBlockhash();
+
         const message = new TransactionMessage({
             payerKey: this.#keypair.publicKey,
             recentBlockhash: latestBlockhash.blockhash,
@@ -40,16 +41,14 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
         transaction.sign([this.#keypair, ...accountsToSign]);
 
         const hash = await this.connection.sendTransaction(transaction, {
-            maxRetries: 5,
+            maxRetries: 10,
             preflightCommitment: "confirmed",
         });
 
-        const newLatestBlockhash = await this.connection.getLatestBlockhash();
-
         await this.connection.confirmTransaction(
             {
-                blockhash: newLatestBlockhash.blockhash,
-                lastValidBlockHeight: newLatestBlockhash.lastValidBlockHeight,
+                blockhash: latestBlockhash.blockhash,
+                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
                 signature: hash,
             },
             "confirmed",

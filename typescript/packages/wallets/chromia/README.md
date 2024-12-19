@@ -4,6 +4,24 @@
 ```
 npm install @goat-sdk/wallet-chromia
 ```
+## Steps to Create a Chromia Dapp Account
+
+1. **Go to Chromia Vault**  
+   Visit the [Chromia Vault](https://vault.chromia.com/en/dapps/).
+
+2. **Connect Your Wallet**  
+   Click on the **Connect** button located in the top right corner of the page.
+
+3. **Create a Dapp Account**  
+   Once connected, click on your address in the top right corner and select **Create Dapp Account**.
+
+4. **Choose the Chromia Economy Chain**  
+   - Select the **Chromia Economy Chain** option.  
+   - Follow the prompts to deposit the required amount of CHR to create your account.
+
+5. **Confirm Your Address**  
+   After making the deposit, your CHR address will be listed below for your reference.
+
 
 ## Usage
 
@@ -31,7 +49,7 @@ import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { createClient } from "postchain-client";
 import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
 import { createConnection, createInMemoryEvmKeyStore, createKeyStoreInteractor } from "@chromia/ft4";
-import { sendCHR } from "@goat-sdk/core";
+import { sendCHR } from "@goat-sdk/wallet-chromia";
 
 const privateKey = process.env.EVM_PRIVATE_KEY
 

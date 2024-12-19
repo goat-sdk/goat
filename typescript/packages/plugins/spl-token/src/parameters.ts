@@ -18,7 +18,7 @@ export class TransferTokenByMintAddressParameters extends createToolParameters(
     z.object({
         mintAddress: z.string().describe("The mint address of the token to transfer"),
         to: z.string().describe("The address to transfer the token to"),
-        amount: z.string().describe("The amount of tokens to transfer"),
+        amount: z.string().describe("The amount of tokens to transfer in base unit"),
     }),
 ) {}
 

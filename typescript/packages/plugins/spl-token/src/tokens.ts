@@ -32,6 +32,16 @@ export const GOAT: Token = {
     },
 };
 
+export const PENGU: Token = {
+    decimals: 6,
+    symbol: "PENGU",
+    name: "Pengu",
+    mintAddresses: {
+        mainnet: "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+        devnet: null,
+    },
+};
+
 export const SOL: Token = {
     decimals: 9,
     symbol: "SOL",
@@ -42,4 +52,4 @@ export const SOL: Token = {
     },
 };
 
-export const SPL_TOKENS: Token[] = [USDC, GOAT, SOL];
+export const SPL_TOKENS: Token[] = [USDC, GOAT, PENGU, SOL];

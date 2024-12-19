@@ -14,8 +14,11 @@
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-chromia": "workspace:*",
+        "@langchain/langgraph": "^0.2.0",
         "ai": "catalog:",
+        "chalk": "5.3.0",
         "dotenv": "^16.4.5",
-        "postchain-client": "catalog:"
+        "postchain-client": "catalog:",
+        "zod": "^3.24.1"
     }
 }

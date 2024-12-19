@@ -49,9 +49,24 @@ export class SplTokenService {
         parameters: GetTokenBalanceByMintAddressParameters,
     ) {
         const { walletAddress, mintAddress } = parameters;
-        const tokenAccount = getAssociatedTokenAddressSync(new PublicKey(mintAddress), new PublicKey(walletAddress));
-        const balance = walletClient.getConnection().getTokenAccountBalance(tokenAccount);
-        return balance;
+        try {
+            const tokenAccount = getAssociatedTokenAddressSync(
+                new PublicKey(mintAddress),
+                new PublicKey(walletAddress),
+            );
+
+            const accountExists = await doesAccountExist(walletClient.getConnection(), tokenAccount);
+
+            if (!accountExists) {
+                return 0;
+            }
+
+            const balance = await walletClient.getConnection().getTokenAccountBalance(tokenAccount);
+
+            return balance;
+        } catch (error) {
+            throw new Error(`Failed to get token balance: ${error}`);
+        }
     }
 
     @Tool({
