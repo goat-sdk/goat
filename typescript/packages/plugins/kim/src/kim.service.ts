@@ -12,7 +12,6 @@ import {
     BurnParams,
     GlobalStateResponseParams,
 } from "./parameters";
-import { KimContractAddresses } from "./types/KimCtorParams";
 import { KIM_FACTORY_ABI } from "./abi/factory";
 import { POSITION_MANAGER_ABI } from "./abi/positionManager";
 import { SWAP_ROUTER_ABI } from "./abi/swaprouter";
