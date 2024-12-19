@@ -1,16 +1,30 @@
 import { Tool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { MintResponseSchema, increaseLiquidityResponseSchema, decreaseLiquidityResponseSchema, collectResponseSchema, exactInputSingleSchema, exactOutputSingleSchema, exactInputSchema, exactOutputSchema, mintSchema, increaseLiquiditySchema, decreaseLiquiditySchema, collectSchema, burnSchema } from "./parameters";
+import {
+    MintResponseSchema,
+    increaseLiquidityResponseSchema,
+    decreaseLiquidityResponseSchema,
+    collectResponseSchema,
+    exactInputSingleSchema,
+    exactOutputSingleSchema,
+    exactInputSchema,
+    exactOutputSchema,
+    mintSchema,
+    increaseLiquiditySchema,
+    decreaseLiquiditySchema,
+    collectSchema,
+    burnSchema,
+} from "./parameters";
 import { KimContractAddresses } from "./types/KimCtorParams";
-import { KIM_FACTORY_ABI } from './abi/factory';
-import { POSITION_MANAGER_ABI } from './abi/positionManager';
-import { SWAP_ROUTER_ABI } from './abi/swaprouter';
+import { KIM_FACTORY_ABI } from "./abi/factory";
+import { POSITION_MANAGER_ABI } from "./abi/positionManager";
+import { SWAP_ROUTER_ABI } from "./abi/swaprouter";
 import { z } from "zod";
 import { ERC20_ABI } from "./abi/erc20";
 import { parseUnits } from "viem";
 import { decodeEventLog, formatUnits } from "viem";
 import { encodeAbiParameters } from "viem";
-import { POOL_ABI } from './abi/pool';
+import { POOL_ABI } from "./abi/pool";
 import { globalStateResponseSchema } from "./parameters";
 
 export class KimService {
@@ -18,31 +32,44 @@ export class KimService {
 
     @Tool({
         name: "kim_swap_exact_input_single_hop",
-        description: "Swaps an exact amount of input tokens for a single hop",
+        description: "Swap an exact amount of input tokens for a single hop",
     })
     async swapExactInputSingleHop(
         walletClient: EVMWalletClient,
         parameters: z.infer<typeof exactInputSingleSchema>
     ): Promise<string> {
         try {
-            const tokenIn = await walletClient.resolveAddress(parameters.tokenIn);
-            const tokenOut = await walletClient.resolveAddress(parameters.tokenOut);
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const tokenIn = await walletClient.resolveAddress(
+                parameters.tokenIn
+            );
+            const tokenOut = await walletClient.resolveAddress(
+                parameters.tokenOut
+            );
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
 
-            const tokenInDecimals = Number(await walletClient.read({
-                address: parameters.tokenIn as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenInDecimals = Number(
+                await walletClient.read({
+                    address: parameters.tokenIn as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
-            const tokenOutDecimals = Number(await walletClient.read({
-                address: parameters.tokenOut as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenOutDecimals = Number(
+                await walletClient.read({
+                    address: parameters.tokenOut as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
             const amountIn = parseUnits(parameters.amountIn, tokenInDecimals);
-            const amountOutMinimum = parseUnits(parameters.amountOutMinimum, tokenOutDecimals);
+            const amountOutMinimum = parseUnits(
+                parameters.amountOutMinimum,
+                tokenOutDecimals
+            );
             const limitSqrtPrice = parseUnits(parameters.limitSqrtPrice, 96);
 
             const hash = await walletClient.sendTransaction({
@@ -70,31 +97,47 @@ export class KimService {
 
     @Tool({
         name: "kim_swap_exact_output_single_hop",
-        description: "Swaps an exact amount of output tokens for a single hop",
+        description: "Swap an exact amount of output tokens for a single hop",
     })
     async swapExactOutputSingleHop(
         walletClient: EVMWalletClient,
         parameters: z.infer<typeof exactOutputSingleSchema>
     ): Promise<string> {
         try {
-            const tokenIn = await walletClient.resolveAddress(parameters.tokenIn);
-            const tokenOut = await walletClient.resolveAddress(parameters.tokenOut);
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const tokenIn = await walletClient.resolveAddress(
+                parameters.tokenIn
+            );
+            const tokenOut = await walletClient.resolveAddress(
+                parameters.tokenOut
+            );
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
 
-            const tokenInDecimals = Number(await walletClient.read({
-                address: parameters.tokenIn as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenInDecimals = Number(
+                await walletClient.read({
+                    address: parameters.tokenIn as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
-            const tokenOutDecimals = Number(await walletClient.read({
-                address: parameters.tokenOut as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenOutDecimals = Number(
+                await walletClient.read({
+                    address: parameters.tokenOut as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
-            const amountOut = parseUnits(parameters.amountOut, tokenOutDecimals);
-            const amountInMaximum = parseUnits(parameters.amountInMaximum, tokenInDecimals);
+            const amountOut = parseUnits(
+                parameters.amountOut,
+                tokenOutDecimals
+            );
+            const amountInMaximum = parseUnits(
+                parameters.amountInMaximum,
+                tokenInDecimals
+            );
             const limitSqrtPrice = parseUnits(parameters.limitSqrtPrice, 96);
 
             const hash = await walletClient.sendTransaction({
@@ -120,36 +163,47 @@ export class KimService {
 
     @Tool({
         name: "kim_swap_exact_input_multi_hop",
-        description: "Swaps an exact amount of input tokens in multiple hops",
+        description: "Swap an exact amount of input tokens in multiple hops",
     })
     async swapExactInputMultiHop(
         walletClient: EVMWalletClient,
         parameters: z.infer<typeof exactInputSchema>
     ): Promise<string> {
         try {
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
 
             // Get first and last token decimals
-            const tokenInDecimals = Number(await walletClient.read({
-                address: parameters.path.tokenIn as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenInDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenIn as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
-            const tokenOutDecimals = Number(await walletClient.read({
-                address: parameters.path.tokenOut as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenOutDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenOut as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
             // Encode the path
             const encodedPath = encodeAbiParameters(
-                [{ type: 'address[]' }, { type: 'uint24[]' }],
-                [[
-                    parameters.path.tokenIn as `0x${string}`,
-                    ...parameters.path.intermediateTokens.map(t => t as `0x${string}`),
-                    parameters.path.tokenOut as `0x${string}`
-                ], parameters.path.fees]
+                [{ type: "address[]" }, { type: "uint24[]" }],
+                [
+                    [
+                        parameters.path.tokenIn as `0x${string}`,
+                        ...parameters.path.intermediateTokens.map(
+                            (t) => t as `0x${string}`
+                        ),
+                        parameters.path.tokenOut as `0x${string}`,
+                    ],
+                    parameters.path.fees,
+                ]
             );
 
             const hash = await walletClient.sendTransaction({
@@ -173,36 +227,48 @@ export class KimService {
 
     @Tool({
         name: "kim_swap_exact_output_multi_hop",
-        description: "Swaps tokens to receive an exact amount of output tokens in multiple hops",
+        description:
+            "Swap tokens to receive an exact amount of output tokens in multiple hops",
     })
     async swapExactOutputMultiHop(
         walletClient: EVMWalletClient,
         parameters: z.infer<typeof exactOutputSchema>
     ): Promise<string> {
         try {
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
 
             // Get first and last token decimals
-            const tokenInDecimals = Number(await walletClient.read({
-                address: parameters.path.tokenIn as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenInDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenIn as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
-            const tokenOutDecimals = Number(await walletClient.read({
-                address: parameters.path.tokenOut as `0x${string}`,
-                abi: ERC20_ABI,
-                functionName: "decimals",
-            }));
+            const tokenOutDecimals = Number(
+                await walletClient.read({
+                    address: parameters.path.tokenOut as `0x${string}`,
+                    abi: ERC20_ABI,
+                    functionName: "decimals",
+                })
+            );
 
             // Encode the path
             const encodedPath = encodeAbiParameters(
-                [{ type: 'address[]' }, { type: 'uint24[]' }],
-                [[
-                    parameters.path.tokenIn as `0x${string}`,
-                    ...parameters.path.intermediateTokens.map((t: string) => t as `0x${string}`),
-                    parameters.path.tokenOut as `0x${string}`
-                ], parameters.path.fees]
+                [{ type: "address[]" }, { type: "uint24[]" }],
+                [
+                    [
+                        parameters.path.tokenIn as `0x${string}`,
+                        ...parameters.path.intermediateTokens.map(
+                            (t: string) => t as `0x${string}`
+                        ),
+                        parameters.path.tokenOut as `0x${string}`,
+                    ],
+                    parameters.path.fees,
+                ]
             );
 
             const hash = await walletClient.sendTransaction({
@@ -226,7 +292,7 @@ export class KimService {
 
     @Tool({
         name: "kim_mint_position",
-        description: "Mints a new liquidity position",
+        description: "Mint a new liquidity position",
     })
     async mintPosition(
         walletClient: EVMWalletClient,
@@ -234,7 +300,9 @@ export class KimService {
     ): Promise<string> {
         try {
             const tickSpacing = 60; // This should come from the pool fee tier
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
             const token0 = await walletClient.resolveAddress(parameters.token0);
             const token1 = await walletClient.resolveAddress(parameters.token1);
 
@@ -246,19 +314,23 @@ export class KimService {
                 args: [token0, token1],
             });
 
-            const globalState = await walletClient.read({
+            const globalState = (await walletClient.read({
                 address: poolAddress as unknown as `0x${string}`,
                 abi: POOL_ABI,
                 functionName: "globalState",
-            }) as any as z.infer<typeof globalStateResponseSchema>;
+            })) as any as z.infer<typeof globalStateResponseSchema>;
 
             const currentTick = globalState.tick;
 
             // Calculate ticks around current price
-            const tickLower = parameters.tickLower ? parameters.tickLower : Math.floor(currentTick / tickSpacing)
-                * tickSpacing - tickSpacing * 2;
-            const tickUpper = parameters.tickUpper ? parameters.tickUpper : Math.floor(currentTick / tickSpacing)
-                * tickSpacing + tickSpacing * 2;
+            const tickLower = parameters.tickLower
+                ? parameters.tickLower
+                : Math.floor(currentTick / tickSpacing) * tickSpacing -
+                  tickSpacing * 2;
+            const tickUpper = parameters.tickUpper
+                ? parameters.tickUpper
+                : Math.floor(currentTick / tickSpacing) * tickSpacing +
+                  tickSpacing * 2;
 
             const [token0Decimals, token1Decimals] = await Promise.all([
                 walletClient.read({
@@ -273,25 +345,33 @@ export class KimService {
                 }),
             ]);
 
-            const amount0Desired = parseUnits(parameters.amount0Desired, Number(token0Decimals));
-            const amount1Desired = parseUnits(parameters.amount1Desired, Number(token1Decimals));
+            const amount0Desired = parseUnits(
+                parameters.amount0Desired,
+                Number(token0Decimals)
+            );
+            const amount1Desired = parseUnits(
+                parameters.amount1Desired,
+                Number(token1Decimals)
+            );
 
             const hash = await walletClient.sendTransaction({
                 to: this.addresses.positionManager,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "mint",
-                args: [{
-                    token0,
-                    token1,
-                    tickLower,
-                    tickUpper,
-                    amount0Desired,
-                    amount1Desired,
-                    amount0Min: 0, // Consider adding slippage protection
-                    amount1Min: 0, // Consider adding slippage protection
-                    recipient,
-                    deadline: parameters.deadline
-                }]
+                args: [
+                    {
+                        token0,
+                        token1,
+                        tickLower,
+                        tickUpper,
+                        amount0Desired,
+                        amount1Desired,
+                        amount0Min: 0, // Consider adding slippage protection
+                        amount1Min: 0, // Consider adding slippage protection
+                        recipient,
+                        deadline: parameters.deadline,
+                    },
+                ],
             });
 
             return hash.hash;
@@ -303,7 +383,7 @@ export class KimService {
 
     @Tool({
         name: "kim_increase_liquidity",
-        description: "Increases liquidity in an existing position",
+        description: "Increase liquidity in an existing position",
     })
     async increaseLiquidity(
         walletClient: EVMWalletClient,
@@ -311,30 +391,48 @@ export class KimService {
     ): Promise<string> {
         try {
             const [token0Decimals, token1Decimals] = await Promise.all([
-                Number(await walletClient.read({
-                    address: parameters.token0 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
-                Number(await walletClient.read({
-                    address: parameters.token1 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token0 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token1 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
             ]);
 
             const hash = await walletClient.sendTransaction({
                 to: this.addresses.positionManager,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "increaseLiquidity",
-                args: [{
-                    tokenId: parameters.tokenId,
-                    amount0Desired: parseUnits(parameters.amount0Desired, token0Decimals),
-                    amount1Desired: parseUnits(parameters.amount1Desired, token1Decimals),
-                    amount0Min: parseUnits(parameters.amount0Min, token0Decimals),
-                    amount1Min: parseUnits(parameters.amount1Min, token1Decimals),
-                    deadline: parameters.deadline,
-                }],
+                args: [
+                    {
+                        tokenId: parameters.tokenId,
+                        amount0Desired: parseUnits(
+                            parameters.amount0Desired,
+                            token0Decimals
+                        ),
+                        amount1Desired: parseUnits(
+                            parameters.amount1Desired,
+                            token1Decimals
+                        ),
+                        amount0Min: parseUnits(
+                            parameters.amount0Min,
+                            token0Decimals
+                        ),
+                        amount1Min: parseUnits(
+                            parameters.amount1Min,
+                            token1Decimals
+                        ),
+                        deadline: parameters.deadline,
+                    },
+                ],
             });
 
             return hash.hash;
@@ -345,7 +443,7 @@ export class KimService {
 
     @Tool({
         name: "kim_decrease_liquidity",
-        description: "Decreases liquidity in an existing position",
+        description: "Decrease liquidity in an existing position",
     })
     async decreaseLiquidity(
         walletClient: EVMWalletClient,
@@ -353,29 +451,41 @@ export class KimService {
     ): Promise<string> {
         try {
             const [token0Decimals, token1Decimals] = await Promise.all([
-                Number(await walletClient.read({
-                    address: parameters.token0 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
-                Number(await walletClient.read({
-                    address: parameters.token1 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token0 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token1 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
             ]);
 
             const hash = await walletClient.sendTransaction({
                 to: this.addresses.positionManager,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "decreaseLiquidity",
-                args: [{
-                    tokenId: parameters.tokenId,
-                    liquidity: parseUnits(parameters.liquidity, 18), // Liquidity has 18 decimals
-                    amount0Min: parseUnits(parameters.amount0Min, token0Decimals),
-                    amount1Min: parseUnits(parameters.amount1Min, token1Decimals),
-                    deadline: parameters.deadline,
-                }],
+                args: [
+                    {
+                        tokenId: parameters.tokenId,
+                        liquidity: parseUnits(parameters.liquidity, 18), // Liquidity has 18 decimals
+                        amount0Min: parseUnits(
+                            parameters.amount0Min,
+                            token0Decimals
+                        ),
+                        amount1Min: parseUnits(
+                            parameters.amount1Min,
+                            token1Decimals
+                        ),
+                        deadline: parameters.deadline,
+                    },
+                ],
             });
 
             return hash.hash;
@@ -386,38 +496,52 @@ export class KimService {
 
     @Tool({
         name: "kim_collect",
-        description: "Collects tokens from a liquidity position",
+        description: "Collect tokens from a liquidity position",
     })
     async collect(
         walletClient: EVMWalletClient,
         parameters: z.infer<typeof collectSchema>
     ): Promise<string> {
         try {
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = await walletClient.resolveAddress(
+                parameters.recipient
+            );
 
             const [token0Decimals, token1Decimals] = await Promise.all([
-                Number(await walletClient.read({
-                    address: parameters.token0 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
-                Number(await walletClient.read({
-                    address: parameters.token1 as `0x${string}`,
-                    abi: ERC20_ABI,
-                    functionName: "decimals",
-                })),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token0 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
+                Number(
+                    await walletClient.read({
+                        address: parameters.token1 as `0x${string}`,
+                        abi: ERC20_ABI,
+                        functionName: "decimals",
+                    })
+                ),
             ]);
 
             const hash = await walletClient.sendTransaction({
                 to: this.addresses.positionManager,
                 abi: POSITION_MANAGER_ABI,
                 functionName: "collect",
-                args: [{
-                    tokenId: parameters.tokenId,
-                    recipient,
-                    amount0Max: parseUnits(parameters.amount0Max, token0Decimals),
-                    amount1Max: parseUnits(parameters.amount1Max, token1Decimals),
-                }],
+                args: [
+                    {
+                        tokenId: parameters.tokenId,
+                        recipient,
+                        amount0Max: parseUnits(
+                            parameters.amount0Max,
+                            token0Decimals
+                        ),
+                        amount1Max: parseUnits(
+                            parameters.amount1Max,
+                            token1Decimals
+                        ),
+                    },
+                ],
             });
 
             return hash.hash;
@@ -428,7 +552,8 @@ export class KimService {
 
     @Tool({
         name: "kim_burn",
-        description: "Burns a liquidity position NFT after all tokens have been collected",
+        description:
+            "Burn a liquidity position NFT after all tokens have been collected",
     })
     async burn(
         walletClient: EVMWalletClient,
@@ -447,5 +572,4 @@ export class KimService {
             throw new Error(`Failed to burn position: ${error}`);
         }
     }
-
 }
