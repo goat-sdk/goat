@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-chromia
 
+## 0.2.1
+
+### Patch Changes
+
+- aa751c2: Conversational Agent for CHR
+
 ## 0.2.0
 
 ### Minor Changes
