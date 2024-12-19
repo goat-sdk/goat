@@ -1,0 +1,48 @@
+{
+  "name": "@goat-sdk/plugin-balancer",
+  "version": "0.1.0",
+  "description": "Balancer plugin for GOAT SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@balancer/sdk": "1.1.4",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsup": "^7.0.0",
+    "jest": "^29.0.0",
+    "@types/node": "^18.0.0",
+    "@types/jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "rimraf": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.0"
+  },
+  "peerDependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "@balancer/sdk": "catalog:",
+    "zod": "catalog:"
+  },
+  "keywords": [
+    "goat",
+    "sdk",
+    "plugin",
+    "balancer",
+    "defi"
+  ],
+  "author": "Kamal",
+  "license": "MIT"
+} 
