@@ -22,6 +22,10 @@
             "path": "./typescript/packages/adapters/eliza"
         },
         {
+            "name": "[Adapter] 🦾 model context protocol",
+            "path": "./typescript/packages/adapters/model-context-protocol"
+        },
+        {
             "name": "[Adapter] 🦜 langchain",
             "path": "./typescript/packages/adapters/langchain"
         },

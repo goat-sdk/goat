@@ -36,6 +36,9 @@ catalogs:
     '@lit-protocol/wrapped-keys':
       specifier: 7.0.2
       version: 7.0.2
+    '@modelcontextprotocol/sdk':
+      specifier: 1.0.4
+      version: 1.0.4
     '@solana/web3.js':
       specifier: 1.95.8
       version: 1.95.8
@@ -51,10 +54,20 @@ catalogs:
     zod:
       specifier: 3.23.8
       version: 3.23.8
+    zod-to-json-schema:
+      specifier: 3.23.5
+      version: 3.23.5
 
 importers:
 
   .:
+    dependencies:
+      zod:
+        specifier: 3.24.1
+        version: 3.24.1
+      zod-to-json-schema:
+        specifier: 3.24.1
+        version: 3.24.1(zod@3.24.1)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -243,6 +256,43 @@ importers:
       viem:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+
+  examples/model-context-protocol/viem:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.5(zod@3.24.1)
+      '@goat-sdk/adapter-model-context-protocol':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/model-context-protocol
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/plugin-erc20':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc20
+      '@goat-sdk/plugin-kim':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/kim
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
+      '@goat-sdk/wallet-viem':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/viem
+      '@modelcontextprotocol/sdk':
+        specifier: 1.0.4
+        version: 1.0.4
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      viem:
+        specifier: 2.21.49
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+    devDependencies:
+      '@types/node':
+        specifier: 22.7.4
+        version: 22.7.4
 
   examples/vercel-ai/abstract:
     dependencies:
@@ -591,6 +641,18 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.23.8
+
+  packages/adapters/model-context-protocol:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@modelcontextprotocol/sdk':
+        specifier: 'catalog:'
+        version: 1.0.4
+      zod-to-json-schema:
+        specifier: 'catalog:'
+        version: 3.23.5(zod@3.24.1)
 
   packages/adapters/vercel-ai:
     dependencies:
@@ -3196,6 +3258,9 @@ packages:
 
   '@meteora-ag/dlmm@1.3.4':
     resolution: {integrity: sha512-nyVtfuiMmNRhVMTrLZUl9wKmpOIsJRwiTdlIwJhbulcK9sM94cih6/dc7V3VxeR1iFnjcM/e5dCnA+G6QABavQ==}
+
+  '@modelcontextprotocol/sdk@1.0.4':
+    resolution: {integrity: sha512-C+jw1lF6HSGzs7EZpzHbXfzz9rj9him4BaoumlTciW/IDDgIpweF/qiCWKlP02QKg5PPcgY6xY2WCt5y2tpYow==}
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -7448,6 +7513,10 @@ packages:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
 
+  raw-body@3.0.0:
+    resolution: {integrity: sha512-RmkhL8CAyCRPXCE28MMH0z2PNWQBNk2Q09ZdxM9IOOXwxwZbN+qbWaatPkdkWIKL2ZVDImrN/pK5HTRz2PcS4g==}
+    engines: {node: '>= 0.8'}
+
   rc@1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
@@ -8839,6 +8908,11 @@ packages:
     peerDependencies:
       zod: ^3.23.3
 
+  zod-to-json-schema@3.24.1:
+    resolution: {integrity: sha512-3h08nf3Vw3Wl3PK+q3ow/lIil81IT2Oa7YpQyUUDsEWbXveMesdfK1xBd2RhCkynwZndAxixji/7SYJJowr62w==}
+    peerDependencies:
+      zod: ^3.24.1
+
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
@@ -9017,7 +9091,7 @@ snapshots:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       json-schema: 0.4.0
       secure-json-parse: 2.7.0
-      zod-to-json-schema: 3.23.5(zod@3.23.8)
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
     optionalDependencies:
       zod: 3.23.8
 
@@ -9025,7 +9099,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 1.0.1
       '@ai-sdk/provider-utils': 2.0.2(zod@3.23.8)
-      zod-to-json-schema: 3.23.5(zod@3.23.8)
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
     optionalDependencies:
       zod: 3.23.8
 
@@ -9033,7 +9107,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 1.0.1
       '@ai-sdk/provider-utils': 2.0.2(zod@3.24.1)
-      zod-to-json-schema: 3.23.5(zod@3.24.1)
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
     optionalDependencies:
       zod: 3.24.1
 
@@ -11378,7 +11452,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 10.0.0
       zod: 3.24.1
-      zod-to-json-schema: 3.23.5(zod@3.24.1)
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
     transitivePeerDependencies:
       - openai
 
@@ -11394,7 +11468,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 10.0.0
       zod: 3.24.1
-      zod-to-json-schema: 3.23.5(zod@3.24.1)
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
     transitivePeerDependencies:
       - openai
 
@@ -12408,6 +12482,12 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
+
+  '@modelcontextprotocol/sdk@1.0.4':
+    dependencies:
+      content-type: 1.0.5
+      raw-body: 3.0.0
+      zod: 3.24.1
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -14629,7 +14709,7 @@ snapshots:
       json-schema: 0.4.0
       jsondiffpatch: 0.6.0
       secure-json-parse: 2.7.0
-      zod-to-json-schema: 3.23.5(zod@3.23.8)
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
     optionalDependencies:
       openai: 4.73.0(zod@3.23.8)
       react: 19.0.0-rc-66855b96-20241106
@@ -14648,7 +14728,7 @@ snapshots:
       '@ai-sdk/ui-utils': 1.0.2(zod@3.23.8)
       '@opentelemetry/api': 1.9.0
       jsondiffpatch: 0.6.0
-      zod-to-json-schema: 3.23.5(zod@3.23.8)
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
     optionalDependencies:
       react: 19.0.0-rc-66855b96-20241106
       zod: 3.23.8
@@ -14661,7 +14741,7 @@ snapshots:
       '@ai-sdk/ui-utils': 1.0.2(zod@3.24.1)
       '@opentelemetry/api': 1.9.0
       jsondiffpatch: 0.6.0
-      zod-to-json-schema: 3.23.5(zod@3.24.1)
+      zod-to-json-schema: 3.24.1(zod@3.24.1)
     optionalDependencies:
       react: 19.0.0-rc-66855b96-20241106
       zod: 3.24.1
@@ -16376,7 +16456,6 @@ snapshots:
   iconv-lite@0.6.3:
     dependencies:
       safer-buffer: 2.1.2
-    optional: true
 
   idb-keyval@6.2.1: {}
 
@@ -18061,6 +18140,13 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
+  raw-body@3.0.0:
+    dependencies:
+      bytes: 3.1.2
+      http-errors: 2.0.0
+      iconv-lite: 0.6.3
+      unpipe: 1.0.0
+
   rc@1.2.8:
     dependencies:
       deep-extend: 0.6.0
@@ -19613,6 +19699,14 @@ snapshots:
       zod: 3.23.8
 
   zod-to-json-schema@3.23.5(zod@3.24.1):
+    dependencies:
+      zod: 3.24.1
+
+  zod-to-json-schema@3.24.1(zod@3.23.8):
+    dependencies:
+      zod: 3.23.8
+
+  zod-to-json-schema@3.24.1(zod@3.24.1):
     dependencies:
       zod: 3.24.1
 
