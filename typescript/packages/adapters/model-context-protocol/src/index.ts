@@ -1,13 +1,7 @@
-import {
-    type GetToolsParams,
-    type ToolBase,
-    type WalletClientBase,
-    getTools,
-} from "@goat-sdk/core";
+import { type GetToolsParams, type ToolBase, type WalletClientBase, getTools } from "@goat-sdk/core";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> =
-    GetToolsParams<TWalletClient>;
+export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = GetToolsParams<TWalletClient>;
 
 export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     wallet,

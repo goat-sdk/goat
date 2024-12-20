@@ -1,20 +1,17 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import {
-    CallToolRequestSchema,
-    ListToolsRequestSchema,
-} from "@modelcontextprotocol/sdk/types.js";
+import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { createWalletClient, http } from "viem";
 import { mode } from "viem/chains";
 
 import { MODE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { kim } from "@goat-sdk/plugin-kim";
 
+import { getOnChainTools } from "@goat-sdk/adapter-model-context-protocol";
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
-import { getOnChainTools } from "@goat-sdk/adapter-model-context-protocol";
 
 const server = new Server(
     {
@@ -25,12 +22,10 @@ const server = new Server(
         capabilities: {
             tools: {},
         },
-    }
+    },
 );
 
-const account = privateKeyToAccount(
-    process.env.WALLET_PRIVATE_KEY as `0x${string}`
-);
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
 const walletClient = createWalletClient({
     account: account,
