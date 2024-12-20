@@ -1,25 +1,22 @@
-import { getOnChainTools } from "@goat-sdk/adapter-model-context-protocol";
-import { MODE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { kim } from "@goat-sdk/plugin-kim";
-import { sendETH } from "@goat-sdk/wallet-evm";
-import { viem } from "@goat-sdk/wallet-viem";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mode } from "viem/chains";
-const server = new Server(
-    {
-        name: "goat",
-        version: "1.0.0",
+import { MODE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
+import { kim } from "@goat-sdk/plugin-kim";
+import { getOnChainTools } from "@goat-sdk/adapter-model-context-protocol";
+import { sendETH } from "@goat-sdk/wallet-evm";
+import { viem } from "@goat-sdk/wallet-viem";
+const server = new Server({
+    name: "goat",
+    version: "1.0.0",
+}, {
+    capabilities: {
+        tools: {},
     },
-    {
-        capabilities: {
-            tools: {},
-        },
-    },
-);
+});
 const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY);
 const walletClient = createWalletClient({
     account: account,
@@ -41,7 +38,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { toolHandler } = await toolsPromise;
     try {
         return toolHandler(request.params.name, request.params.arguments);
-    } catch (error) {
+    }
+    catch (error) {
         throw new Error(`Tool ${name} failed: ${error}`);
     }
 });

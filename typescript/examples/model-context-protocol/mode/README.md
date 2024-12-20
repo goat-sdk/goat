@@ -21,7 +21,7 @@ code ~/Library/Application\ Support/Claude/claude_desktop_config.json
         "goat": {
             "command": "node",
             "args": [
-                "/ABSOLUTE/PATH/TO/PARENT/FOLDER/weather/build/index.js"
+                "/ABSOLUTE/PATH/TO/PARENT/FOLDER/build/index.js"
             ],
             "env": {
                 "WALLET_PRIVATE_KEY": "<YOUR_PRIVATE_KEY>",
