@@ -3,8 +3,11 @@ import type { SessionSigsMap } from "@lit-protocol/types";
 import { StoredKeyData, api } from "@lit-protocol/wrapped-keys";
 import { PublicKey, Transaction } from "@solana/web3.js";
 
-import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { formatUnits } from "viem/_types/utils/unit/formatUnits";
+import {
+    type SolanaTransaction,
+    SolanaWalletClient,
+} from "@goat-sdk/wallet-solana";
+import { formatUnits } from "viem";
 import type { LitSolanaWalletOptions } from "./types";
 
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
@@ -17,7 +20,8 @@ export class LitSolanaWallet extends SolanaWalletClient {
 
     constructor(options: LitSolanaWalletOptions) {
         super({ connection: options.connection });
-        const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chain } = options;
+        const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chain } =
+            options;
         this.litNodeClient = litNodeClient;
         this.pkpSessionSigs = pkpSessionSigs;
         this.wrappedKeyMetadata = wrappedKeyMetadata;
@@ -40,8 +44,12 @@ export class LitSolanaWallet extends SolanaWalletClient {
         return { signature };
     }
 
-    async sendTransaction({ instructions }: SolanaTransaction): Promise<{ hash: string }> {
-        const latestBlockhash = await this.connection.getLatestBlockhash("confirmed");
+    async sendTransaction({
+        instructions,
+    }: SolanaTransaction): Promise<{ hash: string }> {
+        const latestBlockhash = await this.connection.getLatestBlockhash(
+            "confirmed"
+        );
         const tx = new Transaction();
         tx.recentBlockhash = latestBlockhash.blockhash;
         tx.feePayer = new PublicKey(this.wrappedKeyMetadata.publicKey);
