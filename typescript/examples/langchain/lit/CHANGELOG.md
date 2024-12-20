@@ -1,5 +1,12 @@
 # goat-examples-langchain-lit
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [65ee1e8]
+  - @goat-sdk/wallet-lit@0.2.5
+
 ## 0.1.6
 
 ### Patch Changes
