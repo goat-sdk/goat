@@ -10,6 +10,7 @@
     "license": "MIT",
     "dependencies": {
         "@ai-sdk/openai": "^1.0.4",
+        "@ai-sdk/xai": "1.0.9",
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",

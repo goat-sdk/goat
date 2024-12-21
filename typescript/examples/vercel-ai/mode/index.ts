@@ -1,6 +1,7 @@
 import readline from "node:readline";
 
-import { openai } from "@ai-sdk/openai";
+import { createXai } from "@ai-sdk/xai";
+
 import { generateText } from "ai";
 
 import { http } from "viem";
@@ -17,12 +18,18 @@ import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
+const account = privateKeyToAccount(
+    process.env.WALLET_PRIVATE_KEY as `0x${string}`
+);
 
 const walletClient = createWalletClient({
     account: account,
     transport: http(process.env.RPC_PROVIDER_URL),
     chain: mode,
+});
+
+const xai = createXai({
+    apiKey: process.env.GROK_API_KEY,
 });
 
 (async () => {
@@ -46,27 +53,35 @@ const walletClient = createWalletClient({
             break;
         }
 
-        console.log("\n-------------------\n");
-        console.log("TOOLS CALLED");
-        console.log("\n-------------------\n");
+        console.log("\n===========================================");
+        console.log("🤖 Processing prompt:", prompt);
+        console.log("===========================================\n");
 
         console.log("\n-------------------\n");
-        console.log("RESPONSE");
-        console.log("\n-------------------\n");
+
+        console.log("🛠️  TOOLS CALLED");
+        console.log("-------------------");
+
         try {
             const result = await generateText({
-                model: openai("gpt-4o-mini"),
+                model: xai("grok-beta"),
                 tools: tools,
-                maxSteps: 10,
+                maxSteps: 15,
                 prompt: prompt,
                 onStepFinish: (event) => {
-                    console.log(event.toolResults);
+                    console.log("\n👉 Step Result:");
+                    console.log(JSON.stringify(event.toolResults, null, 2));
                 },
             });
+
+            console.log("\n📊 FINAL RESPONSE");
+            console.log("-------------------");
             console.log(result.text);
         } catch (error) {
+            console.log("\n❌ ERROR");
+            console.log("-------------------");
             console.error(error);
         }
-        console.log("\n-------------------\n");
+        console.log("\n===========================================\n");
     }
 })();
