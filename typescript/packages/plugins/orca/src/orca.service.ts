@@ -12,7 +12,7 @@ import {
     TickUtil,
     TokenExtensionContextForPool,
     TokenExtensionUtil,
-    //   ORCA_WHIRLPOOLS_CONFIG,
+    ORCA_WHIRLPOOLS_CONFIG,
     WhirlpoolContext,
     WhirlpoolIx,
     increaseLiquidityQuoteByInputTokenWithParams,
@@ -39,8 +39,6 @@ export const FEE_TIERS = {
     1.0: 128,
     2.0: 256,
 } as const;
-
-const ORCA_WHIRLPOOLS_CONFIG = new PublicKey("FcrweFY1G9HJAHG5inkGB6pKg1HZ6x9UC2WioAfWrGkR");
 
 export class OrcaService {
     @Tool({
