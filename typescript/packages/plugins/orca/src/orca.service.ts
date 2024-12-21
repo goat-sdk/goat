@@ -5,6 +5,7 @@ import { Percentage, TransactionBuilder, resolveOrCreateATAs } from "@orca-so/co
 import {
     IncreaseLiquidityQuoteParam,
     NO_TOKEN_EXTENSION_CONTEXT,
+    ORCA_WHIRLPOOLS_CONFIG,
     ORCA_WHIRLPOOL_PROGRAM_ID,
     PDAUtil,
     PoolUtil,
@@ -12,7 +13,6 @@ import {
     TickUtil,
     TokenExtensionContextForPool,
     TokenExtensionUtil,
-    ORCA_WHIRLPOOLS_CONFIG,
     WhirlpoolContext,
     WhirlpoolIx,
     increaseLiquidityQuoteByInputTokenWithParams,
