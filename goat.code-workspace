@@ -82,6 +82,10 @@
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },
+        {
+            "name": "[Plugin] 🟡 Mode Governance",
+            "path": "./typescript/packages/plugins/mode-governance"
+        },
         // Wallets
         {
             "name": "[Wallet] 🅰 aptos",
