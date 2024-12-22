@@ -16,7 +16,7 @@ Add your chain to the `Chain.ts` file in the [core package](https://github.com/g
  * @param type - "evm" or "solana", extend this union as needed (e.g., "sui")
  * @param id - Chain ID, optional for EVM
  */
-export type Chain = EvmChain | SolanaChain | AptosChain | ChromiaChain | MyAwesomeChain;
+export type Chain = EvmChain | SolanaChain | AptosChain | ChromiaChain | FuelChain | MyAwesomeChain;
 
 export type MyAwesomeChain = {
     type: "my-awesome-chain";

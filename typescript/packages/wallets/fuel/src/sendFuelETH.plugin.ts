@@ -1,7 +1,6 @@
 import { Chain, createTool, PluginBase } from "@goat-sdk/core";
 import { FuelWalletClient } from "./FuelWalletClient";
 import { z } from "zod";
-import { bn } from "fuels";
 
 const sendFuelETHParametersSchema = z.object({
     to: z.string().describe("The address to send ETH to"),
@@ -37,10 +36,11 @@ async function sendFuelETHMethod(
 ) {
     try {
         const { to, amount } = parameters;
-
         const tx = await walletClient.transfer(to, amount);
         return tx.hash;
     } catch (error) {
         throw new Error(`Failed to send ETH: ${error}`);
     }
 }
+
+export const sendFuelETH = () => new SendFuelETHPlugin();

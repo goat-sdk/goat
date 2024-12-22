@@ -1,20 +1,16 @@
 import { WalletClientBase } from "@goat-sdk/core";
-import { bn, formatUnits, TransactionRequest, WalletUnlocked } from "fuels";
+import { formatUnits, Provider, TransactionRequest } from "fuels";
 
 export type FuelWalletCtorParams = {
-    fuelWallet: WalletUnlocked;
+    provider: Provider;
 };
 
-export class FuelWalletClient extends WalletClientBase {
-    private fuelWallet: WalletUnlocked;
+export abstract class FuelWalletClient extends WalletClientBase {
+    private provider: Provider;
 
     constructor(public readonly params: FuelWalletCtorParams) {
         super();
-        this.fuelWallet = params.fuelWallet;
-    }
-
-    getAddress() {
-        return this.fuelWallet.address.toB256();
+        this.provider = params.provider;
     }
 
     getChain() {
@@ -23,42 +19,20 @@ export class FuelWalletClient extends WalletClientBase {
         } as const;
     }
 
-    async signMessage(message: string) {
-        const signature = (
-            await this.fuelWallet.signMessage(message)
-        ).toString();
-        return {
-            signature,
-        };
+    getProvider() {
+        return this.provider;
     }
 
-    async sendTransaction({
-        transactionRequest,
-    }: {
-        transactionRequest: TransactionRequest;
-    }) {
-        const tx = await this.fuelWallet.sendTransaction(transactionRequest);
-        const { id } = await tx.waitForResult();
-        return {
-            hash: id,
-        };
-    }
+    abstract sendTransaction(
+        transaction: TransactionRequest
+    ): Promise<{ hash: string }>;
 
-    async transfer(to: string, amount: string) {
-        const amountInWei = bn.parseUnits(amount);
-
-        const tx = await this.fuelWallet.transfer(to, amountInWei);
-        const { id } = await tx.waitForResult();
-        return {
-            hash: id,
-        };
-    }
+    abstract transfer(to: string, amount: string): Promise<{ hash: string }>;
 
     async balanceOf(address: string) {
-        const provider = this.fuelWallet.provider;
-        const balance = await provider.getBalance(
+        const balance = await this.provider.getBalance(
             address,
-            provider.getBaseAssetId()
+            this.provider.getBaseAssetId()
         );
 
         return {
@@ -69,8 +43,4 @@ export class FuelWalletClient extends WalletClientBase {
             inBaseUnits: balance.toString(),
         };
     }
-}
-
-export function fuel({ fuelWallet }: FuelWalletCtorParams) {
-    return new FuelWalletClient({ fuelWallet });
 }

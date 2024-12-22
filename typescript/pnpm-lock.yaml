@@ -450,6 +450,30 @@ importers:
         specifier: 2.21.49
         version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
 
+  examples/vercel-ai/fuel:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.5(zod@3.24.1)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/vercel-ai
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/wallet-fuel':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/fuel
+      ai:
+        specifier: 'catalog:'
+        version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.24.1)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      fuels:
+        specifier: 0.97.2
+        version: 0.97.2(vitest@2.1.5(@types/node@22.7.5)(less@4.2.1)(lightningcss@1.22.1)(terser@5.37.0))
+
   examples/vercel-ai/mode:
     dependencies:
       '@ai-sdk/openai':

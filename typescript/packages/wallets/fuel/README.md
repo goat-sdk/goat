@@ -16,14 +16,11 @@ import { getOnChainTools } from "@goat-sdk/core";
 const provider = await Provider.create(
     "https://mainnet.fuel.network/v1/graphql"
 );
-const fuelWallet = Wallet.fromPrivateKey(
-    process.env.FUEL_PRIVATE_KEY,
-    provider
-);
 
 const tools = await getOnChainTools({
     wallet: fuel({
-        fuelWallet,
+        privateKey: process.env.FUEL_WALLET_PRIVATE_KEY,
+        provider,
     }),
 });
 ```
