@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { HyperliquidPlugin } from '../src/hyperliquid.plugin';
+import type { Chain } from '@goat-sdk/core';
 
 describe('HyperliquidPlugin', () => {
     const testConfig = {
@@ -17,19 +18,19 @@ describe('HyperliquidPlugin', () => {
 
     describe('supportsChain', () => {
         it('should support Arbitrum chain', () => {
-            expect(plugin.supportsChain({
+            const chain: Chain = {
                 type: 'evm',
-                id: 42161,
-                name: 'Arbitrum'
-            })).toBe(true);
+                id: 42161
+            };
+            expect(plugin.supportsChain(chain)).toBe(true);
         });
 
         it('should not support other chains', () => {
-            expect(plugin.supportsChain({
+            const chain: Chain = {
                 type: 'evm',
-                id: 1,
-                name: 'Ethereum'
-            })).toBe(false);
+                id: 1
+            };
+            expect(plugin.supportsChain(chain)).toBe(false);
         });
     });
 
