@@ -28,7 +28,7 @@ export class FarcasterPlugin extends PluginBase<WalletClientBase> {
                 async (params) => {
                     const result = await this.client.getCast(params.identifier, params.type);
                     return result;
-                }
+                },
             ),
 
             // Publish new cast
@@ -49,7 +49,7 @@ export class FarcasterPlugin extends PluginBase<WalletClientBase> {
                         channelId: params.channel_id,
                     });
                     return result;
-                }
+                },
             ),
 
             // Search casts
@@ -71,7 +71,7 @@ export class FarcasterPlugin extends PluginBase<WalletClientBase> {
                         limit: params.limit,
                     });
                     return result;
-                }
+                },
             ),
 
             // Get conversation
@@ -93,7 +93,7 @@ export class FarcasterPlugin extends PluginBase<WalletClientBase> {
                         limit: params.limit,
                     });
                     return result;
-                }
+                },
             ),
         ];
     }
