@@ -1,0 +1,1 @@
+import { ethers } from "ethers"; async function checkWallet() { const privateKey = "0xe40f880ec1de982aa82008ff0013ba1c4a1295b4ade0e253c8984660c9a587b5"; const wallet = new ethers.Wallet(privateKey); console.log("Wallet address:", wallet.address); } checkWallet().catch(console.error);

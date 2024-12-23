@@ -1,0 +1,35 @@
+{
+  "name": "@goat-sdk/hyperliquid-plugin",
+  "version": "0.1.0",
+  "description": "Hyperliquid plugin for GOAT SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@goat-sdk/core": "../../core",
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "axios": "^1.6.2",
+    "ethers": "^6.13.4",
+    "viem": "^2.0.0",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.4",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
+    "dotenv": "^16.4.7",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  }
+}
