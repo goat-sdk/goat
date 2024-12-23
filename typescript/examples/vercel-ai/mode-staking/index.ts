@@ -23,9 +23,7 @@ const walletClient = createWalletClient({
 (async () => {
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [
-            modeStaking(),
-        ],
+        plugins: [modeStaking()],
     });
 
     // Example tasks that demonstrate different staking operations

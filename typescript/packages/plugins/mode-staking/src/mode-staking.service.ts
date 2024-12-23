@@ -1,24 +1,18 @@
 import { type ToolBase, createTool } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import type { z } from "zod";
+import { CLOCK_ABI, EXIT_QUEUE_ABI, MODE_TOKEN_ABI, VENFT_LOCK_ABI, VOTING_ESCROW_ABI } from "./constants";
 import {
-    MODE_TOKEN_ABI,
-    VOTING_ESCROW_ABI,
-    VENFT_LOCK_ABI,
-    EXIT_QUEUE_ABI,
-    CLOCK_ABI,
-} from "./constants";
-import { MODE_CONTRACTS } from "./types";
-import {
-    stakeParametersSchema,
-    unstakeParametersSchema,
-    increaseAmountParametersSchema,
-    increaseLockTimeParametersSchema,
+    getCooldownInfoParametersSchema,
     getStakingPositionParametersSchema,
     getStakingPositionsParametersSchema,
-    getCooldownInfoParametersSchema,
     getWarmupInfoParametersSchema,
+    increaseAmountParametersSchema,
+    increaseLockTimeParametersSchema,
+    stakeParametersSchema,
+    unstakeParametersSchema,
 } from "./parameters";
+import { MODE_CONTRACTS } from "./types";
 
 export function getTools(walletClient: EVMWalletClient): ToolBase[] {
     return [
@@ -26,7 +20,7 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
         createTool(
             {
                 name: "stake_mode",
-                description: "Stake MODE tokens for voting power. Returns NFT token ID",
+                description: "Stake MODE tokens for voting power and receive an NFT token ID",
                 parameters: stakeParametersSchema,
             },
             async (parameters: z.infer<typeof stakeParametersSchema>) => {
@@ -53,18 +47,18 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                 });
 
                 return stakeHash.hash;
-            }
+            },
         ),
 
         // Get staking positions
         createTool(
             {
                 name: "get_staking_positions",
-                description: "Get all staking positions for a wallet",
+                description: "Get all MODE staking positions for a specified wallet",
                 parameters: getStakingPositionsParametersSchema,
             },
             async (parameters: z.infer<typeof getStakingPositionsParametersSchema>) => {
-                const address = parameters.walletAddress || await walletClient.getAddress();
+                const address = parameters.walletAddress || (await walletClient.getAddress());
 
                 // Get number of NFTs
                 const balance = await walletClient.read({
@@ -109,14 +103,14 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                 }
 
                 return positions;
-            }
+            },
         ),
 
         // Increase amount
         createTool(
             {
                 name: "increase_stake_amount",
-                description: "Increase the staked amount for an existing position",
+                description: "Increase the MODE token stake amount for an existing position",
                 parameters: increaseAmountParametersSchema,
             },
             async (parameters: z.infer<typeof increaseAmountParametersSchema>) => {
@@ -139,14 +133,14 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                 });
 
                 return hash.hash;
-            }
+            },
         ),
 
         // Increase lock time
         createTool(
             {
                 name: "increase_lock_time",
-                description: "Increase the lock time for an existing position",
+                description: "Increase the lock duration for an existing MODE position",
                 parameters: increaseLockTimeParametersSchema,
             },
             async (parameters: z.infer<typeof increaseLockTimeParametersSchema>) => {
@@ -160,14 +154,14 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                 });
 
                 return hash.hash;
-            }
+            },
         ),
 
         // Get cooldown info
         createTool(
             {
                 name: "get_cooldown_info",
-                description: "Get cooldown information for a staking position",
+                description: "Get cooldown status and timing for a MODE staking position",
                 parameters: getCooldownInfoParametersSchema,
             },
             async (parameters: z.infer<typeof getCooldownInfoParametersSchema>) => {
@@ -186,14 +180,14 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     cooldownEnd: endTime,
                     remainingTime: Math.max(0, endTime - currentTime),
                 };
-            }
+            },
         ),
 
         // Get warmup info
         createTool(
             {
                 name: "get_warmup_info",
-                description: "Get warmup information for a staking position",
+                description: "Get warmup status and timing for a MODE staking position",
                 parameters: getWarmupInfoParametersSchema,
             },
             async (parameters: z.infer<typeof getWarmupInfoParametersSchema>) => {
@@ -212,14 +206,14 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     warmupEnd: endTime,
                     remainingTime: Math.max(0, endTime - currentTime),
                 };
-            }
+            },
         ),
 
         // Unstake
         createTool(
             {
                 name: "unstake_mode",
-                description: "Unstake MODE tokens from a position",
+                description: "Withdraw MODE tokens from a staking position",
                 parameters: unstakeParametersSchema,
             },
             async (parameters: z.infer<typeof unstakeParametersSchema>) => {
@@ -231,7 +225,7 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                 });
 
                 return hash.hash;
-            }
+            },
         ),
     ];
 }

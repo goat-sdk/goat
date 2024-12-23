@@ -24,7 +24,10 @@ export const getStakingPositionParametersSchema = z.object({
 });
 
 export const getStakingPositionsParametersSchema = z.object({
-    walletAddress: z.string().optional().describe("Wallet address to query positions for (defaults to connected wallet)"),
+    walletAddress: z
+        .string()
+        .optional()
+        .describe("Wallet address to query positions for (defaults to connected wallet)"),
 });
 
 export const getCooldownInfoParametersSchema = z.object({
