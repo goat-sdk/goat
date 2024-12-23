@@ -31,7 +31,7 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
         createTool(
             {
                 name: "get_available_gauges",
-                description: "Gets a list of all available gauge addresses that can be voted on",
+                description: "Get a list of all gauge addresses available for voting",
                 parameters: getAvailableGaugesParametersSchema,
             },
             async () => {
@@ -41,13 +41,13 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     functionName: "getGauges",
                 });
                 return gauges.value as string[];
-            }
+            },
         ),
 
         createTool(
             {
                 name: "get_voting_power",
-                description: "Gets the current voting power of the wallet",
+                description: "Get the current wallet's voting power for MODE gauges",
                 parameters: getVotingPowerParametersSchema,
             },
             async () => {
@@ -59,13 +59,13 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     args: [address],
                 });
                 return (balance.value as bigint).toString();
-            }
+            },
         ),
 
         createTool(
             {
                 name: "get_current_votes",
-                description: "Gets the current votes allocated to a specific gauge",
+                description: "Get the current vote allocation for a specific gauge",
                 parameters: getCurrentVotesParametersSchema,
             },
             async (parameters: z.infer<typeof getCurrentVotesParametersSchema>) => {
@@ -77,13 +77,13 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     args: [address, parameters.gaugeAddress as `0x${string}`],
                 });
                 return (votes.value as bigint).toString();
-            }
+            },
         ),
 
         createTool(
             {
                 name: "vote_on_gauges",
-                description: "Vote on multiple gauges with specified weights. Weights should sum to 10000 (100%)",
+                description: "Cast votes on multiple MODE gauges (weights must sum to 10000 for 100%)",
                 parameters: voteOnGaugesParametersSchema,
             },
             async (parameters: z.infer<typeof voteOnGaugesParametersSchema>) => {
@@ -100,20 +100,17 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     to: MODE_CONTRACTS.GAUGE_VOTER,
                     abi: GAUGE_VOTER_ABI,
                     functionName: "vote",
-                    args: [
-                        parameters.gaugeAddresses as `0x${string}`[],
-                        parameters.weights.map(w => BigInt(w)),
-                    ],
+                    args: [parameters.gaugeAddresses as `0x${string}`[], parameters.weights.map((w) => BigInt(w))],
                 });
 
                 return hash.hash;
-            }
+            },
         ),
 
         createTool(
             {
                 name: "get_used_voting_weight",
-                description: "Gets the total voting weight currently used by the wallet",
+                description: "Get the total voting weight used by the wallet",
                 parameters: getUsedVotingWeightParametersSchema,
             },
             async () => {
@@ -125,13 +122,13 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     args: [address],
                 });
                 return (usedWeight.value as bigint).toString();
-            }
+            },
         ),
 
         createTool(
             {
                 name: "get_last_vote_timestamp",
-                description: "Gets the timestamp of the last vote cast by the wallet",
+                description: "Get the timestamp of the wallet's last vote",
                 parameters: getLastVoteTimestampParametersSchema,
             },
             async () => {
@@ -143,7 +140,7 @@ export function getTools(walletClient: EVMWalletClient): ToolBase[] {
                     args: [address],
                 });
                 return (lastVote.value as bigint).toString();
-            }
+            },
         ),
     ];
 }

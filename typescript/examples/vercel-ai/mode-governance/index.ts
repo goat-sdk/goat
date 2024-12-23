@@ -1,12 +1,12 @@
 import { openai } from "@ai-sdk/openai";
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
+import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
+import { viem } from "@goat-sdk/wallet-viem";
 import { generateText } from "ai";
 import { http } from "viem";
 import { createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mode } from "./mode-chain";
-import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
-import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
@@ -22,9 +22,7 @@ const walletClient = createWalletClient({
     // Initialize GOAT tools with Mode Governance plugin
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [
-            modeGovernance(),
-        ],
+        plugins: [modeGovernance()],
     });
 
     // Example prompts to test different governance functionalities
