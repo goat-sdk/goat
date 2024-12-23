@@ -71,6 +71,10 @@
             "path": "./typescript/packages/plugins/spl-token"
         },
         {
+            "name": "[Plugin] 🫖 tee",
+            "path": "./typescript/packages/plugins/tee"
+        },
+        {
             "name": "[Plugin] ⛓️‍💥 tensor",
             "path": "./typescript/packages/plugins/tensor"
         },
