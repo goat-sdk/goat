@@ -124,6 +124,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             functionName,
             args,
             chain: this.#client.chain,
+            value: value,
         });
 
         // Encode the call data ourselves
@@ -197,3 +198,4 @@ export class ViemEVMWalletClient extends EVMWalletClient {
 export function viem(client: ViemWalletClient, options?: ViemOptions) {
     return new ViemEVMWalletClient(client, options);
 }
+
