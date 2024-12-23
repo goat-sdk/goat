@@ -10,3 +10,6 @@
 =
 # windsurf rules
 .windsurfrules
+
+# node_modules
+node_modules
