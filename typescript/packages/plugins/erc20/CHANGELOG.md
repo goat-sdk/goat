@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-erc20
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/wallet-evm@0.2.1
+
 ## 0.2.2
 
 ### Patch Changes
