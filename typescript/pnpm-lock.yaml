@@ -201,10 +201,10 @@ importers:
         version: link:../../../packages/wallets/solana
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.73.0(zod@3.23.8))
+        version: 0.3.6(openai@4.73.0(zod@3.24.1))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))
       '@lit-protocol/constants':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -219,10 +219,10 @@ importers:
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(openai@4.73.0(zod@3.23.8))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))(axios@1.7.4)(openai@4.73.0(zod@3.24.1))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
 
   examples/langchain/viem:
     dependencies:
@@ -243,19 +243,19 @@ importers:
         version: link:../../../packages/wallets/viem
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.73.0(zod@3.24.1))
+        version: 0.3.6(openai@4.73.0(zod@3.23.8))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))(axios@1.7.4)(openai@4.73.0(zod@3.24.1))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(openai@4.73.0(zod@3.23.8))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
   examples/model-context-protocol/mode:
     dependencies:
@@ -473,6 +473,33 @@ importers:
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
+      '@goat-sdk/wallet-viem':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/viem
+      ai:
+        specifier: 'catalog:'
+        version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.24.1)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      viem:
+        specifier: 2.21.49
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+
+  examples/vercel-ai/mode-governance:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.5(zod@3.24.1)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/vercel-ai
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/plugin-mode-governance':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/mode-governance
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -760,7 +787,7 @@ importers:
         version: link:../../wallets/solana
       '@meteora-ag/dlmm':
         specifier: 1.3.4
-        version: 1.3.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        version: 1.3.4(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -774,6 +801,15 @@ importers:
       '@types/bn.js':
         specifier: 5.1.6
         version: 5.1.6
+
+  packages/plugins/mode-governance:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/plugins/orca:
     dependencies:
@@ -12549,11 +12585,11 @@ snapshots:
       '@metaplex-foundation/umi-public-keys': 0.8.9
       '@metaplex-foundation/umi-serializers': 0.9.0
 
-  '@meteora-ag/dlmm@1.3.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@meteora-ag/dlmm@1.3.4(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.28.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@coral-xyz/borsh': 0.28.0(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))
-      '@solana-developers/helpers': 2.5.6(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@solana-developers/helpers': 2.5.6(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -13231,7 +13267,7 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@solana-developers/helpers@2.5.6(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@solana-developers/helpers@2.5.6(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/spl-token-metadata': 0.1.6(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)
