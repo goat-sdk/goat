@@ -524,6 +524,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../../packages/core
+      '@goat-sdk/plugin-coingecko':
+        specifier: 0.2.0
+        version: 0.2.0(@goat-sdk/core@packages+core)
       '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
         version: link:../../../packages/plugins/jupiter
@@ -2682,6 +2685,11 @@ packages:
   '@fal-ai/client@1.2.0':
     resolution: {integrity: sha512-MNCnE5icY+OM5ahgYJItmydZ7AxhtzhgA5tQI13jVntzhLT0z+tetHIlAL1VA0XFZgldDzqxeTf9Pr5TW3VErg==}
     engines: {node: '>=18.0.0'}
+
+  '@goat-sdk/plugin-coingecko@0.2.0':
+    resolution: {integrity: sha512-0sFFbY9JI73ISrrW+OQ05eG8HCwtUhoSdjEsDjOqIX149UliR6aPpQy/Ygx6oK+6OW4TzTQsxgVf89KBOy7FRQ==}
+    peerDependencies:
+      '@goat-sdk/core': 0.4.0
 
   '@google-cloud/vertexai@1.9.0':
     resolution: {integrity: sha512-8brlcJwFXI4fPuBtsDNQqCdWZmz8gV9jeEKOU0vc5H2SjehCQpXK/NwuSEr916zbhlBHtg/sU37qQQdgvh5BRA==}
@@ -11346,6 +11354,11 @@ snapshots:
       '@msgpack/msgpack': 3.0.0-beta2
       eventsource-parser: 1.1.2
       robot3: 0.4.1
+
+  '@goat-sdk/plugin-coingecko@0.2.0(@goat-sdk/core@packages+core)':
+    dependencies:
+      '@goat-sdk/core': link:packages/core
+      zod: 3.23.8
 
   '@google-cloud/vertexai@1.9.0':
     dependencies:
