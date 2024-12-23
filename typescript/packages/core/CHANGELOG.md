@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.2
+
+### Patch Changes
+
+- 279dfcd: Fix peer dependency
+
 ## 0.4.1
 
 ### Patch Changes
