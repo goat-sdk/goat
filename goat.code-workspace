@@ -82,6 +82,10 @@
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },
+        {
+            "name": "[Plugin] Mode staking",
+            "path": "./typescript/packages/plugins/mode-staking"
+        },
         // Wallets
         {
             "name": "[Wallet] 🅰 aptos",
