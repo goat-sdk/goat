@@ -5,11 +5,17 @@
 # OS generated files
 .DS_Store
 
-# Build files
-# extra
-=
-# windsurf rules
-.windsurfrules
+# Node.js dependencies
+node_modules/
+*.log
+*.tsbuildinfo
+npm-debug.log*
 
-# node_modules
-node_modules
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build
+dist
+.turbo
