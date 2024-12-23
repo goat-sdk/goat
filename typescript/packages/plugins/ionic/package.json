@@ -1,0 +1,31 @@
+{
+  "name": "@goat-sdk/plugin-ionic",
+  "version": "0.1.0",
+  "files": ["dist/**/*", "README.md", "package.json"],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "test": "vitest run --passWithNoTests"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "@goat-sdk/wallet-evm": "workspace:*",
+    "viem": "^2.0.0",
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "viem": "^2.0.0"
+  },
+  "homepage": "https://ohmygoat.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goat-sdk/goat.git"
+  },
+  "license": "MIT",
+  "keywords": ["ai", "agents", "web3"]
+}
