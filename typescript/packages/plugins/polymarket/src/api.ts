@@ -67,30 +67,34 @@ const Event = z.object({
     description: z.string(),
     endDate: z.string(),
     liquidity: z.number().optional(),
-    markets: z.array(z.object({
-        acceptingOrders: z.boolean(),
-        clobTokenIds: z.string(),
-        description: z.string(),
-        oneDayPriceChange: z.number().optional(),
-        orderMinSize: z.number(),
-        orderPriceMinTickSize: z.number(),
-        outcomePrices: z.string(),
-        outcomes: z.string(),
-        question: z.string().optional(),
-        slug: z.string(),
-        volume: z.string().optional()
-    })),
+    markets: z.array(
+        z.object({
+            acceptingOrders: z.boolean(),
+            clobTokenIds: z.string(),
+            description: z.string(),
+            oneDayPriceChange: z.number().optional(),
+            orderMinSize: z.number(),
+            orderPriceMinTickSize: z.number(),
+            outcomePrices: z.string(),
+            outcomes: z.string(),
+            question: z.string().optional(),
+            slug: z.string(),
+            volume: z.string().optional(),
+        }),
+    ),
     slug: z.string(),
     startDate: z.string(),
-    tags: z.array(z.object({
-        id: z.string().optional(),
-        label: z.string().optional(),
-        slug: z.string()
-    })),
+    tags: z.array(
+        z.object({
+            id: z.string().optional(),
+            label: z.string().optional(),
+            slug: z.string(),
+        }),
+    ),
     title: z.string(),
     updatedAt: z.string().optional(),
     volume: z.number().optional(),
-    volume24hr: z.number().optional()
+    volume24hr: z.number().optional(),
 });
 
 export enum SignatureType {
@@ -244,11 +248,11 @@ export async function getEvents(
         }));
     }
 
-    return events.map(event => ({
+    return events.map((event) => ({
         ...event,
-        markets: event.markets.map(market => ({
-            ...transformMarketOutcomes(market)
-        }))
+        markets: event.markets.map((market) => ({
+            ...transformMarketOutcomes(market),
+        })),
     }));
 }
 

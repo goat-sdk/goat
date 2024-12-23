@@ -18,7 +18,10 @@ export const getEventsParametersSchema = z.object({
     offset: z.optional(z.number()).describe("The number of events to skip"),
     liquidityMin: z.optional(z.number()).describe("The minimum liquidity of the events to get"),
     tagSlug: z.optional(z.string()).describe("Keyword to search events by"),
-    showOnlyMarketsAcceptingOrders: z.optional(z.boolean()).default(true).describe("Whether to show only markets accepting orders"),
+    showOnlyMarketsAcceptingOrders: z
+        .optional(z.boolean())
+        .default(true)
+        .describe("Whether to show only markets accepting orders"),
 });
 
 export const getMarketInfoParametersSchema = z.object({

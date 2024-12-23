@@ -1,6 +1,6 @@
+import * as readline from "node:readline/promises";
 import { openai } from "@ai-sdk/openai";
 import { CoreMessage, streamText } from "ai";
-import * as readline from "node:readline/promises";
 
 import { http } from "viem";
 import { createWalletClient } from "viem";
