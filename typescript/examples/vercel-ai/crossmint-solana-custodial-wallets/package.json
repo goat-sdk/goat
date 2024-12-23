@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-crossmint-solana-custodial-wallets",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "",
     "private": true,
     "scripts": {

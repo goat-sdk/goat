@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.3.6
+
+### Patch Changes
+
+- 1bc1d42: Add MODE network
+
 ## 0.3.5
 
 ### Patch Changes

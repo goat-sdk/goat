@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.3.2
+
+### Patch Changes
+
+- 1bc1d42: Minor changes
+
 ## 0.3.1
 
 ### Patch Changes
