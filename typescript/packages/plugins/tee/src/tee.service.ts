@@ -55,7 +55,7 @@ export class TeeService {
                 timestamp: Date.now(),
             };
             console.log("Remote attestation quote: ", quote);
-            return quote;
+            return quote.quote;
         } catch (error) {
             throw new Error(`Failed to generate remote attestation quote: ${error}`);
         }

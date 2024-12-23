@@ -1,10 +1,5 @@
 import { createToolParameters } from "@goat-sdk/core";
-// import { TdxQuoteHashAlgorithms } from "@phala/dstack-sdk";
 import { z } from "zod";
-
-type TdxQuoteHashAlgorithms =
-  'sha256' | 'sha384' | 'sha512' | 'sha3-256' | 'sha3-384' | 'sha3-512' |
-  'keccak256' | 'keccak384' | 'keccak512' | 'raw'
 
 export class GetDerivedKeyParameters extends createToolParameters(
     z.object({
@@ -16,9 +11,7 @@ export class GetDerivedKeyParameters extends createToolParameters(
 
 export class GetRemoteAttestationParameters extends createToolParameters(
     z.object({
-        reportData: z
-            .union([z.string(), z.instanceof(Buffer), z.instanceof(Uint8Array)])
-            .describe("The report data to generate the attestation for"),
+        reportData: z.string().or(z.instanceof(Buffer)).or(z.instanceof(Uint8Array)).describe("The report data to generate the attestation for"),
         hashAlgorithm: z.enum(['sha256', 'sha384', 'sha512', 'sha3-256', 'sha3-384', 'sha3-512', 'keccak256', 'keccak384', 'keccak512', 'raw']).optional().describe("The hash algorithm to use for the attestation"),
     }),
 ) {}
