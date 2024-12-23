@@ -1,6 +1,6 @@
-import { Chain, createTool, PluginBase } from "@goat-sdk/core";
-import { FuelWalletClient } from "./FuelWalletClient";
+import { Chain, PluginBase, createTool } from "@goat-sdk/core";
 import { z } from "zod";
+import { FuelWalletClient } from "./FuelWalletClient";
 
 const sendFuelETHParametersSchema = z.object({
     to: z.string().describe("The address to send ETH to"),
@@ -23,8 +23,7 @@ export class SendFuelETHPlugin extends PluginBase<FuelWalletClient> {
                 description: "Send ETH to a Fuel address",
                 parameters: sendFuelETHParametersSchema,
             },
-            (parameters: z.infer<typeof sendFuelETHParametersSchema>) =>
-                sendFuelETHMethod(walletClient, parameters)
+            (parameters: z.infer<typeof sendFuelETHParametersSchema>) => sendFuelETHMethod(walletClient, parameters),
         );
         return [sendTool];
     }
@@ -32,7 +31,7 @@ export class SendFuelETHPlugin extends PluginBase<FuelWalletClient> {
 
 async function sendFuelETHMethod(
     walletClient: FuelWalletClient,
-    parameters: z.infer<typeof sendFuelETHParametersSchema>
+    parameters: z.infer<typeof sendFuelETHParametersSchema>,
 ) {
     try {
         const { to, amount } = parameters;

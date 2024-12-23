@@ -1,10 +1,4 @@
-import {
-    bn,
-    Provider,
-    TransactionRequest,
-    Wallet,
-    WalletUnlocked,
-} from "fuels";
+import { Provider, TransactionRequest, Wallet, WalletUnlocked, bn } from "fuels";
 import { FuelWalletClient } from "./FuelWalletClient";
 
 export type FuelKeypairWalletClientCtorParams = {
@@ -51,9 +45,6 @@ export class FuelKeypairWalletClient extends FuelWalletClient {
     }
 }
 
-export function fuel({
-    privateKey,
-    provider,
-}: FuelKeypairWalletClientCtorParams) {
+export function fuel({ privateKey, provider }: FuelKeypairWalletClientCtorParams) {
     return new FuelKeypairWalletClient({ privateKey, provider });
 }

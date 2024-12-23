@@ -10,9 +10,7 @@ require("dotenv").config();
 const privateKey = process.env.FUEL_WALLET_PRIVATE_KEY as string;
 
 (async () => {
-    const provider = await Provider.create(
-        "https://mainnet.fuel.network/v1/graphql"
-    );
+    const provider = await Provider.create("https://mainnet.fuel.network/v1/graphql");
 
     const tools = await getOnChainTools({
         wallet: fuel({
