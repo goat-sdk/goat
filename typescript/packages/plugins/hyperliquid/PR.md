@@ -1,7 +1,7 @@
 # 🌊 Add Hyperliquid Plugin Support
 
 <div align="center">
-  <img src="assets/hyperliquid.svg" alt="Hyperliquid" width="600" />
+  <img src="assets/hyperliquid.png" alt="Hyperliquid" width="800" />
 </div>
 
 ## OODA Loop Analysis
