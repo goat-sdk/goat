@@ -1,84 +1,169 @@
-import { 
-    type Address,
-    type Abi
-} from 'viem';
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { Tool } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { z } from "zod";
-import { COMPTROLLER_ABI } from "./abi";
+import { parseUnits, formatUnits, Abi, Address } from "viem";
+import type { HealthMetrics } from "./types";
+import { ionicProtocolAddresses } from "./config";
+import * as ComptrollerABIImport from "./abis/Comptroller.json";
+import * as PoolABIImport from "./abis/Pool.json";
+import * as ERC20ABIImport from "./abis/ERC20.json";
+import type { Chain } from "@goat-sdk/core";
 
-interface HealthMetrics {
-    ltv: number;
-    liquidationRisk: 'LOW' | 'MEDIUM' | 'HIGH';
-    assetPerformance: Record<string, any>;
-}
+// Properly type the imported ABIs
+const ComptrollerABI = ComptrollerABIImport as unknown as Abi;
+const PoolABI = PoolABIImport as unknown as Abi;
+const ERC20ABI = ERC20ABIImport as unknown as Abi;
 
-export class IonicService {
-    private static readonly supplySchema = z.object({
-        poolId: z.string().describe("The ID of the pool to supply to"),
-        asset: z.string().describe("The asset address to supply"),
-        amount: z.string().describe("The amount to supply in base units"),
-    });
+// Parameter schemas
+const supplyAssetSchema = z.object({
+    poolId: z.string(),
+    asset: z.string(),
+    amount: z.string()
+});
 
-    private static readonly healthSchema = z.object({
-        poolId: z.string().describe("The pool ID to check metrics for"),
-    });
+const borrowAssetSchema = z.object({
+    poolId: z.string(),
+    asset: z.string(),
+    amount: z.string()
+});
+
+const getHealthMetricsSchema = z.object({
+    poolId: z.string()
+});
+
+export class IonicTools {
+    constructor() {}
+
+    private async getAssetConfig(chainId: number, symbol: string): Promise<{ address: Address, decimals: number }> {
+        const config = ionicProtocolAddresses[chainId]?.assets?.[symbol];
+        if (!config?.address || config.decimals === undefined) {
+            throw new Error(`Asset ${symbol} not found in Ionic Protocol addresses for chain ${chainId}`);
+        }
+        return { address: config.address as Address, decimals: config.decimals };
+    }
 
     @Tool({
-        name: "ionic_supply_asset",
+        name: "supply_asset",
         description: "Supply an asset to an Ionic Protocol pool"
     })
-    async supplyAsset(
-        walletClient: EVMWalletClient,
-        parameters: z.infer<typeof IonicService.supplySchema>
-    ) {
-        const { poolId, asset, amount } = parameters;
-        const amountBigInt = BigInt(amount);
-        const userAddress = await walletClient.resolveAddress('');
+    async supplyAsset(walletClient: EVMWalletClient, parameters: z.infer<typeof supplyAssetSchema>) {
+        const validatedParams = supplyAssetSchema.parse(parameters);
+        const { poolId, asset, amount } = validatedParams;
+        
+        const chainId = walletClient.chainId;
+        const poolAddress = ionicProtocolAddresses[chainId]?.pools[poolId] as Address;
 
-        // Use the abstracted wallet client's sendTransaction method
-        return await walletClient.sendTransaction({
-            to: poolId,
-            abi: COMPTROLLER_ABI as Abi,
-            functionName: 'supply',
-            args: [asset as Address, amountBigInt, userAddress as Address],
-            value: 0n
-        });
-    }
-    
-    @Tool({
-        name: "ionic_get_health_metrics",
-        description: "Get health metrics for Ionic Protocol positions"
-    })
-    async getHealthMetrics(
-        walletClient: EVMWalletClient,
-        parameters: z.infer<typeof IonicService.healthSchema>
-    ): Promise<HealthMetrics> {
-        const { poolId } = parameters;
-        const userAddress = await walletClient.resolveAddress('');
-    
-        // Use the abstracted wallet client's read method
-        const result = await walletClient.read({
-            address: poolId,
-            abi: COMPTROLLER_ABI as Abi,
-            functionName: 'getAccountLiquidity',
-            args: [userAddress as Address]
-        });
-    
-        const [error, liquidity, shortfall] = result.value as [bigint, bigint, bigint];
-    
-        if (error !== 0n) {
-            throw new Error(`Failed to get account positions: error ${error}`);
+        if (!poolAddress) {
+            throw new Error(`Pool with ID ${poolId} not found for chain ID ${chainId}`);
         }
-    
-        const ltv = shortfall > 0n ? 100 : Number(liquidity) / Number(shortfall) * 100;
-        const liquidationRisk = shortfall > 0n ? "HIGH" : 
-                               liquidity > shortfall * 2n ? "LOW" : "MEDIUM";
-    
-        return {
-            ltv,
-            liquidationRisk,
-            assetPerformance: {}
-        };
+
+        try {
+            const assetConfig = await this.getAssetConfig(chainId, asset);
+            const amountBigInt = parseUnits(amount, assetConfig.decimals);
+
+            // Check allowance - properly handle bigint comparison
+            const allowanceResult = await walletClient.read({
+                address: assetConfig.address,
+                abi: ERC20ABI,
+                functionName: 'allowance',
+                args: [walletClient.account.address, poolAddress]
+            });
+            
+            const allowance = BigInt(allowanceResult.toString());
+            
+            if (allowance < amountBigInt) {
+                // Properly type the transaction hash
+                const approveTx = await walletClient.sendTransaction({
+                    to: assetConfig.address,
+                    abi: ERC20ABI,
+                    functionName: 'approve',
+                    args: [poolAddress, amountBigInt]
+                });
+                
+                // Ensure the hash is properly typed as `0x${string}`
+                const approveHash = approveTx.hash as `0x${string}`;
+                
+                await walletClient.publicClient.waitForTransactionReceipt({
+                    hash: approveHash
+                });
+            }
+
+            // Handle the supply transaction with proper hash typing
+            const supplyTx = await walletClient.sendTransaction({
+                to: poolAddress,
+                abi: PoolABI,
+                functionName: 'supply',
+                args: [assetConfig.address, amountBigInt]
+            });
+
+            // Ensure we return a properly typed hash
+            return supplyTx.hash as `0x${string}`;
+        } catch (error: any) {
+            throw new Error(`Failed to supply asset: ${error.message}`);
+        }
+    }
+
+    @Tool({
+        name: "borrow_asset",
+        description: "Borrow an asset from an Ionic Protocol pool"
+    })
+    async borrowAsset(walletClient: EVMWalletClient, parameters: z.infer<typeof borrowAssetSchema>) {
+        const validatedParams = borrowAssetSchema.parse(parameters);
+        const { poolId, asset, amount } = validatedParams;
+        
+        const chainId = walletClient.chainId;
+        const poolAddress = ionicProtocolAddresses[chainId]?.pools[poolId] as Address;
+
+        if (!poolAddress) {
+            throw new Error(`Pool with ID ${poolId} not found for chain ID ${chainId}`);
+        }
+
+        try {
+            const assetConfig = await this.getAssetConfig(chainId, asset);
+            const amountBigInt = parseUnits(amount, assetConfig.decimals);
+
+            const borrowTx = await walletClient.sendTransaction({
+                to: poolAddress,
+                abi: PoolABI,
+                functionName: 'borrow',
+                args: [assetConfig.address, amountBigInt]
+            });
+
+            // Ensure we return a properly typed hash
+            return borrowTx.hash as `0x${string}`;
+        } catch (error: any) {
+            throw new Error(`Failed to borrow asset: ${error.message}`);
+        }
+    }
+
+    @Tool({
+        name: "get_health_metrics",
+        description: "Get health metrics for a pool position"
+    })
+    async getHealthMetrics(walletClient: EVMWalletClient, parameters: z.infer<typeof getHealthMetricsSchema>): Promise<HealthMetrics> {
+        const validatedParams = getHealthMetricsSchema.parse(parameters);
+        const { poolId } = validatedParams;
+        
+        const chainId = walletClient.chainId;
+        const poolAddress = ionicProtocolAddresses[chainId]?.pools[poolId] as Address;
+
+        if (!poolAddress) {
+            throw new Error(`Pool with ID ${poolId} not found for chain ID ${chainId}`);
+        }
+
+        try {
+            // Implementation for getting health metrics
+            // You'll need to add the specific metrics calculation based on your requirements
+            return {
+                // Add your health metrics properties here
+            } as HealthMetrics;
+        } catch (error: any) {
+            throw new Error(`Failed to get health metrics: ${error.message}`);
+        }
     }
 }
+
+// Export parameter types
+export type SupplyAssetParams = z.infer<typeof supplyAssetSchema>;
+export type BorrowAssetParams = z.infer<typeof borrowAssetSchema>;
+export type GetHealthMetricsParams = z.infer<typeof getHealthMetricsSchema>;
