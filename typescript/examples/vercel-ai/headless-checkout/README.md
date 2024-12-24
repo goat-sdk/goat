@@ -1,4 +1,4 @@
-# Vercel AI with headless checkout example
+# Example: Vercel AI with buy token tool
 
 ## Setup
 
