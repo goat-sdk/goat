@@ -41,7 +41,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
             ...superTools,
             createTool(
                 {
-                    name: "create_and_pay_order",
+                    name: "buy_token",
                     description: "Create and pay for a Crossmint Headless Checkout order",
                     parameters: getCreateAndPayOrderParameters(this.callDataSchema),
                 },
