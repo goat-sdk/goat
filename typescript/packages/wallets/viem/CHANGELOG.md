@@ -1,5 +1,24 @@
 # @goat-sdk/wallet-viem
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/wallet-evm@0.2.3
+
+## 0.2.2
+
+### Patch Changes
+
+- @goat-sdk/wallet-evm@0.2.2
+
+## 0.2.1
+
+### Patch Changes
+
+- @goat-sdk/wallet-evm@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

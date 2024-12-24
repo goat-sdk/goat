@@ -130,6 +130,22 @@ const tools = await getOnChainTools({
     }),
 });
 ```
+
+```typescript Fuel
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
+import { fuel } from "@goat-sdk/wallet-fuel";
+import { Provider } from "fuels";
+
+const provider = await Provider.create('https://mainnet.fuel.network/v1/graphql');
+
+const tools = await getOnChainTools({
+    wallet: fuel({
+        privateKey: process.env.FUEL_WALLET_PRIVATE_KEY,
+        provider,
+    }),
+});
+```
+
 </CodeGroup>
 
 ## Creating your own wallet client

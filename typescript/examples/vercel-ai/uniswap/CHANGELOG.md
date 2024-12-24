@@ -1,5 +1,35 @@
 # goat-examples-vercel-ai-uniswap
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/adapter-vercel-ai@0.2.3
+  - @goat-sdk/plugin-uniswap@0.2.4
+  - @goat-sdk/wallet-viem@0.2.3
+
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [279dfcd]
+  - @goat-sdk/core@0.4.2
+  - @goat-sdk/adapter-vercel-ai@0.2.2
+  - @goat-sdk/plugin-uniswap@0.2.3
+  - @goat-sdk/wallet-viem@0.2.2
+
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/adapter-vercel-ai@0.2.1
+  - @goat-sdk/plugin-uniswap@0.2.2
+  - @goat-sdk/wallet-viem@0.2.1
+
 ## 0.1.1
 
 ### Patch Changes

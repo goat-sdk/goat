@@ -201,3 +201,38 @@ export function getExpirationTimestamp(secondsToAdd: number) {
 function replaceAll(str: string, search: string, replace: string): string {
     return str.split(search).join(replace);
 }
+
+/**
+ * Transforms market outcome data into a more usable format.
+ * Takes a market object with separate arrays for prices, names and token IDs,
+ * and combines them into a single array of outcome objects.
+ * Each outcome object contains the price, name and token ID for that outcome.
+ *
+ * @param market - Market object containing outcomePrices, outcomes (names), and clobTokenIds arrays
+ * @returns Transformed market object with combined outcomes array and other properties preserved
+ */
+export function transformMarketOutcomes<
+    T extends {
+        outcomePrices: string;
+        outcomes: string;
+        clobTokenIds: string;
+    },
+>(
+    market: T,
+): Omit<T, "outcomePrices" | "clobTokenIds"> & { outcomes: Array<{ price: string; name: string; tokenId: string }> } {
+    const outcomePrices_ = JSON.parse(market.outcomePrices);
+    const outcomes_ = JSON.parse(market.outcomes);
+    const clobTokenIds_ = JSON.parse(market.clobTokenIds);
+
+    const transformedOutcomes = outcomePrices_.map((price: string, index: number) => ({
+        price,
+        name: outcomes_[index],
+        tokenId: clobTokenIds_[index],
+    }));
+
+    const { outcomePrices, clobTokenIds, ...rest } = market;
+    return {
+        ...rest,
+        outcomes: transformedOutcomes,
+    };
+}

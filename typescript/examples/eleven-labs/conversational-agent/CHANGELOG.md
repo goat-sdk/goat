@@ -1,5 +1,41 @@
 # conversational-agent
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-evm@0.2.3
+  - @goat-sdk/adapter-eleven-labs@0.2.3
+  - @goat-sdk/plugin-coingecko@0.2.3
+  - @goat-sdk/wallet-solana@0.2.7
+  - @goat-sdk/wallet-viem@0.2.3
+
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [279dfcd]
+  - @goat-sdk/core@0.4.2
+  - @goat-sdk/adapter-eleven-labs@0.2.2
+  - @goat-sdk/plugin-coingecko@0.2.2
+  - @goat-sdk/wallet-evm@0.2.2
+  - @goat-sdk/wallet-solana@0.2.6
+  - @goat-sdk/wallet-viem@0.2.2
+
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/adapter-eleven-labs@0.2.1
+  - @goat-sdk/plugin-coingecko@0.2.1
+  - @goat-sdk/wallet-evm@0.2.1
+  - @goat-sdk/wallet-solana@0.2.5
+  - @goat-sdk/wallet-viem@0.2.1
+
 ## 0.2.4
 
 ### Patch Changes

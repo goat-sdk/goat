@@ -1,5 +1,35 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.3.5
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-evm@0.2.3
+
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies [279dfcd]
+  - @goat-sdk/core@0.4.2
+  - @goat-sdk/wallet-evm@0.2.2
+
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/wallet-evm@0.2.1
+
+## 0.3.2
+
+### Patch Changes
+
+- 1bc1d42: Minor changes
+
 ## 0.3.1
 
 ### Patch Changes

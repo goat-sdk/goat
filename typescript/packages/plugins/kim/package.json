@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-kim",
-    "version": "0.1.1",
+    "version": "0.1.5",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

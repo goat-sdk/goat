@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-langchain-lit",
-    "version": "0.1.7",
+    "version": "0.1.10",
     "description": "",
     "private": true,
     "scripts": {

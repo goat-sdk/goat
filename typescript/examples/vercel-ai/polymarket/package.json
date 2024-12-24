@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-polymarket",
-    "version": "0.2.1",
+    "version": "0.2.5",
     "description": "",
     "private": true,
     "scripts": {
@@ -12,12 +12,12 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@ai-sdk/openai": "^1.0.4",
+        "@ai-sdk/openai": "^1.0.11",
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-polymarket": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
-        "ai": "catalog:",
+        "ai": "4.0.22",
         "dotenv": "^16.4.5",
         "viem": "2.21.49"
     }
