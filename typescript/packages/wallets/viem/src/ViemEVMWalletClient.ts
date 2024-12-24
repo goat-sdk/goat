@@ -86,7 +86,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
     }
 
     async sendTransaction(transaction: EVMTransaction) {
-        const { to, abi, functionName, args, value, options } = transaction;
+        const { to, abi, functionName, args, value, options, data } = transaction;
         if (!this.#client.account) throw new Error("No account connected");
 
         const toAddress = await this.resolveAddress(to);
@@ -105,6 +105,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
                 to: toAddress,
                 chain: this.#client.chain,
                 value,
+                data,
                 ...(txHasPaymaster ? { paymaster, paymasterInput } : {}),
             };
 
@@ -126,20 +127,18 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             chain: this.#client.chain,
         });
 
-        // Encode the call data ourselves
-        const data = encodeFunctionData({
-            abi: abi,
-            functionName,
-            args,
-        });
-
         if (txHasPaymaster) {
+            const payMasterData = encodeFunctionData({
+                abi: abi,
+                functionName,
+                args,
+            });
             // With paymaster, we must use sendTransaction() directly
             const txParams = {
                 account: this.#client.account,
                 chain: this.#client.chain,
                 to: request.address,
-                data,
+                data: payMasterData,
                 value: request.value,
                 paymaster,
                 paymasterInput,
