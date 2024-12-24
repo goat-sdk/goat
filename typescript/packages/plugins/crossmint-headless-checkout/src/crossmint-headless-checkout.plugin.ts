@@ -46,6 +46,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                     parameters: getCreateAndPayOrderParameters(this.callDataSchema),
                 },
                 async (params) => {
+                    console.log("Creating order with params:", params);
                     const res = await this.crossmintApiClient.post("/api/2022-06-09/orders", {
                         body: JSON.stringify(params),
                         headers: {
@@ -69,6 +70,8 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
 
                     const { order } = (await res.json()) as { order: Order; orderClientSecret: string };
 
+                    console.log("Created order:", order.orderId);
+
                     const serializedTransaction =
                         order.payment.preparation != null && "serializedTransaction" in order.payment.preparation
                             ? order.payment.preparation.serializedTransaction
@@ -84,6 +87,8 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                     if (transaction.to == null) {
                         throw new Error("Transaction to is null");
                     }
+
+                    console.log("Paying order:", order.orderId);
 
                     const sendRes = await walletClient.sendTransaction({
                         to: transaction.to,
