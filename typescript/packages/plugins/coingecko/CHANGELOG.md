@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-coingecko
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+
 ## 0.2.2
 
 ### Patch Changes

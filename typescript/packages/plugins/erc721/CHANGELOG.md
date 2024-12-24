@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-erc721
 
+## 0.1.14
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-evm@0.2.3
+
 ## 0.1.13
 
 ### Patch Changes

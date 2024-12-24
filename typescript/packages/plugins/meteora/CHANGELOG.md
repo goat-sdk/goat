@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-meteora
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-solana@0.2.7
+
 ## 0.2.6
 
 ### Patch Changes

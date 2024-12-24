@@ -1,5 +1,13 @@
 # @goat-sdk/wallet-evm
 
+## 0.2.3
+
+### Patch Changes
+
+- 778440b: Allow arbitrary data tx
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+
 ## 0.2.2
 
 ### Patch Changes

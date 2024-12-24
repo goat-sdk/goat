@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.3
+
+### Patch Changes
+
+- 778440b: Allow arbitrary data tx
+
 ## 0.4.2
 
 ### Patch Changes

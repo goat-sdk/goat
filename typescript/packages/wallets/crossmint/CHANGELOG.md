@@ -1,5 +1,15 @@
 # @goat-sdk/crossmint
 
+## 0.3.9
+
+### Patch Changes
+
+- 778440b: Add twitter wallets and fix mint plugin
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-evm@0.2.3
+  - @goat-sdk/wallet-solana@0.2.7
+
 ## 0.3.8
 
 ### Patch Changes
