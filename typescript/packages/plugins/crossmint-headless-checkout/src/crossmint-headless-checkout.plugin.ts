@@ -7,6 +7,7 @@ import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import packageJson from "../package.json";
 import { Order } from "@crossmint/client-sdk-base";
 import { parseTransaction } from "viem";
+import { getCreateAndPayOrderParameters } from "./parameters";
 
 export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     private readonly crossmintApiClient: CrossmintApiClient;
@@ -31,53 +32,40 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     }
 
     supportsChain(chain: Chain): boolean {
-        return chain.type === "evm" || chain.type === "solana";
+        return chain.type === "evm"; // TODO: Add support for more blockchains
     }
 
-    getTools(walletClient: EVMWalletClient) {
-        const parametersSchema = z.object({
-            recipient: z.union([
-                z.object({
-                    walletAddress: z.string(),
-                }),
-                z.object({
-                    email: z.string().email(),
-                }),
-            ]),
-            payment: z.object({
-                method: z.enum([
-                    "ethereum",
-                    "ethereum-sepolia",
-                    "base",
-                    "base-sepolia",
-                    "polygon",
-                    "polygon-amoy",
-                    "solana",
-                ]), // TOOD: This is not the full list of methods
-                currency: z.enum(["usdc"]), // TODO: This is not the full list of currencies
-                payerAddress: z.string(), // TODO: This required for now, as this will create and buy the order in 1 tool
-                receiptEmail: z.string().optional(),
-            }),
-            lineItems: z.array(
-                z.object({
-                    // TODO: Add tokenLocator support
-                    collectionLocator: z.string(),
-                    callData: this.callDataSchema,
-                }),
-            ),
-        });
+    async getTools(walletClient: EVMWalletClient) {
+        const superTools = await super.getTools(walletClient);
         return [
+            ...superTools,
             createTool(
                 {
                     name: "create_and_pay_order",
                     description: "Create and pay for a Crossmint Headless Checkout order",
-                    parameters: parametersSchema,
+                    parameters: getCreateAndPayOrderParameters(this.callDataSchema),
                 },
                 async (params) => {
-                    const url = this.crossmintApiClient.buildUrl("/api/2022-06-09/orders");
-                    const res = await this.crossmintApiClient.post(url, {
+                    const res = await this.crossmintApiClient.post("/api/2022-06-09/orders", {
                         body: JSON.stringify(params),
+                        headers: {
+                            "x-api-key": this.crossmint.apiKey,
+                            "Content-Type": "application/json",
+                        },
                     });
+
+                    if (!res.ok) {
+                        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
+                        let json;
+                        try {
+                            json = await res.json();
+                            throw new Error(
+                                `Failed to create order: ${res.status} ${res.statusText}\n\n${JSON.stringify(json, null, 2)}`,
+                            );
+                        } catch (e) {
+                            throw new Error(`Failed to create order: ${res.status} ${res.statusText}`);
+                        }
+                    }
 
                     const { order } = (await res.json()) as { order: Order; orderClientSecret: string };
 
@@ -86,14 +74,29 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                             ? order.payment.preparation.serializedTransaction
                             : undefined;
                     if (!serializedTransaction) {
-                        throw new Error("No serialized transaction found");
+                        throw new Error(
+                            `No serialized transaction found for order:\n\n ${JSON.stringify(order, null, 2)}`,
+                        );
                     }
 
                     const transaction = parseTransaction(serializedTransaction as `0x${string}`);
 
-                    throw new Error("I cant send this transaction :(");
+                    if (transaction.to == null) {
+                        throw new Error("Transaction to is null");
+                    }
+
+                    const sendRes = await walletClient.sendTransaction({
+                        to: transaction.to,
+                        value: transaction.value || 0n,
+                        data: transaction.data,
+                    });
+                    return { order, txId: sendRes.hash };
                 },
             ),
         ];
     }
 }
+
+export const crossmintHeadlessCheckout = (crossmint: Crossmint, callDataSchema: z.ZodSchema) => {
+    return new CrossmintHeadlessCheckoutPlugin(crossmint, callDataSchema);
+};
