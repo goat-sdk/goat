@@ -261,7 +261,7 @@ importers:
     dependencies:
       '@ai-sdk/openai':
         specifier: ^1.0.4
-        version: 1.0.5(zod@3.24.1)
+        version: 1.0.11(zod@3.24.1)
       '@goat-sdk/adapter-model-context-protocol':
         specifier: workspace:*
         version: link:../../../packages/adapters/model-context-protocol
@@ -527,6 +527,45 @@ importers:
       '@goat-sdk/plugin-kim':
         specifier: workspace:*
         version: link:../../../packages/plugins/kim
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/evm
+      '@goat-sdk/wallet-viem':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/viem
+      ai:
+        specifier: 'catalog:'
+        version: 4.0.3(react@19.0.0-rc-66855b96-20241106)(zod@3.24.1)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      viem:
+        specifier: 2.21.49
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+
+  examples/vercel-ai/modespray:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.5(zod@3.24.1)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/vercel-ai
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/plugin-erc20':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc20
+      '@goat-sdk/plugin-erc721':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/erc721
+      '@goat-sdk/plugin-kim':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/kim
+      '@goat-sdk/plugin-modespray':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/modespray
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -885,6 +924,21 @@ importers:
         version: 5.1.6
 
   packages/plugins/mode-governance:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      viem:
+        specifier: 'catalog:'
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
+  packages/plugins/modespray:
     dependencies:
       '@goat-sdk/core':
         specifier: workspace:*
@@ -9457,7 +9511,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 0.0.26
       eventsource-parser: 1.1.2
-      nanoid: 3.3.8
+      nanoid: 3.3.7
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.23.8
@@ -9466,7 +9520,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 1.0.1
       eventsource-parser: 3.0.0
-      nanoid: 3.3.8
+      nanoid: 3.3.7
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.23.8
@@ -9475,7 +9529,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 1.0.1
       eventsource-parser: 3.0.0
-      nanoid: 3.3.8
+      nanoid: 3.3.7
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.24.1
@@ -12224,7 +12278,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 10.0.0
       zod: 3.24.1
-      zod-to-json-schema: 3.24.1(zod@3.24.1)
+      zod-to-json-schema: 3.23.5(zod@3.24.1)
     transitivePeerDependencies:
       - openai
 
@@ -12240,7 +12294,7 @@ snapshots:
       p-retry: 4.6.2
       uuid: 10.0.0
       zod: 3.24.1
-      zod-to-json-schema: 3.24.1(zod@3.24.1)
+      zod-to-json-schema: 3.23.5(zod@3.24.1)
     transitivePeerDependencies:
       - openai
 
@@ -14101,8 +14155,8 @@ snapshots:
   '@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       '@babel/runtime': 7.26.0
-      '@noble/curves': 1.7.0
-      '@noble/hashes': 1.6.1
+      '@noble/curves': 1.6.0
+      '@noble/hashes': 1.5.0
       '@solana/buffer-layout': 4.0.1
       agentkeepalive: 4.5.0
       bigint-buffer: 1.1.5
