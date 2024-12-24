@@ -75,7 +75,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                             : undefined;
                     if (!serializedTransaction) {
                         throw new Error(
-                            `No serialized transaction found for order:\n\n ${JSON.stringify(order, null, 2)}`,
+                            `No serialized transaction found for order, this item may not be available for purchase:\n\n ${JSON.stringify(order, null, 2)}`,
                         );
                     }
 
