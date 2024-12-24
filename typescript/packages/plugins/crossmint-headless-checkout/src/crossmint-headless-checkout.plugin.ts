@@ -63,7 +63,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                                 `Failed to create buy order: ${res.status} ${res.statusText}\n\n${JSON.stringify(json, null, 2)}`,
                             );
                         } catch (e) {
-                            throw new Error(`Failed to create order: ${res.status} ${res.statusText}`);
+                            throw new Error(`Failed to create buy order: ${res.status} ${res.statusText}`);
                         }
                     }
 
