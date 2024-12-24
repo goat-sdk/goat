@@ -19,6 +19,8 @@
   "dependencies": {
     "@goat-sdk/core": "workspace:*",
     "@goat-sdk/wallet-evm": "workspace:*",
+    "@ionicprotocol/types": "0.3.7",
+    "ethers": "^5.7.2",
     "viem": "latest",
     "webauthn-p256": "0.0.8",
     "zod": "latest"
@@ -47,5 +49,12 @@
     "web3",
     "ionic protocol",
     "lending"
-  ]
+  ],
+  "pnpm": {
+    "overrides": {
+      "@ionicprotocol/chains": {
+        "@ionicprotocol/types": "0.3.7"
+      }
+    }
+  }
 }
