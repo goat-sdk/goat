@@ -1,17 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-      "baseUrl": ".",
-      "rootDir": "src",
-      "paths": {
-          "@/*": ["src/*"]
-      },
-      "typeRoots": [
-          "./node_modules/@types",
-          "./src/types"
-      ]
-  },
-  "include": ["src/**/*", "src/types/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
