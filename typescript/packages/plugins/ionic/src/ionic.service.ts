@@ -158,7 +158,7 @@ export class IonicTools {
                 functionName: 'pools',
                 args: [BigInt(poolId)],
             });
-            const poolData = poolDataRaw.value as [bigint, boolean, Address]; // Use .value
+            const poolData = poolDataRaw.value as [bigint, boolean, Address]; 
             const comptrollerAddress = poolData[2];
             if (!comptrollerAddress || comptrollerAddress === '0x0000000000000000000000000000000000000000') {
                 throw new Error(`Comptroller address not found for pool ID ${poolId}`);

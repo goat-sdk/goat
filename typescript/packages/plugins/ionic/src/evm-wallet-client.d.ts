@@ -7,6 +7,6 @@ declare module "@goat-sdk/wallet-evm" {
     walletClient: WalletClient;
     account: Account;
     chainId: number;
-    // Add other properties and methods of your EVMWalletClient
+    
   }
 }

@@ -1,4 +1,3 @@
-// typescript/packages/plugins/ionic/turbo.json
 {
   "$schema": "https://turbo.build/schema.json",
   "extends": ["//"],
