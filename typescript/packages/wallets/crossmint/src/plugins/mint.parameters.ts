@@ -42,7 +42,14 @@ export class MintNFTParameters extends createToolParameters(
         recipient: z
             .string()
             .describe(
-                "A locator for the recipient of the NFT, in the format `<address>` if it's a wallet or `email:<email_address>` if it's an email",
+                "The recipient of the NFT, this can be a wallet address or an email address",
+            ),
+        recipientType: z
+            .enum(["wallet", "email"])
+            .optional()
+            .default("email")
+            .describe(
+                "The type of the recipient, either 'wallet' or 'email'",
             ),
         metadata: z
             .object({
