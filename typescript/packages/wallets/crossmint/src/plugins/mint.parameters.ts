@@ -39,18 +39,12 @@ export class GetAllCollectionsParameters extends createToolParameters(z.object({
 export class MintNFTParameters extends createToolParameters(
     z.object({
         collectionId: z.string().describe("The ID of the collection to mint the NFT in"),
-        recipient: z
-            .string()
-            .describe(
-                "The recipient of the NFT, this can be a wallet address or an email address",
-            ),
+        recipient: z.string().describe("The recipient of the NFT, this can be a wallet address or an email address"),
         recipientType: z
             .enum(["wallet", "email"])
             .optional()
             .default("email")
-            .describe(
-                "The type of the recipient, either 'wallet' or 'email'",
-            ),
+            .describe("The type of the recipient, either 'wallet' or 'email'"),
         metadata: z
             .object({
                 name: z.string().describe("The name of the NFT"),

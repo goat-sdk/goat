@@ -1,7 +1,7 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { faucetPlugin, mintPlugin } from "./plugins";
-import { custodialFactory, smartWalletFactory } from "./wallets";
 import { walletsPlugin } from "./plugins/wallets.plugin";
+import { custodialFactory, smartWalletFactory } from "./wallets";
 function crossmint(apiKey: string) {
     const apiClient = new CrossmintApiClient(
         {

@@ -37,7 +37,7 @@ const { wallets, mint } = crossmint(apiKey);
         plugins: [wallets(), mint()],
     });
 
-   const rl = readline.createInterface({
+    const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
