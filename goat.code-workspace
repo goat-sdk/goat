@@ -67,6 +67,10 @@
             "path": "./typescript/packages/plugins/meteora"
         },
         {
+            "name": "[Plugin] ionic",
+            "path": "./typescript/packages/plugins/ionic"
+        },
+        {
             "name": "[Plugin] 🪙 spl token",
             "path": "./typescript/packages/plugins/spl-token"
         },

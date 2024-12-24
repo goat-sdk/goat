@@ -1,20 +1,22 @@
+// typescript/packages/plugins/ionic/turbo.json
 {
   "$schema": "https://turbo.build/schema.json",
   "extends": ["//"],
-  "tasks": {
+  "pipeline": {
     "build": {
-      "inputs": [
-        "src/**/*.{ts,tsx}",
-        "tsup.config.ts",
-        "tsconfig.json",
-        "../../core/src/**/*.{ts,tsx}",
-        "../../wallets/evm/src/**/*.{ts,tsx}"
-      ],
       "dependsOn": ["^build"],
-      "outputs": [
-        "dist/**",
-        "*.tsbuildinfo"
-      ]
+      "outputs": ["dist/**"]
+    },
+    "lint": {},
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "cache": false
     }
   }
 }

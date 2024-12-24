@@ -1,32 +1,6 @@
-
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "baseUrl": ".",
-    "paths": {
-      "@goat-sdk/core": ["../../core/src"],
-      "@goat-sdk/wallet-evm": ["../../wallets/evm/src"]
-    },
-    "declaration": true,
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "composite": true  
-  },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"],
-  "references": [  
-    {
-      "path": "../../core"
-    },
-    {
-      "path": "../../wallets/evm"
-    }
-  ]
+  "exclude": ["node_modules", "dist"]
 }
