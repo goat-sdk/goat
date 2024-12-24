@@ -42,7 +42,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
             createTool(
                 {
                     name: "buy_token",
-                    description: "Create and pay for a Crossmint Headless Checkout order",
+                    description: "Buy a token such as an NFT, SFT or item tokenized by them, listed on any blockchain",
                     parameters: getCreateAndPayOrderParameters(this.callDataSchema),
                 },
                 async (params) => {
