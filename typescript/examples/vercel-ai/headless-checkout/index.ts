@@ -8,8 +8,8 @@ import { base, baseSepolia, sepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 
-import { viem } from "@goat-sdk/wallet-viem";
 import { crossmintHeadlessCheckout } from "@goat-sdk/plugin-crossmint-headless-checkout";
+import { viem } from "@goat-sdk/wallet-viem";
 import { z } from "zod";
 
 require("dotenv").config();

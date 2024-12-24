@@ -1,12 +1,12 @@
-import { createCrossmint, Crossmint, CrossmintApiClient } from "@crossmint/common-sdk-base";
-import { Chain, createTool, PluginBase, WalletClientBase } from "@goat-sdk/core";
+import { Crossmint, CrossmintApiClient, createCrossmint } from "@crossmint/common-sdk-base";
+import { Chain, PluginBase, WalletClientBase, createTool } from "@goat-sdk/core";
 import { z } from "zod";
 
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 
-import packageJson from "../package.json";
 import { Order } from "@crossmint/client-sdk-base";
 import { parseTransaction } from "viem";
+import packageJson from "../package.json";
 import { getCreateAndPayOrderParameters } from "./parameters";
 
 export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
