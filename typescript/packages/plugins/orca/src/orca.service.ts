@@ -44,14 +44,14 @@ export class OrcaService {
         description:
             "Create a single-sided liquidity pool on the Orca DEX. This function initializes a new pool with liquidity contributed from a single token, allowing users to define an initial price, a maximum price, and other parameters. The function ensures proper mint order and on-chain configuration for seamless execution. Ideal for setting up a pool with minimal price impact, it supports advanced features like adjustable fee tiers and precise initial price settings.",
     })
-        async createSingleSidedPool(walletClient: SolanaWalletClient, parameters: CreateSingleSidedPoolParameters) {
+    async createSingleSidedPool(walletClient: SolanaWalletClient, parameters: CreateSingleSidedPoolParameters) {
         let whirlpoolsConfigAddress: PublicKey;
-        if (walletClient.getConnection().rpcEndpoint.includes('mainnet')) {
-            whirlpoolsConfigAddress = new PublicKey('2LecshUwdy9xi7meFgHtFJQNSKk4KdTrcpvaB56dP2NQ');
-        } else if (walletClient.getConnection().rpcEndpoint.includes('devnet')) {
-            whirlpoolsConfigAddress = new PublicKey('FcrweFY1G9HJAHG5inkGB6pKg1HZ6x9UC2WioAfWrGkR');
+        if (walletClient.getConnection().rpcEndpoint.includes("mainnet")) {
+            whirlpoolsConfigAddress = new PublicKey("2LecshUwdy9xi7meFgHtFJQNSKk4KdTrcpvaB56dP2NQ");
+        } else if (walletClient.getConnection().rpcEndpoint.includes("devnet")) {
+            whirlpoolsConfigAddress = new PublicKey("FcrweFY1G9HJAHG5inkGB6pKg1HZ6x9UC2WioAfWrGkR");
         } else {
-            throw new Error('Unsupported network');
+            throw new Error("Unsupported network");
         }
         const vanityWallet = new Wallet(new Keypair());
         const ctx = WhirlpoolContext.from(walletClient.getConnection(), vanityWallet, ORCA_WHIRLPOOL_PROGRAM_ID);
@@ -88,7 +88,11 @@ export class OrcaService {
             tokenMintWithProgramA: mintAAccount,
             tokenMintWithProgramB: mintBAccount,
         };
-        const feeTierKey = PDAUtil.getFeeTier(ORCA_WHIRLPOOL_PROGRAM_ID, whirlpoolsConfigAddress, tickSpacing).publicKey;
+        const feeTierKey = PDAUtil.getFeeTier(
+            ORCA_WHIRLPOOL_PROGRAM_ID,
+            whirlpoolsConfigAddress,
+            tickSpacing,
+        ).publicKey;
         const initSqrtPrice = PriceMath.tickIndexToSqrtPriceX64(initialTick);
         const tokenVaultAKeypair = Keypair.generate();
         const tokenVaultBKeypair = Keypair.generate();
@@ -280,7 +284,8 @@ export class OrcaService {
 
         const txPayload = await txBuilder.build();
         const instructions = TransactionMessage.decompile(
-            (txPayload.transaction as VersionedTransaction).message).instructions
+            (txPayload.transaction as VersionedTransaction).message,
+        ).instructions;
 
         try {
             const { hash } = await walletClient.sendTransaction({
