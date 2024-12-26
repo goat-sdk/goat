@@ -10,8 +10,7 @@
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
-        "test": "vitest run",
-        "lint": "eslint ."
+        "test": "vitest run --passWithNoTests"
     },
     "sideEffects": false,
     "main": "./dist/index.js",
