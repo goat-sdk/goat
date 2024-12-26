@@ -1,5 +1,47 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+
+## 0.2.4
+
+### Patch Changes
+
+- de8533d: Fix transaction instructions
+
+## 0.2.3
+
+### Patch Changes
+
+- b9cb39c: Wait for transaction confirmation
+
+## 0.2.2
+
+### Patch Changes
+
+- 608f9f1: Move to imperative prompts
+
+## 0.2.1
+
+### Patch Changes
+
+- ab3b1dc: Add accountsToSign to Solana tx
+
+## 0.2.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/core@0.4.0
+
 ## 0.1.9
 
 ### Patch Changes

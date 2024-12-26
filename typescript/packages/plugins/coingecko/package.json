@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-coingecko",
-    "version": "0.1.5",
+    "version": "0.2.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,12 +13,10 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:"
+        "@goat-sdk/core": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

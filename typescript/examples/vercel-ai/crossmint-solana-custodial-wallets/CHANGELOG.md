@@ -1,5 +1,81 @@
 # goat-examples-vercel-ai-crossmint-solana-custodial-wallets
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/adapter-vercel-ai@0.2.1
+  - @goat-sdk/plugin-solana-nfts@0.2.5
+  - @goat-sdk/crossmint@0.3.7
+  - @goat-sdk/wallet-solana@0.2.5
+
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [1bc1d42]
+  - @goat-sdk/crossmint@0.3.6
+
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [de8533d]
+  - @goat-sdk/wallet-solana@0.2.4
+  - @goat-sdk/plugin-solana-nfts@0.2.4
+  - @goat-sdk/crossmint@0.3.5
+
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [b9cb39c]
+  - @goat-sdk/wallet-solana@0.2.3
+  - @goat-sdk/plugin-solana-nfts@0.2.3
+  - @goat-sdk/crossmint@0.3.4
+
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [608f9f1]
+  - @goat-sdk/plugin-solana-nfts@0.2.2
+  - @goat-sdk/wallet-solana@0.2.2
+  - @goat-sdk/crossmint@0.3.3
+
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [0927d9c]
+  - @goat-sdk/crossmint@0.3.2
+
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [ab3b1dc]
+  - @goat-sdk/wallet-solana@0.2.1
+  - @goat-sdk/plugin-solana-nfts@0.2.1
+  - @goat-sdk/crossmint@0.3.1
+
+## 0.2.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/plugin-solana-nfts@1.0.0
+  - @goat-sdk/adapter-vercel-ai@1.0.0
+  - @goat-sdk/crossmint@1.0.0
+  - @goat-sdk/wallet-solana@1.0.0
+  - @goat-sdk/core@0.4.0
+
 ## 0.1.7
 
 ### Patch Changes

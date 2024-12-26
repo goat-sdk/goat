@@ -2,9 +2,9 @@ import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { sendETH } from "@goat-sdk/core";
 import { crossmint } from "@goat-sdk/crossmint";
 import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
+import { sendETH } from "@goat-sdk/wallet-evm";
 
 require("dotenv").config();
 
@@ -36,7 +36,7 @@ const { smartwallet, faucet } = crossmint(apiKey);
         model: openai("gpt-4o-mini"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Top up my wallet with USDC",
+        prompt: "Top up my wallet with 10 USDC",
     });
 
     console.log(result1.text);

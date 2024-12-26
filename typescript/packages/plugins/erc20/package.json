@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-erc20",
-    "version": "0.1.12",
+    "version": "0.2.3",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:",
         "zod": "catalog:"
     },

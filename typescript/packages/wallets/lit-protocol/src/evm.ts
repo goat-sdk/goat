@@ -1,30 +1,43 @@
-import type {
-    EVMReadRequest,
-    EVMReadResult,
-    EVMTransaction,
-    EVMTransactionResult,
-    EVMTypedData,
-    EVMWalletClient,
-    Signature,
-} from "@goat-sdk/core";
-import type { AccsDefaultParams } from "@lit-protocol/types";
-import { type EthereumLitTransaction, api } from "@lit-protocol/wrapped-keys";
-import { formatEther, isAddress, publicActions } from "viem";
+import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
+import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
+import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
+import { formatEther, formatUnits, isAddress, publicActions } from "viem";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
-
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
 import type { LitEVMWalletOptions } from "./types";
 
+import { type EvmChain, type Signature } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { LitNodeClient } from "@lit-protocol/lit-node-client";
+
+import { WalletClient as ViemWalletClient } from "viem";
+
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
-export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
-    const { litNodeClient, pkpSessionSigs, wrappedKeyMetadata, chainId, litEVMChainIdentifier, viemWalletClient } =
-        options;
+export class LitEVMWalletClient extends EVMWalletClient {
+    private litNodeClient: LitNodeClient;
+    private pkpSessionSigs: SessionSigsMap;
+    private wrappedKeyMetadata: StoredKeyData & { wrappedKeyAddress: string };
+    private chainId: number;
+    private litEVMChainIdentifier: string;
+    private viemWalletClient: ViemWalletClient;
 
-    const viemPublicClient = viemWalletClient.extend(publicActions);
+    private get viemPublicClient() {
+        return this.viemWalletClient.extend(publicActions);
+    }
 
-    function getPkpAccessControlCondition(pkpAddress: string): AccsDefaultParams {
+    constructor(private options: LitEVMWalletOptions) {
+        super();
+        this.litNodeClient = options.litNodeClient;
+        this.pkpSessionSigs = options.pkpSessionSigs;
+        this.wrappedKeyMetadata = options.wrappedKeyMetadata;
+        this.chainId = options.chainId;
+        this.litEVMChainIdentifier = options.litEVMChainIdentifier;
+        this.viemWalletClient = options.viemWalletClient;
+    }
+
+    private getPkpAccessControlCondition(pkpAddress: string): AccsDefaultParams {
         if (!isAddress(pkpAddress)) {
             throw new Error(`pkpAddress is not a valid Ethereum Address: ${pkpAddress}`);
         }
@@ -42,134 +55,146 @@ export function createEVMWallet(options: LitEVMWalletOptions): EVMWalletClient {
         };
     }
 
-    async function resolveAddress(address: string) {
+    async resolveAddress(address: string): Promise<`0x${string}`> {
         if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
 
         try {
-            const resolvedAddress = (await viemPublicClient.getEnsAddress({
+            const resolvedAddress = (await this.viemPublicClient.getEnsAddress({
                 name: normalize(address),
             })) as `0x${string}`;
             if (!resolvedAddress) {
                 throw new Error("ENS name could not be resolved.");
             }
-            return resolvedAddress as `0x${string}`;
+            return resolvedAddress;
         } catch (error) {
             throw new Error(`Failed to resolve ENS name: ${error}`);
         }
     }
 
-    const waitForReceipt = async (hash: `0x${string}`) => {
-        const receipt = await viemPublicClient.waitForTransactionReceipt({ hash });
-        return { hash: receipt.transactionHash, status: receipt.status };
-    };
+    private async waitForReceipt(hash: `0x${string}`): Promise<{ hash: string; status: string }> {
+        const receipt = await this.viemPublicClient.waitForTransactionReceipt({
+            hash,
+        });
+        return {
+            hash: receipt.transactionHash,
+            status: receipt.status ? "success" : "failure",
+        };
+    }
 
-    return {
-        getAddress: () => wrappedKeyMetadata.wrappedKeyAddress,
-        getChain() {
-            return {
-                type: "evm",
-                id: options.chainId ?? 0,
+    getAddress(): string {
+        return this.wrappedKeyMetadata.wrappedKeyAddress;
+    }
+
+    getChain(): EvmChain {
+        return {
+            type: "evm" as const,
+            id: this.options.chainId ?? 0,
+        };
+    }
+
+    async signMessage(message: string): Promise<Signature> {
+        const signature = await signMessageWithEncryptedKey({
+            pkpSessionSigs: this.pkpSessionSigs,
+            network: "evm",
+            id: this.wrappedKeyMetadata.id,
+            messageToSign: message,
+            litNodeClient: this.litNodeClient,
+        });
+        return { signature };
+    }
+
+    async signTypedData(data: EVMTypedData): Promise<Signature> {
+        const response = await this.litNodeClient.executeJs({
+            sessionSigs: this.pkpSessionSigs,
+            code: signEip712MessageLitActionCode,
+            jsParams: {
+                accessControlConditions: [this.getPkpAccessControlCondition(this.wrappedKeyMetadata.pkpAddress)],
+                ciphertext: this.wrappedKeyMetadata.ciphertext,
+                dataToEncryptHash: this.wrappedKeyMetadata.dataToEncryptHash,
+                messageToSign: JSON.stringify(data),
+            },
+        });
+
+        return {
+            signature: response.response as string,
+        };
+    }
+
+    async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
+        const { to, abi, functionName, args, value } = transaction;
+        const toAddress = await this.resolveAddress(to);
+
+        // Simple ETH transfer (no ABI)
+        if (!abi) {
+            const litTransaction: EthereumLitTransaction = {
+                chainId: this.chainId,
+                chain: this.litEVMChainIdentifier,
+                toAddress,
+                value: formatEther(value ?? 0n),
             };
-        },
-        resolveAddress,
-        async signMessage(message: string): Promise<Signature> {
-            return {
-                signature: await signMessageWithEncryptedKey({
-                    pkpSessionSigs,
-                    network: "evm",
-                    id: wrappedKeyMetadata.id,
-                    messageToSign: message,
-                    litNodeClient,
-                }),
-            };
-        },
-        async signTypedData(data: EVMTypedData): Promise<Signature> {
-            const response = await litNodeClient.executeJs({
-                sessionSigs: pkpSessionSigs,
-                code: signEip712MessageLitActionCode,
-                jsParams: {
-                    accessControlConditions: [getPkpAccessControlCondition(wrappedKeyMetadata.pkpAddress)],
-                    ciphertext: wrappedKeyMetadata.ciphertext,
-                    dataToEncryptHash: wrappedKeyMetadata.dataToEncryptHash,
-                    messageToSign: JSON.stringify(data),
-                },
+
+            const txHash = await signTransactionWithEncryptedKey({
+                litNodeClient: this.litNodeClient,
+                pkpSessionSigs: this.pkpSessionSigs,
+                network: "evm",
+                id: this.wrappedKeyMetadata.id,
+                unsignedTransaction: litTransaction,
+                broadcast: true,
             });
+            return this.waitForReceipt(txHash as `0x${string}`);
+        }
 
-            return {
-                signature: response.response as string,
-            };
-        },
-        async sendTransaction(transaction: EVMTransaction): Promise<EVMTransactionResult> {
-            const { to, abi, functionName, args, value } = transaction;
-            const toAddress = await resolveAddress(to);
+        // Contract call
+        if (!functionName) {
+            throw new Error("Function name is required for contract calls");
+        }
 
-            // Simple ETH transfer (no ABI)
-            if (!abi) {
-                const litTransaction: EthereumLitTransaction = {
-                    chainId,
-                    chain: litEVMChainIdentifier,
-                    toAddress,
-                    value: formatEther(value ?? 0n),
-                };
+        const { request } = await this.viemPublicClient.simulateContract({
+            account: this.wrappedKeyMetadata.wrappedKeyAddress as `0x${string}`,
+            address: toAddress,
+            abi,
+            functionName,
+            args,
+            chain: this.viemWalletClient.chain,
+        });
 
-                const txHash = await signTransactionWithEncryptedKey({
-                    litNodeClient,
-                    pkpSessionSigs,
-                    network: "evm",
-                    id: wrappedKeyMetadata.id,
-                    unsignedTransaction: litTransaction,
-                    broadcast: true,
-                });
-                return waitForReceipt(txHash as `0x${string}`);
-            }
+        // Uses the viem wallet client to send the transaction
+        const txHash = await this.viemWalletClient.writeContract(request);
+        return this.waitForReceipt(txHash);
+    }
 
-            // Contract call
-            if (!functionName) {
-                throw new Error("Function name is required for contract calls");
-            }
+    async read(request: EVMReadRequest): Promise<EVMReadResult> {
+        const { address, abi, functionName, args } = request;
+        if (!abi) throw new Error("Read request must include ABI for EVM");
 
-            const { request } = await viemPublicClient.simulateContract({
-                account: wrappedKeyMetadata.wrappedKeyAddress as `0x${string}`,
-                address: toAddress as `0x${string}`,
-                abi,
-                functionName,
-                args,
-                chain: viemWalletClient.chain,
-            });
+        const result = await this.viemPublicClient.readContract({
+            address: await this.resolveAddress(address),
+            abi,
+            functionName,
+            args,
+        });
 
-            // Without paymaster, use writeContract which handles encoding too,
-            // but since we already have request, let's let writeContract do its thing.
-            // However, writeContract expects the original request format (with abi, functionName, args).
-            const txHash = await viemWalletClient.writeContract(request);
-            return waitForReceipt(txHash);
-        },
-        async read(request: EVMReadRequest): Promise<EVMReadResult> {
-            const { address, abi, functionName, args } = request;
-            if (!abi) throw new Error("Read request must include ABI for EVM");
+        return { value: result };
+    }
 
-            const result = await viemPublicClient.readContract({
-                address: await this.resolveAddress(address),
-                abi,
-                functionName,
-                args,
-            });
+    async balanceOf(address: string) {
+        const resolvedAddress = await this.resolveAddress(address);
+        const balance = await this.viemPublicClient.getBalance({
+            address: resolvedAddress,
+        });
 
-            return { value: result };
-        },
-        async balanceOf(address: string) {
-            const resolvedAddress = await this.resolveAddress(address);
-            const balance = await viemPublicClient.getBalance({
-                address: resolvedAddress,
-            });
+        const chain = this.viemWalletClient.chain ?? mainnet;
 
-            const chain = viemWalletClient.chain ?? mainnet;
+        return {
+            value: formatUnits(balance, chain.nativeCurrency.decimals),
+            decimals: chain.nativeCurrency.decimals,
+            symbol: chain.nativeCurrency.symbol,
+            name: chain.nativeCurrency.name,
+            inBaseUnits: balance.toString(),
+        };
+    }
+}
 
-            return {
-                value: balance,
-                decimals: chain.nativeCurrency.decimals,
-                symbol: chain.nativeCurrency.symbol,
-                name: chain.nativeCurrency.name,
-            };
-        },
-    };
+export function createEVMWallet(options: LitEVMWalletOptions) {
+    return new LitEVMWalletClient(options);
 }

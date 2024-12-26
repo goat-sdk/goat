@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-tensor",
-    "version": "0.0.4",
+    "version": "0.2.5",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
         "zod": "catalog:"
     },

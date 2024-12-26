@@ -15,7 +15,6 @@ import {
 } from "@solana/web3.js";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { sendSOL } from "@goat-sdk/core";
 import {
     createEthersWallet,
     createLitContractsClient,
@@ -27,6 +26,7 @@ import {
     mintCapacityCredit,
     mintPKP,
 } from "@goat-sdk/wallet-lit";
+import { sendSOL } from "@goat-sdk/wallet-solana";
 
 import { LIT_NETWORK as _LIT_NETWORK } from "@lit-protocol/constants";
 

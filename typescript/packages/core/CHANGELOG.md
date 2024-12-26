@@ -1,5 +1,17 @@
 # @goat-sdk/core
 
+## 0.4.1
+
+### Patch Changes
+
+- 6c03f61: Fix zod versions
+
+## 0.4.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
 ## 0.3.15
 
 ### Patch Changes

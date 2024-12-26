@@ -22,6 +22,10 @@
             "path": "./typescript/packages/adapters/eliza"
         },
         {
+            "name": "[Adapter] 🦾 model context protocol",
+            "path": "./typescript/packages/adapters/model-context-protocol"
+        },
+        {
             "name": "[Adapter] 🦜 langchain",
             "path": "./typescript/packages/adapters/langchain"
         },
@@ -33,6 +37,10 @@
         {
             "name": "[Plugin] 💰 erc20",
             "path": "./typescript/packages/plugins/erc20"
+        },
+        {
+            "name": "[Plugin] 💰 erc721",
+            "path": "./typescript/packages/plugins/erc721"
         },
         {
             "name": "[Plugin] 🎰 polymarket",
@@ -49,6 +57,14 @@
         {
             "name": "[Plugin] 🪐 jupiter",
             "path": "./typescript/packages/plugins/jupiter"
+        },
+        {
+            "name": "[Plugin] 🔶 kim",
+            "path": "./typescript/packages/plugins/kim"
+        },
+        {
+            "name": "[Plugin] ☄️ meteora",
+            "path": "./typescript/packages/plugins/meteora"
         },
         {
             "name": "[Plugin] 🪙 spl token",
@@ -68,6 +84,10 @@
         },
         // Wallets
         {
+            "name": "[Wallet] 🅰 aptos",
+            "path": "./typescript/packages/wallets/aptos"
+        },
+        {
             "name": "[Wallet] 🍀 crossmint",
             "path": "./typescript/packages/wallets/crossmint"
         },
@@ -78,6 +98,10 @@
         {
             "name": "[Wallet] 🌞 solana",
             "path": "./typescript/packages/wallets/solana"
+        },
+        {
+            "name": "[Wallet] 🪨 evm",
+            "path": "./typescript/packages/wallets/evm"
         },
         {
             "name": "[Wallet] 💳 viem",

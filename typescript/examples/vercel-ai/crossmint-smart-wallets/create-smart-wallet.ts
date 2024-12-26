@@ -14,7 +14,7 @@ if (!apiKey || !walletAddress || !walletSignerSecretKey) {
     const response = await createWallet(walletAddress as `0x${string}`, apiKey);
 
     if (response.error) {
-        console.error(response.error);
+        console.error(response);
         return;
     }
 

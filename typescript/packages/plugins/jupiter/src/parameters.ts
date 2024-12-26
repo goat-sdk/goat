@@ -1,3 +1,4 @@
+import { createToolParameters } from "@goat-sdk/core";
 import {
     type QuoteGetRequest,
     QuoteGetSwapModeEnum,
@@ -7,30 +8,35 @@ import {
 } from "@jup-ag/api";
 import { z } from "zod";
 
-export const getQuoteParametersSchema: z.ZodType<QuoteGetRequest> = z.object({
-    inputMint: z.string().describe("The token address of the token to swap from"),
-    outputMint: z.string().describe("The token address of the token to swap to"),
-    amount: z.number().describe("The amount of tokens to swap in the tokens base unit"),
-    slippageBps: z.number().optional().describe("The slippage in bps"),
-    autoSlippage: z.boolean().optional().describe("Whether to use auto slippage"),
-    autoSlippageCollisionUsdValue: z.number().optional().describe("The collision USD value for auto slippage"),
-    computeAutoSlippage: z.boolean().optional().describe("Whether to compute auto slippage"),
-    maxAutoSlippageBps: z.number().optional().describe("The maximum auto slippage in bps"),
-    swapMode: z.nativeEnum(QuoteGetSwapModeEnum).optional().describe("The swap mode"),
-    dexes: z.array(z.string()).optional().describe("The dexes to use"),
-    excludeDexes: z.array(z.string()).optional().describe("The dexes to exclude"),
-    restrictIntermediateTokens: z.boolean().optional().describe("Whether to restrict intermediate tokens"),
-    onlyDirectRoutes: z.boolean().optional().describe("Whether to only use direct routes"),
-    asLegacyTransaction: z.boolean().optional().describe("Whether to return the transaction as a legacy transaction"),
-    platformFeeBps: z.number().optional().describe("The platform fee in bps"),
-    maxAccounts: z.number().optional().describe("The maximum number of accounts"),
-    minimizeSlippage: z.boolean().optional().describe("Whether to minimize slippage"),
-    preferLiquidDexes: z.boolean().optional().describe("Whether to prefer liquid dexes"),
-    tokenCategoryBasedIntermediateTokens: z
-        .boolean()
-        .optional()
-        .describe("Whether to use token category based intermediate tokens"),
-});
+export class GetQuoteParameters extends createToolParameters(
+    z.object({
+        inputMint: z.string().describe("The token address of the token to swap from"),
+        outputMint: z.string().describe("The token address of the token to swap to"),
+        amount: z.number().describe("The amount of tokens to swap in the tokens base unit"),
+        slippageBps: z.number().optional().describe("The slippage in bps"),
+        autoSlippage: z.boolean().optional().describe("Whether to use auto slippage"),
+        autoSlippageCollisionUsdValue: z.number().optional().describe("The collision USD value for auto slippage"),
+        computeAutoSlippage: z.boolean().optional().describe("Whether to compute auto slippage"),
+        maxAutoSlippageBps: z.number().optional().describe("The maximum auto slippage in bps"),
+        swapMode: z.nativeEnum(QuoteGetSwapModeEnum).optional().describe("The swap mode"),
+        dexes: z.array(z.string()).optional().describe("The dexes to use"),
+        excludeDexes: z.array(z.string()).optional().describe("The dexes to exclude"),
+        restrictIntermediateTokens: z.boolean().optional().describe("Whether to restrict intermediate tokens"),
+        onlyDirectRoutes: z.boolean().optional().describe("Whether to only use direct routes"),
+        asLegacyTransaction: z
+            .boolean()
+            .optional()
+            .describe("Whether to return the transaction as a legacy transaction"),
+        platformFeeBps: z.number().optional().describe("The platform fee in bps"),
+        maxAccounts: z.number().optional().describe("The maximum number of accounts"),
+        minimizeSlippage: z.boolean().optional().describe("Whether to minimize slippage"),
+        preferLiquidDexes: z.boolean().optional().describe("Whether to prefer liquid dexes"),
+        tokenCategoryBasedIntermediateTokens: z
+            .boolean()
+            .optional()
+            .describe("Whether to use token category based intermediate tokens"),
+    }),
+) {}
 
 export const swapInfoSchema: z.ZodType<SwapInfo> = z.object({
     ammKey: z.string().describe("The AMM key"),

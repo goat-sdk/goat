@@ -9,8 +9,8 @@ import { DynamicWidget, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { isSolanaWallet } from "@dynamic-labs/solana";
 
-import { sendETH } from "@goat-sdk/core";
 import { coingecko } from "@goat-sdk/plugin-coingecko";
+import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 import { createSolanaWalletFromDynamic } from "../utils";
 
@@ -44,21 +44,12 @@ export function Conversation() {
 
                 tools = await getOnChainTools({
                     wallet: createSolanaWalletFromDynamic(connection, signer),
-                    plugins: [
-                        coingecko({
-                            apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "",
-                        }),
-                    ],
+                    plugins: [coingecko({ apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "" })],
                 });
             } else if (isEthereumWallet(primaryWallet)) {
                 tools = await getOnChainTools({
                     wallet: viem(await primaryWallet.getWalletClient()),
-                    plugins: [
-                        sendETH(),
-                        coingecko({
-                            apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "",
-                        }),
-                    ],
+                    plugins: [sendETH(), coingecko({ apiKey: process.env.NEXT_PUBLIC_COINGECKO_API_KEY ?? "" })],
                     options: {
                         logTools: true,
                     },

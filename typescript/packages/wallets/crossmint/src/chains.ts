@@ -12,6 +12,8 @@ import {
     bsc,
     chiliz,
     mainnet,
+    mode,
+    modeTestnet,
     optimism,
     optimismSepolia,
     polygon,
@@ -48,6 +50,8 @@ const smartWalletChains = [
     "base-sepolia",
     "arbitrum",
     "arbitrum-sepolia",
+    "mode",
+    "mode-sepolia",
     "optimism",
     "optimism-sepolia",
 ] as const;
@@ -67,6 +71,8 @@ export const mintingChains = [
     "chiliz-spicy-testnet",
     "ethereum",
     "ethereum-sepolia",
+    "mode",
+    "mode-sepolia",
     "optimism",
     "optimism-sepolia",
     "polygon",
@@ -97,6 +103,8 @@ const chainMap: Record<SupportedFaucetChains | SupportedSmartWalletChains | Supp
     chiliz,
     ethereum: mainnet,
     optimism,
+    mode,
+    "mode-sepolia": modeTestnet,
     "optimism-sepolia": optimismSepolia,
     polygon,
     "polygon-amoy": polygonAmoy,
@@ -161,4 +169,17 @@ const mintingChainIds = new Set(mintingChains.map((chainName) => chainMap[chainN
 
 export function isChainSupportedByMinting(chainId: number): boolean {
     return mintingChainIds.has(chainId);
+}
+
+export function getTestnetChainNameById(chainId: number): string | null {
+    const testnetChainIdMap: Record<number, string> = {
+        421614: "arbitrum-sepolia",
+        84532: "base-sepolia",
+        11155111: "ethereum-sepolia",
+        11155420: "optimism-sepolia",
+        999999999: "zora-sepolia",
+        919: "mode-sepolia",
+    };
+
+    return testnetChainIdMap[chainId] || null;
 }

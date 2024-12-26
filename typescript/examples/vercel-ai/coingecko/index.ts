@@ -7,9 +7,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { sepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { sendETH } from "@goat-sdk/core";
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { viem } from "@goat-sdk/wallet-viem";
 
@@ -26,11 +24,7 @@ const walletClient = createWalletClient({
 (async () => {
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [
-            sendETH(),
-            erc20({ tokens: [USDC, PEPE] }),
-            coingecko({ apiKey: process.env.COINGECKO_API_KEY as string }),
-        ],
+        plugins: [coingecko({ apiKey: process.env.COINGECKO_API_KEY as string })],
     });
 
     const result = await generateText({

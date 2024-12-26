@@ -1,7 +1,8 @@
-import type { Chain, EVMWalletClient } from "@goat-sdk/core";
+import type { EvmChain } from "@goat-sdk/core";
+import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { parseUnits } from "viem";
 import { polygon } from "viem/chains";
-import type { z } from "zod";
+import { z } from "zod";
 import { COLLATERAL_TOKEN_DECIMALS, CONDITIONAL_TOKEN_DECIMALS, getContractConfig } from "./contracts";
 import type {
     cancelOrderParametersSchema,
@@ -18,11 +19,12 @@ import {
     getExpirationTimestamp,
     getOrderRawAmounts,
     priceValid,
+    transformMarketOutcomes,
 } from "./utils";
 
 const GAMMA_URL = "https://gamma-api.polymarket.com";
 
-function getBaseUrl(chain: Chain): string {
+function getBaseUrl(chain: EvmChain): string {
     return chain.id === polygon.id ? "https://clob.polymarket.com" : "https://clob-staging.polymarket.com";
 }
 
@@ -56,6 +58,45 @@ type L2HeadersArgs = {
 
 export type TickSize = "0.1" | "0.01" | "0.001" | "0.0001";
 
+const Event = z.object({
+    active: z.boolean(),
+    archived: z.boolean(),
+    closed: z.boolean(),
+    commentCount: z.number().optional(),
+    creationDate: z.string(),
+    description: z.string(),
+    endDate: z.string(),
+    liquidity: z.number().optional(),
+    markets: z.array(
+        z.object({
+            acceptingOrders: z.boolean(),
+            clobTokenIds: z.string(),
+            description: z.string(),
+            oneDayPriceChange: z.number().optional(),
+            orderMinSize: z.number(),
+            orderPriceMinTickSize: z.number(),
+            outcomePrices: z.string(),
+            outcomes: z.string(),
+            question: z.string().optional(),
+            slug: z.string(),
+            volume: z.string().optional(),
+        }),
+    ),
+    slug: z.string(),
+    startDate: z.string(),
+    tags: z.array(
+        z.object({
+            id: z.string().optional(),
+            label: z.string().optional(),
+            slug: z.string(),
+        }),
+    ),
+    title: z.string(),
+    updatedAt: z.string().optional(),
+    volume: z.number().optional(),
+    volume24hr: z.number().optional(),
+});
+
 export enum SignatureType {
     EOA = 0,
     POLY_PROXY = 1,
@@ -80,7 +121,7 @@ export const ORDER_STRUCTURE = [
 export const PROTOCOL_NAME = "Polymarket CTF Exchange";
 export const PROTOCOL_VERSION = "1";
 
-async function getHostTimestamp(chain: Chain): Promise<number> {
+async function getHostTimestamp(chain: EvmChain): Promise<number> {
     const response = await fetch(`${getBaseUrl(chain)}/time`);
     const data = await response.text();
     return Number.parseInt(data, 10);
@@ -123,7 +164,7 @@ async function createL2Headers(
     return headers;
 }
 
-async function getTickSize(chain: Chain, tokenId: string) {
+async function getTickSize(chain: EvmChain, tokenId: string) {
     const url = `${getBaseUrl(chain)}/tick-size/${tokenId}`;
     const response = await fetch(url.toString());
     if (!response.ok) {
@@ -134,7 +175,7 @@ async function getTickSize(chain: Chain, tokenId: string) {
     return result.minimum_tick_size;
 }
 
-async function getNegativeRiskAdapter(chain: Chain, tokenId: string) {
+async function getNegativeRiskAdapter(chain: EvmChain, tokenId: string) {
     const url = `${getBaseUrl(chain)}/neg-risk/${tokenId}`;
     const response = await fetch(url.toString());
 
@@ -188,14 +229,31 @@ export async function getEvents(
     // biome-ignore lint/suspicious/noExplicitAny: Need to create a schema for the response
 ): Promise<any> {
     const url = new URL(`${GAMMA_URL}/events`);
-    appendSearchParams(url, parameters);
+
+    // Filter out the showOnlyMarketsAcceptingOrders parameter, it's not a valid query parameter
+    const { showOnlyMarketsAcceptingOrders, ...filteredParams } = parameters;
+    appendSearchParams(url, filteredParams);
 
     const response = await fetch(url.toString());
     if (!response.ok) {
         throw new Error(`Failed to fetch events: ${response.statusText}`);
     }
 
-    return await response.json();
+    let events = z.array(Event).parse(await response.json());
+
+    if (showOnlyMarketsAcceptingOrders) {
+        events = events.map((event) => ({
+            ...event,
+            markets: event.markets.filter((market) => market.acceptingOrders),
+        }));
+    }
+
+    return events.map((event) => ({
+        ...event,
+        markets: event.markets.map((market) => ({
+            ...transformMarketOutcomes(market),
+        })),
+    }));
 }
 
 export async function getMarketInfo(
@@ -324,7 +382,12 @@ export async function createOrder(
     });
 
     if (!response.ok) {
-        throw new Error(`Failed to create order: ${JSON.stringify(await response.json())}`);
+        const responseJson = await response.json();
+        if (responseJson.error === "not enough balance / allowance") {
+            const totalPrice = Number(price) * size;
+            return `You don't have enough funds for this bet. Total cost: ${totalPrice} USDC. If you do, then you need to give Polymarket allowance.`;
+        }
+        throw new Error(`Failed to create order: ${JSON.stringify(responseJson)}`);
     }
 
     return await response.json();

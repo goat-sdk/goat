@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-solana",
-    "version": "0.1.9",
+    "version": "0.2.5",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -14,8 +14,9 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@solana/web3.js": "catalog:",
-        "bs58": "^6.0.0",
-        "tweetnacl": "^1.0.3"
+        "tweetnacl": "^1.0.3",
+        "viem": "catalog:",
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",

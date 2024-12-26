@@ -1,6 +1,7 @@
 import type { ISolana } from "@dynamic-labs/solana-core";
-import type { SolanaReadRequest, SolanaTransaction, SolanaWalletClient } from "@goat-sdk/core";
+import { SolanWalletClientCtorParams, SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { formatUnits } from "viem";
 
 export function createSolanaWalletFromDynamic(connection: Connection, signer: ISolana): SolanaWalletClient {
     const publicKey = signer.publicKey;
@@ -8,24 +9,41 @@ export function createSolanaWalletFromDynamic(connection: Connection, signer: IS
         throw new Error("Signer public key is undefined");
     }
 
-    return {
-        getAddress: () => new PublicKey(publicKey.toBytes()).toBase58(),
+    class DynamicSolanaWallet extends SolanaWalletClient {
+        private readonly signer: ISolana;
+
+        constructor(params: SolanWalletClientCtorParams & { signer: ISolana }) {
+            super({
+                connection: params.connection,
+            });
+
+            this.signer = params.signer;
+        }
+
+        getAddress() {
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            return new PublicKey(this.signer.publicKey!.toBytes()).toBase58();
+        }
+
         getChain() {
             return {
                 type: "solana",
-            };
-        },
+            } as const;
+        }
+
         async signMessage(message: string) {
             const messageBytes = Buffer.from(message);
             const signature = await signer.signMessage(messageBytes);
+
             return {
                 signature: Buffer.from(signature.signature).toString("hex"),
             };
-        },
+        }
+
         async sendTransaction({ instructions }: SolanaTransaction) {
             const latestBlockhash = await connection.getLatestBlockhash("confirmed");
             const message = new TransactionMessage({
-                payerKey: new PublicKey(publicKey.toBytes()),
+                payerKey: new PublicKey(this.getAddress()),
                 recentBlockhash: latestBlockhash.blockhash,
                 instructions,
             }).compileToV0Message();
@@ -39,20 +57,8 @@ export function createSolanaWalletFromDynamic(connection: Connection, signer: IS
             return {
                 hash: txid,
             };
-        },
-        async read(request: SolanaReadRequest) {
-            const { accountAddress } = request;
-            const pubkey = new PublicKey(accountAddress);
-            const accountInfo = await connection.getAccountInfo(pubkey);
+        }
 
-            if (!accountInfo) {
-                throw new Error(`Account ${accountAddress} not found`);
-            }
-
-            return {
-                value: accountInfo,
-            };
-        },
         async balanceOf(address: string) {
             const pubkey = new PublicKey(address);
             const balance = await connection.getBalance(pubkey);
@@ -61,8 +67,11 @@ export function createSolanaWalletFromDynamic(connection: Connection, signer: IS
                 decimals: 9,
                 symbol: "SOL",
                 name: "Solana",
-                value: BigInt(balance),
+                value: formatUnits(BigInt(balance), 9),
+                inBaseUnits: balance.toString(),
             };
-        },
-    };
+        }
+    }
+
+    return new DynamicSolanaWallet({ connection, signer });
 }

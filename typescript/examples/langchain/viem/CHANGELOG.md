@@ -1,5 +1,52 @@
 # goat-examples-langchain-viem
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/adapter-langchain@0.2.2
+  - @goat-sdk/plugin-erc20@0.2.3
+  - @goat-sdk/wallet-evm@0.2.1
+  - @goat-sdk/wallet-viem@0.2.1
+
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [c565119]
+  - @goat-sdk/plugin-erc20@0.2.2
+
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [f10e6d1]
+  - @goat-sdk/adapter-langchain@0.2.1
+
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [608f9f1]
+  - @goat-sdk/plugin-erc20@0.2.1
+
+## 0.2.0
+
+### Minor Changes
+
+- d3d9a7d: Upgrade to new plugin architecture
+
+### Patch Changes
+
+- Updated dependencies [d3d9a7d]
+  - @goat-sdk/adapter-langchain@1.0.0
+  - @goat-sdk/plugin-erc20@1.0.0
+  - @goat-sdk/wallet-viem@1.0.0
+  - @goat-sdk/wallet-evm@1.0.0
+  - @goat-sdk/core@0.4.0
+
 ## 0.1.5
 
 ### Patch Changes

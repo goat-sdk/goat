@@ -1,14 +1,14 @@
 import {
     type GetToolsParams,
-    type Tool,
-    type WalletClient,
+    type ToolBase,
+    type WalletClientBase,
     addParametersToDescription,
     getTools,
 } from "@goat-sdk/core";
 
 import type { z } from "zod";
 
-export type GetOnChainToolsParams<TWalletClient extends WalletClient> = {
+export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = {
     options?: {
         logTools?: boolean;
     };
@@ -20,12 +20,12 @@ type ElevenLabsTool = (
     // biome-ignore lint/suspicious/noConfusingVoidType: void is returned by the ElevenLabs tools
 ) => Promise<string | number | void> | string | number | void;
 
-export async function getOnChainTools<TWalletClient extends WalletClient>({
+export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     wallet,
     plugins,
     options,
 }: GetOnChainToolsParams<TWalletClient>) {
-    const tools: Tool[] = await getTools<TWalletClient>({
+    const tools: ToolBase[] = await getTools<TWalletClient>({
         wallet,
         plugins,
     });
@@ -38,7 +38,7 @@ export async function getOnChainTools<TWalletClient extends WalletClient>({
 
     for (const [index, t] of tools.entries()) {
         elevenLabsTools[t.name] = async (parameters: z.output<typeof t.parameters>) => {
-            return JSON.stringify(await t.method(parameters));
+            return JSON.stringify(await t.execute(parameters));
         };
 
         if (options?.logTools) {

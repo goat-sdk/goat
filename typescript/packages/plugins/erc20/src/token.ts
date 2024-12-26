@@ -53,6 +53,20 @@ export const USDC: Token = {
         "11155111": {
             contractAddress: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
         },
+        "34443": {
+            contractAddress: "0xd988097fb8612cc24eeC14542bC03424c656005f",
+        },
+    },
+};
+
+export const MODE: Token = {
+    decimals: 18,
+    symbol: "MODE",
+    name: "Mode",
+    chains: {
+        "34443": {
+            contractAddress: "0xDfc7C877a950e49D2610114102175A06C2e3167a",
+        },
     },
 };
 

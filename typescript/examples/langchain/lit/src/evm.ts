@@ -8,8 +8,8 @@ import { createWalletClient } from "viem";
 import { sepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { sendETH } from "@goat-sdk/core";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
+import { sendETH } from "@goat-sdk/wallet-evm";
 
 import {
     createEthersWallet,
