@@ -51,6 +51,10 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
+            "name": "[Plugin] 📡 farcaster",
+            "path": "./typescript/packages/plugins/farcaster"
+        },
+        {
             "name": "[Plugin] 🌐 solana nfts",
             "path": "./typescript/packages/plugins/solana-nfts"
         },
@@ -61,6 +65,10 @@
         {
             "name": "[Plugin] 🔶 kim",
             "path": "./typescript/packages/plugins/kim"
+        },
+        {
+            "name": "[Plugin] 📊 mode governance",
+            "path": "./typescript/packages/plugins/mode-governance"
         },
         {
             "name": "[Plugin] ☄️ meteora",
