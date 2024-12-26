@@ -1,12 +1,8 @@
 {
-    "name": "@goat-sdk/adapter-langindex",
-    "version": "0.1.9",
+    "name": "@goat-sdk/adapter-llamaindex",
+    "version": "0.2.0",
     "sideEffects": false,
-    "files": [
-        "dist/**/*",
-        "README.md",
-        "package.json"
-    ],
+    "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
@@ -18,13 +14,12 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "ajv": "8.17.1",
-        "llamaindex": "0.8.30",
         "zod": "catalog:",
         "zod-to-json-schema": "3.24.1"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@langchain/core": "catalog:"
+        "llamaindex": "0.8.30"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
@@ -35,11 +30,7 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": [
-        "ai",
-        "agents",
-        "web3"
-    ],
+    "keywords": ["ai", "agents", "web3"],
     "devDependencies": {
         "@types/json-schema": "7.0.15"
     }

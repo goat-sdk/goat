@@ -1,8 +1,8 @@
-# Goat Adapter Langchain 🐐 - TypeScript
+# Goat Adapter Llamaindex 🐐 - TypeScript
 
 ## Installation
 ```
-npm install @goat-sdk/adapter-langindex
+npm install @goat-sdk/adapter-llamaindex
 ```
 
 ## Goat

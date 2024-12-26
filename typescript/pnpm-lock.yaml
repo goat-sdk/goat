@@ -666,14 +666,11 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
-  packages/adapters/langindex:
+  packages/adapters/llamaindex:
     dependencies:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-      '@langchain/core':
-        specifier: 'catalog:'
-        version: 0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
       ajv:
         specifier: 8.17.1
         version: 8.17.1
