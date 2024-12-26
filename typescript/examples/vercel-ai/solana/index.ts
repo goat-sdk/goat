@@ -1,3 +1,5 @@
+import readline from "node:readline";
+
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
@@ -6,12 +8,10 @@ import { sendSOL, solana } from "@goat-sdk/wallet-solana";
 
 import { Connection, Keypair } from "@solana/web3.js";
 
+import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { jupiter } from "@goat-sdk/plugin-jupiter";
 import { splToken } from "@goat-sdk/plugin-spl-token";
-import { coingecko } from "@goat-sdk/plugin-coingecko";
 import base58 from "bs58";
-
-import readline from 'readline';
 
 require("dotenv").config();
 
@@ -20,11 +20,11 @@ const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_K
 
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 
 type Message = {
-    role: 'user' | 'assistant';
+    role: "user" | "assistant";
     content: string;
 };
 
@@ -35,22 +35,27 @@ async function chat() {
             keypair,
             connection,
         }),
-        plugins: [sendSOL(), jupiter(), splToken(), coingecko({
-            apiKey: process.env.COINGECKO_API_KEY as string
-        })],
+        plugins: [
+            sendSOL(),
+            jupiter(),
+            splToken(),
+            coingecko({
+                apiKey: process.env.COINGECKO_API_KEY as string,
+            }),
+        ],
     });
 
     console.log("Chat started. Type 'exit' to end the conversation.");
-    
+
     const askQuestion = () => {
-        rl.question('You: ', async (prompt) => {
-            if (prompt.toLowerCase() === 'exit') {
+        rl.question("You: ", async (prompt) => {
+            if (prompt.toLowerCase() === "exit") {
                 rl.close();
                 return;
             }
 
-            conversationHistory.push({ role: 'user', content: prompt });
-            
+            conversationHistory.push({ role: "user", content: prompt });
+
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
@@ -58,18 +63,19 @@ async function chat() {
                 prompt: `You are a based crypto degen assistant. You're knowledgeable about DeFi, NFTs, and trading. You use crypto slang naturally and stay up to date with Solana ecosystem. You help users with their trades and provide market insights. Keep responses concise and use emojis occasionally.
 
 Previous conversation:
-${conversationHistory
-    .map(m => `${m.role}: ${m.content}`)
-    .join('\n')}
+${conversationHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
 
 Current request: ${prompt}`,
                 onStepFinish: (event) => {
-                    console.log('Tool execution:', event.toolResults);
+                    console.log("Tool execution:", event.toolResults);
                 },
             });
 
-            conversationHistory.push({ role: 'assistant', content: result.text });
-            console.log('Assistant:', result.text);
+            conversationHistory.push({
+                role: "assistant",
+                content: result.text,
+            });
+            console.log("Assistant:", result.text);
             askQuestion();
         });
     };
