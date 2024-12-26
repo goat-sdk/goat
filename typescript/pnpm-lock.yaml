@@ -614,9 +614,6 @@ importers:
       '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
         version: link:../../../packages/plugins/jupiter
-      '@goat-sdk/plugin-orca':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/orca
       '@goat-sdk/plugin-spl-token':
         specifier: workspace:*
         version: link:../../../packages/plugins/spl-token
