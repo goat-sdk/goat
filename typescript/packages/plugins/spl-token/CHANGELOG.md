@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-spl-token
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [6c03f61]
+  - @goat-sdk/core@0.4.1
+  - @goat-sdk/wallet-solana@0.2.5
+
 ## 0.2.5
 
 ### Patch Changes

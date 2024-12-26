@@ -1,5 +1,6 @@
+import * as readline from "node:readline/promises";
 import { openai } from "@ai-sdk/openai";
-import { generateText } from "ai";
+import { CoreMessage, streamText } from "ai";
 
 import { http } from "viem";
 import { createWalletClient } from "viem";
@@ -20,7 +21,14 @@ const walletClient = createWalletClient({
     chain: polygon,
 });
 
-(async () => {
+const terminal = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
+
+const messages: CoreMessage[] = [];
+
+async function main() {
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
         plugins: [
@@ -34,12 +42,32 @@ const walletClient = createWalletClient({
         ],
     });
 
-    const result = await generateText({
-        model: openai("gpt-4o-mini"),
-        tools: tools,
-        maxSteps: 5,
-        prompt: "List all my active orders on Polymarket",
-    });
+    while (true) {
+        const userInput = await terminal.question("\nYou: ");
+        messages.push({ role: "user", content: userInput });
 
-    console.log(result.text);
-})();
+        try {
+            const result = streamText({
+                model: openai("gpt-4o-mini"),
+                messages,
+                tools: tools,
+                maxSteps: 5,
+            });
+
+            let fullResponse = "";
+            process.stdout.write("\nAssistant: ");
+            for await (const delta of result.textStream) {
+                fullResponse += delta;
+                process.stdout.write(delta);
+            }
+            process.stdout.write("\n");
+
+            messages.push({ role: "assistant", content: fullResponse });
+        } catch (error) {
+            console.error("Error:", error);
+            messages.push({ role: "assistant", content: JSON.stringify(error) });
+        }
+    }
+}
+
+main().catch(console.error);
