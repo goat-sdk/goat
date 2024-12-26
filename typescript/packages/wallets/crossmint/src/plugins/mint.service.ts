@@ -11,6 +11,7 @@ export class CrossmintMintService {
         description: "Create a new collection and return the id of the collection",
     })
     async createCollection(walletClient: EVMWalletClient, parameters: MintNFTParameters) {
+        // TODO: add chain as a parameter
         const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/collections/`, {
             method: "POST",
             body: JSON.stringify({
@@ -46,7 +47,7 @@ export class CrossmintMintService {
         description: "Get all collections created by the user",
     })
     async getAllCollections(walletClient: EVMWalletClient, parameters: GetAllCollectionsParameters) {
-        const response = await fetch(`${this.client.baseUrl}/collections/`, {
+        const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/collections/`, {
             headers: {
                 ...this.client.authHeaders,
                 "Content-Type": "application/json",
@@ -63,8 +64,9 @@ export class CrossmintMintService {
     async mintNFT(walletClient: EVMWalletClient, parameters: MintNFTParameters) {
         let recipient: string;
 
-        if (parameters.recipient.startsWith("email:")) {
-            recipient = `${parameters.recipient}:${getCrossmintChainString(walletClient.getChain())}`;
+        // TODO: add chain as a parameter
+        if (parameters.recipientType === "email") {
+            recipient = `email:${parameters.recipient}:${getCrossmintChainString(walletClient.getChain())}`;
         } else {
             recipient = `${getCrossmintChainString(walletClient.getChain())}:${parameters.recipient}`;
         }

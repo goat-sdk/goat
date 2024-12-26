@@ -70,6 +70,32 @@ export const MODE: Token = {
     },
 };
 
+export const WETH: Token = {
+    decimals: 18,
+    symbol: "WETH",
+    name: "Wrapped Ether",
+    chains: {
+        "1": {
+            contractAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        },
+        "8453": {
+            contractAddress: "0x4200000000000000000000000000000000000006",
+        },
+        "34443": {
+            contractAddress: "0x4200000000000000000000000000000000000006",
+        },
+        "42161": {
+            contractAddress: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+        },
+        "10": {
+            contractAddress: "0x4200000000000000000000000000000000000006",
+        },
+        "137": {
+            contractAddress: "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
+        },
+    },
+};
+
 export function getTokensForNetwork(chainId: number, tokens: Token[]): ChainSpecificToken[] {
     const result: ChainSpecificToken[] = [];
 

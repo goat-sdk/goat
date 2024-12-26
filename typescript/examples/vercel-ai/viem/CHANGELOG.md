@@ -1,5 +1,29 @@
 # goat-examples-vercel-ai-viem
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [778440b]
+  - @goat-sdk/core@0.4.3
+  - @goat-sdk/wallet-evm@0.2.3
+  - @goat-sdk/adapter-vercel-ai@0.2.3
+  - @goat-sdk/plugin-erc20@0.2.5
+  - @goat-sdk/plugin-erc721@0.1.14
+  - @goat-sdk/wallet-viem@0.2.3
+
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [279dfcd]
+  - @goat-sdk/core@0.4.2
+  - @goat-sdk/adapter-vercel-ai@0.2.2
+  - @goat-sdk/plugin-erc20@0.2.4
+  - @goat-sdk/plugin-erc721@0.1.13
+  - @goat-sdk/wallet-evm@0.2.2
+  - @goat-sdk/wallet-viem@0.2.2
+
 ## 0.2.3
 
 ### Patch Changes
