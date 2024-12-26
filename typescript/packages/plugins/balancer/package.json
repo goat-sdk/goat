@@ -1,0 +1,31 @@
+{
+  "name": "@goat-sdk/plugin-balancer",
+  "version": "0.1.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts src/balancer.plugin.ts src/balancer.service.ts src/parameters.ts --format esm,cjs --dts",
+    "clean": "rm -rf dist",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@balancer/sdk": "^1.0.2",
+    "@goat-sdk/core": "workspace:*",
+    "@goat-sdk/wallet-evm": "workspace:*",
+    "viem": "^2.7.8",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+} 
