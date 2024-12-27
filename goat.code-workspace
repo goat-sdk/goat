@@ -67,6 +67,10 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ⛽️ pumpfun",
+            "path": "./typescript/packages/plugins/pumpfun"
+        },
+        {
             "name": "[Plugin] 🔶 kim",
             "path": "./typescript/packages/plugins/kim"
         },

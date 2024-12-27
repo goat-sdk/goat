@@ -1,8 +1,7 @@
 import { Tool } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { createJupiterApiClient } from "@jup-ag/api";
-import { ComputeBudgetProgram, PublicKey, Transaction, TransactionInstruction } from "@solana/web3.js";
-
+import { VersionedTransaction } from "@solana/web3.js";
 import { GetQuoteParameters } from "./parameters";
 
 export class JupiterService {
@@ -46,10 +45,7 @@ export class JupiterService {
         });
 
         const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(swapTransaction, "base64"));
-        const instructions = await decompileVersionedTransactionToInstructions(
-            walletClient.getConnection(),
-            versionedTransaction,
-        );
+        const instructions = await walletClient.decompileVersionedTransactionToInstructions(versionedTransaction);
 
         const { hash } = await walletClient.sendTransaction({
             instructions,
@@ -62,25 +58,4 @@ export class JupiterService {
             hash,
         };
     }
-}
-
-import { type DecompileArgs, TransactionMessage } from "@solana/web3.js";
-
-import { type Connection, VersionedTransaction } from "@solana/web3.js";
-
-export async function decompileVersionedTransactionToInstructions(
-    connection: Connection,
-    versionedTransaction: VersionedTransaction,
-) {
-    const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map((lookup) => lookup.accountKey);
-    const addressLookupTableAccounts = await Promise.all(
-        lookupTableAddresses.map((address) =>
-            connection.getAddressLookupTable(address).then((lookupTable) => lookupTable.value),
-        ),
-    );
-    const nonNullAddressLookupTableAccounts = addressLookupTableAccounts.filter((lookupTable) => lookupTable != null);
-    const decompileArgs: DecompileArgs = {
-        addressLookupTableAccounts: nonNullAddressLookupTableAccounts,
-    };
-    return TransactionMessage.decompile(versionedTransaction.message, decompileArgs).instructions;
 }

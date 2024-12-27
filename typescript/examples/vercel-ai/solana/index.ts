@@ -10,6 +10,7 @@ import { Connection, Keypair } from "@solana/web3.js";
 
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 import { jupiter } from "@goat-sdk/plugin-jupiter";
+import { pumpfun } from "@goat-sdk/plugin-pumpfun";
 import { splToken } from "@goat-sdk/plugin-spl-token";
 import base58 from "bs58";
 
@@ -42,6 +43,7 @@ async function chat() {
             coingecko({
                 apiKey: process.env.COINGECKO_API_KEY as string,
             }),
+            pumpfun(),
         ],
     });
 
