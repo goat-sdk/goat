@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-orca
 
+## 0.2.9
+
+### Patch Changes
+
+- 2446db5: Minor updates
+
 ## 0.2.8
 
 ### Patch Changes
