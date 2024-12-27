@@ -46,6 +46,25 @@ export class IonicTools {
         return { address: config.address as Address, decimals: config.decimals };
     }
 
+    private calculateApy(ratePerBlock: bigint): number {
+        // Convert rate per block to yearly APY
+        // Assuming ~2.1s block time for Mode/Base/Optimism
+        // ~15M blocks per year (31536000 seconds / 2.1 seconds)
+        const blocksPerYear = 15000000n;
+        const rayPrecision = BigInt(1e27);
+
+        // Convert rate per block to yearly rate
+        const yearlyRate = (ratePerBlock * blocksPerYear) / rayPrecision;
+
+        // Convert to APY using the compound interest formula
+        // APY = (1 + r)^n - 1, where n is number of compounds per year
+        // We're using blocks as compound periods
+        const baseRate = 1 + Number(yearlyRate) / Number(blocksPerYear);
+        const apy = (Math.pow(baseRate, Number(blocksPerYear)) - 1) * 100;
+
+        return Number(apy.toFixed(2));
+    }
+
     @Tool({
         name: "supply_asset",
         description: "Supply an asset to an Ionic Protocol pool"
@@ -130,8 +149,6 @@ export class IonicTools {
         }
     }
 
-
-
     @Tool({
         name: "get_health_metrics",
         description: "Get health metrics for a pool position"
@@ -158,7 +175,7 @@ export class IonicTools {
                 functionName: 'pools',
                 args: [BigInt(poolId)],
             });
-            const poolData = poolDataRaw.value as [bigint, boolean, Address]; 
+            const poolData = poolDataRaw.value as [bigint, boolean, Address];
             const comptrollerAddress = poolData[2];
             if (!comptrollerAddress || comptrollerAddress === '0x0000000000000000000000000000000000000000') {
                 throw new Error(`Comptroller address not found for pool ID ${poolId}`);
@@ -193,9 +210,7 @@ export class IonicTools {
                 functionName: 'getAssetsIn',
                 args: [poolAddress],
             });
-            const marketAddresses = marketsResultRaw.value as Address[]; // Use .value
-            const apiKey = 'YOUR_SUPABASE_CLIENT_ANON_KEY';
-            const baseURL = 'https://uoagtjstsdrjypxlkuzr.supabase.co/rest/v1/asset-total-apy';
+            const marketAddresses = marketsResultRaw.value as Address[];
 
             for (const marketAddress of marketAddresses) {
                 const assetConfig = Object.values(ionicProtocolAddresses[chainId]?.assets || {}).find(config => config.address === marketAddress);
@@ -203,11 +218,21 @@ export class IonicTools {
                 const symbol = Object.keys(ionicProtocolAddresses[chainId]?.assets || {}).find(key => ionicProtocolAddresses[chainId]?.assets[key]?.address === marketAddress);
                 if (!symbol) continue;
 
-                const underlyingAddress = Object.entries(ionicProtocolAddresses[chainId]?.assets || {}).find(([key, config]) => config.address === marketAddress)?.[1]?.address;
-                if (!underlyingAddress) {
-                    console.warn(`Underlying address not found for ${symbol} (${marketAddress})`);
-                    continue;
-                }
+                // Get supply and borrow rates directly from the pool contract
+                const supplyRateRaw = await walletClient.read({
+                    address: marketAddress,
+                    abi: PoolABI,
+                    functionName: 'supplyRatePerBlock',
+                });
+                const borrowRateRaw = await walletClient.read({
+                    address: marketAddress,
+                    abi: PoolABI,
+                    functionName: 'borrowRatePerBlock',
+                });
+
+                // Calculate APYs using the rate per block
+                const supplyApy = this.calculateApy(BigInt(supplyRateRaw.toString()));
+                const borrowApy = this.calculateApy(BigInt(borrowRateRaw.toString()));
 
                 const supplyBalanceRaw = await walletClient.read({ ...poolContract, functionName: 'supplyBalanceOf', args: [marketAddress, accountAddress] });
                 const borrowBalanceRaw = await walletClient.read({ ...poolContract, functionName: 'borrowBalanceOf', args: [marketAddress, accountAddress] });
@@ -216,7 +241,6 @@ export class IonicTools {
 
                 const marketDetails = await walletClient.read({ ...comptrollerContract, functionName: 'markets', args: [marketAddress] }) as any;
                 const collateralFactorMantissa = BigInt(marketDetails.collateralFactorMantissa?.toString() || "0");
-                const liquidationThresholdMantissa = BigInt(marketDetails.liquidationThresholdMantissa?.toString() || "0");
 
                 let assetPrice: number = 0;
                 try {
@@ -224,7 +248,7 @@ export class IonicTools {
                         ...comptrollerContract,
                         functionName: 'oracle',
                     });
-                    const oracleAddress = oracleAddressRaw.value as Address; // Use .value
+                    const oracleAddress = oracleAddressRaw.value as Address;
 
                     const simplePriceOracleContract = {
                         address: oracleAddress,
@@ -242,32 +266,6 @@ export class IonicTools {
                     continue;
                 }
 
-                let supplyApy: number = 0;
-                let borrowApy: number = 0;
-                const apyApiUrl = `${baseURL}?chain_id=eq.${chainId}&underlying_address=eq.${underlyingAddress}`;
-                try {
-                    const response = await fetch(apyApiUrl, {
-                        headers: {
-                            'apikey': apiKey,
-                            'Authorization': `Bearer ${apiKey}`,
-                        },
-                    });
-
-                    if (!response.ok) {
-                        console.error(`Failed to fetch APY for ${symbol} (${underlyingAddress}): ${response.status} ${response.statusText}`);
-                    } else {
-                        const apyData = await response.json();
-                        if (apyData && apyData.length > 0) {
-                            supplyApy = parseFloat(apyData[0].supplyApy || "0");
-                            borrowApy = parseFloat(apyData[0].borrowApy || "0");
-                        } else {
-                            console.warn(`APY data not found for ${symbol} (${underlyingAddress})`);
-                        }
-                    }
-                } catch (error) {
-                    console.error(`Error fetching APY for ${symbol} (${underlyingAddress}):`, error);
-                }
-
                 const supplyValue = supplyBalance * assetPrice;
                 const borrowValue = borrowBalance * assetPrice;
                 const collateralValue = supplyValue * Number(formatUnits(collateralFactorMantissa, 18));
@@ -275,62 +273,56 @@ export class IonicTools {
                 totalBorrowedValue += borrowValue;
                 totalCollateralValue += collateralValue;
 
-                let tvl: number = 0;
-                let utilization: number = 0;
-                try {
-                    const poolAssetsDataRaw = await walletClient.read({
-                        ...poolLensContract,
-                        functionName: 'getPoolAssetsWithData',
-                        args: [comptrollerAddress],
-                    });
-
-                    // Type for the PoolAsset struct from the ABI
-                    type PoolAsset = {
-                        cToken: Address;
-                        underlyingToken: Address;
-                        underlyingName: string;
-                        underlyingSymbol: string;
-                        underlyingDecimals: bigint;
-                        underlyingBalance: bigint;
-                        supplyRatePerBlock: bigint;
-                        borrowRatePerBlock: bigint;
-                        totalSupply: bigint;
-                        totalBorrow: bigint;
-                        supplyBalance: bigint;
-                        borrowBalance: bigint;
-                        liquidity: bigint;
-                        membership: boolean;
-                        exchangeRate: bigint;
-                        underlyingPrice: bigint;
-                        oracle: Address;
-                        collateralFactor: bigint;
-                        reserveFactor: bigint;
-                        adminFee: bigint;
-                        ionicFee: bigint;
-                        borrowGuardianPaused: boolean;
-                        mintGuardianPaused: boolean;
-                    };
-
-                    const poolAssetsData = poolAssetsDataRaw.value as PoolAsset[];
-                    const assetData = poolAssetsData.find((asset: PoolAsset) => asset.cToken === marketAddress);
-
-                    if (assetData) {
-                        tvl = Number(formatUnits(assetData.totalSupply, assetConfig.decimals)) * assetPrice;
-                        const totalBorrows = assetData.totalBorrow;
-                        const totalSupply = assetData.totalSupply;
-                        utilization = totalSupply > 0n ? Number(totalBorrows) / Number(totalSupply) * 100 : 0;
-                    } else {
-                        console.warn(`Asset data not found in PoolLens for ${symbol} (${marketAddress})`);
-                    }
-                } catch (error) {
-                    console.error(`Error fetching TVL/Utilization for ${symbol} (${marketAddress}):`, error);
-                }
-
-                assetPerformance[symbol] = {
-                    apy: supplyApy,
-                    tvl: tvl,
-                    utilization: utilization,
+                // Type for the PoolAsset struct from the ABI
+                type PoolAsset = {
+                    cToken: Address;
+                    underlyingToken: Address;
+                    underlyingName: string;
+                    underlyingSymbol: string;
+                    underlyingDecimals: bigint;
+                    underlyingBalance: bigint;
+                    supplyRatePerBlock: bigint;
+                    borrowRatePerBlock: bigint;
+                    totalSupply: bigint;
+                    totalBorrow: bigint;
+                    supplyBalance: bigint;
+                    borrowBalance: bigint;
+                    liquidity: bigint;
+                    membership: boolean;
+                    exchangeRate: bigint;
+                    underlyingPrice: bigint;
+                    oracle: Address;
+                    collateralFactor: bigint;
+                    reserveFactor: bigint;
+                    adminFee: bigint;
+                    ionicFee: bigint;
+                    borrowGuardianPaused: boolean;
+                    mintGuardianPaused: boolean;
                 };
+
+                const poolAssetsDataRaw = await walletClient.read({
+                    ...poolLensContract,
+                    functionName: 'getPoolAssetsWithData',
+                    args: [comptrollerAddress],
+                });
+
+                const poolAssetsData = poolAssetsDataRaw.value as PoolAsset[];
+                const assetData = poolAssetsData.find((asset: PoolAsset) => asset.cToken === marketAddress);
+
+                if (assetData) {
+                    const totalSupply = assetData.totalSupply;
+                    const totalBorrows = assetData.totalBorrow;
+                    const utilization = totalSupply > 0n ? (Number(totalBorrows) * 100) / Number(totalSupply) : 0;
+                    const tvl = Number(formatUnits(totalSupply, assetConfig.decimals)) * assetPrice;
+
+                    assetPerformance[symbol] = {
+                        apy: supplyApy,
+                        tvl: tvl,
+                        utilization: utilization,
+                    };
+                } else {
+                    console.warn(`Asset data not found in PoolLens for ${symbol} (${marketAddress})`);
+                }
             }
 
             const ltv = totalCollateralValue > 0 ? (totalBorrowedValue / totalCollateralValue) * 100 : 0;
@@ -345,13 +337,11 @@ export class IonicTools {
                 liquidationRisk = "MEDIUM";
             }
 
-            const healthMetrics: HealthMetrics = {
+            return {
                 ltv: ltv,
                 liquidationRisk: liquidationRisk,
                 assetPerformance: assetPerformance,
             };
-
-            return healthMetrics;
 
         } catch (error: any) {
             throw new Error(`Failed to get health metrics: ${error.message}`);
@@ -361,4 +351,4 @@ export class IonicTools {
 
 export type SupplyAssetParams = z.infer<typeof supplyAssetSchema>;
 export type BorrowAssetParams = z.infer<typeof borrowAssetSchema>;
-export type GetHealthMetricsParams = z.infer<typeof getHealthMetricsSchema>;
+export type GetHealthMetricsParams = z.infer<typeof getHealthMetricsSchema>j;
