@@ -82,6 +82,10 @@
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },
+        {
+            "name": "[Plugin] 🌍 zerodev-global-address",
+            "path": "./typescript/packages/plugins/zerodev-global-address"
+        },
         // Wallets
         {
             "name": "[Wallet] 🅰 aptos",
