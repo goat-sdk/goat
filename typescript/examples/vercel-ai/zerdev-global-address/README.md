@@ -68,3 +68,4 @@ The example uses the `@goat-sdk/plugin-zerodev-global-address` plugin to create 
 - Automatically bridge those tokens to your destination chain
 - Handle multiple token types including native tokens, ERC20s, and USDC
 
+note: first on typescript directory run `pnpm install` to install the dependencies and then `pnpm build` to build the packages.
