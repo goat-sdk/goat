@@ -1,7 +1,7 @@
 {
-    "name": "goat-examples-vercel-ai-zerodev-global-address-transfer",
+    "name": "goat-examples-vercel-ai-zerodev-global-address",
     "version": "0.0.1",
-    "description": "Example of using the ZeroDev Global Address Transfer plugin",
+    "description": "Example of using the ZeroDev Global Address plugin",
     "private": true,
     "scripts": {
         "test": "vitest run --passWithNoTests"
@@ -9,7 +9,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@ai-sdk/openai": "^1.0.4",
+        "@ai-sdk/xai": "1.0.9",
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-zerodev-global-address": "workspace:*",
@@ -19,5 +19,8 @@
         "ai": "catalog:",
         "dotenv": "^16.4.5",
         "viem": "~2.17.11"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0"
     }
 }

@@ -201,10 +201,10 @@ importers:
         version: link:../../../packages/wallets/solana
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.73.0(zod@3.23.8))
+        version: 0.3.6(openai@4.73.0(zod@3.24.1))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))
       '@lit-protocol/constants':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -219,10 +219,10 @@ importers:
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(handlebars@4.7.8)(openai@4.73.0(zod@3.23.8))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))(axios@1.7.4)(handlebars@4.7.8)(openai@4.73.0(zod@3.24.1))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
 
   examples/langchain/viem:
     dependencies:
@@ -243,19 +243,19 @@ importers:
         version: link:../../../packages/wallets/viem
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.73.0(zod@3.24.1))
+        version: 0.3.6(openai@4.73.0(zod@3.23.8))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.24.1)))(axios@1.7.4)(handlebars@4.7.8)(openai@4.73.0(zod@3.24.1))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(handlebars@4.7.8)(openai@4.73.0(zod@3.23.8))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
   examples/model-context-protocol/mode:
     dependencies:
@@ -698,9 +698,9 @@ importers:
 
   examples/vercel-ai/zerdev-global-address-transfer:
     dependencies:
-      '@ai-sdk/openai':
-        specifier: ^1.0.4
-        version: 1.0.11(zod@3.24.1)
+      '@ai-sdk/xai':
+        specifier: 1.0.9
+        version: 1.0.9(zod@3.24.1)
       '@goat-sdk/adapter-vercel-ai':
         specifier: workspace:*
         version: link:../../../packages/adapters/vercel-ai
@@ -728,6 +728,10 @@ importers:
       viem:
         specifier: ~2.17.11
         version: 2.17.11(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.17.10
 
   packages/adapters/eleven-labs:
     dependencies:
@@ -1295,6 +1299,12 @@ packages:
     peerDependencies:
       zod: ^3.0.0
 
+  '@ai-sdk/openai-compatible@0.0.8':
+    resolution: {integrity: sha512-gEyOSvAdhMRcSyfZeatrx1wv+ju+fS3zB8IbY8UJzs6WBg6YSu4ZqEJnY9UjuZ2TA0fmw4G7Mn3N4rJIrdiTOg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+
   '@ai-sdk/openai@1.0.11':
     resolution: {integrity: sha512-qI9s7Slma5i5bB4yYVlFdcG3PNDwdqivPT1Dr8adDX92nSSpILjgFIooS5yys9sXjvvcfOi/WXbDvVhLSRRlvg==}
     engines: {node: '>=18'}
@@ -1334,6 +1344,15 @@ packages:
       zod:
         optional: true
 
+  '@ai-sdk/provider-utils@2.0.4':
+    resolution: {integrity: sha512-GMhcQCZbwM6RoZCri0MWeEWXRt/T+uCxsmHEsTwNvEH3GDjNzchfX25C8ftry2MeEOOn6KfqCLSKomcgK6RoOg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
   '@ai-sdk/provider-utils@2.0.5':
     resolution: {integrity: sha512-2M7vLhYN0ThGjNlzow7oO/lsL+DyMxvGMIYmVQvEYaCWhDzxH5dOp78VNjJIVwHzVLMbBDigX3rJuzAs853idw==}
     engines: {node: '>=18'}
@@ -1353,6 +1372,10 @@ packages:
 
   '@ai-sdk/provider@1.0.1':
     resolution: {integrity: sha512-mV+3iNDkzUsZ0pR2jG0sVzU6xtQY5DtSCBy3JFycLp6PwjyLw/iodfL3MwdmMCRJWgs3dadcHejRnMvF9nGTBg==}
+    engines: {node: '>=18'}
+
+  '@ai-sdk/provider@1.0.2':
+    resolution: {integrity: sha512-YYtP6xWQyaAf5LiWLJ+ycGTOeBLWrED7LUrvc+SQIWhGaneylqbaGsyQL7VouQUeQ4JZ1qKYZuhmi3W56HADPA==}
     engines: {node: '>=18'}
 
   '@ai-sdk/provider@1.0.3':
@@ -1448,6 +1471,12 @@ packages:
     peerDependenciesMeta:
       vue:
         optional: true
+
+  '@ai-sdk/xai@1.0.9':
+    resolution: {integrity: sha512-YjbHBW8t22R8ya8cEOqlkK2csSqNGTyZahV9AnKLA+squG/FMjzBPPW3OMLWedp4M3plF3uoLtvuzfkfrm2wQw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
 
   '@ai16z/eliza@0.1.5-alpha.5':
     resolution: {integrity: sha512-08EFPlfhE1p5IsacR0Kh2MZOBxKnOoWTE4vZ9cz3V9f/Ka0760p5sNzna4pfKlXUFBZlKfWDnbTXEDcjNOc20Q==}
@@ -4513,6 +4542,9 @@ packages:
 
   '@types/node@18.19.65':
     resolution: {integrity: sha512-Ay5BZuO1UkTmVHzZJNvZKw/E+iB3GQABb6kijEz89w2JrfhNA+M/ebp18pfz9Gqe9ywhMC8AA8yC01lZq48J+Q==}
+
+  '@types/node@20.17.10':
+    resolution: {integrity: sha512-/jrvh5h6NXhEauFFexRin69nA0uHJ5gwk4iDivp/DeoEua3uwCUto6PC86IpRITBOs4+6i2I56K5x5b6WYGXHA==}
 
   '@types/node@22.7.4':
     resolution: {integrity: sha512-y+NPi1rFzDs1NdQHHToqeiX2TIS79SWEAw9GYhkkx8bD0ChpfqC+n2j5OXOCpzfojBEBt6DnEnnG9MY0zk1XLg==}
@@ -9502,6 +9534,12 @@ snapshots:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       zod: 3.23.8
 
+  '@ai-sdk/openai-compatible@0.0.8(zod@3.24.1)':
+    dependencies:
+      '@ai-sdk/provider': 1.0.2
+      '@ai-sdk/provider-utils': 2.0.4(zod@3.24.1)
+      zod: 3.24.1
+
   '@ai-sdk/openai@1.0.11(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 1.0.3
@@ -9562,6 +9600,15 @@ snapshots:
     optionalDependencies:
       zod: 3.24.1
 
+  '@ai-sdk/provider-utils@2.0.4(zod@3.24.1)':
+    dependencies:
+      '@ai-sdk/provider': 1.0.2
+      eventsource-parser: 3.0.0
+      nanoid: 3.3.8
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.24.1
+
   '@ai-sdk/provider-utils@2.0.5(zod@3.23.8)':
     dependencies:
       '@ai-sdk/provider': 1.0.3
@@ -9589,6 +9636,10 @@ snapshots:
       json-schema: 0.4.0
 
   '@ai-sdk/provider@1.0.1':
+    dependencies:
+      json-schema: 0.4.0
+
+  '@ai-sdk/provider@1.0.2':
     dependencies:
       json-schema: 0.4.0
 
@@ -9696,6 +9747,13 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - zod
+
+  '@ai-sdk/xai@1.0.9(zod@3.24.1)':
+    dependencies:
+      '@ai-sdk/openai-compatible': 0.0.8(zod@3.24.1)
+      '@ai-sdk/provider': 1.0.2
+      '@ai-sdk/provider-utils': 2.0.4(zod@3.24.1)
+      zod: 3.24.1
 
   '@ai16z/eliza@0.1.5-alpha.5(@google-cloud/vertexai@1.9.0)(@langchain/core@0.3.18(openai@4.73.0(zod@3.23.8)))(axios@1.7.4)(handlebars@4.7.8)(react@19.0.0-rc-66855b96-20241106)(sswr@2.1.0(svelte@5.2.12))(svelte@5.2.12)(vue@3.5.13(typescript@5.6.3))':
     dependencies:
@@ -14543,6 +14601,10 @@ snapshots:
   '@types/node@18.19.65':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/node@20.17.10':
+    dependencies:
+      undici-types: 6.19.8
 
   '@types/node@22.7.4':
     dependencies:
