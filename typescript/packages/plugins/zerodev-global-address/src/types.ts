@@ -1,34 +1,33 @@
-import { type Chain } from '@goat-sdk/core'
+import { type Chain } from 'viem/chains'
 import { type Address } from 'viem'
-import { arbitrum, base, mainnet, optimism, polygon, mode, scroll } from 'viem/chains'
 import { CALL } from '@zerodev/global-address'
 
-export type TokenType = 'ERC20' | 'NATIVE' | 'USDC';
+export type TokenType = 'ERC20' | 'NATIVE' | 'USDC' | 'WRAPPED_NATIVE';
 
 export interface TokenConfig {
   tokenType: TokenType;
-  chain: typeof mainnet | typeof optimism | typeof arbitrum | typeof base | typeof polygon | typeof mode | typeof scroll;
+  chain: Chain;
 }
 
 export interface GlobalAddressConfig {
   owner?: Address;
-  destChain?: typeof mainnet | typeof optimism | typeof arbitrum | typeof base | typeof polygon | typeof mode | typeof scroll;
+  destChain?: Chain;
   slippage?: number;
 }
 
 export interface GlobalAddressResponse {
-  globalAddress: Address
-  estimatedFees: bigint
+  globalAddress: Address;
+  estimatedFees: bigint[];
 }
 
 export interface ActionConfig {
-  action: CALL[]
-  fallBack: CALL[]
+  action: CALL[];
+  fallBack: CALL[];
 }
 
 export interface TokenActions {
-  ERC20: ActionConfig
-  NATIVE: ActionConfig
-  USDC: ActionConfig
-  WRAPPED_NATIVE: ActionConfig
+  ERC20: ActionConfig;
+  NATIVE: ActionConfig;
+  USDC: ActionConfig;
+  WRAPPED_NATIVE: ActionConfig;
 }
