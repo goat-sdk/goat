@@ -1,4 +1,4 @@
-# Goat Plugin ModeSrpray 🐐 💛 - TypeScript
+# Goat Plugin ModeSpray 🐐 💛 - TypeScript
 
 ## Installation
 
@@ -8,7 +8,7 @@ pnpm install @goat-sdk/plugin-modespray
 
 ## Description
 
-This plugin enables AI agents to interact with ModeSpray on Mode Network, allowing them to **Spray** assets in a single click
+This plugin enables AI agents to interact with ModeSpray on Mode Network, allowing them to **Spray** assets to multiple recipients in a single transaction.
 
 ## Usage
 
