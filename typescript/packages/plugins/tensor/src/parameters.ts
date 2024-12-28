@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export class GetNftInfoParameters extends createToolParameters(
     z.object({
-        mintHash: z.string(),
+        mintHash: z.string().describe("The mint hash of the NFT"),
     }),
 ) {}
 

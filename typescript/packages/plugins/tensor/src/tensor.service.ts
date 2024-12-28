@@ -1,8 +1,15 @@
 import { Tool } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { z } from "zod";
-import { GetNftInfoParameters, getBuyListingTransactionResponseSchema, getNftInfoResponseSchema } from "./parameters";
-import { deserializeTxResponseToInstructions } from "./utils/deserializeTxResponseToInstructions";
+import {
+    GetNftInfoParameters,
+    getBuyListingTransactionResponseSchema,
+    getNftInfoResponseSchema,
+} from "./parameters";
+import {
+    VersionedTransaction,
+    MessageAddressTableLookup,
+} from "@solana/web3.js";
 
 export class TensorService {
     constructor(private readonly apiKey: string) {}
@@ -13,14 +20,19 @@ export class TensorService {
     async getNftInfo(parameters: GetNftInfoParameters) {
         let nftInfo: z.infer<typeof getNftInfoResponseSchema>;
         try {
-            const response = await fetch(`https://api.mainnet.tensordev.io/api/v1/mint?mints=${parameters.mintHash}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-tensor-api-key": this.apiKey,
-                },
-            });
+            const response = await fetch(
+                `https://api.mainnet.tensordev.io/api/v1/mint?mints=${parameters.mintHash}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-tensor-api-key": this.apiKey,
+                    },
+                }
+            );
 
-            nftInfo = (await response.json()) as z.infer<typeof getNftInfoResponseSchema>;
+            nftInfo = (await response.json()) as z.infer<
+                typeof getNftInfoResponseSchema
+            >;
         } catch (error) {
             throw new Error(`Failed to get NFT info: ${error}`);
         }
@@ -29,9 +41,12 @@ export class TensorService {
     }
 
     @Tool({
-        description: "Get a transaction to buy an NFT from a listing from the Tensor API",
+        description: "Buy NFT from a listing from the Tensor API",
     })
-    async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParameters) {
+    async getBuyListingTransaction(
+        walletClient: SolanaWalletClient,
+        parameters: GetNftInfoParameters
+    ) {
         const nftInfo = await this.getNftInfo(parameters);
 
         const price = nftInfo.listing?.price;
@@ -51,26 +66,51 @@ export class TensorService {
 
         let data: z.infer<typeof getBuyListingTransactionResponseSchema>;
         try {
-            const response = await fetch(`https://api.mainnet.tensordev.io/api/v1/tx/buy?${queryParams.toString()}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-tensor-api-key": this.apiKey,
-                },
-            });
+            const response = await fetch(
+                `https://api.mainnet.tensordev.io/api/v1/tx/buy?${queryParams.toString()}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-tensor-api-key": this.apiKey,
+                    },
+                }
+            );
 
-            data = (await response.json()) as z.infer<typeof getBuyListingTransactionResponseSchema>;
+            data = (await response.json()) as z.infer<
+                typeof getBuyListingTransactionResponseSchema
+            >;
             console.log(data);
         } catch (error) {
             throw new Error(`Failed to get buy listing transaction: ${error}`);
         }
 
-        const { versionedTransaction, instructions } = await deserializeTxResponseToInstructions(
-            walletClient.getConnection(),
-            data,
+        const firstTransaction = data.txs[0];
+        if (firstTransaction == null) {
+            throw new Error("No transaction in response");
+        }
+        const txV0 = firstTransaction.txV0;
+        if (txV0 == null) {
+            throw new Error("No txV0 in response");
+        }
+        const versionedTransaction = VersionedTransaction.deserialize(
+            Buffer.from(txV0.data)
         );
-        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey,
-        );
-        return { versionedTransaction, instructions, lookupTableAddresses };
+        const instructions =
+            await walletClient.decompileVersionedTransactionToInstructions(
+                versionedTransaction
+            );
+
+        const lookupTableAddresses =
+            versionedTransaction.message.addressTableLookups.map(
+                (lookup: MessageAddressTableLookup) =>
+                    lookup.accountKey.toString()
+            );
+
+        const { hash } = await walletClient.sendTransaction({
+            instructions,
+            addressLookupTableAddresses: lookupTableAddresses,
+        });
+
+        return hash;
     }
 }
