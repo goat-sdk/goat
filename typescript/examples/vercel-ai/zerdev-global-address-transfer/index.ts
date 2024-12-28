@@ -1,5 +1,5 @@
 import { zeroDevGlobalAddress } from '@goat-sdk/plugin-zerodev-global-address';
-import { optimism } from 'viem/chains';
+import { optimism, arbitrum, mainnet, base, scroll, mode } from 'viem/chains';
 import { getAddress } from 'viem';
 
 // Define interface for the fee structure
@@ -14,6 +14,25 @@ interface TokenFeeData {
 interface EstimatedFee {
     chainId: number;
     data: TokenFeeData[];
+}
+
+function getChainName(chainId: number): string {
+    switch (chainId) {
+        case mainnet.id:
+            return 'Ethereum Mainnet';
+        case optimism.id:
+            return 'Optimism';
+        case arbitrum.id:
+            return 'Arbitrum';
+        case base.id:
+            return 'Base';
+        case scroll.id:
+            return 'Scroll';
+        case mode.id:
+            return 'Mode';
+        default:
+            return `Unknown Chain`;
+    }
 }
 
 function formatTokenAmount(hexAmount: string, decimals: number): string {
@@ -38,7 +57,7 @@ async function main() {
     // Example configuration
     const config = {
         owner: getAddress('0x228bB8BcbCEc34e5b2E82791D916E577FC6C6C7a'),
-        destChain: optimism,
+        destChain: mode,
         slippage: 1000 // 1% slippage (in basis points)
     };
 
@@ -49,7 +68,7 @@ async function main() {
         console.log('\nGlobal Address:', result.globalAddress);
         console.log('\nEstimated Fees by Chain:');
         result.estimatedFees.forEach((fee: EstimatedFee) => {
-            console.log(`\nChain ID ${fee.chainId}:`);
+            console.log(`\nChain: ${getChainName(fee.chainId)} (${fee.chainId}):`);
             fee.data.forEach((tokenFee: TokenFeeData) => {
                 console.log(`\n${tokenFee.name} (${tokenFee.token}):`);
                 console.log(`  Min Deposit: ${formatTokenAmount(tokenFee.minDeposit, tokenFee.decimal)}`);
