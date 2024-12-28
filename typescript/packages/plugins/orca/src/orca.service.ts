@@ -5,7 +5,6 @@ import { Percentage, TransactionBuilder, resolveOrCreateATAs } from "@orca-so/co
 import {
     IncreaseLiquidityQuoteParam,
     NO_TOKEN_EXTENSION_CONTEXT,
-    ORCA_WHIRLPOOLS_CONFIG,
     ORCA_WHIRLPOOL_PROGRAM_ID,
     PDAUtil,
     PoolUtil,
@@ -24,7 +23,7 @@ import {
     openPositionWithTokenExtensionsIx,
 } from "@orca-so/whirlpools-sdk/dist/instructions";
 import { TOKEN_2022_PROGRAM_ID, getAssociatedTokenAddressSync } from "@solana/spl-token";
-import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
+import { Keypair, PublicKey, Transaction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { Decimal } from "decimal.js";
 import { CreateSingleSidedPoolParameters } from "./parameters";
 
@@ -46,6 +45,14 @@ export class OrcaService {
             "Create a single-sided liquidity pool on the Orca DEX. This function initializes a new pool with liquidity contributed from a single token, allowing users to define an initial price, a maximum price, and other parameters. The function ensures proper mint order and on-chain configuration for seamless execution. Ideal for setting up a pool with minimal price impact, it supports advanced features like adjustable fee tiers and precise initial price settings.",
     })
     async createSingleSidedPool(walletClient: SolanaWalletClient, parameters: CreateSingleSidedPoolParameters) {
+        let whirlpoolsConfigAddress: PublicKey;
+        if (walletClient.getConnection().rpcEndpoint.includes("mainnet")) {
+            whirlpoolsConfigAddress = new PublicKey("2LecshUwdy9xi7meFgHtFJQNSKk4KdTrcpvaB56dP2NQ");
+        } else if (walletClient.getConnection().rpcEndpoint.includes("devnet")) {
+            whirlpoolsConfigAddress = new PublicKey("FcrweFY1G9HJAHG5inkGB6pKg1HZ6x9UC2WioAfWrGkR");
+        } else {
+            throw new Error("Unsupported network");
+        }
         const vanityWallet = new Wallet(new Keypair());
         const ctx = WhirlpoolContext.from(walletClient.getConnection(), vanityWallet, ORCA_WHIRLPOOL_PROGRAM_ID);
         const fetcher = ctx.fetcher;
@@ -81,22 +88,26 @@ export class OrcaService {
             tokenMintWithProgramA: mintAAccount,
             tokenMintWithProgramB: mintBAccount,
         };
-        const feeTierKey = PDAUtil.getFeeTier(ORCA_WHIRLPOOL_PROGRAM_ID, ORCA_WHIRLPOOLS_CONFIG, tickSpacing).publicKey;
+        const feeTierKey = PDAUtil.getFeeTier(
+            ORCA_WHIRLPOOL_PROGRAM_ID,
+            whirlpoolsConfigAddress,
+            tickSpacing,
+        ).publicKey;
         const initSqrtPrice = PriceMath.tickIndexToSqrtPriceX64(initialTick);
         const tokenVaultAKeypair = Keypair.generate();
         const tokenVaultBKeypair = Keypair.generate();
         const whirlpoolPda = PDAUtil.getWhirlpool(
             ORCA_WHIRLPOOL_PROGRAM_ID,
-            ORCA_WHIRLPOOLS_CONFIG,
+            whirlpoolsConfigAddress,
             mintA,
             mintB,
             FEE_TIERS[feeTier],
         );
-        const tokenBadgeA = PDAUtil.getTokenBadge(ORCA_WHIRLPOOL_PROGRAM_ID, ORCA_WHIRLPOOLS_CONFIG, mintA).publicKey;
-        const tokenBadgeB = PDAUtil.getTokenBadge(ORCA_WHIRLPOOL_PROGRAM_ID, ORCA_WHIRLPOOLS_CONFIG, mintB).publicKey;
+        const tokenBadgeA = PDAUtil.getTokenBadge(ORCA_WHIRLPOOL_PROGRAM_ID, whirlpoolsConfigAddress, mintA).publicKey;
+        const tokenBadgeB = PDAUtil.getTokenBadge(ORCA_WHIRLPOOL_PROGRAM_ID, whirlpoolsConfigAddress, mintB).publicKey;
         const baseParamsPool = {
             initSqrtPrice,
-            whirlpoolsConfig: ORCA_WHIRLPOOLS_CONFIG,
+            whirlpoolsConfig: whirlpoolsConfigAddress,
             whirlpoolPda,
             tokenMintA: mintA,
             tokenMintB: mintB,
@@ -202,7 +213,7 @@ export class OrcaService {
             walletAddress,
             undefined,
             ctx.accountResolverOpts.allowPDAOwnerAddress,
-            ctx.accountResolverOpts.createWrappedSolAccountMethod,
+            "ata",
         );
         const { address: tokenOwnerAccountA, ...tokenOwnerAccountAIx } = ataA;
         const { address: tokenOwnerAccountB, ...tokenOwnerAccountBIx } = ataB;
@@ -271,20 +282,19 @@ export class OrcaService {
               });
         txBuilder.addInstruction(liquidityIx);
 
-        const txPayload = await txBuilder.build({
-            maxSupportedTransactionVersion: "legacy",
-        });
+        const txPayload = await txBuilder.build();
+        const instructions = TransactionMessage.decompile(
+            (txPayload.transaction as VersionedTransaction).message,
+        ).instructions;
 
-        if (txPayload.transaction instanceof Transaction) {
-            try {
-                const { hash } = await walletClient.sendTransaction({
-                    instructions: txPayload.transaction.instructions,
-                    accountsToSign: [positionMintKeypair, tokenVaultAKeypair, tokenVaultBKeypair],
-                });
-                return hash;
-            } catch (error) {
-                throw new Error(`Failed to create pool: ${JSON.stringify(error)}`);
-            }
+        try {
+            const { hash } = await walletClient.sendTransaction({
+                instructions: instructions,
+                accountsToSign: [positionMintKeypair, tokenVaultAKeypair, tokenVaultBKeypair],
+            });
+            return hash;
+        } catch (error) {
+            throw new Error(`Failed to create pool: ${JSON.stringify(error)}`);
         }
     }
 }

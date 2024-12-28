@@ -1,5 +1,11 @@
 import { WalletClientBase } from "@goat-sdk/core";
-import { AddressLookupTableAccount, type Connection, PublicKey } from "@solana/web3.js";
+import {
+    AddressLookupTableAccount,
+    type Connection,
+    PublicKey,
+    TransactionMessage,
+    type VersionedTransaction,
+} from "@solana/web3.js";
 import { formatUnits } from "viem";
 import type { SolanaTransaction } from "./types";
 
@@ -36,6 +42,24 @@ export abstract class SolanaWalletClient extends WalletClientBase {
             value: formatUnits(BigInt(balance), 9),
             inBaseUnits: balance.toString(),
         };
+    }
+
+    async decompileVersionedTransactionToInstructions(versionedTransaction: VersionedTransaction) {
+        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
+            (lookup) => lookup.accountKey,
+        );
+        const addressLookupTableAccounts = await Promise.all(
+            lookupTableAddresses.map((address) =>
+                this.connection.getAddressLookupTable(address).then((lookupTable) => lookupTable.value),
+            ),
+        );
+        const nonNullAddressLookupTableAccounts = addressLookupTableAccounts.filter(
+            (lookupTable) => lookupTable != null,
+        );
+        const decompileArgs = {
+            addressLookupTableAccounts: nonNullAddressLookupTableAccounts,
+        };
+        return TransactionMessage.decompile(versionedTransaction.message, decompileArgs).instructions;
     }
 
     abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;

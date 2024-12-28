@@ -1,5 +1,16 @@
 # goat-examples-vercel-ai-solana
 
+## 0.2.9
+
+### Patch Changes
+
+- 87eed18: Support pump.fun plugin
+- Updated dependencies [87eed18]
+  - @goat-sdk/plugin-spl-token@0.2.9
+  - @goat-sdk/plugin-jupiter@0.2.8
+  - @goat-sdk/plugin-pumpfun@0.1.1
+  - @goat-sdk/wallet-solana@0.2.8
+
 ## 0.2.8
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # goat-examples-langchain-lit
 
+## 0.1.11
+
+### Patch Changes
+
+- Updated dependencies [87eed18]
+  - @goat-sdk/wallet-solana@0.2.8
+  - @goat-sdk/wallet-lit@0.2.9
+
 ## 0.1.10
 
 ### Patch Changes
