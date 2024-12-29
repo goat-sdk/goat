@@ -21,7 +21,7 @@ export function getTools(walletClient: EVMWalletClient, { credentials }: Polymar
         createTool(
             {
                 name: "get_polymarket_events",
-                description: "Get the events on Polymarket including their markets",
+                description: "Get the events on Polymarket, including their markets, with optional filters",
                 parameters: getEventsParametersSchema,
             },
             (parameters) => getEvents(parameters),

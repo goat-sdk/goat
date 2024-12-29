@@ -12,6 +12,8 @@ import {
     bsc,
     chiliz,
     mainnet,
+    mode,
+    modeTestnet,
     optimism,
     optimismSepolia,
     polygon,
@@ -48,6 +50,8 @@ const smartWalletChains = [
     "base-sepolia",
     "arbitrum",
     "arbitrum-sepolia",
+    "mode",
+    "mode-sepolia",
     "optimism",
     "optimism-sepolia",
 ] as const;
@@ -67,6 +71,8 @@ export const mintingChains = [
     "chiliz-spicy-testnet",
     "ethereum",
     "ethereum-sepolia",
+    "mode",
+    "mode-sepolia",
     "optimism",
     "optimism-sepolia",
     "polygon",
@@ -97,6 +103,8 @@ const chainMap: Record<SupportedFaucetChains | SupportedSmartWalletChains | Supp
     chiliz,
     ethereum: mainnet,
     optimism,
+    mode,
+    "mode-sepolia": modeTestnet,
     "optimism-sepolia": optimismSepolia,
     polygon,
     "polygon-amoy": polygonAmoy,
@@ -170,6 +178,7 @@ export function getTestnetChainNameById(chainId: number): string | null {
         11155111: "ethereum-sepolia",
         11155420: "optimism-sepolia",
         999999999: "zora-sepolia",
+        919: "mode-sepolia",
     };
 
     return testnetChainIdMap[chainId] || null;

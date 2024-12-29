@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-solana",
-    "version": "0.2.5",
+    "version": "0.2.9",
     "description": "",
     "private": true,
     "scripts": {
@@ -12,8 +12,10 @@
         "@ai-sdk/openai": "^1.0.4",
         "@goat-sdk/adapter-vercel-ai": "workspace:*",
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/plugin-spl-token": "workspace:*",
+        "@goat-sdk/plugin-coingecko": "workspace:*",
         "@goat-sdk/plugin-jupiter": "workspace:*",
+        "@goat-sdk/plugin-pumpfun": "workspace:*",
+        "@goat-sdk/plugin-spl-token": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
         "ai": "catalog:",

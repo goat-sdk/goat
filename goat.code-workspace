@@ -22,6 +22,10 @@
             "path": "./typescript/packages/adapters/eliza"
         },
         {
+            "name": "[Adapter] 🦙 llamaindex",
+            "path": "./typescript/packages/adapters/llamaindex"
+        },
+        {
             "name": "[Adapter] 🦾 model context protocol",
             "path": "./typescript/packages/adapters/model-context-protocol"
         },
@@ -51,6 +55,10 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
+            "name": "[Plugin] 📡 farcaster",
+            "path": "./typescript/packages/plugins/farcaster"
+        },
+        {
             "name": "[Plugin] 🌐 solana nfts",
             "path": "./typescript/packages/plugins/solana-nfts"
         },
@@ -59,8 +67,16 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ⛽️ pumpfun",
+            "path": "./typescript/packages/plugins/pumpfun"
+        },
+        {
             "name": "[Plugin] 🔶 kim",
             "path": "./typescript/packages/plugins/kim"
+        },
+        {
+            "name": "[Plugin] 📊 mode governance",
+            "path": "./typescript/packages/plugins/mode-governance"
         },
         {
             "name": "[Plugin] ☄️ meteora",
@@ -77,6 +93,10 @@
         {
             "name": "[Plugin] 🪄 magic eden",
             "path": "./typescript/packages/plugins/solana-magiceden"
+        },
+        {
+            "name": "[Plugin] 🐦‍🔥 renzo",
+            "path": "./typescript/packages/plugins/renzo"
         },
         {
             "name": "[Plugin] 🦄 uniswap",

@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-spl-token",
-    "version": "0.2.5",
+    "version": "0.2.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -15,7 +15,7 @@
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
         "@solana/web3.js": "catalog:",
-        "@solana/spl-token": "0.4.9",
+        "@solana/spl-token": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {

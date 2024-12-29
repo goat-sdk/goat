@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-solana",
-    "version": "0.2.4",
+    "version": "0.2.8",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

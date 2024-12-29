@@ -7,6 +7,7 @@ export type EVMTransaction = {
     value?: bigint;
     abi?: Abi;
     options?: EVMTransactionOptions;
+    data?: `0x${string}`;
 };
 
 export type EVMTransactionOptions = {

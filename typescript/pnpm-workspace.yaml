@@ -8,6 +8,7 @@ catalog:
     viem: 2.21.49
     zod: 3.23.8
     zod-to-json-schema: 3.23.5
+    "@solana/spl-token": 0.4.9
     "@solana/web3.js": 1.95.8
     ai: 4.0.3
     "@langchain/core": 0.3.6

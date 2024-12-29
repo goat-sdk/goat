@@ -1,46 +1,74 @@
 # Vercel AI Polymarket Example
 
+## Prerequisites
+
+Before starting, you'll need:
+1. An OpenAI API key (get one from [OpenAI's platform](https://platform.openai.com))
+2. A wallet with:
+   - Some MATIC for gas fees (0.1 MATIC should be enough)
+   - USDC.e tokens for trading (not regular USDC)
+3. A Polygon RPC URL (get one from [Alchemy](https://www.alchemy.com) or [Infura](https://www.infura.io))
+
 ## Setup
 
-Copy the `.env.template` and populate with your values.
-
+1. Install dependencies:
+```bash
+pnpm install
 ```
+
+2. Copy the `.env.template` and populate with your values:
+```bash
 cp .env.template .env
 ```
 
-`POLYMARKET_API_KEY`, `POLYMARKET_SECRET` and `POLYMARKET_PASSPHRASE` will be populated in the next step.
+3. Edit your `.env` file with the following values:
+   - `OPENAI_API_KEY`: Your OpenAI API key
+   - `WALLET_PRIVATE_KEY`: Your wallet's private key (with 0x prefix)
+   - `RPC_PROVIDER_URL`: Your Polygon RPC URL
 
-## Usage
+   The following values will be populated in the next step:
+   - `POLYMARKET_API_KEY`
+   - `POLYMARKET_SECRET`
+   - `POLYMARKET_PASSPHRASE`
 
-1. Create an API key for your wallet using Polymarket's API key creation tool
-
-```
+4. Create an API key for your wallet using Polymarket's API key creation tool:
+```bash
 pnpm polymarket:api-key
 ```
 
-2. Copy the API key response into the `.env` file
+5. Copy the API key response values into your `.env` file:
+   - `POLYMARKET_API_KEY`
+   - `POLYMARKET_SECRET`
+   - `POLYMARKET_PASSPHRASE`
 
-3. To use Polymarket you need to approve the exchange contracts to use your tokens (e.USDC or conditional tokens) so it can complete the trade on your behalf. This approval lets the exchanges move the tokens you’re using for buying or selling without needing your manual confirmation every time. It's like giving a trusted broker permission to handle the payment and delivery for a transaction you’ve already agreed to.
-
-To approve the exchange contracts to use your tokens run the `setup-allowance` script.
-
-```
+6. Set up token allowances for trading. This approval lets the exchanges move tokens on your behalf:
+```bash
 pnpm polymarket:setup-allowance
 ```
 
-4. Top up USDC.e to your wallet. **Important**, Polymarket uses USDC.e, not USDC. This is Bridged USDC on Polygon which is a different contract than USDC. If you top up USDC, you will get a "not enough funds" error. See contract [here](https://polygonscan.com/address/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174).
+7. Make sure your wallet has:
+   - Some MATIC for gas fees (0.1 MATIC should be enough)
+   - USDC.e tokens for trading. **Important**: Polymarket uses USDC.e (Bridged USDC on Polygon), not regular USDC. See contract [here](https://polygonscan.com/address/0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174).
 
-5. Run the script with your prompt!
-```
-npx ts-node index.ts
-```
-Some examples:
-* Prompt it to list events that have not closed yet
-* Purchase a position on an event
-* Prompt it to list all your active orders
-* Prompt it to cancel all your active orders
+   You can get MATIC and USDC.e through:
+   - A centralized exchange that supports direct withdrawal to Polygon
+   - Bridge assets from Ethereum using the [Polygon Bridge](https://wallet.polygon.technology/bridge)
+   - Buy directly on a DEX on Polygon
 
-## Actions it supports
+## Usage
+
+Run the interactive script:
+```bash
+pnpm ts-node index.ts
+```
+
+The script will start an interactive session where you can type your prompts. Some example prompts:
+* "List events that have not closed yet"
+* "Purchase a position on an event"
+* "List all my active orders"
+* "Cancel all my active orders"
+
+## Available Actions
 
 - `Get events`: Get a list of events filtered by date, liquidity, slug, etc.
 - `Get market info`: Get info about a specific market using the market id
