@@ -8,10 +8,10 @@ export const depositParametersSchema = z.object({
     poolAddress: z.string().describe("The address of the Steer Smart Pool"),
 
     // Amount of token0 to deposit
-    amount0Desired: z.string().describe("The desired amount of token0 to deposit"),
+    amount0Desired: z.string().describe("The desired amount of token0 to deposit in its base unit"),
 
     // Amount of token1 to deposit
-    amount1Desired: z.string().describe("The desired amount of token1 to deposit"),
+    amount1Desired: z.string().describe("The desired amount of token1 to deposit in its base unit"),
 
     // Minimum amount of token0 to accept (slippage protection)
     amount0Min: z
@@ -62,13 +62,6 @@ export const withdrawParametersSchema = z.object({
             "The minimum amount of token1 to deposit, in base units (e.g. wei, not ether). Used for slippage protection.",
         )
         .default("0"),
-
-    // Optional deadline for the transaction
-    deadline: z
-        .number()
-        .optional()
-        .default(60 * 60 * 24)
-        .describe("Optional deadline for the transaction"),
 });
 
 /**
