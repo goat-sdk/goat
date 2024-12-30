@@ -11,7 +11,7 @@ export interface TokenConfig {
 
 export interface GlobalAddressConfig {
   owner?: Address;
-  destChain?: Chain;
+  destinationChain?: Chain;
   slippage?: number;
 }
 

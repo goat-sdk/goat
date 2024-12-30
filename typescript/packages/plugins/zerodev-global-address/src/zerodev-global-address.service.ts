@@ -96,35 +96,29 @@ export class ZeroDevGlobalAddressService {
     description: `Creates a global address that can receive tokens from multiple chains.
     A global address allows you to receive tokens on any supported chain and have them automatically bridged to your destination chain.
     
-    Supported chains: mainnet, base, optimism, arbitrum, scroll, and mode.
-    
     Example prompts:
     - "Create a global address" (uses default settings: Optimism as destination chain)
     - "Create a global address on base" (specifies base as destination chain)
     - "Create a global address for wallet 0x123...abc" (specifies owner address)
     - "Create a global address on arbitrum with 30% slippage"
-    
-    Technical parameters:
-    - owner: Ethereum address that will own the global address
-    - destChain: Destination chain (optimism, base, arbitrum, etc.)
-    - slippage: Slippage tolerance in basis points (default: 5000 = 50%)`,
+    `,
   })
   async createGlobalAddressConfig(
     params: CreateGlobalAddressConfigParams
   ): Promise<FormattedGlobalAddressResponse & { logs: string }> {
-    const { owner, destChain = optimism, slippage = this.defaultSlippage } = params;
+    const { owner, destinationChain = optimism, slippage = this.defaultSlippage } = params;
     
     if (!owner) {
       throw new Error('Owner address is required');
     }
 
     const allSrcTokens = this.getSourceTokens();
-    const srcTokens = allSrcTokens.filter(token => token.chain.id !== destChain.id);
+    const srcTokens = allSrcTokens.filter(token => token.chain.id !== destinationChain.id);
     const actions = this.createActionConfig(owner);
 
     try {
       const { globalAddress, estimatedFees } = await createGlobalAddress({
-        destChain,
+        destChain: destinationChain,
         owner,
         slippage,
         actions,
@@ -133,7 +127,7 @@ export class ZeroDevGlobalAddressService {
 
       const formattedFees = this.formatEstimatedFees(estimatedFees);
       const logs = this.formatLogsToString(globalAddress, formattedFees);
-      const targetChain_name = `destination chain: ${this.getChainName(destChain.id)} (${destChain.id})`
+      const targetChain_name = `destination chain: ${this.getChainName(destinationChain.id)} (${destinationChain.id})`
 
       return {
         globalAddress,
