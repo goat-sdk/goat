@@ -69,11 +69,9 @@ export class MagicEdenService {
         }
 
         const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(data.v0.tx.data));
-        const instructions = await walletClient.decompileVersionedTransactionToInstructions(
-            versionedTransaction,
-        );
-        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey.toString(),
+        const instructions = await walletClient.decompileVersionedTransactionToInstructions(versionedTransaction);
+        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map((lookup) =>
+            lookup.accountKey.toString(),
         );
 
         const { hash } = await walletClient.sendTransaction({
