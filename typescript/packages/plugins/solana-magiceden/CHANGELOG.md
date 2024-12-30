@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-solana-magiceden
 
+## 0.2.9
+
+### Patch Changes
+
+- ef12907: Execute tx when calling the buy tool
+
 ## 0.2.8
 
 ### Patch Changes

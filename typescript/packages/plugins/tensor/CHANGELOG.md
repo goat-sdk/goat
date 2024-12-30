@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-tensor
 
+## 0.2.9
+
+### Patch Changes
+
+- ef12907: Execute transactions inside the tool
+
 ## 0.2.8
 
 ### Patch Changes
