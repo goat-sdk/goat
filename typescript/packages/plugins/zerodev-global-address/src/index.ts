@@ -1,1 +1,1 @@
-export * from "./zerodev-global-address.plugin"
+export * from "./zerodev-global-address.plugin";

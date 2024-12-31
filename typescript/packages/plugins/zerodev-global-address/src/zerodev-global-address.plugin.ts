@@ -1,7 +1,7 @@
 import { type Chain, PluginBase } from "@goat-sdk/core";
 import { arbitrum, base, mainnet, mode, optimism, polygon, scroll } from "viem/chains";
 import { ZeroDevGlobalAddressService } from "./zerodev-global-address.service";
-export * from './types'
+export * from "./types";
 
 const SUPPORTED_CHAINS = [mainnet, polygon, base, optimism, arbitrum, mode, scroll];
 
