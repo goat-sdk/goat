@@ -25,7 +25,7 @@
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/core": "workspace:*"
     },
     "engines": {
         "node": ">=20.12.2 <21",
