@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-solana-magiceden",
-    "version": "0.2.9",
+    "name": "@goat-sdk/plugin-opensea",
+    "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,8 +13,6 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-solana": "workspace:*",
-        "@solana/web3.js": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
@@ -29,5 +27,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": ["ai", "agents", "web3", "opensea"]
 }

@@ -7,7 +7,6 @@ import {
     getBuyListingTransactionResponseSchema,
     getNftInfoResponseSchema,
 } from "./parameters";
-import { decompileVersionedTransactionToInstructions } from "./utils/decompileVersionedTransactionToInstructions";
 
 export class MagicEdenService {
     constructor(private readonly apiKey?: string) {}
@@ -38,7 +37,7 @@ export class MagicEdenService {
     }
 
     @Tool({
-        description: "Get a transaction to buy an NFT from a listing from the Magic Eden API",
+        description: "Buy an NFT from a listing from the Magic Eden API",
     })
     async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParametersSchema) {
         const nftInfo = await this.getNftListings(parameters);
@@ -70,14 +69,16 @@ export class MagicEdenService {
         }
 
         const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(data.v0.tx.data));
-        const instructions = await decompileVersionedTransactionToInstructions(
-            walletClient.getConnection(),
-            versionedTransaction,
-        );
-        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey,
+        const instructions = await walletClient.decompileVersionedTransactionToInstructions(versionedTransaction);
+        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map((lookup) =>
+            lookup.accountKey.toString(),
         );
 
-        return { versionedTransaction, instructions, lookupTableAddresses };
+        const { hash } = await walletClient.sendTransaction({
+            instructions,
+            addressLookupTableAddresses: lookupTableAddresses,
+        });
+
+        return hash;
     }
 }

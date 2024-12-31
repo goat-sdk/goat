@@ -1,8 +1,8 @@
 import { Tool } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import { MessageAddressTableLookup, VersionedTransaction } from "@solana/web3.js";
 import { z } from "zod";
 import { GetNftInfoParameters, getBuyListingTransactionResponseSchema, getNftInfoResponseSchema } from "./parameters";
-import { deserializeTxResponseToInstructions } from "./utils/deserializeTxResponseToInstructions";
 
 export class TensorService {
     constructor(private readonly apiKey: string) {}
@@ -29,7 +29,7 @@ export class TensorService {
     }
 
     @Tool({
-        description: "Get a transaction to buy an NFT from a listing from the Tensor API",
+        description: "Buy NFT from a listing from the Tensor API",
     })
     async getBuyListingTransaction(walletClient: SolanaWalletClient, parameters: GetNftInfoParameters) {
         const nftInfo = await this.getNftInfo(parameters);
@@ -64,13 +64,26 @@ export class TensorService {
             throw new Error(`Failed to get buy listing transaction: ${error}`);
         }
 
-        const { versionedTransaction, instructions } = await deserializeTxResponseToInstructions(
-            walletClient.getConnection(),
-            data,
-        );
+        const firstTransaction = data.txs[0];
+        if (firstTransaction == null) {
+            throw new Error("No transaction in response");
+        }
+        const txV0 = firstTransaction.txV0;
+        if (txV0 == null) {
+            throw new Error("No txV0 in response");
+        }
+        const versionedTransaction = VersionedTransaction.deserialize(Buffer.from(txV0.data));
+        const instructions = await walletClient.decompileVersionedTransactionToInstructions(versionedTransaction);
+
         const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey,
+            (lookup: MessageAddressTableLookup) => lookup.accountKey.toString(),
         );
-        return { versionedTransaction, instructions, lookupTableAddresses };
+
+        const { hash } = await walletClient.sendTransaction({
+            instructions,
+            addressLookupTableAddresses: lookupTableAddresses,
+        });
+
+        return hash;
     }
 }
