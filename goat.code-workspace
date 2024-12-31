@@ -63,6 +63,10 @@
             "path": "./typescript/packages/plugins/solana-nfts"
         },
         {
+            "name": "[Plugin] ionic",
+            "path": "./typescript/packages/plugins/ionic"
+        },
+        {
             "name": "[Plugin] 🪐 jupiter",
             "path": "./typescript/packages/plugins/jupiter"
         },
