@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-spl-token
 
+## 0.2.10
+
+### Patch Changes
+
+- 7f3c8dc: Fix base units error
+
 ## 0.2.9
 
 ### Patch Changes
