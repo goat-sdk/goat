@@ -2,31 +2,32 @@
 
 ## Installation
 ```
-npm install @goat-sdk/wallet-solana
+npm install @goat-sdk/wallet-viem
 ```
 
 ## Usage
 ```typescript
+import { http } from "viem";
+import { createWalletClient } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { sepolia } from "viem/chains";
+
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { solana } from "@goat-sdk/wallet-solana";
+import { viem } from "@goat-sdk/wallet-viem";
 
-import { Connection, Keypair } from "@solana/web3.js";
-import * as bip39 from "bip39";
 
-const connection = new Connection(
-    "https://api.mainnet-beta.solana.com",
-    "confirmed"
-);
+require("dotenv").config();
 
-const mnemonic = process.env.WALLET_MNEMONIC;
+const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
-const seed = bip39.mnemonicToSeedSync(mnemonic);
-const keypair = Keypair.fromSeed(Uint8Array.from(seed).subarray(0, 32));
-
-const tools = await getOnChainTools({
-    wallet: solana({
-        keypair,
-        connection,
-    }),
+const walletClient = createWalletClient({
+    account: account,
+    transport: http(process.env.RPC_PROVIDER_URL),
+    chain: sepolia,
 });
+
+   const tools = await getOnChainTools({
+        wallet: viem(walletClient),
+    });
+
 ```
