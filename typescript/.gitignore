@@ -19,6 +19,3 @@ npm-debug.log*
 # Build
 dist
 .turbo
-
-# examples
-/examples/vercel-ai/zerdev-global-address/
