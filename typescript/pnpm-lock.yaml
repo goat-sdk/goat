@@ -140,7 +140,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/coingecko
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -204,10 +204,10 @@ importers:
         version: link:../../../packages/wallets/solana
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
+        version: 0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(encoding@0.1.13)
       '@lit-protocol/constants':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -222,10 +222,10 @@ importers:
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8)))(axios@1.7.4)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(axios@1.7.4)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.77.0(encoding@0.1.13)(zod@3.24.1))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
 
   examples/langchain/viem:
     dependencies:
@@ -246,19 +246,19 @@ importers:
         version: link:../../../packages/wallets/viem
       '@langchain/core':
         specifier: 'catalog:'
-        version: 0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1))
+        version: 0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
       '@langchain/openai':
         specifier: ^0.3.5
-        version: 0.3.14(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(encoding@0.1.13)
+        version: 0.3.14(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       langchain:
         specifier: ^0.3.2
-        version: 0.3.6(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.24.1)))(axios@1.7.4)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.77.0(encoding@0.1.13)(zod@3.24.1))
+        version: 0.3.6(@langchain/core@0.3.6(openai@4.77.0(encoding@0.1.13)(zod@3.23.8)))(axios@1.7.4)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.77.0(encoding@0.1.13)(zod@3.23.8))
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+        version: 2.21.49(bufferutil@4.0.8)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
   examples/model-context-protocol/mode:
     dependencies:
@@ -376,7 +376,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/coingecko
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -682,7 +682,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/superfluid
+        version: link:../../../packages/plugins/coingecko
       '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
         version: link:../../../packages/plugins/jupiter
@@ -755,6 +755,9 @@ importers:
       '@goat-sdk/plugin-erc721':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc721
+      '@goat-sdk/plugin-superfluid':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/superfluid
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -1188,6 +1191,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
       zod:
         specifier: 'catalog:'
         version: 3.23.8

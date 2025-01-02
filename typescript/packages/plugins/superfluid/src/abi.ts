@@ -87,9 +87,7 @@ export const CFA_FORWARDER_ABI = [
             { internalType: "int96", name: "flowrate", type: "int96" },
         ],
         name: "getBufferAmountByFlowrate",
-        outputs: [
-            { internalType: "uint256", name: "bufferAmount", type: "uint256" },
-        ],
+        outputs: [{ internalType: "uint256", name: "bufferAmount", type: "uint256" }],
         stateMutability: "view",
         type: "function",
     },
@@ -238,7 +236,7 @@ export const CFA_FORWARDER_ABI = [
         stateMutability: "nonpayable",
         type: "function",
     },
-];
+] as const;
 
 export const POOL_ABI = [
     {
@@ -879,7 +877,7 @@ export const POOL_ABI = [
         stateMutability: "nonpayable",
         type: "function",
     },
-];
+] as const;
 
 export const SUPER_TOKEN_FACTORY_ABI = [
     {
@@ -1059,9 +1057,7 @@ export const SUPER_TOKEN_FACTORY_ABI = [
     {
         inputs: [],
         name: "_SUPER_TOKEN_LOGIC",
-        outputs: [
-            { internalType: "contract ISuperToken", name: "", type: "address" },
-        ],
+        outputs: [{ internalType: "contract ISuperToken", name: "", type: "address" }],
         stateMutability: "view",
         type: "function",
     },
@@ -1101,9 +1097,7 @@ export const SUPER_TOKEN_FACTORY_ABI = [
             },
         ],
         name: "createCanonicalERC20Wrapper",
-        outputs: [
-            { internalType: "contract ISuperToken", name: "", type: "address" },
-        ],
+        outputs: [{ internalType: "contract ISuperToken", name: "", type: "address" }],
         stateMutability: "nonpayable",
         type: "function",
     },
@@ -1245,9 +1239,7 @@ export const SUPER_TOKEN_FACTORY_ABI = [
     {
         inputs: [],
         name: "getCodeAddress",
-        outputs: [
-            { internalType: "address", name: "codeAddress", type: "address" },
-        ],
+        outputs: [{ internalType: "address", name: "codeAddress", type: "address" }],
         stateMutability: "view",
         type: "function",
     },
@@ -1261,9 +1253,7 @@ export const SUPER_TOKEN_FACTORY_ABI = [
     {
         inputs: [],
         name: "getSuperTokenLogic",
-        outputs: [
-            { internalType: "contract ISuperToken", name: "", type: "address" },
-        ],
+        outputs: [{ internalType: "contract ISuperToken", name: "", type: "address" }],
         stateMutability: "view",
         type: "function",
     },
@@ -1320,12 +1310,10 @@ export const SUPER_TOKEN_FACTORY_ABI = [
         type: "function",
     },
     {
-        inputs: [
-            { internalType: "address", name: "newAddress", type: "address" },
-        ],
+        inputs: [{ internalType: "address", name: "newAddress", type: "address" }],
         name: "updateCode",
         outputs: [],
         stateMutability: "nonpayable",
         type: "function",
     },
-];
+] as const;

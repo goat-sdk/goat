@@ -4,10 +4,10 @@ import { CFA_FORWARDER_ABI, POOL_ABI } from "./abi";
 import {
     FlowParameters,
     GetFlowrateParameters,
-    UpdateMemberUnitsParameters,
-    GetUnitsParameters,
     GetMemberFlowRateParameters,
     GetTotalFlowRateParameters,
+    GetUnitsParameters,
+    UpdateMemberUnitsParameters,
 } from "./parameters";
 
 export class SuperfluidService {
@@ -42,7 +42,7 @@ export class SuperfluidService {
             functionName: "getFlowrate",
             args: [parameters.token, parameters.sender, parameters.receiver],
         });
-        return result.value.toString();
+        return result.value;
     }
 
     @Tool({
@@ -74,7 +74,7 @@ export class SuperfluidService {
             functionName: "getUnits",
             args: [parameters.memberAddr],
         });
-        return result.value.toString();
+        return result.value;
     }
 
     @Tool({
@@ -88,7 +88,7 @@ export class SuperfluidService {
             functionName: "getMemberFlowRate",
             args: [parameters.memberAddr],
         });
-        return result.value.toString();
+        return result.value;
     }
 
     @Tool({
@@ -102,6 +102,6 @@ export class SuperfluidService {
             functionName: "getTotalFlowRate",
             args: [],
         });
-        return result.value.toString();
+        return result.value;
     }
 }
