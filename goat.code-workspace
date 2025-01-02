@@ -71,6 +71,10 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ♏︎ jsonrpc",
+            "path": "./typescript/packages/plugins/jsonrpc"
+        },
+        {
             "name": "[Plugin] ⛽️ pumpfun",
             "path": "./typescript/packages/plugins/pumpfun"
         },
@@ -101,6 +105,10 @@
         {
             "name": "[Plugin] 🐦‍🔥 renzo",
             "path": "./typescript/packages/plugins/renzo"
+        },
+        {
+            "name": "[Plugin] 🗿 ironclad",
+            "path": "./typescript/packages/plugins/ironclad"
         },
         {
             "name": "[Plugin] 🦄 uniswap",
