@@ -1,21 +1,16 @@
 import { Wallet } from "@coral-xyz/anchor";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { Percentage, TransactionBuilder, resolveOrCreateATAs } from "@orca-so/common-sdk";
+import { Percentage } from "@orca-so/common-sdk";
 import {
     NO_TOKEN_EXTENSION_CONTEXT,
     ORCA_WHIRLPOOL_PROGRAM_ID,
-    PDAUtil,
     PriceMath,
     TokenExtensionContextForPool,
-    TokenExtensionUtil,
     WhirlpoolContext,
     buildWhirlpoolClient,
     increaseLiquidityQuoteByInputToken,
 } from "@orca-so/whirlpools-sdk";
-import { openPositionWithTokenExtensionsIx } from "@orca-so/whirlpools-sdk/dist/instructions";
-import { increaseLiquidityIx } from "@orca-so/whirlpools-sdk/dist/instructions";
-import { increaseLiquidityV2Ix } from "@orca-so/whirlpools-sdk/dist/instructions";
-import { TOKEN_2022_PROGRAM_ID, getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 import { Keypair, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { Decimal } from "decimal.js";
 import { OpenCenteredPositionParameters } from "../parameters";
@@ -32,7 +27,6 @@ export async function openCenteredPosition(
     const priceOffsetBps = Number(parameters.priceOffsetBps);
     const inputTokenMint = new PublicKey(parameters.inputTokenMint);
     const inputAmount = new Decimal(parameters.inputAmount);
-    const tokenProgramId = TOKEN_2022_PROGRAM_ID;
     const client = buildWhirlpoolClient(ctx);
 
     const whirlpool = await client.getPool(whirlpoolAddress);
@@ -83,91 +77,15 @@ export async function openCenteredPosition(
         whirlpool,
         tokenExtensionCtx,
     );
-    const { liquidityAmount: liquidity, tokenMaxA, tokenMaxB } = increaseLiquiditQuote;
-
-    const positionMintKeypair = Keypair.generate();
-    const positionMintPubkey = positionMintKeypair.publicKey;
-    const positionPda = PDAUtil.getPosition(ctx.program.programId, positionMintPubkey);
-    const positionTokenAccountAddress = getAssociatedTokenAddressSync(
-        positionMintPubkey,
+    const { positionMint, tx: txBuilder } = await whirlpool.openPositionWithMetadata(
+        lowerTick,
+        upperTick,
+        increaseLiquiditQuote,
         walletAddress,
-        ctx.accountResolverOpts.allowPDAOwnerAddress,
-        tokenProgramId,
-    );
-    const txBuilder = new TransactionBuilder(ctx.provider.connection, ctx.provider.wallet, ctx.txBuilderOpts);
-    const params = {
-        funder: walletAddress,
-        owner: walletAddress,
-        positionPda,
-        positionTokenAccount: positionTokenAccountAddress,
-        whirlpool: whirlpoolAddress,
-        tickLowerIndex: lowerTick,
-        tickUpperIndex: upperTick,
-    };
-    const positionIx = openPositionWithTokenExtensionsIx(ctx.program, {
-        ...params,
-        positionMint: positionMintPubkey,
-        withTokenMetadataExtension: true,
-    });
-    txBuilder.addSigner(positionMintKeypair);
-    txBuilder.addInstruction(positionIx);
-    const [ataA, ataB] = await resolveOrCreateATAs(
-        ctx.connection,
-        walletAddress,
-        [
-            { tokenMint: mintInfoA.address, wrappedSolAmountIn: tokenMaxA },
-            { tokenMint: mintInfoB.address, wrappedSolAmountIn: tokenMaxB },
-        ],
-        () => ctx.fetcher.getAccountRentExempt(),
         walletAddress,
         undefined,
-        ctx.accountResolverOpts.allowPDAOwnerAddress,
-        "ata",
+        TOKEN_2022_PROGRAM_ID,
     );
-    const { address: tokenOwnerAccountA, ...tokenOwnerAccountAIx } = ataA;
-    const { address: tokenOwnerAccountB, ...tokenOwnerAccountBIx } = ataB;
-    txBuilder.addInstruction(tokenOwnerAccountAIx);
-    txBuilder.addInstruction(tokenOwnerAccountBIx);
-
-    const tickArrayLowerPda = PDAUtil.getTickArrayFromTickIndex(
-        lowerTick,
-        whirlpoolData.tickSpacing,
-        whirlpoolAddress,
-        ctx.program.programId,
-    );
-    const tickArrayUpperPda = PDAUtil.getTickArrayFromTickIndex(
-        upperTick,
-        whirlpoolData.tickSpacing,
-        whirlpoolAddress,
-        ctx.program.programId,
-    );
-
-    const baseParamsLiquidity = {
-        liquidityAmount: liquidity,
-        tokenMaxA,
-        tokenMaxB,
-        whirlpool: whirlpoolAddress,
-        positionAuthority: walletAddress,
-        position: positionPda.publicKey,
-        positionTokenAccount: positionTokenAccountAddress,
-        tokenOwnerAccountA,
-        tokenOwnerAccountB,
-        tokenVaultA: whirlpoolData.tokenVaultA,
-        tokenVaultB: whirlpoolData.tokenVaultB,
-        tickArrayLower: tickArrayLowerPda.publicKey,
-        tickArrayUpper: tickArrayUpperPda.publicKey,
-    };
-
-    const liquidityIx = !TokenExtensionUtil.isV2IxRequiredPool(tokenExtensionCtx)
-        ? increaseLiquidityIx(ctx.program, baseParamsLiquidity)
-        : increaseLiquidityV2Ix(ctx.program, {
-              ...baseParamsLiquidity,
-              tokenMintA: mintInfoA.address,
-              tokenMintB: mintInfoB.address,
-              tokenProgramA: tokenExtensionCtx.tokenMintWithProgramA.tokenProgram,
-              tokenProgramB: tokenExtensionCtx.tokenMintWithProgramB.tokenProgram,
-          });
-    txBuilder.addInstruction(liquidityIx);
 
     const txPayload = await txBuilder.build();
     const txPayloadDecompiled = TransactionMessage.decompile((txPayload.transaction as VersionedTransaction).message);
@@ -181,7 +99,7 @@ export async function openCenteredPosition(
         });
         return JSON.stringify({
             transactionId: hash,
-            positionMint: positionMintPubkey.toString(),
+            positionMint: positionMint.toString(),
         });
     } catch (error) {
         throw new Error(`Failed to create position: ${JSON.stringify(error)}`);
