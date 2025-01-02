@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-jsonrpc",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -11,19 +11,13 @@
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-    
+
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
-    },
-    "engines": {
-        "node": ">=20.12.2 <21",
-        "npm": "please-use-pnpm",
-        "pnpm": ">=9",
-        "yarn": "please-use-pnpm"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

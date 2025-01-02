@@ -71,6 +71,10 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ♏︎ jsonrpc",
+            "path": "./typescript/packages/plugins/jsonrpc"
+        },
+        {
             "name": "[Plugin] ⛽️ pumpfun",
             "path": "./typescript/packages/plugins/pumpfun"
         },
