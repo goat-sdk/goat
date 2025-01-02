@@ -106,6 +106,10 @@
             "name": "[Plugin] ⛽️ opensea",
             "path": "./typescript/packages/plugins/opensea"
         },
+        {
+            "name": "[Plugin] 💰 superfluid",
+            "path": "./typescript/packages/plugins/superfluid"
+        },
         // Wallets
         {
             "name": "[Wallet] 🅰 aptos",
