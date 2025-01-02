@@ -1,29 +1,37 @@
-# Goat Coingecko Plugin 🐐 - TypeScript
+# Goat Superfluid Plugin 🐐 - TypeScript
 
-Coingecko plugin for Goat. Allows you to create tools for interacting with the CoinGecko API.
+[Superfluid Protocol](https://docs.superfluid.finance/) plugin for Goat. Allows you to create tools for interacting with the Superfluid Protocol.
 
 ## Installation
 ```
-npm install @goat-sdk/plugin-coingecko
+npm install @goat-sdk/plugin-superfluid
 ```
 
 ## Setup
     
 ```typescript
-import { coingecko } from "@goat-sdk/plugin-coingecko";
+import { superfluid } from "@goat-sdk/plugin-superfluid";
 
-const plugin = coingecko({ 
-    apiKey: process.env.COINGECKO_API_KEY 
+const plugin = superfluid({
 });
 ```
 
 ## Available Actions
 
-### Get Trending Coins
-Fetches the current trending cryptocurrencies.
+### Create or Update or Delete Flow
+Creates, updates, or deletes a flow of tokens from sender to receiver.
 
-### Get Coin Price
-Fetches the current price and optional market data for a specific cryptocurrency.
+### Get Flow Rate
+Fetches the current flow rate of a token from sender to receiver.
+
+### Get Units
+Fetches the current units of a member in a pool.
+
+### Update Member Units
+Updates the units of a member in a pool.
+
+### Get Total Flow Rate
+Fetches the total flow rate of a pool of a pool.
 
 ## Goat
 

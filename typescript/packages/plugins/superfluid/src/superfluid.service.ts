@@ -8,16 +8,14 @@ import {
     GetUnitsParameters,
     GetMemberFlowRateParameters,
     GetTotalFlowRateParameters,
-    DeploySuperTokenWrapperParameters,
 } from "./parameters";
 
 export class SuperfluidService {
     private readonly CFA_FORWARDER_ADDRESS = "0xcfA132E353cB4E398080B9700609bb008eceB125";
-    private readonly SUPER_TOKEN_FACTORY_ADDRESS = "0xe20B9a38E0c96F61d1bA6b42a61512D56Fea1Eb3";
 
     @Tool({
-        name: "create_or_update_flow",
-        description: "Create or update a flow of tokens from sender to receiver",
+        name: "create_or_update_or_delete_flow",
+        description: "Create, update, or delete a flow of tokens from sender to receiver",
     })
     async flow(walletClient: EVMWalletClient, parameters: FlowParameters) {
         try {
@@ -105,25 +103,5 @@ export class SuperfluidService {
             args: [],
         });
         return result.value.toString();
-    }
-
-    @Tool({
-        name: "deploy_super_token_wrapper",
-        description: "Deploy a new Super Token wrapper for an existing ERC20 token",
-    })
-    async deploySuperTokenWrapper(walletClient: EVMWalletClient, parameters: DeploySuperTokenWrapperParameters) {
-        const result = await walletClient.sendTransaction({
-            to: this.SUPER_TOKEN_FACTORY_ADDRESS,
-            abi: SUPER_TOKEN_FACTORY_ABI,
-            functionName: "createERC20Wrapper",
-            args: [
-                parameters.underlyingToken,
-                parameters.underlyingDecimals,
-                parameters.upgradability,
-                parameters.name,
-                parameters.symbol,
-            ],
-        });
-        return result.hash;
     }
 }
