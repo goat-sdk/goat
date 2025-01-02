@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-spl-token",
-    "version": "0.2.10",
+    "name": "@goat-sdk/plugin-allora",
+    "version": "0.1.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,10 +13,8 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-solana": "workspace:*",
-        "@solana/web3.js": "catalog:",
-        "@solana/spl-token": "catalog:",
-        "zod": "catalog:"
+        "zod": "catalog:",
+        "axios": "1.7.9"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
@@ -30,5 +28,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": ["ai", "agents", "web3", "allora"]
 }

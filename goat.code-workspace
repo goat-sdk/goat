@@ -51,6 +51,10 @@
             "path": "./typescript/packages/plugins/polymarket"
         },
         {
+            "name": "[Plugin] 🌸 allora",
+            "path": "./typescript/packages/plugins/allora"
+        },
+        {
             "name": "[Plugin] 💰 coingecko",
             "path": "./typescript/packages/plugins/coingecko"
         },
@@ -105,6 +109,10 @@
         {
             "name": "[Plugin] ⛽️ opensea",
             "path": "./typescript/packages/plugins/opensea"
+        },
+        {
+            "name": "[Plugin] 🌍 zerodev-global-address",
+            "path": "./typescript/packages/plugins/zerodev-global-address"
         },
         // Wallets
         {

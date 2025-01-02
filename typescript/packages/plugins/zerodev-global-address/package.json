@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-spl-token",
-    "version": "0.2.10",
+    "name": "@goat-sdk/plugin-zerodev-global-address",
+    "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -12,10 +12,9 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@zerodev/global-address": "^0.0.19",
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-solana": "workspace:*",
-        "@solana/web3.js": "catalog:",
-        "@solana/spl-token": "catalog:",
+        "viem": "~2.17.11",
         "zod": "catalog:"
     },
     "peerDependencies": {
