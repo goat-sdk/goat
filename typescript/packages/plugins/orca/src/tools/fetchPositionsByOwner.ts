@@ -8,8 +8,10 @@ import {
     getAllPositionAccountsByOwner,
 } from "@orca-so/whirlpools-sdk";
 import { Keypair } from "@solana/web3.js";
+import { FetchPositionsByOwnerParameters } from "../parameters";
 
 interface PositionInfo {
+    positionMintAddress: string;
     whirlpoolAddress: string;
     positionInRange: boolean;
     distanceFromCenterBps: number;
@@ -19,14 +21,18 @@ type PositionDataMap = {
     [positionMintAddress: string]: PositionInfo;
 };
 
-export async function fetchPositionsByOwner(walletClient: SolanaWalletClient) {
+export async function fetchPositionsByOwner(
+    walletClient: SolanaWalletClient,
+    parameters: FetchPositionsByOwnerParameters,
+) {
     const vanityWallet = new Wallet(new Keypair());
     const ctx = WhirlpoolContext.from(walletClient.getConnection(), vanityWallet, ORCA_WHIRLPOOL_PROGRAM_ID);
     const client = buildWhirlpoolClient(ctx);
+    const owner = parameters.owner || walletClient.getAddress();
 
     const positions = await getAllPositionAccountsByOwner({
         ctx,
-        owner: walletClient.getAddress(),
+        owner: owner,
     });
     const positionDatas = [...positions.positions.entries(), ...positions.positionsWithTokenExtensions.entries()];
     const result: PositionDataMap = {};
@@ -52,6 +58,7 @@ export async function fetchPositionsByOwner(walletClient: SolanaWalletClient) {
         );
 
         result[positionMintAddress.toString()] = {
+            positionMintAddress: positionMintAddress.toString(),
             whirlpoolAddress: whirlpoolAddress.toString(),
             positionInRange,
             distanceFromCenterBps,

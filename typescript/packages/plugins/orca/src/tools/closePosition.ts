@@ -1,20 +1,14 @@
 import { Wallet } from "@coral-xyz/anchor";
-import { createToolParameters } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import { Percentage } from "@orca-so/common-sdk";
 import { ORCA_WHIRLPOOL_PROGRAM_ID, PDAUtil, WhirlpoolContext, buildWhirlpoolClient } from "@orca-so/whirlpools-sdk";
 import { Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
-import { z } from "zod";
-
-export class ClosePositionParameters extends createToolParameters(
-    z.object({
-        positionMintAddress: z.string().describe("The mint address of the liquidity position to close."),
-    }),
-) {}
+import { ClosePositionParameters } from "../parameters";
 
 export async function closePosition(walletClient: SolanaWalletClient, parameters: ClosePositionParameters) {
     const vanityWallet = new Wallet(new Keypair());
     const ctx = WhirlpoolContext.from(walletClient.getConnection(), vanityWallet, ORCA_WHIRLPOOL_PROGRAM_ID);
+    const walletAddress = new PublicKey(walletClient.getAddress());
 
     const positionMintAddress = new PublicKey(parameters.positionMintAddress);
     const client = buildWhirlpoolClient(ctx);
@@ -23,7 +17,13 @@ export async function closePosition(walletClient: SolanaWalletClient, parameters
     const position = await client.getPosition(positionAddress.publicKey);
     const whirlpoolAddress = position.getData().whirlpool;
     const whirlpool = await client.getPool(whirlpoolAddress);
-    const txBuilder = await whirlpool.closePosition(positionAddress.publicKey, Percentage.fromFraction(1, 100));
+    const txBuilder = await whirlpool.closePosition(
+        positionAddress.publicKey,
+        Percentage.fromFraction(1, 100),
+        walletAddress,
+        walletAddress,
+        walletAddress,
+    );
     const txPayload = await txBuilder[0].build();
     const txPayloadDecompiled = TransactionMessage.decompile((txPayload.transaction as VersionedTransaction).message);
     const instructions = txPayloadDecompiled.instructions;
@@ -36,6 +36,6 @@ export async function closePosition(walletClient: SolanaWalletClient, parameters
         });
         return hash;
     } catch (error) {
-        throw new Error(`Failed to create pool: ${JSON.stringify(error)}`);
+        throw new Error(`Failed to close position: ${JSON.stringify(error)}`);
     }
 }

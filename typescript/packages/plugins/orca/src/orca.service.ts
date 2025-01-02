@@ -1,11 +1,19 @@
 import { Tool } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { ClosePositionParameters, closePosition } from "./tools/closePosition";
-import { CreateCLMMParameters, createCLMM } from "./tools/createCLMM";
-import { CreateSingleSidedPoolParameters, createSingleSidedPool } from "./tools/createSingleSidedPool";
+import {
+    ClosePositionParameters,
+    CreateCLMMParameters,
+    CreateSingleSidedPoolParameters,
+    FetchPositionsByOwnerParameters,
+    OpenCenteredPositionParameters,
+    OpenSingleSidedPositionParameters,
+} from "./parameters";
+import { closePosition } from "./tools/closePosition";
+import { createCLMM } from "./tools/createCLMM";
+import { createSingleSidedPool } from "./tools/createSingleSidedPool";
 import { fetchPositionsByOwner } from "./tools/fetchPositionsByOwner";
-import { OpenCenteredPositionParameters, openCenteredPosition } from "./tools/openCenteredPosition";
-import { OpenSingleSidedPositionParameters, openSingleSidedPosition } from "./tools/openSingleSidedPosition";
+import { openCenteredPosition } from "./tools/openCenteredPosition";
+import { openSingleSidedPosition } from "./tools/openSingleSidedPosition";
 
 export const FEE_TIERS = {
     0.01: 1,
@@ -24,7 +32,7 @@ export class OrcaService {
         description: "Closes a Liquidity Position in an Orca Whirlpool.",
     })
     async closePosition(walletClient: SolanaWalletClient, parameters: ClosePositionParameters) {
-        await closePosition(walletClient, parameters);
+        return await closePosition(walletClient, parameters);
     }
 
     @Tool({
@@ -32,7 +40,7 @@ export class OrcaService {
             "Create a concentrated liquidity market maker (CLMM) pool on Orca. This function only initializes a new account with the pool state, but does not open a position with liquidity yet.",
     })
     async createCLMM(walletClient: SolanaWalletClient, parameters: CreateCLMMParameters) {
-        await createCLMM(walletClient, parameters);
+        return await createCLMM(walletClient, parameters);
     }
 
     @Tool({
@@ -40,15 +48,15 @@ export class OrcaService {
             "Create a single-sided liquidity pool on the Orca DEX. This function initializes a new pool with liquidity contributed from a single token, allowing users to define an initial price, a maximum price, and other parameters. The function ensures proper mint order and on-chain configuration for seamless execution. Ideal for setting up a pool with minimal price impact, it supports advanced features like adjustable fee tiers and precise initial price settings.",
     })
     async createSingleSidedPool(walletClient: SolanaWalletClient, parameters: CreateSingleSidedPoolParameters) {
-        await createSingleSidedPool(walletClient, parameters);
+        return await createSingleSidedPool(walletClient, parameters);
     }
 
     @Tool({
         description:
             "Fetches Liquidity Position by owner and returns if the positions are in range and the distance from the current price to the center price of the position in bps.",
     })
-    async fetchPositionsByOwner(walletClient: SolanaWalletClient) {
-        await fetchPositionsByOwner(walletClient);
+    async fetchPositionsByOwner(walletClient: SolanaWalletClient, parameters: FetchPositionsByOwnerParameters) {
+        return await fetchPositionsByOwner(walletClient, parameters);
     }
 
     @Tool({
@@ -56,7 +64,7 @@ export class OrcaService {
             "Add liquidity to a CLMM by opening a centered position in an Orca Whirlpool, the most efficient liquidity pool on Solana.",
     })
     async openCenteredPosition(walletClient: SolanaWalletClient, parameters: OpenCenteredPositionParameters) {
-        await openCenteredPosition(walletClient, parameters);
+        return await openCenteredPosition(walletClient, parameters);
     }
 
     @Tool({
@@ -64,6 +72,6 @@ export class OrcaService {
             "Add liquidity to a CLMM by opening a single-sided position in an Orca Whirlpool, the most efficient liquidity pool on Solana.",
     })
     async openSingleSidedPosition(walletClient: SolanaWalletClient, parameters: OpenSingleSidedPositionParameters) {
-        await openSingleSidedPosition(walletClient, parameters);
+        return await openSingleSidedPosition(walletClient, parameters);
     }
 }

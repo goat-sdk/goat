@@ -1,5 +1,4 @@
 import { Wallet } from "@coral-xyz/anchor";
-import { createToolParameters } from "@goat-sdk/core";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 import {
     ORCA_WHIRLPOOL_PROGRAM_ID,
@@ -10,20 +9,8 @@ import {
 } from "@orca-so/whirlpools-sdk";
 import { Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import { Decimal } from "decimal.js";
-import { z } from "zod";
 import { FEE_TIERS } from "../orca.service";
-
-export class CreateCLMMParameters extends createToolParameters(
-    z.object({
-        mintDeploy: z.string().describe("The mint of the token you want to deploy."),
-        mintPair: z.string().describe("The mint of the token you want to pair the deployed mint with."),
-        initialPrice: z.string().describe("The mint address of the other token in the pool, eg. USDC."),
-        feeTier: z.string().describe(
-            "The fee tier percentage for the pool, determining tick spacing and fee collection rates. \
-          Available fee tiers are 0.01, 0.02, 0.04, 0.05, 0.16, 0.30, 0.65, 1.0, 2.0",
-        ),
-    }),
-) {}
+import { CreateCLMMParameters } from "../parameters";
 
 export async function createCLMM(walletClient: SolanaWalletClient, parameters: CreateCLMMParameters) {
     let whirlpoolsConfigAddress: PublicKey;
@@ -87,7 +74,10 @@ export async function createCLMM(walletClient: SolanaWalletClient, parameters: C
             instructions: instructions,
             accountsToSign: signers,
         });
-        return hash;
+        return JSON.stringify({
+            transactionId: hash,
+            whirlpoolAddress: poolKey.toString(),
+        });
     } catch (error) {
         throw new Error(`Failed to create pool: ${JSON.stringify(error)}`);
     }
