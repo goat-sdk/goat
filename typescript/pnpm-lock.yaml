@@ -140,7 +140,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/coingecko
+        version: link:../../../packages/plugins/superfluid
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -376,7 +376,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/coingecko
+        version: link:../../../packages/plugins/superfluid
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
@@ -682,7 +682,7 @@ importers:
         version: link:../../../packages/core
       '@goat-sdk/plugin-coingecko':
         specifier: workspace:*
-        version: link:../../../packages/plugins/coingecko
+        version: link:../../../packages/plugins/superfluid
       '@goat-sdk/plugin-jupiter':
         specifier: workspace:*
         version: link:../../../packages/plugins/jupiter
@@ -1179,6 +1179,15 @@ importers:
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
+  packages/plugins/superfluid:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
       zod:
         specifier: 'catalog:'
         version: 3.23.8

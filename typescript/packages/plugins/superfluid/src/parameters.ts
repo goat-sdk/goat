@@ -1,41 +1,56 @@
 import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
-export class GetTrendingCoinsParameters extends createToolParameters(
+export class FlowParameters extends createToolParameters(
     z.object({
-        limit: z.number().optional().describe("The number of trending coins to return. Defaults to all coins."),
-        include_platform: z
-            .boolean()
-            .optional()
-            .describe("Include platform contract addresses (e.g., ETH, BSC) in response"),
+        token: z.string().describe("The address of the Super Token to get the flow of"),
+        receiver: z.string().describe("The address of the receiver of the flow"),
+        flowrate: z.string().describe("The flowrate of the flow"),
     }),
 ) {}
 
-export class GetCoinPriceParameters extends createToolParameters(
+export class GetFlowrateParameters extends createToolParameters(
     z.object({
-        coinId: z.string().describe("The ID of the coin on CoinGecko (e.g., 'bitcoin', 'ethereum')"),
-        vsCurrency: z
-            .string()
-            .default("usd")
-            .describe("The target currency to get price in (e.g., 'usd', 'eur', 'jpy')"),
-        includeMarketCap: z.boolean().optional().default(false).describe("Include market cap data in the response"),
-        include24hrVol: z.boolean().optional().default(false).describe("Include 24 hour volume data in the response"),
-        include24hrChange: z
-            .boolean()
-            .optional()
-            .default(false)
-            .describe("Include 24 hour price change data in the response"),
-        includeLastUpdatedAt: z
-            .boolean()
-            .optional()
-            .default(false)
-            .describe("Include last updated timestamp in the response"),
+        token: z.string().describe("The address of the Super Token to get the flow of"),
+        sender: z.string().describe("The address of the sender of the flow"),
+        receiver: z.string().describe("The address of the receiver of the flow"),
     }),
 ) {}
 
-export class SearchCoinsParameters extends createToolParameters(
+export class UpdateMemberUnitsParameters extends createToolParameters(
     z.object({
-        query: z.string().describe("The search query to find coins (e.g., 'bitcoin' or 'btc')"),
-        exact_match: z.boolean().optional().default(false).describe("Only return exact matches for the search query"),
+        poolAddress: z.string().describe("The address of the Pool contract"),
+        memberAddr: z.string().describe("The address of the member to update units for"),
+        newUnits: z.number().describe("The new units amount for the member"),
+    }),
+) {}
+
+export class GetUnitsParameters extends createToolParameters(
+    z.object({
+        poolAddress: z.string().describe("The address of the Pool contract"),
+        memberAddr: z.string().describe("The address of the member to get units for"),
+    }),
+) {}
+
+export class GetMemberFlowRateParameters extends createToolParameters(
+    z.object({
+        poolAddress: z.string().describe("The address of the Pool contract"),
+        memberAddr: z.string().describe("The address of the member to get flow rate for"),
+    }),
+) {}
+
+export class GetTotalFlowRateParameters extends createToolParameters(
+    z.object({
+        poolAddress: z.string().describe("The address of the Pool contract"),
+    }),
+) {}
+
+export class DeploySuperTokenWrapperParameters extends createToolParameters(
+    z.object({
+        underlyingToken: z.string().describe("The address of the contract to deploy the Super Token Wrapper for"),
+        underlyingDecimals: z.number().describe("The decimals of the underlying token"),
+        upgradability: z.enum(["0", "1", "2"]).describe("The upgradability of the Super Token Wrapper"),
+        name: z.string().describe("The name of the Super Token Wrapper"),
+        symbol: z.string().describe("The symbol of the Super Token Wrapper"),
     }),
 ) {}
