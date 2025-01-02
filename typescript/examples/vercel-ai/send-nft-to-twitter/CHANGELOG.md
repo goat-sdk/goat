@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-send-nft-to-twitter
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [1906022]
+  - @goat-sdk/adapter-vercel-ai@0.2.4
+
 ## 0.2.5
 
 ### Patch Changes

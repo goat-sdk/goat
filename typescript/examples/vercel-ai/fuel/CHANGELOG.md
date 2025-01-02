@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-fuel
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [1906022]
+  - @goat-sdk/adapter-vercel-ai@0.2.4
+
 ## 0.1.3
 
 ### Patch Changes

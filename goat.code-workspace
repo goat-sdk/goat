@@ -51,6 +51,10 @@
             "path": "./typescript/packages/plugins/polymarket"
         },
         {
+            "name": "[Plugin] 🌸 allora",
+            "path": "./typescript/packages/plugins/allora"
+        },
+        {
             "name": "[Plugin] 💰 coingecko",
             "path": "./typescript/packages/plugins/coingecko"
         },
@@ -65,6 +69,10 @@
         {
             "name": "[Plugin] 🪐 jupiter",
             "path": "./typescript/packages/plugins/jupiter"
+        },
+        {
+            "name": "[Plugin] ♏︎ jsonrpc",
+            "path": "./typescript/packages/plugins/jsonrpc"
         },
         {
             "name": "[Plugin] ⛽️ pumpfun",
@@ -99,6 +107,10 @@
             "path": "./typescript/packages/plugins/renzo"
         },
         {
+            "name": "[Plugin] 🗿 ironclad",
+            "path": "./typescript/packages/plugins/ironclad"
+        },
+        {
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },
@@ -109,6 +121,10 @@
         {
             "name": "[Plugin] 💰 superfluid",
             "path": "./typescript/packages/plugins/superfluid"
+        },
+        {
+            "name": "[Plugin] 🌍 zerodev-global-address",
+            "path": "./typescript/packages/plugins/zerodev-global-address"
         },
         // Wallets
         {

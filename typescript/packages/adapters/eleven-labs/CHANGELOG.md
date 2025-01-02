@@ -1,5 +1,11 @@
 # @goat-sdk/adapter-eleven-labs
 
+## 0.2.4
+
+### Patch Changes
+
+- 1906022: Fix zod versions
+
 ## 0.2.3
 
 ### Patch Changes

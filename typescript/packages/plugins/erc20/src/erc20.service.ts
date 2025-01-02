@@ -9,6 +9,7 @@ import {
     GetTokenBalanceParameters,
     GetTokenInfoBySymbolParameters,
     GetTokenTotalSupplyParameters,
+    RevokeApprovalParameters,
     TransferFromParameters,
     TransferParameters,
 } from "./parameters";
@@ -141,6 +142,25 @@ export class Erc20Service {
             return hash.hash;
         } catch (error) {
             throw Error(`Failed to approve: ${error}`);
+        }
+    }
+
+    @Tool({
+        description: "Revoke approval for an ERC20 token to an address",
+    })
+    async revokeApproval(walletClient: EVMWalletClient, parameters: RevokeApprovalParameters) {
+        try {
+            const spender = await walletClient.resolveAddress(parameters.spender);
+
+            const hash = await walletClient.sendTransaction({
+                to: parameters.tokenAddress,
+                abi: ERC20_ABI,
+                functionName: "approve",
+                args: [spender, 0],
+            });
+            return hash.hash;
+        } catch (error) {
+            throw Error(`Failed to revoke approval: ${error}`);
         }
     }
 

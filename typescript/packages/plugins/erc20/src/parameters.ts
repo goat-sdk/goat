@@ -44,6 +44,13 @@ export class ApproveParameters extends createToolParameters(
     }),
 ) {}
 
+export class RevokeApprovalParameters extends createToolParameters(
+    z.object({
+        tokenAddress: z.string().describe("The address of the token to revoke"),
+        spender: z.string().describe("The address to revoke the allowance to"),
+    }),
+) {}
+
 export class TransferFromParameters extends createToolParameters(
     z.object({
         tokenAddress: z.string().describe("The address of the token to transfer"),
