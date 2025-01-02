@@ -1,5 +1,12 @@
 # conversational-agent
 
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [1906022]
+  - @goat-sdk/adapter-eleven-labs@0.2.4
+
 ## 0.2.8
 
 ### Patch Changes

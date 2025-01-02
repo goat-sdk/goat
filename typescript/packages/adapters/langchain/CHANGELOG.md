@@ -1,5 +1,11 @@
 # @goat-sdk/adapter-langchain
 
+## 0.2.5
+
+### Patch Changes
+
+- 1906022: Fix zod versions
+
 ## 0.2.4
 
 ### Patch Changes
