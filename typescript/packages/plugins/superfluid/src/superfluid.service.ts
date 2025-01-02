@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { CFA_FORWARDER_ABI, SUPER_TOKEN_FACTORY_ABI, POOL_ABI } from "./abi";
+import { CFA_FORWARDER_ABI, POOL_ABI } from "./abi";
 import {
     FlowParameters,
     GetFlowrateParameters,
