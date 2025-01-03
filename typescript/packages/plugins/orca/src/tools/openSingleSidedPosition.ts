@@ -101,14 +101,14 @@ export async function openSingleSidedPosition(
         tokenExtensionCtx,
     );
     const { positionMint, tx: txBuilder } = await whirlpool.openPositionWithMetadata(
-            lowerTick,
-            upperTick,
-            increaseLiquiditQuote,
-            walletAddress,
-            walletAddress,
-            undefined,
-            TOKEN_2022_PROGRAM_ID,
-        );
+        lowerTick,
+        upperTick,
+        increaseLiquiditQuote,
+        walletAddress,
+        walletAddress,
+        undefined,
+        TOKEN_2022_PROGRAM_ID,
+    );
     const txPayload = await txBuilder.build();
     const txPayloadDecompiled = TransactionMessage.decompile((txPayload.transaction as VersionedTransaction).message);
     instructions = instructions.concat(txPayloadDecompiled.instructions);
