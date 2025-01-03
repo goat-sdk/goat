@@ -119,6 +119,10 @@
             "path": "./typescript/packages/plugins/opensea"
         },
         {
+            "name": "[Plugin] 💰 superfluid",
+            "path": "./typescript/packages/plugins/superfluid"
+        },
+        {
             "name": "[Plugin] 🌍 zerodev-global-address",
             "path": "./typescript/packages/plugins/zerodev-global-address"
         },

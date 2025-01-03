@@ -1,5 +1,5 @@
 {
-    "name": "@goat-sdk/plugin-ironclad",
+    "name": "@goat-sdk/plugin-superfluid",
     "version": "0.1.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -14,12 +14,10 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
-        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:"
+        "@goat-sdk/core": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
@@ -30,5 +28,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3", "defi", "lending"]
+    "keywords": ["ai", "agents", "web3"]
 }
