@@ -907,6 +907,18 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/coinmarketcap:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      zod:
+        specifier: ^3.22.4
+        version: 3.24.1
+
   packages/plugins/crossmint-headless-checkout:
     dependencies:
       '@crossmint/client-sdk-base':

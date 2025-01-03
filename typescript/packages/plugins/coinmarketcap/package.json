@@ -1,32 +1,32 @@
 {
-  "name": "@goat-sdk/plugin-coinmarketcap",
-  "version": "0.1.0",
-  "files": ["dist/**/*", "README.md", "package.json"],
-  "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
-    "clean": "rm -rf dist",
-    "test": "vitest run --passWithNoTests"
-  },
-  "sideEffects": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "@goat-sdk/core": "workspace:*",
-    "@goat-sdk/wallet-evm": "workspace:*",
-    "zod": "^3.22.4"
-  },
-  "peerDependencies": {
-    "@goat-sdk/core": "workspace:*"
-  },
-  "homepage": "https://ohmygoat.dev",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/goat-sdk/goat.git"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/goat-sdk/goat/issues"
-  },
-  "keywords": ["ai", "agents", "web3"]
+    "name": "@goat-sdk/plugin-coinmarketcap",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "zod": "^3.22.4"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*"
+    },
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3"]
 }
