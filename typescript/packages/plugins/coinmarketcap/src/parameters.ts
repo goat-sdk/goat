@@ -76,23 +76,9 @@ export const contentLatestParametersSchema = paginationSchema.extend({
     end_time: z.string().optional().describe("Timestamp (ISO 8601) to end returning content at"),
 });
 
-// Parameter classes for Tool decorator
-export const CryptocurrencyListingsParameters = createToolParameters(
-    cryptocurrencyListingsParametersSchema,
-);
-
-export const CryptocurrencyQuotesLatestParameters = createToolParameters(
-    cryptocurrencyQuotesLatestParametersSchema,
-);
-
-export const ExchangeListingsParameters = createToolParameters(
-    exchangeListingsParametersSchema,
-);
-
-export const ExchangeQuotesLatestParameters = createToolParameters(
-    exchangeQuotesLatestParametersSchema,
-);
-
-export const ContentLatestParameters = createToolParameters(
-    contentLatestParametersSchema,
-);
+// Parameter schemas for Tool decorator
+export const CryptocurrencyListingsParameters = cryptocurrencyListingsParametersSchema;
+export const CryptocurrencyQuotesLatestParameters = cryptocurrencyQuotesLatestParametersSchema;
+export const ExchangeListingsParameters = exchangeListingsParametersSchema;
+export const ExchangeQuotesLatestParameters = exchangeQuotesLatestParametersSchema;
+export const ContentLatestParameters = contentLatestParametersSchema;
