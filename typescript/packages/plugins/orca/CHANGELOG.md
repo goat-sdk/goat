@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-orca
 
+## 0.2.11
+
+### Patch Changes
+
+- 6d7bde5: Add tools to manage Orca pools
+
 ## 0.2.10
 
 ### Patch Changes
