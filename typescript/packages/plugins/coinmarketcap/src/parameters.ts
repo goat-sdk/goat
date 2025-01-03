@@ -77,37 +77,12 @@ export const contentLatestParametersSchema = paginationSchema.extend({
 });
 
 // Parameter classes for Tool decorator
-export class CryptocurrencyListingsParameters implements z.infer<typeof cryptocurrencyListingsParametersSchema> {
-    static readonly schema = cryptocurrencyListingsParametersSchema;
-    constructor(params: z.infer<typeof cryptocurrencyListingsParametersSchema>) {
-        Object.assign(this, params);
-    }
-}
+export const CryptocurrencyListingsParameters = createToolParameters(cryptocurrencyListingsParametersSchema);
 
-export class CryptocurrencyQuotesLatestParameters implements z.infer<typeof cryptocurrencyQuotesLatestParametersSchema> {
-    static readonly schema = cryptocurrencyQuotesLatestParametersSchema;
-    constructor(params: z.infer<typeof cryptocurrencyQuotesLatestParametersSchema>) {
-        Object.assign(this, params);
-    }
-}
+export const CryptocurrencyQuotesLatestParameters = createToolParameters(cryptocurrencyQuotesLatestParametersSchema);
 
-export class ExchangeListingsParameters implements z.infer<typeof exchangeListingsParametersSchema> {
-    static readonly schema = exchangeListingsParametersSchema;
-    constructor(params: z.infer<typeof exchangeListingsParametersSchema>) {
-        Object.assign(this, params);
-    }
-}
+export const ExchangeListingsParameters = createToolParameters(exchangeListingsParametersSchema);
 
-export class ExchangeQuotesLatestParameters implements z.infer<typeof exchangeQuotesLatestParametersSchema> {
-    static readonly schema = exchangeQuotesLatestParametersSchema;
-    constructor(params: z.infer<typeof exchangeQuotesLatestParametersSchema>) {
-        Object.assign(this, params);
-    }
-}
+export const ExchangeQuotesLatestParameters = createToolParameters(exchangeQuotesLatestParametersSchema);
 
-export class ContentLatestParameters implements z.infer<typeof contentLatestParametersSchema> {
-    static readonly schema = contentLatestParametersSchema;
-    constructor(params: z.infer<typeof contentLatestParametersSchema>) {
-        Object.assign(this, params);
-    }
-}
+export const ContentLatestParameters = createToolParameters(contentLatestParametersSchema);
