@@ -2,8 +2,6 @@ import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
 import { z } from "zod";
 import { ChromiaWalletClient } from "./ChromiaWalletClient";
-import { CHROMIA_MAINNET_BRID } from "./consts";
-import { CHR_ASSET_ID } from "./consts";
 
 export class SendCHRPlugin extends PluginBase<ChromiaWalletClient> {
     constructor() {
@@ -18,7 +16,7 @@ export class SendCHRPlugin extends PluginBase<ChromiaWalletClient> {
         const sendTool = createTool(
             {
                 name: "send_CHR",
-                description: "Send CHR to an address.",
+                description: "Send a Chromia asset to an address",
                 parameters: sendCHRParametersSchema,
             },
             (parameters: z.infer<typeof sendCHRParametersSchema>) => sendCHRMethod(walletClient, parameters),
@@ -30,8 +28,8 @@ export class SendCHRPlugin extends PluginBase<ChromiaWalletClient> {
 export const sendCHR = () => new SendCHRPlugin();
 
 const sendCHRParametersSchema = z.object({
-    to: z.string().describe("The address to send CHR to"),
-    amount: z.string().describe("The amount of CHR to send"),
+    to: z.string().describe("The address to send the Chromia asset to"),
+    amount: z.string().describe("The amount of the Chromia asset to send"),
 });
 
 async function sendCHRMethod(
@@ -40,15 +38,18 @@ async function sendCHRMethod(
 ): Promise<string> {
     try {
         const { to, amount } = parameters;
+        const { assetId, connection } = walletClient.params;
         const { receipt } = await walletClient.sendTransaction({
             to,
-            assetId: CHR_ASSET_ID,
+            assetId,
             amount,
         });
-        return `https://explorer.chromia.com/mainnet/${
-            CHROMIA_MAINNET_BRID.ECONOMY_CHAIN
-        }/transaction/${receipt.transactionRid.toString("hex")}`;
+
+        return `https://explorer.chromia.com/${walletClient.networkName}/${connection.blockchainRid.toString(
+            "hex",
+        )}/transaction/${receipt.transactionRid.toString("hex")}`;
     } catch (error) {
-        return `Error sending CHR: ${error}`;
+        console.error("Debug - Error Details:", error);
+        return `Error sending the Chromia asset. Ensure the recipient address, asset ID, and amount are correct. Details: ${error}`;
     }
 }
