@@ -1,3 +1,4 @@
+import type { Signature } from "@goat-sdk/core";
 import { SuiClient, type SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 import { type Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
@@ -19,7 +20,6 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
 
     async sendTransaction(transaction: SuiTransaction): Promise<Transaction> {
         const txb = new TransactionBlock();
-        
         // Create a transfer transaction
         txb.transferObjects([txb.gas], txb.pure(transaction.to));
 
@@ -46,7 +46,13 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
         return result;
     }
 
-    async getAddress(): Promise<string> {
+    getAddress(): string {
         return this.keypair.getPublicKey().toSuiAddress();
+    }
+
+    async signMessage(message: string): Promise<Signature> {
+        const signatureArray = await this.keypair.sign(new TextEncoder().encode(message));
+        const signature = Buffer.from(signatureArray).toString("base64");
+        return { signature };
     }
 }

@@ -14,6 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@mysten/sui.js": "^0.47.0",
+        "@types/node": "^20.0.0",
         "zod": "catalog:"
     },
     "peerDependencies": {
