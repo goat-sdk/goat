@@ -1453,6 +1453,18 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/wallets/sui:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@mysten/sui.js':
+        specifier: ^0.47.0
+        version: 0.47.0
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/wallets/viem:
     dependencies:
       '@goat-sdk/wallet-evm':
@@ -4369,6 +4381,14 @@ packages:
     resolution: {integrity: sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==}
     engines: {node: '>= 14'}
 
+  '@mysten/bcs@0.8.1':
+    resolution: {integrity: sha512-wSEdP7QEfGQdb34g+7R0f3OdRqrv88iIABfJVDVJ6IsGLYVILreh8dZfNpZNUUyzctiyhX7zB9e/lR5qkddFPA==}
+
+  '@mysten/sui.js@0.47.0':
+    resolution: {integrity: sha512-WBHNX5eMirpwd7v6im25r+I8a/GfYUX03jS9bIr7hei3NnUMcfOENOn9+Tv3+MURQ1MzdS0PzeZkuYrvQlVBCw==}
+    engines: {node: '>=16'}
+    deprecated: This package has been renamed to @mysten/sui, please update to use the renamed package.
+
   '@next/env@15.0.3':
     resolution: {integrity: sha512-t9Xy32pjNOvVn2AS+Utt6VmyrshbpfUMhIjFO60gI58deSo/KgLOp31XZ4O+kY/Is8WAGYwA5gR7kOb1eORDBA==}
 
@@ -5212,6 +5232,9 @@ packages:
 
   '@stablelib/x25519@1.0.3':
     resolution: {integrity: sha512-KnTbKmUhPhHavzobclVJQG5kuivH+qDLpe84iRqX3CLrKp881cF160JvXJ+hjn1aMyCwYOKeIZefIH/P5cJoRw==}
+
+  '@suchipi/femver@1.0.0':
+    resolution: {integrity: sha512-bprE8+K5V+DPX7q2e2K57ImqNBdfGHDIWaGI5xHxZoxbKOuQZn4wzPiUxOAHnsUr3w3xHrWXwN7gnG/iIuEMIg==}
 
   '@swc/core-darwin-arm64@1.10.1':
     resolution: {integrity: sha512-NyELPp8EsVZtxH/mEqvzSyWpfPJ1lugpTQcSlMduZLj1EASLO4sC8wt8hmL1aizRlsbjCX+r0PyL+l0xQ64/6Q==}
@@ -16085,6 +16108,21 @@ snapshots:
 
   '@msgpack/msgpack@3.0.0-beta2': {}
 
+  '@mysten/bcs@0.8.1':
+    dependencies:
+      bs58: 5.0.0
+
+  '@mysten/sui.js@0.47.0':
+    dependencies:
+      '@mysten/bcs': 0.8.1
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.1
+      '@scure/bip32': 1.6.0
+      '@scure/bip39': 1.5.0
+      '@suchipi/femver': 1.0.0
+      superstruct: 1.0.4
+      tweetnacl: 1.0.3
+
   '@next/env@15.0.3': {}
 
   '@next/swc-darwin-arm64@15.0.3':
@@ -17335,6 +17373,8 @@ snapshots:
       '@stablelib/keyagreement': 1.0.1
       '@stablelib/random': 1.0.2
       '@stablelib/wipe': 1.0.1
+
+  '@suchipi/femver@1.0.0': {}
 
   '@swc/core-darwin-arm64@1.10.1':
     optional: true
