@@ -96,6 +96,17 @@ export const WETH: Token = {
     },
 };
 
+export const USDT_t: Token = {
+    decimals: 6,
+    symbol: "USDT_t",
+    name: "Tether USD_TRON",
+    chains: {
+        "199": {
+            contractAddress: "0xdb28719f7f938507dbfe4f0eae55668903d34a15",
+        },
+    },
+};
+
 export function getTokensForNetwork(chainId: number, tokens: Token[]): ChainSpecificToken[] {
     const result: ChainSpecificToken[] = [];
 
