@@ -77,12 +77,22 @@ export const contentLatestParametersSchema = paginationSchema.extend({
 });
 
 // Parameter classes for Tool decorator
-export const CryptocurrencyListingsParameters = createToolParameters(cryptocurrencyListingsParametersSchema);
+export const CryptocurrencyListingsParameters = createToolParameters(
+    cryptocurrencyListingsParametersSchema,
+);
 
-export const CryptocurrencyQuotesLatestParameters = createToolParameters(cryptocurrencyQuotesLatestParametersSchema);
+export const CryptocurrencyQuotesLatestParameters = createToolParameters(
+    cryptocurrencyQuotesLatestParametersSchema,
+);
 
-export const ExchangeListingsParameters = createToolParameters(exchangeListingsParametersSchema);
+export const ExchangeListingsParameters = createToolParameters(
+    exchangeListingsParametersSchema,
+);
 
-export const ExchangeQuotesLatestParameters = createToolParameters(exchangeQuotesLatestParametersSchema);
+export const ExchangeQuotesLatestParameters = createToolParameters(
+    exchangeQuotesLatestParametersSchema,
+);
 
-export const ContentLatestParameters = createToolParameters(contentLatestParametersSchema);
+export const ContentLatestParameters = createToolParameters(
+    contentLatestParametersSchema,
+);
