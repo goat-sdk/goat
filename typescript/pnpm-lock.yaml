@@ -1461,6 +1461,9 @@ importers:
       '@mysten/sui.js':
         specifier: ^0.47.0
         version: 0.47.0
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.17.11
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -5448,6 +5451,9 @@ packages:
 
   '@types/node@18.19.69':
     resolution: {integrity: sha512-ECPdY1nlaiO/Y6GUnwgtAAhLNaQ53AyIVz+eILxpEo5OvuqE6yWkqWBIb5dU0DqhKQtMeny+FBD3PK6lm7L5xQ==}
+
+  '@types/node@20.17.11':
+    resolution: {integrity: sha512-Ept5glCK35R8yeyIeYlRIZtX6SLRyqMhOFTgj5SOkMpLTdw3SEHI9fHx60xaUZ+V1aJxQJODE+7/j5ocZydYTg==}
 
   '@types/node@22.10.3':
     resolution: {integrity: sha512-DifAyw4BkrufCILvD3ucnuN8eydUfc/C1GlyrnI+LK6543w5/L3VeVgf05o3B4fqSXP1dKYLOZsKfutpxPzZrw==}
@@ -17638,6 +17644,10 @@ snapshots:
   '@types/node@18.19.69':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/node@20.17.11':
+    dependencies:
+      undici-types: 6.19.8
 
   '@types/node@22.10.3':
     dependencies:
