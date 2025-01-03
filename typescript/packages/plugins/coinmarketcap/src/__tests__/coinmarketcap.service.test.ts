@@ -1,6 +1,6 @@
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { describe, expect, it } from "vitest";
 import { CoinmarketcapService } from "../coinmarketcap.service";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 
 describe("CoinmarketcapService", () => {
     // Set NODE_ENV to test to use sandbox API
