@@ -77,22 +77,37 @@ export const contentLatestParametersSchema = paginationSchema.extend({
 });
 
 // Parameter classes for Tool decorator
-export class CryptocurrencyListingsParameters extends createToolParameters(cryptocurrencyListingsParametersSchema) {
+export class CryptocurrencyListingsParameters implements z.infer<typeof cryptocurrencyListingsParametersSchema> {
     static readonly schema = cryptocurrencyListingsParametersSchema;
+    constructor(params: z.infer<typeof cryptocurrencyListingsParametersSchema>) {
+        Object.assign(this, params);
+    }
 }
 
-export class CryptocurrencyQuotesLatestParameters extends createToolParameters(cryptocurrencyQuotesLatestParametersSchema) {
+export class CryptocurrencyQuotesLatestParameters implements z.infer<typeof cryptocurrencyQuotesLatestParametersSchema> {
     static readonly schema = cryptocurrencyQuotesLatestParametersSchema;
+    constructor(params: z.infer<typeof cryptocurrencyQuotesLatestParametersSchema>) {
+        Object.assign(this, params);
+    }
 }
 
-export class ExchangeListingsParameters extends createToolParameters(exchangeListingsParametersSchema) {
+export class ExchangeListingsParameters implements z.infer<typeof exchangeListingsParametersSchema> {
     static readonly schema = exchangeListingsParametersSchema;
+    constructor(params: z.infer<typeof exchangeListingsParametersSchema>) {
+        Object.assign(this, params);
+    }
 }
 
-export class ExchangeQuotesLatestParameters extends createToolParameters(exchangeQuotesLatestParametersSchema) {
+export class ExchangeQuotesLatestParameters implements z.infer<typeof exchangeQuotesLatestParametersSchema> {
     static readonly schema = exchangeQuotesLatestParametersSchema;
+    constructor(params: z.infer<typeof exchangeQuotesLatestParametersSchema>) {
+        Object.assign(this, params);
+    }
 }
 
-export class ContentLatestParameters extends createToolParameters(contentLatestParametersSchema) {
+export class ContentLatestParameters implements z.infer<typeof contentLatestParametersSchema> {
     static readonly schema = contentLatestParametersSchema;
+    constructor(params: z.infer<typeof contentLatestParametersSchema>) {
+        Object.assign(this, params);
+    }
 }
