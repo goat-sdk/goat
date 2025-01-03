@@ -18,7 +18,7 @@ export const CHROMIA_CONFIG = {
             "https://chromia-mainnet-system-node.asymm.ventures:7740",
             "https://chr.bbbnnnbbb.net:443",
             "https://chromia-system-node.moca-services.xyz:7740",
-            "https://chromia-mainnet-system.dwellir.com:443"
+            "https://chromia-mainnet-system.dwellir.com:443",
         ],
     },
     testnet: {
@@ -29,7 +29,7 @@ export const CHROMIA_CONFIG = {
             "https://node0.testnet.chromia.com:7740",
             "https://node1.testnet.chromia.com:7740",
             "https://node2.testnet.chromia.com:7740",
-            "https://node3.testnet.chromia.com:7740"
+            "https://node3.testnet.chromia.com:7740",
         ],
     },
 };

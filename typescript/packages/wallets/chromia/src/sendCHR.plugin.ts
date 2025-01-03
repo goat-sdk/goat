@@ -44,12 +44,12 @@ async function sendCHRMethod(
             assetId,
             amount,
         });
-    
-        return `https://explorer.chromia.com/${walletClient.networkName}/${
-            connection.blockchainRid.toString("hex")
-        }/transaction/${receipt.transactionRid.toString("hex")}`;
+
+        return `https://explorer.chromia.com/${walletClient.networkName}/${connection.blockchainRid.toString(
+            "hex",
+        )}/transaction/${receipt.transactionRid.toString("hex")}`;
     } catch (error) {
         console.error("Debug - Error Details:", error);
         return `Error sending the Chromia asset. Ensure the recipient address, asset ID, and amount are correct. Details: ${error}`;
-    }    
+    }
 }

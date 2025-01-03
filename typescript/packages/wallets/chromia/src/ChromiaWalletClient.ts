@@ -30,7 +30,7 @@ export class ChromiaWalletClient extends WalletClientBase {
 
         if (!network) {
             throw new Error(
-                `Unknown directoryChainRid: ${directoryChainRid}. Ensure the client is configured correctly.`
+                `Unknown directoryChainRid: ${directoryChainRid}. Ensure the client is configured correctly.`,
             );
         }
 
@@ -62,7 +62,7 @@ export class ChromiaWalletClient extends WalletClientBase {
         if (!asset) {
             throw new Error(`Asset ${assetId} not found on Blockchain RID: ${connection.blockchainRid}`);
         }
-       
+
         const amountToSend = createAmount(amount, asset.decimals);
         return await session.account.transfer(to, assetId, amountToSend);
     }
