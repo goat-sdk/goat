@@ -87,6 +87,10 @@
             "path": "./typescript/packages/plugins/mode-governance"
         },
         {
+            "name": "[Plugin] 📊 mode voting",
+            "path": "./typescript/packages/plugins/mode-voting"
+        },
+        {
             "name": "[Plugin] ☄️ meteora",
             "path": "./typescript/packages/plugins/meteora"
         },
