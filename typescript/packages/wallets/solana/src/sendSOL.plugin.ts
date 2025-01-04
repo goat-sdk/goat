@@ -44,10 +44,11 @@ async function sendSOLMethod(
 
         const senderAddress = walletClient.getAddress();
         const lamports = parseUnits(amount, 9);
+        const resolvedReceiverAddress = await walletClient.resolveAddress(to);
 
         const transferInstruction = SystemProgram.transfer({
             fromPubkey: new PublicKey(senderAddress),
-            toPubkey: new PublicKey(to),
+            toPubkey: new PublicKey(resolvedReceiverAddress),
             lamports,
         });
 

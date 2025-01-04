@@ -12,6 +12,8 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "@bonfida/spl-name-service": "^3.0.7",
+        "bs58": "^6.0.0",
         "@goat-sdk/core": "workspace:*",
         "@solana/web3.js": "catalog:",
         "tweetnacl": "^1.0.3",

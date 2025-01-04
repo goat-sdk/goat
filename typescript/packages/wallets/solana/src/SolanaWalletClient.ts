@@ -8,6 +8,8 @@ import {
 } from "@solana/web3.js";
 import { formatUnits } from "viem";
 import type { SolanaTransaction } from "./types";
+import { resolve } from "@bonfida/spl-name-service";
+import bs58 from "bs58";
 
 export type SolanWalletClientCtorParams = {
     connection: Connection;
@@ -32,7 +34,8 @@ export abstract class SolanaWalletClient extends WalletClientBase {
     }
 
     async balanceOf(address: string) {
-        const pubkey = new PublicKey(address);
+        const resolvedAddress = await this.resolveAddress(address);
+        const pubkey = new PublicKey(resolvedAddress);
         const balance = await this.connection.getBalance(pubkey);
 
         return {
@@ -62,8 +65,6 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         return TransactionMessage.decompile(versionedTransaction.message, decompileArgs).instructions;
     }
 
-    abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;
-
     protected async getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
         const addressLookupTableAccountInfos = await this.connection.getMultipleAccountsInfo(
             keys.map((key) => new PublicKey(key)),
@@ -82,4 +83,14 @@ export abstract class SolanaWalletClient extends WalletClientBase {
             return acc;
         }, new Array<AddressLookupTableAccount>());
     }
+
+    async resolveAddress(address: string): Promise<string> {
+        if (!bs58.decodeUnsafe(address)) {
+            const publicKey = await resolve(this.connection, address);
+            return publicKey.toBase58();
+        }
+        return address;
+    }
+
+    abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;
 }
