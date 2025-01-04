@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-fuel
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [50180d4]
+  - @goat-sdk/core@0.4.4
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.4
+
+### Patch Changes
+
+- 50180d4: Add Sui support
+
 ## 0.4.3
 
 ### Patch Changes

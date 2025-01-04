@@ -1,5 +1,12 @@
 # @goat-sdk/adapter-vercel-ai
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [50180d4]
+  - @goat-sdk/core@0.4.4
+
 ## 0.2.4
 
 ### Patch Changes

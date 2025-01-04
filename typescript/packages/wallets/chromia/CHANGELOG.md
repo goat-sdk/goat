@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-chromia
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [50180d4]
+  - @goat-sdk/core@0.4.4
+
 ## 0.2.5
 
 ### Patch Changes
