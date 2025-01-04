@@ -1,5 +1,5 @@
 ---
-"@goat-sdk/plugin-dexscreener": minor
+"@goat-sdk/plugin-dexscreener": patch
 ---
 
 feat: add dexscreener plugin with rate-limited API tools for DEX pair data
