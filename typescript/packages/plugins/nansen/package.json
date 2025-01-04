@@ -1,0 +1,25 @@
+{
+  "name": "@goat-sdk/plugin-nansen",
+  "version": "0.0.1",
+  "description": "Nansen API plugin for GOAT SDK",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "biome check src",
+    "lint:fix": "biome check --apply src"
+  },
+  "dependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@goat-sdk/core": "workspace:*"
+  }
+}
