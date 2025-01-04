@@ -1,11 +1,12 @@
-import { type SuiClient } from "@mysten/sui.js/client";
+import { type SuiClient, type SuiObjectResponse } from "@mysten/sui.js/client";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 
-export type AwesomeChainResponse = unknown;
+export type SuiReadResponse = SuiObjectResponse & {
+    object: SuiObjectResponse["data"];
+};
 
 export type SuiTransaction = {
-    to: string;
-    amount: string;
-    // Add other transaction parameters as needed
+    transactionBlock: TransactionBlock;
 };
 
 export type Transaction = {

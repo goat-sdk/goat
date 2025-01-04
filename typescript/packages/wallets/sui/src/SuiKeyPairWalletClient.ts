@@ -3,7 +3,7 @@ import { SuiClient, type SuiTransactionBlockResponse } from "@mysten/sui.js/clie
 import { type Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { SuiWalletClient } from "./SuiWalletClient";
-import type { AwesomeChainResponse, SuiQuery, SuiTransaction, Transaction } from "./types";
+import type { SuiQuery, SuiReadResponse, SuiTransaction, Transaction } from "./types";
 
 export type SuiKeyPairWalletClientParams = {
     client: SuiClient;
@@ -18,10 +18,8 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
         this.keypair = params.keypair;
     }
 
-    async sendTransaction(transaction: SuiTransaction): Promise<Transaction> {
-        const txb = new TransactionBlock();
-        // Create a transfer transaction
-        txb.transferObjects([txb.gas], txb.pure(transaction.to));
+    async sendTransaction(transaction: SuiTransaction) {
+        const txb = transaction.transactionBlock;
 
         // Sign and execute the transaction
         const result = await this.client.signAndExecuteTransactionBlock({
@@ -34,7 +32,7 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
         };
     }
 
-    async read(query: SuiQuery): Promise<AwesomeChainResponse> {
+    async read(query: SuiQuery): Promise<SuiReadResponse> {
         // Use dynamic field or object read based on the query
         const result = await this.client.getObject({
             id: query.contractAddress,
@@ -43,7 +41,10 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
             },
         });
 
-        return result;
+        return {
+            object: result.data,
+            ...result,
+        };
     }
 
     getAddress(): string {
