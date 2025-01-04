@@ -1247,8 +1247,8 @@ importers:
         specifier: workspace:*
         version: link:../../core
       zod:
-        specifier: ^3.0.0
-        version: 3.24.1
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/plugins/solana-magiceden:
     dependencies:
