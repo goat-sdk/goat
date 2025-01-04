@@ -1,8 +1,9 @@
 {
     "private": true,
-    "name": "goat-repo",
+    "name": "goat-typescript",
     "version": "0.1.1",
     "scripts": {
+        "prepare": "cd .. && pnpm install && cd typescript",
         "build": "pnpm turbo build",
         "build:libs": "pnpm turbo --filter \"./packages/**\" build",
         "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",

@@ -63,6 +63,10 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
+            "name": "[Plugin] 🧢 coinmarketcap",
+            "path": "./typescript/packages/plugins/coinmarketcap"
+        },
+        {
             "name": "[Plugin] 📡 farcaster",
             "path": "./typescript/packages/plugins/farcaster"
         },
@@ -146,6 +150,10 @@
         {
             "name": "[Wallet] 🌞 solana",
             "path": "./typescript/packages/wallets/solana"
+        },
+        {
+            "name": "[Wallet] 💧 sui",
+            "path": "./typescript/packages/wallets/sui"
         },
         {
             "name": "[Wallet] 🪨 evm",
