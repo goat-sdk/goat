@@ -59,6 +59,10 @@
             "path": "./typescript/packages/plugins/coingecko"
         },
         {
+            "name": "[Plugin] 🧢 coinmarketcap",
+            "path": "./typescript/packages/plugins/coinmarketcap"
+        },
+        {
             "name": "[Plugin] 📡 farcaster",
             "path": "./typescript/packages/plugins/farcaster"
         },

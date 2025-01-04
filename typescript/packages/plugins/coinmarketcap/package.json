@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
-        "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+        "build": "tsup",
         "clean": "rm -rf dist",
         "test": "vitest run --passWithNoTests"
     },
@@ -13,7 +13,6 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-evm": "workspace:*",
         "zod": "catalog:"
     },
     "peerDependencies": {
