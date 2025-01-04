@@ -898,6 +898,18 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/birdeye:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/coingecko:
     dependencies:
       '@goat-sdk/core':
