@@ -1,15 +1,15 @@
 import { type SuiClient, type SuiObjectResponse } from "@mysten/sui.js/client";
-import { Transaction } from "@mysten/sui.js/transactions";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 
 export type SuiReadResponse = SuiObjectResponse & {
     object: SuiObjectResponse["data"];
 };
 
 export type SuiTransaction = {
-    transaction: Transaction;
+    transactionBlock: Uint8Array | TransactionBlock;
 };
 
-export type Transaction = {
+export type TransactionResponse = {
     hash: string;
     // Add other transaction response fields as needed
 };

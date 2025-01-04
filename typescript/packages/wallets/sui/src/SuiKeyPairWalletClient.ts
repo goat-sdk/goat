@@ -1,9 +1,9 @@
 import type { Signature } from "@goat-sdk/core";
 import { SuiClient, type SuiTransactionBlockResponse } from "@mysten/sui.js/client";
 import { type Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { Transaction } from "@mysten/sui.js/transactions";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { SuiWalletClient } from "./SuiWalletClient";
-import type { SuiQuery, SuiReadResponse, SuiTransaction, Transaction } from "./types";
+import type { SuiQuery, SuiReadResponse, SuiTransaction, TransactionResponse } from "./types";
 
 export type SuiKeyPairWalletClientParams = {
     client: SuiClient;
@@ -19,11 +19,17 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
     }
 
     async sendTransaction(transaction: SuiTransaction) {
-        const result = await this.client.signAndExecuteTransaction({
-            transaction: transaction.transaction,
+        const result = await this.client.signAndExecuteTransactionBlock({
+            transactionBlock: transaction.transactionBlock,
             signer: this.keypair,
+            options: {
+                showEffects: true,
+            },
         });
-        await this.client.waitForTransaction({ digest: result.digest });
+        await this.client.waitForTransactionBlock({
+            digest: result.digest,
+            options: { showEffects: true },
+        });
         return { hash: result.digest };
     }
 
