@@ -20,16 +20,13 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
 
     async sendTransaction(transaction: SuiTransaction) {
         const txb = transaction.transactionBlock;
-
-        // Sign and execute the transaction
         const result = await this.client.signAndExecuteTransactionBlock({
             transactionBlock: txb,
             signer: this.keypair,
         });
-
-        return {
-            hash: result.digest,
-        };
+        // Wait for transaction completion
+        await this.client.waitForTransactionBlock({ digest: result.digest });
+        return { hash: result.digest };
     }
 
     async read(query: SuiQuery): Promise<SuiReadResponse> {
