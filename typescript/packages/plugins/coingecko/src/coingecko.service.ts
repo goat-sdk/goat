@@ -1,11 +1,11 @@
 import { Tool } from "@goat-sdk/core";
 import {
     GetCoinDataParameters,
+    GetCoinPriceByContractAddressParameters,
     GetCoinPriceParameters,
     GetHistoricalDataParameters,
     GetOHLCParameters,
     GetSupportedCoinsParameters,
-    GetTokenPriceParameters,
     GetTrendingCoinsParameters,
     SearchCoinsParameters,
 } from "./parameters";
@@ -44,20 +44,19 @@ export class CoinGeckoService {
         description: "Search for coins by keyword",
     })
     async searchCoins(parameters: SearchCoinsParameters) {
-        const { query, exact_match } = parameters;
+        const { query } = parameters;
         return coingeckoRequest(
             buildUrl(`${COINGECKO_API_BASE_URL}/search`, {
                 query,
-                exact_match,
             }),
             this.apiKey,
         );
     }
 
     @Tool({
-        description: "Get coin price by token contract address",
+        description: "Get coin price by contract address",
     })
-    async getTokenPrice(parameters: GetTokenPriceParameters) {
+    async getCoinPriceByContractAddress(parameters: GetCoinPriceByContractAddressParameters) {
         const {
             id,
             contractAddresses,
@@ -70,7 +69,7 @@ export class CoinGeckoService {
 
         return coingeckoRequest(
             buildUrl(`${COINGECKO_API_BASE_URL}/simple/token_price/${id}`, {
-                contract_addresses: contractAddresses,
+                contract_addresses: contractAddresses.join(","),
                 vs_currencies: vsCurrency,
                 include_market_cap: includeMarketCap,
                 include_24hr_vol: include24hrVol,
@@ -82,7 +81,7 @@ export class CoinGeckoService {
     }
 
     @Tool({
-        description: "Get detailed coin data by ID",
+        description: "Get detailed coin data by ID (including market data, community data, developer stats, and more)",
     })
     async getCoinData(parameters: GetCoinDataParameters) {
         const { id, localization, tickers, marketData, communityData, developerData, sparkline } = parameters;
