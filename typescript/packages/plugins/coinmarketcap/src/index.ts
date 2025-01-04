@@ -1,12 +1,11 @@
 import { type Chain, PluginBase } from "@goat-sdk/core";
-import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { CoinmarketcapService } from "./coinmarketcap.service";
 
 export interface CoinmarketcapOptions {
     apiKey: string;
 }
 
-export class CoinmarketcapPlugin extends PluginBase<EVMWalletClient> {
+export class CoinmarketcapPlugin extends PluginBase {
     constructor(private readonly options: CoinmarketcapOptions) {
         super("coinmarketcap", [new CoinmarketcapService(options)]);
     }

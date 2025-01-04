@@ -12,10 +12,7 @@ import type {
     ExchangeQuotesLatestParameters,
 } from "./parameters";
 
-const BASE_URL =
-    process.env.NODE_ENV === "test"
-        ? "https://sandbox-api.coinmarketcap.com/v1"
-        : "https://pro-api.coinmarketcap.com/v1";
+const BASE_URL = "https://pro-api.coinmarketcap.com/v1";
 
 export interface ApiResponse<T> {
     data: T;
