@@ -1,13 +1,11 @@
 import { Tool } from "@goat-sdk/core";
-import type { z } from "zod";
 import {
-    GetAddressDetailsParams,
-    GetEntityDetailsParams,
-    GetExchangeFlowsParams,
     GetNFTDetailsParams,
-    GetSignalParams,
+    GetNFTTradesParams,
     GetSmartMoneyParams,
     GetTokenDetailsParams,
+    GetTokenTradesParams,
+    GetTradingSignalParams,
 } from "./parameters";
 
 export class NansenService {
@@ -27,69 +25,62 @@ export class NansenService {
     }
 
     @Tool({
-        description: "Get details for a specific address from Nansen",
-    })
-    async getAddressDetails(parameters: z.infer<typeof GetAddressDetailsParams.schema>) {
-        const { address } = parameters;
-        return this.fetchNansen(`/address/${address}`);
-    }
-
-    @Tool({
-        description: "Get transactions for a specific address from Nansen",
-    })
-    async getAddressTransactions(parameters: z.infer<typeof GetAddressDetailsParams.schema>) {
-        const { address } = parameters;
-        return this.fetchNansen(`/address/${address}/transactions`);
-    }
-
-    @Tool({
+        name: "nansen.getTokenDetails",
         description: "Get details for a specific token from Nansen",
     })
-    async getTokenDetails(parameters: z.infer<typeof GetTokenDetailsParams.schema>) {
-        const { address, chain } = parameters;
-        return this.fetchNansen(`/token/${chain}/${address}`);
+    async getTokenDetails(parameters: GetTokenDetailsParams) {
+        const { address } = parameters;
+        return this.fetchNansen(`/token?address=${address}`);
     }
 
     @Tool({
+        name: "nansen.getTokenTrades",
+        description: "Get trades for a specific token from Nansen",
+    })
+    async getTokenTrades(parameters: GetTokenTradesParams) {
+        const { address, start_date, end_date } = parameters;
+        const queryParams = `?address=${address}&start_date=${start_date}&end_date=${end_date}`;
+        return this.fetchNansen(`/token/dex_trades${queryParams}`);
+    }
+
+    @Tool({
+        name: "nansen.getNFTDetails",
         description: "Get details for a specific NFT collection or token from Nansen",
     })
-    async getNFTDetails(parameters: z.infer<typeof GetNFTDetailsParams.schema>) {
-        const { address, chain, tokenId } = parameters;
-        const endpoint = tokenId ? `/nft/${chain}/${address}/${tokenId}` : `/nft/${chain}/${address}`;
-        return this.fetchNansen(endpoint);
+    async getNFTDetails(parameters: GetNFTDetailsParams) {
+        const { token_address, nft_id } = parameters;
+        const queryParams = `?token_address=${token_address}&nft_id=${nft_id}`;
+        return this.fetchNansen(`/nft${queryParams}`);
     }
 
     @Tool({
-        description: "Check if an address is considered 'smart money' by Nansen",
+        name: "nansen.getNFTTrades",
+        description: "Get trades for a specific NFT collection or token from Nansen",
     })
-    async getSmartMoneyStatus(parameters: z.infer<typeof GetSmartMoneyParams.schema>) {
-        const { address, chain } = parameters;
-        return this.fetchNansen(`/smart-money/${chain}/${address}`);
+    async getNFTTrades(parameters: GetNFTTradesParams) {
+        const { token_address, nft_id, start_date, end_date } = parameters;
+        const queryParams = `?token_address=${token_address}&nft_id=${nft_id}&start_date=${start_date}&end_date=${end_date}`;
+        return this.fetchNansen(`/nft/trades${queryParams}`);
     }
 
     @Tool({
-        description: "Get details for a specific entity from Nansen",
+        description: "Get the flows of tokens associated with smart money addresses",
     })
-    async getEntityDetails(parameters: z.infer<typeof GetEntityDetailsParams.schema>) {
-        const { entityId } = parameters;
-        return this.fetchNansen(`/entity/${entityId}`);
+    async getSmartMoneyStatus(parameters: GetSmartMoneyParams) {
+        const { start_date, end_date, token_address } = parameters;
+        const queryParams = `?start_date=${start_date}&end_date=${end_date}`;
+        const tokenParam = token_address ? `&token_address=${token_address}` : "";
+        return this.fetchNansen(`/token_flows${queryParams}${tokenParam}`);
     }
 
     @Tool({
-        description: "Get token flow data for a specific exchange",
+        name: "nansen.getTradingSignal",
+        description: "Get trading signals and alerts based on onchain data and patterns",
     })
-    async getExchangeFlows(parameters: z.infer<typeof GetExchangeFlowsParams.schema>) {
-        const { exchange, token, timeframe } = parameters;
-        const tokenParam = token ? `&token=${token}` : "";
-        return this.fetchNansen(`/exchange/${exchange}/flows?timeframe=${timeframe}${tokenParam}`);
-    }
-
-    @Tool({
-        description: "Get data for a specific Nansen signal",
-    })
-    async getSignal(parameters: z.infer<typeof GetSignalParams.schema>) {
-        const { signalId, parameters: signalParams } = parameters;
-        const queryParams = signalParams ? `?${new URLSearchParams(signalParams as Record<string, string>)}` : "";
-        return this.fetchNansen(`/signal/${signalId}${queryParams}`);
+    async getTradingSignal(parameters: GetTradingSignalParams) {
+        const { start_date, end_date, token_address } = parameters;
+        const queryParams = `?start_date=${start_date}&end_date=${end_date}`;
+        const tokenParam = token_address ? `&token_address=${token_address}` : "";
+        return this.fetchNansen(`/signals${queryParams}${tokenParam}`);
     }
 }

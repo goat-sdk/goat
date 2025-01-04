@@ -99,6 +99,10 @@
             "path": "./typescript/packages/plugins/meteora"
         },
         {
+            "name": "[Plugin] 📈 nansen",
+            "path": "./typescript/packages/plugins/nansen"
+        },
+        {
             "name": "[Plugin] 🪙 spl token",
             "path": "./typescript/packages/plugins/spl-token"
         },

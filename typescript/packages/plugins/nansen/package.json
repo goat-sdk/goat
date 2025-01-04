@@ -1,25 +1,31 @@
 {
     "name": "@goat-sdk/plugin-nansen",
-    "version": "0.0.1",
-    "description": "Nansen API plugin for GOAT SDK",
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
-        "dev": "tsup --watch",
-        "lint": "biome check src",
-        "lint:fix": "biome check --apply src"
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
     },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "zod": "catalog:"
     },
-    "devDependencies": {
-        "tsup": "^8.0.1",
-        "typescript": "^5.3.3"
-    },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
-    }
+    },
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3"]
 }
