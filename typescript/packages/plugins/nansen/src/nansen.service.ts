@@ -1,4 +1,5 @@
 import { Tool } from "@goat-sdk/core";
+import type { z } from "zod";
 import {
     GetAddressDetailsParams,
     GetEntityDetailsParams,
@@ -28,7 +29,7 @@ export class NansenService {
     @Tool({
         description: "Get details for a specific address from Nansen",
     })
-    async getAddressDetails(parameters: GetAddressDetailsParams) {
+    async getAddressDetails(parameters: z.infer<typeof GetAddressDetailsParams.schema>) {
         const { address } = parameters;
         return this.fetchNansen(`/address/${address}`);
     }
@@ -36,7 +37,7 @@ export class NansenService {
     @Tool({
         description: "Get transactions for a specific address from Nansen",
     })
-    async getAddressTransactions(parameters: GetAddressDetailsParams) {
+    async getAddressTransactions(parameters: z.infer<typeof GetAddressDetailsParams.schema>) {
         const { address } = parameters;
         return this.fetchNansen(`/address/${address}/transactions`);
     }
@@ -44,7 +45,7 @@ export class NansenService {
     @Tool({
         description: "Get details for a specific token from Nansen",
     })
-    async getTokenDetails(parameters: GetTokenDetailsParams) {
+    async getTokenDetails(parameters: z.infer<typeof GetTokenDetailsParams.schema>) {
         const { address, chain } = parameters;
         return this.fetchNansen(`/token/${chain}/${address}`);
     }
@@ -52,7 +53,7 @@ export class NansenService {
     @Tool({
         description: "Get details for a specific NFT collection or token from Nansen",
     })
-    async getNFTDetails(parameters: GetNFTDetailsParams) {
+    async getNFTDetails(parameters: z.infer<typeof GetNFTDetailsParams.schema>) {
         const { address, chain, tokenId } = parameters;
         const endpoint = tokenId ? `/nft/${chain}/${address}/${tokenId}` : `/nft/${chain}/${address}`;
         return this.fetchNansen(endpoint);
@@ -61,7 +62,7 @@ export class NansenService {
     @Tool({
         description: "Check if an address is considered 'smart money' by Nansen",
     })
-    async getSmartMoneyStatus(parameters: GetSmartMoneyParams) {
+    async getSmartMoneyStatus(parameters: z.infer<typeof GetSmartMoneyParams.schema>) {
         const { address, chain } = parameters;
         return this.fetchNansen(`/smart-money/${chain}/${address}`);
     }
@@ -69,7 +70,7 @@ export class NansenService {
     @Tool({
         description: "Get details for a specific entity from Nansen",
     })
-    async getEntityDetails(parameters: GetEntityDetailsParams) {
+    async getEntityDetails(parameters: z.infer<typeof GetEntityDetailsParams.schema>) {
         const { entityId } = parameters;
         return this.fetchNansen(`/entity/${entityId}`);
     }
@@ -77,7 +78,7 @@ export class NansenService {
     @Tool({
         description: "Get token flow data for a specific exchange",
     })
-    async getExchangeFlows(parameters: GetExchangeFlowsParams) {
+    async getExchangeFlows(parameters: z.infer<typeof GetExchangeFlowsParams.schema>) {
         const { exchange, token, timeframe } = parameters;
         const tokenParam = token ? `&token=${token}` : "";
         return this.fetchNansen(`/exchange/${exchange}/flows?timeframe=${timeframe}${tokenParam}`);
@@ -86,7 +87,7 @@ export class NansenService {
     @Tool({
         description: "Get data for a specific Nansen signal",
     })
-    async getSignal(parameters: GetSignalParams) {
+    async getSignal(parameters: z.infer<typeof GetSignalParams.schema>) {
         const { signalId, parameters: signalParams } = parameters;
         const queryParams = signalParams ? `?${new URLSearchParams(signalParams as Record<string, string>)}` : "";
         return this.fetchNansen(`/signal/${signalId}${queryParams}`);

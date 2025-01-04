@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "zod": "^3.22.4"
+        "zod": "catalog:"
     },
     "devDependencies": {
         "tsup": "^8.0.1",
