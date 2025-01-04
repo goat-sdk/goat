@@ -55,6 +55,10 @@
             "path": "./typescript/packages/plugins/allora"
         },
         {
+            "name": "[Plugin] 🦅 birdeye",
+            "path": "./typescript/packages/plugins/birdeye"
+        },
+        {
             "name": "[Plugin] 💰 coingecko",
             "path": "./typescript/packages/plugins/coingecko"
         },

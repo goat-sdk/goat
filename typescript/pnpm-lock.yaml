@@ -903,9 +903,6 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-      '@goat-sdk/wallet-evm':
-        specifier: workspace:*
-        version: link:../../wallets/evm
       zod:
         specifier: 'catalog:'
         version: 3.23.8
