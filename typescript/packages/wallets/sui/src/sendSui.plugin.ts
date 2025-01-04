@@ -1,4 +1,5 @@
 import { Chain, PluginBase, createTool } from "@goat-sdk/core";
+import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { z } from "zod";
 import { SuiWalletClient } from "./SuiWalletClient";
 
@@ -11,9 +12,13 @@ const sendSUIParametersSchema = z.object({
 // Implementation of the send method
 const sendSUIMethod = async (walletClient: SuiWalletClient, parameters: z.infer<typeof sendSUIParametersSchema>) => {
     const { to, amount } = parameters;
+    const txb = new TransactionBlock();
+    // Split amount into coins and transfer to recipient
+    const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount)]);
+    txb.transferObjects([coin], txb.pure(to));
+    
     return walletClient.sendTransaction({
-        to,
-        amount,
+        transactionBlock: txb,
     });
 };
 
