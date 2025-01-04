@@ -1,5 +1,6 @@
 import { Tool } from "@goat-sdk/core";
-import { GetAggregatedBalancesAndAllowancesParameters } from "./parameters";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { GetBalancesParameters } from "./parameters";
 import { AggregatedBalancesAndAllowancesResponse, BalanceServiceParams } from "./types";
 
 export class BalanceService {
@@ -7,24 +8,24 @@ export class BalanceService {
     private readonly apiKey?: string;
 
     constructor(params: BalanceServiceParams = {}) {
-        this.baseUrl = params.baseUrl ?? "https://api.1inch.dev/balance";
+        this.baseUrl = params.baseUrl ?? "https://api.1inch.dev";
         this.apiKey = params.apiKey;
     }
 
     @Tool({
-        description:
-            "Get aggregated balances and allowances for a list of wallet addresses, checking their token balances and allowances for a specific spender address.",
+        name: "1inch.get_balances",
+        description: "Get the balances of a wallet address on a specific chain",
     })
     async getAggregatedBalancesAndAllowances(
-        parameters: GetAggregatedBalancesAndAllowancesParameters,
+        walletClient: EVMWalletClient,
+        parameters: GetBalancesParameters,
     ): Promise<AggregatedBalancesAndAllowancesResponse> {
-        const { chain, spender, wallets, filterEmpty } = parameters;
+        const { walletAddress } = parameters;
+        const chainId = walletClient.getChain().id;
 
-        const url = new URL(`${this.baseUrl}/v1.2/${chain}/aggregatedBalancesAndAllowances/${spender}`);
-        url.searchParams.append("wallets", wallets.join(","));
-        if (filterEmpty !== undefined) {
-            url.searchParams.append("filterEmpty", String(filterEmpty));
-        }
+        const url = new URL(
+            `${this.baseUrl}/balance/v1.2/${chainId}/balances/${walletAddress ?? walletClient.getAddress()}`,
+        );
 
         const response = await fetch(url.toString(), {
             headers: {

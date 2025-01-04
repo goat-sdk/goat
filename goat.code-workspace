@@ -119,6 +119,10 @@
             "path": "./typescript/packages/plugins/ironclad"
         },
         {
+            "name": "[Plugin] 🐎 1inch",
+            "path": "./typescript/packages/plugins/1inch"
+        },
+        {
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },

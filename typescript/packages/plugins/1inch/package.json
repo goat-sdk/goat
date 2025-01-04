@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-1inch-balance",
-    "version": "0.0.1",
+    "name": "@goat-sdk/plugin-1inch",
+    "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -14,10 +14,12 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*"
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
