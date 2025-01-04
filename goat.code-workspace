@@ -131,7 +131,7 @@
             "path": "./typescript/packages/plugins/uniswap"
         },
         {
-            "name": "[Plugin] ⛽️ opensea",
+            "name": "[Plugin] 🖼️ opensea",
             "path": "./typescript/packages/plugins/opensea"
         },
         {
@@ -141,6 +141,10 @@
         {
             "name": "[Plugin] 🌍 zerodev-global-address",
             "path": "./typescript/packages/plugins/zerodev-global-address"
+        },
+        {
+            "name": "[Plugin] 📇 sns",
+            "path": "./typescript/packages/plugins/sns"
         },
         // Wallets
         {

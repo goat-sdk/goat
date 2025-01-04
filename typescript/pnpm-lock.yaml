@@ -498,7 +498,7 @@ importers:
         version: 16.4.7
       fuels:
         specifier: 0.97.2
-        version: 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+        version: 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
 
   examples/vercel-ai/headless-checkout:
     dependencies:
@@ -685,6 +685,39 @@ importers:
       ai:
         specifier: 'catalog:'
         version: 4.0.3(react@18.3.1)(zod@3.24.1)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.7
+      viem:
+        specifier: 2.21.49
+        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+
+  examples/vercel-ai/sns:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ^1.0.4
+        version: 1.0.13(zod@3.24.1)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/vercel-ai
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../../packages/core
+      '@goat-sdk/plugin-sns':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/sns
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/solana
+      '@solana/web3.js':
+        specifier: 'catalog:'
+        version: 1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      ai:
+        specifier: 'catalog:'
+        version: 4.0.3(react@18.3.1)(zod@3.24.1)
+      bs58:
+        specifier: ^6.0.0
+        version: 6.0.0
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
@@ -1100,7 +1133,7 @@ importers:
         version: link:../../wallets/solana
       '@meteora-ag/dlmm':
         specifier: 1.3.4
-        version: 1.3.4(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        version: 1.3.4(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 'catalog:'
         version: 1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -1461,7 +1494,7 @@ importers:
         version: link:../../core
       fuels:
         specifier: 0.97.2
-        version: 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+        version: 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -1488,10 +1521,10 @@ importers:
         version: 7.0.2(bufferutil@4.0.9)(date-and-time@2.4.3)(multiformats@9.9.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/lit-auth-client':
         specifier: 'catalog:'
-        version: 7.0.2(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
+        version: 7.0.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
       '@lit-protocol/lit-node-client':
         specifier: 'catalog:'
-        version: 7.0.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
+        version: 7.0.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
       '@lit-protocol/misc':
         specifier: 'catalog:'
         version: 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -13309,7 +13342,7 @@ snapshots:
   '@bonfida/spl-name-service@3.0.7(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@bonfida/sns-records': 0.0.1(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))
-      '@noble/curves': 1.7.0
+      '@noble/curves': 1.8.0
       '@scure/base': 1.2.1
       '@solana/spl-token': 0.4.6(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -14606,7 +14639,7 @@ snapshots:
     transitivePeerDependencies:
       - vitest
 
-  '@fuel-ts/account@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
+  '@fuel-ts/account@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/address': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
@@ -14641,17 +14674,17 @@ snapshots:
     transitivePeerDependencies:
       - vitest
 
-  '@fuel-ts/contract@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
+  '@fuel-ts/contract@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/account': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/account': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/crypto': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/errors': 0.97.2
       '@fuel-ts/hasher': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/interfaces': 0.97.2
       '@fuel-ts/math': 0.97.2
       '@fuel-ts/merkle': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/program': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/program': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/transactions': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/utils': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/versions': 0.97.2
@@ -14699,10 +14732,10 @@ snapshots:
     transitivePeerDependencies:
       - vitest
 
-  '@fuel-ts/program@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
+  '@fuel-ts/program@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/account': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/account': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/address': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/errors': 0.97.2
       '@fuel-ts/interfaces': 0.97.2
@@ -14715,29 +14748,29 @@ snapshots:
       - encoding
       - vitest
 
-  '@fuel-ts/recipes@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
+  '@fuel-ts/recipes@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/abi-typegen': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/account': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/contract': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/account': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/contract': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/interfaces': 0.97.2
-      '@fuel-ts/program': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/program': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/transactions': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/utils': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
     transitivePeerDependencies:
       - encoding
       - vitest
 
-  '@fuel-ts/script@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
+  '@fuel-ts/script@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))':
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/account': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/account': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/address': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/errors': 0.97.2
       '@fuel-ts/interfaces': 0.97.2
       '@fuel-ts/math': 0.97.2
-      '@fuel-ts/program': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/program': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/transactions': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/utils': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
     transitivePeerDependencies:
@@ -15035,14 +15068,14 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       jest-mock: 29.7.0
 
   '@jest/fake-timers@29.7.0':
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -15055,7 +15088,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       '@types/yargs': 15.0.19
       chalk: 4.1.2
 
@@ -15064,7 +15097,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -15228,7 +15261,7 @@ snapshots:
     dependencies:
       ajv: 8.17.1
 
-  '@lit-protocol/auth-browser@7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)':
+  '@lit-protocol/auth-browser@7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)':
     dependencies:
       '@ethersproject/abstract-provider': 5.7.0
       '@ethersproject/bytes': 5.7.0
@@ -15245,7 +15278,7 @@ snapshots:
       '@lit-protocol/types': 7.0.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@lit-protocol/uint8arrays': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@openagenda/verror': 3.1.4
-      '@walletconnect/ethereum-provider': 2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@walletconnect/ethereum-provider': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@walletconnect/modal': 2.7.0(@types/react@18.3.18)(react@18.3.1)
       ajv: 8.17.1
       bech32: 2.0.0
@@ -15427,7 +15460,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@lit-protocol/lit-auth-client@7.0.2(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)':
+  '@lit-protocol/lit-auth-client@7.0.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)':
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/abstract-provider': 5.7.0
@@ -15439,14 +15472,14 @@ snapshots:
       '@ethersproject/wallet': 5.7.0
       '@lit-protocol/access-control-conditions': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/accs-schemas': 0.0.20
-      '@lit-protocol/auth-browser': 7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)
+      '@lit-protocol/auth-browser': 7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)
       '@lit-protocol/auth-helpers': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/constants': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/contracts': 0.0.74(typescript@5.6.3)
       '@lit-protocol/contracts-sdk': 7.0.2(bufferutil@4.0.9)(date-and-time@2.4.3)(multiformats@9.9.0)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/core': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/crypto': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@lit-protocol/lit-node-client': 7.0.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
+      '@lit-protocol/lit-node-client': 7.0.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)
       '@lit-protocol/lit-node-client-nodejs': 7.0.2(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/logger': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/misc': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -15458,7 +15491,7 @@ snapshots:
       '@openagenda/verror': 3.1.4
       '@simplewebauthn/browser': 9.0.1
       '@simplewebauthn/typescript-types': 7.4.0
-      '@walletconnect/ethereum-provider': 2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@walletconnect/ethereum-provider': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       ajv: 8.17.1
       base64url: 3.0.1
       bech32: 2.0.0
@@ -15546,7 +15579,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@lit-protocol/lit-node-client@7.0.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)':
+  '@lit-protocol/lit-node-client@7.0.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(web-vitals@3.5.2)':
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/abstract-provider': 5.7.0
@@ -15558,7 +15591,7 @@ snapshots:
       '@ethersproject/wallet': 5.7.0
       '@lit-protocol/access-control-conditions': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/accs-schemas': 0.0.20
-      '@lit-protocol/auth-browser': 7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)
+      '@lit-protocol/auth-browser': 7.0.2(@lit-protocol/contracts@0.0.74(typescript@5.6.3))(@walletconnect/ethereum-provider@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(siwe@2.3.2(ethers@5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(tweetnacl-util@0.15.1)(tweetnacl@1.0.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(util@0.12.5)(web-vitals@3.5.2)
       '@lit-protocol/auth-helpers': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/constants': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/contracts': 0.0.74(typescript@5.6.3)
@@ -15574,7 +15607,7 @@ snapshots:
       '@lit-protocol/uint8arrays': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/wasm': 7.0.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@openagenda/verror': 3.1.4
-      '@walletconnect/ethereum-provider': 2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@walletconnect/ethereum-provider': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       ajv: 8.17.1
       bech32: 2.0.0
       cross-fetch: 3.1.8(encoding@0.1.13)
@@ -16327,11 +16360,11 @@ snapshots:
       '@metaplex-foundation/umi-public-keys': 0.8.9
       '@metaplex-foundation/umi-serializers': 0.9.0
 
-  '@meteora-ag/dlmm@1.3.4(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@meteora-ag/dlmm@1.3.4(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.28.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@coral-xyz/borsh': 0.28.0(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))
-      '@solana-developers/helpers': 2.5.6(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@solana-developers/helpers': 2.5.6(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/buffer-layout': 4.0.1
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -16960,7 +16993,7 @@ snapshots:
   '@safe-global/safe-apps-sdk@9.1.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@safe-global/safe-gateway-typescript-sdk': 3.22.4
-      viem: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+      viem: 2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -16979,7 +17012,7 @@ snapshots:
 
   '@scure/bip32@1.4.0':
     dependencies:
-      '@noble/curves': 1.4.0
+      '@noble/curves': 1.4.2
       '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
 
@@ -17373,7 +17406,7 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@solana-developers/helpers@2.5.6(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@solana-developers/helpers@2.5.6(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/spl-token-metadata': 0.1.6(@solana/web3.js@1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)
@@ -17878,7 +17911,7 @@ snapshots:
 
   '@turnkey/solana@1.0.1(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)':
     dependencies:
-      '@solana/web3.js': 1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@solana/web3.js': 1.95.8(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@turnkey/http': 2.15.0(encoding@0.1.13)
       '@turnkey/sdk-browser': 1.8.0(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.18)(bufferutil@4.0.9)(encoding@0.1.13)(react@18.3.1)(utf-8-validate@5.0.10)
       '@turnkey/sdk-server': 1.5.0(encoding@0.1.13)
@@ -17934,7 +17967,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
 
   '@types/debug@4.1.12':
     dependencies:
@@ -17975,7 +18008,7 @@ snapshots:
 
   '@types/node-forge@1.3.11':
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
 
   '@types/node@12.20.55': {}
 
@@ -18044,11 +18077,11 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
 
   '@types/ws@8.5.13':
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -18369,7 +18402,7 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/core@2.9.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
+  '@walletconnect/core@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.1
       '@walletconnect/jsonrpc-provider': 1.0.13
@@ -18382,8 +18415,8 @@ snapshots:
       '@walletconnect/relay-auth': 1.0.4
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.9.2
-      '@walletconnect/utils': 2.9.2
+      '@walletconnect/types': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
+      '@walletconnect/utils': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
       events: 3.3.0
       lodash.isequal: 4.5.0
       uint8arrays: 3.1.1
@@ -18487,16 +18520,16 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/ethereum-provider@2.9.2(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)':
+  '@walletconnect/ethereum-provider@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)':
     dependencies:
       '@walletconnect/jsonrpc-http-connection': 1.0.8(encoding@0.1.13)
       '@walletconnect/jsonrpc-provider': 1.0.14
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
-      '@walletconnect/sign-client': 2.9.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@walletconnect/types': 2.9.2
-      '@walletconnect/universal-provider': 2.9.2(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
-      '@walletconnect/utils': 2.9.2
+      '@walletconnect/sign-client': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@walletconnect/types': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
+      '@walletconnect/universal-provider': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@walletconnect/utils': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
       events: 3.3.0
     optionalDependencies:
       '@walletconnect/modal': 2.7.0(@types/react@18.3.18)(react@18.3.1)
@@ -18736,16 +18769,16 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/sign-client@2.9.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
+  '@walletconnect/sign-client@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
-      '@walletconnect/core': 2.9.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@walletconnect/core': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.1
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.9.2
-      '@walletconnect/utils': 2.9.2
+      '@walletconnect/types': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
+      '@walletconnect/utils': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -18857,7 +18890,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/types@2.9.2':
+  '@walletconnect/types@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.1
@@ -18953,16 +18986,16 @@ snapshots:
       - uploadthing
       - utf-8-validate
 
-  '@walletconnect/universal-provider@2.9.2(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)':
+  '@walletconnect/universal-provider@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)':
     dependencies:
       '@walletconnect/jsonrpc-http-connection': 1.0.8(encoding@0.1.13)
       '@walletconnect/jsonrpc-provider': 1.0.13
       '@walletconnect/jsonrpc-types': 1.0.4
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/sign-client': 2.9.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@walletconnect/types': 2.9.2
-      '@walletconnect/utils': 2.9.2
+      '@walletconnect/sign-client': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@walletconnect/types': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
+      '@walletconnect/utils': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -19061,7 +19094,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/utils@2.9.2':
+  '@walletconnect/utils@2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)':
     dependencies:
       '@stablelib/chacha20poly1305': 1.0.1
       '@stablelib/hkdf': 1.0.1
@@ -19071,7 +19104,7 @@ snapshots:
       '@walletconnect/relay-api': 1.0.11
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.9.2
+      '@walletconnect/types': 2.9.2(@azure/cosmos@4.2.0)(@azure/identity@4.5.0)
       '@walletconnect/window-getters': 1.0.1
       '@walletconnect/window-metadata': 1.0.1
       detect-browser: 5.3.0
@@ -19141,6 +19174,11 @@ snapshots:
       typescript: 5.6.3
       zod: 3.23.8
 
+  abitype@1.0.5(typescript@5.6.3)(zod@3.24.1):
+    optionalDependencies:
+      typescript: 5.6.3
+      zod: 3.24.1
+
   abitype@1.0.6(typescript@5.6.3)(zod@3.23.8):
     optionalDependencies:
       typescript: 5.6.3
@@ -19155,6 +19193,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
       zod: 3.23.8
+
+  abitype@1.0.8(typescript@5.6.3)(zod@3.24.1):
+    optionalDependencies:
+      typescript: 5.6.3
+      zod: 3.24.1
 
   abort-controller-x@0.4.3: {}
 
@@ -19819,7 +19862,7 @@ snapshots:
 
   chrome-launcher@0.15.2:
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -20909,22 +20952,22 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  fuels@0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0)):
+  fuels@0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0)):
     dependencies:
       '@fuel-ts/abi-coder': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/abi-typegen': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/account': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/account': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/address': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/contract': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/contract': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/crypto': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/errors': 0.97.2
       '@fuel-ts/hasher': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/interfaces': 0.97.2
       '@fuel-ts/math': 0.97.2
       '@fuel-ts/merkle': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/program': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/recipes': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
-      '@fuel-ts/script': 0.97.2(encoding@0.1.13)(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/program': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/recipes': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
+      '@fuel-ts/script': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/transactions': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/utils': 0.97.2(vitest@2.1.5(@types/node@22.10.5)(terser@5.37.0))
       '@fuel-ts/versions': 0.97.2
@@ -21589,7 +21632,7 @@ snapshots:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
@@ -21610,13 +21653,13 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       jest-util: 29.7.0
 
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -21633,7 +21676,7 @@ snapshots:
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -21828,7 +21871,7 @@ snapshots:
       '@langchain/core': 0.3.6(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))
       '@langchain/openai': 0.3.16(@langchain/core@0.3.6(openai@4.73.0(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
       '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.6(openai@4.73.0(encoding@0.1.13)(zod@3.23.8)))
-      js-tiktoken: 1.0.15
+      js-tiktoken: 1.0.16
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langsmith: 0.2.14(openai@4.73.0(encoding@0.1.13)(zod@3.23.8))
@@ -22893,11 +22936,11 @@ snapshots:
   ox@0.1.2(typescript@5.6.3)(zod@3.23.8):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
-      '@noble/curves': 1.6.0
-      '@noble/hashes': 1.5.0
-      '@scure/bip32': 1.5.0
-      '@scure/bip39': 1.4.0
-      abitype: 1.0.6(typescript@5.6.3)(zod@3.23.8)
+      '@noble/curves': 1.8.0
+      '@noble/hashes': 1.7.0
+      '@scure/bip32': 1.6.1
+      '@scure/bip39': 1.5.1
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.23.8)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.6.3
@@ -22907,11 +22950,11 @@ snapshots:
   ox@0.1.2(typescript@5.6.3)(zod@3.24.1):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
-      '@noble/curves': 1.6.0
-      '@noble/hashes': 1.5.0
-      '@scure/bip32': 1.5.0
-      '@scure/bip39': 1.4.0
-      abitype: 1.0.6(typescript@5.6.3)(zod@3.24.1)
+      '@noble/curves': 1.8.0
+      '@noble/hashes': 1.7.0
+      '@scure/bip32': 1.6.1
+      '@scure/bip39': 1.5.1
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.24.1)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.6.3
@@ -23328,7 +23371,7 @@ snapshots:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 22.7.4
+      '@types/node': 20.17.11
       long: 4.0.0
 
   protobufjs@7.4.0:
@@ -24937,6 +24980,23 @@ snapshots:
       - utf-8-validate
       - zod
 
+  viem@2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1):
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.0
+      '@noble/curves': 1.4.0
+      '@noble/hashes': 1.4.0
+      '@scure/bip32': 1.4.0
+      '@scure/bip39': 1.3.0
+      abitype: 1.0.5(typescript@5.6.3)(zod@3.24.1)
+      isows: 1.0.4(ws@8.17.1(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+      ws: 8.17.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+    optionalDependencies:
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
   viem@2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8):
     dependencies:
       '@noble/curves': 1.6.0
@@ -25328,8 +25388,8 @@ snapshots:
 
   webauthn-p256@0.0.10:
     dependencies:
-      '@noble/curves': 1.6.0
-      '@noble/hashes': 1.5.0
+      '@noble/curves': 1.8.0
+      '@noble/hashes': 1.7.0
 
   webextension-polyfill@0.10.0: {}
 
