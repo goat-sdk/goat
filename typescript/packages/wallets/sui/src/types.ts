@@ -6,7 +6,7 @@ export type SuiReadResponse = SuiObjectResponse & {
 };
 
 export type SuiTransaction = {
-    transactionBlock: TransactionBlock;
+    transaction: TransactionBlock;
 };
 
 export type Transaction = {

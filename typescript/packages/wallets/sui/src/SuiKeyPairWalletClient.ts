@@ -19,9 +19,8 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
     }
 
     async sendTransaction(transaction: SuiTransaction) {
-        const txb = transaction.transactionBlock;
         const result = await this.client.signAndExecuteTransactionBlock({
-            transactionBlock: txb,
+            transactionBlock: transaction.transaction,
             signer: this.keypair,
         });
         // Wait for transaction completion
