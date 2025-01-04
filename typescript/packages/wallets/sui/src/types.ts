@@ -1,20 +1,22 @@
-import { type SuiClient, type SuiObjectResponse } from "@mysten/sui.js/dist/cjs/client";
-import { type TransactionBlock } from "@mysten/sui.js/dist/cjs/transactions";
+import { SuiClient } from "@mysten/sui/client";
+import { type Transaction } from "@mysten/sui/transactions";
 
-export type SuiReadResponse = SuiObjectResponse & {
-    object: SuiObjectResponse["data"];
+export type SuiReadResponse = {
+    value: unknown;
 };
+
 export type SuiTransaction = {
-    transaction: Uint8Array | TransactionBlock;
+    transaction: Transaction;
 };
+
 export type TransactionResponse = {
     hash: string;
 };
+
 export type SuiQuery = {
-    contractAddress: string;
-    method: string;
-    args?: unknown[];
+    objectId: string;
 };
+
 export type SuiWalletClientCtorParams = {
     client: SuiClient;
 };

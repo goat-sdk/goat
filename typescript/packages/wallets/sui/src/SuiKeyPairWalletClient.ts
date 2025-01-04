@@ -1,7 +1,6 @@
 import type { Signature } from "@goat-sdk/core";
-import { SuiClient } from "@mysten/sui.js/dist/cjs/client";
-import { Ed25519Keypair } from "@mysten/sui.js/dist/cjs/keypairs/ed25519";
-import { TransactionBlock } from "@mysten/sui.js/dist/cjs/transactions";
+import { SuiClient } from "@mysten/sui/client";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 import { SuiWalletClient } from "./SuiWalletClient";
 import type { SuiQuery, SuiReadResponse, SuiTransaction, TransactionResponse } from "./types";
 
@@ -27,20 +26,12 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
      * - Custom transaction blocks
      */
     async sendTransaction(transaction: SuiTransaction): Promise<TransactionResponse> {
-        // Handle both raw transaction bytes and TransactionBlock instances
-        const transactionBlock =
-            transaction.transaction instanceof TransactionBlock
-                ? transaction.transaction
-                : TransactionBlock.from(transaction.transaction);
-
-        // Sign and execute the transaction
-        const result = await this.client.signAndExecuteTransactionBlock({
-            transactionBlock,
+        const result = await this.client.signAndExecuteTransaction({
+            transaction: transaction.transaction,
             signer: this.keypair,
         });
 
-        // Wait for transaction finalization
-        await this.client.waitForTransactionBlock({
+        await this.client.waitForTransaction({
             digest: result.digest,
         });
 
@@ -50,15 +41,14 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
     async read(query: SuiQuery): Promise<SuiReadResponse> {
         // Use dynamic field or object read based on the query
         const result = await this.client.getObject({
-            id: query.contractAddress,
+            id: query.objectId,
             options: {
                 showContent: true,
             },
         });
 
         return {
-            object: result.data,
-            ...result,
+            value: result.data,
         };
     }
 

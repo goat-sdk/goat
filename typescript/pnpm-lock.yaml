@@ -1458,12 +1458,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-      '@mysten/sui.js':
-        specifier: ^0.54.1
-        version: 0.54.1(typescript@5.6.3)
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.17.11
+      '@mysten/sui':
+        specifier: ^1.18.0
+        version: 1.18.0(typescript@5.6.3)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -4418,13 +4415,12 @@ packages:
     resolution: {integrity: sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==}
     engines: {node: '>= 14'}
 
-  '@mysten/bcs@0.11.1':
-    resolution: {integrity: sha512-xP85isNSYUCHd3O/g+TmZYmg4wK6cU8q/n/MebkIGP4CYVJZz2wU/G24xIZ3wI+0iTop4dfgA5kYrg/DQKCUzA==}
+  '@mysten/bcs@1.2.0':
+    resolution: {integrity: sha512-LuKonrGdGW7dq/EM6U2L9/as7dFwnhZnsnINzB/vu08Xfrj0qzWwpLOiXagAa5yZOPLK7anRZydMonczFkUPzA==}
 
-  '@mysten/sui.js@0.54.1':
-    resolution: {integrity: sha512-TSmGIX7U9O/uS9EKIQdv7/S69KTbBhMJVelXCafJE6IJw8iB9cN9uLu0+uklkBSDrbRmLSEY70jMr3uRFjReIg==}
-    engines: {node: '>=16'}
-    deprecated: This package has been renamed to @mysten/sui, please update to use the renamed package.
+  '@mysten/sui@1.18.0':
+    resolution: {integrity: sha512-cFh5LxXZrXb/ZAD1dkKeQxzhgRYFXreyFGmI7w/JQWwdl+/0FrHJBwaWyTmGxJ/6ZC9SlaOPOk63flN7DbUurg==}
+    engines: {node: '>=18'}
 
   '@next/env@15.0.3':
     resolution: {integrity: sha512-t9Xy32pjNOvVn2AS+Utt6VmyrshbpfUMhIjFO60gI58deSo/KgLOp31XZ4O+kY/Is8WAGYwA5gR7kOb1eORDBA==}
@@ -5481,9 +5477,6 @@ packages:
 
   '@types/node@18.19.69':
     resolution: {integrity: sha512-ECPdY1nlaiO/Y6GUnwgtAAhLNaQ53AyIVz+eILxpEo5OvuqE6yWkqWBIb5dU0DqhKQtMeny+FBD3PK6lm7L5xQ==}
-
-  '@types/node@20.17.11':
-    resolution: {integrity: sha512-Ept5glCK35R8yeyIeYlRIZtX6SLRyqMhOFTgj5SOkMpLTdw3SEHI9fHx60xaUZ+V1aJxQJODE+7/j5ocZydYTg==}
 
   '@types/node@22.10.5':
     resolution: {integrity: sha512-F8Q+SeGimwOo86fiovQh8qiXfFEh2/ocYv7tU5pJ3EXMSSxk1Joj5wefpFK2fHTf/N6HKGSxIDBT9f3gCxXPkQ==}
@@ -7929,6 +7922,9 @@ packages:
 
   jose@4.15.9:
     resolution: {integrity: sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==}
+
+  jose@5.9.6:
+    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -10801,6 +10797,9 @@ packages:
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
+
+  valibot@0.36.0:
+    resolution: {integrity: sha512-CjF1XN4sUce8sBK9TixrDqFM7RwNkuXdJu174/AwmQUB62QbCQADg5lLe8ldBalFgtj1uKj+pKwDJiNo4Mn+eQ==}
 
   valid-url@1.0.9:
     resolution: {integrity: sha512-QQDsV8OnSf5Uc30CKSwG9lnhMPe6exHtTXLRYX8uMwKENy640pU+2BgBL0LRbDh/eYRahNCS7aewCx0wf3NYVA==}
@@ -16185,24 +16184,26 @@ snapshots:
 
   '@msgpack/msgpack@3.0.0-beta2': {}
 
-  '@mysten/bcs@0.11.1':
+  '@mysten/bcs@1.2.0':
     dependencies:
-      bs58: 5.0.0
+      bs58: 6.0.0
 
-  '@mysten/sui.js@0.54.1(typescript@5.6.3)':
+  '@mysten/sui@1.18.0(typescript@5.6.3)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
-      '@mysten/bcs': 0.11.1
+      '@mysten/bcs': 1.2.0
       '@noble/curves': 1.8.0
       '@noble/hashes': 1.7.0
       '@scure/bip32': 1.6.1
       '@scure/bip39': 1.5.1
+      '@simplewebauthn/typescript-types': 7.4.0
       '@suchipi/femver': 1.0.0
       bech32: 2.0.0
       gql.tada: 1.8.10(graphql@16.10.0)(typescript@5.6.3)
       graphql: 16.10.0
-      superstruct: 1.0.4
-      tweetnacl: 1.0.3
+      jose: 5.9.6
+      poseidon-lite: 0.2.1
+      valibot: 0.36.0
     transitivePeerDependencies:
       - '@gql.tada/svelte-support'
       - '@gql.tada/vue-support'
@@ -17721,10 +17722,6 @@ snapshots:
   '@types/node@18.19.69':
     dependencies:
       undici-types: 5.26.5
-
-  '@types/node@20.17.11':
-    dependencies:
-      undici-types: 6.19.8
 
   '@types/node@22.10.5':
     dependencies:
@@ -21331,6 +21328,8 @@ snapshots:
 
   jose@4.15.9: {}
 
+  jose@5.9.6: {}
+
   joycon@3.1.1: {}
 
   js-base64@3.7.2: {}
@@ -24539,6 +24538,8 @@ snapshots:
   uuidv7@0.6.3: {}
 
   v8-compile-cache-lib@3.0.1: {}
+
+  valibot@0.36.0: {}
 
   valid-url@1.0.9: {}
 

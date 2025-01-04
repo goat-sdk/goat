@@ -144,6 +144,10 @@
             "path": "./typescript/packages/wallets/solana"
         },
         {
+            "name": "[Wallet] 💧 sui",
+            "path": "./typescript/packages/wallets/sui"
+        },
+        {
             "name": "[Wallet] 🪨 evm",
             "path": "./typescript/packages/wallets/evm"
         },
