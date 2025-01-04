@@ -16,7 +16,7 @@ export interface BirdEyeOptions {
  * BirdEye plugin for accessing DeFi, Token, Wallet, and Trader data
  */
 export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
-    private readonly baseUrl = "https://public-api.birdeye.so";
+    public readonly baseUrl = "https://public-api.birdeye.so";
     private readonly chainMapping: Record<string, { type: string; chainId?: number; birdeyeChain: string }> = {
         // EVM chains
         "evm-1": { type: "evm", chainId: 1, birdeyeChain: "ethereum" },
@@ -33,11 +33,13 @@ export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
     };
 
     constructor(private readonly options: BirdEyeOptions) {
-        super("birdeye", [
-            new BirdEyeDefiService(options),
-            new BirdEyeMarketService(options),
-            new BirdEyeTransactionService(options),
-        ]);
+        const services: Array<BirdEyeDefiService | BirdEyeMarketService | BirdEyeTransactionService> = [];
+        super("birdeye", services);
+        services.push(
+            new BirdEyeDefiService(this),
+            new BirdEyeMarketService(this),
+            new BirdEyeTransactionService(this),
+        );
     }
 
     supportsChain(chain: Chain): boolean {
@@ -70,6 +72,10 @@ export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
     /**
      * Helper method to make authenticated requests to BirdEye API
      */
+    public getApiKey(): string {
+        return this.options.apiKey;
+    }
+
     async makeRequest(endpoint: string, options: RequestInit = {}) {
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             ...options,

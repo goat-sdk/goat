@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { createToolParameters } from "@goat-sdk/core";
+import { z } from "zod";
 
 export const supportedChains = [
     "solana",
