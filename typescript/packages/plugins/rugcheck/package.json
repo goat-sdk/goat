@@ -13,6 +13,6 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "zod": "catalog:"
+        "zod": "^3.0.0"
     }
 }
