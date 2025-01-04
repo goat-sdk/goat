@@ -7,19 +7,19 @@ import { DexscreenerService } from "./dexscreener.service";
  * Provides tools for fetching DEX pair data, token information, and market searches
  */
 export class DexscreenerPlugin extends PluginBase<WalletClientBase> {
-  constructor() {
-    super("dexscreener", [new DexscreenerService()]);
-  }
+    constructor() {
+        super("dexscreener", [new DexscreenerService()]);
+    }
 
-  /**
-   * This plugin supports all chains as it's a data provider
-   */
-  supportsChain = (chain: Chain) => true;
+    /**
+     * This plugin supports all chains as it's a data provider
+     */
+    supportsChain = (chain: Chain) => true;
 }
 
 /**
  * Utility factory function for creating a DexscreenerPlugin instance
  */
 export function dexscreener() {
-  return new DexscreenerPlugin();
+    return new DexscreenerPlugin();
 }
