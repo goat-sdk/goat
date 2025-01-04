@@ -23,7 +23,6 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
             transactionBlock: transaction.transaction,
             signer: this.keypair,
         });
-        // Wait for transaction completion
         await this.client.waitForTransactionBlock({ digest: result.digest });
         return { hash: result.digest };
     }
