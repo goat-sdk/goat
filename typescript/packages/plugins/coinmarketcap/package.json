@@ -14,7 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
-        "zod": "^3.22.4"
+        "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"

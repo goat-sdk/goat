@@ -916,8 +916,8 @@ importers:
         specifier: workspace:*
         version: link:../../wallets/evm
       zod:
-        specifier: ^3.22.4
-        version: 3.24.1
+        specifier: 'catalog:'
+        version: 3.23.8
 
   packages/plugins/crossmint-headless-checkout:
     dependencies:
