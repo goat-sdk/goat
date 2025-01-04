@@ -12,12 +12,18 @@ const sendSUIParametersSchema = z.object({
 // Implementation of the send method
 const sendSUIMethod = async (walletClient: SuiWalletClient, parameters: z.infer<typeof sendSUIParametersSchema>) => {
     const { to, amount } = parameters;
-    const txb = new TransactionBlock();
-    // Split amount into coins and transfer to recipient
-    const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount)]);
-    txb.transferObjects([coin], txb.pure(to));
+    // Create a new transaction block for sending SUI
+    const tx = new TransactionBlock();
+    
+    // Split the gas coin and get a specific amount
+    const [coin] = tx.splitCoins(tx.gas, [tx.pure(amount)]);
+    
+    // Transfer the split coin to the recipient
+    tx.transferObjects([coin], tx.pure(to));
+    
+    // Send the transaction and wait for finalization
     return walletClient.sendTransaction({
-        transaction: txb,
+        transaction: tx,
     });
 };
 

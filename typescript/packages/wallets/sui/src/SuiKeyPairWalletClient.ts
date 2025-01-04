@@ -18,17 +18,28 @@ export class SuiKeyPairWalletClient extends SuiWalletClient {
         this.keypair = params.keypair;
     }
 
+    /**
+     * Send a transaction to the Sui network.
+     * This method can handle any type of Sui transaction, including:
+     * - Token transfers
+     * - Smart contract interactions
+     * - Object management
+     * - Custom transaction blocks
+     */
     async sendTransaction(transaction: SuiTransaction): Promise<TransactionResponse> {
+        // Handle both raw transaction bytes and TransactionBlock instances
         const transactionBlock =
             transaction.transaction instanceof TransactionBlock
                 ? transaction.transaction
                 : TransactionBlock.from(transaction.transaction);
 
+        // Sign and execute the transaction
         const result = await this.client.signAndExecuteTransactionBlock({
             transactionBlock,
             signer: this.keypair,
         });
 
+        // Wait for transaction finalization
         await this.client.waitForTransactionBlock({
             digest: result.digest,
         });
