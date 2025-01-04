@@ -58,3 +58,56 @@ export class ContentLatestParameters extends createToolParameters(
         end_time: z.string().optional().describe("Timestamp (ISO 8601) to end returning content at"),
     }),
 ) {}
+
+export class CryptocurrencyMapParameters extends createToolParameters(
+    z.object({
+        listing_status: z.enum(["active", "inactive", "untracked"]).optional().describe("Status of listings to return"),
+        start: z.number().optional().describe("Starting position of results"),
+        limit: z.number().optional().describe("Number of results to return"),
+        sort: z.enum(["cmc_rank", "id", "name"]).optional().describe("What field to sort the list by"),
+        symbol: z.string().optional().describe("Cryptocurrency symbol(s) to filter by"),
+        aux: z.string().optional().describe("Comma-separated list of auxiliary fields to return"),
+    }),
+) {}
+
+export class CryptocurrencyOHLCVLatestParameters extends createToolParameters(
+    z.object({
+        id: z.string().optional().describe("One or more comma-separated cryptocurrency IDs"),
+        symbol: z.string().optional().describe("One or more comma-separated cryptocurrency symbols"),
+        convert: z.string().optional().describe("Currency to convert prices to"),
+        convert_id: z.string().optional().describe("Currency ID to convert prices to"),
+        skip_invalid: z.boolean().optional().describe("Skip invalid currency conversions"),
+    }),
+) {}
+
+export class CryptocurrencyTrendingLatestParameters extends createToolParameters(
+    z.object({
+        start: z.number().optional().describe("Starting position of results"),
+        limit: z.number().optional().describe("Number of results to return"),
+        time_period: z.enum(["24h", "30d", "7d"]).optional().describe("Time period for trending data"),
+        convert: z.string().optional().describe("Currency to convert prices to"),
+        convert_id: z.string().optional().describe("Currency ID to convert prices to"),
+    }),
+) {}
+
+export class CryptocurrencyTrendingMostVisitedParameters extends createToolParameters(
+    z.object({
+        start: z.number().optional().describe("Starting position of results"),
+        limit: z.number().optional().describe("Number of results to return"),
+        time_period: z.enum(["24h", "30d", "7d"]).optional().describe("Time period for trending data"),
+        convert: z.string().optional().describe("Currency to convert prices to"),
+        convert_id: z.string().optional().describe("Currency ID to convert prices to"),
+    }),
+) {}
+
+export class CryptocurrencyTrendingGainersLosersParameters extends createToolParameters(
+    z.object({
+        start: z.number().optional().describe("Starting position of results"),
+        limit: z.number().optional().describe("Number of results to return"),
+        time_period: z.enum(["1h", "24h", "7d", "30d"]).optional().describe("Time period for trending data"),
+        convert: z.string().optional().describe("Currency to convert prices to"),
+        convert_id: z.string().optional().describe("Currency ID to convert prices to"),
+        sort: z.string().optional().describe("What field to sort the list by"),
+        sort_dir: z.enum(["asc", "desc"]).optional().describe("Direction to sort the list"),
+    }),
+) {}

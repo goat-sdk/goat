@@ -1,10 +1,15 @@
 import type { z } from "zod";
 import type {
-    contentLatestParametersSchema,
-    cryptocurrencyListingsParametersSchema,
-    cryptocurrencyQuotesLatestParametersSchema,
-    exchangeListingsParametersSchema,
-    exchangeQuotesLatestParametersSchema,
+    ContentLatestParameters,
+    CryptocurrencyListingsParameters,
+    CryptocurrencyMapParameters,
+    CryptocurrencyOHLCVLatestParameters,
+    CryptocurrencyQuotesLatestParameters,
+    CryptocurrencyTrendingGainersLosersParameters,
+    CryptocurrencyTrendingLatestParameters,
+    CryptocurrencyTrendingMostVisitedParameters,
+    ExchangeListingsParameters,
+    ExchangeQuotesLatestParameters,
 } from "./parameters";
 
 const BASE_URL =
@@ -70,33 +75,64 @@ async function makeRequest<T>(endpoint: string, params: WithApiKey<T>): Promise<
 
 // Cryptocurrency endpoints
 export async function getCryptocurrencyListings(
-    params: WithApiKey<z.infer<typeof cryptocurrencyListingsParametersSchema>>,
+    params: WithApiKey<z.infer<(typeof CryptocurrencyListingsParameters)["schema"]>>,
 ): Promise<ApiResponse<Record<string, unknown>>> {
     return makeRequest("/cryptocurrency/listings/latest", params);
 }
 
 export async function getCryptocurrencyQuotesLatest(
-    params: WithApiKey<z.infer<typeof cryptocurrencyQuotesLatestParametersSchema>>,
+    params: WithApiKey<z.infer<(typeof CryptocurrencyQuotesLatestParameters)["schema"]>>,
 ): Promise<ApiResponse<Record<string, unknown>>> {
     return makeRequest("/cryptocurrency/quotes/latest", params);
 }
 
 // Exchange endpoints
 export async function getExchangeListings(
-    params: WithApiKey<z.infer<typeof exchangeListingsParametersSchema>>,
+    params: WithApiKey<z.infer<(typeof ExchangeListingsParameters)["schema"]>>,
 ): Promise<ApiResponse<Record<string, unknown>>> {
     return makeRequest("/exchange/listings/latest", params);
 }
 
 export async function getExchangeQuotesLatest(
-    params: WithApiKey<z.infer<typeof exchangeQuotesLatestParametersSchema>>,
+    params: WithApiKey<z.infer<(typeof ExchangeQuotesLatestParameters)["schema"]>>,
 ): Promise<ApiResponse<Record<string, unknown>>> {
     return makeRequest("/exchange/quotes/latest", params);
 }
 
 // Content endpoints
 export async function getLatestContent(
-    params: WithApiKey<z.infer<typeof contentLatestParametersSchema>>,
+    params: WithApiKey<z.infer<(typeof ContentLatestParameters)["schema"]>>,
 ): Promise<ApiResponse<Record<string, unknown>>> {
     return makeRequest("/content/latest", params);
+}
+
+// Additional cryptocurrency endpoints
+export async function getCryptocurrencyMap(
+    params: WithApiKey<z.infer<(typeof CryptocurrencyMapParameters)["schema"]>>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+    return makeRequest("/cryptocurrency/map", params);
+}
+
+export async function getCryptocurrencyOHLCVLatest(
+    params: WithApiKey<z.infer<(typeof CryptocurrencyOHLCVLatestParameters)["schema"]>>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+    return makeRequest("/v2/cryptocurrency/ohlcv/latest", params);
+}
+
+export async function getCryptocurrencyTrendingLatest(
+    params: WithApiKey<z.infer<(typeof CryptocurrencyTrendingLatestParameters)["schema"]>>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+    return makeRequest("/cryptocurrency/trending/latest", params);
+}
+
+export async function getCryptocurrencyTrendingMostVisited(
+    params: WithApiKey<z.infer<(typeof CryptocurrencyTrendingMostVisitedParameters)["schema"]>>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+    return makeRequest("/cryptocurrency/trending/most-visited", params);
+}
+
+export async function getCryptocurrencyTrendingGainersLosers(
+    params: WithApiKey<z.infer<(typeof CryptocurrencyTrendingGainersLosersParameters)["schema"]>>,
+): Promise<ApiResponse<Record<string, unknown>>> {
+    return makeRequest("/cryptocurrency/trending/gainers-losers", params);
 }
