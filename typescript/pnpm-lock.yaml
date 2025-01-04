@@ -1246,10 +1246,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
-    devDependencies:
       zod:
-        specifier: 'catalog:'
-        version: 3.23.8
+        specifier: ^3.0.0
+        version: 3.24.1
 
   packages/plugins/solana-magiceden:
     dependencies:
