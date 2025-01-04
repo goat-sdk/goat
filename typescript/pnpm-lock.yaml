@@ -1241,6 +1241,16 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/rugcheck:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+    devDependencies:
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/solana-magiceden:
     dependencies:
       '@goat-sdk/core':
