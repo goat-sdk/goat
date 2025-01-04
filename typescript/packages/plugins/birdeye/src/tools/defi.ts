@@ -34,20 +34,17 @@ export function getDefiTools(walletClient: EVMWalletClient, options: BirdEyeOpti
                 parameters: defiPriceVolumeMultiParametersSchema,
             },
             async (params) => {
-                const response = await fetch(
-                    "https://public-api.birdeye.so/defi/price_volume_multi",
-                    {
-                        method: "POST",
-                        headers: {
-                            "X-API-KEY": options.apiKey,
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            chain: await getChainName(),
-                            addresses: params.token_addresses,
-                        }),
+                const response = await fetch("https://public-api.birdeye.so/defi/price_volume_multi", {
+                    method: "POST",
+                    headers: {
+                        "X-API-KEY": options.apiKey,
+                        "Content-Type": "application/json",
                     },
-                );
+                    body: JSON.stringify({
+                        chain: await getChainName(),
+                        token_addresses: params.token_addresses,
+                    }),
+                });
                 return handleApiError(response);
             },
         ),

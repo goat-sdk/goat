@@ -289,7 +289,7 @@ export function getTools(walletClient: EVMWalletClient, options: BirdEyeOptions)
                     },
                     body: JSON.stringify({
                         chain: await getChainName(),
-                        addresses: params.addresses,
+                        token_addresses: params.token_addresses,
                     }),
                 });
                 return handleApiError(response);
