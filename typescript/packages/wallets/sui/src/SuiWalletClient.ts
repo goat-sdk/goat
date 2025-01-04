@@ -2,7 +2,7 @@ import { WalletClientBase } from "@goat-sdk/core";
 import type { Chain } from "@goat-sdk/core";
 import type { Balance, Signature } from "@goat-sdk/core";
 import { type SuiClient } from "@mysten/sui.js/client";
-import type { SuiReadResponse, SuiQuery, SuiTransaction, SuiWalletClientCtorParams, Transaction } from "./types";
+import type { SuiQuery, SuiReadResponse, SuiTransaction, SuiWalletClientCtorParams, Transaction } from "./types";
 
 export abstract class SuiWalletClient extends WalletClientBase {
     protected client: SuiClient;

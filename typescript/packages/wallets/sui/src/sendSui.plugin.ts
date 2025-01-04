@@ -16,7 +16,6 @@ const sendSUIMethod = async (walletClient: SuiWalletClient, parameters: z.infer<
     // Split amount into coins and transfer to recipient
     const [coin] = txb.splitCoins(txb.gas, [txb.pure(amount)]);
     txb.transferObjects([coin], txb.pure(to));
-    
     return walletClient.sendTransaction({
         transactionBlock: txb,
     });
