@@ -1,7 +1,8 @@
-import { type Chain, PluginBase, type ToolBase } from "@goat-sdk/core";
+import { type Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { z } from "zod";
-import { getTools } from "./tools";
+import { BirdEyeDefiService } from "./services/defi.service";
+import { BirdEyeMarketService } from "./services/market.service";
+import { BirdEyeTransactionService } from "./services/transaction.service";
 
 /**
  * Options for the BirdEye plugin
@@ -16,15 +17,6 @@ export interface BirdEyeOptions {
  */
 export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
     private readonly baseUrl = "https://public-api.birdeye.so";
-
-    constructor(private readonly options: BirdEyeOptions) {
-        super("birdeye", []);
-    }
-
-    /**
-     * Check if the plugin supports a given chain
-     * Currently supports all chains as BirdEye has multi-chain support
-     */
     private readonly chainMapping: Record<string, { type: string; chainId?: number; birdeyeChain: string }> = {
         // EVM chains
         "evm-1": { type: "evm", chainId: 1, birdeyeChain: "ethereum" },
@@ -39,6 +31,14 @@ export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
         solana: { type: "solana", birdeyeChain: "solana" },
         sui: { type: "sui", birdeyeChain: "sui" },
     };
+
+    constructor(private readonly options: BirdEyeOptions) {
+        super("birdeye", [
+            new BirdEyeDefiService(options),
+            new BirdEyeMarketService(options),
+            new BirdEyeTransactionService(options),
+        ]);
+    }
 
     supportsChain(chain: Chain): boolean {
         if (chain.type === "evm") {
@@ -70,7 +70,7 @@ export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
     /**
      * Helper method to make authenticated requests to BirdEye API
      */
-    private async makeRequest(endpoint: string, options: RequestInit = {}) {
+    async makeRequest(endpoint: string, options: RequestInit = {}) {
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             ...options,
             headers: {
@@ -87,13 +87,6 @@ export class BirdEyePlugin extends PluginBase<EVMWalletClient> {
         }
 
         return response.json();
-    }
-
-    /**
-     * Get all tools provided by the BirdEye plugin
-     */
-    public async getTools(walletClient: EVMWalletClient): Promise<ToolBase[]> {
-        return getTools(walletClient, this.options);
     }
 }
 

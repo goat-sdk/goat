@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createToolParameters } from "@goat-sdk/core";
 
 export const supportedChains = [
     "solana",
@@ -17,81 +18,85 @@ export type SupportedChain = (typeof supportedChains)[number];
 
 export const chainSchema = z.enum(supportedChains).describe("Chain name (e.g., ethereum, solana)");
 
-export const defiNetworksParametersSchema = z.object({});
+// Defi Price Parameters
+export class DefiPriceParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+    }),
+) {}
 
-export const defiPriceParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-});
+export class DefiMultiPriceParameters extends createToolParameters(
+    z.object({
+        token_addresses: z.array(z.string()).max(100).describe("Array of token contract addresses (max 100)"),
+    }),
+) {}
 
-export const defiMultiPriceParametersSchema = z.object({
-    chain: chainSchema,
-    addresses: z.array(z.string()).max(100).describe("Array of token contract addresses (max 100)"),
-});
+export class DefiHistoryPriceParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+        type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
+        limit: z.number().optional().describe("Number of data points to return"),
+    }),
+) {}
 
-export const defiHistoryPriceParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-    type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
-    limit: z.number().optional().describe("Number of data points to return"),
-});
+export class DefiHistoricalPriceUnixParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+        timestamp: z.number().describe("Unix timestamp"),
+    }),
+) {}
 
-export const defiHistoricalPriceUnixParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-    timestamp: z.number().describe("Unix timestamp"),
-});
+// Transaction Parameters
+export class TransactionHistoryParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+        limit: z.number().optional().describe("Number of items per page"),
+        offset: z.number().optional().describe("Offset for pagination"),
+    }),
+) {}
 
-export const defiTokenTxsParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-    page: z.number().optional().describe("Page number"),
-    limit: z.number().optional().describe("Number of items per page"),
-});
+export class WalletTransactionHistoryParameters extends createToolParameters(
+    z.object({
+        wallet: z.string().describe("Wallet address"),
+        limit: z.number().optional().describe("Number of items per page"),
+        offset: z.number().optional().describe("Offset for pagination"),
+    }),
+) {}
 
-export const defiPairTxsParametersSchema = z.object({
-    chain: chainSchema,
-    pair_address: z.string().describe("Pair contract address"),
-    page: z.number().optional().describe("Page number"),
-    limit: z.number().optional().describe("Number of items per page"),
-});
+// Market Parameters
+export class DefiOhlcvParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+        type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
+        limit: z.number().optional().describe("Number of data points to return"),
+    }),
+) {}
 
-export const defiTxsSeekByTimeParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token or pair contract address"),
-    from_time: z.number().describe("Start timestamp"),
-    to_time: z.number().describe("End timestamp"),
-    limit: z.number().optional().describe("Number of items to return"),
-});
+export class DefiOhlcvPairParameters extends createToolParameters(
+    z.object({
+        pair_address: z.string().describe("Pair contract address"),
+        type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
+        limit: z.number().optional().describe("Number of data points to return"),
+    }),
+) {}
 
-export const defiOhlcvParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-    type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
-    limit: z.number().optional().describe("Number of data points to return"),
-});
+export class DefiOhlcvBaseQuoteParameters extends createToolParameters(
+    z.object({
+        base_address: z.string().describe("Base token contract address"),
+        quote_address: z.string().describe("Quote token contract address"),
+        type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
+        limit: z.number().optional().describe("Number of data points to return"),
+    }),
+) {}
 
-export const defiOhlcvPairParametersSchema = z.object({
-    chain: chainSchema,
-    pair_address: z.string().describe("Pair contract address"),
-    type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
-    limit: z.number().optional().describe("Number of data points to return"),
-});
+export class DefiPriceVolumeSingleParameters extends createToolParameters(
+    z.object({
+        address: z.string().describe("Token contract address"),
+    }),
+) {}
 
-export const defiOhlcvBaseQuoteParametersSchema = z.object({
-    chain: chainSchema,
-    base_address: z.string().describe("Base token contract address"),
-    quote_address: z.string().describe("Quote token contract address"),
-    type: z.enum(["1H", "4H", "12H", "1D", "1W", "1M"]).describe("Time interval"),
-    limit: z.number().optional().describe("Number of data points to return"),
-});
-
-export const defiPriceVolumeSingleParametersSchema = z.object({
-    chain: chainSchema,
-    address: z.string().describe("Token contract address"),
-});
-
-export const defiPriceVolumeMultiParametersSchema = z.object({
-    chain_id: z.number(),
-    token_addresses: z.array(z.string()).max(50).describe("Array of token contract addresses (max 50)"),
-});
+export class DefiPriceVolumeMultiParameters extends createToolParameters(
+    z.object({
+        token_addresses: z.array(z.string()).max(50).describe("Array of token contract addresses (max 50)"),
+    }),
+) {}
