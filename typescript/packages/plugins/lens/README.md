@@ -18,8 +18,6 @@ const plugin = lens({});
 
 ## Working example
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/opensea) for a working example of how to use the Opensea plugin.
-
 ## Goat
 
 <div align="center">

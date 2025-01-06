@@ -7,9 +7,12 @@ export class GetPostOwnerParameterSchema extends createToolParameters(
     })
 ) {}
 
-export class GetNftSalesParametersSchema extends createToolParameters(
+export class TipParameters extends createToolParameters(
     z.object({
-        collectionSlug: z.string(),
+        to: z.string().describe("The address to transfer the token to"),
+        amount: z
+            .string()
+            .describe("The amount of tokens to transfer in base units"),
     })
 ) {}
 

@@ -17,6 +17,8 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "2.22.2",
         "zod": "catalog:"
     },
     "peerDependencies": {

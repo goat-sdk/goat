@@ -1,11 +1,14 @@
 import { Tool } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+
 import { z } from "zod";
 import {
     GetPostOwnerParameterSchema,
     GetPostOwnerResponseSchema,
+    TipParameters,
 } from "./parameters";
-
-import { fetchPost } from "./utils/lens.query";
+import { ERC20_ABI } from "./abi";
+import { parseEther } from "viem";
 
 export class LensService {
     @Tool({
@@ -15,8 +18,6 @@ export class LensService {
         const link = parameters.postURL;
         const regex = /https:\/\/hey\.xyz\/posts\/(.*)/;
         const match = link.match(regex);
-
-        console.log({ match });
 
         if (!match) {
             throw new Error(
@@ -61,5 +62,24 @@ export class LensService {
         }
 
         return postOwner;
+    }
+
+    @Tool({
+        description: "Tip this creator with an amount of grass token",
+    })
+    async tipTheCreator(
+        walletClient: EVMWalletClient,
+        parameters: TipParameters
+    ) {
+        try {
+            const to = await walletClient.resolveAddress(parameters.to);
+            const hash = await walletClient.sendTransaction({
+                to,
+                value: parseEther(parameters.amount),
+            });
+            return hash.hash;
+        } catch (error) {
+            throw Error(`Failed to transfer: ${error}`);
+        }
     }
 }
