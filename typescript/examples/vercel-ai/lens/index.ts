@@ -15,7 +15,7 @@ const account = privateKeyToAccount(`0x${process.env.WALLET_PRIVATE_KEY}`);
 
 const walletClient = createWalletClient({
     account: account,
-    transport: http(`0x${process.env.ALCHEMY_LENS_RPC_URL}`),
+    transport: http(`${process.env.ALCHEMY_LENS_RPC_URL}`),
     chain: lens_testnet,
 });
 
