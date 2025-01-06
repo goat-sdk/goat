@@ -4,13 +4,10 @@ import { generateText } from "ai";
 import { http } from "viem";
 import { createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { abstractTestnet } from "viem/chains";
+import { polygon } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import {} from "../../../packages/plugins/lens";
-
-import { sendETH } from "@goat-sdk/wallet-evm";
+import { lens } from "@goat-sdk/plugin-lens";
 import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
@@ -21,25 +18,21 @@ const account = privateKeyToAccount(
 
 const walletClient = createWalletClient({
     account: account,
-    transport: http(process.env.RPC_PROVIDER_URL),
-    chain: abstractTestnet,
+    transport: http(process.env.ALCHEMY_API_KEY),
+    chain: polygon,
 });
 
 (async () => {
     const tools = await getOnChainTools({
-        wallet: viem(walletClient, {
-            paymaster: {
-                defaultAddress: process.env.PAYMASTER_ADDRESS as `0x${string}`,
-            },
-        }),
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        wallet: viem(walletClient),
+        plugins: [lens()],
     });
 
     const result = await generateText({
-        model: openai("gpt-4o-mini"),
+        model: openai("gpt-4o"),
         tools: tools,
         maxSteps: 5,
-        prompt: "Send 0.000001 ETH to <address> and return the tx id",
+        prompt: "Get the creator of post https://hey.xyz/posts/0x033026-0x0580",
     });
 
     console.log(result.text);
