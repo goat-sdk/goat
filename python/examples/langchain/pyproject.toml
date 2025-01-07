@@ -44,10 +44,10 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
 goat-sdk = { path = "../../src/goat-sdk", develop = true }
-goat-sdk-wallet-evm = { path = "../../src/wallets/goat-wallet-evm", develop = true }
-goat-sdk-wallet-web3 = { path = "../../src/wallets/goat-wallet-web3", develop = true }
-goat-sdk-plugin-erc20 = { path = "../../src/plugins/goat-plugin-erc20", develop = true }
-goat-sdk-adapter-langchain = { path = "../../src/adapters/goat-adapter-langchain", develop = true }
+goat-sdk-wallet-evm = { path = "../../src/wallets/evm", develop = true }
+goat-sdk-wallet-web3 = { path = "../../src/wallets/web3", develop = true }
+goat-sdk-plugin-erc20 = { path = "../../src/plugins/erc20", develop = true }
+goat-sdk-adapter-langchain = { path = "../../src/adapters/langchain", develop = true }
 
 [tool.ruff]
 line-length = 120

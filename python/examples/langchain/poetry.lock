@@ -995,7 +995,7 @@ langchain = "^0.3.14"
 
 [package.source]
 type = "directory"
-url = "../../src/adapters/goat-adapter-langchain"
+url = "../../src/adapters/langchain"
 
 [[package]]
 name = "goat-sdk-plugin-erc20"
@@ -1012,7 +1012,7 @@ goat-sdk-wallet-evm = "^0.1.0"
 
 [package.source]
 type = "directory"
-url = "../../src/plugins/goat-plugin-erc20"
+url = "../../src/plugins/erc20"
 
 [[package]]
 name = "goat-sdk-wallet-evm"
@@ -1029,7 +1029,7 @@ goat-sdk = "^0.1.0"
 
 [package.source]
 type = "directory"
-url = "../../src/wallets/goat-wallet-evm"
+url = "../../src/wallets/evm"
 
 [[package]]
 name = "goat-sdk-wallet-web3"
@@ -1042,12 +1042,12 @@ develop = true
 
 [package.dependencies]
 goat-sdk = "^0.1.0"
-goat-sdk-wallet-evm = {path = "../goat-wallet-evm", develop = true}
+goat-sdk-wallet-evm = "^0.1.0"
 web3 = "^7.6.1"
 
 [package.source]
 type = "directory"
-url = "../../src/wallets/goat-wallet-web3"
+url = "../../src/wallets/web3"
 
 [[package]]
 name = "greenlet"
@@ -2827,4 +2827,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "163cc66a03cc31a596158bfa23151060e96bd9872cc510a296a0d0dd2e10dd5c"
+content-hash = "b0784d2f1cfac2123a331067efc1b01b37c9b6f4c6e08f19774f4c9468513ab6"
