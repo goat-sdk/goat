@@ -9,7 +9,7 @@ class CoinGeckoService:
 
     @Tool({
         "description": "Get the list of trending coins from CoinGecko",
-        "parameters": GetTrendingCoinsParameters
+        "parameters_schema": GetTrendingCoinsParameters
     })
     async def get_trending_coins(self, parameters: dict):
         """Get the list of trending coins from CoinGecko"""
@@ -22,7 +22,7 @@ class CoinGeckoService:
 
     @Tool({
         "description": "Get the price of a specific coin from CoinGecko",
-        "parameters": GetCoinPriceParameters
+        "parameters_schema": GetCoinPriceParameters
     })
     async def get_coin_price(self, parameters: dict):
         """Get the price of a specific coin from CoinGecko"""
@@ -45,7 +45,7 @@ class CoinGeckoService:
 
     @Tool({
         "description": "Search for coins on CoinGecko",
-        "parameters": SearchCoinsParameters
+        "parameters_schema": SearchCoinsParameters
     })
     async def search_coins(self, parameters: dict):
         """Search for coins on CoinGecko"""

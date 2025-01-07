@@ -17,12 +17,12 @@ class ToolConfig(TypedDict):
     Configuration interface for creating a Tool
 
     Generic Parameters:
-        TParameters: The Zon schema type for the tool's parameters
+        TResult: The return type of the tool's execution
 
     Attributes:
         name: The name of the tool
         description: A description of what the tool does
-        parameters: The Zon schema defining the tool's parameters
+        parameters: The Pydantic model class defining the tool's parameters
     """
 
     name: str
@@ -31,7 +31,17 @@ class ToolConfig(TypedDict):
 
 
 class ToolBase(Generic[TResult], ABC):
-    """Abstract base class for creating tools with typed results"""
+    """
+    Abstract base class for creating tools with typed results
+
+    Generic Parameters:
+        TResult: The return type of the tool's execution
+
+    Attributes:
+        name: The name of the tool
+        description: A description of what the tool does
+        parameters: The Pydantic model class defining the tool's parameters
+    """
 
     name: str
     description: str
@@ -42,7 +52,7 @@ class ToolBase(Generic[TResult], ABC):
         Creates a new Tool instance
 
         Args:
-            config: The configuration object for the tool
+            config: The configuration object for the tool containing name, description, and parameter model
         """
         super().__init__()
         self.name = config["name"]
@@ -55,7 +65,7 @@ class ToolBase(Generic[TResult], ABC):
         Executes the tool with the provided parameters
 
         Args:
-            parameters: The parameters for the tool execution, validated against the tool's schema
+            parameters: The parameters for the tool execution, validated against the tool's Pydantic model
 
         Returns:
             The result of the tool execution
@@ -70,11 +80,11 @@ def create_tool(
     Creates a new Tool instance with the provided configuration and execution function
 
     Args:
-        config: The configuration object for the tool
+        config: The configuration object for the tool containing name, description, and parameter model
         execute_fn: The function to be called when the tool is executed
 
     Returns:
-        A new Tool instance
+        A new Tool instance that validates parameters using the provided Pydantic model
     """
 
     class Tool(ToolBase):

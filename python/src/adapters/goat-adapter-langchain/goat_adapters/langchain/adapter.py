@@ -1,6 +1,5 @@
 from typing import List, TypeVar, Any
 
-from goat.classes.tool_base import zon_to_pydantic
 from langchain_core.tools import BaseTool
 from langchain_core.tools.structured import StructuredTool
 from goat import ToolBase, WalletClientBase, get_tools
@@ -28,7 +27,7 @@ def get_on_chain_tools(wallet: WalletClientBase, plugins: List[Any]) -> List[Bas
             name=t.name,
             description=t.description,
             func=lambda t=t, **args: _execute_tool(t, **args),
-            args_schema=zon_to_pydantic(t.parameters),
+            args_schema=t.parameters,
         )
         langchain_tools.append(tool)
 

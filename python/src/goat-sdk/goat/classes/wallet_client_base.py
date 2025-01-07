@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, TypedDict
 from pydantic import BaseModel
-from zon import ZonRecord, ZonString
 
 from goat.classes.tool_base import ToolBase, create_tool
 from goat.types.chain import Chain
-from goat.utils.create_tool_parameters import create_tool_parameters
 
 
 class EmptyParams(BaseModel):

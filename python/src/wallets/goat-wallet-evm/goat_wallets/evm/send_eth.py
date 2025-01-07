@@ -1,15 +1,19 @@
 from decimal import Decimal
 from typing import Dict, List, cast
 
-from zon import ZonRecord, ZonString
+from pydantic import BaseModel, Field
 from evmchains.chains import PUBLIC_CHAIN_META
 
 from goat.classes.plugin_base import PluginBase
 from goat.classes.tool_base import ToolBase, create_tool
-from goat.utils.create_tool_parameters import create_tool_parameters
 from goat.types.chain import Chain
 
 from .evm_smart_wallet_client import EVMWalletClient
+
+
+class SendETHParameters(BaseModel):
+    to: str = Field(description="The address to send ETH to")
+    amount: str = Field(description="The amount of ETH to send")
 
 
 class SendETHPlugin(PluginBase[EVMWalletClient]):
@@ -25,7 +29,7 @@ class SendETHPlugin(PluginBase[EVMWalletClient]):
             config={
                 "name": f"send_{chain_token['symbol']}",
                 "description": f"Send {chain_token['symbol']} to an address.",
-                "parameters": send_eth_parameters_schema.schema,
+                "parameters": SendETHParameters,
             },
             execute_fn=lambda params: send_eth_method(
                 wallet_client, cast(Dict[str, str], params)
@@ -38,19 +42,7 @@ def send_eth() -> SendETHPlugin:
     return SendETHPlugin()
 
 
-to_param = ZonString()
-to_param.description = "The address to send ETH to"  # type: ignore
-amount_param = ZonString()
-amount_param.description = "The amount of ETH to send"  # type: ignore
-
-send_eth_parameters_schema = create_tool_parameters(
-    ZonRecord({"to": to_param, "amount": amount_param})
-)
-
-
-def send_eth_method(
-    wallet_client: EVMWalletClient, parameters: Dict[str, str]
-) -> str:
+def send_eth_method(wallet_client: EVMWalletClient, parameters: Dict[str, str]) -> str:
     try:
         # Convert amount to Wei (1 ETH = 10^18 Wei)
         amount = int(Decimal(parameters["amount"]) * Decimal("1e18"))
@@ -78,4 +70,3 @@ def get_chain_token(chain_id: int) -> Dict[str, str | int]:
                     "decimals": native_currency["decimals"],
                 }
     raise Exception(f"Unsupported EVM chain ID: {chain_id}")
-

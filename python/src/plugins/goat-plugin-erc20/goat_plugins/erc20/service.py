@@ -22,7 +22,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Get the ERC20 token info by its symbol, including the contract address, decimals, and name",
-            "parameters": GetTokenInfoBySymbolParameters,
+            "parameters_schema": GetTokenInfoBySymbolParameters,
         }
     )
     def get_token_info_by_symbol(
@@ -58,7 +58,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Get the balance of an ERC20 token in base units. Convert to decimal units before returning.",
-            "parameters": GetTokenBalanceParameters,
+            "parameters_schema": GetTokenBalanceParameters,
         }
     )
     def get_token_balance(self, wallet_client: EVMWalletClient, parameters: dict):
@@ -83,7 +83,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Transfer an amount of an ERC20 token to an address",
-            "parameters": TransferParameters,
+            "parameters_schema": TransferParameters,
         }
     )
     def transfer(self, wallet_client: EVMWalletClient, parameters: dict):
@@ -105,7 +105,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Get the total supply of an ERC20 token",
-            "parameters": GetTokenTotalSupplyParameters,
+            "parameters_schema": GetTokenTotalSupplyParameters,
         }
     )
     def get_token_total_supply(
@@ -127,7 +127,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Get the allowance of an ERC20 token",
-            "parameters": GetTokenAllowanceParameters,
+            "parameters_schema": GetTokenAllowanceParameters,
         }
     )
     def get_token_allowance(self, wallet_client: EVMWalletClient, parameters: dict):
@@ -150,7 +150,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Approve an amount of an ERC20 token to an address",
-            "parameters": ApproveParameters,
+            "parameters_schema": ApproveParameters,
         }
     )
     def approve(self, wallet_client: EVMWalletClient, parameters: dict):
@@ -172,7 +172,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Transfer an amount of an ERC20 token from an address to another address",
-            "parameters": TransferFromParameters,
+            "parameters_schema": TransferFromParameters,
         }
     )
     def transfer_from(self, wallet_client: EVMWalletClient, parameters: dict):
@@ -195,7 +195,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Convert an amount of an ERC20 token to its base unit",
-            "parameters": ConvertToBaseUnitParameters,
+            "parameters_schema": ConvertToBaseUnitParameters,
         }
     )
     def convert_to_base_unit(self, parameters: dict):
@@ -207,7 +207,7 @@ class Erc20Service:
     @Tool(
         {
             "description": "Convert an amount of an ERC20 token from its base unit to its decimal unit",
-            "parameters": ConvertFromBaseUnitParameters,
+            "parameters_schema": ConvertFromBaseUnitParameters,
         }
     )
     def convert_from_base_unit(self, parameters: dict):

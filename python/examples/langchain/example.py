@@ -25,7 +25,7 @@ assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
 
 account: LocalAccount = Account.from_key(private_key)
 w3.eth.default_account = account.address  # Set the default account
-w3.middleware_onion.inject(SignAndSendRawMiddlewareBuilder.build(account), layer=0)
+w3.middleware_onion.inject(SignAndSendRawMiddlewareBuilder.build(account), layer=0) # type: ignore
 
 # Initialize LLM
 llm = ChatOpenAI(model="gpt-4o-mini")

@@ -10,7 +10,6 @@ repository = "https://github.com/goat-sdk/goat"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-zon = "^2.0.1"
 pydantic = "^2.10.0"
 
 [tool.poetry.group.test.dependencies]

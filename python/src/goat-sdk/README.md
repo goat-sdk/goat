@@ -20,20 +20,19 @@ poetry add goat-sdk
 ## Quick Start
 
 ```python
-from goat import WalletClientBase, create_tool, ToolParameters
-from zon import ZonRecord, ZonString
+from goat import WalletClientBase, create_tool
+from pydantic import BaseModel, Field
 
 # Create a wallet client
 wallet = MyWalletClient()
 
 # Create a tool with parameters
-parameters = create_tool_parameters(ZonRecord({
-    "address": ZonString()
-}))
+class GetBalanceParameters(BaseModel):
+    address: str = Field(description="The address to get the balance of")
 
 @Tool({
     "description": "Get the balance of an address",
-    "parameters": parameters
+    "parameters": GetBalanceParameters
 })
 def get_balance(params: dict) -> str:
     balance = await wallet.balance_of(params["address"])

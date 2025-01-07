@@ -969,13 +969,12 @@ name = "goat-sdk"
 version = "0.1.0"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
 optional = false
-python-versions = "^3.12"
+python-versions = "^3.10"
 files = []
 develop = true
 
 [package.dependencies]
 pydantic = "^2.10.0"
-zon = "^2.0.1"
 
 [package.source]
 type = "directory"
@@ -986,7 +985,7 @@ name = "goat-sdk-adapter-langchain"
 version = "0.1.0"
 description = "Goat adapter for LangChain"
 optional = false
-python-versions = "^3.12"
+python-versions = "^3.10"
 files = []
 develop = true
 
@@ -1003,7 +1002,7 @@ name = "goat-sdk-plugin-erc20"
 version = "0.1.0"
 description = "Goat plugin for ERC20"
 optional = false
-python-versions = "^3.12"
+python-versions = "^3.10"
 files = []
 develop = true
 
@@ -1020,7 +1019,7 @@ name = "goat-sdk-wallet-evm"
 version = "0.1.0"
 description = "Goat SDK EVM wallet implementation"
 optional = false
-python-versions = "^3.12"
+python-versions = "^3.10"
 files = []
 develop = true
 
@@ -1037,7 +1036,7 @@ name = "goat-sdk-wallet-web3"
 version = "0.1.0"
 description = "Goat SDK Web3 wallet implementation"
 optional = false
-python-versions = "^3.12"
+python-versions = "^3.10"
 files = []
 develop = true
 
@@ -2602,30 +2601,6 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
-name = "uuid"
-version = "1.30"
-description = "UUID object and generation functions (Python 2.3 or higher)"
-optional = false
-python-versions = "*"
-files = [
-    {file = "uuid-1.30.tar.gz", hash = "sha256:1f87cc004ac5120466f36c5beae48b4c48cc411968eed0eaecd3da82aa96193f"},
-]
-
-[[package]]
-name = "validators"
-version = "0.34.0"
-description = "Python Data Validation for Humans™"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "validators-0.34.0-py3-none-any.whl", hash = "sha256:c804b476e3e6d3786fa07a30073a4ef694e617805eb1946ceee3fe5a9b8b1321"},
-    {file = "validators-0.34.0.tar.gz", hash = "sha256:647fe407b45af9a74d245b943b18e6a816acf4926974278f6dd617778e1e781f"},
-]
-
-[package.extras]
-crypto-eth-addresses = ["eth-hash[pycryptodome] (>=0.7.0)"]
-
-[[package]]
 name = "web3"
 version = "7.6.1"
 description = "web3: A Python library for interacting with Ethereum"
@@ -2848,25 +2823,6 @@ files = [
 idna = ">=2.0"
 multidict = ">=4.0"
 propcache = ">=0.2.0"
-
-[[package]]
-name = "zon"
-version = "2.0.1"
-description = "A Zod-like validation library for Python"
-optional = false
-python-versions = ">=3.11"
-files = [
-    {file = "zon-2.0.1-py3-none-any.whl", hash = "sha256:a65be8a581c66e8a42c4df179a456698707da3cf1f262a3a2f7973db113e0ac7"},
-    {file = "zon-2.0.1.tar.gz", hash = "sha256:7b24050de71603101b169ca8a99064c1aba8f7bdcf47abf4fa43e4c63b010ea7"},
-]
-
-[package.dependencies]
-typing-extensions = ">4.12"
-uuid = "1.30"
-validators = ">0.28"
-
-[package.extras]
-dev = ["black", "build", "pylint", "pylint-pytest", "pytest", "pytest-cov"]
 
 [metadata]
 lock-version = "2.0"
