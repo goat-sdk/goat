@@ -12,7 +12,7 @@ packages = [
 ] 
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 aiohttp = "^3.8.6"
 goat-sdk = "^0.1.0"
 
