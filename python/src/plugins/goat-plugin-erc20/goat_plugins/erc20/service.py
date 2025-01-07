@@ -25,7 +25,7 @@ class Erc20Service:
             "parameters": GetTokenInfoBySymbolParameters,
         }
     )
-    async def get_token_info_by_symbol(
+    def get_token_info_by_symbol(
         self, wallet_client: EVMWalletClient, parameters: dict
     ):
         token = next(
@@ -61,7 +61,7 @@ class Erc20Service:
             "parameters": GetTokenBalanceParameters,
         }
     )
-    async def get_token_balance(self, wallet_client: EVMWalletClient, parameters: dict):
+    def get_token_balance(self, wallet_client: EVMWalletClient, parameters: dict):
         try:
             resolved_wallet_address = wallet_client.resolve_address(
                 parameters["wallet"]
@@ -86,7 +86,7 @@ class Erc20Service:
             "parameters": TransferParameters,
         }
     )
-    async def transfer(self, wallet_client: EVMWalletClient, parameters: dict):
+    def transfer(self, wallet_client: EVMWalletClient, parameters: dict):
         try:
             to_address = wallet_client.resolve_address(parameters["to"])
 
@@ -108,7 +108,7 @@ class Erc20Service:
             "parameters": GetTokenTotalSupplyParameters,
         }
     )
-    async def get_token_total_supply(
+    def get_token_total_supply(
         self, wallet_client: EVMWalletClient, parameters: dict
     ):
         try:

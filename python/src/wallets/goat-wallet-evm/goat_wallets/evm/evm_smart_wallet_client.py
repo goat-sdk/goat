@@ -7,6 +7,6 @@ from .types import EVMTransaction
 
 class EVMSmartWalletClient(EVMWalletClient):
     @abstractmethod
-    async def send_batch_of_transactions(self, transactions: List[EVMTransaction]) -> Dict[str, str]:
+    def send_batch_of_transactions(self, transactions: List[EVMTransaction]) -> Dict[str, str]:
         """Send a batch of transactions on the EVM chain."""
         pass
