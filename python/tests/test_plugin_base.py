@@ -18,10 +18,10 @@ class TestWalletClient(WalletClientBase):
     def get_chain(self) -> Chain:
         return EvmChain(type="evm", id=1)
     
-    async def sign_message(self, message: str) -> Signature:
+    def sign_message(self, message: str) -> Signature:
         return Signature(signature=f"signed_{message}")
     
-    async def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str) -> Balance:
         return Balance(decimals=18, symbol="ETH", name="Ethereum", value="100", in_base_units="100")
 
 # Test tool provider class

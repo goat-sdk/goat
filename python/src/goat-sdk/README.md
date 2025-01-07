@@ -35,7 +35,7 @@ parameters = create_tool_parameters(ZonRecord({
     "description": "Get the balance of an address",
     "parameters": parameters
 })
-async def get_balance(params: dict) -> str:
+def get_balance(params: dict) -> str:
     balance = await wallet.balance_of(params["address"])
     return f"{balance.value} {balance.symbol}"
 
