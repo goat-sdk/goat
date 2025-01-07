@@ -1,15 +1,19 @@
 from abc import ABC, abstractmethod
 from typing import List, TypedDict
+from pydantic import BaseModel
 from zon import ZonRecord, ZonString
 
 from goat.classes.tool_base import ToolBase, create_tool
 from goat.types.chain import Chain
 from goat.utils.create_tool_parameters import create_tool_parameters
 
-EmptyParams = create_tool_parameters(ZonRecord({}))
-BalanceParams = create_tool_parameters(ZonRecord({
-    "address": ZonString()
-}))
+
+class EmptyParams(BaseModel):
+    pass
+
+
+class BalanceParams(BaseModel):
+    address: str
 
 
 class Signature(TypedDict):
@@ -47,24 +51,24 @@ class WalletClientBase(ABC):
                 {
                     "name": "get_address",
                     "description": "Get the address of the wallet",
-                    "parameters": EmptyParams.schema, # type: ignore
+                    "parameters": EmptyParams
                 },
-                lambda _: self.get_address()
+                lambda _: self.get_address(),
             ),
             create_tool(
                 {
                     "name": "get_chain",
                     "description": "Get the chain of the wallet",
-                    "parameters": EmptyParams.schema, # type: ignore
+                    "parameters": EmptyParams
                 },
-                lambda _: self.get_chain()
+                lambda _: self.get_chain(),
             ),
             create_tool(
                 {
                     "name": "get_balance",
                     "description": "Get the balance of the wallet",
-                    "parameters": BalanceParams.schema, # type: ignore
+                    "parameters": BalanceParams
                 },
-                lambda parameters: self.balance_of(parameters["address"])
-            )
-        ] 
+                lambda parameters: self.balance_of(parameters["address"]),
+            ),
+        ]

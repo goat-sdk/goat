@@ -1,22 +1,16 @@
-from abc import ABC
-from typing import TypeVar, Generic, Type
-from zon import ZonRecord
+from dataclasses import dataclass
+from typing import Type
+from pydantic import BaseModel
 
-T = TypeVar('T', bound=ZonRecord)
 
-class ToolParameters(Generic[T]):
-    schema: T
+@dataclass
+class ToolParametersSchemaHolder:
+    schema: Type[BaseModel]
 
-def create_tool_parameters(schema: T) -> ToolParameters[T]:
+
+def create_tool_parameters(schema: Type[BaseModel]) -> ToolParametersSchemaHolder:
     # Check if schema is an instance of ZonRecord
-    if not isinstance(schema, ZonRecord):
-        raise ValueError(f"Schema must be an instance of ZonRecord, got {type(schema)}")
+    if not issubclass(schema, BaseModel):
+        raise ValueError(f"Schema must be a subclass of BaseModel")
 
-    return type(
-        'SchemaHolder',
-        (ToolParameters,),
-        {
-            'schema': schema,
-            '__init__': lambda self: super(type(self), self).__init__()
-        }
-    )()
+    return ToolParametersSchemaHolder(schema)

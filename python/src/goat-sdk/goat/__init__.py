@@ -1,8 +1,10 @@
 from .classes.tool_base import create_tool, ToolBase
 from .classes.wallet_client_base import WalletClientBase
 from .classes.plugin_base import PluginBase
-from .utils.add_parameters_to_description import add_parameters_to_description
-from .utils.create_tool_parameters import create_tool_parameters, ToolParameters
+from .utils.create_tool_parameters import (
+    create_tool_parameters,
+    ToolParametersSchemaHolder,
+)
 from .utils.snake_case import snake_case
 from .utils.get_tools import get_tools
 from .types.chain import Chain, EvmChain, SolanaChain, AptosChain, ChromiaChain
@@ -13,18 +15,15 @@ __all__ = [
     "create_tool",
     "WalletClientBase",
     "PluginBase",
-    
     # Utils
-    "add_parameters_to_description",
     "create_tool_parameters",
-    "ToolParameters",
+    "ToolParametersSchemaHolder",
     "snake_case",
     "get_tools",
-    
     # Types
     "Chain",
-    "EvmChain", 
+    "EvmChain",
     "SolanaChain",
     "AptosChain",
-    "ChromiaChain"
+    "ChromiaChain",
 ]

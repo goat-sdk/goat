@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Any, Union, Awaitable, TypeVar, Generic
-from typing_extensions import TypeVar
+from typing import List, Any, TypeVar, Generic
 
 from goat.classes.tool_base import ToolBase, create_tool
 from goat.classes.wallet_client_base import WalletClientBase
