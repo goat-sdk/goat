@@ -1,5 +1,5 @@
 
-export interface AvnuCtorParams {
+export interface ConfigSchema {
     base_url: string;
     Starknet_rpc: string;
     private_key: string;
