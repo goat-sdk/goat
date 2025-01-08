@@ -1,15 +1,9 @@
 //import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { Balance, Chain, Signature, type ToolBase, WalletClientBase } from "@goat-sdk/core";
-import {
-    type EVMReadRequest,
-    type EVMReadResult,
-    type EVMTransaction,
-    type EVMTypedData,
-    EVMWalletClient,
-} from "@goat-sdk/wallet-evm";
+import { Balance, Chain, Signature, WalletClientBase } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { ViemEVMWalletClient } from "@goat-sdk/wallet-viem";
 import { ViemOptions } from "@goat-sdk/wallet-viem";
-import { Account, Wallet } from "@zilliqa-js/account";
+import { Account } from "@zilliqa-js/account";
 import { Zilliqa } from "@zilliqa-js/zilliqa";
 import { type WalletClient as ViemWalletClient } from "viem";
 

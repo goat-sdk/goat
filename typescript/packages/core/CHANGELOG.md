@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.5
+
+### Patch Changes
+
+- b9af25b: Add support for Zilliqa network
+
 ## 0.4.4
 
 ### Patch Changes

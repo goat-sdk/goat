@@ -1,9 +1,7 @@
 import { Balance, Tool } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { ZilliqaWalletClient } from "@goat-sdk/wallet-zilliqa";
 import { fromBech32Address, toBech32Address, toChecksumAddress } from "@zilliqa-js/crypto";
 import { BN, Long, units as ZilliqaUnits, validation as ZilliqaValidation } from "@zilliqa-js/util";
-import { Zilliqa } from "@zilliqa-js/zilliqa";
 import * as viem from "viem";
 import { AddressParameters, TransferParameters } from "./parameters";
 
