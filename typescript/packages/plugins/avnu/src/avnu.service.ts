@@ -1,17 +1,21 @@
 import { Tool } from "@goat-sdk/core";
 import { Account, RpcProvider } from "starknet";
-import { ConfigSchema, GetQuoteBodySchema } from "./types";
-import { AvnuOptions, executeSwap, fetchQuotes, type Quote } from "@avnu/avnu-sdk";
+import { executeSwap, fetchQuotes, type Quote } from "@avnu/avnu-sdk";
+import { GetQuoteConfigParams } from "./parameters";
 
 export class AvnuService {
-    private params: ConfigSchema;
+    private params;
     account: Account;
-    avnu_options: AvnuOptions;
+    avnu_options;
 
     constructor() {
         this.params = this.createProviderConfig();
-        const provider = new RpcProvider({ nodeUrl: this.params.Starknet_rpc });
-        this.avnu_options = { baseUrl: this.params.base_url };
+        const provider = new RpcProvider({
+            nodeUrl: this.params.Starknet_rpc
+        });
+        this.avnu_options = {
+            baseUrl: this.params.base_url
+        };
         this.account = new Account(
             provider,
             this.params.account_address,
@@ -19,12 +23,22 @@ export class AvnuService {
         );
     }
 
-    async getQuote(params: GetQuoteBodySchema): Promise<Quote[]> {
+    @Tool({
+        name: "getQuote",
+        description: "Get quotes for swapping tokens on Avnu"
+    })
+    async getQuote(params: GetQuoteConfigParams): Promise<Quote[]> {
         try {
-            const quotes = await fetchQuotes(params, this.avnu_options);
-            if (!quotes.length) {
-                throw new Error("No quotes available");
+            const quotes = await fetchQuotes({
+                ...params,
+                sellAmount: BigInt(params.sellAmount),
+                ...this.avnu_options
+            });
+
+            if (!quotes || quotes.length === 0) {
+                throw new Error("No quotes found");
             }
+
             return quotes;
         } catch (error) {
             console.error("Error fetching quotes:", error);
@@ -32,15 +46,18 @@ export class AvnuService {
         }
     }
 
+    @Tool({
+        name: "executeSwap",
+        description: "Execute a token swap on Avnu using a quote"
+    })
     async Swap(quote: Quote) {
         try {
             const swapResponse = await executeSwap(
                 this.account,
                 quote,
-                {
-                    executeApprove: true,
-                    slippage: 0.01
-                },
+                { executeApprove: true ,
+                 slippage: 0.5 
+                }, 
                 this.avnu_options
             );
             return swapResponse;
@@ -50,9 +67,9 @@ export class AvnuService {
         }
     }
 
-    private createProviderConfig(): ConfigSchema {
+    private createProviderConfig() {
         const base_url = process.env.BASE_URL;
-        const Starknet_rpc = process.env.STARKNET_RPC || "https://starknet-mainnet.public.blastapi.io/rpc/v0_6";
+        const Starknet_rpc = process.env.STARKNET_RPC;
         const private_key = process.env.PRIVATE_KEY;
         const account_address = process.env.ACCOUNT_ADDRESS;
 
@@ -61,7 +78,7 @@ export class AvnuService {
         }
 
         return {
-            base_url: base_url || 'https://starknet.api.avnu.fi',
+            base_url: base_url || "https://starknet.api.avnu.fi",
             Starknet_rpc,
             private_key,
             account_address

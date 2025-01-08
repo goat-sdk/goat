@@ -12,4 +12,4 @@ export class AvnuPlugin extends PluginBase {
     supportsChain = (chain: Chain) => chain.type === "starknet";
 }
 
-export const Avnu = () => new AvnuService();
+export const Avnu = () => new AvnuPlugin();
