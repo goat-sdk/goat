@@ -1,5 +1,11 @@
 # @goat-sdk/adapter-langchain
 
+## 0.2.7
+
+### Patch Changes
+
+- b9317ec: Make sure tools return string responses
+
 ## 0.2.6
 
 ### Patch Changes

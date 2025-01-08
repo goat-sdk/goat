@@ -1,5 +1,12 @@
 # goat-examples-langchain-viem
 
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [b9317ec]
+  - @goat-sdk/adapter-langchain@0.2.7
+
 ## 0.2.8
 
 ### Patch Changes
