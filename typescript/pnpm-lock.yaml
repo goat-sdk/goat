@@ -992,6 +992,13 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.23.8
+    devDependencies:
+      '@ai-sdk/xai':
+        specifier: 1.0.9
+        version: 1.0.9(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: workspace:*
+        version: link:../../adapters/vercel-ai
 
   packages/plugins/coingecko:
     dependencies:
@@ -11589,6 +11596,12 @@ snapshots:
       '@ai-sdk/provider-utils': 1.0.22(zod@3.23.8)
       zod: 3.23.8
 
+  '@ai-sdk/openai-compatible@0.0.8(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 1.0.2
+      '@ai-sdk/provider-utils': 2.0.4(zod@3.23.8)
+      zod: 3.23.8
+
   '@ai-sdk/openai-compatible@0.0.8(zod@3.24.1)':
     dependencies:
       '@ai-sdk/provider': 1.0.2
@@ -11654,6 +11667,15 @@ snapshots:
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.24.1
+
+  '@ai-sdk/provider-utils@2.0.4(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 1.0.2
+      eventsource-parser: 3.0.0
+      nanoid: 3.3.8
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
 
   '@ai-sdk/provider-utils@2.0.4(zod@3.24.1)':
     dependencies:
@@ -11802,6 +11824,13 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - zod
+
+  '@ai-sdk/xai@1.0.9(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/openai-compatible': 0.0.8(zod@3.23.8)
+      '@ai-sdk/provider': 1.0.2
+      '@ai-sdk/provider-utils': 2.0.4(zod@3.23.8)
+      zod: 3.23.8
 
   '@ai-sdk/xai@1.0.9(zod@3.24.1)':
     dependencies:

@@ -22,6 +22,10 @@
     "starknet": "^6.11.0",
     "zod": "catalog:"
   },
+  "devDependencies": {
+    "@goat-sdk/adapter-vercel-ai": "workspace:*",
+    "@ai-sdk/xai": "1.0.9"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
