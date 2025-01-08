@@ -1,9 +1,9 @@
 import { Tool } from "@goat-sdk/core";
-import { CreateGlobalAddressParams, FLEX, createCall, createGlobalAddress } from "@zerodev/global-address";
-import { type Address, erc20Abi, getAddress } from "viem";
+import { FLEX, createCall, createGlobalAddress } from "@zerodev/global-address";
+import { type Address, erc20Abi } from "viem";
 import { arbitrum, base, mainnet, mode, optimism, scroll } from "viem/chains";
 import { CreateGlobalAddressConfigParams } from "./parameters";
-import { GlobalAddressConfig, GlobalAddressResponse, TokenActions, TokenConfig } from "./types";
+import { GlobalAddressResponse, TokenActions, TokenConfig } from "./types";
 
 interface FormattedFee {
     chainName: string;

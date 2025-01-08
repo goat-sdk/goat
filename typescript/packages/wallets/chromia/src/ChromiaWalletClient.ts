@@ -2,7 +2,6 @@ import { type Connection, type KeyStoreInteractor, createAmount } from "@chromia
 import { WalletClientBase } from "@goat-sdk/core";
 import type { DictPair, IClient, QueryObject, RawGtv } from "postchain-client";
 import { formatUnits } from "viem";
-import { CHROMIA_CONFIG } from "./consts";
 import type { ChromiaTransaction } from "./types/ChromiaTransaction";
 
 export type ChromiaWalletCtorParams = {

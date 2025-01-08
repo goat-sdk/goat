@@ -1,6 +1,6 @@
 import { Wallet } from "@coral-xyz/anchor";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { Percentage, TransactionBuilder, resolveOrCreateATAs } from "@orca-so/common-sdk";
+import { Percentage } from "@orca-so/common-sdk";
 import {
     NO_TOKEN_EXTENSION_CONTEXT,
     ORCA_WHIRLPOOL_PROGRAM_ID,

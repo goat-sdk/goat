@@ -1,5 +1,5 @@
 import { Crossmint, CrossmintApiClient, createCrossmint } from "@crossmint/common-sdk-base";
-import { Chain, PluginBase, WalletClientBase, createTool } from "@goat-sdk/core";
+import { Chain, PluginBase, createTool } from "@goat-sdk/core";
 import { z } from "zod";
 
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
