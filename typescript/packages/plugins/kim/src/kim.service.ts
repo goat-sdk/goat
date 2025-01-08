@@ -16,7 +16,6 @@ import {
     ExactOutputParams,
     ExactOutputSingleParams,
     GetSwapRouterAddressParams,
-    GlobalStateResponseParams,
     IncreaseLiquidityParams,
     MintParams,
 } from "./parameters";

@@ -2,7 +2,6 @@ import { Chain, PluginBase } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { mode } from "viem/chains";
 import { ModeGovernanceService } from "./mode-governance.service";
-import { GetBalanceParameters, GetStakeInfoParameters, StakeParameters } from "./parameters";
 
 const SUPPORTED_CHAINS = [mode];
 

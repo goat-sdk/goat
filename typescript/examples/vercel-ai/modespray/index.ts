@@ -4,7 +4,7 @@ import { generateText } from "ai";
 import { http, createWalletClient } from "viem";
 
 import { privateKeyToAccount } from "viem/accounts";
-import { mode, modeTestnet } from "viem/chains";
+import { modeTestnet } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 

@@ -1,5 +1,18 @@
 # goat-examples-vercel-ai-mode
 
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [b9af25b]
+  - @goat-sdk/core@0.4.5
+  - @goat-sdk/adapter-vercel-ai@0.2.6
+  - @goat-sdk/plugin-erc20@0.2.7
+  - @goat-sdk/plugin-erc721@0.1.16
+  - @goat-sdk/plugin-kim@0.1.7
+  - @goat-sdk/wallet-evm@0.2.5
+  - @goat-sdk/wallet-viem@0.2.5
+
 ## 0.2.8
 
 ### Patch Changes

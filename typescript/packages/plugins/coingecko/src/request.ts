@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 /**
  * Helper function to make requests to the CoinGecko API
  * @param endpointUrl - The full URL of the CoinGecko API endpoint

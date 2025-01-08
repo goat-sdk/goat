@@ -1,4 +1,4 @@
-import { type Chain, PluginBase, ToolBase } from "@goat-sdk/core";
+import { type Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { mode } from "viem/chains";
 import { IroncladService } from "./ironclad.service";

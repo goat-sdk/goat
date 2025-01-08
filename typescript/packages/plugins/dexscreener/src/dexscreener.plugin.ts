@@ -1,4 +1,4 @@
-import { PluginBase, createTool } from "@goat-sdk/core";
+import { PluginBase } from "@goat-sdk/core";
 import type { Chain, WalletClientBase } from "@goat-sdk/core";
 import { DexscreenerService } from "./dexscreener.service";
 
