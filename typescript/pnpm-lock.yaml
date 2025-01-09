@@ -1044,6 +1044,15 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/etherscan:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/farcaster:
     dependencies:
       '@goat-sdk/core':
