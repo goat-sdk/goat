@@ -32,9 +32,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
-goat-core = { path = "src/goat/core/", develop = true }
-goat-plugin-coingecko = { path = "src/goat/plugins/coingecko/", develop = true }
-goat-plugin-erc20 = { path = "src/goat/plugins/erc20/", develop = true }
+goat-sdk = { path = "src/goat-sdk/", develop = true }
+goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/", develop = true }
+goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/", develop = true }
 
 [tool.ruff]
 line-length = 120
