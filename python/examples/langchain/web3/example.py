@@ -1,5 +1,9 @@
 import os
 from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_structured_chat_agent
 from langchain.hub import pull
@@ -13,9 +17,6 @@ from goat_plugins.erc20.token import PEPE, USDC
 from goat_plugins.erc20 import erc20, ERC20PluginOptions
 from goat_wallets.evm import send_eth
 from goat_wallets.web3 import Web3EVMWalletClient
-
-# Load environment variables
-load_dotenv()
 
 # Initialize Web3 and account
 w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_PROVIDER_URL")))
@@ -45,7 +46,7 @@ def main():
     agent = create_structured_chat_agent(llm=llm, tools=tools, prompt=prompt)
 
     # Create the executor
-    agent_executor = AgentExecutor(agent=agent, tools=tools)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True)
 
     # Execute the agent
     response = agent_executor.invoke({"input": "Get my balance in USDC"})
