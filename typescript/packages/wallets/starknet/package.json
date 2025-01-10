@@ -17,6 +17,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "ethers": "6.13.5",
         "starknet": "^6.11.0",
         "viem": "catalog:",
         "zod": "catalog:"
