@@ -1,7 +1,7 @@
 import { Tool } from "@goat-sdk/core";
 import { Account, RpcProvider } from "starknet";
 import { executeSwap, fetchQuotes, type Quote } from "@avnu/avnu-sdk";
-import { GetQuoteConfigParams } from "./parameters";
+import { SwapConfigParams } from "./parameters";
 
 export class AvnuService {
     private params;
@@ -23,11 +23,11 @@ export class AvnuService {
         );
     }
 
-    @Tool({
-        name: "getQuote",
-        description: "Get quotes for swapping tokens on Avnu"
-    })
-    async getQuote(params: GetQuoteConfigParams): Promise<Quote[]> {
+    private async getQuote(params: {
+        sellTokenAddress: string,
+        buyTokenAddress: string,
+        sellAmount: string
+    }): Promise<Quote[]> {
         try {
             const quotes = await fetchQuotes({
                 ...params,
@@ -48,15 +48,19 @@ export class AvnuService {
 
     @Tool({
         name: "executeSwap",
-        description: "Execute a token swap on Avnu using a quote"
+        description: "Execute a token swap on Avnu"
     })
-    async Swap(quote: Quote) {
+    async Swap(params: SwapConfigParams) {
         try {
+            const quotes = await this.getQuote(params);
+            const bestQuote = quotes[0]; // Assuming the first quote is the best one
+
             const swapResponse = await executeSwap(
                 this.account,
-                quote,
-                { executeApprove: true ,
-                 slippage: 0.5 
+                bestQuote,
+                { 
+                    executeApprove: true,
+                    slippage: 0.5 
                 }, 
                 this.avnu_options
             );
