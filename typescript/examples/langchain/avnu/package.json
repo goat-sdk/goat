@@ -1,0 +1,27 @@
+{
+    "name": "goat-examples-langchain-avnu",
+    "version": "0.1.0",
+    "description": "Langchain example for Avnu",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@goat-sdk/adapter-langchain": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-avnu": "workspace:*",
+        "@goat-sdk/wallet-starknet": "workspace:*",
+        "@langchain/community": "0.3.23",
+        "@langchain/core": "catalog:",
+        "@langchain/langgraph": "^0.2.0",
+        "@langchain/ollama": "0.1.4",
+        "@langchain/openai": "^0.3.14",
+        "dotenv": "^16.4.5",
+        "ethers": "5.7.2",
+        "get-starknet": "^3.3.3",
+        "langchain": "^0.3.2",
+        "starknet": "^6.11.0"
+    }
+}
