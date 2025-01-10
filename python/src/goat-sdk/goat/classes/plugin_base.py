@@ -1,3 +1,5 @@
+import asyncio
+import inspect
 from abc import ABC, abstractmethod
 from typing import List, Any, TypeVar, Generic
 
@@ -112,4 +114,8 @@ class PluginBase(Generic[TWalletClient], ABC):
             args[parameters_index - 1] = params
 
         method = getattr(tool_provider, tool_metadata.target.__name__)
-        return method(*args)
+        result = method(*args)
+
+        if inspect.iscoroutine(result):
+            return asyncio.get_event_loop().run_until_complete(result)
+        return result
