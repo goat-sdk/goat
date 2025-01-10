@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-plugin-coingecko"
-version = "0.1.0"
+version = "0.1.1"
 description = "Goat plugin for Coingecko"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
