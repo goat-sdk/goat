@@ -832,9 +832,9 @@ importers:
       '@ai-sdk/openai':
         specifier: ^1.0.4
         version: 1.0.13(zod@3.23.8)
-      '@goat-sdk/adapter-vercel-ai':
+      '@goat-sdk/adapter-virtuals-game':
         specifier: workspace:*
-        version: link:../../../packages/adapters/vercel-ai
+        version: link:../../../packages/adapters/virtuals-game
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../../packages/core
@@ -953,6 +953,24 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.23.8
+
+  packages/adapters/virtuals-game:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@virtuals-protocol/game':
+        specifier: ^0.1.6
+        version: 0.1.6
+      ajv:
+        specifier: ^8.17.1
+        version: 8.17.1
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+      zod-to-json-schema:
+        specifier: 3.24.1
+        version: 3.24.1(zod@3.23.8)
 
   packages/core:
     dependencies:
@@ -5785,6 +5803,9 @@ packages:
 
   '@virtuals-protocol/game@0.1.4':
     resolution: {integrity: sha512-H8Tr3CYPwVxCeJGsGqvKAWnJHPiAeeLk2c32p/O1ZC1GMEMoJTPgKVtnDE7xY7AOQn69jOVK0BQRNZH11gvdlg==}
+
+  '@virtuals-protocol/game@0.1.6':
+    resolution: {integrity: sha512-zbhgjdPXpva/mS/uC295mBGtgLWg3x7bZMGMGoQBrH7OFmQYilebB42iEt8sQCWqqcCfWsnFbDIBpVqb+ioSYg==}
 
   '@vitest/expect@0.34.6':
     resolution: {integrity: sha512-QUzKpUQRc1qC7qdGo7rMK3AkETI7w18gTCUrsNnyjjJKYiuUB9+TQK3QnR1unhCnWRC0AbKv2omLGQDF/mIjOw==}
@@ -18386,6 +18407,12 @@ snapshots:
   '@upstash/vector@1.1.7': {}
 
   '@virtuals-protocol/game@0.1.4':
+    dependencies:
+      axios: 1.7.9
+    transitivePeerDependencies:
+      - debug
+
+  '@virtuals-protocol/game@0.1.6':
     dependencies:
       axios: 1.7.9
     transitivePeerDependencies:

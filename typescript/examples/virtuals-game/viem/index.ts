@@ -1,22 +1,14 @@
-import {
-    ExecutableGameFunctionResponse,
-    ExecutableGameFunctionStatus,
-    GameAgent,
-    GameFunction,
-    GameWorker,
-} from "@virtuals-protocol/game";
+import { GameAgent, GameWorker } from "@virtuals-protocol/game";
 
 import { http } from "viem";
 import { createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mode } from "viem/chains";
 
-import { ToolBase, getTools } from "@goat-sdk/core";
+import { VirtualsGameAdapter } from "@goat-sdk/adapter-virtuals-game";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
-import type { JSONSchemaType } from "ajv";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 require("dotenv").config();
 
@@ -28,45 +20,14 @@ const walletClient = createWalletClient({
     chain: mode,
 });
 
+const wallet = viem(walletClient);
+
 (async () => {
-    const tools: ToolBase[] = await getTools({
-        wallet: viem(walletClient),
+    const adapter = new VirtualsGameAdapter({
+        wallet: wallet,
         plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
     });
-
-    const workerFunctions = tools.map((tool) => {
-        // biome-ignore lint/suspicious/noExplicitAny: Fix types later
-        const schema = zodToJsonSchema(tool.parameters as any, {
-            target: "jsonSchema7",
-        }) as JSONSchemaType<typeof tool.parameters>;
-
-        const properties = Object.keys(schema.properties);
-
-        const args = properties.map((property) => ({
-            name: property,
-            description: schema.properties[property].description ?? "",
-        }));
-
-        return new GameFunction({
-            name: tool.name,
-            description: tool.description,
-            args: args,
-            executable: async (args) => {
-                try {
-                    const result = await tool.execute(args);
-                    return new ExecutableGameFunctionResponse(
-                        ExecutableGameFunctionStatus.Done,
-                        JSON.stringify(result),
-                    );
-                } catch (e) {
-                    return new ExecutableGameFunctionResponse(
-                        ExecutableGameFunctionStatus.Failed,
-                        `Failed to execute tool: ${e}`,
-                    );
-                }
-            },
-        });
-    });
+    const workerFunctions = await adapter.getAdaptedTools();
 
     const onChainWorker = new GameWorker({
         id: "onchain_worker",
