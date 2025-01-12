@@ -23,7 +23,7 @@ export function getCreateAndPayOrderParameters(callDataSchema: z.ZodSchema) {
             .object({
                 method: z
                     .enum(["ethereum", "ethereum-sepolia", "base", "base-sepolia", "polygon", "polygon-amoy", "solana"])
-                    .describe("The blockchain network to use for the transaction"), // TOOD: This is not the full list of methods
+                    .describe("The blockchain network to use for the transaction"), // TODO: This is not the full list of methods
                 currency: z.enum(["usdc"]).describe("The currency to use for payment"), // TODO: This is not the full list of currencies
                 payerAddress: z.string().describe("The address that will pay for the transaction"), // TODO: This required for now, as this will create and buy the order in 1 tool
                 receiptEmail: z.string().optional().describe("Optional email to send payment receipt to"),
