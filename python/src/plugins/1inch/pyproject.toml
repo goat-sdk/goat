@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goat-plugin-oneinch"
+name = "goat-plugin-1inch"
 version = "0.1.0"
 description = "1inch plugin for GOAT SDK"
 authors = ["GOAT SDK Team"]
