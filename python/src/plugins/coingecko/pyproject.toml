@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-plugin-coingecko"
-version = "0.1.0"
+version = "0.1.1"
 description = "Goat plugin for Coingecko"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
@@ -14,7 +14,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.10"
 aiohttp = "^3.8.6"
-goat-sdk = "^0.1.0"
+goat-sdk = "^0.1.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
@@ -37,7 +37,6 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
 goat-sdk = { path = "../../goat-sdk", develop = true }
-
 
 [tool.ruff]
 line-length = 120

@@ -7,10 +7,16 @@ readme = "README.md"
 keywords = ["goat", "sdk", "web3", "agents", "ai"]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
 pydantic = "^2.10.0"
+goat-sdk = { path = "src/goat-sdk/" }
+goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/" }
+goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/" }
+goat-sdk-wallet-web3 = { path = "src/wallets/web3/" }
+goat-sdk-adapter-langchain = { path = "src/adapters/langchain/" }
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
@@ -29,12 +35,6 @@ asyncio_default_fixture_loop_scope = "function"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.8.6"
-goat-core = { path = "src/goat/core/", develop = true }
-goat-plugin-coingecko = { path = "src/goat/plugins/coingecko/", develop = true }
-goat-plugin-erc20 = { path = "src/goat/plugins/erc20/", develop = true }
 
 [tool.ruff]
 line-length = 120
