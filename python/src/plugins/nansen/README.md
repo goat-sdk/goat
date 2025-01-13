@@ -1,91 +1,110 @@
+# GOAT SDK Nansen Plugin
 
+This plugin provides tools for interacting with the Nansen API, allowing you to:
+- Get token details and trades
+- Retrieve NFT collection details and trades
+- Access smart money wallet analysis
+- Get trading signals based on on-chain data
 
-<div align="center">
-Go out and eat some grass.
+## Installation
 
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)
-
-GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossmint.com)
-</div>
-
-## Goat 🐐
-GOAT 🐐 (Great Onchain Agent Toolkit) is an open-source framework for adding blockchain tools such as wallets, being able to hold or trade tokens, or interacting with blockchain smart contracts, to your AI agent.
-
-**Problem**: 
-
-Making agents perform onchain actions is tedious. The ecosystem is heavily fragmented, spanning 5+ popular agent development frameworks, multiple programming languages, and dozens of different blockchains and wallet architectures.
-For developers without blockchain expertise, finding clear instructions to perform simple actions - like sending USDC payments or placing Polymarket bets - is nearly impossible.
-
-**Solution**: 
-
-GOAT solves this by providing an open-source, provider-agnostic framework that abstracts away all these combinations.
-
-- **For agent developers**: GOAT offers an always-growing catalog of ready made blockchain actions (sending tokens, using a DeFi protocol, ...) that can be imported as tools into your existing agent. It works with the most popular agent frameworks (Langchain, Vercel's AI SDK, Eliza, etc), Typescript and Python, 30+ blockchains (Solana, Base, Polygon, Mode, ...), and many wallet providers.
-
-- **For dApp / smart contract developers**: develop a plug-in in GOAT, and allow agents built with any of the most popular agent development frameworks to access your service.
-
-### Key features
-1. **Works Everywhere**: Compatible with Langchain, Vercel’s AI SDK, Eliza, and more.
-2. **Wallet Agnostic**: Supports all wallets, from your own key pairs to [Crossmint Smart Wallets](https://docs.crossmint.com/wallets/smart-wallets/overview) and Coinbase.
-3. **Multi-Chain**: Supports EVM chains and Solana (more coming 👀).
-4. **Customizable**: Use or build plugins for any onchain functionality (sending tokens, checking wallet balance, etc) and protocol (Polymarket, Uniswap, etc).
-
-![goat](https://github.com/user-attachments/assets/f6aa46ce-5684-4136-be29-7867acab3f27)
-
-### How it works
-GOAT plugs into your agents tool calling capabilities adding all the functions your agent needs to interact with the blockchain. 
-
-High-level, here's how it works:
-
-#### Configure the wallet you want to use
-```typescript
-// ... Code to connect your wallet (e.g createWalletClient from viem)
-const wallet = ...
-
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-})
+```bash
+pip install goat-sdk-plugin-nansen
 ```
 
-#### Add the plugins you need to interact with the protocols you want
-```typescript
-const wallet = ...
+## Usage
 
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-  plugins: [
-    sendETH(),
-    erc20({ tokens: [USDC, PEPE] }),
-    faucet(),
-    polymarket(),
-    // ...
-  ],
-})
+```python
+from goat_plugins.nansen import nansen, NansenPluginOptions
+
+# Initialize the plugin with your API key
+plugin = nansen(NansenPluginOptions(
+    api_key="your-nansen-api-key"
+))
+
+# Example: Get token details
+async def get_token_info():
+    result = await plugin.get_token_details({
+        "address": "0x1234..."  # Token contract address
+    })
+    print(result)
+
+# Example: Get NFT trades
+async def get_nft_trading_history():
+    result = await plugin.get_nft_trades({
+        "token_address": "0x1234...",  # NFT contract address
+        "nft_id": "1",                 # Token ID
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-31"
+    })
+    print(result)
+
+# Example: Get smart money flows
+async def get_smart_money_flows():
+    result = await plugin.get_smart_money_status({
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-31",
+        "token_address": "0x1234..."  # Optional token address
+    })
+    print(result)
+
+# Example: Get trading signals
+async def get_trading_signals():
+    result = await plugin.get_trading_signal({
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-31"
+    })
+    print(result)
 ```
 
-#### Connect it to your agent framework of choice
-```typescript
-// ... Code to connect your wallet (e.g createWalletClient from viem)
-const wallet = ...
+## Features
 
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-  plugins: [ 
-    sendETH(),
-    erc20({ tokens: [USDC, PEPE] }), 
-    faucet(), 
-    polymarket(), 
-    // ...
-  ],
-})
+- Token Analysis:
+  - Get detailed token information
+  - Track token trading activity
+  
+- NFT Analytics:
+  - Fetch NFT collection details
+  - Monitor NFT trading activity
+  
+- Smart Money Tracking:
+  - Analyze smart money wallet behavior
+  - Track token flows
+  
+- Trading Signals:
+  - Get trading signals based on on-chain data
+  - Filter by date ranges and specific tokens
 
-// Vercel's AI SDK
-const result = await generateText({
-    model: openai("gpt-4o-mini"),
-    tools: tools,
-    maxSteps: 5,
-    prompt: "Send 420 ETH to ohmygoat.eth",
-});
+## Configuration
+
+The plugin requires a Nansen API key. You can obtain one by:
+1. Creating an account at [Nansen](https://www.nansen.ai)
+2. Subscribing to the API service
+3. Generating an API key in your dashboard
+
+## Development
+
+To set up the development environment:
+
+```bash
+# Clone the repository
+git clone https://github.com/goat-sdk/goat.git
+cd goat/python/src/plugins/nansen
+
+# Install dependencies using Poetry
+poetry install
+
+# Run tests
+poetry run pytest
+
+# Run linting
+poetry run ruff check .
 ```
 
-See [here](https://github.com/goat-sdk/goat/tree/main/typescript/examples) for more examples.
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
