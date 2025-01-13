@@ -8,7 +8,7 @@ This plugin provides tools for interacting with the Dexscreener API, allowing yo
 ## Installation
 
 ```bash
-pip install goat-plugins-dexscreener
+pip install goat-sdk-plugin-dexscreener
 ```
 
 ## Usage
