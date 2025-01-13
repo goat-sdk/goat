@@ -7,7 +7,7 @@ This plugin provides integration with the OpenSea API for the GOAT SDK, allowing
 ## Installation
 
 ```bash
-pip install goat-plugins-opensea
+pip install goat-sdk-plugin-opensea
 ```
 
 ## Usage
