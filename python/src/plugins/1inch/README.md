@@ -9,13 +9,13 @@ This plugin provides integration with the 1inch API for the GOAT SDK.
 ## Installation
 
 ```bash
-pip install goat-plugin-oneinch
+pip install goat-plugin-1inch
 ```
 
 ## Usage
 
 ```python
-from goat_plugins.oneinch import OneInchService
+from goat_plugins.inch1 import OneInchService
 
 # Initialize the service with your API key
 service = OneInchService(api_key="your_api_key")
