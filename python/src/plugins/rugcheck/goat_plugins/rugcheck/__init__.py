@@ -10,12 +10,12 @@ class RugCheckPluginOptions:
 
 
 class RugCheckPlugin(PluginBase):
-    def __init__(self, options: RugCheckPluginOptions):
-        super().__init__("rugcheck", [RugCheckService(options.jwt_token)])
+    def __init__(self):
+        super().__init__("rugcheck", [RugCheckService()])
 
     def supports_chain(self, chain) -> bool:
         return True
 
 
-def rugcheck(options: RugCheckPluginOptions) -> RugCheckPlugin:
-    return RugCheckPlugin(options)
+def rugcheck() -> RugCheckPlugin:
+    return RugCheckPlugin()

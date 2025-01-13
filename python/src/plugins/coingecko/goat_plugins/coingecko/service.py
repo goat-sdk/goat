@@ -17,7 +17,7 @@ class CoinGeckoService:
             url = f"{self.base_url}/search/trending?x_cg_demo_api_key={self.api_key}"
             async with session.get(url) as response:
                 if not response.ok:
-                    raise Exception(f"HTTP error! status: {response.status}")
+                    raise Exception(f"HTTP error! status: {response.status} {await response.text()}")
                 return await response.json()
 
     @Tool({
@@ -40,7 +40,7 @@ class CoinGeckoService:
             url = f"{self.base_url}/simple/price"
             async with session.get(url, params=params) as response:
                 if not response.ok:
-                    raise Exception(f"HTTP error! status: {response.status}")
+                    raise Exception(f"HTTP error! status: {response.status} {await response.text()}")
                 return await response.json()
 
     @Tool({
@@ -58,7 +58,7 @@ class CoinGeckoService:
             url = f"{self.base_url}/search"
             async with session.get(url, params=params) as response:
                 if not response.ok:
-                    raise Exception(f"HTTP error! status: {response.status}")
+                    raise Exception(f"HTTP error! status: {response.status} {await response.text()}")
                 data = await response.json()
                 
                 if parameters["exact_match"]:

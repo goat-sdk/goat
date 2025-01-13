@@ -12,8 +12,7 @@ class RugCheckService:
         headers = {
             "Content-Type": "application/json",
         }
-        if self.jwt_token:
-            headers["Authorization"] = f"Bearer {self.jwt_token}"
+        
         async with aiohttp.ClientSession() as session:
             url = f"{self.base_url}{endpoint}"
             async with session.get(url, headers=headers) as response:

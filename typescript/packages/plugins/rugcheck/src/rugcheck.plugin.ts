@@ -7,8 +7,8 @@ export interface RugCheckOptions {
 }
 
 export class RugCheckPlugin extends PluginBase {
-    constructor(options: RugCheckOptions) {
-        super("rugcheck", [new RugCheckService(new RugCheckApi(options.jwtToken))]);
+    constructor() {
+        super("rugcheck", [new RugCheckService(new RugCheckApi())]);
     }
 
     supportsChain(chain: Chain): boolean {
@@ -19,6 +19,6 @@ export class RugCheckPlugin extends PluginBase {
 /**
  * Factory function to create a new RugCheck plugin instance
  */
-export function rugcheck(options: RugCheckOptions) {
-    return new RugCheckPlugin(options);
+export function rugcheck() {
+    return new RugCheckPlugin();
 }

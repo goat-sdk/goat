@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from langchain_openai import ChatOpenAI
-from langchain.agents import AgentExecutor, create_structured_chat_agent
-from langchain.hub import pull
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain_core.prompts import ChatPromptTemplate
 from web3 import Web3
 from web3.middleware.signing import construct_sign_and_send_raw_middleware
 from eth_account.signers.local import LocalAccount
@@ -17,6 +17,8 @@ from goat_plugins.erc20.token import PEPE, USDC
 from goat_plugins.erc20 import erc20, ERC20PluginOptions
 from goat_wallets.evm import send_eth
 from goat_wallets.web3 import Web3EVMWalletClient
+from goat_plugins.coingecko import coingecko, CoinGeckoPluginOptions
+from goat_plugins.rugcheck import rugcheck
 
 # Initialize Web3 and account
 w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_PROVIDER_URL")))
@@ -36,24 +38,43 @@ llm = ChatOpenAI(model="gpt-4o-mini")
 
 def main():
     # Get the prompt template
-    prompt = pull("hwchase17/structured-chat-agent")
+    prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", "You are a helpful assistant"),
+        ("placeholder", "{chat_history}"),
+        ("human", "{input}"),
+        ("placeholder", "{agent_scratchpad}"),
+    ]
+)
 
     # Initialize tools with web3 wallet
     tools = get_on_chain_tools(
         wallet=Web3EVMWalletClient(w3),
-        plugins=[send_eth(), erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE]))],
+        plugins=[
+            send_eth(),
+            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
+            coingecko(options=CoinGeckoPluginOptions(api_key=os.getenv("COINGECKO_API_KEY")))
+        ],
     )
+    
+    agent = create_tool_calling_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True)
+    
+    while True:
+        user_input = input("\nYou: ").strip()
+        
+        if user_input.lower() == 'quit':
+            print("Goodbye!")
+            break
+            
+        try:
+            response = agent_executor.invoke({
+                "input": user_input,
+            })
 
-    # Create the agent
-    agent = create_structured_chat_agent(llm=llm, tools=tools, prompt=prompt)
-
-    # Create the executor
-    agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True)
-
-    # Execute the agent
-    response = agent_executor.invoke({"input": "Get my balance in USDC"})
-
-    print(response)
+            print("\nAssistant:", response["output"])
+        except Exception as e:
+            print("\nError:", str(e))
 
 
 if __name__ == "__main__":

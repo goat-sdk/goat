@@ -1,17 +1,11 @@
 export class RugCheckApi {
     public readonly baseUrl = "https://api.rugcheck.xyz/v1";
 
-    constructor(private readonly jwtToken?: string) {}
-
     async makeRequest(endpoint: string, options: RequestInit = {}) {
         const headers: Record<string, string> = {
             ...(options.headers as Record<string, string>),
             "Content-Type": "application/json",
         };
-
-        if (this.jwtToken) {
-            headers.Authorization = `Bearer ${this.jwtToken}`;
-        }
 
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             ...options,
