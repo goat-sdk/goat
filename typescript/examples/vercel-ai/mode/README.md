@@ -10,7 +10,7 @@ cp .env.template .env
 
 ## Usage
 
-Run the following command from the this directory:
+Run the following command from the /mode directory:
 
 ```
 npx ts-node index.ts
