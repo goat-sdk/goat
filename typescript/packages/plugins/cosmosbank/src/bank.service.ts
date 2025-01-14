@@ -24,8 +24,6 @@ export class BankService {
         try {
             const t = await this.getChainInfo(walletClient);
             const _d = t.asset?.assets.find((a) => a.symbol === parameters.symbol);
-            const acc = await walletClient.client.getAccount(parameters.address);
-            if (!acc?.address) throw new Error("Provided address is unavaiable");
 
             if (!_d) throw new Error("the Requested Token is unavailabe on the network");
 
@@ -106,8 +104,6 @@ export class BankService {
         try {
             const t = await this.getChainInfo(walletClient);
             const _d = t.asset?.assets.find((a) => a.symbol === parameters.amount.symbol);
-            const acc = await walletClient.client.getAccount(parameters.toAddress);
-            if (!acc?.address) throw new Error("Provided address is unavaiable");
 
             if (!_d) throw new Error("the Requested Token is unavailabe on the network");
 
