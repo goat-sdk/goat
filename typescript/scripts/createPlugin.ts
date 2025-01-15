@@ -85,11 +85,11 @@ function createPackageJson(options: PluginOptions): string {
         homepage: "https://ohmygoat.dev",
         repository: {
             type: "git",
-            url: "git+https://github.com/goat-sdk/goat.git"
+            url: "git+https://github.com/goat-sdk/goat.git",
         },
         license: "MIT",
         bugs: {
-            url: "https://github.com/goat-sdk/goat/issues"
+            url: "https://github.com/goat-sdk/goat/issues",
         },
         keywords: ["ai", "agents", "web3"],
         dependencies,
@@ -279,8 +279,8 @@ program
 
         const validTypes = ["evm", "solana", "any"] as const;
         const pluginType = type || "any";
-        
-        if (!validTypes.includes(pluginType as typeof validTypes[number])) {
+
+        if (!validTypes.includes(pluginType as (typeof validTypes)[number])) {
             console.error("Error: Plugin type must be one of: evm, solana, any");
             process.exit(1);
         }

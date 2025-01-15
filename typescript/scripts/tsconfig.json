@@ -1,5 +1,10 @@
 {
     "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "types": ["node"]
+    },
     "ts-node": {
         "esm": true,
         "experimentalSpecifiers": true,
