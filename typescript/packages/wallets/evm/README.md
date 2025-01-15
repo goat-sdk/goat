@@ -1,4 +1,4 @@
-# Goat Wallet Solana 🐐 - TypeScript
+# Goat Wallet EVM 🐐 - TypeScript
 
 ## Installation
 ```
