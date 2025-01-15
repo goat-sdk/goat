@@ -106,10 +106,53 @@ export const baaaSigner = () => new BAAAASigner();
   </Step>
   <Step title="Add tools to the plugin">
     There are two ways to add tools to the plugin:
-    1. Using the `getTools` and `createTool` functions
-    2. Using the `@Tool` decorator on our own class
+    1. Using the `@Tool` decorator on our own class
+    2. Using the `getTools` and `createTool` functions to create tools dynamically
 
-    #### Option 1: Using the `getTools` and `createTool` functions
+    #### Option 1: Using the `@Tool` decorator
+    The `@Tool` decorator is a way to create tools in a more declarative way.
+    You can create a class and decorate its methods with the `@Tool` decorator to create tools.
+    The tool methods will receive the wallet client as the first argument and the parameters as the second argument.
+
+    ```typescript
+    import { Tool } from "@goat-sdk/core";
+
+    class MyTools {
+        @Tool({
+            name: "sign_message_baaaa",
+            description: "Sign a message with 'BAAAA' prefix",
+            parameters: z.object({
+                message: z.string(),
+            }),
+        })
+        async signMessage(walletClient: WalletClientBase, parameters: z.infer<typeof parameters>) {
+            const originalMessage: string = parameters.message;
+            const prefixedMessage = `BAAAA${originalMessage}`;
+            const signed = await walletClient.signMessage(prefixedMessage);
+            return signed.signedMessage;
+        }
+    }
+    ```
+
+    Once we have our class we now need to import it in our plugin class.
+
+ ```typescript
+    import { PluginBase, WalletClientBase } from "@goat-sdk/core";
+    import { MyTools } from "./my-tools.service.ts";
+
+export class BAAAASigner extends PluginBase<WalletClientBase> {
+        constructor() {
+            // Import the tools we created in the previous step here
+            super("baaaSigner", [new MyTools()]);
+        }
+
+        supportsChain = (chain: Chain) => true;
+}
+
+export const baaaSigner = () => new BAAAASigner();
+    ```
+
+    #### Option 2: Using the `getTools` and `createTool` functions
     We will start by implementing the `getTools` method in our plugin class.
 
     Inside the method, we will return an array of tools created using the `createTool` function.
@@ -151,49 +194,6 @@ export class BAAAASigner extends PluginBase<WalletClientBase> {
 }
 
 // We export a factory function to create a new instance of the plugin
-export const baaaSigner = () => new BAAAASigner();
-    ```
-
-    #### Option 2: Using the `@Tool` decorator
-    The `@Tool` decorator is a way to create tools in a more declarative way.
-    You can create a class and decorate its methods with the `@Tool` decorator to create tools.
-    The tool methods will receive the wallet client as the first argument and the parameters as the second argument.
-
-    ```typescript
-    import { Tool } from "@goat-sdk/core";
-
-    class MyTools {
-        @Tool({
-            name: "sign_message_baaaa",
-            description: "Sign a message with 'BAAAA' prefix",
-            parameters: z.object({
-                message: z.string(),
-            }),
-        })
-        async signMessage(walletClient: WalletClientBase, parameters: z.infer<typeof parameters>) {
-            const originalMessage: string = parameters.message;
-            const prefixedMessage = `BAAAA${originalMessage}`;
-            const signed = await walletClient.signMessage(prefixedMessage);
-            return signed.signedMessage;
-        }
-    }
-    ```
-
-    Once we have our class we now need to import it in our plugin class.
-
- ```typescript
-    import { PluginBase, WalletClientBase } from "@goat-sdk/core";
-    import { MyTools } from "./my-tools.service.ts";
-
-export class BAAAASigner extends PluginBase<WalletClientBase> {
-        constructor() {
-            // Import the tools we created in the previous step here
-            super("baaaSigner", [new MyTools()]);
-        }
-
-        supportsChain = (chain: Chain) => true;
-}
-
 export const baaaSigner = () => new BAAAASigner();
     ```
   </Step>
