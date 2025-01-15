@@ -43,17 +43,6 @@ src/plugins/<plugin-name>/
     ├── parameters.py     # Pydantic parameter models
     └── service.py        # Service implementation with Tool decorators
 ```
-
-### Features
-
-- Automatic project structure setup
-- Configurable EVM support
-- Example parameter models and service methods
-- Ready-to-use Tool decorators
-- Comprehensive README generation
-- Proper dependency management
-- Development environment configuration
-
 For more information about plugin development, check out our [documentation](https://ohmygoat.dev).
 
 
