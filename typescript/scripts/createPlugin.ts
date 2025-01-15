@@ -81,6 +81,17 @@ function createPackageJson(options: PluginOptions): string {
         main: "./dist/index.js",
         module: "./dist/index.mjs",
         types: "./dist/index.d.ts",
+        sideEffects: false,
+        homepage: "https://ohmygoat.dev",
+        repository: {
+            type: "git",
+            url: "git+https://github.com/goat-sdk/goat.git"
+        },
+        license: "MIT",
+        bugs: {
+            url: "https://github.com/goat-sdk/goat/issues"
+        },
+        keywords: ["ai", "agents", "web3"],
         dependencies,
         peerDependencies: {
             "@goat-sdk/core": "workspace:*",
@@ -256,7 +267,7 @@ program
     .name("createPlugin")
     .description("Create a new GOAT SDK plugin")
     .requiredOption("-n, --name <name>", "plugin name (lowercase, hyphen-separated)")
-    .requiredOption("-t, --type <type>", "plugin type (evm, solana, or any)")
+    .option("-t, --type <type>", "plugin type (evm, solana, or any)", "any")
     .action(async (options: { name: string; type: string }) => {
         const { name, type } = options;
 
@@ -266,13 +277,16 @@ program
             process.exit(1);
         }
 
-        if (!["evm", "solana", "any"].includes(type)) {
+        const validTypes = ["evm", "solana", "any"] as const;
+        const pluginType = type || "any";
+        
+        if (!validTypes.includes(pluginType as typeof validTypes[number])) {
             console.error("Error: Plugin type must be one of: evm, solana, any");
             process.exit(1);
         }
 
         try {
-            await createPlugin({ name, type: type as PluginOptions["type"] });
+            await createPlugin({ name, type: pluginType as PluginOptions["type"] });
         } catch (error) {
             console.error("Error creating plugin:", error);
             process.exit(1);

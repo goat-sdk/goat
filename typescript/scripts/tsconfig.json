@@ -1,13 +1,5 @@
 {
-    "extends": "../tsconfig.base.json",
-    "compilerOptions": {
-        "module": "ESNext",
-        "moduleResolution": "NodeNext",
-        "target": "ES2022",
-        "types": ["node"],
-        "allowJs": true,
-        "outDir": "dist"
-    },
+    "extends": "../tsconfig.json",
     "ts-node": {
         "esm": true,
         "experimentalSpecifiers": true,
