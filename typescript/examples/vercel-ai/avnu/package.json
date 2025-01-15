@@ -1,0 +1,24 @@
+{
+    "name": "goat-examples-vercel-ai-avnu",
+    "version": "0.1.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-avnu": "workspace:*",
+        "@goat-sdk/wallet-starknet": "workspace:*",
+        "@goat-sdk/plugin-starknet-token": "workspace:*",
+        "ai": "catalog:",
+        "dotenv": "^16.4.5",
+        "ollama-ai-provider": "^1.1.0",
+        "starknet": "^6.11.0",
+        "@avnu/avnu-sdk": "^3.0.0"
+    }
+}
