@@ -29,11 +29,24 @@ export class AvnuService {
         sellAmount: string
     }): Promise<Quote[]> {
         try {
+            const sellAmountBigInt = BigInt(params.sellAmount);
+
             const quotes = await fetchQuotes({
-                ...params,
-                sellAmount: BigInt(params.sellAmount),
+                sellTokenAddress: params.sellTokenAddress,
+                buyTokenAddress: params.buyTokenAddress,
+                sellAmount: sellAmountBigInt,
                 ...this.avnu_options
             });
+
+            console.log({
+                "Sell Token Address": params.sellTokenAddress,
+                "Buy Token Address": params.buyTokenAddress,
+                "Original Sell Amount": params.sellAmount,
+                "Converted Sell Amount": sellAmountBigInt.toString(),
+                "Sell Amount Type": typeof sellAmountBigInt,
+            });
+
+            console.log("Quotes:", quotes);
 
             if (!quotes || quotes.length === 0) {
                 throw new Error("No quotes found");
@@ -41,6 +54,10 @@ export class AvnuService {
 
             return quotes;
         } catch (error) {
+            if (error instanceof Error && error.message.includes("BigInt")) {
+                console.error("Error converting sellAmount to BigInt:", error);
+                throw new Error(`Invalid sellAmount format: ${params.sellAmount}`);
+            }
             console.error("Error fetching quotes:", error);
             throw error;
         }
@@ -48,10 +65,11 @@ export class AvnuService {
 
     @Tool({
         name: "executeSwap",
-        description: "Execute a token swap on Avnu"
+        description: "Execute a token swap on Avnu, make sure to use the correct token addresses and amount"
     })
-    async Swap(params: SwapConfigParams) {
+    async executeSwap(params: SwapConfigParams) {
         try {
+            console.log("Executing swap with params:", params);
             const quotes = await this.getQuote(params);
             const bestQuote = quotes[0]; // Assuming the first quote is the best one
 
