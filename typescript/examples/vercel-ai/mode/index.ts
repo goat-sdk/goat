@@ -17,7 +17,17 @@ import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
+let privateKey = process.env.WALLET_PRIVATE_KEY || '';
+
+if (!privateKey.startsWith('0x')) {
+    privateKey = '0x' + privateKey;
+}
+
+if (privateKey.length !== 66) {
+    throw new Error('WALLET_PRIVATE_KEY must have 64 characters after the 0x.');
+}
+
+const account = privateKeyToAccount(privateKey as `0x${string}`);
 
 const walletClient = createWalletClient({
     account: account,
