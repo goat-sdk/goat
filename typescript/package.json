@@ -4,6 +4,7 @@
     "version": "0.1.1",
     "scripts": {
         "prepare": "cd .. && pnpm install && cd typescript",
+        "create-plugin": "tsx scripts/createPlugin.ts",
         "build": "pnpm turbo build",
         "build:libs": "pnpm turbo --filter \"./packages/**\" build",
         "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",
@@ -27,6 +28,7 @@
         "ts-node": "10.9.2",
         "tsc-alias": "1.8.10",
         "tsup": "8.3.5",
+        "tsx": "4.19.2",
         "turbo": "2.3.1",
         "typescript": "5.6.3",
         "vitest": "2.1.5"
@@ -47,5 +49,8 @@
         "url": "https://github.com/crossmint/goat/issues"
     },
     "keywords": ["ai", "agents", "web3"],
-    "packageManager": "pnpm@9.14.2"
+    "packageManager": "pnpm@9.14.2",
+    "dependencies": {
+        "commander": "13.0.0"
+    }
 }
