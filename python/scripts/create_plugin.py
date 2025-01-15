@@ -164,9 +164,11 @@ class {class_name}:
 
 def create_init_file(goat_plugins_dir: Path, plugin_name: str, is_evm: bool) -> None:
     """Create the __init__.py file with plugin class."""
-    class_name = f"{plugin_name.title()}Service"
-    plugin_class = f"{plugin_name.title()}Plugin"
-    options_class = f"{plugin_name.title()}PluginOptions"
+    # Convert hyphens to underscores for class names
+    class_base = plugin_name.replace("-", "_").title()
+    class_name = f"{class_base}Service"
+    plugin_class = f"{class_base}Plugin"
+    options_class = f"{class_base}PluginOptions"
     
     init_content = '''from dataclasses import dataclass
 from goat.classes.plugin_base import PluginBase
@@ -201,7 +203,27 @@ def {plugin_name}(options: {options_class}) -> {plugin_class}:
         f.write(init_content)
 
 def main():
-    """Main function to create a new GOAT plugin."""
+    """Main function to create a new GOAT plugin.
+    
+    This script generates a new plugin package for the GOAT SDK with a standardized structure.
+    The plugin name should use hyphens for spaces (e.g., 'my-plugin') and be lowercase.
+    Class names will automatically convert hyphens to underscores for valid Python syntax.
+    
+    Examples:
+        # Create an EVM-compatible plugin
+        python create_plugin.py my-token --evm
+        
+        # Create a chain-agnostic plugin
+        python create_plugin.py my-service
+        
+    The script will create:
+    1. pyproject.toml with proper dependencies
+    2. goat_plugins directory with:
+       - parameters.py: Example Pydantic models
+       - service.py: Service class with Tool decorators
+       - __init__.py: Plugin class and initialization
+    3. README.md with usage instructions
+    """
     parser = argparse.ArgumentParser(description="Create a new GOAT plugin.")
     parser.add_argument("name", help="Plugin name, e.g. 'myplugin'")
     parser.add_argument("--evm", action="store_true", help="Indicate if plugin is for EVM")
@@ -210,8 +232,8 @@ def main():
     plugin_name = args.name.lower()  # Normalize to lowercase
     is_evm = args.evm
     
-    # Create base plugin directory
-    plugin_dir = Path("src/plugins") / plugin_name
+    # Create base plugin directory (relative to python root)
+    plugin_dir = Path(__file__).parent.parent / "src" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True, exist_ok=True)
     
     # Create all required files
