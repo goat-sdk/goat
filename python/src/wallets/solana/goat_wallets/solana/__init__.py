@@ -3,7 +3,7 @@ from .wallet import (
     SolanaKeypairWalletClient,
     SolanaTransaction,
     SolanaOptions,
-    solana_keypair,
+    solana_keypair_wallet,
 )
 
 __all__ = [
@@ -11,5 +11,5 @@ __all__ = [
     "SolanaKeypairWalletClient",
     "SolanaTransaction",
     "SolanaOptions",
-    "solana_keypair",
+    "solana_keypair_wallet",
 ]

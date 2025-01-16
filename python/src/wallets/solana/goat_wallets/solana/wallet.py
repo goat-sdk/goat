@@ -13,6 +13,7 @@ from goat.types.chain import Chain
 
 class SolanaTransaction(TypedDict):
     """Transaction parameters for Solana transactions."""
+
     instructions: List[TransactionInstruction]
     address_lookup_table_addresses: Optional[List[str]]
     accounts_to_sign: Optional[List[Keypair]]
@@ -20,6 +21,7 @@ class SolanaTransaction(TypedDict):
 
 class SolanaOptions:
     """Configuration options for Solana wallet clients."""
+
     def __init__(self):
         pass
 
@@ -107,7 +109,9 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
     def send_transaction(self, transaction: SolanaTransaction) -> Dict[str, str]:
         """Send a transaction on the Solana chain."""
         # Get latest blockhash
-        recent_blockhash = self.client.get_latest_blockhash()["result"]["value"]["blockhash"]
+        recent_blockhash = self.client.get_latest_blockhash()["result"]["value"][
+            "blockhash"
+        ]
 
         # Create transaction
         tx = Transaction()
@@ -145,7 +149,9 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         return {"hash": result["result"]}
 
 
-def solana_keypair(client: SolanaClient, keypair: Keypair) -> SolanaKeypairWalletClient:
+def solana_keypair_wallet(
+    client: SolanaClient, keypair: Keypair
+) -> SolanaKeypairWalletClient:
     """Create a new SolanaKeypairWalletClient instance.
 
     Args:
