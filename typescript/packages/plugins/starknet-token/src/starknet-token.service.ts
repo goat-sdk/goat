@@ -40,8 +40,26 @@ export class StarknetTokenService {
         walletClient: StarknetWalletClient,
         parameters: GetTokenBalanceByAddressParameters,
     ) {
-        // Implementation will depend on Starknet specific logic
-        throw new Error("Not implemented");
+        try {
+            const { walletAddress, tokenAddress } = parameters;
+            
+            const result = await walletClient.starknetClient.callContract({
+                contractAddress: tokenAddress,
+                entrypoint: 'balanceOf',
+                calldata: [walletAddress]
+            });
+
+            if (!result || !result[0]) {
+                throw new Error('Failed to fetch balance');
+            }
+
+            // Convert hex string to decimal
+            const balanceHex = result[0].toString();
+            const balanceDecimal = BigInt(balanceHex).toString();
+            return Number(balanceDecimal) / 10 ** parameters.decimals;
+        } catch (error) {
+            throw new Error(`Failed to get token balance: ${error}`);
+        }
     }
 
     @Tool({

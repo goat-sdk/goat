@@ -45,7 +45,18 @@ export const STARK: Token = {
     }
 };
 
-export const STARKNET_TOKENS: Token[] = [ETH, USDC, STARK];
+export const EKUBO: Token = {
+    decimals: 18,
+    symbol: "EKUBO",
+    name: "Ekubo",
+    addresses: {
+        mainnet: "0x075afe6402aD5A5c20Dd25E10eC3b3986aCAA647b77e4Ae24B0CBc9a54A27a87",
+        testnet: null,
+        goerli: null
+    }
+};
+
+export const STARKNET_TOKENS: Token[] = [ETH, USDC, STARK, EKUBO];
 
 export function getTokensForNetwork(network: StarknetNetwork, tokens: Token[]): NetworkSpecificToken[] {
     const result: NetworkSpecificToken[] = [];
