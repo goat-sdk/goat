@@ -114,6 +114,14 @@
             "name": "[Plugin] 🌍 zerodev-global-address",
             "path": "./typescript/packages/plugins/zerodev-global-address"
         },
+        {
+            "name": "[Plugin] 🪙 starknet token",
+            "path": "./typescript/packages/plugins/starknet-token"
+        },
+        {
+            "name": "[Plugin] 🔄 avnu",
+            "path": "./typescript/packages/plugins/avnu"
+        },
         // Wallets
         {
             "name": "[Wallet] 🅰 aptos",
@@ -142,6 +150,10 @@
         {
             "name": "[Wallet] 🔥 lit",
             "path": "./typescript/packages/wallets/lit-protocol"
+        },
+        {
+            "name": "[Wallet] 🐺 starknet",
+            "path": "./typescript/packages/wallets/starknet"
         },
         // Docs
         {
