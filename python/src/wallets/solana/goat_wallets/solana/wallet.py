@@ -98,7 +98,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
 
     def balance_of(self, address: str) -> Balance:
         """Get the SOL balance of an address."""
-        pubkey = Pubkey(address.encode())
+        pubkey = Pubkey.from_string(address)
         balance_lamports = self.client.get_balance(pubkey).value
         # Convert lamports (1e9 lamports in 1 SOL)
         return {
