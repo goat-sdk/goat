@@ -65,7 +65,9 @@ export class AvnuService {
 
     @Tool({
         name: "executeSwap",
-        description: "Execute a token swap on Avnu, make sure to use the correct token addresses and amount"
+        description: `Executes a token swap on Avnu DEX. 
+        IMPORTANT: Never use placeholder any kind of placeholder values. 
+        Always get actual token addresses and converted amounts before executing a swap.`
     })
     async executeSwap(params: SwapConfigParams) {
         try {
@@ -78,7 +80,7 @@ export class AvnuService {
                 bestQuote,
                 { 
                     executeApprove: true,
-                    slippage: 0.5 
+                    slippage: 0.01 
                 }, 
                 this.avnu_options
             );
