@@ -21,19 +21,20 @@ We offer **bounties** to developers who contribute creating plugins and wallet i
 ### Python
 | Framework | Supported |
 | -------- | ------------------------------------- |
-| Langchain | Coming soon |
+| [Langchain](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/langchain) | ✅ |
 | Autogen | Coming soon |
 | CrewAI | Coming soon |
 
 ## Chains
 | Chain | Supported | 
 | -------- | ------------------------------------- |
-| **All** EVM chains      | ✅ |
+| **All** EVM chains (Base, Polygon, Mode, Sei, etc.)      | ✅ |
 | Solana   | ✅ |
 | Chromia   | ✅ |
 | Fuel   | ✅ |
 | Aptos   | ✅ |
-| Sui   | Coming soon |
+| Sui   | ✅ |
+| Zilliqa | ✅ |
 
 
 ## Wallets
@@ -49,19 +50,45 @@ We offer **bounties** to developers who contribute creating plugins and wallet i
 | [Aptos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/aptos) | ✅ |
 
 ## Plugins
-| Plugin | Supported |
-| -------- | ------------------------------------- |
-| [ERC20](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/erc20) | ✅ |
-| [USDC Faucet](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | ✅ |
-| [Crossmint Mint API](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | ✅ |
-| [Polymarket](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/polymarket) | ✅ |
-| [Uniswap](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/uniswap) | ✅ |
-| [Jupiter](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/jupiter) | ✅ |
-| [Tensor](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/tensor) | ✅ |
-| [MagicEden](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/solana-magiceden) | ✅ |
-| [Solana NFTs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/solana-nfts) | ✅ |
-| [Solana SPL](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/spl-token) | ✅ |
-| [Coingecko](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/coingecko) | ✅ |
+| Plugin | TypeScript | Python |
+| -------- | ------------------------------------- | ------------------------------------- |
+| [1inch](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/1inch) | ✅ | ✅ |
+| [Allora](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/allora) | ✅ | ✅ |
+| [Birdeye](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/birdeye) | ✅ | |
+| [Coingecko](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/coingecko) | ✅ | ✅ |
+| [Coinmarketcap](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/coinmarketcap) | ✅ | |
+| [Crossmint Headless Checkout](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/crossmint-headless-checkout) | ✅ | |
+| [Crossmint Mint API](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | ✅ | |
+| [DexScreener](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/dexscreener) | ✅ | ✅ |
+| [ERC20](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/erc20) | ✅ | ✅ |
+| [ERC721](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/erc721) | ✅ | |
+| [Etherscan](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/etherscan) | ✅ | |
+| [Farcaster](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/farcaster) | ✅ | ✅ |
+| [Ironclad](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/ironclad) | ✅ | |
+| [JSON-RPC](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/jsonrpc) | ✅ | ✅ |
+| [Jupiter](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/jupiter) | ✅ | |
+| [Kim](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/kim) | ✅ | |
+| [MagicEden](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/solana-magiceden) | ✅ | |
+| [Meteora](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/meteora) | ✅ | |
+| [Mode Governance](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/mode-governance) | ✅ | |
+| [Mode Spray](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/modespray) | ✅ | |
+| [Mode Voting](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/mode-voting) | ✅ | |
+| [Nansen](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/nansen) | ✅ | ✅ |
+| [OpenSea](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/opensea) | ✅ | ✅ |
+| [Orca](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/orca) | ✅ | |
+| [Polymarket](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/polymarket) | ✅ | |
+| [Pumpfun](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/pumpfun) | ✅ | |
+| [Renzo](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/renzo) | ✅ | |
+| [RugCheck](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/rugcheck) | ✅ | ✅ |
+| [SNS](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/sns) | ✅ | |
+| [Solana NFTs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/solana-nfts) | ✅ | |
+| [Solana SPL](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/spl-token) | ✅ | |
+| [Superfluid](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/superfluid) | ✅ | ✅ |
+| [Tensor](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/tensor) | ✅ | |
+| [Uniswap](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/uniswap) | ✅ | |
+| [USDC Faucet](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | ✅ | |
+| [Zerodev Global Address](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/zerodev-global-address) | ✅ | |
+| [Zilliqa](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/zilliqa) | ✅ | |
 
 
 And **many** more!

@@ -3,7 +3,7 @@ import { openai } from "@ai-sdk/openai";
 import { createConnection, createInMemoryEvmKeyStore, createKeyStoreInteractor } from "@chromia/ft4";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { sendCHR } from "@goat-sdk/wallet-chromia";
-import { CHROMIA_MAINNET_BRID, chromia } from "@goat-sdk/wallet-chromia";
+import { CHROMIA_CONFIG, chromia } from "@goat-sdk/wallet-chromia";
 import { generateText } from "ai";
 import chalk from "chalk";
 import { type KeyPair, createClient } from "postchain-client";
@@ -11,11 +11,18 @@ import { z } from "zod";
 import { MASTER_PROMPT, getLiveTokenPrice } from "./tools";
 require("dotenv").config();
 
+const chromiaNetwork = process.env.CHROMIA_NETWORK?.toLowerCase() as keyof typeof CHROMIA_CONFIG;
 const privateKey = process.env.EVM_PRIVATE_KEY;
+
+if (!chromiaNetwork || !(chromiaNetwork in CHROMIA_CONFIG)) {
+    throw new Error("CHROMIA_NETWORK must be set to 'mainnet' or 'testnet' in the environment.");
+}
 
 if (!privateKey) {
     throw new Error("EVM_PRIVATE_KEY is not set in the environment");
 }
+
+const config = CHROMIA_CONFIG[chromiaNetwork];
 
 async function chat(tools: object) {
     const rl = readline.createInterface({
@@ -86,8 +93,8 @@ async function chat(tools: object) {
 
 (async () => {
     const chromiaClient = await createClient({
-        nodeUrlPool: ["https://system.chromaway.com:7740"],
-        blockchainRid: CHROMIA_MAINNET_BRID.ECONOMY_CHAIN,
+        nodeUrlPool: config.NODE_URL_POOL,
+        blockchainRid: config.ECONOMY_CHAIN_BRID,
     });
     const connection = createConnection(chromiaClient);
     const evmKeyStore = createInMemoryEvmKeyStore({
@@ -103,6 +110,7 @@ async function chat(tools: object) {
             client: chromiaClient,
             accountAddress,
             keystoreInteractor,
+            assetId: config.CHR_ASSET_ID,
             connection,
         }),
         plugins: [sendCHR()],

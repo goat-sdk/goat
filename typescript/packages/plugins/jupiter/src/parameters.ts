@@ -1,11 +1,5 @@
 import { createToolParameters } from "@goat-sdk/core";
-import {
-    type QuoteGetRequest,
-    QuoteGetSwapModeEnum,
-    type QuoteResponse,
-    type SwapInfo,
-    type SwapPostRequest,
-} from "@jup-ag/api";
+import { QuoteGetSwapModeEnum, type QuoteResponse, type SwapInfo, type SwapPostRequest } from "@jup-ag/api";
 import { z } from "zod";
 
 export class GetQuoteParameters extends createToolParameters(

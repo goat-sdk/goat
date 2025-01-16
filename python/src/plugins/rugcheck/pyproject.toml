@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "goat-plugin-rugcheck"
+version = "0.1.0"
+description = "A Python rugcheck plugin for the GOAT SDK"
+authors = ["GOAT SDK Team"]
+packages = [
+    { include = "goat_plugins" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+goat-sdk = { path = "../../../.." }
+aiohttp = "^3.8.4"
+pydantic = "^1.10"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.0"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = "."

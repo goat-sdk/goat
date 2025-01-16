@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "goat-sdk-plugin-erc20"
+version = "0.1.0"
+description = "Goat plugin for ERC20"
+authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
+readme = "README.md"
+keywords = ["goat", "sdk", "web3", "agents", "ai"]
+homepage = "https://ohmygoat.dev/"
+repository = "https://github.com/goat-sdk/goat"
+packages = [
+    { include = "goat_plugins/erc20" },
+] 
+
+[tool.poetry.dependencies]
+python = "^3.10"
+goat-sdk = "^0.1.0"
+goat-sdk-wallet-evm = "^0.1.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.0"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--import-mode=importlib",
+]
+pythonpath = "src"
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+goat-sdk = { path = "../../goat-sdk", develop = true }
+goat-sdk-wallet-evm = { path = "../../wallets/evm", develop = true }
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

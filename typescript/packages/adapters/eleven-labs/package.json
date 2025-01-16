@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-eleven-labs",
-    "version": "0.2.3",
+    "version": "0.2.6",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,11 +12,14 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "zod": "catalog:"
+        "@goat-sdk/core": "workspace:*"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*"
+        "@goat-sdk/core": "workspace:*",
+        "zod": "^3.0.0"
+    },
+    "devDependencies": {
+        "zod": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

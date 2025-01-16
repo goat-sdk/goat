@@ -23,6 +23,7 @@
         "rules": {
             "recommended": true,
             "correctness": {
+                "noUnusedImports": "warn",
                 "useExhaustiveDependencies": "warn"
             },
             "style": {

@@ -110,7 +110,7 @@ export class SplTokenService {
                 tokenMintPublicKey,
                 toTokenAccount,
                 fromPublicKey,
-                BigInt(amount) * BigInt(10) ** BigInt(token.decimals),
+                BigInt(amount),
                 token.decimals,
             ),
         );
