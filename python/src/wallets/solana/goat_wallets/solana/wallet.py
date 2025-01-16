@@ -2,9 +2,12 @@ from abc import abstractmethod
 from typing import Dict, Optional, TypedDict, List
 
 from solana.rpc.api import Client as SolanaClient
-from solana.publickey import PublicKey
-from solana.keypair import Keypair
-from solana.transaction import Transaction, TransactionInstruction
+from solana.rpc.types import TxOpts
+from solana.rpc.commitment import Confirmed
+from solana.transaction import Transaction
+from solders.pubkey import Pubkey
+from solders.keypair import Keypair
+from solders.instruction import Instruction
 import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
@@ -14,7 +17,7 @@ from goat.types.chain import Chain
 class SolanaTransaction(TypedDict):
     """Transaction parameters for Solana transactions."""
 
-    instructions: List[TransactionInstruction]
+    instructions: List[Instruction]
     address_lookup_table_addresses: Optional[List[str]]
     accounts_to_sign: Optional[List[Keypair]]
 
@@ -85,18 +88,18 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
 
     def get_address(self) -> str:
         """Get the wallet's public address."""
-        return str(self.keypair.public_key)
+        return str(self.keypair.pubkey())
 
     def sign_message(self, message: str) -> Signature:
         """Sign a message with the wallet's private key."""
         message_bytes = message.encode("utf-8")
-        signed = nacl.signing.SigningKey(self.keypair.secret_key).sign(message_bytes)
+        signed = nacl.signing.SigningKey(self.keypair.secret()).sign(message_bytes)
         return {"signature": signed.signature.hex()}
 
     def balance_of(self, address: str) -> Balance:
         """Get the SOL balance of an address."""
-        pubkey = PublicKey(address)
-        balance_lamports = self.client.get_balance(pubkey)["result"]["value"]
+        pubkey = Pubkey(address.encode())
+        balance_lamports = self.client.get_balance(pubkey).value
         # Convert lamports (1e9 lamports in 1 SOL)
         return {
             "decimals": 9,
@@ -109,14 +112,12 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
     def send_transaction(self, transaction: SolanaTransaction) -> Dict[str, str]:
         """Send a transaction on the Solana chain."""
         # Get latest blockhash
-        recent_blockhash = self.client.get_latest_blockhash()["result"]["value"][
-            "blockhash"
-        ]
+        recent_blockhash = self.client.get_latest_blockhash().value.blockhash
 
         # Create transaction
         tx = Transaction()
         tx.recent_blockhash = recent_blockhash
-        tx.fee_payer = self.keypair.public_key
+        tx.fee_payer = self.keypair.pubkey()
 
         # Add instructions
         for instruction in transaction["instructions"]:
@@ -133,20 +134,20 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         result = self.client.send_transaction(
             tx,
             *signers,
-            opts={
-                "skip_preflight": False,
-                "max_retries": 10,
-                "preflight_commitment": "confirmed",
-            },
+            opts=TxOpts(
+                skip_preflight=False,
+                max_retries=10,
+                preflight_commitment=Confirmed,
+            ),
         )
 
         # Wait for confirmation
         self.client.confirm_transaction(
-            result["result"],
-            commitment="confirmed",
+            result.value,
+            commitment=Confirmed,
         )
 
-        return {"hash": result["result"]}
+        return {"hash": str(result.value)}
 
 
 def solana_keypair_wallet(
