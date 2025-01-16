@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-fuel",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

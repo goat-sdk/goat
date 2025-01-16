@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-langchain-viem",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "description": "",
     "private": true,
     "scripts": {

@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-farcaster",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Farcaster protocol plugin for GOAT SDK",
     "author": {
         "name": "Codingsh",

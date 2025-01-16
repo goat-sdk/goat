@@ -1,5 +1,19 @@
 # goat-examples-vercel-ai-modespray
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [2b4b8e8]
+  - @goat-sdk/core@0.4.6
+  - @goat-sdk/adapter-vercel-ai@0.2.7
+  - @goat-sdk/plugin-erc20@0.2.8
+  - @goat-sdk/plugin-erc721@0.1.17
+  - @goat-sdk/plugin-kim@0.1.8
+  - @goat-sdk/plugin-modespray@0.1.3
+  - @goat-sdk/wallet-evm@0.2.6
+  - @goat-sdk/wallet-viem@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes

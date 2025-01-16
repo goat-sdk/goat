@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-send-nft-to-twitter",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "description": "",
     "private": true,
     "scripts": {

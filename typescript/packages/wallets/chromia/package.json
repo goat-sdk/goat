@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-chromia",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

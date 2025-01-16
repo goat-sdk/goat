@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-cosmos",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -21,7 +21,6 @@
         "chain-registry": "^1.69.74",
         "cosmjs-types": "^0.9.0"
     },
-
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
     },

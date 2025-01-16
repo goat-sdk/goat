@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-dexscreener
 
+## 0.1.4
+
+### Patch Changes
+
+- 2b4b8e8: worldstore: initial release
+- Updated dependencies [2b4b8e8]
+  - @goat-sdk/core@0.4.6
+
 ## 0.1.3
 
 ### Patch Changes

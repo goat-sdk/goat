@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.6
+
+### Patch Changes
+
+- 2b4b8e8: worldstore: initial release
+
 ## 0.4.5
 
 ### Patch Changes

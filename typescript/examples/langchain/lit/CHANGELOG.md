@@ -1,5 +1,17 @@
 # goat-examples-langchain-lit
 
+## 0.1.16
+
+### Patch Changes
+
+- Updated dependencies [2b4b8e8]
+  - @goat-sdk/core@0.4.6
+  - @goat-sdk/adapter-langchain@0.2.9
+  - @goat-sdk/plugin-erc20@0.2.8
+  - @goat-sdk/wallet-evm@0.2.6
+  - @goat-sdk/wallet-lit@0.2.12
+  - @goat-sdk/wallet-solana@0.2.11
+
 ## 0.1.15
 
 ### Patch Changes
