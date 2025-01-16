@@ -3,7 +3,7 @@
 <div align="center">
 Go out and eat some grass.
 
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)
+[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Chains](https://ohmygoat.dev/chains-wallets-plugins) | [Plugins](https://ohmygoat.dev/chains-wallets-plugins#plugins) | [Discord](https://discord.gg/goat-sdk)
 
 GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossmint.com)
 </div>
@@ -22,7 +22,7 @@ GOAT solves this by providing an open-source, provider-agnostic framework that a
 
 - **For agent developers**: GOAT offers an always-growing catalog of ready made blockchain actions (sending tokens, using a DeFi protocol, ...) that can be imported as tools into your existing agent. It works with the most popular agent frameworks (Langchain, Vercel's AI SDK, Eliza, etc), Typescript and Python, 30+ blockchains (Solana, Base, Polygon, Mode, ...), and many wallet providers.
 
-- **For dApp / smart contract developers**: develop a plug-in in GOAT, and allow agents built with any of the most popular agent develoment frameworks to access your service.
+- **For dApp / smart contract developers**: develop a plug-in in GOAT, and allow agents built with any of the most popular agent development frameworks to access your service.
 
 ### Key features
 1. **Works Everywhere**: Compatible with Langchain, Vercel’s AI SDK, Eliza, and more.

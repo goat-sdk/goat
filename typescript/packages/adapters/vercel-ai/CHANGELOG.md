@@ -1,5 +1,25 @@
 # @goat-sdk/adapter-vercel-ai
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [b9af25b]
+  - @goat-sdk/core@0.4.5
+
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies [50180d4]
+  - @goat-sdk/core@0.4.4
+
+## 0.2.4
+
+### Patch Changes
+
+- 1906022: Fix zod versions
+
 ## 0.2.3
 
 ### Patch Changes

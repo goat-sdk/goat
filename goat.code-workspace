@@ -9,6 +9,10 @@
             "path": "./typescript"
         },
         {
+            "name": "🐍 Python",
+            "path": "./python"
+        },
+        {
             "name": "🌋 Core",
             "path": "./typescript/packages/core"
         },
@@ -55,8 +59,16 @@
             "path": "./typescript/packages/plugins/allora"
         },
         {
+            "name": "[Plugin] 🦅 birdeye",
+            "path": "./typescript/packages/plugins/birdeye"
+        },
+        {
             "name": "[Plugin] 💰 coingecko",
             "path": "./typescript/packages/plugins/coingecko"
+        },
+        {
+            "name": "[Plugin] 🧢 coinmarketcap",
+            "path": "./typescript/packages/plugins/coinmarketcap"
         },
         {
             "name": "[Plugin] 📡 farcaster",
@@ -71,6 +83,10 @@
             "path": "./typescript/packages/plugins/jupiter"
         },
         {
+            "name": "[Plugin] ♏︎ jsonrpc",
+            "path": "./typescript/packages/plugins/jsonrpc"
+        },
+        {
             "name": "[Plugin] ⛽️ pumpfun",
             "path": "./typescript/packages/plugins/pumpfun"
         },
@@ -83,8 +99,16 @@
             "path": "./typescript/packages/plugins/mode-governance"
         },
         {
+            "name": "[Plugin] 📊 mode voting",
+            "path": "./typescript/packages/plugins/mode-voting"
+        },
+        {
             "name": "[Plugin] ☄️ meteora",
             "path": "./typescript/packages/plugins/meteora"
+        },
+        {
+            "name": "[Plugin] 📈 nansen",
+            "path": "./typescript/packages/plugins/nansen"
         },
         {
             "name": "[Plugin] 🪙 spl token",
@@ -103,16 +127,35 @@
             "path": "./typescript/packages/plugins/renzo"
         },
         {
+            "name": "[Plugin] 🗿 ironclad",
+            "path": "./typescript/packages/plugins/ironclad"
+        },
+        {
+            "name": "[Plugin] 🐎 1inch",
+            "path": "./typescript/packages/plugins/1inch"
+        },
+        {
             "name": "[Plugin] 🦄 uniswap",
             "path": "./typescript/packages/plugins/uniswap"
         },
         {
-            "name": "[Plugin] ⛽️ opensea",
+            "name": "[Plugin] 🖼️ opensea",
             "path": "./typescript/packages/plugins/opensea"
+        },
+        {
+            "name": "[Plugin] 💰 superfluid",
+            "path": "./typescript/packages/plugins/superfluid"
         },
         {
             "name": "[Plugin] 🌍 zerodev-global-address",
             "path": "./typescript/packages/plugins/zerodev-global-address"
+        },
+        {
+            "name": "[Plugin] 📇 sns",
+            "path": "./typescript/packages/plugins/sns"
+        },
+            "name" : "[Plugin] 🦓 zilliqa",
+            "path": "./typescript/packages/plugins/zilliqa"
         },
         {
             "name": "[Plugin] 🪙 starknet token",
@@ -140,6 +183,10 @@
             "path": "./typescript/packages/wallets/solana"
         },
         {
+            "name": "[Wallet] 💧 sui",
+            "path": "./typescript/packages/wallets/sui"
+        },
+        {
             "name": "[Wallet] 🪨 evm",
             "path": "./typescript/packages/wallets/evm"
         },
@@ -150,6 +197,10 @@
         {
             "name": "[Wallet] 🔥 lit",
             "path": "./typescript/packages/wallets/lit-protocol"
+        },
+        {
+            "name": "[Wallet] 🦓 zilliqa",
+            "path": "./typescript/packages/wallets/zilliqa"
         },
         {
             "name": "[Wallet] 🐺 starknet",

@@ -14,7 +14,7 @@ export async function getOnChainTools<TWalletClient extends WalletClientBase>({
     return tools.map((t) =>
         tool(
             async (arg: z.output<typeof t.parameters>) => {
-                return await t.execute(arg);
+                return JSON.stringify(await t.execute(arg));
             },
             {
                 name: t.name,

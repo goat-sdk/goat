@@ -12,7 +12,7 @@ cp .env.template .env
 
 ## Usage
 
-1. Create an API key for Uniswap's Trading API by visiting [this page](https://hub.uniswap.org/) and following the instructions. Also obtain the url from the API key creation page.
+1. Create an API key for Uniswap's Trading API by visiting [this page](https://hub.uniswap.org/) and following the instructions. To obtain the URL, visit the Uniswap Trading API docs site [here](https://uniswap-docs.readme.io/reference/trading-flow). Otherwise, you can use the sample values in `.env.template`.
 
 2. Run the script with your prompt!
 

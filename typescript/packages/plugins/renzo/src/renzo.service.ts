@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { EZETH_ABI } from "./abi/ezeth";
 import { RENZO_ABI } from "./abi/renzo";
 import { BalanceOfParams, DepositETHParams, DepositParams, GetDepositAddressParams } from "./parameters";

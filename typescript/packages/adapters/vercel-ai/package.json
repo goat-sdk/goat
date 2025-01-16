@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-vercel-ai",
-    "version": "0.2.3",
+    "version": "0.2.6",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,12 +13,15 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "ai": "catalog:",
-        "zod": "catalog:"
+        "ai": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "ai": "catalog:"
+        "ai": "catalog:",
+        "zod": "^3.0.0"
+    },
+    "devDependencies": {
+        "zod": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/adapter-langchain",
-    "version": "0.2.4",
+    "version": "0.2.8",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,12 +13,15 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@langchain/core": "catalog:",
-        "zod": "catalog:"
+        "@langchain/core": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@langchain/core": "catalog:"
+        "@langchain/core": "catalog:",
+        "zod": "^3.0.0"
+    },
+    "devDependencies": {
+        "zod": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
