@@ -69,8 +69,37 @@ export class StarknetTokenService {
         walletClient: StarknetWalletClient,
         parameters: TransferTokenParameters,
     ) {
-        // Implementation will depend on Starknet specific logic
-        throw new Error("Not implemented");
+        try {
+            const { tokenAddress, to, amount } = parameters;
+
+            // Convert amount string to BigInt and encode it as felt
+            const amountBigInt = BigInt(amount);
+            
+            // Execute the transfer by calling the token contract
+            const result = await walletClient.sendTransaction({
+                calls: [{
+                    contractAddress: tokenAddress,
+                    entrypoint: 'transfer',
+                    // Pass uint256 as two separate felts (low and high)
+                    calldata: [
+                        to,
+                        amountBigInt.toString(10), // low
+                        "0"  // high
+                    ]
+                }]
+            });
+
+            if (!result?.hash) {
+                throw new Error('Failed to execute transfer');
+            }
+
+            return {
+                transactionHash: result.hash,
+                status: 'success'
+            };
+        } catch (error) {
+            throw new Error(`Failed to transfer token: ${error}`);
+        }
     }
 
     @Tool({
