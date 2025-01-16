@@ -46,6 +46,14 @@ export abstract class WalletClientBase {
                 },
                 (parameters) => this.balanceOf(parameters.address),
             ),
+            createTool(
+                {
+                    name: "sign_message",
+                    description: "Sign a message with the wallet",
+                    parameters: z.object({ message: z.string() }),
+                },
+                (parameters) => this.signMessage(parameters.message),
+            ),
         ];
     }
 }
