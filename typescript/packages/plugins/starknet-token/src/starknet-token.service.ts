@@ -36,21 +36,18 @@ export class StarknetTokenService {
     @Tool({
         description: "Get the balance of a Starknet token by its contract address",
     })
-    async getTokenBalanceByAddress(
-        walletClient: StarknetWalletClient,
-        parameters: GetTokenBalanceByAddressParameters,
-    ) {
+    async getTokenBalanceByAddress(walletClient: StarknetWalletClient, parameters: GetTokenBalanceByAddressParameters) {
         try {
             const { walletAddress, tokenAddress } = parameters;
-            
+
             const result = await walletClient.starknetClient.callContract({
                 contractAddress: tokenAddress,
-                entrypoint: 'balanceOf',
-                calldata: [walletAddress]
+                entrypoint: "balanceOf",
+                calldata: [walletAddress],
             });
 
             if (!result || !result[0]) {
-                throw new Error('Failed to fetch balance');
+                throw new Error("Failed to fetch balance");
             }
 
             // Convert hex string to decimal
@@ -65,37 +62,36 @@ export class StarknetTokenService {
     @Tool({
         description: "Transfer a Starknet token by its contract address",
     })
-    async transferToken(
-        walletClient: StarknetWalletClient,
-        parameters: TransferTokenParameters,
-    ) {
+    async transferToken(walletClient: StarknetWalletClient, parameters: TransferTokenParameters) {
         try {
             const { tokenAddress, to, amount } = parameters;
 
             // Convert amount string to BigInt and encode it as felt
             const amountBigInt = BigInt(amount);
-            
+
             // Execute the transfer by calling the token contract
             const result = await walletClient.sendTransaction({
-                calls: [{
-                    contractAddress: tokenAddress,
-                    entrypoint: 'transfer',
-                    // Pass uint256 as two separate felts (low and high)
-                    calldata: [
-                        to,
-                        amountBigInt.toString(10), // low
-                        "0"  // high
-                    ]
-                }]
+                calls: [
+                    {
+                        contractAddress: tokenAddress,
+                        entrypoint: "transfer",
+                        // Pass uint256 as two separate felts (low and high)
+                        calldata: [
+                            to,
+                            amountBigInt.toString(10), // low
+                            "0", // high
+                        ],
+                    },
+                ],
             });
 
             if (!result?.hash) {
-                throw new Error('Failed to execute transfer');
+                throw new Error("Failed to execute transfer");
             }
 
             return {
                 transactionHash: result.hash,
-                status: 'success'
+                status: "success",
             };
         } catch (error) {
             throw new Error(`Failed to transfer token: ${error}`);
@@ -110,4 +106,4 @@ export class StarknetTokenService {
         const baseUnit = amount * 10 ** decimals;
         return baseUnit;
     }
-} 
+}

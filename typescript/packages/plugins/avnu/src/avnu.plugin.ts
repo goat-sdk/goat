@@ -1,6 +1,5 @@
-import {type Chain, PluginBase } from "@goat-sdk/core";
+import { type Chain, PluginBase } from "@goat-sdk/core";
 import { AvnuService } from "./avnu.service";
-
 
 const SUPPORTED_CHAINS = ["starknet"];
 

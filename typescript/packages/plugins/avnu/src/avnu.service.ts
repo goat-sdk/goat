@@ -1,6 +1,6 @@
+import { type Quote, executeSwap, fetchQuotes } from "@avnu/avnu-sdk";
 import { Tool } from "@goat-sdk/core";
 import { Account, RpcProvider } from "starknet";
-import { executeSwap, fetchQuotes, type Quote } from "@avnu/avnu-sdk";
 import { SwapConfigParams } from "./parameters";
 
 export class AvnuService {
@@ -11,22 +11,18 @@ export class AvnuService {
     constructor() {
         this.params = this.createProviderConfig();
         const provider = new RpcProvider({
-            nodeUrl: this.params.Starknet_rpc
+            nodeUrl: this.params.Starknet_rpc,
         });
         this.avnu_options = {
-            baseUrl: this.params.base_url
+            baseUrl: this.params.base_url,
         };
-        this.account = new Account(
-            provider,
-            this.params.account_address,
-            this.params.private_key
-        );
+        this.account = new Account(provider, this.params.account_address, this.params.private_key);
     }
 
     private async getQuote(params: {
-        sellTokenAddress: string,
-        buyTokenAddress: string,
-        sellAmount: string
+        sellTokenAddress: string;
+        buyTokenAddress: string;
+        sellAmount: string;
     }): Promise<Quote[]> {
         try {
             const sellAmountBigInt = BigInt(params.sellAmount);
@@ -35,7 +31,7 @@ export class AvnuService {
                 sellTokenAddress: params.sellTokenAddress,
                 buyTokenAddress: params.buyTokenAddress,
                 sellAmount: sellAmountBigInt,
-                ...this.avnu_options
+                ...this.avnu_options,
             });
 
             console.log({
@@ -67,7 +63,7 @@ export class AvnuService {
         name: "executeSwap",
         description: `Executes a token swap on Avnu DEX. 
         IMPORTANT: Never use placeholder any kind of placeholder values. 
-        Always get actual token addresses and converted amounts before executing a swap.`
+        Always get actual token addresses and converted amounts before executing a swap.`,
     })
     async executeSwap(params: SwapConfigParams) {
         try {
@@ -78,11 +74,11 @@ export class AvnuService {
             const swapResponse = await executeSwap(
                 this.account,
                 bestQuote,
-                { 
+                {
                     executeApprove: true,
-                    slippage: 0.01 
-                }, 
-                this.avnu_options
+                    slippage: 0.01,
+                },
+                this.avnu_options,
             );
             return swapResponse;
         } catch (error) {
@@ -105,7 +101,7 @@ export class AvnuService {
             base_url: base_url || "https://starknet.api.avnu.fi",
             Starknet_rpc,
             private_key,
-            account_address
+            account_address,
         };
     }
 }

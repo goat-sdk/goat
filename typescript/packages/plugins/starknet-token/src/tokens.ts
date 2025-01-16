@@ -19,8 +19,8 @@ export const ETH: Token = {
     addresses: {
         mainnet: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
         testnet: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
-        goerli: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7"
-    }
+        goerli: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+    },
 };
 
 export const USDC: Token = {
@@ -30,8 +30,8 @@ export const USDC: Token = {
     addresses: {
         mainnet: "0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8",
         testnet: "0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8",
-        goerli: null
-    }
+        goerli: null,
+    },
 };
 
 export const STARK: Token = {
@@ -41,8 +41,8 @@ export const STARK: Token = {
     addresses: {
         mainnet: "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
         testnet: "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d",
-        goerli: null
-    }
+        goerli: null,
+    },
 };
 
 export const EKUBO: Token = {
@@ -52,8 +52,8 @@ export const EKUBO: Token = {
     addresses: {
         mainnet: "0x075afe6402aD5A5c20Dd25E10eC3b3986aCAA647b77e4Ae24B0CBc9a54A27a87",
         testnet: null,
-        goerli: null
-    }
+        goerli: null,
+    },
 };
 
 export const STARKNET_TOKENS: Token[] = [ETH, USDC, STARK, EKUBO];
@@ -75,4 +75,4 @@ export function getTokensForNetwork(network: StarknetNetwork, tokens: Token[]): 
     }
 
     return result;
-} 
+}

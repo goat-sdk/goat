@@ -12,9 +12,7 @@ export class StarknetTokenPlugin extends PluginBase<StarknetWalletClient> {
     supportsChain(chain: Chain): boolean {
         return chain.type === "starknet";
     }
-
-    
-} 
+}
 
 export function starknetToken({ tokens }: StarknetTokenPluginCtorParams) {
     return new StarknetTokenPlugin({ tokens });
