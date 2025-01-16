@@ -4,7 +4,7 @@ from solana.rpc.api import Client as SolanaClient
 from solders.keypair import Keypair
 from solders.instruction import Instruction
 from typing import List, Optional
-from goat_wallets.solana import solana_keypair_wallet, SolanaTransaction
+from goat_wallets.solana import solana, SolanaTransaction
 
 # Load environment variables
 load_dotenv()
@@ -14,7 +14,7 @@ client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
 keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
 
 # Create wallet instance
-wallet = solana_keypair_wallet(client, keypair)
+wallet = solana(client, keypair)
 
 # Get wallet address
 address = wallet.get_address()

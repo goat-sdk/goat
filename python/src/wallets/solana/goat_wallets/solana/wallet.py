@@ -150,9 +150,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         return {"hash": str(result.value)}
 
 
-def solana_keypair_wallet(
-    client: SolanaClient, keypair: Keypair
-) -> SolanaKeypairWalletClient:
+def solana(client: SolanaClient, keypair: Keypair) -> SolanaKeypairWalletClient:
     """Create a new SolanaKeypairWalletClient instance.
 
     Args:
