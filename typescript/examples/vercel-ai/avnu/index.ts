@@ -8,7 +8,7 @@ import { ollama } from "ollama-ai-provider";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { starknet } from "@goat-sdk/wallet-starknet";
 import { Avnu } from "@goat-sdk/plugin-avnu";
-import { ETH, USDC, STARK, starknetToken } from "@goat-sdk/plugin-starknet-token";
+import { STARKNET_TOKENS, starknetToken } from "@goat-sdk/plugin-starknet-token";
 
 
 require("dotenv").config();
@@ -61,7 +61,7 @@ User request: `;
 (async () => {
     const tools = await getOnChainTools({
         wallet: wallet,
-        plugins: [Avnu(), starknetToken({ tokens: [ETH, USDC, STARK] })],
+        plugins: [Avnu(), starknetToken({ tokens: STARKNET_TOKENS })],
     });
 
     const rl = readline.createInterface({
