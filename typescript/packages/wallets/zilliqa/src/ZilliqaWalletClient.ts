@@ -27,10 +27,15 @@ export abstract class ZilliqaWalletClient extends WalletClientBase {
 export class ZilliqaJSViemWalletClient extends ZilliqaWalletClient {
     zilliqa: Zilliqa;
     viem: ViemEVMWalletClient;
-    chainId = 0;
+    // This was originally a static assignment; however, this causes
+    // typescript to emit invalid JS when compiling the CJS version of
+    // the distribution package, so it is now initialized in the
+    // constructor.
+    chainId;
 
     constructor(client: ViemWalletClient, node: string, account: Account, chainId: number, options?: ViemOptions) {
         super();
+        this.chainId = 0;
         this.viem = new ViemEVMWalletClient(client, options);
         this.zilliqa = new Zilliqa(node);
         this.zilliqa.wallet.addByPrivateKey(account.privateKey);
