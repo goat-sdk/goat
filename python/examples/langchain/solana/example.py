@@ -12,6 +12,7 @@ from solders.keypair import Keypair
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.solana import solana
+from goat_plugins.jupiter import jupiter, JupiterPluginOptions
 
 # Initialize Solana client and wallet
 client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
@@ -36,7 +37,9 @@ def main():
     # Initialize tools with Solana wallet
     tools = get_on_chain_tools(
         wallet=wallet,
-        plugins=[],  # Add Solana specific plugins here when needed
+        plugins=[
+            jupiter(JupiterPluginOptions(api_key="")),  # API key not required for Jupiter v6
+        ],
     )
 
     agent = create_tool_calling_agent(llm, tools, prompt)
