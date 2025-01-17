@@ -12,6 +12,8 @@ from solders.keypair import Keypair
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.solana import solana
+from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
+from goat_plugins.spl_token.tokens import SPL_TOKENS
 
 # Initialize Solana client and wallet
 client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
@@ -19,7 +21,7 @@ keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
 wallet = solana(client, keypair)
 
 # Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatOpenAI(model="gpt-4")
 
 
 def main():
@@ -33,10 +35,17 @@ def main():
         ]
     )
 
+    # Initialize SPL Token plugin
+    spl_token_plugin = spl_token(SplTokenPluginOptions(
+        api_key="",  # Not needed for SPL token operations
+        network="devnet",  # Using devnet as specified in .env
+        tokens=SPL_TOKENS
+    ))
+
     # Initialize tools with Solana wallet
     tools = get_on_chain_tools(
         wallet=wallet,
-        plugins=[],  # Add Solana specific plugins here when needed
+        plugins=[spl_token_plugin]
     )
 
     agent = create_tool_calling_agent(llm, tools, prompt)
