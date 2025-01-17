@@ -1,5 +1,13 @@
 # goat-examples-vercel-ai-viem
 
+## 0.2.10
+
+### Patch Changes
+
+- bff4fa1: Minor chores
+- Updated dependencies [bff4fa1]
+  - @goat-sdk/plugin-uniswap@0.2.8
+
 ## 0.2.9
 
 ### Patch Changes

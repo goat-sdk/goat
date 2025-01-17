@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-uniswap
 
+## 0.2.8
+
+### Patch Changes
+
+- bff4fa1: Minor chores
+
 ## 0.2.7
 
 ### Patch Changes
