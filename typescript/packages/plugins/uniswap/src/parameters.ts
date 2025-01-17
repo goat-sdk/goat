@@ -74,7 +74,7 @@ export class CheckApprovalBodySchema extends createToolParameters(
         token: z.string(),
         amount: z.string(),
         walletAddress: z.string(),
-    })
+    }),
 ) {}
 
 export class GetQuoteParameters extends createToolParameters(
@@ -90,7 +90,7 @@ export class GetQuoteParameters extends createToolParameters(
             .nativeEnum(Routing)
             .default(Routing.BEST_PRICE)
             .describe(
-                "The routing preference determines which protocol to use for the swap. If the routing preference is UNISWAPX, then the swap will be routed through the UniswapX Dutch Auction Protocol. If the routing preference is CLASSIC, then the swap will be routed through the Classic Protocol. If the routing preference is BEST_PRICE, then the swap will be routed through the protocol that provides the best price. When UNIXWAPX_V2 is passed, the swap will be routed through the UniswapX V2 Dutch Auction Protocol. When V3_ONLY is passed, the swap will be routed ONLY through the Uniswap V3 Protocol. When V2_ONLY is passed, the swap will be routed ONLY through the Uniswap V2 Protocol."
+                "The routing preference determines which protocol to use for the swap. If the routing preference is UNISWAPX, then the swap will be routed through the UniswapX Dutch Auction Protocol. If the routing preference is CLASSIC, then the swap will be routed through the Classic Protocol. If the routing preference is BEST_PRICE, then the swap will be routed through the protocol that provides the best price. When UNIXWAPX_V2 is passed, the swap will be routed through the UniswapX V2 Dutch Auction Protocol. When V3_ONLY is passed, the swap will be routed ONLY through the Uniswap V3 Protocol. When V2_ONLY is passed, the swap will be routed ONLY through the Uniswap V2 Protocol.",
             ),
-    })
+    }),
 ) {}

@@ -1,7 +1,7 @@
 import { Tool } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { CheckApprovalBodySchema, GetQuoteParameters } from "./parameters";
 import type { UniswapCtorParams } from "./types/UniswapCtorParams";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 
 export class UniswapService {
     constructor(private readonly params: UniswapCtorParams) {}
@@ -18,13 +18,7 @@ export class UniswapService {
         });
 
         if (!response.ok) {
-            throw new Error(
-                `Failed to fetch ${endpoint}: ${JSON.stringify(
-                    await response.json(),
-                    null,
-                    2
-                )}`
-            );
+            throw new Error(`Failed to fetch ${endpoint}: ${JSON.stringify(await response.json(), null, 2)}`);
         }
 
         return response.json();
@@ -35,10 +29,7 @@ export class UniswapService {
         description:
             "Check if the wallet has enough approval for a token and return the transaction to approve the token. The approval must takes place before the swap transaction",
     })
-    async checkApproval(
-        walletClient: EVMWalletClient,
-        parameters: CheckApprovalBodySchema
-    ) {
+    async checkApproval(walletClient: EVMWalletClient, parameters: CheckApprovalBodySchema) {
         const data = await this.makeRequest("check_approval", {
             token: parameters.token,
             amount: parameters.amount,
@@ -70,10 +61,7 @@ export class UniswapService {
         name: "uniswap_get_quote",
         description: "Get the quote for a swap",
     })
-    async getQuote(
-        walletClient: EVMWalletClient,
-        parameters: GetQuoteParameters
-    ) {
+    async getQuote(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
         return this.makeRequest("quote", {
             ...parameters,
             swapper: walletClient.getAddress(),
@@ -84,10 +72,7 @@ export class UniswapService {
         name: "uniswap_swap_tokens",
         description: "Swap tokens on Uniswap",
     })
-    async getSwapTransaction(
-        walletClient: EVMWalletClient,
-        parameters: GetQuoteParameters
-    ) {
+    async getSwapTransaction(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
         const quote = await this.getQuote(walletClient, parameters);
 
         const response = await this.makeRequest("swap", {
