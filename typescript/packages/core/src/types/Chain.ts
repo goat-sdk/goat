@@ -10,7 +10,8 @@ export type Chain =
     | FuelChain
     | SuiChain
     | ZilliqaChain
-    | CosmosChain;
+    | CosmosChain
+    | StarknetChain;
 
 export type SuiChain = {
     type: "sui";
@@ -45,4 +46,8 @@ export type ZilliqaChain = {
 
 export type CosmosChain = {
     type: "cosmos";
+};
+
+export type StarknetChain = {
+    type: "starknet";
 };
