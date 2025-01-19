@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-solana-nfts",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

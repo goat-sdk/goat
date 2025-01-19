@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-cosmosbank",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -11,7 +11,6 @@
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-cosmos": "workspace:*",
@@ -20,13 +19,11 @@
         "chain-registry": "^1.69.74",
         "zod": "catalog:"
     },
-
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
         "@cosmjs/stargate": "^0.32.4",
         "cosmjs-types": "^0.9.0"
     },
-
     "engines": {
         "node": ">=20.12.2 <21",
         "npm": "please-use-pnpm",

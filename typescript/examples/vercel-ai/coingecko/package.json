@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-coingecko",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "",
     "private": true,
     "scripts": {

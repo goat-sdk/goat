@@ -1,5 +1,18 @@
 # goat-examples-vercel-ai-solana
 
+## 0.2.14
+
+### Patch Changes
+
+- Updated dependencies [2b4b8e8]
+  - @goat-sdk/core@0.4.6
+  - @goat-sdk/adapter-vercel-ai@0.2.7
+  - @goat-sdk/plugin-coingecko@0.2.6
+  - @goat-sdk/plugin-jupiter@0.2.11
+  - @goat-sdk/plugin-pumpfun@0.1.4
+  - @goat-sdk/plugin-spl-token@0.2.13
+  - @goat-sdk/wallet-solana@0.2.11
+
 ## 0.2.13
 
 ### Patch Changes

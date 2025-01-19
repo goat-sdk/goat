@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-vercel-ai-viem",
-    "version": "0.2.8",
+    "version": "0.2.10",
     "description": "",
     "private": true,
     "scripts": {
@@ -14,6 +14,7 @@
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/plugin-erc20": "workspace:*",
         "@goat-sdk/plugin-erc721": "workspace:*",
+        "@goat-sdk/plugin-uniswap": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
         "ai": "catalog:",

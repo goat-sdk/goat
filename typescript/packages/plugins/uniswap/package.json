@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-uniswap",
-    "version": "0.2.6",
+    "version": "0.2.8",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:",
         "zod": "catalog:"
     },

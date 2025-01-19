@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-sns
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [2b4b8e8]
+  - @goat-sdk/core@0.4.6
+  - @goat-sdk/adapter-vercel-ai@0.2.7
+  - @goat-sdk/plugin-sns@0.1.3
+  - @goat-sdk/wallet-solana@0.2.11
+
 ## 0.1.4
 
 ### Patch Changes

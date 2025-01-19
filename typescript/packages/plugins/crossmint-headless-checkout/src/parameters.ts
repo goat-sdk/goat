@@ -36,7 +36,9 @@ export function getCreateAndPayOrderParameters(callDataSchema: z.ZodSchema) {
                 z.object({
                     collectionLocator: z
                         .string()
-                        .describe("The collection locator. Ex: 'crossmint:3351221a-6d91-419a-b3a9-a6c54b74ab78'"), // TODO: Add tokenLocator support
+                        .describe(
+                            "The collection locator. Ex: 'crossmint:<crossmint_collection_id>', '<chain>:<contract_address>'",
+                        ), // TODO: Add tokenLocator support
                     callData: callDataSchema,
                 }),
             )

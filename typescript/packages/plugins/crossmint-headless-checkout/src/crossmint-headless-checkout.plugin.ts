@@ -55,19 +55,19 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                     });
 
                     if (!res.ok) {
-                        // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
-                        let json;
+                        let errorMessage = `Failed to create buy order: ${res.status} ${res.statusText}`;
                         try {
-                            json = await res.json();
-                            throw new Error(
-                                `Failed to create buy order: ${res.status} ${res.statusText}\n\n${JSON.stringify(json, null, 2)}`,
-                            );
+                            const json = await res.json();
+                            errorMessage += `\n\n${JSON.stringify(json, null, 2)}`;
                         } catch (e) {
-                            throw new Error(`Failed to create buy order: ${res.status} ${res.statusText}`);
+                            console.error("Failed to parse JSON response:", e);
                         }
+                        throw new Error(errorMessage);
                     }
 
                     const { order } = (await res.json()) as { order: Order; orderClientSecret: string };
+
+                    console.log("Created order:", order.orderId);
 
                     const serializedTransaction =
                         order.payment.preparation != null && "serializedTransaction" in order.payment.preparation
@@ -84,6 +84,8 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                     if (transaction.to == null) {
                         throw new Error("Transaction to is null");
                     }
+
+                    console.log("Paying order:", order.orderId);
 
                     const sendRes = await walletClient.sendTransaction({
                         to: transaction.to,

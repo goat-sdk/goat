@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-aptos",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

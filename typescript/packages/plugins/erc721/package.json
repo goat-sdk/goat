@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-erc721",
-    "version": "0.1.16",
+    "version": "0.1.17",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

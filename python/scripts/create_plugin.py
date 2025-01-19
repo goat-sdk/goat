@@ -1,27 +1,29 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
 from pathlib import Path
-from typing import Optional
 
-def create_project_toml(plugin_dir: Path, plugin_name: str, is_evm: bool) -> None:
+def create_project_toml(plugin_dir: Path, plugin_name: str, is_evm: bool, is_solana: bool = False) -> None:
     """Create the pyproject.toml file for the plugin."""
     # Base dependencies
     dependencies = '''python = "^3.10"
 goat-sdk = "^0.1.0"'''
     
-    # Add EVM dependency if needed
+    # Add chain-specific dependencies
     if is_evm:
         dependencies += '\ngoat-sdk-wallet-evm = "^0.1.0"'
+    elif is_solana:
+        dependencies += '\ngoat-sdk-wallet-solana = "^0.1.0"'
     
     # Dev dependencies
     dev_dependencies = '''ruff = "^0.8.6"
 goat-sdk = { path = "../../goat-sdk", develop = true }'''
     
-    # Add EVM dev dependency if needed
+    # Add chain-specific dev dependencies
     if is_evm:
         dev_dependencies += '\ngoat-sdk-wallet-evm = { path = "../../wallets/evm", develop = true }'
+    elif is_solana:
+        dev_dependencies += '\ngoat-sdk-wallet-solana = { path = "../../wallets/solana", develop = true }'
     
     toml_content = f'''[tool.poetry]
 name = "goat-sdk-plugin-{plugin_name}"
@@ -104,21 +106,42 @@ class ExampleActionParameters(BaseModel):
     with open(goat_plugins_dir / "parameters.py", "w") as f:
         f.write(parameters_content)
 
-def create_service_file(goat_plugins_dir: Path, plugin_name: str, is_evm: bool) -> None:
+def convert_to_python_identifier(name: str, for_class: bool = False) -> str:
+    """Convert a kebab-case name to a valid Python identifier.
+    
+    Args:
+        name: The name to convert
+        for_class: If True, convert to PascalCase for class names,
+                  otherwise convert to snake_case for function/variable names
+    """
+    # First convert to snake_case
+    snake_case = name.replace("-", "_")
+    
+    if for_class:
+        # Convert to PascalCase for class names
+        return "".join(word.title() for word in snake_case.split("_"))
+    
+    return snake_case
+
+def create_service_file(goat_plugins_dir: Path, plugin_name: str, is_evm: bool, is_solana: bool = False) -> None:
     """Create the service.py file with an empty tool."""
+    # Convert plugin name to valid Python identifier for class name
+    class_name = f"{convert_to_python_identifier(plugin_name, for_class=True)}Service"
+    
     # Start with common imports
     service_content = '''from goat.decorators.tool import Tool
 from .parameters import ExampleQueryParameters, ExampleActionParameters
 '''
 
-    # Add EVM-specific imports if needed
+    # Add chain-specific imports if needed
     if is_evm:
         service_content += '''from goat_wallets.evm import EVMWalletClient
 
 '''
+    elif is_solana:
+        service_content += '''from goat_wallets.solana import SolanaWalletClient
 
-    # Create the service class
-    class_name = f"{plugin_name.title()}Service"
+'''
     service_content += f'''
 class {class_name}:
     def __init__(self, api_key: str):
@@ -128,7 +151,7 @@ class {class_name}:
         "description": "Example query tool that demonstrates parameter usage",
         "parameters_schema": ExampleQueryParameters
     }})
-    async def example_query(self{", wallet_client: EVMWalletClient" if is_evm else ""}, parameters: dict):
+    async def example_query(self{", wallet_client: EVMWalletClient" if is_evm else ", wallet_client: SolanaWalletClient" if is_solana else ""}, parameters: dict):
         """An example query method that shows how to use parameters."""
         try:
             # Example implementation
@@ -145,7 +168,7 @@ class {class_name}:
         "description": "Example action tool that demonstrates parameter usage",
         "parameters_schema": ExampleActionParameters
     }})
-    async def example_action(self{", wallet_client: EVMWalletClient" if is_evm else ""}, parameters: dict):
+    async def example_action(self{", wallet_client: EVMWalletClient" if is_evm else ", wallet_client: SolanaWalletClient" if is_solana else ""}, parameters: dict):
         """An example action method that shows how to use parameters."""
         try:
             # Example implementation
@@ -162,10 +185,11 @@ class {class_name}:
     with open(goat_plugins_dir / "service.py", "w") as f:
         f.write(service_content)
 
-def create_init_file(goat_plugins_dir: Path, plugin_name: str, is_evm: bool) -> None:
+def create_init_file(goat_plugins_dir: Path, plugin_name: str, is_evm: bool, is_solana: bool = False) -> None:
     """Create the __init__.py file with plugin class."""
-    # Convert hyphens to underscores for class names
-    class_base = plugin_name.replace("-", "_").title()
+    # Convert plugin name to valid Python identifiers
+    python_name = convert_to_python_identifier(plugin_name)
+    class_base = convert_to_python_identifier(plugin_name, for_class=True)
     class_name = f"{class_base}Service"
     plugin_class = f"{class_base}Plugin"
     options_class = f"{class_base}PluginOptions"
@@ -189,14 +213,15 @@ class {plugin_class}(PluginBase):
         return {supports_chain}
 
 
-def {plugin_name}(options: {options_class}) -> {plugin_class}:
+def {python_name}(options: {options_class}) -> {plugin_class}:
     return {plugin_class}(options)
 '''.format(
         class_name=class_name,
         plugin_class=plugin_class,
         options_class=options_class,
         plugin_name=plugin_name,
-        supports_chain="chain['type'] == 'evm'" if is_evm else "True"
+        python_name=python_name,
+        supports_chain="chain['type'] == 'evm'" if is_evm else "chain['type'] == 'solana'" if is_solana else "True"
     )
 
     with open(goat_plugins_dir / "__init__.py", "w") as f:
@@ -227,17 +252,27 @@ def main():
     parser = argparse.ArgumentParser(description="Create a new GOAT plugin.")
     parser.add_argument("name", help="Plugin name, e.g. 'myplugin'")
     parser.add_argument("--evm", action="store_true", help="Indicate if plugin is for EVM")
+    parser.add_argument("--solana", action="store_true", help="Indicate if plugin is for Solana")
     args = parser.parse_args()
+    
+    # Ensure only one chain type is specified
+    if args.evm and args.solana:
+        parser.error("Please specify only one chain type (--evm or --solana)")
     
     plugin_name = args.name.lower()  # Normalize to lowercase
     is_evm = args.evm
+    is_solana = args.solana
+    
+    # Convert plugin name to valid Python identifiers (used throughout the script)
+    python_name = convert_to_python_identifier(plugin_name)
+    class_base = convert_to_python_identifier(plugin_name, for_class=True)
     
     # Create base plugin directory (relative to python root)
     plugin_dir = Path(__file__).parent.parent / "src" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True, exist_ok=True)
     
     # Create all required files
-    create_project_toml(plugin_dir, plugin_name, is_evm)
+    create_project_toml(plugin_dir, plugin_name, is_evm, is_solana)
     
     # Create goat_plugins directory and its contents
     goat_plugins_dir = plugin_dir / "goat_plugins" / plugin_name
@@ -245,10 +280,23 @@ def main():
     
     # Create all plugin files
     create_parameters_file(goat_plugins_dir, plugin_name)
-    create_service_file(goat_plugins_dir, plugin_name, is_evm)
-    create_init_file(goat_plugins_dir, plugin_name, is_evm)
+    create_service_file(goat_plugins_dir, plugin_name, is_evm, is_solana)
+    create_init_file(goat_plugins_dir, plugin_name, is_evm, is_solana)
     
     # Create README.md
+    # Convert plugin name for Python usage
+    python_name = convert_to_python_identifier(plugin_name)
+    
+    # Determine chain support text
+    chain_support = 'EVM chain support' if is_evm else 'Solana chain support' if is_solana else 'Chain-agnostic support'
+    
+    # Determine additional dependencies
+    additional_deps = ''
+    if is_evm:
+        additional_deps = '# Install required wallet dependency\npoetry add goat-sdk-wallet-evm'
+    elif is_solana:
+        additional_deps = '# Install required wallet dependency\npoetry add goat-sdk-wallet-solana'
+    
     readme_content = f"""# {plugin_name} Plugin for GOAT SDK
 
 A plugin for the GOAT SDK that provides {plugin_name} functionality.
@@ -256,26 +304,29 @@ A plugin for the GOAT SDK that provides {plugin_name} functionality.
 ## Installation
 
 ```bash
+# Install the plugin
 poetry add goat-sdk-plugin-{plugin_name}
+
+{additional_deps if additional_deps else ''}
 ```
 
 ## Usage
 
 ```python
-from goat_plugins.{plugin_name} import {plugin_name}, {plugin_name.title()}PluginOptions
+from goat_plugins.{plugin_name} import {python_name}, {class_base}PluginOptions
 
 # Initialize the plugin
-options = {plugin_name.title()}PluginOptions(
+options = {class_base}PluginOptions(
     api_key="your-api-key"
 )
-plugin = {plugin_name}(options)
+plugin = {python_name}(options)
 ```
 
 ## Features
 
 - Example query functionality
 - Example action functionality
-- {'EVM chain support' if is_evm else 'Chain-agnostic support'}
+- {chain_support}
 
 ## License
 
