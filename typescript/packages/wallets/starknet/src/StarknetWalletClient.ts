@@ -1,9 +1,8 @@
 import { WalletClientBase } from "@goat-sdk/core";
 import { formatUnits } from "ethers";
-import type { Account, Call, InvocationsDetails, InvokeFunctionResponse, RpcProvider } from "starknet";
+import type { Call, InvocationsDetails, RpcProvider } from "starknet";
 
 export type StarknetWalletCtorParams = {
-    starknetAccount: Account;
     starknetClient: RpcProvider;
 };
 
@@ -12,18 +11,12 @@ export type StarknetTransaction = {
     transactionDetails?: InvocationsDetails;
 };
 
-export class StarknetWalletClient extends WalletClientBase {
-    private starknetAccount: Account;
-    starknetClient: RpcProvider;
+export abstract class StarknetWalletClient extends WalletClientBase {
+    protected starknetClient: RpcProvider;
 
     constructor(params: StarknetWalletCtorParams) {
         super();
-        this.starknetAccount = params.starknetAccount;
         this.starknetClient = params.starknetClient;
-    }
-
-    getAddress() {
-        return this.starknetAccount.address;
     }
 
     getChain() {
@@ -32,54 +25,15 @@ export class StarknetWalletClient extends WalletClientBase {
         } as const;
     }
 
-    async signMessage(message: string) {
-        try {
-            const signature = await this.starknetAccount.signMessage({
-                domain: {
-                    name: "StarkNet",
-                    chainId: "SN_MAIN",
-                    version: "1",
-                },
-                types: {
-                    Message: [{ name: "message", type: "felt" }],
-                },
-                primaryType: "Message",
-                message: { message },
-            });
-            return {
-                signature: signature.toString(),
-            };
-        } catch (error) {
-            console.error("Error signing message:", error);
-            throw error;
-        }
+    getClient() {
+        return this.starknetClient;
     }
 
-    async sendTransaction({ calls, transactionDetails }: StarknetTransaction) {
-        try {
-            const result = await this.starknetAccount.execute(calls, undefined, {
-                maxFee: transactionDetails?.maxFee,
-                version: transactionDetails?.version,
-                nonce: transactionDetails?.nonce,
-                resourceBounds: transactionDetails?.resourceBounds,
-            });
+    abstract getAddress(): string;
 
-            const receipt = await this.starknetClient.waitForTransaction(result.transaction_hash, {
-                retryInterval: 1000,
-            });
+    abstract signMessage(message: string): Promise<{ signature: string }>;
 
-            if (!receipt.isSuccess()) {
-                throw new Error("Transaction failed");
-            }
-
-            return {
-                hash: receipt.transaction_hash,
-            };
-        } catch (error) {
-            console.error("Error sending transaction:", error);
-            throw error;
-        }
-    }
+    abstract sendTransaction(transaction: StarknetTransaction): Promise<{ hash: string }>;
 
     async balanceOf(address: string) {
         try {
@@ -105,8 +59,4 @@ export class StarknetWalletClient extends WalletClientBase {
             throw error;
         }
     }
-}
-
-export function starknet({ starknetAccount, starknetClient }: StarknetWalletCtorParams) {
-    return new StarknetWalletClient({ starknetAccount, starknetClient });
 }

@@ -1,2 +1,3 @@
 export { StarknetWalletClient } from "./StarknetWalletClient";
-export { starknet } from "./StarknetWalletClient";
+export { StarknetAccountWalletClient } from "./StarknetAccountWalletClient";
+export { starknet } from "./StarknetAccountWalletClient";
