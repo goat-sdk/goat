@@ -1,0 +1,29 @@
+{
+    "name": "@goat-sdk/plugin-avnu",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "description": "",
+    "dependencies": {
+        "@avnu/avnu-sdk": "^3.0.0",
+        "@goat-sdk/core": "workspace:*",
+        "@types/dotenv": "^8.2.3",
+        "dotenv": "^16.4.7",
+        "ethers": "^6.13.4",
+        "get-starknet": "^3.3.3",
+        "starknet": "^6.11.0",
+        "zod": "catalog:"
+    },
+
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
