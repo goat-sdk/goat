@@ -73,15 +73,15 @@ export class CosmosClient extends CosmosWalletClient {
         const {contractAdr, message} = transaction;
         const id = await this.client.getChainId()
 
-        const fe = chains.find((ch) => ch.chain_id == id)?.fees?.fee_tokens[0]
+        const fe = chains.find((ch) => ch.chain_id === id)?.fees?.fee_tokens[0]
 
         if(!fe) throw new Error("network data is unavailable");
 
         if(!contractAdr) throw new Error("Invalid Contarct Address");
 
         const memo = `txn`;
-        var gas = 400000
-        var tk = fe?.high_gas_price ?? fe?.average_gas_price ?? fe?.low_gas_price ?? fe?.fixed_min_gas_price ?? 0
+        let gas = 400000
+        let tk = fe?.high_gas_price ?? fe?.average_gas_price ?? fe?.low_gas_price ?? fe?.fixed_min_gas_price ?? 0
         tk = tk == 0 ? 0.25: tk 
         const fee = { amount: [ { denom: fe?.denom, amount: Math.round(tk * gas).toString() } ], gas: gas.toString() };
         const result = await this.client.execute(
@@ -123,8 +123,8 @@ export class CosmosClient extends CosmosWalletClient {
         const ast = await this.getChainInfo()
 
         if(!ast.asset) throw new Error("Asset data is unavailable");
-        var _ast = ast.asset?.assets[0]
-        var exp = _ast?.denom_units.find((d) => d.denom == _ast?.display);
+        let _ast = ast.asset?.assets[0]
+        let exp = _ast?.denom_units.find((d) => d.denom === _ast?.display);
         const balance = await this.client.getBalance(address, _ast.base)
         var ex = !exp?.exponent ? 0 : exp?.exponent;
 
