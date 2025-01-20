@@ -150,13 +150,10 @@ class PluginBase(Generic[TWalletClient], ABC):
             try:
                 loop = asyncio.get_event_loop()
                 if loop.is_running():
-                    # Case 2: Loop is running, run in new thread
                     return _run_coroutine_in_new_thread(result)
                 else:
-                    # Case 1: Loop exists but not running
                     return loop.run_until_complete(result)
             except RuntimeError:
-                # Case 3: No loop exists, create new one
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 return loop.run_until_complete(result)
