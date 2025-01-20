@@ -426,33 +426,6 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1
 
-  examples/vercel-ai/coingecko:
-    dependencies:
-      '@ai-sdk/openai':
-        specifier: ^1.0.4
-        version: 1.0.13(zod@3.24.1)
-      '@goat-sdk/adapter-vercel-ai':
-        specifier: workspace:*
-        version: link:../../../packages/adapters/vercel-ai
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../../../packages/core
-      '@goat-sdk/plugin-coingecko':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/coingecko
-      '@goat-sdk/wallet-viem':
-        specifier: workspace:*
-        version: link:../../../packages/wallets/viem
-      ai:
-        specifier: 'catalog:'
-        version: 4.0.3(react@18.3.1)(zod@3.24.1)
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.7
-      viem:
-        specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
-
   examples/vercel-ai/crossmint-smart-wallets:
     dependencies:
       '@ai-sdk/openai':
@@ -807,33 +780,6 @@ importers:
         specifier: ^16.4.5
         version: 16.4.7
 
-  examples/vercel-ai/uniswap:
-    dependencies:
-      '@ai-sdk/openai':
-        specifier: ^1.0.4
-        version: 1.0.13(zod@3.24.1)
-      '@goat-sdk/adapter-vercel-ai':
-        specifier: workspace:*
-        version: link:../../../packages/adapters/vercel-ai
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../../../packages/core
-      '@goat-sdk/plugin-uniswap':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/uniswap
-      '@goat-sdk/wallet-viem':
-        specifier: workspace:*
-        version: link:../../../packages/wallets/viem
-      ai:
-        specifier: ^4.0.3
-        version: 4.0.22(react@18.3.1)(zod@3.24.1)
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.7
-      viem:
-        specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
-
   examples/vercel-ai/viem:
     dependencies:
       '@ai-sdk/openai':
@@ -848,9 +794,6 @@ importers:
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20
-      '@goat-sdk/plugin-erc721':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/erc721
       '@goat-sdk/plugin-uniswap':
         specifier: workspace:*
         version: link:../../../packages/plugins/uniswap
