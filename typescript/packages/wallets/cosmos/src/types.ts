@@ -11,10 +11,6 @@ export type CosmosReadRequest = {
     message: EncodeObject;
 };
 
-export type CosmosReadResult = {
-    value: QueryAbciResponse;
-};
-
 export type ContractWriteData = {
     contractAdr: string
     message: JsonObject
@@ -25,6 +21,14 @@ export type ContractReadData = {
     message: JsonObject
 }
 
+export type CosmosTransactionResult = {
+    value: DeliverTxResponse;
+};
+
+export type CosmosReadResult = {
+    value: QueryAbciResponse;
+};
+
 export type ContractWriteResult = {
     value: ExecuteResult;
 }
@@ -33,13 +37,6 @@ export type ContractReadResult = {
     value: JsonObject
 }
 
-export type CosmosTransactionResult = {
-    value: DeliverTxResponse;
-};
-
-export type CosmosBalanceResponse = {
-    value: string;
-};
 
 export abstract class CosmosWalletClient extends WalletClientBase {
     abstract getChain(): CosmosChain;
