@@ -121,21 +121,19 @@ export class DebridgeTools {
     @Tool({
         name: "create_bridge_order",
         description: `Create a bridge order to transfer tokens between chains.
+Use the user requested target asset full address(eg:DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5) for dstChainTokenOut do NOT use the ticker(eg:DBR) for dstChainTokenOut
 
 EVM to EVM:
-1. Use EVM addresses (0x...) for all fields
-2. Set dstChainTokenOutRecipient to recipient's EVM address
-3. Set senderAddress, srcChainOrderAuthorityAddress, srcChainRefundAddress to user's EVM address
+1. Set dstChainTokenOutRecipient to recipient's EVM address
+3. Set dstChainTokenOut to the erc-20 format address of the token to receive, not the ticker
 
 To Solana (7565164):
 1. Ask for Solana recipient address (base58, e.g. DXu6uARB7gVxqtuwjMyK2mgEchorxDDyrSN9dRK1Af7q)
-2. Set dstChainTokenOutRecipient, dstChainOrderAuthorityAddress to Solana address
-3. Set senderAddress, srcChainOrderAuthorityAddress, srcChainRefundAddress to EVM address
+2. Set dstChainTokenOut to the base58 address of the token to receive on Solana, not the ticker
 
 From Solana:
-1. Ask for EVM address (0x...)
-2. Set dstChainTokenOutRecipient to EVM address
-3. Set senderAddress, srcChainOrderAuthorityAddress, srcChainRefundAddress to Solana address`,
+1. Ask for EVM recipient address (ERC-20 format)
+2. Set dstChainTokenOut must be the erc-20 format address of the token to receive, not the ticker`,
     })
     async createBridgeOrder(walletClient: EVMWalletClient, parameters: createBridgeOrderParametersSchema) {
         try {
@@ -147,17 +145,11 @@ From Solana:
             params.append("dstChainTokenOut", parameters.dstChainTokenOut);
             params.append("dstChainTokenOutRecipient", parameters.dstChainTokenOutRecipient);
             params.append("senderAddress", parameters.senderAddress);
-            // If srcChainOrderAuthorityAddress is not provided, use senderAddress
-            params.append(
-                "srcChainOrderAuthorityAddress",
-                parameters.srcChainOrderAuthorityAddress || parameters.senderAddress,
-            );
-            params.append("srcChainRefundAddress", parameters.srcChainRefundAddress);
-            // If dstChainOrderAuthorityAddress is not provided, use dstChainTokenOutRecipient
-            params.append(
-                "dstChainOrderAuthorityAddress",
-                parameters.dstChainOrderAuthorityAddress || parameters.dstChainTokenOutRecipient,
-            );
+            // Always use senderAddress for source chain authorities
+            params.append("srcChainOrderAuthorityAddress", parameters.senderAddress);
+            params.append("srcChainRefundAddress", parameters.senderAddress);
+            // Always use dstChainTokenOutRecipient for destination chain authority
+            params.append("dstChainOrderAuthorityAddress", parameters.dstChainTokenOutRecipient);
             params.append("referralCode", parameters.referralCode || REFERRAL_CODE || "21064");
             params.append("prependOperatingExpenses", "true");
             params.append("enableEstimate", parameters.enableEstimate?.toString() || "false");
@@ -321,7 +313,7 @@ From Solana:
      */
     @Tool({
         name: "execute_bridge_transaction",
-        description: "Execute a bridge transaction using tx data from create_bridge_order tool",
+        description: "Execute a bridge transaction using tx data from create_bridge_order tool. Always ask for confirmation before proceeding",
     })
     async executeBridgeTransaction(
         walletClient: EVMWalletClient,

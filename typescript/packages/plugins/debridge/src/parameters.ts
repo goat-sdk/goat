@@ -154,7 +154,7 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
                 "Token address must be either a valid EVM address (0x-prefixed) or Solana address (base58)",
             )
             .describe(
-                "Token address on destination chain. For EVM: use 0x0000000000000000000000000000000000000000 for native ETH coin and 0x-prefixed address for tokens. For Solana: use 11111111111111111111111111111111 or a base58 token address for other tokens.",
+                "Full token address on destination chain.",
             ),
 
         /** Recipient address on the destination chain */
@@ -185,7 +185,7 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
                 message: "Authority address cannot be the zero address",
             })
             .describe(
-                "The user's wallet address that can cancel/modify the order. If not provided, defaults to senderAddress. NEVER use the zero address!",
+                "Optional: The user's wallet address that can cancel/modify the order. If not provided, defaults to senderAddress.",
             )
             .optional(),
 
@@ -197,8 +197,9 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
                 message: "Refund address cannot be the zero address",
             })
             .describe(
-                "The user's wallet address to receive refunds if the transaction fails. Use the same address as senderAddress. NEVER use the zero address!",
-            ),
+                "Optional: The user's wallet address to receive refunds if the transaction fails. Defaults to senderAddress.",
+            )
+            .optional(),
 
         /** Authority address on the destination chain */
         dstChainOrderAuthorityAddress: z
@@ -211,7 +212,7 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
                 message: "Authority address cannot be the zero address",
             })
             .describe(
-                "Authority address on destination chain. IMPORTANT: For EVM chains use the same address as senderAddress, for Solana use the same address as dstChainTokenOutRecipient. If not provided, defaults to dstChainTokenOutRecipient. NEVER use the zero address!",
+                "Optional: Authority address on destination chain. Defaults to dstChainTokenOutRecipient.",
             )
             .optional(),
 
@@ -257,20 +258,5 @@ export class executeBridgeTransactionParametersSchema extends createToolParamete
                 value: z.string().regex(/^\d+$/, "Value must be a positive integer in wei").optional(),
             })
             .describe("Transaction data from createBridgeOrder"),
-
-        /** Optional paymaster configuration for gas abstraction */
-        paymaster: z
-            .object({
-                /** Paymaster contract address */
-                address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Paymaster address must be a valid EVM address"),
-
-                /** Optional paymaster input data */
-                input: z
-                    .string()
-                    .regex(/^0x[a-fA-F0-9]*$/, "Paymaster input must be valid hex")
-                    .optional(),
-            })
-            .optional()
-            .describe("Optional paymaster configuration for gas abstraction"),
     }),
 ) {}
