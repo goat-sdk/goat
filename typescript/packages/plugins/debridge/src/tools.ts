@@ -12,8 +12,6 @@ import {
     getBridgeQuoteParametersSchema,
     getTokenInfoParametersSchema,
 } from "./parameters";
-import { DEBRIDGE_ABI } from "./abi/debridge";
-import { decodeFunctionData } from 'viem';
 
 /** Default referral code for DeBridge transactions */
 const REFERRAL_CODE = "21064";
@@ -150,10 +148,16 @@ From Solana:
             params.append("dstChainTokenOutRecipient", parameters.dstChainTokenOutRecipient);
             params.append("senderAddress", parameters.senderAddress);
             // If srcChainOrderAuthorityAddress is not provided, use senderAddress
-            params.append("srcChainOrderAuthorityAddress", parameters.srcChainOrderAuthorityAddress || parameters.senderAddress);
+            params.append(
+                "srcChainOrderAuthorityAddress",
+                parameters.srcChainOrderAuthorityAddress || parameters.senderAddress,
+            );
             params.append("srcChainRefundAddress", parameters.srcChainRefundAddress);
             // If dstChainOrderAuthorityAddress is not provided, use dstChainTokenOutRecipient
-            params.append("dstChainOrderAuthorityAddress", parameters.dstChainOrderAuthorityAddress || parameters.dstChainTokenOutRecipient);
+            params.append(
+                "dstChainOrderAuthorityAddress",
+                parameters.dstChainOrderAuthorityAddress || parameters.dstChainTokenOutRecipient,
+            );
             params.append("referralCode", parameters.referralCode || REFERRAL_CODE || "21064");
             params.append("prependOperatingExpenses", "true");
             params.append("enableEstimate", parameters.enableEstimate?.toString() || "false");
@@ -325,26 +329,26 @@ From Solana:
     ) {
         try {
             const { txData } = parameters;
-            
+
             // Validate transaction data
             if (!txData.to || !txData.data) {
                 throw new Error("Invalid transaction data: missing 'to' or 'data' field");
             }
-            
+
             // Validate data format
-            if (!txData.data.startsWith('0x')) {
+            if (!txData.data.startsWith("0x")) {
                 throw new Error("Invalid transaction data: 'data' field must start with '0x'");
             }
 
             // Enhanced logging for debugging
             console.log("Executing bridge transaction with data:", {
                 to: txData.to,
-                value: txData.value ? `${txData.value} (${BigInt(txData.value)})` : 'undefined',
+                value: txData.value ? `${txData.value} (${BigInt(txData.value)})` : "undefined",
                 data: {
                     full: txData.data,
                     functionSelector: txData.data.slice(0, 10),
-                    parameters: txData.data.slice(10)
-                }
+                    parameters: txData.data.slice(10),
+                },
             });
 
             // Send transaction using raw transaction data
@@ -357,7 +361,6 @@ From Solana:
 
             console.log("Transaction sent! Hash:", sendRes.hash);
             return { hash: sendRes.hash };
-
         } catch (error) {
             console.error("Bridge transaction execution failed:", error);
             throw new Error(`Failed to execute bridge transaction: ${error}`);

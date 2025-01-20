@@ -263,9 +263,12 @@ export class executeBridgeTransactionParametersSchema extends createToolParamete
             .object({
                 /** Paymaster contract address */
                 address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Paymaster address must be a valid EVM address"),
-                
+
                 /** Optional paymaster input data */
-                input: z.string().regex(/^0x[a-fA-F0-9]*$/, "Paymaster input must be valid hex").optional(),
+                input: z
+                    .string()
+                    .regex(/^0x[a-fA-F0-9]*$/, "Paymaster input must be valid hex")
+                    .optional(),
             })
             .optional()
             .describe("Optional paymaster configuration for gas abstraction"),
