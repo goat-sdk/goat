@@ -116,20 +116,24 @@ class UniswapService:
         """Get a quote for token swap."""
         try:
             chain_id = wallet_client.get_chain()["id"]
-            # Convert chain IDs to string names using the mapping
-            chain_id_str = self.chain_id_map.get(chain_id, str(chain_id))
+            # Always use numeric chain IDs as strings
+            chain_id_str = str(chain_id)
             token_out_chain_id = parameters.get("tokenOutChainId", chain_id)
-            token_out_chain_id_str = self.chain_id_map.get(token_out_chain_id, str(token_out_chain_id))
+            token_out_chain_id_str = str(token_out_chain_id)
             
             # Prepare request parameters
             request_params = {
                 **parameters,
                 "tokenInChainId": chain_id_str,
-                "tokenOutChainId": token_out_chain_id_str,
+                "tokenOutChainId": chain_id_str,  # Default to same chain
                 "swapper": wallet_client.get_address(),
                 "type": parameters.get("type", "EXACT_INPUT"),
-                "protocols": parameters.get("protocols", ["V2", "V3"])
+                "protocols": parameters.get("protocols", ["V2", "V3"]),
+                "routingPreference": parameters.get("routingPreference", "CLASSIC")
             }
+            
+            # Remove any None values
+            request_params = {k: v for k, v in request_params.items() if v is not None}
             
             # Debug log the request parameters
             print(f"\nRequest parameters for quote:")
