@@ -61,7 +61,7 @@ class UniswapService:
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
                 "data": str(approval["data"]) if isinstance(approval["data"], str) else approval["data"].hex(),
-                "value": 0,  # Default value
+                "value": int(approval["value"]) if approval.get("value") else 0,  # Use original value or default to 0
                 "abi": [],  # Empty ABI since we're using raw data
                 "functionName": None  # No function name since we're using raw data
             })
@@ -112,7 +112,7 @@ class UniswapService:
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
                 "data": str(swap["data"]) if isinstance(swap["data"], str) else swap["data"].hex(),
-                "value": 0,  # Default value
+                "value": int(swap["value"]) if swap.get("value") else 0,  # Use original value or default to 0
                 "abi": [],  # Empty ABI since we're using raw data
                 "functionName": None  # No function name since we're using raw data
             })
