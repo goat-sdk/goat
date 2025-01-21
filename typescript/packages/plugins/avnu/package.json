@@ -15,6 +15,7 @@
     "dependencies": {
         "@avnu/avnu-sdk": "^3.0.0",
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-starknet": "workspace:*",
         "@types/dotenv": "^8.2.3",
         "dotenv": "^16.4.7",
         "ethers": "^6.13.4",
@@ -22,8 +23,18 @@
         "starknet": "^6.11.0",
         "zod": "catalog:"
     },
-
-    "keywords": [],
-    "author": "",
-    "license": "ISC"
+    "peerDependencies": {
+        "viem": "catalog:",
+        "@goat-sdk/core": "workspace:*"
+    },
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3"]
 }

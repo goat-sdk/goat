@@ -1,23 +1,12 @@
 import { type Quote, executeSwap, fetchQuotes } from "@avnu/avnu-sdk";
 import { Tool } from "@goat-sdk/core";
-import { Account, RpcProvider } from "starknet";
+import { StarknetAccountWalletClient } from "@goat-sdk/wallet-starknet";
 import { SwapConfigParams } from "./parameters";
 
 export class AvnuService {
-    private params;
-    account: Account;
-    avnu_options;
-
-    constructor() {
-        this.params = this.createProviderConfig();
-        const provider = new RpcProvider({
-            nodeUrl: this.params.Starknet_rpc,
-        });
-        this.avnu_options = {
-            baseUrl: this.params.base_url,
-        };
-        this.account = new Account(provider, this.params.account_address, this.params.private_key);
-    }
+    private avnu_options = {
+        baseUrl: "https://starknet.api.avnu.fi",
+    };
 
     private async getQuote(params: {
         sellTokenAddress: string;
@@ -33,16 +22,6 @@ export class AvnuService {
                 sellAmount: sellAmountBigInt,
                 ...this.avnu_options,
             });
-
-            console.log({
-                "Sell Token Address": params.sellTokenAddress,
-                "Buy Token Address": params.buyTokenAddress,
-                "Original Sell Amount": params.sellAmount,
-                "Converted Sell Amount": sellAmountBigInt.toString(),
-                "Sell Amount Type": typeof sellAmountBigInt,
-            });
-
-            console.log("Quotes:", quotes);
 
             if (!quotes || quotes.length === 0) {
                 throw new Error("No quotes found");
@@ -99,18 +78,17 @@ Example flows:
 DO NOT proceed to the next step until you have the actual values from the current step.
 DO NOT use placeholder values like <TOKEN_ADDRESS> or <BASE_UNIT_AMOUNT>.`,
     })
-    async executeSwap(params: SwapConfigParams) {
+    async executeSwap(walletClient: StarknetAccountWalletClient, params: SwapConfigParams) {
         try {
-            console.log("Executing swap with params:", params);
             const quotes = await this.getQuote(params);
             const bestQuote = quotes[0]; // Assuming the first quote is the best one
 
             const swapResponse = await executeSwap(
-                this.account,
+                walletClient.getAccount(),
                 bestQuote,
                 {
                     executeApprove: true,
-                    slippage: 0.01,
+                    slippage: params.slippage,
                 },
                 this.avnu_options,
             );
@@ -119,23 +97,5 @@ DO NOT use placeholder values like <TOKEN_ADDRESS> or <BASE_UNIT_AMOUNT>.`,
             console.error("Error executing swap:", error);
             throw error;
         }
-    }
-
-    private createProviderConfig() {
-        const base_url = process.env.BASE_URL;
-        const Starknet_rpc = process.env.STARKNET_RPC;
-        const private_key = process.env.PRIVATE_KEY;
-        const account_address = process.env.ACCOUNT_ADDRESS;
-
-        if (!private_key || !account_address) {
-            throw new Error("PRIVATE_KEY and ACCOUNT_ADDRESS must be set in environment variables");
-        }
-
-        return {
-            base_url: base_url || "https://starknet.api.avnu.fi",
-            Starknet_rpc,
-            private_key,
-            account_address,
-        };
     }
 }
