@@ -9,6 +9,7 @@ homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
     { include = "example.py" },
+    { include = "uniswap_example.py" },
 ]
 
 [tool.poetry.dependencies]
@@ -23,6 +24,7 @@ goat-sdk-wallet-web3 = "^0.1.0"
 goat-sdk-plugin-erc20 = "^0.1.0"
 goat-sdk-adapter-langchain = "^0.1.0"
 goat-sdk-plugin-coingecko = "^0.1.0"
+goat-sdk-plugin-uniswap = "^0.1.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
@@ -50,6 +52,7 @@ goat-sdk-wallet-web3 = { path = "../../../src/wallets/web3", develop = true }
 goat-sdk-plugin-erc20 = { path = "../../../src/plugins/erc20", develop = true }
 goat-sdk-plugin-coingecko = { path = "../../../src/plugins/coingecko", develop = true }
 goat-sdk-adapter-langchain = { path = "../../../src/adapters/langchain", develop = true }
+goat-sdk-plugin-uniswap = { path = "../../../src/plugins/uniswap", develop = true }
 
 [tool.ruff]
 line-length = 120
