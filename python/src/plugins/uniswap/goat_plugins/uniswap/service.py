@@ -61,20 +61,13 @@ class UniswapService:
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
                 "data": str(approval["data"]) if isinstance(approval["data"], str) else approval["data"].hex(),
-                "value": 0  # Default value
+                "value": 0,  # Default value
+                "abi": [],  # Empty ABI since we're using raw data
+                "functionName": None  # No function name since we're using raw data
             })
-            if approval.get("value"):
-                value = approval["value"]
-                if isinstance(value, str):
-                    if value.startswith("0x"):
-                        transaction_params["value"] = int(value, 16)
-                    else:
-                        transaction_params["value"] = int(value)
-                else:
-                    transaction_params["value"] = int(value)
             
             # Send the transaction
-            transaction = await wallet_client.send_transaction(transaction_params)
+            transaction = wallet_client.send_transaction(transaction_params)
             return {
                 "status": "approved",
                 "txHash": transaction["hash"]
@@ -119,20 +112,13 @@ class UniswapService:
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
                 "data": str(swap["data"]) if isinstance(swap["data"], str) else swap["data"].hex(),
-                "value": 0  # Default value
+                "value": 0,  # Default value
+                "abi": [],  # Empty ABI since we're using raw data
+                "functionName": None  # No function name since we're using raw data
             })
-            if swap.get("value"):
-                value = swap["value"]
-                if isinstance(value, str):
-                    if value.startswith("0x"):
-                        transaction_params["value"] = int(value, 16)
-                    else:
-                        transaction_params["value"] = int(value)
-                else:
-                    transaction_params["value"] = int(value)
             
             # Send the transaction
-            transaction = await wallet_client.send_transaction(transaction_params)
+            transaction = wallet_client.send_transaction(transaction_params)
 
             return {
                 "txHash": transaction["hash"]
