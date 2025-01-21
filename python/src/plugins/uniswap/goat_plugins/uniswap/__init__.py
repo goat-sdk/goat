@@ -7,7 +7,7 @@ from .service import UniswapService
 class UniswapPluginOptions:
     """Options for the UniswapPlugin."""
     api_key: str  # API key for external service integration
-    base_url: str = "https://api.uniswap.org/v2"  # Base URL for Uniswap API
+    base_url: str = "https://api.uniswap.org/v1"  # Base URL for Uniswap API
 
 
 class UniswapPlugin(PluginBase):
@@ -18,13 +18,30 @@ class UniswapPlugin(PluginBase):
     def supports_chain(self, chain) -> bool:
         """Check if the chain is supported by Uniswap.
         
-        Currently supports: Mainnet, Polygon, Avalanche, Base, Optimism, Zora, Arbitrum, Celo
+        Currently supports:
+        - Mainnet (1)
+        - Polygon (137)
+        - Avalanche (43114)
+        - Base (8453)
+        - Optimism (10)
+        - Zora (7777777)
+        - Arbitrum (42161)
+        - Celo (42220)
         """
         if chain['type'] != 'evm':
             return False
             
         # List of supported chain IDs from uniswap.plugin.ts
-        SUPPORTED_CHAIN_IDS = [1, 137, 43114, 8453, 10, 7777777, 42161, 42220]  # Mainnet, Polygon, Avalanche, Base, Optimism, Zora, Arbitrum, Celo
+        SUPPORTED_CHAIN_IDS = [
+            1,        # Mainnet
+            137,      # Polygon
+            43114,    # Avalanche
+            8453,     # Base
+            10,       # Optimism
+            7777777,  # Zora
+            42161,    # Arbitrum
+            42220     # Celo
+        ]
         return chain['id'] in SUPPORTED_CHAIN_IDS
 
 

@@ -18,10 +18,16 @@ from goat_wallets.evm import send_eth
 from goat_wallets.web3 import Web3EVMWalletClient
 
 # Initialize Web3 and account
-w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_PROVIDER_URL")))
+# Force mainnet connection for Uniswap testing
+w3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/xhS9ak8KcGVSNw2ekfMy195ZymIspLZv"))
 private_key = os.getenv("WALLET_PRIVATE_KEY")
 assert private_key is not None, "You must set WALLET_PRIVATE_KEY environment variable"
 assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
+
+# Verify we're on mainnet
+chain_id = w3.eth.chain_id
+if chain_id != 1:
+    raise ValueError(f"Must be connected to Ethereum mainnet (chain_id: 1), got chain_id: {chain_id}")
 
 account: LocalAccount = Account.from_key(private_key)
 w3.eth.default_account = account.address  # Set the default account
@@ -45,11 +51,13 @@ def main():
 3. Execute token swaps using uniswap_swap_tokens
    Example: "Swap 0.1 WETH for USDC"
 
-You understand common token addresses:
+You understand mainnet token addresses:
 - WETH: 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
 - USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-- USDT: 0xdAC17F958D2ee523a2206206994597C13D831ec7
-- DAI: 0x6B175474E89094C44Da98b954EedeAC495271d0F
+
+For testing purposes, use small amounts:
+- 0.01 WETH = 10000000000000000 (18 decimals)
+- 10 USDC = 10000000 (6 decimals)
 
 When users ask for token swaps:
 1. First check approval using uniswap_check_approval
@@ -85,11 +93,12 @@ Always use base units (wei) for amounts. For example:
     print("1. Check if I have enough USDC approval for Uniswap")
     print("2. Get a quote to swap 1 WETH for USDC")
     print("3. Swap 0.1 WETH for USDC")
-    print("\nCommon token addresses:")
+    print("\nMainnet token addresses:")
     print("- WETH: 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
     print("- USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48")
-    print("- USDT: 0xdAC17F958D2ee523a2206206994597C13D831ec7")
-    print("- DAI: 0x6B175474E89094C44Da98b954EedeAC495271d0F")
+    print("\nTest amounts:")
+    print("- 0.01 WETH = 10000000000000000 wei")
+    print("- 10 USDC = 10000000 units")
     print("\nType 'quit' to exit\n")
     
     while True:

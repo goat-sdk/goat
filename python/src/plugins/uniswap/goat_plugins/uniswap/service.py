@@ -1,4 +1,5 @@
 import aiohttp
+import json
 from typing import Any, Dict
 from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
@@ -6,7 +7,7 @@ from goat_wallets.evm import EVMWalletClient
 
 
 class UniswapService:
-    def __init__(self, api_key: str, base_url: str = "https://api.uniswap.org/v2"):
+    def __init__(self, api_key: str, base_url: str = "https://beta.trade-api.gateway.uniswap.org/v1"):
         self.api_key = api_key
         self.base_url = base_url
 
@@ -15,15 +16,15 @@ class UniswapService:
         url = f"{self.base_url}/{endpoint}"
         
         headers = {
-            "Content-Type": "application/json",
             "x-api-key": self.api_key
         }
         
         async with aiohttp.ClientSession() as session:
             async with session.post(url, json=parameters, headers=headers) as response:
+                response_json = await response.json()
                 if not response.ok:
-                    raise Exception(f"Failed to fetch {endpoint}: {await response.text()}")
-                return await response.json()
+                    raise Exception(f"Failed to fetch {endpoint}: {json.dumps(response_json, indent=2)}")
+                return response_json
 
     @Tool({
         "name": "uniswap_check_approval",
@@ -46,7 +47,7 @@ class UniswapService:
 
             transaction = await wallet_client.send_transaction({
                 "to": approval["to"],
-                "value": approval["value"],
+                "value": str(approval["value"]),
                 "data": approval["data"]
             })
 
@@ -92,7 +93,7 @@ class UniswapService:
             swap = response["swap"]
             transaction = await wallet_client.send_transaction({
                 "to": swap["to"],
-                "value": swap["value"],
+                "value": str(swap["value"]),
                 "data": swap["data"]
             })
 
