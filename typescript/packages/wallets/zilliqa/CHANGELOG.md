@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-zilliqa
 
+## 0.2.6
+
+### Patch Changes
+
+- 97a2d21: Fix compilation issue with some versions of typescript
+
 ## 0.2.5
 
 ### Patch Changes
