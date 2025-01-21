@@ -104,6 +104,33 @@ class SolanaWalletClient(WalletClientBase):
 
         return instructions
 
+    def get_address_lookup_table_accounts(self, keys: List[str]) -> List[AddressLookupTableAccount]:
+        """Get address lookup table accounts for the given addresses.
+
+        Args:
+            addresses: List of lookup table addresses
+
+        Returns:
+            List of address lookup table accounts
+        """
+        # Convert addresses to Pubkeys
+        pubkeys = [Pubkey.from_string(addr) for addr in keys]
+
+        # Get account info for each lookup table
+        account_infos = self.client.get_multiple_accounts(pubkeys).value
+
+        # Create lookup table accounts for non-null accounts
+        lookup_table_accounts = []
+        for i, account_info in enumerate(account_infos):
+            if account_info is not None:
+                lookup_table_account = AddressLookupTableAccount.from_bytes(
+                    account_info.data
+                )
+                lookup_table_accounts.append(lookup_table_account)
+
+        return lookup_table_accounts
+
+
 class SolanaKeypairWalletClient(SolanaWalletClient):
     """Solana wallet implementation using a keypair."""
 
