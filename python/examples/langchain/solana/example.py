@@ -12,6 +12,7 @@ from solders.keypair import Keypair
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.solana import solana
+from goat_plugins.jupiter import jupiter, JupiterPluginOptions
 from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
 from goat_plugins.spl_token.tokens import SPL_TOKENS
 
@@ -44,7 +45,10 @@ def main():
     # Initialize tools with Solana wallet
     tools = get_on_chain_tools(
         wallet=wallet,
-        plugins=[spl_token_plugin]
+        plugins=[
+            jupiter(JupiterPluginOptions()),  # No options needed for Jupiter v6
+            spl_token(),
+        ],
     )
 
     agent = create_tool_calling_agent(llm, tools, prompt)

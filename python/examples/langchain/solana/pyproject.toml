@@ -47,6 +47,7 @@ ruff = "^0.8.6"
 goat-sdk = { path = "../../../src/goat-sdk", develop = true }
 goat-sdk-wallet-solana = { path = "../../../src/wallets/solana", develop = true }
 goat-sdk-adapter-langchain = { path = "../../../src/adapters/langchain", develop = true }
+goat-sdk-plugin-jupiter = { path = "../../../src/plugins/jupiter", develop = true }
 
 [tool.ruff]
 line-length = 120

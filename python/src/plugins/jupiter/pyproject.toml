@@ -1,22 +1,20 @@
 [tool.poetry]
-name = "goat-sdk-wallet-solana"
-version = "0.1.1"
-description = "Goat SDK Solana wallet implementation"
-authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
+name = "goat-sdk-plugin-jupiter"
+version = "0.1.0"
+description = "Goat plugin for jupiter"
+authors = ["Your Name <your_email@example.com>"]
 readme = "README.md"
-keywords = ["goat", "sdk", "solana", "agents", "ai", "wallet"]
+keywords = ["goat", "sdk", "agents", "ai", "jupiter"]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
-    { include = "goat_wallets/solana" },
+    { include = "goat_plugins/jupiter" },
 ]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 goat-sdk = "^0.1.0"
-solana = "^0.30.2"
-solders = "^0.18.0"
-PyNaCl = "^1.5.0"
+goat-sdk-wallet-solana = "^0.1.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
@@ -27,7 +25,7 @@ pytest-asyncio = "^0.25.0"
 
 [tool.pytest.ini_options]
 addopts = [
-    "--import-mode=importlib",
+  "--import-mode=importlib",
 ]
 pythonpath = "src"
 asyncio_default_fixture_loop_scope = "function"
@@ -39,6 +37,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
 goat-sdk = { path = "../../goat-sdk", develop = true }
+goat-sdk-wallet-solana = { path = "../../wallets/solana", develop = true }
 
 [tool.ruff]
 line-length = 120

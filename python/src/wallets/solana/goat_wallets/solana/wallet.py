@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Dict, Optional, TypedDict, List
+from typing import Dict, Optional, TypedDict, List, Any
 
 from solana.rpc.api import Client as SolanaClient
 from solana.rpc.types import TxOpts
@@ -7,7 +7,10 @@ from solana.rpc.commitment import Confirmed
 from solana.transaction import Transaction
 from solders.pubkey import Pubkey
 from solders.keypair import Keypair
-from solders.instruction import Instruction
+from solders.instruction import Instruction, AccountMeta, CompiledInstruction
+from solders.message import Message, MessageV0
+from solders.address_lookup_table_account import AddressLookupTableAccount
+from solders.transaction import VersionedTransaction
 import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
@@ -71,6 +74,61 @@ class SolanaWalletClient(WalletClientBase):
             Dict containing the transaction hash
         """
         pass
+
+    def decompile_versioned_transaction_to_instructions(self, versioned_transaction: VersionedTransaction) -> List[Instruction]:
+        """Decompile a versioned transaction into its constituent instructions.
+
+        Args:
+            versioned_transaction: The versioned transaction to decompile
+
+        Returns:
+            List of instructions from the transaction
+        """
+        # Convert CompiledInstructions back to Instructions
+        instructions = []
+        for compiled_ix in versioned_transaction.message.instructions:
+            # Get the program ID from the account keys
+            program_id = versioned_transaction.message.account_keys[compiled_ix.program_id_index]
+            
+            # Get the account metas
+            accounts = []
+            for account_idx in compiled_ix.accounts:
+                pubkey = versioned_transaction.message.account_keys[account_idx]
+                is_signer = versioned_transaction.message.is_signer(account_idx)
+                is_writable = versioned_transaction.message.is_writable(account_idx)
+                accounts.append(AccountMeta(pubkey, is_signer, is_writable))
+
+            # Create the instruction
+            ix = Instruction(program_id, compiled_ix.data, accounts)
+            instructions.append(ix)
+
+        return instructions
+
+    def get_address_lookup_table_accounts(self, keys: List[str]) -> List[AddressLookupTableAccount]:
+        """Get address lookup table accounts for the given addresses.
+
+        Args:
+            addresses: List of lookup table addresses
+
+        Returns:
+            List of address lookup table accounts
+        """
+        # Convert addresses to Pubkeys
+        pubkeys = [Pubkey.from_string(addr) for addr in keys]
+
+        # Get account info for each lookup table
+        account_infos = self.client.get_multiple_accounts(pubkeys).value
+
+        # Create lookup table accounts for non-null accounts
+        lookup_table_accounts = []
+        for i, account_info in enumerate(account_infos):
+            if account_info is not None:
+                lookup_table_account = AddressLookupTableAccount.from_bytes(
+                    account_info.data
+                )
+                lookup_table_accounts.append(lookup_table_account)
+
+        return lookup_table_accounts
 
 
 class SolanaKeypairWalletClient(SolanaWalletClient):
