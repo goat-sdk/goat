@@ -105,11 +105,14 @@ class UniswapService:
         """Get a quote for token swap."""
         try:
             chain_id = wallet_client.get_chain()["id"]
+            # Ensure chain IDs are properly formatted for the API
             return await self.make_request("quote", {
                 **parameters,
-                "tokenInChainId": chain_id,
-                "tokenOutChainId": parameters.get("tokenOutChainId", chain_id),
-                "swapper": wallet_client.get_address()
+                "tokenInChainId": str(chain_id),  # Convert to string as API expects
+                "tokenOutChainId": str(parameters.get("tokenOutChainId", chain_id)),  # Default to same chain if not specified
+                "swapper": wallet_client.get_address(),
+                "type": parameters.get("type", "EXACT_INPUT"),  # Default to EXACT_INPUT if not specified
+                "protocols": parameters.get("protocols", ["V2", "V3"])  # Default to both V2 and V3 if not specified
             })
         except Exception as error:
             raise Exception(f"Failed to get quote: {error}")
