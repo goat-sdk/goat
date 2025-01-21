@@ -1,6 +1,6 @@
 import aiohttp
 import json
-from typing import Any, Dict
+from typing import Any, Dict, cast
 from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
 from goat_wallets.evm import EVMWalletClient
@@ -48,12 +48,16 @@ class UniswapService:
             if not approval:
                 return {"status": "approved"}
 
-            # Use raw transaction data from the API response
-            transaction = await wallet_client.send_transaction({
-                "to": approval["to"],
-                "data": approval["data"]  # Use the raw transaction data from the API
+            # Create properly typed transaction object
+            transaction_params = cast(EVMTransaction, {
+                "to": str(approval["to"]),
+                "data": str(approval["data"])
             })
-
+            if approval.get("value"):
+                transaction_params["value"] = int(approval["value"])
+            
+            # Send the transaction
+            transaction = await wallet_client.send_transaction(transaction_params)
             return {
                 "status": "approved",
                 "txHash": transaction["hash"]
@@ -94,11 +98,16 @@ class UniswapService:
             })
             
             swap = response["swap"]
-            # Use raw transaction data from the API response
-            transaction = await wallet_client.send_transaction({
-                "to": swap["to"],
-                "data": swap["data"]  # Use the raw transaction data from the API
+            # Create properly typed transaction object
+            transaction_params = cast(EVMTransaction, {
+                "to": str(swap["to"]),
+                "data": str(swap["data"])
             })
+            if swap.get("value"):
+                transaction_params["value"] = int(swap["value"])
+            
+            # Send the transaction
+            transaction = await wallet_client.send_transaction(transaction_params)
 
             return {
                 "txHash": transaction["hash"]
