@@ -47,7 +47,10 @@ def main():
         wallet=wallet,
         plugins=[
             jupiter(JupiterPluginOptions()),  # No options needed for Jupiter v6
-            spl_token(),
+            spl_token(SplTokenPluginOptions(
+                network="devnet",  # Using devnet as specified in .env
+                tokens=SPL_TOKENS
+            )),
         ],
     )
 
