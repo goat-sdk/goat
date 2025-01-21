@@ -419,9 +419,7 @@ From Solana:
         name: "check_transaction_status",
         description: "Check the status of bridge transactions using their order IDs.",
     })
-    async checkTransactionStatus(
-        parameters: checkTransactionStatusParametersSchema,
-    ): Promise<OrderStatusResponse[]> {
+    async checkTransactionStatus(parameters: checkTransactionStatusParametersSchema): Promise<OrderStatusResponse[]> {
         try {
             // First get the order IDs for the transaction
             const orderIdsUrl = `${this.options.baseUrl}/dln/tx/${parameters.txHash}/order-ids`;
