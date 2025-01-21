@@ -6,12 +6,12 @@ from .service import JupiterService
 @dataclass
 class JupiterPluginOptions:
     """Options for the JupiterPlugin."""
-    api_key: str  # API key for external service integration
+    pass  # No options needed for Jupiter v6
 
 
 class JupiterPlugin(PluginBase):
     def __init__(self, options: JupiterPluginOptions):
-        super().__init__("jupiter", [JupiterService(options.api_key)])
+        super().__init__("jupiter", [JupiterService()])
 
     def supports_chain(self, chain) -> bool:
         return chain['type'] == 'solana'

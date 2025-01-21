@@ -1,15 +1,15 @@
 import base64
 import aiohttp
 from goat.decorators.tool import Tool
-from solders.transaction import VersionedTransaction
+from goat_wallets.solana.wallet import SolanaTransaction
 from solders.message import MessageV0
-from .parameters import GetQuoteParameters, QuoteResponse, SwapParameters
-from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
+from solders.transaction import VersionedTransaction
+from .parameters import GetQuoteParameters, QuoteResponse
+from goat_wallets.solana import SolanaWalletClient
 
 
 class JupiterService:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
+    def __init__(self):
         self.base_url = "https://quote-api.jup.ag/v6"
         self._timeout = aiohttp.ClientTimeout(total=10)  # 10 second timeout
 
@@ -17,10 +17,10 @@ class JupiterService:
         "description": "Get a quote for a swap on the Jupiter DEX",
         "parameters_schema": GetQuoteParameters
     })
-    async def get_quote(self, wallet_client: SolanaWalletClient, parameters: dict) -> QuoteResponse:
+    async def get_quote(self, parameters: dict) -> QuoteResponse:
         """Get a quote for swapping tokens using Jupiter."""
         try:
-            params = GetQuoteParameters.parse_obj(parameters)
+            params = GetQuoteParameters.model_validate(parameters)
             # Convert parameters to dict and ensure required fields are properly formatted
             request_params = {
                 'inputMint': params.inputMint,
@@ -65,7 +65,7 @@ class JupiterService:
         """Swap tokens using Jupiter DEX."""
         try:
             # First get the quote
-            quote_response = await self.get_quote(wallet_client, parameters)
+            quote_response = await self.get_quote(parameters)
             
             # Prepare swap request
             swap_request = {
