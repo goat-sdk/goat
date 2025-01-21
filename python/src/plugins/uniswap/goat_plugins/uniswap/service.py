@@ -8,7 +8,7 @@ from goat_wallets.evm.types import EVMTransaction
 
 
 class UniswapService:
-    def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org"):
+    def __init__(self, api_key: str, base_url: str = "https://api.uniswap.org"):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")  # Remove trailing slash if present
 
@@ -19,7 +19,7 @@ class UniswapService:
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
+            "x-api-key": self.api_key
         }
         
         async with aiohttp.ClientSession() as session:
