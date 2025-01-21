@@ -2,8 +2,9 @@ import base64
 import aiohttp
 from goat.decorators.tool import Tool
 from solders.transaction import VersionedTransaction
+from solders.message import MessageV0
 from .parameters import GetQuoteParameters, QuoteResponse, SwapParameters
-from goat_wallets.solana import SolanaWalletClient
+from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 
 
 class JupiterService:
@@ -91,16 +92,21 @@ class JupiterService:
                     versioned_transaction = VersionedTransaction.from_bytes(base64.b64decode(swap_transaction))
                     
                     # Get instructions from the transaction
-                    instructions = await wallet_client.decompile_versioned_transaction_to_instructions(versioned_transaction)
+                    instructions = wallet_client.decompile_versioned_transaction_to_instructions(versioned_transaction)
+                    
+                    # Create transaction dictionary
+                    message = versioned_transaction.message
+                    assert isinstance(message, MessageV0)  # Ensure it's a MessageV0
+                    lookup_table_addresses = [str(lookup.account_key) for lookup in message.address_table_lookups]
+                    
+                    tx: SolanaTransaction = {
+                        "instructions": instructions,
+                        "address_lookup_table_addresses": lookup_table_addresses,
+                        "accounts_to_sign": None
+                    }
                     
                     # Send the transaction
-                    result = wallet_client.send_transaction({
-                        "instructions": instructions,
-                        "address_lookup_table_addresses": [
-                            lookup.account_key.to_base58() 
-                            for lookup in versioned_transaction.message.address_table_lookups
-                        ]
-                    })
+                    result = wallet_client.send_transaction(tx)
                     
                     return {
                         "hash": result["hash"]
