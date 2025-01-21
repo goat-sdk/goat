@@ -46,8 +46,8 @@ def main():
     tools = get_on_chain_tools(
         wallet=wallet,
         plugins=[
-            jupiter(JupiterPluginOptions(api_key="")),  # API key not required for Jupiter v6
-            spl_token_plugin
+            jupiter(JupiterPluginOptions()),  # No options needed for Jupiter v6
+            spl_token(),
         ],
     )
 
