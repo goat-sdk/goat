@@ -8,7 +8,7 @@ from goat_wallets.evm.types import EVMTransaction
 
 
 class UniswapService:
-    def __init__(self, api_key: str, base_url: str = "https://api.uniswap.org"):
+    def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org"):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")  # Remove trailing slash if present
 
@@ -48,7 +48,7 @@ class UniswapService:
     async def check_approval(self, wallet_client: EVMWalletClient, parameters: dict):
         """Check token approval and approve if needed."""
         try:
-            data = await self.make_request("check-approval", {
+            data = await self.make_request("check_approval", {
                 "token": parameters["token"],
                 "amount": parameters["amount"],
                 "walletAddress": parameters["walletAddress"],
