@@ -13,13 +13,7 @@ export const SwapConfigSchema = z.object({
         .describe("The address of the token to buy"),
 
     sellAmount: z.string().describe("The amount of tokens to sell in base units"),
-    slippage: z
-        .number()
-        .min(0)
-        .max(10000)
-        .describe("Slippage tolerance in basis points (default: 1000 = 10%)")
-        .default(1000)
-        .optional(),
+    slippage: z.number().min(0).max(0.5).describe("Slippage tolerance (default: 0.3 = 30%)").default(0.3),
 });
 
 export class SwapConfigParams extends createToolParameters(SwapConfigSchema) {}
