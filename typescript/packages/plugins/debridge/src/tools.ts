@@ -7,15 +7,15 @@ import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { DebridgeOptions } from "./index";
 import {
-    createBridgeOrderParametersSchema,
-    executeBridgeTransactionParametersSchema,
-    getBridgeQuoteParametersSchema,
-    getTokenInfoParametersSchema,
-    getSupportedChainsParametersSchema,
-    checkTransactionStatusParametersSchema,
     OrderIdsResponse,
     OrderStatusResponse,
     SupportedChainsResponse,
+    checkTransactionStatusParametersSchema,
+    createBridgeOrderParametersSchema,
+    executeBridgeTransactionParametersSchema,
+    getBridgeQuoteParametersSchema,
+    getSupportedChainsParametersSchema,
+    getTokenInfoParametersSchema,
 } from "./parameters";
 
 /** Default referral code for DeBridge transactions */
@@ -320,7 +320,7 @@ From Solana:
     })
     async getSupportedChains(
         walletClient: EVMWalletClient,
-        parameters: getSupportedChainsParametersSchema
+        parameters: getSupportedChainsParametersSchema,
     ): Promise<SupportedChainsResponse> {
         try {
             const url = `${this.options.baseUrl}/supported-chains-info`;
@@ -448,7 +448,7 @@ From Solana:
     })
     async checkTransactionStatus(
         walletClient: EVMWalletClient,
-        parameters: checkTransactionStatusParametersSchema
+        parameters: checkTransactionStatusParametersSchema,
     ): Promise<OrderStatusResponse[]> {
         try {
             // First get the order IDs for the transaction
@@ -480,12 +480,12 @@ From Solana:
                         throw new Error(`HTTP error! status: ${statusResponse.status}, body: ${text}`);
                     }
 
-                    const statusData = await statusResponse.json() as OrderStatusResponse;
+                    const statusData = (await statusResponse.json()) as OrderStatusResponse;
                     // Add the deBridge app link
                     statusData.orderLink = `https://app.debridge.finance/order?orderId=${orderId}`;
                     console.log("Status response:", JSON.stringify(statusData, null, 2));
                     return statusData;
-                })
+                }),
             );
 
             return statuses;
