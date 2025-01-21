@@ -1,5 +1,27 @@
 # goat-examples-vercel-ai-viem
 
+## 0.2.12
+
+### Patch Changes
+
+- 5b08d6c: Release 0x plugin
+
+## 0.2.11
+
+### Patch Changes
+
+- d8b05a5: Fix endpoints
+- Updated dependencies [d8b05a5]
+  - @goat-sdk/plugin-uniswap@0.2.9
+
+## 0.2.10
+
+### Patch Changes
+
+- bff4fa1: Minor chores
+- Updated dependencies [bff4fa1]
+  - @goat-sdk/plugin-uniswap@0.2.8
+
 ## 0.2.9
 
 ### Patch Changes

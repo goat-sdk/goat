@@ -6,11 +6,12 @@ import { generateText } from "ai";
 import { http } from "viem";
 import { createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { sepolia } from "viem/chains";
+import { base } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
+import { uniswap } from "@goat-sdk/plugin-uniswap";
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
@@ -21,13 +22,20 @@ const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${strin
 const walletClient = createWalletClient({
     account: account,
     transport: http(process.env.RPC_PROVIDER_URL),
-    chain: sepolia,
+    chain: base,
 });
 
 (async () => {
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        plugins: [
+            sendETH(),
+            erc20({ tokens: [USDC, PEPE] }),
+            uniswap({
+                baseUrl: process.env.UNISWAP_BASE_URL as string,
+                apiKey: process.env.UNISWAP_API_KEY as string,
+            }),
+        ],
     });
 
     const rl = readline.createInterface({

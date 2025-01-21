@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-coingecko
 
+## 0.2.7
+
+### Patch Changes
+
+- d8b05a5: Fix endpoints
+
 ## 0.2.6
 
 ### Patch Changes

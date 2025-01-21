@@ -9,200 +9,54 @@
             "path": "./typescript"
         },
         {
+            "name": "📘 Core",
+            "path": "./typescript/packages/core"
+        },
+        {
+            "name": "📘 Adapters",
+            "path": "./typescript/packages/adapters"
+        },
+        {
+            "name": "📘 Plugins",
+            "path": "./typescript/packages/plugins"
+        },
+        {
+            "name": "📘 Wallets",
+            "path": "./typescript/packages/wallets"
+        },
+        {
+            "name": "📘 Examples",
+            "path": "./typescript/examples"
+        },
+        {
             "name": "🐍 Python",
             "path": "./python"
         },
         {
-            "name": "🌋 Core",
-            "path": "./typescript/packages/core"
-        },
-        // Adapters
-        {
-            "name": "[Adapter] 🎧 eleven-labs",
-            "path": "./typescript/packages/adapters/eleven-labs"
+            "name": "🐍 Core",
+            "path": "./python/src/goat-sdk"
         },
         {
-            "name": "[Adapter] 🟠 eliza",
-            "path": "./typescript/packages/adapters/eliza"
+            "name": "🐍 Adapters",
+            "path": "./python/src/adapters"
+        },
+
+        {
+            "name": "🐍 Plugins",
+            "path": "./python/src/plugins"
+        },
+
+        {
+            "name": "🐍 Wallets",
+            "path": "./python/src/wallets"
         },
         {
-            "name": "[Adapter] 🦙 llamaindex",
-            "path": "./typescript/packages/adapters/llamaindex"
+            "name": "🐍 Examples",
+            "path": "./python/examples"
         },
-        {
-            "name": "[Adapter] 🦾 model context protocol",
-            "path": "./typescript/packages/adapters/model-context-protocol"
-        },
-        {
-            "name": "[Adapter] 🦜 langchain",
-            "path": "./typescript/packages/adapters/langchain"
-        },
-        {
-            "name": "[Adapter] 🤖 vercel-ai",
-            "path": "./typescript/packages/adapters/vercel-ai"
-        },
-        // Plugins
-        {
-            "name": "[Plugin] 💰 erc20",
-            "path": "./typescript/packages/plugins/erc20"
-        },
-        {
-            "name": "[Plugin] 💰 erc721",
-            "path": "./typescript/packages/plugins/erc721"
-        },
-        {
-            "name": "[Plugin] 🎰 polymarket",
-            "path": "./typescript/packages/plugins/polymarket"
-        },
-        {
-            "name": "[Plugin] 🌸 allora",
-            "path": "./typescript/packages/plugins/allora"
-        },
-        {
-            "name": "[Plugin] 🦅 birdeye",
-            "path": "./typescript/packages/plugins/birdeye"
-        },
-        {
-            "name": "[Plugin] 💰 coingecko",
-            "path": "./typescript/packages/plugins/coingecko"
-        },
-        {
-            "name": "[Plugin] 🧢 coinmarketcap",
-            "path": "./typescript/packages/plugins/coinmarketcap"
-        },
-        {
-            "name": "[Plugin] 📡 farcaster",
-            "path": "./typescript/packages/plugins/farcaster"
-        },
-        {
-            "name": "[Plugin] 🌐 solana nfts",
-            "path": "./typescript/packages/plugins/solana-nfts"
-        },
-        {
-            "name": "[Plugin] 🪐 jupiter",
-            "path": "./typescript/packages/plugins/jupiter"
-        },
-        {
-            "name": "[Plugin] ♏︎ jsonrpc",
-            "path": "./typescript/packages/plugins/jsonrpc"
-        },
-        {
-            "name": "[Plugin] ⛽️ pumpfun",
-            "path": "./typescript/packages/plugins/pumpfun"
-        },
-        {
-            "name": "[Plugin] 🔶 kim",
-            "path": "./typescript/packages/plugins/kim"
-        },
-        {
-            "name": "[Plugin] 📊 mode governance",
-            "path": "./typescript/packages/plugins/mode-governance"
-        },
-        {
-            "name": "[Plugin] 📊 mode voting",
-            "path": "./typescript/packages/plugins/mode-voting"
-        },
-        {
-            "name": "[Plugin] ☄️ meteora",
-            "path": "./typescript/packages/plugins/meteora"
-        },
-        {
-            "name": "[Plugin] 📈 nansen",
-            "path": "./typescript/packages/plugins/nansen"
-        },
-        {
-            "name": "[Plugin] 🪙 spl token",
-            "path": "./typescript/packages/plugins/spl-token"
-        },
-        {
-            "name": "[Plugin] ⛓️‍💥 tensor",
-            "path": "./typescript/packages/plugins/tensor"
-        },
-        {
-            "name": "[Plugin] 🪄 magic eden",
-            "path": "./typescript/packages/plugins/solana-magiceden"
-        },
-        {
-            "name": "[Plugin] 🐦‍🔥 renzo",
-            "path": "./typescript/packages/plugins/renzo"
-        },
-        {
-            "name": "[Plugin] 🗿 ironclad",
-            "path": "./typescript/packages/plugins/ironclad"
-        },
-        {
-            "name": "[Plugin] 🐎 1inch",
-            "path": "./typescript/packages/plugins/1inch"
-        },
-        {
-            "name": "[Plugin] 🦄 uniswap",
-            "path": "./typescript/packages/plugins/uniswap"
-        },
-        {
-            "name": "[Plugin] 🖼️ opensea",
-            "path": "./typescript/packages/plugins/opensea"
-        },
-        {
-            "name": "[Plugin] 💰 superfluid",
-            "path": "./typescript/packages/plugins/superfluid"
-        },
-        {
-            "name": "[Plugin] 🌍 zerodev-global-address",
-            "path": "./typescript/packages/plugins/zerodev-global-address"
-        },
-        {
-            "name": "[Plugin] 📇 sns",
-            "path": "./typescript/packages/plugins/sns"
-        },
-            "name" : "[Plugin] 🦓 zilliqa",
-            "path": "./typescript/packages/plugins/zilliqa"
-        },
-        // Wallets
-        {
-            "name": "[Wallet] 🅰 aptos",
-            "path": "./typescript/packages/wallets/aptos"
-        },
-        {
-            "name": "[Wallet] 🍀 crossmint",
-            "path": "./typescript/packages/wallets/crossmint"
-        },
-        {
-            "name": "[Wallet] 🪪 chromia",
-            "path": "./typescript/packages/wallets/chromia"
-        },
-        {
-            "name": "[Wallet] 🌞 solana",
-            "path": "./typescript/packages/wallets/solana"
-        },
-        {
-            "name": "[Wallet] 💧 sui",
-            "path": "./typescript/packages/wallets/sui"
-        },
-        {
-            "name": "[Wallet] 🪨 evm",
-            "path": "./typescript/packages/wallets/evm"
-        },
-        {
-            "name": "[Wallet] 💳 viem",
-            "path": "./typescript/packages/wallets/viem"
-        },
-        {
-            "name": "[Wallet] 🔥 lit",
-            "path": "./typescript/packages/wallets/lit-protocol"
-        },
-        {
-            "name": "[Wallet] 🦓 zilliqa",
-            "path": "./typescript/packages/wallets/zilliqa"
-        },
-        // Docs
         {
             "name": "📚 Docs",
             "path": "./docs"
-        },
-        // Examples
-        {
-            "name": "🚀 Examples",
-            "path": "./typescript/examples"
         }
     ],
     "settings": {

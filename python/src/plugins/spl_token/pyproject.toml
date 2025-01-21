@@ -1,24 +1,27 @@
 [tool.poetry]
-name = "goat-sdk"
-version = "0.1.2"
-description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
-authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
+name = "goat-sdk-plugin-spl-token"
+version = "0.1.0"
+description = "Goat plugin for spl_token"
+authors = ["Your Name <your_email@example.com>"]
 readme = "README.md"
-keywords = ["goat", "sdk", "web3", "agents", "ai"]
+keywords = ["goat", "sdk", "agents", "ai", "spl_token"]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
-    { include = "goat" },
+    { include = "goat_plugins/spl_token" },
 ]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^2.10.0"
-asyncio = "^3.4.1"
+goat-sdk = "*"
+goat-sdk-wallet-solana = "*"
+solders = "^0.18.0"
+solana = {version = "^0.30.2", extras = ["spl"]}
+anchorpy = "^0.18.0"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.3.4"
-pytest-asyncio = "^0.25.0"
+pytest = "*"
+pytest-asyncio = "*"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
@@ -36,6 +39,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
+goat-sdk = { path = "../../goat-sdk", develop = true }
+goat-sdk-wallet-solana = { path = "../../wallets/solana", develop = true }
+solana = {version = "^0.30.2", extras = ["spl"]}
 
 [tool.ruff]
 line-length = 120

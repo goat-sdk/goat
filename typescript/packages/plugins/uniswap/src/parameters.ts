@@ -2,8 +2,8 @@ import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
 enum SwapType {
-    EXACT_IN = "EXACT_IN",
-    EXACT_OUT = "EXACT_OUT",
+    EXACT_INPUT = "EXACT_INPUT",
+    EXACT_OUTPUT = "EXACT_OUTPUT",
 }
 
 enum Protocol {
@@ -13,6 +13,13 @@ enum Protocol {
 
 enum Routing {
     CLASSIC = "CLASSIC",
+    UNISWAPX = "UNISWAPX",
+    UNISWAPX_V2 = "UNISWAPX_V2",
+    V3_ONLY = "V3_ONLY",
+    V2_ONLY = "V2_ONLY",
+    BEST_PRICE = "BEST_PRICE",
+    BEST_PRICE_V2 = "BEST_PRICE_V2",
+    FASTEST = "FASTEST",
 }
 
 export const QuoteSchema = z.object({
@@ -62,8 +69,6 @@ export const SwapResponseSchema = z.object({
     gasFee: z.string(),
 });
 
-export const TxHashSchema = z.string();
-
 export class CheckApprovalBodySchema extends createToolParameters(
     z.object({
         token: z.string(),
@@ -72,24 +77,19 @@ export class CheckApprovalBodySchema extends createToolParameters(
     }),
 ) {}
 
-export class GetQuoteBodySchema extends createToolParameters(
+export class GetQuoteParameters extends createToolParameters(
     z.object({
         tokenIn: z.string(),
         tokenOut: z.string(),
-        tokenInChainId: z.number(),
-        tokenOutChainId: z.number(),
-        amount: z.string(),
-        swapper: z.string(),
-        type: z.nativeEnum(SwapType),
+        tokenOutChainId: z.number().optional(),
+        amount: z.string().describe("The amount of tokens to swap in base units"),
+        type: z.nativeEnum(SwapType).default(SwapType.EXACT_INPUT),
         protocols: z.array(z.nativeEnum(Protocol)),
-    }),
-) {}
-
-export class GetSwapBodySchema extends createToolParameters(
-    z.object({
-        quote: QuoteResponseSchema,
-        permitData: z.any().optional(),
-        signature: z.string().optional(),
-        simulateTransaction: z.boolean().optional(),
+        routingPreference: z
+            .nativeEnum(Routing)
+            .default(Routing.CLASSIC)
+            .describe(
+                "The routing preference determines which protocol to use for the swap. If the routing preference is UNISWAPX, then the swap will be routed through the UniswapX Dutch Auction Protocol. If the routing preference is CLASSIC, then the swap will be routed through the Classic Protocol. If the routing preference is BEST_PRICE, then the swap will be routed through the protocol that provides the best price. When UNIXWAPX_V2 is passed, the swap will be routed through the UniswapX V2 Dutch Auction Protocol. When V3_ONLY is passed, the swap will be routed ONLY through the Uniswap V3 Protocol. When V2_ONLY is passed, the swap will be routed ONLY through the Uniswap V2 Protocol.",
+            ),
     }),
 ) {}

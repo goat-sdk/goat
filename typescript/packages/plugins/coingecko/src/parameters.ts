@@ -1,19 +1,11 @@
 import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
-export class GetTrendingCoinsParameters extends createToolParameters(
-    z.object({
-        limit: z.number().optional().describe("The number of trending coins to return. Defaults to all coins."),
-        include_platform: z
-            .boolean()
-            .optional()
-            .describe("Include platform contract addresses (e.g., ETH, BSC) in response"),
-    }),
-) {}
+export class NoParams extends createToolParameters(z.object({})) {}
 
-export class GetCoinPriceParameters extends createToolParameters(
+export class GetCoinPricesParameters extends createToolParameters(
     z.object({
-        coinId: z.string().describe("The ID of the coin on CoinGecko (e.g., 'bitcoin', 'ethereum')"),
+        coinIds: z.array(z.string()).describe("The ID of the coin on CoinGecko (e.g., 'bitcoin', 'eth')"),
         vsCurrency: z
             .string()
             .default("usd")
@@ -41,7 +33,7 @@ export class SearchCoinsParameters extends createToolParameters(
 
 export class GetCoinPriceByContractAddressParameters extends createToolParameters(
     z.object({
-        id: z.string().describe("Asset platform's id (e.g., 'ethereum')"),
+        id: z.string().describe("Asset platform's id (e.g., 'eth')"),
         contractAddresses: z.array(z.string()).describe("List of contract addresses for the tokens"),
         vsCurrency: z.string().default("usd").describe("Target currency (e.g., 'usd', 'eur')"),
         includeMarketCap: z.boolean().optional().default(false).describe("Include market cap data"),
@@ -63,12 +55,6 @@ export class GetCoinDataParameters extends createToolParameters(
     }),
 ) {}
 
-export class GetSupportedCoinsParameters extends createToolParameters(
-    z.object({
-        includePlatform: z.boolean().optional().default(false).describe("Include platform contract addresses"),
-    }),
-) {}
-
 export class GetHistoricalDataParameters extends createToolParameters(
     z.object({
         id: z.string().describe("Pass the coin id (can be obtained from the supported coins endpoint)"),
@@ -82,5 +68,25 @@ export class GetOHLCParameters extends createToolParameters(
         id: z.string().describe("Pass the coin id (can be obtained from the supported coins endpoint)"),
         vsCurrency: z.string().default("usd").describe("The target currency of market data (usd, eur, jpy, etc.)"),
         days: z.number().describe("Data up to number of days ago (1/7/14/30/90/180/365/max)"),
+    }),
+) {}
+
+export class GetTrendingCoinCategoriesParameters extends createToolParameters(
+    z.object({
+        vsCurrency: z.string().default("usd").describe("The target currency of market data (usd, eur, jpy, etc.)"),
+        ids: z.array(z.string()).describe("The ids of the coins to get trending data for"),
+        category: z.string().describe("The category to get trending data for"),
+        order: z
+            .enum(["market_cap_desc", "volume_desc", "volume_asc", "market_cap_asc"])
+            .describe("The order to get trending data for"),
+        perPage: z.number().min(1).max(30).default(10).describe("The number of trending coins to get"),
+        page: z.number().describe("The page number to get trending coins for"),
+        sparkline: z.boolean().optional().default(false).describe("Include sparkline 7 days data"),
+        priceChangePercentage: z
+            .enum(["1h", "24h", "7d", "14d", "30d", "200d", "1y"])
+            .optional()
+            .default("24h")
+            .describe("The price change percentage to get trending coins for"),
+        locale: z.string().optional().default("en").describe("The locale to get trending coins for"),
     }),
 ) {}

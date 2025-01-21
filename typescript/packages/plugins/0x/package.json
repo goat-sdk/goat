@@ -1,26 +1,16 @@
 {
-    "name": "@goat-sdk/plugin-uniswap",
-    "version": "0.2.9",
+    "name": "@goat-sdk/plugin-0x",
+    "version": "0.1.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
         "test": "vitest run --passWithNoTests"
     },
-    "sideEffects": false,
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-    "dependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-evm": "workspace:*",
-        "viem": "catalog:",
-        "zod": "catalog:"
-    },
-    "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "viem": "catalog:"
-    },
+    "sideEffects": false,
     "homepage": "https://ohmygoat.dev",
     "repository": {
         "type": "git",
@@ -30,5 +20,13 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": ["ai", "agents", "web3"],
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "zod": "catalog:",
+        "@goat-sdk/wallet-evm": "workspace:*"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*"
+    }
 }

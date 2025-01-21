@@ -7,6 +7,15 @@ Uniswap plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools
 npm install @goat-sdk/plugin-uniswap
 ```
 
+You can get your Uniswap API key [here](https://hub.uniswap.org/).
+
+For testing purposes, you can use the following base URL and API key:
+
+```
+https://trade-api.gateway.uniswap.org/v1
+kHEhfIPvCE3PO5PeT0rNb1CA3JJcnQ8r7kJDXN5X
+```
+
 ## Usage
 
 ```typescript
