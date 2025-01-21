@@ -1,7 +1,6 @@
 import { Chain, PluginBase } from "@goat-sdk/core";
 import { StarknetWalletClient } from "@goat-sdk/wallet-starknet";
 import { StarknetTokenService } from "./starknet-token.service";
-import { Token } from "./tokens";
 import { StarknetTokenPluginCtorParams } from "./types/StarknetTokenPluginCtorParams";
 
 export class StarknetTokenPlugin extends PluginBase<StarknetWalletClient> {

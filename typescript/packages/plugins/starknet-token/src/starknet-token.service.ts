@@ -1,5 +1,5 @@
 import { Tool } from "@goat-sdk/core";
-import { StarknetWalletClient } from "@goat-sdk/wallet-starknet";
+import { StarknetAccountWalletClient } from "@goat-sdk/wallet-starknet";
 import {
     ConvertToBaseUnitParameters,
     GetTokenBalanceByAddressParameters,
@@ -36,11 +36,14 @@ export class StarknetTokenService {
     @Tool({
         description: "Get the balance of a Starknet token by its contract address",
     })
-    async getTokenBalanceByAddress(walletClient: StarknetWalletClient, parameters: GetTokenBalanceByAddressParameters) {
+    async getTokenBalanceByAddress(
+        walletClient: StarknetAccountWalletClient,
+        parameters: GetTokenBalanceByAddressParameters,
+    ) {
         try {
             const { walletAddress, tokenAddress } = parameters;
 
-            const result = await walletClient.starknetClient.callContract({
+            const result = await walletClient.getClient().callContract({
                 contractAddress: tokenAddress,
                 entrypoint: "balanceOf",
                 calldata: [walletAddress],
@@ -62,7 +65,7 @@ export class StarknetTokenService {
     @Tool({
         description: "Transfer a Starknet token by its contract address",
     })
-    async transferToken(walletClient: StarknetWalletClient, parameters: TransferTokenParameters) {
+    async transferToken(walletClient: StarknetAccountWalletClient, parameters: TransferTokenParameters) {
         try {
             const { tokenAddress, to, amount } = parameters;
 
