@@ -109,17 +109,19 @@ export class DebridgeTools {
      * Create a bridge order to transfer tokens between chains
      * This method initiates the cross-chain transfer by creating an order on DeBridge
      *
-     * @param {EVMWalletClient} walletClient - The wallet client for transaction signing
      * @param {createBridgeOrderParametersSchema} parameters - Parameters for creating the bridge order
      * @returns {Promise<Object>} Order details including transaction data and fees
      * @throws {Error} If the API request fails or returns an error
      *
      * @example
      * ```typescript
-     * const order = await debridgeTools.createBridgeOrder(wallet, {
+     * const order = await debridgeTools.createBridgeOrder({
+     *   srcChainId: "1",
      *   srcChainTokenIn: "0x0000000000000000000000000000000000000000",
      *   srcChainTokenInAmount: "1000000000000000000",
-     *   // ... other parameters
+     *   dstChainId: "7565164",
+     *   dstChainTokenOut: "DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5",
+     *   dstChainTokenOutRecipient: "9ZNXcG5SgqKwQj6uGt9DjmBwzJAhbX9qQH5pHhDFKxJc"
      * });
      * ```
      */
@@ -140,7 +142,7 @@ From Solana:
 1. Ask for EVM recipient address (ERC-20 format)
 2. Set dstChainTokenOut must be the erc-20 format address of the token to receive, not the ticker`,
     })
-    async createBridgeOrder(walletClient: EVMWalletClient, parameters: createBridgeOrderParametersSchema) {
+    async createBridgeOrder(parameters: createBridgeOrderParametersSchema) {
         try {
             const params = new URLSearchParams();
             params.append("srcChainId", parameters.srcChainId);
@@ -192,22 +194,15 @@ From Solana:
     }
 
     /**
-     * Get token information from a chain
+     * Get token information from a chain. For EVM: use 0x-prefixed address. For Solana: use base58 token address.
      *
-     * @param {EVMWalletClient} walletClient - The wallet client
-     * @param {getTokenInfoParametersSchema} parameters - Parameters for token info query
-     * @returns {Promise<TokenInfoResponse>} Token information including address, symbol, name, and decimals
+     * @param {getTokenInfoParametersSchema} parameters - Parameters for getting token info
+     * @returns {Promise<TokenInfoResponse>} Token information including name, symbol, and decimals
      * @throws {Error} If the API request fails or returns an error
      *
      * @example
      * ```typescript
-     * // Get all tokens on Solana
-     * const { tokens } = await debridgeTools.getTokenInfo(wallet, {
-     *   chainId: "7565164"
-     * });
-     *
-     * // Get specific token info
-     * const { tokens } = await debridgeTools.getTokenInfo(wallet, {
+     * const tokenInfo = await debridgeTools.getTokenInfo({
      *   chainId: "7565164",
      *   tokenAddress: "DBRiDgJAMsM95moTzJs7M9LnkGErpbv9v6CUR1DXnUu5"
      * });
@@ -218,7 +213,7 @@ From Solana:
         description:
             "Get token information from a chain. For EVM: use 0x-prefixed address. For Solana: use base58 token address.",
     })
-    async getTokenInfo(walletClient: EVMWalletClient, parameters: getTokenInfoParametersSchema) {
+    async getTokenInfo(parameters: getTokenInfoParametersSchema) {
         try {
             const url = `${this.options.baseUrl}/token-list?chainId=${parameters.chainId}`;
 
@@ -303,14 +298,13 @@ From Solana:
      * Get a list of supported chains from DeBridge API
      * This method retrieves information about all chains supported by the protocol
      *
-     * @param {EVMWalletClient} walletClient - The wallet client (required by Tool decorator but not used)
      * @param {getSupportedChainsParametersSchema} parameters - Optional parameters
      * @returns {Promise<SupportedChainsResponse>} List of supported chains with their IDs and names
      * @throws {Error} If the API request fails or returns an error
      *
      * @example
      * ```typescript
-     * const chains = await debridgeTools.getSupportedChains(wallet, {});
+     * const chains = await debridgeTools.getSupportedChains({});
      * console.log(chains.chains); // List of supported chains
      * ```
      */
@@ -318,10 +312,7 @@ From Solana:
         name: "get_supported_chains",
         description: "Get a list of all chains supported by DeBridge protocol.",
     })
-    async getSupportedChains(
-        walletClient: EVMWalletClient,
-        parameters: getSupportedChainsParametersSchema,
-    ): Promise<SupportedChainsResponse> {
+    async getSupportedChains(parameters: getSupportedChainsParametersSchema): Promise<SupportedChainsResponse> {
         try {
             const url = `${this.options.baseUrl}/supported-chains-info`;
             console.log("Making request to:", url);
@@ -410,44 +401,25 @@ From Solana:
     }
 
     /**
-     * Check the status of a bridge transaction
-     * This method first gets the order IDs associated with the transaction,
-     * then checks the status of each order
+     * Check the status of bridge transactions
+     * This method retrieves the current status of one or more bridge transactions
      *
-     * Possible status values:
-     * - None: Initial state
-     * - Created: Order has been created and is waiting to be fulfilled
-     * - Fulfilled: Order has been fulfilled by a taker
-     * - SentUnlock: Unlock transaction has been sent
-     * - OrderCancelled: Order has been cancelled
-     * - SentOrderCancel: Cancel transaction has been sent
-     * - ClaimedUnlock: Unlock has been claimed
-     * - ClaimedOrderCancel: Cancel has been claimed
-     *
-     * Each order status response includes:
-     * - status: Current status of the order
-     * - orderId: Unique identifier of the order
-     * - orderLink: Link to view the order on deBridge app (https://app.debridge.finance/order?orderId=...)
-     *
-     * @param {EVMWalletClient} walletClient - The wallet client (required by Tool decorator but not used)
-     * @param {checkTransactionStatusParametersSchema} parameters - Parameters containing the transaction hash
-     * @returns {Promise<OrderStatusResponse[]>} Status of each order associated with the transaction
+     * @param {checkTransactionStatusParametersSchema} parameters - Parameters for checking transaction status
+     * @returns {Promise<OrderStatusResponse[]>} Status information for the transactions
      * @throws {Error} If the API request fails or returns an error
      *
      * @example
      * ```typescript
-     * const status = await debridgeTools.checkTransactionStatus(wallet, {
-     *   txHash: "0x19fa026c3c061aee096f90f1240bc67b88562a1115bf9ef1afb0e5dc27017ece"
+     * const status = await debridgeTools.checkTransactionStatus({
+     *   orderId: "0x1234567890abcdef"
      * });
-     * console.log(status[0].orderLink); // https://app.debridge.finance/order?orderId=...
      * ```
      */
     @Tool({
         name: "check_transaction_status",
-        description: "Check the status of a bridge transaction using its transaction hash.",
+        description: "Check the status of bridge transactions using their order IDs.",
     })
     async checkTransactionStatus(
-        walletClient: EVMWalletClient,
         parameters: checkTransactionStatusParametersSchema,
     ): Promise<OrderStatusResponse[]> {
         try {
