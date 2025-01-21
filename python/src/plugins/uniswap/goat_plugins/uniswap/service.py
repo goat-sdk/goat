@@ -29,10 +29,21 @@ class UniswapService:
                     except json.JSONDecodeError:
                         raise Exception(f"Invalid JSON response from {endpoint}: {response_text}")
                     
+                    print(f"\nAPI Response for {endpoint}:")
+                    print(f"Status: {response.status}")
+                    print(f"Headers: {dict(response.headers)}")
+                    print(f"Body: {response_text}")
+                    
                     if not response.ok:
-                        error_message = response_json.get("errorCode", "Unknown error")
-                        error_details = response_json.get("detail", response_json)
-                        raise Exception(f"API error ({error_message}): {json.dumps(error_details, indent=2)}")
+                        error_code = response_json.get("errorCode", "Unknown error")
+                        if error_code == "VALIDATION_ERROR":
+                            raise Exception("Invalid parameters provided to the API")
+                        elif error_code == "INSUFFICIENT_BALANCE":
+                            raise Exception("Insufficient balance for the requested operation")
+                        elif error_code == "RATE_LIMIT":
+                            raise Exception("API rate limit exceeded")
+                        else:
+                            raise Exception(f"API error: {error_code}")
                     
                     return response_json
             except aiohttp.ClientError as e:
