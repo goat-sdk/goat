@@ -65,6 +65,10 @@ export class StarknetAccountWalletClient extends StarknetWalletClient {
             throw error;
         }
     }
+
+    getAccount(): Account {
+        return this.starknetAccount;
+    }
 }
 
 export function starknet({ starknetAccount, starknetClient }: StarknetAccountWalletCtorParams) {
