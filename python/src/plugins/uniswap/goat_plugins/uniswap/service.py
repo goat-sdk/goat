@@ -53,15 +53,16 @@ class UniswapService:
                 "chainId": wallet_client.get_chain()["id"]
             })
 
-            approval = data.get("approval")
-            if not approval:
+            # If no approval data is returned, the token is already approved
+            if not data or "approval" not in data:
                 return {"status": "approved"}
 
+            approval = data["approval"]
             # Create properly typed transaction object
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
                 "data": str(approval["data"]) if isinstance(approval["data"], str) else approval["data"].hex(),
-                "value": int(approval["value"]) if approval.get("value") else 0,  # Use original value or default to 0
+                "value": int(approval["value"], 16) if isinstance(approval.get("value"), str) and approval["value"].startswith("0x") else int(approval["value"]) if approval.get("value") else 0,
                 "abi": [],  # Empty ABI since we're using raw data
                 "functionName": None  # No function name since we're using raw data
             })
@@ -112,7 +113,7 @@ class UniswapService:
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
                 "data": str(swap["data"]) if isinstance(swap["data"], str) else swap["data"].hex(),
-                "value": int(swap["value"]) if swap.get("value") else 0,  # Use original value or default to 0
+                "value": int(swap["value"], 16) if isinstance(swap.get("value"), str) and swap["value"].startswith("0x") else int(swap["value"]) if swap.get("value") else 0,
                 "abi": [],  # Empty ABI since we're using raw data
                 "functionName": None  # No function name since we're using raw data
             })
