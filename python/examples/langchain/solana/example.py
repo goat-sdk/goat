@@ -21,7 +21,7 @@ keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
 wallet = solana(client, keypair)
 
 # Initialize LLM
-llm = ChatOpenAI(model="gpt-4")
+llm = ChatOpenAI(model="gpt-4o-mini")
 
 
 def main():
@@ -37,7 +37,6 @@ def main():
 
     # Initialize SPL Token plugin
     spl_token_plugin = spl_token(SplTokenPluginOptions(
-        api_key="",  # Not needed for SPL token operations
         network="devnet",  # Using devnet as specified in .env
         tokens=SPL_TOKENS
     ))

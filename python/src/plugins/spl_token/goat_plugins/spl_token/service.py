@@ -15,8 +15,7 @@ from .tokens import SPL_TOKENS, SolanaNetwork
 
 
 class SplTokenService:
-    def __init__(self, api_key: str, network: SolanaNetwork = "mainnet", tokens=SPL_TOKENS):
-        self.api_key = api_key
+    def __init__(self, network: SolanaNetwork = "mainnet", tokens=SPL_TOKENS):
         self.network = network
         self.tokens = tokens
 
