@@ -14,7 +14,7 @@ class UniswapService:
 
     async def make_request(self, endpoint: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to the Uniswap API."""
-        url = f"{self.base_url}/v1/{endpoint}"
+        url = f"{self.base_url}/{endpoint}"
         
         headers = {
             "Accept": "application/json",
