@@ -73,12 +73,14 @@ class UniswapService:
             # Extract spender address from approval data
             data = approval["data"]
             # The spender address starts at position 34 (after function selector) and is 40 characters long
-            spender = "0x" + data[34:74]
+            raw_spender = "0x" + data[34:74]
+            # Use wallet_client's resolve_address to get checksum address
+            spender = wallet_client.resolve_address(raw_spender)
             # Convert max approval amount to integer
             max_approval = int("0x" + "f" * 64, 16)  # Max uint256 value
             
             transaction_params = cast(EVMTransaction, {
-                "to": approval["to"],
+                "to": wallet_client.resolve_address(approval["to"]),
                 "abi": ERC20_ABI,
                 "functionName": "approve",
                 "args": [spender, max_approval],
