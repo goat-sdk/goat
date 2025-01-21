@@ -12,6 +12,17 @@ class UniswapService:
     def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org/v1"):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")  # Remove trailing slash if present
+        # Map chain IDs to their string names
+        self.chain_id_map = {
+            1: "MAINNET",
+            10: "OPTIMISM",
+            137: "POLYGON",
+            42161: "ARBITRUM",
+            8453: "BASE",
+            43114: "AVAX",
+            7777777: "ZORA",
+            42220: "CELO"
+        }
 
     async def make_request(self, endpoint: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to the Uniswap API."""
@@ -105,15 +116,26 @@ class UniswapService:
         """Get a quote for token swap."""
         try:
             chain_id = wallet_client.get_chain()["id"]
-            # Ensure chain IDs are properly formatted for the API
-            return await self.make_request("quote", {
+            # Convert chain IDs to string names using the mapping
+            chain_id_str = self.chain_id_map.get(chain_id, str(chain_id))
+            token_out_chain_id = parameters.get("tokenOutChainId", chain_id)
+            token_out_chain_id_str = self.chain_id_map.get(token_out_chain_id, str(token_out_chain_id))
+            
+            # Prepare request parameters
+            request_params = {
                 **parameters,
-                "tokenInChainId": str(chain_id),  # Convert to string as API expects
-                "tokenOutChainId": str(parameters.get("tokenOutChainId", chain_id)),  # Default to same chain if not specified
+                "tokenInChainId": chain_id_str,
+                "tokenOutChainId": token_out_chain_id_str,
                 "swapper": wallet_client.get_address(),
-                "type": parameters.get("type", "EXACT_INPUT"),  # Default to EXACT_INPUT if not specified
-                "protocols": parameters.get("protocols", ["V2", "V3"])  # Default to both V2 and V3 if not specified
-            })
+                "type": parameters.get("type", "EXACT_INPUT"),
+                "protocols": parameters.get("protocols", ["V2", "V3"])
+            }
+            
+            # Debug log the request parameters
+            print(f"\nRequest parameters for quote:")
+            print(json.dumps(request_params, indent=2))
+            
+            return await self.make_request("quote", request_params)
         except Exception as error:
             raise Exception(f"Failed to get quote: {error}")
 
