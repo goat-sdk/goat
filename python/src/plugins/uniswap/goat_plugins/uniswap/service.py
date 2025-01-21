@@ -70,10 +70,19 @@ class UniswapService:
 
             approval = data["approval"]
             # Create properly typed transaction object using raw API response
+            value = approval.get("value", "0x0")
+            # Convert hex value to integer for EVMTransaction
+            if isinstance(value, str) and value.startswith("0x"):
+                value = int(value, 16)
+            elif isinstance(value, str):
+                value = int(value)
+            else:
+                value = int(value) if value else 0
+            
             transaction_params = cast(EVMTransaction, {
                 "to": approval["to"],
                 "data": approval["data"],
-                "value": approval.get("value", "0x0")
+                "value": value
             })
             
             # Send the transaction
@@ -119,10 +128,19 @@ class UniswapService:
             
             swap = response["swap"]
             # Create properly typed transaction object using raw API response
+            value = swap.get("value", "0x0")
+            # Convert hex value to integer for EVMTransaction
+            if isinstance(value, str) and value.startswith("0x"):
+                value = int(value, 16)
+            elif isinstance(value, str):
+                value = int(value)
+            else:
+                value = int(value) if value else 0
+            
             transaction_params = cast(EVMTransaction, {
                 "to": swap["to"],
                 "data": swap["data"],
-                "value": swap.get("value", "0x0")
+                "value": value
             })
             
             # Send the transaction
