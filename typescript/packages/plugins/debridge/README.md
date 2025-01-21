@@ -37,7 +37,7 @@ Signs and broadcasts the bridge transaction.
 <div align="center">
 Go out and eat some grass.
 
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
+[Docs](https://ohmygoat.dev) | [API](https://dln.debridge.finance/v1.0) | [Discord](https://discord.com/invite/debridge) </div>
 
 ## Goat 🐐
 Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets. 
