@@ -62,16 +62,18 @@ class UniswapService:
             # Create properly typed transaction object
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
-                "data": approval["data"] if isinstance(approval["data"], str) else approval["data"].hex()
+                "data": str(approval["data"]) if isinstance(approval["data"], str) else approval["data"].hex(),
+                "value": 0  # Default value
             })
             if approval.get("value"):
                 value = approval["value"]
                 if isinstance(value, str):
                     if value.startswith("0x"):
-                        value = int(value, 16)
+                        transaction_params["value"] = int(value, 16)
                     else:
-                        value = int(value)
-                transaction_params["value"] = value
+                        transaction_params["value"] = int(value)
+                else:
+                    transaction_params["value"] = int(value)
             
             # Send the transaction
             transaction = await wallet_client.send_transaction(transaction_params)
@@ -118,16 +120,18 @@ class UniswapService:
             # Create properly typed transaction object
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
-                "data": swap["data"] if isinstance(swap["data"], str) else swap["data"].hex()
+                "data": str(swap["data"]) if isinstance(swap["data"], str) else swap["data"].hex(),
+                "value": 0  # Default value
             })
             if swap.get("value"):
                 value = swap["value"]
                 if isinstance(value, str):
                     if value.startswith("0x"):
-                        value = int(value, 16)
+                        transaction_params["value"] = int(value, 16)
                     else:
-                        value = int(value)
-                transaction_params["value"] = value
+                        transaction_params["value"] = int(value)
+                else:
+                    transaction_params["value"] = int(value)
             
             # Send the transaction
             transaction = await wallet_client.send_transaction(transaction_params)
