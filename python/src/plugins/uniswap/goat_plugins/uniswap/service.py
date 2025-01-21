@@ -19,7 +19,7 @@ class UniswapService:
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}"
+            "x-api-key": self.api_key
         }
         
         async with aiohttp.ClientSession() as session:
