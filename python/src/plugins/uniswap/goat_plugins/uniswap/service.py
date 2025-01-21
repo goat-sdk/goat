@@ -7,7 +7,7 @@ from goat_wallets.evm import EVMWalletClient
 
 
 class UniswapService:
-    def __init__(self, api_key: str, base_url: str = "https://api.uniswap.org/v2"):
+    def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org/v1"):
         self.api_key = api_key
         self.base_url = base_url
 
