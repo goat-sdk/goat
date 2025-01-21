@@ -17,8 +17,6 @@ class UniswapService:
         url = f"{self.base_url}/{endpoint}"
         
         headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
             "x-api-key": self.api_key
         }
         
