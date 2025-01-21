@@ -7,7 +7,7 @@ from .service import UniswapService
 class UniswapPluginOptions:
     """Options for the UniswapPlugin."""
     api_key: str  # API key for external service integration
-    base_url: str = "https://trade-api.gateway.uniswap.org/v1"  # Base URL for Uniswap API
+    base_url: str  # Base URL for Uniswap API
 
 
 class UniswapPlugin(PluginBase):

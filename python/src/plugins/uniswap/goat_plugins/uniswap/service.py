@@ -4,6 +4,7 @@ from typing import Any, Dict
 from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
 from goat_wallets.evm import EVMWalletClient
+from goat_wallets.evm.types import EVMTransaction
 
 
 class UniswapService:
@@ -13,12 +14,12 @@ class UniswapService:
 
     async def make_request(self, endpoint: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to the Uniswap API."""
-        url = f"{self.base_url}/{endpoint}"
+        url = f"{self.base_url}v1/{endpoint}"
         
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "x-api-key": self.api_key
+            "Authorization": f"Bearer {self.api_key}"
         }
         
         async with aiohttp.ClientSession() as session:
@@ -47,10 +48,10 @@ class UniswapService:
             if not approval:
                 return {"status": "approved"}
 
+            # Use raw transaction data from the API response
             transaction = await wallet_client.send_transaction({
                 "to": approval["to"],
-                "value": str(approval["value"]),
-                "data": approval["data"]
+                "data": approval["data"]  # Use the raw transaction data from the API
             })
 
             return {
@@ -93,10 +94,10 @@ class UniswapService:
             })
             
             swap = response["swap"]
+            # Use raw transaction data from the API response
             transaction = await wallet_client.send_transaction({
                 "to": swap["to"],
-                "value": str(swap["value"]),
-                "data": swap["data"]
+                "data": swap["data"]  # Use the raw transaction data from the API
             })
 
             return {

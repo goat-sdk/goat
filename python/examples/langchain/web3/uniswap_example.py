@@ -75,13 +75,18 @@ Always use base units (wei) for amounts. For example:
 
     # Initialize tools with web3 wallet and Uniswap plugin
     uniswap_api_key = os.getenv("UNISWAP_API_KEY")
+    uniswap_base_url = os.getenv("UNISWAP_BASE_URL", "https://trade-api.gateway.uniswap.org/")
     assert uniswap_api_key is not None, "You must set UNISWAP_API_KEY environment variable"
+    assert uniswap_base_url is not None, "You must set UNISWAP_BASE_URL environment variable"
 
     tools = get_on_chain_tools(
         wallet=Web3EVMWalletClient(w3),
         plugins=[
             send_eth(),
-            uniswap(options=UniswapPluginOptions(api_key=uniswap_api_key)),
+            uniswap(options=UniswapPluginOptions(
+                api_key=uniswap_api_key,
+                base_url=uniswap_base_url
+            )),
         ],
     )
     
