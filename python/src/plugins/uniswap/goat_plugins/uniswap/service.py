@@ -116,14 +116,28 @@ class UniswapService:
         """Get a quote for token swap."""
         try:
             # Match TypeScript implementation exactly
+            # Map chain IDs to their string names
+            chain_id_map = {
+                1: "MAINNET",
+                10: "OPTIMISM",
+                137: "POLYGON",
+                42161: "ARBITRUM",
+                8453: "BASE",
+                43114: "AVAX",
+                7777777: "ZORA",
+                42220: "CELO"
+            }
+            
             chain_id = wallet_client.get_chain()["id"]
+            chain_name = chain_id_map.get(chain_id, str(chain_id))
+            
             request_params = {
                 "tokenIn": parameters["tokenIn"],
                 "tokenOut": parameters["tokenOut"],
                 "amount": parameters["amount"],
                 "type": "EXACT_INPUT",  # Default type
-                "tokenInChainId": chain_id,
-                "tokenOutChainId": parameters.get("tokenOutChainId", chain_id),
+                "tokenInChainId": chain_name,
+                "tokenOutChainId": chain_name,  # Same chain for now
                 "swapper": wallet_client.get_address()
             }
             
