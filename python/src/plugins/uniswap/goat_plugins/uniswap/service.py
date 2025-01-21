@@ -8,13 +8,13 @@ from goat_wallets.evm.types import EVMTransaction
 
 
 class UniswapService:
-    def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org/v1"):
+    def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org"):
         self.api_key = api_key
-        self.base_url = base_url
+        self.base_url = base_url.rstrip("/")  # Remove trailing slash if present
 
     async def make_request(self, endpoint: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to the Uniswap API."""
-        url = f"{self.base_url}v1/{endpoint}"
+        url = f"{self.base_url}/v1/{endpoint}"
         
         headers = {
             "Accept": "application/json",
@@ -23,11 +23,22 @@ class UniswapService:
         }
         
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=parameters, headers=headers) as response:
-                response_json = await response.json()
-                if not response.ok:
-                    raise Exception(f"Failed to fetch {endpoint}: {json.dumps(response_json, indent=2)}")
-                return response_json
+            try:
+                async with session.post(url, json=parameters, headers=headers) as response:
+                    response_text = await response.text()
+                    try:
+                        response_json = json.loads(response_text)
+                    except json.JSONDecodeError:
+                        raise Exception(f"Invalid JSON response from {endpoint}: {response_text}")
+                    
+                    if not response.ok:
+                        error_message = response_json.get("errorCode", "Unknown error")
+                        error_details = response_json.get("detail", response_json)
+                        raise Exception(f"API error ({error_message}): {json.dumps(error_details, indent=2)}")
+                    
+                    return response_json
+            except aiohttp.ClientError as e:
+                raise Exception(f"Network error while accessing {endpoint}: {str(e)}")
 
     @Tool({
         "name": "uniswap_check_approval",
@@ -37,7 +48,7 @@ class UniswapService:
     async def check_approval(self, wallet_client: EVMWalletClient, parameters: dict):
         """Check token approval and approve if needed."""
         try:
-            data = await self.make_request("check_approval", {
+            data = await self.make_request("check-approval", {
                 "token": parameters["token"],
                 "amount": parameters["amount"],
                 "walletAddress": parameters["walletAddress"],
