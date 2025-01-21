@@ -58,13 +58,11 @@ class UniswapService:
                 return {"status": "approved"}
 
             approval = data["approval"]
-            # Create properly typed transaction object
+            # Create properly typed transaction object matching TypeScript implementation
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
                 "data": str(approval["data"]) if isinstance(approval["data"], str) else approval["data"].hex(),
-                "value": int(approval["value"], 16) if isinstance(approval.get("value"), str) and approval["value"].startswith("0x") else int(approval["value"]) if approval.get("value") else 0,
-                "abi": [],  # Empty ABI since we're using raw data
-                "functionName": None  # No function name since we're using raw data
+                "value": int(approval["value"], 16) if isinstance(approval.get("value"), str) and approval["value"].startswith("0x") else int(approval["value"]) if approval.get("value") else 0
             })
             
             # Send the transaction
@@ -109,13 +107,11 @@ class UniswapService:
             })
             
             swap = response["swap"]
-            # Create properly typed transaction object
+            # Create properly typed transaction object matching TypeScript implementation
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
                 "data": str(swap["data"]) if isinstance(swap["data"], str) else swap["data"].hex(),
-                "value": int(swap["value"], 16) if isinstance(swap.get("value"), str) and swap["value"].startswith("0x") else int(swap["value"]) if swap.get("value") else 0,
-                "abi": [],  # Empty ABI since we're using raw data
-                "functionName": None  # No function name since we're using raw data
+                "value": int(swap["value"], 16) if isinstance(swap.get("value"), str) and swap["value"].startswith("0x") else int(swap["value"]) if swap.get("value") else 0
             })
             
             # Send the transaction
