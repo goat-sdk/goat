@@ -51,10 +51,16 @@ class UniswapService:
             # Create properly typed transaction object
             transaction_params = cast(EVMTransaction, {
                 "to": str(approval["to"]),
-                "data": str(approval["data"])
+                "data": approval["data"] if isinstance(approval["data"], str) else approval["data"].hex()
             })
             if approval.get("value"):
-                transaction_params["value"] = int(approval["value"])
+                value = approval["value"]
+                if isinstance(value, str):
+                    if value.startswith("0x"):
+                        value = int(value, 16)
+                    else:
+                        value = int(value)
+                transaction_params["value"] = value
             
             # Send the transaction
             transaction = await wallet_client.send_transaction(transaction_params)
@@ -101,10 +107,16 @@ class UniswapService:
             # Create properly typed transaction object
             transaction_params = cast(EVMTransaction, {
                 "to": str(swap["to"]),
-                "data": str(swap["data"])
+                "data": swap["data"] if isinstance(swap["data"], str) else swap["data"].hex()
             })
             if swap.get("value"):
-                transaction_params["value"] = int(swap["value"])
+                value = swap["value"]
+                if isinstance(value, str):
+                    if value.startswith("0x"):
+                        value = int(value, 16)
+                    else:
+                        value = int(value)
+                transaction_params["value"] = value
             
             # Send the transaction
             transaction = await wallet_client.send_transaction(transaction_params)
