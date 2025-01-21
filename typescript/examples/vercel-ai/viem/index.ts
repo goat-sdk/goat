@@ -11,7 +11,8 @@ import { base } from "viem/chains";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { uniswap } from "@goat-sdk/plugin-uniswap";
+import { zeroEx } from "@goat-sdk/plugin-0x";
+//import { uniswap } from "@goat-sdk/plugin-uniswap";
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
@@ -31,9 +32,12 @@ const walletClient = createWalletClient({
         plugins: [
             sendETH(),
             erc20({ tokens: [USDC, PEPE] }),
-            uniswap({
-                baseUrl: process.env.UNISWAP_BASE_URL as string,
-                apiKey: process.env.UNISWAP_API_KEY as string,
+            // uniswap({
+            //     baseUrl: process.env.UNISWAP_BASE_URL as string,
+            //     apiKey: process.env.UNISWAP_API_KEY as string,
+            // }),
+            zeroEx({
+                apiKey: process.env.ZEROEX_API_KEY as string,
             }),
         ],
     });
