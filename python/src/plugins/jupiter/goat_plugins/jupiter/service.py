@@ -1,6 +1,4 @@
 import base64
-from typing import Dict, Any
-
 import aiohttp
 from goat.decorators.tool import Tool
 from solders.transaction import VersionedTransaction
@@ -13,7 +11,6 @@ class JupiterService:
         self.api_key = api_key
         self.base_url = "https://quote-api.jup.ag/v6"
         self._timeout = aiohttp.ClientTimeout(total=10)  # 10 second timeout
-        self._session_kwargs = {"timeout": self._timeout}
 
     @Tool({
         "description": "Get a quote for a swap on the Jupiter DEX",
@@ -32,9 +29,9 @@ class JupiterService:
             }
             # Add optional parameters if they are set
             if params.slippageBps is not None:
-                request_params['slippageBps'] = params.slippageBps
+                request_params['slippageBps'] = str(params.slippageBps)
             print(f"Requesting quote with parameters: {request_params}")
-            async with aiohttp.ClientSession(**self._session_kwargs) as session:
+            async with aiohttp.ClientSession(timeout=self._timeout) as session:
                 async with session.get(f"{self.base_url}/quote", params=request_params) as response:
                     response_text = await response.text()
                     print(f"Got response: {response_text}")
@@ -52,8 +49,7 @@ class JupiterService:
             error_message = f"Failed to get quote: {str(error)}"
             if error.status != 404:  # Only try to parse response for non-404 errors
                 try:
-                    error_data = await error.response.json()
-                    error_message = f"Failed to get quote: {error_data.get('error', str(error))}"
+                    error_message = f"Failed to get quote: HTTP {error.status} - {error.message}"
                 except:
                     pass
             raise Exception(error_message)
@@ -79,7 +75,7 @@ class JupiterService:
             }
             
             # Get swap transaction
-            async with aiohttp.ClientSession(**self._session_kwargs) as session:
+            async with aiohttp.ClientSession(timeout=self._timeout) as session:
                 async with session.post(f"{self.base_url}/swap", json={"swapRequest": swap_request}) as response:
                     if response.status != 200:
                         error_data = await response.json()
@@ -98,7 +94,7 @@ class JupiterService:
                     instructions = await wallet_client.decompile_versioned_transaction_to_instructions(versioned_transaction)
                     
                     # Send the transaction
-                    result = await wallet_client.send_transaction({
+                    result = wallet_client.send_transaction({
                         "instructions": instructions,
                         "address_lookup_table_addresses": [
                             lookup.account_key.to_base58() 
