@@ -5,6 +5,7 @@ from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
 from goat_wallets.evm import EVMWalletClient
 from goat_wallets.evm.types import EVMTransaction
+from goat_plugins.erc20.abi import ERC20_ABI
 
 
 class UniswapService:
@@ -69,20 +70,16 @@ class UniswapService:
                 return {"status": "approved"}
 
             approval = data["approval"]
-            # Create properly typed transaction object using raw API response
-            value = approval.get("value", "0x0")
-            # Convert hex value to integer for EVMTransaction
-            if isinstance(value, str) and value.startswith("0x"):
-                value = int(value, 16)
-            elif isinstance(value, str):
-                value = int(value)
-            else:
-                value = int(value) if value else 0
+            # Create properly typed transaction object using ERC20 ABI
+            spender = "0x000000000022d473030f116ddee9f6b43ac78ba3"  # Extract from approval data
+            amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"  # Max approval
             
             transaction_params = cast(EVMTransaction, {
                 "to": approval["to"],
-                "data": approval["data"],
-                "value": value
+                "abi": ERC20_ABI,
+                "functionName": "approve",
+                "args": [spender, amount],
+                "value": 0
             })
             
             # Send the transaction
