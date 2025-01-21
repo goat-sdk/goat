@@ -11,9 +11,22 @@ class UniswapService:
         self.api_key = api_key
         self.base_url = base_url
 
+    def _format_hex(self, value: str) -> str:
+        """Format a numeric string as hex without leading zeros."""
+        # Convert to integer first to remove any leading zeros
+        int_value = int(value)
+        # Convert to hex and remove '0x' prefix
+        hex_value = hex(int_value)[2:]
+        # Add '0x' prefix back
+        return f"0x{hex_value}"
+
     async def make_request(self, endpoint: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to the Uniswap API."""
         url = f"{self.base_url}/{endpoint}"
+        
+        # Format numeric values as hex
+        if endpoint == "check_approval" and "amount" in parameters:
+            parameters["amount"] = self._format_hex(parameters["amount"])
         
         headers = {
             "Accept": "application/json",
