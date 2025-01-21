@@ -45,7 +45,7 @@ class JupiterService:
                             raise Exception(f"Failed to get quote: {response_text}")
                     
                     response_data = await response.json()
-                    return QuoteResponse.parse_obj(response_data)
+                    return QuoteResponse.model_validate(response_data)
         except aiohttp.ClientResponseError as error:
             error_message = f"Failed to get quote: {str(error)}"
             if error.status != 404:  # Only try to parse response for non-404 errors
