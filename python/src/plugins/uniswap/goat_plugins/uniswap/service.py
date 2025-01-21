@@ -70,15 +70,18 @@ class UniswapService:
                 return {"status": "approved"}
 
             approval = data["approval"]
-            # Create properly typed transaction object using ERC20 ABI
-            spender = "0x000000000022d473030f116ddee9f6b43ac78ba3"  # Extract from approval data
-            amount = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"  # Max approval
+            # Extract spender address from approval data
+            data = approval["data"]
+            # The spender address starts at position 34 (after function selector) and is 40 characters long
+            spender = "0x" + data[34:74]
+            # Convert max approval amount to integer
+            max_approval = int("0x" + "f" * 64, 16)  # Max uint256 value
             
             transaction_params = cast(EVMTransaction, {
                 "to": approval["to"],
                 "abi": ERC20_ABI,
                 "functionName": "approve",
-                "args": [spender, amount],
+                "args": [spender, max_approval],
                 "value": 0
             })
             
