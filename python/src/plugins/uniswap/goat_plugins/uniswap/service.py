@@ -115,19 +115,12 @@ class UniswapService:
     async def get_quote(self, wallet_client: EVMWalletClient, parameters: dict):
         """Get a quote for token swap."""
         try:
-            chain_id = wallet_client.get_chain()["id"]
-            
-            # Prepare request parameters with only required fields
+            # Match TypeScript implementation exactly
             request_params = {
                 "tokenIn": parameters["tokenIn"],
                 "tokenOut": parameters["tokenOut"],
                 "amount": parameters["amount"],
-                "tokenInChainId": str(chain_id),
-                "tokenOutChainId": str(chain_id),  # Always same chain for now
-                "swapper": wallet_client.get_address(),
-                "type": "EXACT_INPUT",  # Default type
-                "protocols": ["V2", "V3"],  # Support both protocols
-                "routingPreference": "CLASSIC"  # Default routing
+                "type": "EXACT_INPUT"  # Default type
             }
             
             # Debug log the request parameters
