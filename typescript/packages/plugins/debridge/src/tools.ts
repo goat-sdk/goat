@@ -11,6 +11,11 @@ import {
     executeBridgeTransactionParametersSchema,
     getBridgeQuoteParametersSchema,
     getTokenInfoParametersSchema,
+    getSupportedChainsParametersSchema,
+    checkTransactionStatusParametersSchema,
+    OrderIdsResponse,
+    OrderStatusResponse,
+    SupportedChainsResponse,
 } from "./parameters";
 
 /** Default referral code for DeBridge transactions */
@@ -295,6 +300,50 @@ From Solana:
     }
 
     /**
+     * Get a list of supported chains from DeBridge API
+     * This method retrieves information about all chains supported by the protocol
+     *
+     * @param {EVMWalletClient} walletClient - The wallet client (required by Tool decorator but not used)
+     * @param {getSupportedChainsParametersSchema} parameters - Optional parameters
+     * @returns {Promise<SupportedChainsResponse>} List of supported chains with their IDs and names
+     * @throws {Error} If the API request fails or returns an error
+     *
+     * @example
+     * ```typescript
+     * const chains = await debridgeTools.getSupportedChains(wallet, {});
+     * console.log(chains.chains); // List of supported chains
+     * ```
+     */
+    @Tool({
+        name: "get_supported_chains",
+        description: "Get a list of all chains supported by DeBridge protocol.",
+    })
+    async getSupportedChains(
+        walletClient: EVMWalletClient,
+        parameters: getSupportedChainsParametersSchema
+    ): Promise<SupportedChainsResponse> {
+        try {
+            const url = `${this.options.baseUrl}/supported-chains-info`;
+            console.log("Making request to:", url);
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+            }
+
+            const data = await response.json();
+            console.log("Supported chains response:", JSON.stringify(data, null, 2));
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            return data;
+        } catch (error) {
+            throw new Error(`Failed to get supported chains: ${error}`);
+        }
+    }
+
+    /**
      * Execute a bridge transaction with the provided transaction data
      * This method signs and sends the transaction to the blockchain
      *
@@ -357,6 +406,91 @@ From Solana:
         } catch (error) {
             console.error("Bridge transaction execution failed:", error);
             throw new Error(`Failed to execute bridge transaction: ${error}`);
+        }
+    }
+
+    /**
+     * Check the status of a bridge transaction
+     * This method first gets the order IDs associated with the transaction,
+     * then checks the status of each order
+     *
+     * Possible status values:
+     * - None: Initial state
+     * - Created: Order has been created and is waiting to be fulfilled
+     * - Fulfilled: Order has been fulfilled by a taker
+     * - SentUnlock: Unlock transaction has been sent
+     * - OrderCancelled: Order has been cancelled
+     * - SentOrderCancel: Cancel transaction has been sent
+     * - ClaimedUnlock: Unlock has been claimed
+     * - ClaimedOrderCancel: Cancel has been claimed
+     *
+     * Each order status response includes:
+     * - status: Current status of the order
+     * - orderId: Unique identifier of the order
+     * - orderLink: Link to view the order on deBridge app (https://app.debridge.finance/order?orderId=...)
+     *
+     * @param {EVMWalletClient} walletClient - The wallet client (required by Tool decorator but not used)
+     * @param {checkTransactionStatusParametersSchema} parameters - Parameters containing the transaction hash
+     * @returns {Promise<OrderStatusResponse[]>} Status of each order associated with the transaction
+     * @throws {Error} If the API request fails or returns an error
+     *
+     * @example
+     * ```typescript
+     * const status = await debridgeTools.checkTransactionStatus(wallet, {
+     *   txHash: "0x19fa026c3c061aee096f90f1240bc67b88562a1115bf9ef1afb0e5dc27017ece"
+     * });
+     * console.log(status[0].orderLink); // https://app.debridge.finance/order?orderId=...
+     * ```
+     */
+    @Tool({
+        name: "check_transaction_status",
+        description: "Check the status of a bridge transaction using its transaction hash.",
+    })
+    async checkTransactionStatus(
+        walletClient: EVMWalletClient,
+        parameters: checkTransactionStatusParametersSchema
+    ): Promise<OrderStatusResponse[]> {
+        try {
+            // First get the order IDs for the transaction
+            const orderIdsUrl = `${this.options.baseUrl}/dln/tx/${parameters.txHash}/order-ids`;
+            console.log("Getting order IDs from:", orderIdsUrl);
+
+            const orderIdsResponse = await fetch(orderIdsUrl);
+            if (!orderIdsResponse.ok) {
+                const text = await orderIdsResponse.text();
+                throw new Error(`HTTP error! status: ${orderIdsResponse.status}, body: ${text}`);
+            }
+
+            const orderIdsData = (await orderIdsResponse.json()) as OrderIdsResponse;
+            console.log("Order IDs response:", JSON.stringify(orderIdsData, null, 2));
+
+            if (!orderIdsData.orderIds || orderIdsData.orderIds.length === 0) {
+                throw new Error("No order IDs found for this transaction");
+            }
+
+            // Then get the status for each order
+            const statuses = await Promise.all(
+                orderIdsData.orderIds.map(async (orderId) => {
+                    const statusUrl = `${this.options.baseUrl}/dln/order/${orderId}/status`;
+                    console.log("Getting status from:", statusUrl);
+
+                    const statusResponse = await fetch(statusUrl);
+                    if (!statusResponse.ok) {
+                        const text = await statusResponse.text();
+                        throw new Error(`HTTP error! status: ${statusResponse.status}, body: ${text}`);
+                    }
+
+                    const statusData = await statusResponse.json() as OrderStatusResponse;
+                    // Add the deBridge app link
+                    statusData.orderLink = `https://app.debridge.finance/order?orderId=${orderId}`;
+                    console.log("Status response:", JSON.stringify(statusData, null, 2));
+                    return statusData;
+                })
+            );
+
+            return statuses;
+        } catch (error) {
+            throw new Error(`Failed to check transaction status: ${error}`);
         }
     }
 }
