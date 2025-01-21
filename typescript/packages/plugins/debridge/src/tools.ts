@@ -76,7 +76,7 @@ export class DebridgeTools {
                       dstChainId: parameters.dstChainId,
                       dstChainTokenOut: parameters.dstChainTokenOut,
                       dstChainTokenOutAmount: "auto",
-                      prependOperatingExpenses: parameters.prependOperatingExpenses?.toString() || "true",
+                      prependOperatingExpenses: "true",
                       additionalTakerRewardBps: "0",
                   })}`;
 
@@ -152,8 +152,8 @@ From Solana:
             params.append("dstChainOrderAuthorityAddress", parameters.dstChainTokenOutRecipient);
             params.append("referralCode", parameters.referralCode || REFERRAL_CODE || "21064");
             params.append("prependOperatingExpenses", "true");
-            params.append("enableEstimate", parameters.enableEstimate?.toString() || "false");
-            params.append("ptp", parameters.ptp?.toString() || "false");
+            // params.append("deBridgeApp", "goat");
+            // params.append("enableEstimate", parameters.enableEstimate?.toString() || "false");
             // if (parameters.allowedTaker) {
             //     params.append('allowedTaker', parameters.allowedTaker);
             // }
@@ -313,7 +313,8 @@ From Solana:
      */
     @Tool({
         name: "execute_bridge_transaction",
-        description: "Execute a bridge transaction using tx data from create_bridge_order tool. Always ask for confirmation before proceeding",
+        description:
+            "Execute a bridge transaction using tx data from create_bridge_order tool. Always ask for confirmation before proceeding",
     })
     async executeBridgeTransaction(
         walletClient: EVMWalletClient,

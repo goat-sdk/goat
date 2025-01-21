@@ -153,9 +153,7 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
                 (val) => EVM_ADDRESS_REGEX.test(val) || SOLANA_ADDRESS_REGEX.test(val),
                 "Token address must be either a valid EVM address (0x-prefixed) or Solana address (base58)",
             )
-            .describe(
-                "Full token address on destination chain.",
-            ),
+            .describe("Full token address on destination chain."),
 
         /** Recipient address on the destination chain */
         dstChainTokenOutRecipient: z
@@ -211,9 +209,7 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
             .refine((addr) => addr !== "0x0000000000000000000000000000000000000000", {
                 message: "Authority address cannot be the zero address",
             })
-            .describe(
-                "Optional: Authority address on destination chain. Defaults to dstChainTokenOutRecipient.",
-            )
+            .describe("Optional: Authority address on destination chain. Defaults to dstChainTokenOutRecipient.")
             .optional(),
 
         /** Referral code */
@@ -227,12 +223,6 @@ export class createBridgeOrderParametersSchema extends createToolParameters(
             .describe(
                 "Whether to include operating expenses in the transaction. Always true for native token transfers.",
             ),
-
-        /** Whether to enable estimation */
-        enableEstimate: z.boolean().optional().default(false),
-
-        /** Whether to use PTP mode */
-        ptp: z.boolean().optional().default(false),
 
         /** Optional app identifier */
         deBridgeApp: z.string().optional(),
