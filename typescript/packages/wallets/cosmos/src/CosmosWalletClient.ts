@@ -1,12 +1,10 @@
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Ed25519 } from "@cosmjs/crypto";
 import { AccountData } from "@cosmjs/proto-signing";
 import { QueryClient } from "@cosmjs/stargate";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { assets, chains } from "chain-registry";
-import { CosmosTransaction, CosmosWalletClient, CosmosReadRequest, 
-        ContractReadData, ContractWriteData } from "./types"
-
+import { ContractReadData, ContractWriteData, CosmosReadRequest, CosmosTransaction, CosmosWalletClient } from "./types";
 
 export type CosmosWalletOptions = {
     client: SigningCosmWasmClient;
@@ -70,32 +68,26 @@ export class CosmosClient extends CosmosWalletClient {
     }
 
     async contractWrite(transaction: ContractWriteData) {
-        const {contractAdr, message} = transaction;
-        const id = await this.client.getChainId()
+        const { contractAdr, message } = transaction;
+        const id = await this.client.getChainId();
 
-        const fe = chains.find((ch) => ch.chain_id === id)?.fees?.fee_tokens[0]
+        const fe = chains.find((ch) => ch.chain_id === id)?.fees?.fee_tokens[0];
 
-        if(!fe) throw new Error("network data is unavailable");
+        if (!fe) throw new Error("network data is unavailable");
 
-        if(!contractAdr) throw new Error("Invalid Contarct Address");
+        if (!contractAdr) throw new Error("Invalid Contarct Address");
 
-        const memo = `txn`;
-        let gas = 400000
-        let tk = fe?.high_gas_price ?? fe?.average_gas_price ?? fe?.low_gas_price ?? fe?.fixed_min_gas_price ?? 0
-        tk = tk == 0 ? 0.25: tk 
-        const fee = { amount: [ { denom: fe?.denom, amount: Math.round(tk * gas).toString() } ], gas: gas.toString() };
-        const result = await this.client.execute(
-            this.getAddress(),
-            contractAdr,
-            message,
-            fee, 
-            memo
-        )
-        if(!result.transactionHash) throw new Error("transaction was incomplete");
+        const memo = "txn";
+        const gas = 400000;
+        let tk = fe?.high_gas_price ?? fe?.average_gas_price ?? fe?.low_gas_price ?? fe?.fixed_min_gas_price ?? 0;
+        tk = tk === 0 ? 0.25 : tk;
+        const fee = { amount: [{ denom: fe?.denom, amount: Math.round(tk * gas).toString() }], gas: gas.toString() };
+        const result = await this.client.execute(this.getAddress(), contractAdr, message, fee, memo);
+        if (!result.transactionHash) throw new Error("transaction was incomplete");
         return {
-            value: result
+            value: result,
         };
-    };
+    }
 
     async read(requestdata: CosmosReadRequest) {
         const cometClient = await Tendermint34Client.connect(process.env.RPC_PROVIDER_URL as `0x${string}`);
@@ -108,32 +100,29 @@ export class CosmosClient extends CosmosWalletClient {
     }
 
     async contractRead(request: ContractReadData) {
-        const {contractAdr, message} = request;
-        if(!contractAdr) throw new Error("Invalid Contarct Address");
-        const result  = await this.client.queryContractSmart(
-            request.contractAdr,
-            message
-        )
+        const { contractAdr, message } = request;
+        if (!contractAdr) throw new Error("Invalid Contarct Address");
+        const result = await this.client.queryContractSmart(request.contractAdr, message);
         return {
-            value: result
-        }; 
+            value: result,
+        };
     }
 
     async balanceOf(address: string) {
-        const ast = await this.getChainInfo()
+        const ast = await this.getChainInfo();
 
-        if(!ast.asset) throw new Error("Asset data is unavailable");
-        let _ast = ast.asset?.assets[0]
-        let exp = _ast?.denom_units.find((d) => d.denom === _ast?.display);
-        const balance = await this.client.getBalance(address, _ast.base)
-        var ex = !exp?.exponent ? 0 : exp?.exponent;
+        if (!ast.asset) throw new Error("Asset data is unavailable");
+        const _ast = ast.asset?.assets[0];
+        const exp = _ast?.denom_units.find((d) => d.denom === _ast?.display);
+        const balance = await this.client.getBalance(address, _ast.base);
+        const ex = !exp?.exponent ? 0 : exp?.exponent;
 
         return {
             decimals: ex,
-            symbol: _ast?.symbol ?? 'unknown',
-            name: _ast?.name ?? 'unknown',
-            value: (Number(balance.amount)/10** ex).toString(),
-            inBaseUnits: (Number(balance.amount)/10** ex).toString()
+            symbol: _ast?.symbol ?? "unknown",
+            name: _ast?.name ?? "unknown",
+            value: (Number(balance.amount) / 10 ** ex).toString(),
+            inBaseUnits: (Number(balance.amount) / 10 ** ex).toString(),
         };
     }
 

@@ -1,6 +1,6 @@
+import { DeliverTxResponse, ExecuteResult, JsonObject } from "@cosmjs/cosmwasm-stargate";
 import { EncodeObject } from "@cosmjs/proto-signing";
-import { QueryAbciResponse } from '@cosmjs/stargate';
-import { DeliverTxResponse, ExecuteResult, JsonObject} from "@cosmjs/cosmwasm-stargate";
+import { QueryAbciResponse } from "@cosmjs/stargate";
 import { CosmosChain, WalletClientBase } from "@goat-sdk/core";
 
 export type CosmosTransaction = {
@@ -12,14 +12,14 @@ export type CosmosReadRequest = {
 };
 
 export type ContractWriteData = {
-    contractAdr: string
-    message: JsonObject
-}
+    contractAdr: string;
+    message: JsonObject;
+};
 
 export type ContractReadData = {
-    contractAdr: string
-    message: JsonObject
-}
+    contractAdr: string;
+    message: JsonObject;
+};
 
 export type CosmosTransactionResult = {
     value: DeliverTxResponse;
@@ -31,12 +31,11 @@ export type CosmosReadResult = {
 
 export type ContractWriteResult = {
     value: ExecuteResult;
-}
+};
 
 export type ContractReadResult = {
-    value: JsonObject
-}
-
+    value: JsonObject;
+};
 
 export abstract class CosmosWalletClient extends WalletClientBase {
     abstract getChain(): CosmosChain;

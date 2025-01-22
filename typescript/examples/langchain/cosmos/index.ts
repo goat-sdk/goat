@@ -3,8 +3,8 @@ import type { ChatPromptTemplate } from "@langchain/core/prompts";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 import { cosmosbank } from "@goat-sdk/plugin-cosmosbank";
