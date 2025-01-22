@@ -1,59 +1,57 @@
 import { Tool } from "@goat-sdk/core";
+import { CoinGeckoAPI } from "./api";
 import {
     GetCoinDataParameters,
     GetCoinPriceByContractAddressParameters,
-    GetCoinPriceParameters,
+    GetCoinPricesParameters,
     GetHistoricalDataParameters,
     GetOHLCParameters,
-    GetSupportedCoinsParameters,
-    GetTrendingCoinsParameters,
+    GetTrendingCoinCategoriesParameters,
+    NoParams,
     SearchCoinsParameters,
 } from "./parameters";
-import { COINGECKO_API_BASE_URL, buildUrl, coingeckoRequest } from "./request";
 
 export class CoinGeckoService {
-    constructor(private readonly apiKey: string) {}
+    constructor(protected api: CoinGeckoAPI) {}
 
     @Tool({
+        name: "coingecko_get_trending_coins",
         description: "Get the list of trending coins from CoinGecko",
     })
-    async getTrendingCoins(parameters: GetTrendingCoinsParameters) {
-        return coingeckoRequest(buildUrl(`${COINGECKO_API_BASE_URL}/search/trending`, {}), this.apiKey);
+    async getTrendingCoins(parameters: NoParams) {
+        return this.api.request("search/trending", {});
     }
 
     @Tool({
-        description: "Get the price of a specific coin from CoinGecko",
+        name: "coingecko_get_coin_prices",
+        description: "Get the prices of specific coins from CoinGecko",
     })
-    async getCoinPrice(parameters: GetCoinPriceParameters) {
-        const { coinId, vsCurrency, includeMarketCap, include24hrVol, include24hrChange, includeLastUpdatedAt } =
+    async getCoinPrices(parameters: GetCoinPricesParameters) {
+        const { coinIds, vsCurrency, includeMarketCap, include24hrVol, include24hrChange, includeLastUpdatedAt } =
             parameters;
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/simple/price`, {
-                ids: coinId,
-                vs_currencies: vsCurrency,
-                include_market_cap: includeMarketCap,
-                include_24hr_vol: include24hrVol,
-                include_24hr_change: include24hrChange,
-                include_last_updated_at: includeLastUpdatedAt,
-            }),
-            this.apiKey,
-        );
+        return this.api.request("simple/price", {
+            ids: coinIds.join(","),
+            vs_currencies: vsCurrency,
+            include_market_cap: includeMarketCap,
+            include_24hr_vol: include24hrVol,
+            include_24hr_change: include24hrChange,
+            include_last_updated_at: includeLastUpdatedAt,
+        });
     }
 
     @Tool({
+        name: "coingecko_search_coins",
         description: "Search for coins by keyword",
     })
     async searchCoins(parameters: SearchCoinsParameters) {
         const { query } = parameters;
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/search`, {
-                query,
-            }),
-            this.apiKey,
-        );
+        return this.api.request("search", {
+            query,
+        });
     }
 
     @Tool({
+        name: "coingecko_get_coin_price_by_contract_address",
         description: "Get coin price by contract address",
     })
     async getCoinPriceByContractAddress(parameters: GetCoinPriceByContractAddressParameters) {
@@ -67,76 +65,83 @@ export class CoinGeckoService {
             includeLastUpdatedAt,
         } = parameters;
 
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/simple/token_price/${id}`, {
-                contract_addresses: contractAddresses.join(","),
-                vs_currencies: vsCurrency,
-                include_market_cap: includeMarketCap,
-                include_24hr_vol: include24hrVol,
-                include_24hr_change: include24hrChange,
-                include_last_updated_at: includeLastUpdatedAt,
-            }),
-            this.apiKey,
-        );
+        return this.api.request(`simple/token_price/${id}`, {
+            contract_addresses: contractAddresses.join(","),
+            vs_currencies: vsCurrency,
+            include_market_cap: includeMarketCap,
+            include_24hr_vol: include24hrVol,
+            include_24hr_change: include24hrChange,
+            include_last_updated_at: includeLastUpdatedAt,
+        });
     }
 
     @Tool({
-        description: "Get detailed coin data by ID (including market data, community data, developer stats, and more)",
+        name: "coingecko_get_coin_data",
+        description:
+            "Get detailed coin data by ID (including contract address, market data, community data, developer stats, and more)",
     })
     async getCoinData(parameters: GetCoinDataParameters) {
         const { id, localization, tickers, marketData, communityData, developerData, sparkline } = parameters;
 
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/coins/${id}`, {
-                localization,
-                tickers,
-                market_data: marketData,
-                community_data: communityData,
-                developer_data: developerData,
-                sparkline,
-            }),
-            this.apiKey,
-        );
+        return this.api.request(`coins/${id}`, {
+            localization,
+            tickers,
+            market_data: marketData,
+            community_data: communityData,
+            developer_data: developerData,
+            sparkline,
+        });
     }
 
     @Tool({
-        description: "Get list of all supported coins",
-    })
-    async getSupportedCoins(parameters: GetSupportedCoinsParameters) {
-        const { includePlatform } = parameters;
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/coins/list`, {
-                include_platform: includePlatform,
-            }),
-            this.apiKey,
-        );
-    }
-
-    @Tool({
+        name: "coingecko_get_historical_data",
         description: "Get historical data for a coin by ID",
     })
     async getHistoricalData(parameters: GetHistoricalDataParameters) {
         const { id, date, localization } = parameters;
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/coins/${id}/history`, {
-                date,
-                localization,
-            }),
-            this.apiKey,
-        );
+        return this.api.request(`coins/${id}/history`, {
+            date,
+            localization,
+        });
     }
 
     @Tool({
+        name: "coingecko_get_ohlc_data",
         description: "Get OHLC chart data for a coin by ID",
     })
     async getOHLCData(parameters: GetOHLCParameters) {
         const { id, vsCurrency, days } = parameters;
-        return coingeckoRequest(
-            buildUrl(`${COINGECKO_API_BASE_URL}/coins/${id}/ohlc`, {
-                vs_currency: vsCurrency,
-                days,
-            }),
-            this.apiKey,
-        );
+        return this.api.request(`coins/${id}/ohlc`, {
+            vs_currency: vsCurrency,
+            days,
+        });
+    }
+
+    @Tool({
+        name: "coingecko_get_trending_coin_categories",
+        description: "Get trending coin categories",
+    })
+    async getTrendingCoinCategories(parameters: GetTrendingCoinCategoriesParameters) {
+        const { vsCurrency, ids, category, order, perPage, page, sparkline, priceChangePercentage, locale } =
+            parameters;
+        return this.api.request("coins/markets", {
+            vs_currency: vsCurrency,
+            ids: ids.join(","),
+            category,
+            order,
+            per_page: perPage,
+            page,
+            sparkline,
+            price_change_percentage: priceChangePercentage,
+            locale,
+        });
+    }
+
+    @Tool({
+        name: "coingecko_get_coin_categories",
+        description: "Get all coin categories",
+    })
+    async coinCategories(parameters: NoParams) {
+        return this.api.request("coins/categories", {});
     }
 }
