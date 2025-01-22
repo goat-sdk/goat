@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-solana-magiceden
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [1f361d5]
+  - @goat-sdk/wallet-solana@0.2.12
+
 ## 0.2.12
 
 ### Patch Changes

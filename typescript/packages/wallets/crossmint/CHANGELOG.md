@@ -1,5 +1,13 @@
 # @goat-sdk/crossmint
 
+## 0.3.14
+
+### Patch Changes
+
+- 1f361d5: Support raw txs
+- Updated dependencies [1f361d5]
+  - @goat-sdk/wallet-solana@0.2.12
+
 ## 0.3.13
 
 ### Patch Changes
