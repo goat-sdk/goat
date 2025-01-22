@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-crossmint-headless-checkout
 
+## 0.0.5
+
+### Patch Changes
+
+- 220dd8d: headless: insufficient funds check
+
 ## 0.0.4
 
 ### Patch Changes
