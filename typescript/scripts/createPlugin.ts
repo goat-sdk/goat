@@ -25,9 +25,9 @@ function validatePluginName(name: string): boolean {
 function getWalletClientImport(type: PluginOptions["type"]): string {
     switch (type) {
         case "evm":
-            return 'import type { EVMWalletClient } from "@goat-sdk/wallet-evm";';
+            return 'import { EVMWalletClient } from "@goat-sdk/wallet-evm";';
         case "solana":
-            return 'import type { SolanaWalletClient } from "@goat-sdk/wallet-solana";';
+            return 'import { SolanaWalletClient } from "@goat-sdk/wallet-solana";';
         case "any":
             return 'import { WalletClientBase } from "@goat-sdk/core";';
     }

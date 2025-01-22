@@ -35,8 +35,7 @@ export class StarknetAccountWalletClient extends StarknetWalletClient {
                 signature: signature.toString(),
             };
         } catch (error) {
-            console.error("Error signing message:", error);
-            throw error;
+            throw new Error(`Signing message failed: ${error}`);
         }
     }
 
@@ -61,9 +60,12 @@ export class StarknetAccountWalletClient extends StarknetWalletClient {
                 hash: receipt.transaction_hash,
             };
         } catch (error) {
-            console.error("Error sending transaction:", error);
-            throw error;
+            throw new Error(`Transaction failed: ${error}`);
         }
+    }
+
+    getAccount(): Account {
+        return this.starknetAccount;
     }
 }
 

@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "goat-sdk-plugin-spl-token"
+version = "0.1.0"
+description = "Goat plugin for spl_token"
+authors = ["Your Name <your_email@example.com>"]
+readme = "README.md"
+keywords = ["goat", "sdk", "agents", "ai", "spl_token"]
+homepage = "https://ohmygoat.dev/"
+repository = "https://github.com/goat-sdk/goat"
+packages = [
+    { include = "goat_plugins/spl_token" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+goat-sdk = "*"
+goat-sdk-wallet-solana = "*"
+solders = "^0.18.0"
+solana = {version = "^0.30.2", extras = ["spl"]}
+anchorpy = "^0.18.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-asyncio = "*"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--import-mode=importlib",
+]
+pythonpath = "src"
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+goat-sdk = { path = "../../goat-sdk", develop = true }
+goat-sdk-wallet-solana = { path = "../../wallets/solana", develop = true }
+solana = {version = "^0.30.2", extras = ["spl"]}
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

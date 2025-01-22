@@ -64,6 +64,8 @@ export class UniswapService {
     async getQuote(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
         return this.makeRequest("quote", {
             ...parameters,
+            tokenInChainId: walletClient.getChain().id,
+            tokenOutChainId: parameters.tokenOutChainId ?? walletClient.getChain().id,
             swapper: walletClient.getAddress(),
         });
     }
