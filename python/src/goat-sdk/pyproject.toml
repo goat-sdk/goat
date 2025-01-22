@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk"
-version = "0.1.1"
+version = "0.1.2"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"

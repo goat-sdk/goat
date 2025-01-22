@@ -1,5 +1,12 @@
 # conversational-agent
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [d8b05a5]
+  - @goat-sdk/plugin-coingecko@0.2.7
+
 ## 0.2.12
 
 ### Patch Changes
