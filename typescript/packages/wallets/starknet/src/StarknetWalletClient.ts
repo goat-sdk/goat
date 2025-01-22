@@ -55,8 +55,7 @@ export abstract class StarknetWalletClient extends WalletClientBase {
                 inBaseUnits: balanceWei.toString(),
             };
         } catch (error) {
-            console.error("Error fetching balance:", error);
-            throw error;
+            throw new Error(`Error fetching balance: ${error}`);
         }
     }
 }
