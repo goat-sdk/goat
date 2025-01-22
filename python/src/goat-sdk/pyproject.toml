@@ -15,6 +15,7 @@ packages = [
 python = "^3.10"
 pydantic = "^2.10.0"
 asyncio = "^3.4.1"
+typing-extensions = "^4.12.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"

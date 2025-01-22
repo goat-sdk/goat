@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Any, Callable, NotRequired, Type, TypedDict
+from typing import Any, Callable, Type, TypedDict
+from typing_extensions import NotRequired
 import inspect
 from pydantic import BaseModel
 
