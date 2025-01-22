@@ -39,8 +39,8 @@ export class ZeroExService {
             sellToken: parameters.sellToken,
             buyToken: parameters.buyToken,
             sellAmount: parameters.sellAmount,
-            taker: parameters.taker,
-            txOrigin: parameters.txOrigin,
+            taker: walletClient.getAddress(),
+            txOrigin: walletClient.getAddress(),
             slippageBps: parameters.slippageBps?.toString(),
         };
 
@@ -63,5 +63,13 @@ export class ZeroExService {
         });
 
         return tx.hash;
+    }
+
+    @Tool({
+        name: "0x_get_contract_address_to_give_allowance_for_swap",
+        description: "Get the contract address to give allowance for a swap",
+    })
+    async getContractAddressToGiveAllowanceForSwap(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
+        return "0x0000000000001fF3684f28c67538d4D072C22734";
     }
 }

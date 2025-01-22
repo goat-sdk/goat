@@ -791,6 +791,9 @@ importers:
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../../packages/core
+      '@goat-sdk/plugin-0x':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/0x
       '@goat-sdk/plugin-erc20':
         specifier: workspace:*
         version: link:../../../packages/plugins/erc20

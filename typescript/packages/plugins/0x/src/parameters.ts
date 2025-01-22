@@ -7,15 +7,6 @@ export class GetQuoteParameters extends createToolParameters(
         sellToken: z.string().describe("The token to sell"),
         buyToken: z.string().describe("The token to buy"),
         sellAmount: z.string().describe("The amount of tokens to sell in base units"),
-        taker: z
-            .string()
-            .describe("The address which holds the sellToken balance and has the allowance set for the swap"),
-        txOrigin: z
-            .string()
-            .optional()
-            .describe(
-                "The contract address of the external account that started the transaction. This is only needed if taker is a smart contract.",
-            ),
         slippageBps: z
             .number()
             .optional()
