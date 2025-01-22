@@ -58,6 +58,33 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
             hash,
         };
     }
+
+    async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+        const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
+
+        const latestBlockhash = await this.connection.getLatestBlockhash();
+        tx.message.recentBlockhash = latestBlockhash.blockhash;
+
+        tx.sign([this.#keypair]);
+
+        const hash = await this.connection.sendTransaction(tx, {
+            maxRetries: 10,
+            preflightCommitment: "confirmed",
+        });
+
+        await this.connection.confirmTransaction(
+            {
+                blockhash: latestBlockhash.blockhash,
+                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+                signature: hash,
+            },
+            "confirmed",
+        );
+
+        return {
+            hash,
+        };
+    }
 }
 
 export const solana = (params: SolanaKeypairWalletClientCtorParams) => new SolanaKeypairWalletClient(params);

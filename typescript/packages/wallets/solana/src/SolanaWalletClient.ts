@@ -64,6 +64,8 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 
     abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;
 
+    abstract sendRawTransaction(transaction: string): Promise<{ hash: string }>;
+
     protected async getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
         const addressLookupTableAccountInfos = await this.connection.getMultipleAccountsInfo(
             keys.map((key) => new PublicKey(key)),
