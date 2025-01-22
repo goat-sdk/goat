@@ -4,7 +4,7 @@ import { StarknetAccountWalletClient } from "@goat-sdk/wallet-starknet";
 import { SwapConfigParams } from "./parameters";
 
 export class AvnuService {
-    private avnu_options = {
+    private options = {
         baseUrl: "https://starknet.api.avnu.fi",
     };
 
@@ -16,12 +16,14 @@ export class AvnuService {
         try {
             const sellAmountBigInt = BigInt(params.sellAmount);
 
-            const quotes = await fetchQuotes({
-                sellTokenAddress: params.sellTokenAddress,
-                buyTokenAddress: params.buyTokenAddress,
-                sellAmount: sellAmountBigInt,
-                ...this.avnu_options,
-            });
+            const quotes = await fetchQuotes(
+                {
+                    sellTokenAddress: params.sellTokenAddress,
+                    buyTokenAddress: params.buyTokenAddress,
+                    sellAmount: sellAmountBigInt,
+                },
+                this.options,
+            );
 
             if (!quotes || quotes.length === 0) {
                 throw new Error("No quotes found");
@@ -30,11 +32,9 @@ export class AvnuService {
             return quotes;
         } catch (error) {
             if (error instanceof Error && error.message.includes("BigInt")) {
-                console.error("Error converting sellAmount to BigInt:", error);
                 throw new Error(`Invalid sellAmount format: ${params.sellAmount}`);
             }
-            console.error("Error fetching quotes:", error);
-            throw error;
+            throw new Error(`Error fetching quotes: ${error}`);
         }
     }
 
@@ -90,12 +90,11 @@ DO NOT use placeholder values like <TOKEN_ADDRESS> or <BASE_UNIT_AMOUNT>.`,
                     executeApprove: true,
                     slippage: params.slippage,
                 },
-                this.avnu_options,
+                this.options,
             );
             return swapResponse;
         } catch (error) {
-            console.error("Error executing swap:", error);
-            throw error;
+            throw new Error(`Error executing swap: ${error}`);
         }
     }
 }
