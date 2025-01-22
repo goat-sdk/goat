@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-cosmos",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
