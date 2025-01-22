@@ -1,5 +1,11 @@
 # goat-examples-vercel-ai-viem
 
+## 0.2.12
+
+### Patch Changes
+
+- 5b08d6c: Release 0x plugin
+
 ## 0.2.11
 
 ### Patch Changes
