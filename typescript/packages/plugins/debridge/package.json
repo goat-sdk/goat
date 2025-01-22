@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-debridge",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
