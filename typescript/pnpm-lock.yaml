@@ -1317,6 +1317,18 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/lulo:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-solana':
+        specifier: workspace:*
+        version: link:../../wallets/solana
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/meteora:
     dependencies:
       '@coral-xyz/anchor':
