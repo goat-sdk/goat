@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-uniswap",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

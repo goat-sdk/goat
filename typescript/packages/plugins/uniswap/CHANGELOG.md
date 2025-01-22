@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-uniswap
 
+## 0.2.9
+
+### Patch Changes
+
+- d8b05a5: Fix endpoints
+
 ## 0.2.8
 
 ### Patch Changes
