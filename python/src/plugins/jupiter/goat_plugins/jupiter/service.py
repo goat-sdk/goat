@@ -17,7 +17,7 @@ class JupiterService:
         "description": "Get a quote for a swap on the Jupiter DEX",
         "parameters_schema": GetQuoteParameters
     })
-    async def get_quote(self, parameters: dict) -> QuoteResponse:
+    async def get_quote(self, parameters: dict) -> dict:
         """Get a quote for swapping tokens using Jupiter."""
         try:
             params = GetQuoteParameters.model_validate(parameters)
@@ -45,7 +45,9 @@ class JupiterService:
                             raise Exception(f"Failed to get quote: {response_text}")
                     
                     response_data = await response.json()
-                    return QuoteResponse.model_validate(response_data)
+                    QuoteResponse.model_validate(response_data)
+
+                    return response_data
         except aiohttp.ClientResponseError as error:
             error_message = f"Failed to get quote: {str(error)}"
             if error.status != 404:  # Only try to parse response for non-404 errors
@@ -67,17 +69,70 @@ class JupiterService:
             # First get the quote
             quote_response = await self.get_quote(parameters)
             
-            # Prepare swap request
+            # Transform quote response following the same structure as in TypeScript
+            transformed_quote_response = {
+                "inputMint": quote_response.get("inputMint"),
+                "inAmount": quote_response.get("inAmount"),
+                "outputMint": quote_response.get("outputMint"),
+                "outAmount": quote_response.get("outAmount"),
+                "otherAmountThreshold": quote_response.get("otherAmountThreshold"),
+                "swapMode": quote_response.get("swapMode"),
+                "slippageBps": quote_response.get("slippageBps"),
+                "priceImpactPct": quote_response.get("priceImpactPct"),
+                "routePlan": [
+                    {
+                        "swapInfo": {
+                            "ammKey": step.get("swapInfo", {}).get("ammKey"),
+                            "label": step.get("swapInfo", {}).get("label"),
+                            "inputMint": step.get("swapInfo", {}).get("inputMint"),
+                            "outputMint": step.get("swapInfo", {}).get("outputMint"),
+                            "inAmount": step.get("swapInfo", {}).get("inAmount"),
+                            "outAmount": step.get("swapInfo", {}).get("outAmount"),
+                            "feeAmount": step.get("swapInfo", {}).get("feeAmount"),
+                            "feeMint": step.get("swapInfo", {}).get("feeMint")
+                        },
+                        "percent": step.get("percent")
+                    }
+                    for step in quote_response.get("routePlan", [])
+                ]
+            }
+
+            # Remove None values from the transformed response
+            transformed_quote_response = {k: v for k, v in transformed_quote_response.items() if v is not None}
+
+            # Add optional fields if they exist
+            for field in ["computedAutoSlippage", "contextSlot", "timeTaken"]:
+                if field in quote_response and quote_response[field] is not None:
+                    transformed_quote_response[field] = quote_response[field]
+
+            if "platformFee" in quote_response and quote_response["platformFee"]:
+                platform_fee = quote_response["platformFee"]
+                fee_data = {}
+                if "amount" in platform_fee:
+                    fee_data["amount"] = platform_fee["amount"]
+                if "feeBps" in platform_fee:
+                    fee_data["feeBps"] = platform_fee["feeBps"]
+                if fee_data:
+                    transformed_quote_response["platformFee"] = fee_data
+
+            # Prepare the full swap request
             swap_request = {
+                "quoteResponse": transformed_quote_response,
                 "userPublicKey": wallet_client.get_address(),
-                "quoteResponse": quote_response.dict(),
                 "dynamicComputeUnitLimit": True,
-                "prioritizationFeeLamports": "auto"
+                "prioritizationFeeLamports": "auto",
+                "wrapAndUnwrapSol": True,
+                "useSharedAccounts": True,
+                "dynamicSlippage": None,  # Can be added if needed
+                "asLegacyTransaction": False,
+                "skipUserAccountsRpcCalls": False,
+                "useTokenLedger": False,
+                "destinationTokenAccount": None  # Can be specified if needed
             }
             
             # Get swap transaction
             async with aiohttp.ClientSession(timeout=self._timeout) as session:
-                async with session.post(f"{self.base_url}/swap", json={"swapRequest": swap_request}) as response:
+                async with session.post(f"{self.base_url}/swap", json=swap_request) as response:
                     if response.status != 200:
                         error_data = await response.json()
                         raise Exception(f"Failed to create swap transaction: {error_data.get('error', 'Unknown error')}")

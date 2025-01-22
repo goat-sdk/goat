@@ -36,19 +36,13 @@ def main():
         ]
     )
 
-    # Initialize SPL Token plugin
-    spl_token_plugin = spl_token(SplTokenPluginOptions(
-        network="devnet",  # Using devnet as specified in .env
-        tokens=SPL_TOKENS
-    ))
-
     # Initialize tools with Solana wallet
     tools = get_on_chain_tools(
         wallet=wallet,
         plugins=[
             jupiter(JupiterPluginOptions()),  # No options needed for Jupiter v6
             spl_token(SplTokenPluginOptions(
-                network="devnet",  # Using devnet as specified in .env
+                network="mainnet",  # Using devnet as specified in .env
                 tokens=SPL_TOKENS
             )),
         ],

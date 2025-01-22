@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from typing import Dict, Optional, TypedDict, List, Any
 
+import base64
 from solana.rpc.api import Client as SolanaClient
 from solana.rpc.types import TxOpts
 from solana.rpc.commitment import Confirmed
@@ -75,32 +76,100 @@ class SolanaWalletClient(WalletClientBase):
         """
         pass
 
-    def decompile_versioned_transaction_to_instructions(self, versioned_transaction: VersionedTransaction) -> List[Instruction]:
+
+    def _decompile_instruction(self, compiled_ix: CompiledInstruction, account_keys: list[Pubkey], message: Message) -> Optional[Instruction]:
+        try:
+            # Get program id from the account keys
+            program_id = account_keys[compiled_ix.program_id_index]
+            
+            # Transform account indexes into AccountMeta objects
+            accounts = []
+            for idx in compiled_ix.accounts:
+                try:
+                    pubkey = account_keys[idx]
+                    # You might need to check header/message metadata to determine 
+                    # if the account is writable/signer
+                    is_signer = message.is_signer(idx)
+                    # Handle both Message and MessageV0 types
+                    if isinstance(message, MessageV0):
+                        is_writable = message.is_maybe_writable(idx)
+                    else:
+                        # For legacy messages, check if it's in the writable accounts range
+                        header = message.header
+                        num_required_signatures = header.num_required_signatures
+                        num_readonly_signed = header.num_readonly_signed_accounts
+                        num_readonly_unsigned = header.num_readonly_unsigned_accounts
+                        
+                        if idx < (num_required_signatures - num_readonly_signed):
+                            is_writable = True
+                        elif idx < num_required_signatures:
+                            is_writable = False
+                        elif idx < (len(account_keys) - num_readonly_unsigned):
+                            is_writable = True
+                        else:
+                            is_writable = False
+                            
+                    accounts.append(AccountMeta(pubkey, is_signer=is_signer, is_writable=is_writable))
+                except IndexError:
+                    print(f"Could not find account at index {idx}")
+                    return None
+            
+            return Instruction(
+                program_id=program_id,
+                accounts=accounts,
+                data=compiled_ix.data
+            )
+        except IndexError:
+            print(f"Could not find program id at index {compiled_ix.program_id_index}")
+            return None
+
+    def decompile_versioned_transaction_to_instructions(self, versioned_transaction: VersionedTransaction) -> Optional[List[Instruction]]:
         """Decompile a versioned transaction into its constituent instructions.
 
         Args:
             versioned_transaction: The versioned transaction to decompile
 
         Returns:
-            List of instructions from the transaction
+            List of instructions from the transaction if successful, None if we can't
+            properly decompile all instructions
         """
         # Convert CompiledInstructions back to Instructions
-        instructions = []
-        for compiled_ix in versioned_transaction.message.instructions:
-            # Get the program ID from the account keys
-            program_id = versioned_transaction.message.account_keys[compiled_ix.program_id_index]
+        message = versioned_transaction.message
+        
+        # For MessageV0, we need to get all accounts including those from lookup tables
+        if isinstance(message, MessageV0) and message.address_table_lookups:
+            # Get lookup table accounts
+            lookup_table_keys = [str(lookup.account_key) for lookup in message.address_table_lookups]
+            lookup_tables = self.get_address_lookup_table_accounts(lookup_table_keys)
             
-            # Get the account metas
-            accounts = []
-            for account_idx in compiled_ix.accounts:
-                pubkey = versioned_transaction.message.account_keys[account_idx]
-                is_signer = versioned_transaction.message.is_signer(account_idx)
-                is_writable = versioned_transaction.message.is_writable(account_idx)
-                accounts.append(AccountMeta(pubkey, is_signer, is_writable))
+            # Filter out None lookup tables and their corresponding lookups
+            valid_lookups = []
+            valid_tables = []
+            for i, table in enumerate(lookup_tables):
+                if table is not None:
+                    valid_lookups.append(message.address_table_lookups[i])
+                    valid_tables.append(table)
+            
+            # Build complete account list
+            account_keys = list(message.account_keys)  # Static accounts
+            
+            # Add writable accounts from valid lookup tables
+            for lookup, table in zip(valid_lookups, valid_tables):
+                for idx in lookup.writable_indexes:
+                    account_keys.append(table.addresses[idx])
+            
+            # Add readonly accounts from valid lookup tables
+            for lookup, table in zip(valid_lookups, valid_tables):
+                for idx in lookup.readonly_indexes:
+                    account_keys.append(table.addresses[idx])
+        else:
+            account_keys = message.account_keys
 
-            # Create the instruction
-            ix = Instruction(program_id, compiled_ix.data, accounts)
-            instructions.append(ix)
+        instructions = []
+        for compiled_ix in message.instructions:
+            ix = self._decompile_instruction(compiled_ix, account_keys, message)
+            if ix is not None:
+                instructions.append(ix)
 
         return instructions
 
@@ -113,21 +182,31 @@ class SolanaWalletClient(WalletClientBase):
         Returns:
             List of address lookup table accounts
         """
-        # Convert addresses to Pubkeys
-        pubkeys = [Pubkey.from_string(addr) for addr in keys]
-
-        # Get account info for each lookup table
-        account_infos = self.client.get_multiple_accounts(pubkeys).value
-
-        # Create lookup table accounts for non-null accounts
         lookup_table_accounts = []
-        for i, account_info in enumerate(account_infos):
+        
+        for key in keys:
+            # Convert address to Pubkey
+            pubkey = Pubkey.from_string(key)
+            
+            # Get account info
+            try:
+                account_info = self.client.get_account_info(pubkey).value
+            except Exception as e:
+                print(f"Error getting account info for {key}: {e}")
+                account_info = None
+            
             if account_info is not None:
-                lookup_table_account = AddressLookupTableAccount.from_bytes(
-                    account_info.data
-                )
-                lookup_table_accounts.append(lookup_table_account)
-
+                try:
+                    # The account data comes as base64, need to decode it first
+                    decoded_data = base64.b64decode(account_info.data)
+                    lookup_table_account = AddressLookupTableAccount.from_bytes(decoded_data)
+                    lookup_table_accounts.append(lookup_table_account)
+                except Exception as e:
+                    print(f"Error decoding lookup table for {key}: {e}")
+                    lookup_table_accounts.append(None)
+            else:
+                lookup_table_accounts.append(None)
+                
         return lookup_table_accounts
 
 
