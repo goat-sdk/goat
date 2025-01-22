@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-cosmosbank
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [db65128]
+  - @goat-sdk/wallet-cosmos@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

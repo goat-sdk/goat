@@ -1,6 +1,7 @@
 {
-    "name": "@goat-sdk/plugin-cosmosbank",
-    "version": "0.0.3",
+    "name": "@goat-sdk/plugin-debridge",
+    "version": "0.0.1",
+    "private": true,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -13,24 +14,22 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-cosmos": "workspace:*",
-        "@cosmjs/stargate": "^0.32.4",
-        "cosmjs-types": "^0.9.0",
-        "chain-registry": "^1.69.74",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@cosmjs/stargate": "^0.32.4",
-        "cosmjs-types": "^0.9.0"
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:"
     },
-    "engines": {
-        "node": ">=20.12.2 <21",
-        "npm": "please-use-pnpm",
-        "pnpm": ">=9",
-        "yarn": "please-use-pnpm"
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "tsup": "^6.7.0",
+        "typescript": "^5.2.2",
+        "vitest": "^0.34.0"
     },
-    "homepage": "https://ohmygoat.dev",
+    "homepage": "https://app.debridge.finance/",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/goat-sdk/goat.git"
@@ -39,6 +38,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"],
-    "packageManager": "pnpm@9.14.2"
+    "keywords": ["ai", "agents", "web3", "bridge", "debridge"]
 }
