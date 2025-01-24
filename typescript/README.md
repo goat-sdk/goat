@@ -51,11 +51,11 @@ npm install @goat-sdk/wallet-solana
 3. Install the plugins for the protocols you need (see all available plugins [here](#plugins))
 
 ```bash
-npm install @goat-sdk/plugin-jupiter @goat-sdk/plugin-spl-tokens
+npm install @goat-sdk/plugin-jupiter @goat-sdk/plugin-spl-token
 ```
 4. Install the adapter for the agent framework you want to use (see all available adapters [here](#adapters))
 ```bash
-npm install @goat-sdk/adapter-ai-sdk
+npm install @goat-sdk/adapter-vercel-ai
 ```
 
 ## Usage
@@ -71,7 +71,7 @@ const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_K
 
 2. Configure your tools for the framework you want to use
 ```typescript
-import { getOnChainTools } from "@goat-sdk/adapter-ai-sdk";
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { solana, sendSOL } from "@goat-sdk/wallet-solana";
 import { jupiter } from "@goat-sdk/plugin-jupiter";
 import { splToken } from "@goat-sdk/plugin-spl-token";
@@ -389,7 +389,7 @@ If you would like to see your wallet provider supported, please open an issue or
 ### Agent Framework Adapters
 | Adapter | NPM package |
 | --- | --- |
-| AI SDK | [@goat-sdk/adapter-ai-sdk](https://www.npmjs.com/package/@goat-sdk/adapter-ai-sdk) | 
+| AI SDK | [@goat-sdk/adapter-vercel-ai](https://www.npmjs.com/package/@goat-sdk/adapter-vercel-ai) | 
 | Langchain | [@goat-sdk/adapter-langchain](https://www.npmjs.com/package/@goat-sdk/adapter-langchain) | 
 | ElevenLabs | [@goat-sdk/adapter-elevenlabs](https://www.npmjs.com/package/@goat-sdk/adapter-elevenlabs) |  |
 | LlamaIndex | [@goat-sdk/adapter-llamaindex](https://www.npmjs.com/package/@goat-sdk/adapter-llamaindex) |  |
