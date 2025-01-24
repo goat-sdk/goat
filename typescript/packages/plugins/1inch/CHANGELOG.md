@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-1inch
 
+## 0.1.3
+
+### Patch Changes
+
+- 7531ece: Update docs
+
 ## 0.1.2
 
 ### Patch Changes
