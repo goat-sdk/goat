@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/crossmint",
-    "version": "0.3.14",
+    "version": "0.3.15",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

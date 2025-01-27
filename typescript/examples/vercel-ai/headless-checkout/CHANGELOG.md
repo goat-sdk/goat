@@ -1,5 +1,14 @@
 # goat-examples-vercel-ai-headless-checkout
 
+## 0.2.10
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/plugin-crossmint-headless-checkout@0.0.6
+  - @goat-sdk/wallet-viem@0.2.7
+
 ## 0.2.9
 
 ### Patch Changes

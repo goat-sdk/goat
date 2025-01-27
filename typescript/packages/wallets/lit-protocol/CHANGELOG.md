@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-lit
 
+## 0.2.14
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
 ## 0.2.13
 
 ### Patch Changes

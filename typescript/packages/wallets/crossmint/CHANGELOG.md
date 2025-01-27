@@ -1,5 +1,12 @@
 # @goat-sdk/crossmint
 
+## 0.3.15
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
 ## 0.3.14
 
 ### Patch Changes

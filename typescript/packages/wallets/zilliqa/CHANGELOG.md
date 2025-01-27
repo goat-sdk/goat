@@ -1,5 +1,13 @@
 # @goat-sdk/wallet-zilliqa
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/wallet-viem@0.2.7
+
 ## 0.2.6
 
 ### Patch Changes

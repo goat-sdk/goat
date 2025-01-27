@@ -1,5 +1,14 @@
 # goat-examples-vercel-ai-send-nft-to-twitter
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/crossmint@0.3.15
+  - @goat-sdk/wallet-viem@0.2.7
+
 ## 0.2.10
 
 ### Patch Changes
