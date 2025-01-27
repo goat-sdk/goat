@@ -23,13 +23,14 @@ const walletClient = createWalletClient({
     chain: sepolia,
 });
 
-const apiKey = process.env.CROSSMINT_STAGING_API_KEY;
+const apiKey = process.env.CROSSMINT_STAGING_API_KEY; // Use staging key for development, production key for mainnet
 
 if (!apiKey) {
     throw new Error("Missing Crossmint API key");
 }
 
-const { wallets, mint } = crossmint(apiKey);
+// Initialize Crossmint plugins for wallet creation and NFT minting
+const { wallets, mint } = crossmint(apiKey); // wallets() for Twitter user wallets, mint() for NFT operations
 
 (async () => {
     const tools = await getOnChainTools({
@@ -56,7 +57,7 @@ const { wallets, mint } = crossmint(apiKey);
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
-                maxSteps: 10,
+                maxSteps: 10, // Maximum number of tool invocations per request
                 prompt: prompt,
                 onStepFinish: (event) => {
                     console.log("\n-------------------\n");
