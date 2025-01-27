@@ -26,8 +26,6 @@ const walletClient = createWalletClient({
 });
 
 (async () => {
-    // TODO(alfonso-paella) Should we document supported ERC20 tokens?
-    // What are the requirements for adding new tokens?
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
         plugins: [
@@ -63,8 +61,6 @@ const walletClient = createWalletClient({
         console.log("RESPONSE");
         console.log("\n-------------------\n");
         try {
-            // TODO(alfonso-paella) Should we document the maxSteps parameter?
-            // What's the recommended value for different operations?
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
