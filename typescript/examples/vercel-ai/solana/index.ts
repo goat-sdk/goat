@@ -58,8 +58,6 @@ async function chat() {
 
             conversationHistory.push({ role: "user", content: prompt });
 
-            // TODO(alfonso-paella) Should we document the maxSteps parameter?
-            // What's the recommended value for different Solana operations?
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
