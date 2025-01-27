@@ -31,7 +31,10 @@ const walletClient = createWalletClient({
 (async () => {
     const tools: ToolBase[] = await getTools({
         wallet: viem(walletClient),
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        plugins: [
+            sendETH(), // Enable ETH transfers
+            erc20({ tokens: [USDC, PEPE] }), // Enable ERC20 token operations
+        ],
     });
 
     const workerFunctions = tools.map((tool) => {
@@ -85,6 +88,6 @@ const walletClient = createWalletClient({
     await agent.init();
 
     await agent.run(10, {
-        verbose: true,
+        verbose: true, // Enable detailed execution logging
     });
 })();

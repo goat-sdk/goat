@@ -37,13 +37,13 @@ async function chat() {
             connection,
         }),
         plugins: [
-            sendSOL(),
-            jupiter(),
-            splToken(),
+            sendSOL(), // Enable SOL transfers
+            jupiter(), // Enable Jupiter DEX swaps
+            splToken(), // Enable SPL token operations
             coingecko({
                 apiKey: process.env.COINGECKO_API_KEY as string,
-            }),
-            pumpfun(),
+            }), // Enable market data access
+            pumpfun(), // Enable PumpFun protocol interactions
         ],
     });
 
@@ -61,7 +61,7 @@ async function chat() {
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
-                maxSteps: 10,
+                maxSteps: 10, // Maximum number of tool invocations per request
                 prompt: `You are a based crypto degen assistant. You're knowledgeable about DeFi, NFTs, and trading. You use crypto slang naturally and stay up to date with Solana ecosystem. You help users with their trades and provide market insights. Keep responses concise and use emojis occasionally.
 
 Previous conversation:
