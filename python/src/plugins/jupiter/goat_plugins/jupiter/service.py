@@ -143,25 +143,8 @@ class JupiterService:
                     if not swap_transaction:
                         raise Exception("No swap transaction returned")
                     
-                    # Deserialize the transaction
-                    versioned_transaction = VersionedTransaction.from_bytes(base64.b64decode(swap_transaction))
-                    
-                    # Get instructions from the transaction
-                    instructions = wallet_client.decompile_versioned_transaction_to_instructions(versioned_transaction)
-                    
-                    # Create transaction dictionary
-                    message = versioned_transaction.message
-                    assert isinstance(message, MessageV0)  # Ensure it's a MessageV0
-                    lookup_table_addresses = [str(lookup.account_key) for lookup in message.address_table_lookups]
-                    
-                    tx: SolanaTransaction = {
-                        "instructions": instructions,
-                        "address_lookup_table_addresses": lookup_table_addresses,
-                        "accounts_to_sign": None
-                    }
-                    
-                    # Send the transaction
-                    result = wallet_client.send_transaction(tx)
+                    # Send the raw transaction directly
+                    result = wallet_client.send_raw_transaction(swap_transaction)
                     
                     return {
                         "hash": result["hash"]
