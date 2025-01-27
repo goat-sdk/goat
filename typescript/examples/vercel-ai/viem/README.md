@@ -17,7 +17,7 @@ cp .env.template .env
 ### Required Environment Variables:
 - `OPENAI_API_KEY`: Your OpenAI API key for the AI model
 - `WALLET_PRIVATE_KEY`: Your wallet's private key (with 0x prefix)
-- `RPC_PROVIDER_URL`: Base network RPC URL
+- `RPC_PROVIDER_URL`: EVM network RPC URL (with Base)
 - `UNISWAP_API_KEY`: Your Uniswap API key
 - `UNISWAP_BASE_URL`: Uniswap API base URL
 
