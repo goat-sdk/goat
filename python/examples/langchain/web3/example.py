@@ -18,7 +18,6 @@ from goat_plugins.erc20 import erc20, ERC20PluginOptions
 from goat_wallets.evm import send_eth
 from goat_wallets.web3 import Web3EVMWalletClient
 from goat_plugins.coingecko import coingecko, CoinGeckoPluginOptions
-from goat_plugins.rugcheck import rugcheck
 
 # Initialize Web3 and account
 w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_PROVIDER_URL")))

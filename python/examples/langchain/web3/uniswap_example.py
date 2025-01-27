@@ -1,9 +1,11 @@
 import os
 from dotenv import load_dotenv
+from goat_plugins.erc20.token import PEPE, USDC
 
 # Load environment variables
 load_dotenv()
 
+from goat_plugins.erc20 import ERC20PluginOptions, erc20
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
@@ -14,20 +16,20 @@ from eth_account import Account
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_plugins.uniswap import uniswap, UniswapPluginOptions
-from goat_wallets.evm import send_eth
 from goat_wallets.web3 import Web3EVMWalletClient
 
 # Initialize Web3 and account
-# Force mainnet connection for Uniswap testing
-w3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/xhS9ak8KcGVSNw2ekfMy195ZymIspLZv"))
+# Connect to Base (Coinbase L2)
+BASE_RPC_URL = os.getenv("BASE_RPC_URL", "https://mainnet.base.org")
+w3 = Web3(Web3.HTTPProvider(BASE_RPC_URL))
 private_key = os.getenv("WALLET_PRIVATE_KEY")
 assert private_key is not None, "You must set WALLET_PRIVATE_KEY environment variable"
 assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
 
-# Verify we're on mainnet
+# Verify we're on Base
 chain_id = w3.eth.chain_id
-if chain_id != 1:
-    raise ValueError(f"Must be connected to Ethereum mainnet (chain_id: 1), got chain_id: {chain_id}")
+if chain_id != 8453:  # Base chain ID
+    raise ValueError(f"Must be connected to Base (chain_id: 8453), got chain_id: {chain_id}")
 
 account: LocalAccount = Account.from_key(private_key)
 w3.eth.default_account = account.address  # Set the default account
@@ -51,13 +53,7 @@ def main():
 3. Execute token swaps using uniswap_swap_tokens
    Example: "Swap 0.1 WETH for USDC"
 
-You understand mainnet token addresses:
-- WETH: 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
-- USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-
-For testing purposes, use small amounts:
-- 0.01 WETH = 10000000000000000 (18 decimals)
-- 10 USDC = 10000000 (6 decimals)
+For testing purposes, use small amounts.
 
 When users ask for token swaps:
 1. First check approval using uniswap_check_approval
@@ -82,7 +78,7 @@ Always use base units (wei) for amounts. For example:
     tools = get_on_chain_tools(
         wallet=Web3EVMWalletClient(w3),
         plugins=[
-            send_eth(),
+            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
             uniswap(options=UniswapPluginOptions(
                 api_key=uniswap_api_key,
                 base_url=uniswap_base_url

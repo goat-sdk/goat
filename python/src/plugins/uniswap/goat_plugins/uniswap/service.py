@@ -1,6 +1,6 @@
 import aiohttp
 import json
-from typing import Any, Dict, cast
+from typing import Any, Dict
 from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
 from goat_wallets.evm import EVMWalletClient
@@ -12,6 +12,7 @@ class UniswapService:
     def __init__(self, api_key: str, base_url: str = "https://trade-api.gateway.uniswap.org/v1"):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")  # Remove trailing slash if present
+
         # Map chain IDs to their string names
         self.chain_id_map = {
             1: "MAINNET",
@@ -77,7 +78,7 @@ class UniswapService:
             })
 
             # If no approval data is returned, the token is already approved
-            if not data or "approval" not in data:
+            if not data or "approval" not in data or not data["approval"]:
                 return {"status": "approved"}
 
             approval = data["approval"]
@@ -90,13 +91,13 @@ class UniswapService:
             # Convert max approval amount to integer
             max_approval = int("0x" + "f" * 64, 16)  # Max uint256 value
             
-            transaction_params = cast(EVMTransaction, {
+            transaction_params: EVMTransaction = {
                 "to": wallet_client.resolve_address(approval["to"]),
                 "abi": ERC20_ABI,
                 "functionName": "approve",
                 "args": [spender, max_approval],
                 "value": 0
-            })
+            }
             
             # Send the transaction
             transaction = wallet_client.send_transaction(transaction_params)
@@ -115,29 +116,15 @@ class UniswapService:
     async def get_quote(self, wallet_client: EVMWalletClient, parameters: dict):
         """Get a quote for token swap."""
         try:
-            # Match TypeScript implementation exactly
-            # Map chain IDs to their string names
-            chain_id_map = {
-                1: "MAINNET",
-                10: "OPTIMISM",
-                137: "POLYGON",
-                42161: "ARBITRUM",
-                8453: "BASE",
-                43114: "AVAX",
-                7777777: "ZORA",
-                42220: "CELO"
-            }
-            
             chain_id = wallet_client.get_chain()["id"]
-            chain_name = chain_id_map.get(chain_id, str(chain_id))
             
             request_params = {
                 "tokenIn": parameters["tokenIn"],
                 "tokenOut": parameters["tokenOut"],
                 "amount": parameters["amount"],
                 "type": "EXACT_INPUT",  # Default type
-                "tokenInChainId": chain_name,
-                "tokenOutChainId": chain_name,  # Same chain for now
+                "tokenInChainId": chain_id,
+                "tokenOutChainId": chain_id,  # Same chain for now
                 "swapper": wallet_client.get_address()
             }
             
@@ -174,11 +161,11 @@ class UniswapService:
             else:
                 value = int(value) if value else 0
             
-            transaction_params = cast(EVMTransaction, {
+            transaction_params: EVMTransaction = {
                 "to": swap["to"],
                 "data": swap["data"],
                 "value": value
-            })
+            }
             
             # Send the transaction
             transaction = wallet_client.send_transaction(transaction_params)

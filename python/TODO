@@ -1,0 +1,37 @@
+- Jupiter TX decompilation and address lookup tables
+- Uniswap plugin
+- Crossmint wallet plugin?
+- Pippin PR and README against their repo
+
+
+- Basic example
+    - examples/langchain/viem
+- Publish packages
+- ZerePy (register action) PR
+    - every action installed
+- Devin example to translate an existing plugin
+    - Playbooks
+    - ERC 721
+    - Kim plugin
+
+
+Next up:
+- Solata plugin
+
+- (PRIO) Python packaging & release
+- viem wallet (web3 [https://web3py.readthedocs.io/en/stable/web3.eth.html])
+- erc20 plugin: abi parsing with web3? or use static kim/abi/erc20.ts
+- langchain adapter
+- "Get my balance in USDC" example
+- "Prompt REPL" console
+
+
+- Devin porting of simple plugins
+- Automated testing workflow with actions
+- ZerePy integration
+-
+
+Wallet:
+- USDC/ETH in Sepolia
+- ETH in base
+- USDC/ moa
