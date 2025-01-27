@@ -12,16 +12,6 @@ The example showcases:
 - Natural language DeFi operations
 - Solana blockchain integration
 
-## Features
-- Token swaps via Jupiter
-- SPL token transfers
-- Market price analysis
-- DeFi protocol interactions
-- Crypto-savvy AI responses
-- Real-time market data
-- Transaction execution
-- Conversation history tracking
-
 ## Setup
 
 1. Install dependencies:
@@ -39,17 +29,6 @@ cp .env.template .env
 - `SOLANA_PRIVATE_KEY`: Your Solana wallet's private key (Base58 encoded)
 - `SOLANA_RPC_URL`: Solana RPC endpoint URL
 - `COINGECKO_API_KEY`: Your Coingecko API key for market data
-
-### Prerequisites
-1. Solana Setup
-   - Wallet with SOL for transactions
-   - Access to Solana RPC endpoint
-   - Understanding of SPL tokens
-
-2. Protocol Requirements
-   - Jupiter DEX knowledge
-   - SPL token standards
-   - PumpFun protocol familiarity
 
 ## Usage
 
@@ -82,11 +61,3 @@ Interact with PumpFun
    - Protocol interactions
    - Trading suggestions
    - Error messages
-
-## Note
-- Uses GPT-4o-mini model for natural language processing
-- Maximum 10 steps per interaction
-- Continuous chat until 'exit' command
-- Real-time market data via Coingecko
-- Automatic transaction execution
-- "Based" crypto personality responses 🚀
