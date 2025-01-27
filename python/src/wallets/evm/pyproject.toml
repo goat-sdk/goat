@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-evm"
-version = "0.1.0"
+version = "0.1.1"
 description = "Goat SDK EVM wallet implementation"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
