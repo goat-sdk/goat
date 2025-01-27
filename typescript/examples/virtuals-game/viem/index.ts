@@ -29,8 +29,6 @@ const walletClient = createWalletClient({
 });
 
 (async () => {
-    // TODO(alfonso-paella) Should we document the supported token types?
-    // What tokens can be added beyond USDC and PEPE?
     const tools: ToolBase[] = await getTools({
         wallet: viem(walletClient),
         plugins: [
