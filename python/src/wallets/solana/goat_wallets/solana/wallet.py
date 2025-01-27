@@ -76,6 +76,18 @@ class SolanaWalletClient(WalletClientBase):
         """
         pass
 
+    @abstractmethod
+    def send_raw_transaction(self, transaction: str) -> Dict[str, str]:
+        """Send a raw transaction on the Solana chain.
+
+        Args:
+            transaction: Base64 encoded transaction string
+
+        Returns:
+            Dict containing the transaction hash
+        """
+        pass
+
 
     def _decompile_instruction(self, compiled_ix: CompiledInstruction, account_keys: list[Pubkey], message: Message) -> Optional[Instruction]:
         try:
@@ -284,6 +296,49 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
             commitment=Confirmed,
         )
 
+        return {"hash": str(result.value)}
+
+    def send_raw_transaction(self, transaction: str) -> Dict[str, str]:
+        """Send a raw transaction on the Solana chain.
+        
+        Args:
+            transaction: Base64 encoded transaction string
+            
+        Returns:
+            Dict containing the transaction hash
+        """
+        # Deserialize the transaction from base64
+        tx = VersionedTransaction.from_bytes(base64.b64decode(transaction))
+        
+        # Get latest blockhash
+        recent_blockhash = self.client.get_latest_blockhash().value.blockhash
+        
+        # Create new message with updated blockhash
+        new_message = MessageV0(
+            header=tx.message.header,
+            account_keys=tx.message.account_keys,
+            recent_blockhash=recent_blockhash,
+            instructions=tx.message.instructions,
+            address_table_lookups=tx.message.address_table_lookups
+        )
+        tx = VersionedTransaction(new_message, [self.keypair])
+        
+        # Send the transaction
+        result = self.client.send_transaction(
+            tx,
+            opts=TxOpts(
+                skip_preflight=False,
+                max_retries=10,
+                preflight_commitment=Confirmed,
+            ),
+        )
+        
+        # Wait for confirmation
+        self.client.confirm_transaction(
+            result.value,
+            commitment=Confirmed,
+        )
+        
         return {"hash": str(result.value)}
 
 
