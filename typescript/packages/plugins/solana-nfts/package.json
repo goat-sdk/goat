@@ -20,7 +20,7 @@
         "@metaplex-foundation/umi-bundle-defaults": "0.9.2",
         "@metaplex-foundation/umi-web3js-adapters": "0.8.10",
         "@solana/web3.js": "catalog:",
-        "got": "5.6.0",
+        "got": "11.8.5",
         "zod": "catalog:"
     },
     "peerDependencies": {
