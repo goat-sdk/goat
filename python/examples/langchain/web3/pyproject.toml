@@ -9,6 +9,7 @@ homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
     { include = "example.py" },
+    { include = "uniswap_example.py" },
 ]
 
 [tool.poetry.dependencies]

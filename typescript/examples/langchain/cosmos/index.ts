@@ -3,8 +3,8 @@ import type { ChatPromptTemplate } from "@langchain/core/prompts";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { SigningStargateClient } from "@cosmjs/stargate";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 import { cosmosbank } from "@goat-sdk/plugin-cosmosbank";
@@ -21,7 +21,7 @@ require("dotenv").config();
 
     const [Account] = await wallet.getAccounts();
     const rpcEndpoint = process.env.RPC_PROVIDER_URL as `0x${string}`;
-    const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet);
+    const client = await SigningCosmWasmClient.connectWithSigner(rpcEndpoint, wallet);
 
     const walletClient: CosmosWalletOptions = {
         client: client,

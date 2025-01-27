@@ -1,5 +1,21 @@
 # conversational-agent
 
+## 0.2.15
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/wallet-viem@0.2.7
+
+## 0.2.14
+
+### Patch Changes
+
+- 1f361d5: Support raw txs
+- Updated dependencies [1f361d5]
+  - @goat-sdk/wallet-solana@0.2.12
+
 ## 0.2.13
 
 ### Patch Changes

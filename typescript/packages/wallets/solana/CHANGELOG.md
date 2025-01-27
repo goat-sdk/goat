@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.12
+
+### Patch Changes
+
+- 1f361d5: Support raw txs
+
 ## 0.2.11
 
 ### Patch Changes

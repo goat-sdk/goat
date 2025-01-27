@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-mode-governance
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
 ## 0.0.7
 
 ### Patch Changes

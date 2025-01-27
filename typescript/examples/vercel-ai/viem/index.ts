@@ -29,12 +29,12 @@ const walletClient = createWalletClient({
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
         plugins: [
-            sendETH(),
-            erc20({ tokens: [USDC, PEPE] }),
+            sendETH(), // Enable ETH transfers
+            erc20({ tokens: [USDC, PEPE] }), // Enable ERC20 token operations
             uniswap({
                 baseUrl: process.env.UNISWAP_BASE_URL as string,
                 apiKey: process.env.UNISWAP_API_KEY as string,
-            }),
+            }), // Enable Uniswap trading
         ],
     });
 
@@ -64,7 +64,7 @@ const walletClient = createWalletClient({
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
-                maxSteps: 10,
+                maxSteps: 10, // Maximum number of tool invocations per request
                 prompt: prompt,
                 onStepFinish: (event) => {
                     console.log(event.toolResults);

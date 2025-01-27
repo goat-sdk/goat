@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-evm
 
+## 0.2.7
+
+### Patch Changes
+
+- bcc14a7: Remove viem dependency
+
 ## 0.2.6
 
 ### Patch Changes

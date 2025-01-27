@@ -20,13 +20,16 @@ const keypair = Keypair.fromSecretKey(base58.decode(process.env.WALLET_PRIVATE_K
             keypair,
             connection,
         }),
-        plugins: [sendSOL(), sns()],
+        plugins: [
+            sendSOL(), // Enable SOL transfers
+            sns(), // Enable SNS domain resolution
+        ],
     });
 
     const result = await generateText({
         model: openai("gpt-4o-mini"),
         tools: tools,
-        maxSteps: 5,
+        maxSteps: 5, // Maximum number of tool invocations per request
         prompt: "Send 0.005 SOL to investigations.sol",
     });
 

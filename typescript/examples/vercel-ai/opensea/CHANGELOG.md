@@ -1,5 +1,11 @@
 # goat-examples-vercel-ai-opensea
 
+## 0.1.5
+
+### Patch Changes
+
+- @goat-sdk/wallet-viem@0.2.7
+
 ## 0.1.4
 
 ### Patch Changes

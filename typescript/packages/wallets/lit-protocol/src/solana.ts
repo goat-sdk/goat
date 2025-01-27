@@ -73,6 +73,26 @@ export class LitSolanaWallet extends SolanaWalletClient {
         };
     }
 
+    async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+        const litTransaction = {
+            serializedTransaction: transaction,
+            chain: this.chain,
+        };
+
+        const signedTransaction = await signTransactionWithEncryptedKey({
+            litNodeClient: this.litNodeClient,
+            pkpSessionSigs: this.pkpSessionSigs,
+            network: "solana",
+            id: this.wrappedKeyMetadata.id,
+            unsignedTransaction: litTransaction,
+            broadcast: true,
+        });
+
+        return {
+            hash: signedTransaction,
+        };
+    }
+
     async balanceOf(address: string) {
         const pubkey = new PublicKey(address);
         const balance = await this.connection.getBalance(pubkey);

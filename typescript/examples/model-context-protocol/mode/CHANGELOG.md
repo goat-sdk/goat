@@ -1,5 +1,15 @@
 # goat-examples-model-context-protocol-viem
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/plugin-erc20@0.2.9
+  - @goat-sdk/plugin-kim@0.1.9
+  - @goat-sdk/wallet-viem@0.2.7
+
 ## 0.2.10
 
 ### Patch Changes

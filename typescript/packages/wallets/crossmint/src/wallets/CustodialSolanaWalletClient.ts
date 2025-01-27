@@ -116,6 +116,29 @@ export class CustodialSolanaWalletClient extends SolanaWalletClient {
         }
     }
 
+    async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+        const { id: transactionId } = await this.#client.createTransactionForCustodialWallet(
+            this.#locator,
+            transaction,
+        );
+
+        while (true) {
+            const latestTransaction = await this.#client.checkTransactionStatus(this.#locator, transactionId);
+
+            if (latestTransaction.status === "success") {
+                return {
+                    hash: latestTransaction.onChain?.txId ?? "",
+                };
+            }
+
+            if (latestTransaction.status === "failed") {
+                throw new Error(`Transaction failed: ${latestTransaction.onChain?.txId}`);
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait 3 seconds
+        }
+    }
+
     async balanceOf(address: string) {
         const pubkey = new PublicKey(address);
         const balance = await this.connection.getBalance(pubkey);

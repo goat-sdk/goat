@@ -34,9 +34,9 @@ async function main() {
         plugins: [
             polymarket({
                 credentials: {
-                    key: process.env.POLYMARKET_API_KEY as string,
-                    secret: process.env.POLYMARKET_SECRET as string,
-                    passphrase: process.env.POLYMARKET_PASSPHRASE as string,
+                    key: process.env.POLYMARKET_API_KEY as string, // API key for Polymarket operations
+                    secret: process.env.POLYMARKET_SECRET as string, // API secret for authentication
+                    passphrase: process.env.POLYMARKET_PASSPHRASE as string, // API passphrase for security
                 },
             }),
         ],
@@ -51,7 +51,7 @@ async function main() {
                 model: openai("gpt-4o-mini"),
                 messages,
                 tools: tools,
-                maxSteps: 5,
+                maxSteps: 5, // Maximum number of tool invocations per request
             });
 
             let fullResponse = "";

@@ -55,15 +55,14 @@
 		{
 			"group": "Overview",
 			"pages": [
-				"introduction",
-				"chains-wallets-plugins",
-				"examples",
-				"plugins",
-				"wallets",
-				"chains"
+				"introduction"
 			]
 		}
 	],
+	"topbarCtaButton": {
+		"type": "github",
+		"url": "https://github.com/goat-sdk/goat"
+	},
 	"footerSocials": {
 		"github": "https://github.com/goat-sdk"
 	}

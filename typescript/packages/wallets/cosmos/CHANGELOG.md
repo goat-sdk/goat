@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-cosmos
 
+## 0.0.3
+
+### Patch Changes
+
+- db65128: Minor fixes
+
 ## 0.0.2
 
 ### Patch Changes

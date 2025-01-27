@@ -1,5 +1,18 @@
 # @goat-sdk/plugin-crossmint-headless-checkout
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
+## 0.0.5
+
+### Patch Changes
+
+- 220dd8d: headless: insufficient funds check
+
 ## 0.0.4
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-polymarket",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

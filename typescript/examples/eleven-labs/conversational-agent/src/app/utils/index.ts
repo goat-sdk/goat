@@ -59,6 +59,10 @@ export function createSolanaWalletFromDynamic(connection: Connection, signer: IS
             };
         }
 
+        async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+            throw new Error("Not implemented");
+        }
+
         async balanceOf(address: string) {
             const pubkey = new PublicKey(address);
             const balance = await connection.getBalance(pubkey);
