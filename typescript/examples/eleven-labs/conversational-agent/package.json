@@ -22,7 +22,7 @@
         "@goat-sdk/wallet-solana": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
         "@tanstack/react-query": "^5.62.2",
-        "next": "15.0.3",
+        "next": "15.1.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "viem": "catalog:",
