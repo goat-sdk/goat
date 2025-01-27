@@ -29,16 +29,14 @@ const terminal = readline.createInterface({
 const messages: CoreMessage[] = [];
 
 async function main() {
-    // TODO(alfonso-paella) Should we document the polymarket plugin configuration options?
-    // What are the available settings beyond credentials?
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
         plugins: [
             polymarket({
                 credentials: {
-                    key: process.env.POLYMARKET_API_KEY as string,
-                    secret: process.env.POLYMARKET_SECRET as string,
-                    passphrase: process.env.POLYMARKET_PASSPHRASE as string,
+                    key: process.env.POLYMARKET_API_KEY as string, // API key for Polymarket operations
+                    secret: process.env.POLYMARKET_SECRET as string, // API secret for authentication
+                    passphrase: process.env.POLYMARKET_PASSPHRASE as string, // API passphrase for security
                 },
             }),
         ],
@@ -49,8 +47,6 @@ async function main() {
         messages.push({ role: "user", content: userInput });
 
         try {
-            // TODO(alfonso-paella) Should we document the maxSteps parameter?
-            // What's the recommended value for different Polymarket operations?
             const result = streamText({
                 model: openai("gpt-4o-mini"),
                 messages,
