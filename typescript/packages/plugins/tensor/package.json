@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-tensor",
-    "version": "0.2.12",
+    "version": "0.2.13",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

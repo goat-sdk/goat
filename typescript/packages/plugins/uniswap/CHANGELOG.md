@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-uniswap
 
+## 0.2.10
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
 ## 0.2.9
 
 ### Patch Changes

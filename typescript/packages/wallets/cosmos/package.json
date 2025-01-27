@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-cosmos",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -14,6 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@cosmjs/stargate": "^0.32.4",
+        "@cosmjs/cosmwasm-stargate": "^0.33.0",
         "@cosmjs/proto-signing": "^0.32.4",
         "@cosmjs/tendermint-rpc": "^0.32.4",
         "@cosmjs/crypto": "^0.32.4",

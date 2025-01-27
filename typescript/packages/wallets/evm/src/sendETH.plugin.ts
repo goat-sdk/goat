@@ -55,7 +55,11 @@ function getChainToken(chainId: number) {
     const viemChain = allChains.find((c) => c.id === chainId);
 
     if (!viemChain) {
-        throw new Error(`Unsupported EVM chain ID: ${chainId}`);
+        return {
+            symbol: "ETH",
+            name: "ETH",
+            decimals: 18,
+        };
     }
 
     return {

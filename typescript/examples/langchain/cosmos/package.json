@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-langchain-cosmos",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "",
     "private": true,
     "scripts": {
@@ -13,7 +13,7 @@
         "@goat-sdk/plugin-cosmosbank": "workspace:*",
         "@goat-sdk/wallet-cosmos": "workspace:*",
         "@goat-sdk/core": "workspace:*",
-        "@cosmjs/stargate": "^0.32.4",
+        "@cosmjs/cosmwasm-stargate": "^0.33.0",
         "@langchain/core": "catalog:",
         "@langchain/cohere": "^0.3.2",
         "@cosmjs/proto-signing": "^0.32.4",

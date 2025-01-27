@@ -69,6 +69,11 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
 
                     console.log("Created order:", order.orderId);
 
+                    const isInsufficientFunds = order.payment.status === "crypto-payer-insufficient-funds";
+                    if (isInsufficientFunds) {
+                        throw new Error("Insufficient funds");
+                    }
+
                     const serializedTransaction =
                         order.payment.preparation != null && "serializedTransaction" in order.payment.preparation
                             ? order.payment.preparation.serializedTransaction

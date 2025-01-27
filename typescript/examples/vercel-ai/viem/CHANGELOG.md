@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-viem
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+  - @goat-sdk/plugin-erc20@0.2.9
+  - @goat-sdk/plugin-uniswap@0.2.10
+  - @goat-sdk/wallet-viem@0.2.7
+
 ## 0.2.12
 
 ### Patch Changes

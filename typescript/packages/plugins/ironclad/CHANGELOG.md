@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-ironclad
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [bcc14a7]
+  - @goat-sdk/wallet-evm@0.2.7
+
 ## 0.1.4
 
 ### Patch Changes

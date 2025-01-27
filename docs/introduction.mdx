@@ -2,118 +2,32 @@
 title: Introduction
 ---
 
-_GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossmint.com)_
+GOAT (Great Onchain Agent Toolkit) is a library that adds more than +200 onchain tools to your AI agent.
 
-## What is GOAT 🐐?
-GOAT 🐐 (Great Onchain Agent Toolkit) is an open-source framework for adding blockchain tools such as wallets, being able to hold or trade tokens, or interacting with blockchain smart contracts, to your AI agent.
+* **+200 tools**: DeFi (Uniswap, Jupiter, KIM, Orca, etc.), minting (OpenSea, MagicEden, etc.), betting (Polymarket, etc.), analytics (CoinGecko, BirdEye, Allora, etc.) and more
+* **Chains**: EVM (Base, Polygon, Mode, Sei, etc.), Solana, Aptos, Chromia, Fuel, Sui, Starknet, Zilliqa, etc.
+* **Wallets**: keypair, smart wallets (Crossmint, etc.), LIT, MPC (Coinbase, etc.)
+* **Agent Frameworks**: AI SDK, Langchain, Eliza, ZerePy, GAME, ElevenLabs, etc.
 
-**Problem**: 
+GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossmint.com)
 
-Making agents perform onchain actions is tedious. The ecosystem is heavily fragmented, spanning 5+ popular agent development frameworks, multiple programming languages, and dozens of different blockchains and wallet architectures. 
-
-For developers without blockchain expertise, finding clear instructions to perform simple actions - like sending USDC payments or placing Polymarket bets - is nearly impossible.
-
-**Solution**: 
-
-GOAT solves this by providing an open-source, provider-agnostic framework that abstracts away all these combinations.
-
-- **For agent developers**: GOAT offers an always-growing catalog of ready made blockchain actions (sending tokens, using a DeFi protocol, ...) that can be imported as tools into your existing agent. It works with the most popular agent frameworks (Langchain, Vercel's AI SDK, Eliza, etc), Typescript and Python, 30+ blockchains (Solana, Base, Polygon, Mode, ...), and many wallet providers.
-- **For dApp / smart contract developers**: develop a plug-in in GOAT, and allow agents built with any of the most popular agent development frameworks to access your service.
-
-### Key features
-1. **Works Everywhere**: Compatible with Langchain, Vercel’s AI SDK, Eliza, and more.
-2. **Wallet Agnostic**: Supports all wallets, from your own key pairs to [Crossmint Smart Wallets](https://docs.crossmint.com/wallets/smart-wallets/overview) and Coinbase.
-3. **Multi-Chain**: Supports EVM chains and Solana (more coming 👀).
-4. **Customizable**: Use or build plugins for any onchain functionality (sending tokens, checking wallet balance, etc) and protocol (Polymarket, Uniswap, etc).
-
-### How it works
-GOAT plugs into your agents tool calling capabilities adding all the functions your agent needs to interact with blockchain protocols. 
-
-High-level, here's how it works:
-
-<Steps>
-  <Step title="Configure the wallet you want to use">
-  Each wallet will have their specific client, e.g `viem(wallet)` for EVM key pairs or `smartwallet(wallet)` for Crossmint smart wallets.
-```typescript
-const wallet = ...
-
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-})
-```
-  </Step>
-  <Step title="Add the plugins you need to interact with the protocols you want">
-```typescript
-const wallet = ...
-
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-  plugins: [
-    sendETH(),
-    erc20({ tokens: [USDC, PEPE] }),
-    faucet(),
-    polymarket(),
-    // ...
-  ],
-})
-```
-  </Step>
-  <Step title="Connect it to the agent framework you want">
-```typescript
-const wallet = ...
-
-const tools = getOnChainTools({
-  wallet: viem(wallet),
-  plugins: [ 
-    sendETH(),
-    erc20({ tokens: [USDC, PEPE] }), 
-    faucet(), 
-    polymarket(), 
-    // ...
-  ],
-})
-
-// Vercel's AI SDK
-const result = await generateText({
-    model: openai("gpt-4o-mini"),
-    tools,
-    maxSteps: 5,
-    prompt: "Send 420 ETH to ohmygoat.eth",
-});
-```
-  </Step>
-</Steps>
-
-Ready to get started?
-
-### GOAT to start somewhere
+## Get started
 <CardGroup cols={2}>
-  <Card
-    title="Quickstarts"
-    icon="rocket"
-    href="https://github.com/goat-sdk/goat/tree/main/typescript/examples"
-  >
-    Get started in 2 minutes using our examples
+  <Card title="Typescript SDK" icon="code" href="https://github.com/goat-sdk/goat/tree/main/typescript">
+    Get started with the Typescript SDK
   </Card>
-  <Card
-    title="Plugins"
-    icon="puzzle"
-    href="/plugins"
-  >
-    Leverage existing plugins or create your own
+  <Card title="Python SDK" icon="python" href="https://github.com/goat-sdk/goat/tree/main/python">
+    Get started with the Python SDK
   </Card>
-  <Card
-    title="Wallets"
-    icon="wallet"
-    href="/wallets"
-  >
-    Use any wallet you want, from key pairs to smart wallets from Crossmint
+
+</CardGroup>
+
+## Follow us
+<CardGroup cols={2}>
+  <Card title="Github" icon="github" href="https://github.com/goat-sdk/goat">
+    Check out the Github repository
   </Card>
-  <Card
-    title="Bounties"
-    icon="coin"
-    href="/chains-wallets-plugins"
-  >
-    Earn rewards by building plugins and wallet integrations for the community
+  <Card title="Discord" icon="discord" href="https://discord.gg/goat-sdk">
+    Join the Discord community
   </Card>
 </CardGroup>

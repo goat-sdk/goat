@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk"
-version = "0.1.2"
+version = "0.1.3"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
@@ -15,6 +15,7 @@ packages = [
 python = "^3.10"
 pydantic = "^2.10.0"
 asyncio = "^3.4.1"
+typing-extensions = "^4.12.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"

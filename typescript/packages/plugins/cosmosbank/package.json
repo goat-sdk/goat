@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-cosmosbank",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
