@@ -98,15 +98,16 @@ class Web3EVMWalletClient(EVMWalletClient):
             tx_params: TxParams = {
                 "from": self._web3.eth.default_account,
                 "to": to_checksum_address(to_address),
+                "chainId": self._web3.eth.chain_id,
                 "value": Wei(transaction.get("value", 0)),
+                "data": transaction.get("data", HexStr("")),
             }
 
             if paymaster_address and paymaster_input:
-                tx_params["paymaster"] = to_checksum_address(paymaster_address)
-                tx_params["paymasterInput"] = paymaster_input
+                raise NotImplementedError("Paymaster not supported")
 
             tx_hash = self._web3.eth.send_transaction(tx_params)
-            return self._wait_for_receipt(HexStr(tx_hash.to_0x_hex()))
+            return self._wait_for_receipt(HexStr(tx_hash.hex()))
 
         # Contract call
         function_name = transaction.get("functionName")
@@ -121,20 +122,35 @@ class Web3EVMWalletClient(EVMWalletClient):
         contract_function = getattr(contract.functions, function_name)
         args = transaction.get("args", [])
 
-        # Estimate gas and get the transaction parameters
-        tx_params = {
+        # First simulate the contract call to catch any potential errors
+        try:
+            contract_function(*args).call({
+                "from": self._web3.eth.default_account,
+                "value": Wei(transaction.get("value", 0)),
+            })
+        except Exception as e:
+            raise ValueError(f"Contract call simulation failed: {str(e)}")
+
+        # Build transaction parameters
+        tx_params: TxParams = {
             "from": self._web3.eth.default_account,
+            "chainId": self._web3.eth.chain_id,
             "value": Wei(transaction.get("value", 0)),
         }
 
         if paymaster_address and paymaster_input:
-            tx_params["paymaster"] = to_checksum_address(paymaster_address)
-            tx_params["paymasterInput"] = paymaster_input
+            raise NotImplementedError("Paymaster not supported")
 
+        # Build and send the transaction
+        tx = contract_function(*args).build_transaction(tx_params)
+        
+        # Get the nonce
+        tx["nonce"] = self._web3.eth.get_transaction_count(self._web3.eth.default_account)
+        
         # Send the transaction
-        tx_hash = contract_function(*args).transact(tx_params)
+        tx_hash = self._web3.eth.send_transaction(tx)
 
-        return self._wait_for_receipt(HexStr(tx_hash.to_0x_hex()))
+        return self._wait_for_receipt(HexStr(tx_hash.hex()))
 
     def read(self, request: EVMReadRequest) -> EVMReadResult:
         """Read data from a smart contract."""
