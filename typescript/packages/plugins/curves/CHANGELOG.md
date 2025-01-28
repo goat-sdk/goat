@@ -1,1 +1,0 @@
-# @goat-sdk/plugin-curves
