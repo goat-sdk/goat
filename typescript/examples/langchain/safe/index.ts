@@ -6,7 +6,6 @@ import { pull } from "langchain/hub";
 import { baseSepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { safe } from "@goat-sdk/wallet-safe";

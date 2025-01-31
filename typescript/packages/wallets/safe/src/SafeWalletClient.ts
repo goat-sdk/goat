@@ -1,4 +1,3 @@
-import { WalletClientBase } from "@goat-sdk/core";
 import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
 import Safe, { PredictedSafeProps, SafeAccountConfig, SigningMethod, Eip1193Provider } from "@safe-global/protocol-kit";
 import {
