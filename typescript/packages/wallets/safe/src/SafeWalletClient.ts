@@ -5,14 +5,14 @@ import {
     http,
     Account,
     Address,
+    Chain,
     type WalletClient as ViemWalletClient,
     createWalletClient,
     formatUnits,
     publicActions,
-    Chain,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseSepolia, mainnet } from "viem/chains";
+import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 
 class SafeWalletError extends Error {
