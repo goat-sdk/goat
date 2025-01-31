@@ -187,7 +187,6 @@ export class SafeWalletClient extends EVMSmartWalletClient {
 
     async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
         await this.#ensureSafeDeployed();
-        console.log("Sending transaction", transaction);
         try {
             const metaTransaction = {
                 to: transaction.to,
@@ -198,7 +197,6 @@ export class SafeWalletClient extends EVMSmartWalletClient {
             const result = await this.#createAndExecuteTransaction([metaTransaction]);
             return { hash: result.hash };
         } catch (error) {
-            console.log("Sending transaction", error);
             throw new SafeWalletError(
                 `Failed to send transaction: ${error instanceof Error ? error.message : String(error)}`,
             );
@@ -358,5 +356,8 @@ export class SafeWalletClient extends EVMSmartWalletClient {
 export async function safe(privateKey: `0x${string}`, chain: Chain, saltNonce?: string): Promise<SafeWalletClient> {
     const wallet = new SafeWalletClient(privateKey, chain, saltNonce);
     await wallet.initialize();
+    if (!(await wallet.isDeployed())) {
+        await wallet.deploySafe();
+    }
     return wallet;
 }

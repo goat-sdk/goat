@@ -17,6 +17,7 @@
         "@langchain/core": "catalog:",
         "@langchain/ollama": "0.1.5",
         "@langchain/openai": "^0.3.5",
+        "ai": "4.1.15",
         "dotenv": "^16.4.5",
         "langchain": "^0.3.2",
         "viem": "2.21.49"

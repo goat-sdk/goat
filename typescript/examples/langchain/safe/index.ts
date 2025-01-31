@@ -22,6 +22,7 @@ const llm = new Ollama({
     const prompt = await pull<ChatPromptTemplate>("hwchase17/structured-chat-agent");
 
     const tools = await getOnChainTools({
+        // The wallet will be deployed on chain and requires eth beforehand.
         wallet: await safe(pk, baseSepolia),
         plugins: [sendETH()],
     });
@@ -38,7 +39,7 @@ const llm = new Ollama({
     });
 
     const response = await agentExecutor.invoke({
-        input: "Send 0.00001 eth to 0x0000000000000000000000000000000000000000",
+        input: "Send 0.00000 eth to 0x0000000000000000000000000000000000000000",
     });
 
     console.log(response);
