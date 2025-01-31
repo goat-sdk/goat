@@ -1,5 +1,5 @@
 import { WalletClientBase } from "@goat-sdk/core";
-import { EVMReadRequest, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
+import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
 import Safe, { PredictedSafeProps, SafeAccountConfig, SigningMethod, Eip1193Provider } from "@safe-global/protocol-kit";
 import {
     http,
@@ -40,7 +40,7 @@ class ChainNotConfiguredError extends SafeWalletError {
     }
 }
 
-export class SafeWalletClient extends WalletClientBase {
+export class SafeWalletClient extends EVMSmartWalletClient {
     #client: ViemWalletClient;
     #account: Account;
     #safeAccount: Safe | undefined;
@@ -188,7 +188,7 @@ export class SafeWalletClient extends WalletClientBase {
 
     async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
         await this.#ensureSafeDeployed();
-
+        console.log("Sending transaction", transaction);
         try {
             const metaTransaction = {
                 to: transaction.to,
@@ -199,6 +199,7 @@ export class SafeWalletClient extends WalletClientBase {
             const result = await this.#createAndExecuteTransaction([metaTransaction]);
             return { hash: result.hash };
         } catch (error) {
+            console.log("Sending transaction", error);
             throw new SafeWalletError(
                 `Failed to send transaction: ${error instanceof Error ? error.message : String(error)}`,
             );
@@ -353,4 +354,10 @@ export class SafeWalletClient extends WalletClientBase {
         }
         return this.#isDeployed;
     }
+}
+
+export async function safe(privateKey: `0x${string}`, chain: Chain, saltNonce?: string): Promise<SafeWalletClient> {
+    const wallet = new SafeWalletClient(privateKey, chain, saltNonce);
+    await wallet.initialize();
+    return wallet;
 }
