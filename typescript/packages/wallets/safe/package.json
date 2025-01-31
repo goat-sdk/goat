@@ -1,12 +1,8 @@
 {
-    "name": "@goat-sdk/plugin-curves",
-    "version": "0.0.2",
+    "name": "@goat-sdk/wallet-safe",
+    "version": "0.0.1",
     "sideEffects": false,
-    "files": [
-        "dist/**/*",
-        "README.md",
-        "package.json"
-    ],
+    "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
@@ -16,15 +12,16 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-evm": "0.2.7",
-        "abitype": "^1.0.6",
-        "viem": "catalog:",
-        "zod": "catalog:"
+        "@goat-sdk/core": "0.4.6",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@safe-global/protocol-kit": "5.2.1",
+        "@safe-global/safe-core-sdk-types": "5.1.0",
+        "permissionless": "0.2.28",
+        "viem": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-viem": "workspace:*"
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
@@ -35,10 +32,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": [
-        "ai",
-        "agents",
-        "web3",
-        "form"
-    ]
+    "keywords": ["ai", "agents", "web3"]
 }
