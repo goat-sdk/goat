@@ -9,6 +9,7 @@ import {
     createWalletClient,
     formatUnits,
     publicActions,
+    Chain,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia, mainnet } from "viem/chains";
@@ -48,7 +49,7 @@ export class SafeWalletClient extends WalletClientBase {
     #saltNonce?: string;
     #privateKey: `0x${string}`;
 
-    constructor(privateKey: `0x${string}`, saltNonce?: string) {
+    constructor(privateKey: `0x${string}`, chain: Chain, saltNonce?: string) {
         super();
         if (!privateKey || !privateKey.startsWith("0x")) {
             throw new Error("Invalid private key format");
@@ -56,7 +57,7 @@ export class SafeWalletClient extends WalletClientBase {
         this.#privateKey = privateKey;
         this.#client = createWalletClient({
             account: privateKeyToAccount(privateKey),
-            chain: baseSepolia,
+            chain: chain,
             transport: http(),
         });
         if (!this.#client.account) {
@@ -259,7 +260,7 @@ export class SafeWalletClient extends WalletClientBase {
             }));
 
         return {
-            ...data.domain,
+            ...domainFields,
             chainId: this.#client.chain?.id ?? 0,
         };
     }
