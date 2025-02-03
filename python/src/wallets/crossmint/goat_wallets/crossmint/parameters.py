@@ -1,7 +1,13 @@
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, List, Dict, Any, Literal, Union
 
+
+class WalletType(str, Enum):
+    """Wallet types supported by Crossmint."""
+    SOLANA_CUSTODIAL = "solana-custodial-wallet"
+    EVM_SMART_WALLET = "evm-smart-wallet"
+    SOLANA_SMART_WALLET = "solana-smart-wallet"
 
 class CoreSignerType(str, Enum):
     """Core signer types supported by Crossmint."""
@@ -21,10 +27,14 @@ class AdminSigner(BaseModel):
 
 
 class CreateSmartWalletParameters(BaseModel):
-    """Parameters for creating an EVM smart wallet."""
+    """Parameters for creating a smart wallet."""
     admin_signer: Optional[AdminSigner] = Field(
         None,
         description="Optional admin signer configuration for the wallet"
+    )
+    chain: Optional[str] = Field(
+        None,
+        description="Chain identifier (required for smart wallets)"
     )
 
 
@@ -37,7 +47,7 @@ class CreateCustodialWalletParameters(BaseModel):
 
 class CreateWalletRequest(BaseModel):
     """Request parameters for wallet creation."""
-    type: str = Field(description="Wallet type (evm-smart-wallet or solana-custodial-wallet)")
+    type: WalletType = Field(description="Type of wallet to create")
     config: Optional[Dict[str, Any]] = Field(
         None,
         description="Optional configuration including admin signer"
@@ -64,6 +74,24 @@ class Call(BaseModel):
     data: str
 
 
+class SolanaSmartWalletTransactionParams(BaseModel):
+    """Parameters for creating a Solana Smart Wallet transaction."""
+    transaction: str = Field(description="Base58 encoded serialized Solana transaction")
+    requiredSigners: Optional[List[str]] = Field(
+        None,
+        description="Optional array of additional signers required for the transaction"
+    )
+    signer: Optional[str] = Field(
+        None,
+        description="Optional signer locator that defaults to admin signer"
+    )
+
+    def model_dump(self) -> Dict[str, Any]:
+        """Convert model to dictionary, filtering out None values."""
+        data = super().model_dump()
+        return {k: v for k, v in data.items() if v is not None}
+
+
 class TransactionParams(BaseModel):
     """Parameters for transaction creation."""
     calls: Optional[List[Call]] = None
@@ -71,6 +99,11 @@ class TransactionParams(BaseModel):
     signer: Optional[str] = None
     transaction: Optional[str] = None
     signers: Optional[List[str]] = None
+
+    def model_dump(self) -> Dict[str, Any]:
+        """Convert model to dictionary, filtering out None values."""
+        data = super().model_dump()
+        return {k: v for k, v in data.items() if v is not None}
 
 
 class ApprovalSubmission(BaseModel):
@@ -241,8 +274,9 @@ class CreateTransactionCustodialParameters(BaseModel):
 class CreateTransactionSmartParameters(BaseModel):
     """Parameters for creating a transaction with a smart wallet."""
     wallet_address: str = Field(description="The wallet address")
-    calls: List[Call] = Field(description="The transaction calls")
+    calls: Optional[List[Call]] = Field(None, description="The transaction calls for EVM")
     chain: str = Field(description="The chain of the wallet")
+    transaction: Optional[str] = Field(None, description="Base58 encoded serialized Solana transaction")
     signer: Optional[str] = Field(None, description="Optional signer address")
 
 
@@ -263,6 +297,26 @@ class CheckTransactionStatusParameters(BaseModel):
     """Parameters for checking transaction status."""
     locator: str = Field(description="The wallet locator")
     transaction_id: str = Field(description="The transaction ID")
+
+
+class DelegatedSignerPermission(BaseModel):
+    """Permission object for delegated signers following ERC-7715."""
+    type: str = Field(description="Permission type")
+    value: Any = Field(description="Permission value")
+
+
+class RegisterDelegatedSignerParameters(BaseModel):
+    """Parameters for registering a delegated signer."""
+    signer: str = Field(description="The locator of the delegated signer")
+    chain: str = Field(description="Chain identifier")
+    expires_at: Optional[int] = Field(None, description="Optional expiry date in milliseconds since UNIX epoch")
+    permissions: Optional[List[DelegatedSignerPermission]] = Field(None, description="Optional list of ERC-7715 permission objects")
+
+
+class GetDelegatedSignerParameters(BaseModel):
+    """Parameters for retrieving delegated signer information."""
+    wallet_locator: str = Field(description="The wallet locator")
+    signer_locator: str = Field(description="The signer locator")
 
 
 class EmptyParameters(BaseModel):
