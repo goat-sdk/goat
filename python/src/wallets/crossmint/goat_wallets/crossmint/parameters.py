@@ -3,11 +3,20 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Literal, Union
 
 
+class BaseModelWithoutNone(BaseModel):
+    """Base model that excludes None values from model_dump output."""
+    def model_dump(self) -> Dict[str, Any]:  # type: ignore
+        """Convert model to dictionary, filtering out None values."""
+        data = super().model_dump()
+        return {k: v for k, v in data.items() if v is not None}
+
+
 class WalletType(str, Enum):
     """Wallet types supported by Crossmint."""
     SOLANA_CUSTODIAL = "solana-custodial-wallet"
     EVM_SMART_WALLET = "evm-smart-wallet"
     SOLANA_SMART_WALLET = "solana-smart-wallet"
+
 
 class CoreSignerType(str, Enum):
     """Core signer types supported by Crossmint."""
@@ -19,14 +28,14 @@ class CoreSignerType(str, Enum):
     EVM_KEYPAIR_SESSION = "evm-keypair-session"
 
 
-class AdminSigner(BaseModel):
+class AdminSigner(BaseModelWithoutNone):
     """Configuration for admin signer in wallet creation."""
     type: CoreSignerType
     address: Optional[str] = None
     locator: Optional[str] = None
 
 
-class CreateSmartWalletParameters(BaseModel):
+class CreateSmartWalletParameters(BaseModelWithoutNone):
     """Parameters for creating a smart wallet."""
     admin_signer: Optional[AdminSigner] = Field(
         None,
@@ -38,14 +47,14 @@ class CreateSmartWalletParameters(BaseModel):
     )
 
 
-class CreateCustodialWalletParameters(BaseModel):
+class CreateCustodialWalletParameters(BaseModelWithoutNone):
     """Parameters for creating a Solana custodial wallet."""
     linked_user: str = Field(
         description="User identifier to link the wallet to (email, phone, or user ID)"
     )
 
 
-class CreateWalletRequest(BaseModel):
+class CreateWalletRequest(BaseModelWithoutNone):
     """Request parameters for wallet creation."""
     type: WalletType = Field(description="Type of wallet to create")
     config: Optional[Dict[str, Any]] = Field(
@@ -58,7 +67,7 @@ class CreateWalletRequest(BaseModel):
     )
 
 
-class WalletResponse(BaseModel):
+class WalletResponse(BaseModelWithoutNone):
     """Response structure for wallet operations."""
     type: str
     address: str
@@ -67,14 +76,14 @@ class WalletResponse(BaseModel):
     created_at: str
 
 
-class Call(BaseModel):
+class Call(BaseModelWithoutNone):
     """Structure for EVM transaction calls."""
     to: str
     value: str
     data: str
 
 
-class SolanaSmartWalletTransactionParams(BaseModel):
+class SolanaSmartWalletTransactionParams(BaseModelWithoutNone):
     """Parameters for creating a Solana Smart Wallet transaction."""
     transaction: str = Field(description="Base58 encoded serialized Solana transaction")
     requiredSigners: Optional[List[str]] = Field(
@@ -86,13 +95,8 @@ class SolanaSmartWalletTransactionParams(BaseModel):
         description="Optional signer locator that defaults to admin signer"
     )
 
-    def model_dump(self) -> Dict[str, Any]:  # type: ignore
-        """Convert model to dictionary, filtering out None values."""
-        data = super().model_dump()
-        return {k: v for k, v in data.items() if v is not None}
 
-
-class TransactionParams(BaseModel):
+class TransactionParams(BaseModelWithoutNone):
     """Parameters for transaction creation."""
     calls: Optional[List[Call]] = None
     chain: Optional[str] = None
@@ -100,13 +104,8 @@ class TransactionParams(BaseModel):
     transaction: Optional[str] = None
     signers: Optional[List[str]] = None
 
-    def model_dump(self) -> Dict[str, Any]:  # type: ignore
-        """Convert model to dictionary, filtering out None values."""
-        data = super().model_dump()
-        return {k: v for k, v in data.items() if v is not None}
 
-
-class ApprovalSubmission(BaseModel):
+class ApprovalSubmission(BaseModelWithoutNone):
     """Structure for transaction/signature approvals."""
     signer: str
     message: str
@@ -115,26 +114,26 @@ class ApprovalSubmission(BaseModel):
     metadata: Optional[Dict[str, Any]] = None
 
 
-class TransactionApprovals(BaseModel):
+class TransactionApprovals(BaseModelWithoutNone):
     """Structure for transaction approvals."""
     pending: List[Dict[str, Any]]
     submitted: List[ApprovalSubmission]
     required: Optional[int] = None
 
 
-class SignMessageRequest(BaseModel):
+class SignMessageRequest(BaseModelWithoutNone):
     """Request parameters for message signing."""
     type: str = Field(description="Message type (evm-message or solana-message)")
     params: Dict[str, Any] = Field(description="Message parameters including the message to sign")
 
 
-class SignTypedDataRequest(BaseModel):
+class SignTypedDataRequest(BaseModelWithoutNone):
     """Request parameters for typed data signing."""
     type: Literal["evm-typed-data"]
     params: Dict[str, Any] = Field(description="Parameters including typed data and chain")
 
 
-class SignatureResponse(BaseModel):
+class SignatureResponse(BaseModelWithoutNone):
     """Response structure for signature operations."""
     id: str
     wallet_type: str
@@ -144,7 +143,7 @@ class SignatureResponse(BaseModel):
     created_at: str
 
 
-class TransactionResponse(BaseModel):
+class TransactionResponse(BaseModelWithoutNone):
     """Response structure for transaction operations."""
     id: str
     wallet_type: str
@@ -155,14 +154,14 @@ class TransactionResponse(BaseModel):
     created_at: str
 
 
-class CollectionMetadata(BaseModel):
+class CollectionMetadata(BaseModelWithoutNone):
     name: str = Field(description="The name of the collection")
     description: str = Field(description="A description of the NFT collection")
     image: Optional[str] = Field(None, description="URL pointing to an image that represents the collection")
     symbol: Optional[str] = Field(None, description="Shorthand identifier for the NFT collection (Max length: 10)")
 
 
-class CollectionParameters(BaseModel):
+class CollectionParameters(BaseModelWithoutNone):
     metadata: CollectionMetadata = Field(
         default_factory=lambda: CollectionMetadata(
             name="My first Minting API Collection",
@@ -175,12 +174,12 @@ class CollectionParameters(BaseModel):
     transferable: bool = Field(default=True)
 
 
-class NFTAttribute(BaseModel):
+class NFTAttribute(BaseModelWithoutNone):
     display_type: Literal["number", "boost_number", "boost_percentage"]
     value: str
 
 
-class NFTMetadata(BaseModel):
+class NFTMetadata(BaseModelWithoutNone):
     name: str = Field(description="The name of the NFT")
     description: str = Field(description="The description of the NFT")
     image: str = Field(description="URL pointing to the NFT image")
@@ -188,7 +187,7 @@ class NFTMetadata(BaseModel):
     attributes: Optional[List[NFTAttribute]] = Field(None, description="The attributes of the NFT")
 
 
-class MintNFTParameters(BaseModel):
+class MintNFTParameters(BaseModelWithoutNone):
     collection_id: str = Field(description="The ID of the collection to mint the NFT in")
     recipient: str = Field(description="The recipient of the NFT")
     recipient_type: Literal["wallet", "email"] = Field(
@@ -198,7 +197,7 @@ class MintNFTParameters(BaseModel):
     metadata: NFTMetadata = Field(description="The metadata of the NFT")
 
 
-class CreateWalletForTwitterUserParameters(BaseModel):
+class CreateWalletForTwitterUserParameters(BaseModelWithoutNone):
     """Parameters for creating a wallet for a Twitter user."""
     username: str = Field(description="The username of the Twitter / X user")
     chain: Literal["evm", "solana", "aptos", "cardano", "sui"] = Field(
@@ -206,7 +205,7 @@ class CreateWalletForTwitterUserParameters(BaseModel):
     )
 
 
-class CreateWalletForEmailParameters(BaseModel):
+class CreateWalletForEmailParameters(BaseModelWithoutNone):
     """Parameters for creating a wallet for an email user."""
     email: str = Field(description="The email address of the user")
     chain: Literal["evm", "solana", "aptos", "cardano", "sui"] = Field(
@@ -214,36 +213,36 @@ class CreateWalletForEmailParameters(BaseModel):
     )
 
 
-class GetWalletByTwitterUsernameParameters(BaseModel):
+class GetWalletByTwitterUsernameParameters(BaseModelWithoutNone):
     """Parameters for retrieving a wallet by Twitter username."""
     username: str = Field(description="The username of the Twitter / X user")
     chain: str = Field(description="The chain of the wallet")
 
 
-class GetWalletByEmailParameters(BaseModel):
+class GetWalletByEmailParameters(BaseModelWithoutNone):
     """Parameters for retrieving a wallet by email."""
     email: str = Field(description="The email address of the user")
     chain: str = Field(description="The chain of the wallet")
 
 
-class RequestFaucetTokensParameters(BaseModel):
+class RequestFaucetTokensParameters(BaseModelWithoutNone):
     """Parameters for requesting tokens from faucet."""
     wallet_address: str = Field(description="The wallet address to receive tokens")
     chain_id: str = Field(description="The chain ID for the faucet request")
 
 
-class GetWalletParameters(BaseModel):
+class GetWalletParameters(BaseModelWithoutNone):
     """Parameters for retrieving wallet details."""
     locator: str = Field(description="The wallet locator")
 
 
-class SignMessageCustodialParameters(BaseModel):
+class SignMessageCustodialParameters(BaseModelWithoutNone):
     """Parameters for signing a message with a custodial wallet."""
     locator: str = Field(description="The wallet locator")
     message: str = Field(description="The message to sign")
 
 
-class SignMessageSmartParameters(BaseModel):
+class SignMessageSmartParameters(BaseModelWithoutNone):
     """Parameters for signing a message with a smart wallet."""
     wallet_address: str = Field(description="The wallet address")
     message: str = Field(description="The message to sign")
@@ -251,7 +250,7 @@ class SignMessageSmartParameters(BaseModel):
     signer: Optional[str] = Field(None, description="Optional signer address")
 
 
-class SignTypedDataSmartParameters(BaseModel):
+class SignTypedDataSmartParameters(BaseModelWithoutNone):
     """Parameters for signing typed data with a smart wallet."""
     wallet_address: str = Field(description="The wallet address")
     typed_data: Dict[str, Any] = Field(description="The typed data to sign")
@@ -259,19 +258,19 @@ class SignTypedDataSmartParameters(BaseModel):
     signer: str = Field(description="The signer address")
 
 
-class CheckSignatureStatusParameters(BaseModel):
+class CheckSignatureStatusParameters(BaseModelWithoutNone):
     """Parameters for checking signature status."""
     signature_id: str = Field(description="The ID of the signature")
     wallet_address: str = Field(description="The wallet address")
 
 
-class CreateTransactionCustodialParameters(BaseModel):
+class CreateTransactionCustodialParameters(BaseModelWithoutNone):
     """Parameters for creating a transaction with a custodial wallet."""
     locator: str = Field(description="The wallet locator")
     transaction: str = Field(description="The transaction data")
 
 
-class CreateTransactionSmartParameters(BaseModel):
+class CreateTransactionSmartParameters(BaseModelWithoutNone):
     """Parameters for creating a transaction with a smart wallet."""
     wallet_address: str = Field(description="The wallet address")
     calls: Optional[List[Call]] = Field(None, description="The transaction calls for EVM")
@@ -280,32 +279,32 @@ class CreateTransactionSmartParameters(BaseModel):
     signer: Optional[str] = Field(None, description="Optional signer address")
 
 
-class ApprovalItem(BaseModel):
+class ApprovalItem(BaseModelWithoutNone):
     """Structure for individual approval items."""
     signer: str = Field(description="The signer address")
     signature: str = Field(description="The signature")
 
 
-class ApproveTransactionParameters(BaseModel):
+class ApproveTransactionParameters(BaseModelWithoutNone):
     """Parameters for approving a transaction."""
     locator: str = Field(description="The wallet locator")
     transaction_id: str = Field(description="The transaction ID")
     approvals: List[ApprovalItem] = Field(description="List of transaction approvals")
 
 
-class CheckTransactionStatusParameters(BaseModel):
+class CheckTransactionStatusParameters(BaseModelWithoutNone):
     """Parameters for checking transaction status."""
     locator: str = Field(description="The wallet locator")
     transaction_id: str = Field(description="The transaction ID")
 
 
-class DelegatedSignerPermission(BaseModel):
+class DelegatedSignerPermission(BaseModelWithoutNone):
     """Permission object for delegated signers following ERC-7715."""
     type: str = Field(description="Permission type")
     value: Any = Field(description="Permission value")
 
 
-class RegisterDelegatedSignerParameters(BaseModel):
+class RegisterDelegatedSignerParameters(BaseModelWithoutNone):
     """Parameters for registering a delegated signer."""
     signer: str = Field(description="The locator of the delegated signer")
     chain: str = Field(description="Chain identifier")
@@ -313,12 +312,12 @@ class RegisterDelegatedSignerParameters(BaseModel):
     permissions: Optional[List[DelegatedSignerPermission]] = Field(None, description="Optional list of ERC-7715 permission objects")
 
 
-class GetDelegatedSignerParameters(BaseModel):
+class GetDelegatedSignerParameters(BaseModelWithoutNone):
     """Parameters for retrieving delegated signer information."""
     wallet_locator: str = Field(description="The wallet locator")
     signer_locator: str = Field(description="The signer locator")
 
 
-class EmptyParameters(BaseModel):
+class EmptyParameters(BaseModelWithoutNone):
     """Empty parameter schema for endpoints that take no parameters."""
     pass

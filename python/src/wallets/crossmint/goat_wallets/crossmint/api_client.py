@@ -79,7 +79,7 @@ class CrossmintWalletsAPI:
         payload = {
             "type": wallet_type.value,
             "config": {
-                "adminSigner": admin_signer.dict() if admin_signer else None,
+                "adminSigner": admin_signer.model_dump() if admin_signer else None,
                 "chain": chain
             },
             "linkedUser": linked_user
