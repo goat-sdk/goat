@@ -5,8 +5,7 @@ from goat.types.chain import EvmChain
 from goat_wallets.evm import EVMWalletClient, EVMTransaction, EVMReadRequest, EVMTypedData, EVMReadResult
 from web3.main import Web3
 from web3.providers.rpc import HTTPProvider
-from web3.types import ChecksumAddress, HexStr
-from web3.utils.validation import validate_address
+from eth_typing import ChecksumAddress
 from eth_account.messages import encode_defunct
 from eth_account import Account
 from ens import ENS
@@ -65,10 +64,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
         provider_url: str,
         ens_provider_url: Optional[str] = None
     ):
-        super().__init__()
-        self._address = address
-        self._client = api_client
-        self._chain = chain
+        BaseWalletClient.__init__(self, address, api_client, chain)
         self._signer = signer
         
         self._w3 = Web3(HTTPProvider(provider_url))
@@ -105,7 +101,6 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
     
     def resolve_address(self, address: str) -> ChecksumAddress:
         try:
-            validate_address(address)
             return w3_sync.to_checksum_address(address)
         except ValueError:
             if not self._ens:
@@ -125,7 +120,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             account = self.signerAccount
             if not account:
                 raise ValueError("Signer account is not available")
-            signer_address = account.address
+            signer_address = account.address # type: ignore
             
         response = self._client.sign_message_for_smart_wallet(
             self._address,
@@ -156,7 +151,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             self._client.approve_signature_for_smart_wallet(
                 signature_id,
                 self._address,
-                f"evm-keypair:{account.address}",
+                f"evm-keypair:{account.address}",  # type: ignore
                 signature
             )
         
