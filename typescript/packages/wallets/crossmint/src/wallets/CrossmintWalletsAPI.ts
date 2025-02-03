@@ -20,7 +20,7 @@ type AdminSigner = {
 // Create Wallet
 ////////////////////////////////////////////////////////////////////
 interface CreateWalletRequest {
-    type: "evm-smart-wallet" | "solana-custodial-wallet";
+    type: "evm-smart-wallet" | "solana-custodial-wallet" | "solana-smart-wallet";
     config?: {
         adminSigner?: AdminSigner;
     };
@@ -28,7 +28,7 @@ interface CreateWalletRequest {
 }
 
 interface CreateWalletResponse {
-    type: "evm-smart-wallet" | "solana-custodial-wallet";
+    type: "evm-smart-wallet" | "solana-custodial-wallet" | "solana-smart-wallet";
     address: string;
     config: {
         adminSigner?: AdminSigner;
@@ -229,10 +229,13 @@ export class CrossmintWalletsAPI {
         return responseBody;
     }
 
-    public async createSmartWallet(adminSigner?: AdminSigner): Promise<CreateWalletResponse> {
+    public async createSmartWallet(
+        adminSigner?: AdminSigner,
+        type: "evm-smart-wallet" | "solana-smart-wallet" = "evm-smart-wallet",
+    ): Promise<CreateWalletResponse> {
         const endpoint = "/wallets";
         const payload: CreateWalletRequest = {
-            type: "evm-smart-wallet",
+            type,
             config: {
                 adminSigner: adminSigner,
             },
