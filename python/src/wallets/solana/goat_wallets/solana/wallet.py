@@ -42,7 +42,6 @@ class SolanaWalletClient(WalletClientBase, ABC):
         Args:
             client: A Solana RPC client instance
         """
-        super().__init__()
         self.client = client
 
     def get_chain(self) -> Chain:

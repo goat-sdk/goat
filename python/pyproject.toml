@@ -17,6 +17,7 @@ goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/" }
 goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/" }
 goat-sdk-wallet-web3 = { path = "src/wallets/web3/" }
 goat-sdk-adapter-langchain = { path = "src/adapters/langchain/" }
+web3 = ">=6.20.3,<7.0.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
