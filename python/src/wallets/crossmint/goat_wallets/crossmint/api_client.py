@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 from .parameters import (
     SignTypedDataRequest, AdminSigner, Call, WalletType,
     SolanaSmartWalletTransactionParams, DelegatedSignerPermission
@@ -557,7 +557,7 @@ class CrossmintWalletsAPI:
             Delegated signer registration response
         """
         endpoint = f"/wallets/{quote(wallet_locator)}/signers"
-        payload = {
+        payload: Dict[str, Any] = {
             "signer": signer,
             "chain": chain
         }
@@ -565,7 +565,7 @@ class CrossmintWalletsAPI:
         if expires_at:
             payload["expiresAt"] = str(expires_at)
         if permissions:
-            payload["permissions"] = [p.model_dump() for p in permissions]
+            payload["permissions"] = [{"type": p.type, "value": p.value} for p in permissions]
             
         return self._request(endpoint, method="POST", json=payload)
     

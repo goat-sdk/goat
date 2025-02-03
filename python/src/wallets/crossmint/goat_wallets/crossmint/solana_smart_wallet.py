@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, cast
 import base58
 import time
 from solders.instruction import Instruction
@@ -9,9 +9,10 @@ from goat.classes.wallet_client_base import Balance, Signature
 from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
 from .parameters import SolanaSmartWalletTransactionParams, DelegatedSignerPermission
+from .base_wallet import BaseWalletClient, get_locator
 
 
-class SolanaSmartWalletClient(SolanaWalletClient):
+class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     def __init__(
         self,
         address: str,
@@ -19,12 +20,10 @@ class SolanaSmartWalletClient(SolanaWalletClient):
         connection: SolanaClient,
         options: Dict
     ):
-        super().__init__(connection)
-        self._address = address
-        self._client = api_client
-        self._chain = "solana"
-        self._locator = address
+        SolanaWalletClient.__init__(self, connection)
+        BaseWalletClient.__init__(self, address, api_client, "solana")
         self.connection = connection
+        self._locator = get_locator(address, None, "solana-smart-wallet")
 
     def get_address(self) -> str:
         return self._address

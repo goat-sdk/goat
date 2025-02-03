@@ -8,17 +8,19 @@ from solana.rpc.api import Client as SolanaClient
 from goat.classes.wallet_client_base import Balance, Signature
 from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
+from .base_wallet import get_locator
 
 
-def get_locator(params: Dict) -> str:
-    """Get wallet locator from parameters."""
-    if "address" in params:
-        return params["address"]
+def get_custodial_locator(params: Dict) -> str:
+    """Get custodial wallet locator from parameters."""
+    linked_user = None
     if "email" in params:
-        return f"email:{params['email']}:solana-custodial-wallet"
-    if "phone" in params:
-        return f"phone:{params['phone']}:solana-custodial-wallet"
-    return f"userId:{params['userId']}:solana-custodial-wallet"
+        linked_user = {"email": params["email"]}
+    elif "phone" in params:
+        linked_user = {"phone": params["phone"]}
+    elif "userId" in params:
+        linked_user = {"userId": params["userId"]}
+    return get_locator(params.get("address"), linked_user, "solana-custodial-wallet")
 
 
 class CustodialSolanaWalletClient(SolanaWalletClient):
@@ -42,7 +44,7 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
         super().__init__(connection)
         self._address = address
         self._client = api_client
-        self._locator = get_locator(options)
+        self._locator = get_custodial_locator(options)
         self.connection = connection
     
     def get_address(self) -> str:
@@ -194,7 +196,7 @@ def custodial_factory(api_client: CrossmintWalletsAPI):
     """Factory function to create custodial wallet instances."""
     def create_custodial(options: dict) -> CustodialSolanaWalletClient:
         """Create a new custodial wallet instance."""
-        locator = get_locator(options)
+        locator = get_custodial_locator(options)
         wallet = api_client.get_wallet(locator)
         
         return CustodialSolanaWalletClient(

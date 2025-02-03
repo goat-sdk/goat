@@ -1,21 +1,10 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 from solders.pubkey import Pubkey
 from solana.rpc.api import Client as SolanaClient
 from .api_client import CrossmintWalletsAPI
 from .parameters import WalletType, AdminSigner
 from .solana_smart_wallet import SolanaSmartWalletClient
-
-
-def get_locator(params: Dict) -> str:
-    if "address" in params:
-        return params["address"]
-    if "email" in params:
-        return f"email:{params['email']}:solana-smart-wallet"
-    if "phone" in params:
-        return f"phone:{params['phone']}:solana-smart-wallet"
-    if "twitter" in params:
-        return f"x:{params['twitter']}:solana-smart-wallet"
-    return f"userId:{params['userId']}:solana-smart-wallet"
+from .base_wallet import get_locator
 
 
 def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None) -> Dict:
@@ -50,7 +39,21 @@ def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None
 
 def solana_smart_wallet_factory(api_client: CrossmintWalletsAPI):
     def create_smart_wallet(options: Dict) -> SolanaSmartWalletClient:
-        locator = get_locator(options)
+        linked_user = None
+        if "linkedUser" in options:
+            linked_user = options["linkedUser"]
+        elif any(key in options for key in ["email", "phone", "userId", "twitter"]):
+            linked_user = {}
+            if "email" in options:
+                linked_user["email"] = options["email"]
+            elif "phone" in options:
+                linked_user["phone"] = options["phone"]
+            elif "twitter" in options:
+                linked_user["twitter"] = options["twitter"]
+            else:
+                linked_user["userId"] = options["userId"]
+                
+        locator = get_locator(options.get("address"), linked_user, "solana-smart-wallet")
         
         try:
             wallet = api_client.get_wallet(locator)
