@@ -28,19 +28,19 @@ def main():
     print(f"Created wallet with address: {wallet.get_address()}")
     
     signer_response = wallet.register_delegated_signer(
-        "delegated-signer@example.com",
+        "solana-keypair:BvzKvn6nUUAYtKu2pH3h5SbUkUNcRPQawg3TYz8aB8Zr",
         permissions=[
             DelegatedSignerPermission(type="transaction", value="*")
         ]
     )
     print(f"Registered delegated signer: {signer_response}")
     
-    signer_info = wallet.get_delegated_signer("delegated-signer@example.com")
+    signer_info = wallet.get_delegated_signer("solana-keypair:BvzKvn6nUUAYtKu2pH3h5SbUkUNcRPQawg3TYz8aB8Zr")
     print(f"Delegated signer info: {signer_info}")
     
     signature = wallet.sign_message(
         "Hello, Solana!",
-        required_signers=["delegated-signer@example.com"]
+        required_signers=["solana-keypair:BvzKvn6nUUAYtKu2pH3h5SbUkUNcRPQawg3TYz8aB8Zr"]
     )
     print(f"Message signature: {signature}")
     

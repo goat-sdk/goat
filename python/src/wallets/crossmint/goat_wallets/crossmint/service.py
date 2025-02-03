@@ -59,12 +59,11 @@ class CrossmintService:
         """
         try:
             admin_signer = parameters.get("admin_signer")
-            chain = parameters.get("chain")
 
-            if not admin_signer or not chain:
-                raise ValueError("Admin signer and chain are required")
+            if not admin_signer:
+                raise ValueError("Admin signer is required")
 
-            response = self.api_client.create_smart_wallet(admin_signer, chain)
+            response = self.api_client.create_smart_wallet(admin_signer)
             return WalletResponse(**response)
         except Exception as error:
             raise Exception(f"Failed to create smart wallet: {error}")

@@ -29,7 +29,6 @@ def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None
     try:
         wallet = api_client.create_smart_wallet(
             WalletType.SOLANA_SMART_WALLET,
-            "solana",
             admin_signer,
             linked_user
         )

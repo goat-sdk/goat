@@ -61,7 +61,6 @@ class CrossmintWalletsAPI:
     def create_smart_wallet(
         self,
         wallet_type: WalletType,
-        chain: str,
         admin_signer: Optional[AdminSigner] = None,
         linked_user: Optional[str] = None
     ) -> Dict[str, Any]:
@@ -69,7 +68,6 @@ class CrossmintWalletsAPI:
         
         Args:
             wallet_type: Type of smart wallet (EVM_SMART_WALLET or SOLANA_SMART_WALLET)
-            chain: Chain identifier
             admin_signer: Optional admin signer configuration
             linked_user: Optional user identifier to link the wallet to
         
@@ -78,12 +76,11 @@ class CrossmintWalletsAPI:
         """
         payload = {
             "type": wallet_type.value,
-            "config": {
-                "adminSigner": admin_signer.model_dump() if admin_signer else None,
-                "chain": chain
-            },
             "linkedUser": linked_user
         }
+        
+        if admin_signer:
+            payload["config"]["adminSigner"] = admin_signer.model_dump()
         
         return self._request("/wallets", method="POST", json=payload)
     
