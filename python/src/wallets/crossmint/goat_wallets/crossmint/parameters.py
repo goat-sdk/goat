@@ -86,7 +86,7 @@ class SolanaSmartWalletTransactionParams(BaseModel):
         description="Optional signer locator that defaults to admin signer"
     )
 
-    def model_dump(self) -> Dict[str, Any]:
+    def model_dump(self) -> Dict[str, Any]:  # type: ignore
         """Convert model to dictionary, filtering out None values."""
         data = super().model_dump()
         return {k: v for k, v in data.items() if v is not None}
@@ -100,7 +100,7 @@ class TransactionParams(BaseModel):
     transaction: Optional[str] = None
     signers: Optional[List[str]] = None
 
-    def model_dump(self) -> Dict[str, Any]:
+    def model_dump(self) -> Dict[str, Any]:  # type: ignore
         """Convert model to dictionary, filtering out None values."""
         data = super().model_dump()
         return {k: v for k, v in data.items() if v is not None}
