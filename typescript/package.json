@@ -51,7 +51,7 @@
     "keywords": ["ai", "agents", "web3"],
     "packageManager": "pnpm@9.14.2",
     "dependencies": {
-        "@solana/web3.js": "1.98.0",
+        "@solana/web3.js": "1.95.8",
         "bs58": "^6.0.0",
         "commander": "13.0.0",
         "tweetnacl": "^1.0.3",
