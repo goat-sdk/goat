@@ -3,6 +3,9 @@ from solana.rpc.api import Client as SolanaClient
 from goat_wallets.crossmint.api_client import CrossmintWalletsAPI
 from goat_wallets.crossmint.solana_smart_wallet_factory import solana_smart_wallet_factory
 from goat_wallets.crossmint.parameters import DelegatedSignerPermission
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def main():
     api_key = os.getenv("CROSSMINT_API_KEY")
