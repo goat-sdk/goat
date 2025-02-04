@@ -461,6 +461,7 @@ If you would like to see your wallet provider supported, please open an issue or
 | Nansen | Get Nansen information using Nansen API | [@goat-sdk/plugin-nansen](https://www.npmjs.com/package/@goat-sdk/plugin-nansen) |
 | OpenSea | Get nft and sales information using OpenSea API | [@goat-sdk/plugin-opensea](https://www.npmjs.com/package/@goat-sdk/plugin-opensea) |
 | Orca | Create positions on Orca | [@goat-sdk/plugin-orca](https://www.npmjs.com/package/@goat-sdk/plugin-orca) |
+| PlunderSwap | Currency exchange on Zilliqa | [@goat-sdk/plugin-plunderswap](https://www.npmjs.com/package/@goat-sdk/plugin-plunderswap) |
 | Polymarket | Bet on Polymarket | [@goat-sdk/plugin-polymarket](https://www.npmjs.com/package/@goat-sdk/plugin-polymarket) |
 | Pump.fun | Launch a token on Pump.fun | [@goat-sdk/plugin-pump-fun](https://www.npmjs.com/package/@goat-sdk/plugin-pump-fun) |
 | Renzo | Create a position on Renzo | [@goat-sdk/plugin-renzo](https://www.npmjs.com/package/@goat-sdk/plugin-renzo) |
