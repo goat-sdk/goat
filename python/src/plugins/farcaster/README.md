@@ -1,48 +1,77 @@
-# Goat Farcaster Plugin 🐐 - Python
+# Farcaster Plugin for GOAT SDK
 
-Farcaster plugin for Goat. Allows you to create tools for interacting with the Farcaster social protocol through the Neynar API.
+A plugin for the GOAT SDK that provides Farcaster social protocol functionality through the Neynar API.
 
 ## Installation
+
 ```bash
-pip install goat-sdk-plugin-farcaster
+# Install the plugin
+poetry add goat-sdk-plugin-farcaster
+
+# Install required wallet dependency
+poetry add goat-sdk-wallet-evm
 ```
 
-## Setup
-    
-```python
-from goat_plugins.farcaster import farcaster
+## Usage
 
-plugin = farcaster({ 
-    "api_key": "your_neynar_api_key"
-})
+```python
+from goat_plugins.farcaster import farcaster, FarcasterPluginOptions
+
+# Initialize the plugin
+options = FarcasterPluginOptions(
+    api_key="${ETHERSCAN_API}",  # Your Neynar API key
+    base_url="https://api.neynar.com"  # Optional: Custom API base URL
+)
+plugin = farcaster(options)
+
+# Create a new cast
+cast = await plugin.create_cast(
+    text="Hello Farcaster! 🐐",
+    signer_uuid="your-signer-uuid"
+)
+
+# Get user's casts
+casts = await plugin.get_user_casts(
+    fid=1234,  # Farcaster user ID
+    limit=10
+)
+
+# Search casts
+search_results = await plugin.search_casts(
+    query="goat sdk",
+    limit=20
+)
 ```
 
 ## Features
 
-- Full Farcaster protocol support through Neynar API
-- Cast creation and interaction
-- Thread and conversation management
-- Search functionality
-- Authentication via Signer UUID
-- Proper error handling
-- Python async/await support
-- Type hints with Pydantic models
+- Social Protocol Integration:
+  - Cast creation and interaction
+  - Thread and conversation management
+  - User profile management
+  - Follow/unfollow functionality
+  
+- Content Discovery:
+  - Cast search and filtering
+  - Trending topics
+  - User recommendations
+  - Channel exploration
+  
+- Authentication:
+  - Signer UUID management
+  - Key rotation support
+  - Multi-device support
+  
+- Protocol Features:
+  - Reactions and recasts
+  - Mentions and notifications
+  - Rich media support
+  - Channel-based organization
+  
+- Network Support:
+  - Optimism (Layer 2)
+  - Farcaster Hub Network
 
-## API Reference
+## License
 
-### Plugin Configuration
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| api_key | str | Your Neynar API key |
-| base_url | str | (Optional) Custom API base URL |
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+This project is licensed under the terms of the MIT license.

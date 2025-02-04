@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goat-plugin-1inch"
+name = "goat-sdk-plugin-1inch"
 version = "0.1.0"
 description = "1inch plugin for GOAT SDK"
 authors = ["GOAT SDK Team"]
@@ -9,7 +9,7 @@ homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
     { include = "goat_plugins/inch1" },
-] 
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"

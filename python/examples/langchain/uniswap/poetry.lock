@@ -333,14 +333,25 @@ files = [
 ]
 
 [[package]]
+name = "cached-property"
+version = "2.0.1"
+description = "A decorator for caching properties in classes."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cached_property-2.0.1-py3-none-any.whl", hash = "sha256:f617d70ab1100b7bcf6e42228f9ddcb78c676ffa167278d9f730d1c2fba69ccb"},
+    {file = "cached_property-2.0.1.tar.gz", hash = "sha256:484d617105e3ee0e4f1f58725e72a8ef9e93deee462222dbd51cd91230897641"},
+]
+
+[[package]]
 name = "certifi"
-version = "2024.12.14"
+version = "2025.1.31"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "certifi-2024.12.14-py3-none-any.whl", hash = "sha256:1275f7a45be9464efc1173084eaa30f866fe2e47d389406136d332ed4967ec56"},
-    {file = "certifi-2024.12.14.tar.gz", hash = "sha256:b650d30f370c2b724812bee08008be0c4163b163ddaec3f2546c1caf65f191db"},
+    {file = "certifi-2025.1.31-py3-none-any.whl", hash = "sha256:ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe"},
+    {file = "certifi-2025.1.31.tar.gz", hash = "sha256:3d5da6925056f6f18f119200434a4780a94263f10d1c21d032a6f6b2baa20651"},
 ]
 
 [[package]]
@@ -826,23 +837,24 @@ test = ["pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
 
 [[package]]
 name = "eth-keyfile"
-version = "0.8.1"
+version = "0.9.0"
 description = "eth-keyfile: A library for handling the encrypted keyfiles used to store ethereum private keys"
 optional = false
 python-versions = "<4,>=3.8"
 files = [
-    {file = "eth_keyfile-0.8.1-py3-none-any.whl", hash = "sha256:65387378b82fe7e86d7cb9f8d98e6d639142661b2f6f490629da09fddbef6d64"},
-    {file = "eth_keyfile-0.8.1.tar.gz", hash = "sha256:9708bc31f386b52cca0969238ff35b1ac72bd7a7186f2a84b86110d3c973bec1"},
+    {file = "eth_keyfile-0.9.0-py3-none-any.whl", hash = "sha256:45d3513b6433ad885370225ba0429ed26493ba23589c5b1ca5da024765020fef"},
+    {file = "eth_keyfile-0.9.0.tar.gz", hash = "sha256:8621c35e83cbc05909d2f23dbb8a87633918733caea553ae0e298f6a06291526"},
 ]
 
 [package.dependencies]
 eth-keys = ">=0.4.0"
 eth-utils = ">=2"
+py_ecc = ">=5.2.0"
 pycryptodome = ">=3.6.6,<4"
 
 [package.extras]
-dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "ipython", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
-docs = ["towncrier (>=21,<22)"]
+dev = ["build (>=0.9.0)", "bump_my_version (>=0.19.0)", "ipython", "mypy (==1.10.0)", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "towncrier (>=24,<25)", "tox (>=4.0.0)", "twine", "wheel"]
+docs = ["towncrier (>=24,<25)"]
 test = ["pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
 
 [[package]]
@@ -1048,7 +1060,7 @@ files = [
 
 [[package]]
 name = "goat-sdk"
-version = "0.1.2"
+version = "0.1.3"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
 optional = false
 python-versions = "^3.10"
@@ -1058,6 +1070,7 @@ develop = true
 [package.dependencies]
 asyncio = "^3.4.1"
 pydantic = "^2.10.0"
+typing-extensions = "^4.12.2"
 
 [package.source]
 type = "directory"
@@ -1145,6 +1158,7 @@ develop = true
 [package.dependencies]
 evmchains = "^0.1.3"
 goat-sdk = "^0.1.0"
+typing-extensions = "^4.12.2"
 
 [package.source]
 type = "directory"
@@ -1152,7 +1166,7 @@ url = "../../../src/wallets/evm"
 
 [[package]]
 name = "goat-sdk-wallet-web3"
-version = "0.1.1"
+version = "0.1.2"
 description = "Goat SDK Web3 wallet implementation"
 optional = false
 python-versions = "^3.10"
@@ -1499,18 +1513,18 @@ referencing = ">=0.31.0"
 
 [[package]]
 name = "langchain"
-version = "0.3.15"
+version = "0.3.17"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain-0.3.15-py3-none-any.whl", hash = "sha256:2657735184054cae8181ac43fce6cbc9ee64ca81a2ad2aed3ccd6e5d6fe1f19f"},
-    {file = "langchain-0.3.15.tar.gz", hash = "sha256:1204d67f8469cd8da5621d2b39501650a824d4c0d5a74264dfe3df9a7528897e"},
+    {file = "langchain-0.3.17-py3-none-any.whl", hash = "sha256:4d6d3cf454cc261a5017fd1fa5014cffcc7aeaccd0ec0530fc10c5f71e6e97a0"},
+    {file = "langchain-0.3.17.tar.gz", hash = "sha256:cef56f0a7c8369f35f1fa2690ecf0caa4504a36a5383de0eb29b8a5e26f625a0"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.8.3,<4.0.0"
-langchain-core = ">=0.3.31,<0.4.0"
+langchain-core = ">=0.3.33,<0.4.0"
 langchain-text-splitters = ">=0.3.3,<0.4.0"
 langsmith = ">=0.1.17,<0.4"
 numpy = {version = ">=1.26.2,<3", markers = "python_version >= \"3.12\""}
@@ -1522,13 +1536,13 @@ tenacity = ">=8.1.0,<8.4.0 || >8.4.0,<10"
 
 [[package]]
 name = "langchain-core"
-version = "0.3.31"
+version = "0.3.33"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langchain_core-0.3.31-py3-none-any.whl", hash = "sha256:882e64ad95887c951dce8e835889e43263b11848c394af3b73e06912624bd743"},
-    {file = "langchain_core-0.3.31.tar.gz", hash = "sha256:5ffa56354c07de9efaa4139609659c63e7d9b29da2c825f6bab9392ec98300df"},
+    {file = "langchain_core-0.3.33-py3-none-any.whl", hash = "sha256:269706408a2223f863ff1f9616f31903a5712403199d828b50aadbc4c28b553a"},
+    {file = "langchain_core-0.3.33.tar.gz", hash = "sha256:b5dd93a4e7f8198d2fc6048723b0bfecf7aaf128b0d268cbac19c34c1579b953"},
 ]
 
 [package.dependencies]
@@ -1575,13 +1589,13 @@ langchain-core = ">=0.3.29,<0.4.0"
 
 [[package]]
 name = "langsmith"
-version = "0.3.1"
+version = "0.3.4"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "langsmith-0.3.1-py3-none-any.whl", hash = "sha256:b6afbb214ae82b6d96b8134718db3a7d2598b2a7eb4ab1212bcd6d96e04eda10"},
-    {file = "langsmith-0.3.1.tar.gz", hash = "sha256:9242a49d37e2176a344ddec97bf57b958dc0e1f0437e150cefd0fb70195f0e26"},
+    {file = "langsmith-0.3.4-py3-none-any.whl", hash = "sha256:f3b818ce31dc3bdf1f797e75bf32a8a7b062a411f146bd4ffdfc2be0b4b03233"},
+    {file = "langsmith-0.3.4.tar.gz", hash = "sha256:79fd516e68bbc30f408ab0b30a92175e5be0f5c21002e30a7804c59cb72cfe1a"},
 ]
 
 [package.dependencies]
@@ -1860,13 +1874,13 @@ files = [
 
 [[package]]
 name = "openai"
-version = "1.60.1"
+version = "1.61.0"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "openai-1.60.1-py3-none-any.whl", hash = "sha256:714181ec1c452353d456f143c22db892de7b373e3165063d02a2b798ed575ba1"},
-    {file = "openai-1.60.1.tar.gz", hash = "sha256:beb1541dfc38b002bd629ab68b0d6fe35b870c5f4311d9bc4404d85af3214d5e"},
+    {file = "openai-1.61.0-py3-none-any.whl", hash = "sha256:e8c512c0743accbdbe77f3429a1490d862f8352045de8dc81969301eb4a4f666"},
+    {file = "openai-1.61.0.tar.gz", hash = "sha256:216f325a24ed8578e929b0f1b3fb2052165f3b04b0461818adaa51aa29c71f8a"},
 ]
 
 [package.dependencies]
@@ -2123,6 +2137,27 @@ files = [
 ]
 
 [[package]]
+name = "py-ecc"
+version = "7.0.1"
+description = "py-ecc: Elliptic curve crypto in python including secp256k1, alt_bn128, and bls12_381"
+optional = false
+python-versions = "<4,>=3.8"
+files = [
+    {file = "py_ecc-7.0.1-py3-none-any.whl", hash = "sha256:84a8b4d436163c83c65345a68e32f921ef6e64374a36f8e561f0455b4b08f5f2"},
+    {file = "py_ecc-7.0.1.tar.gz", hash = "sha256:557461f42e57294d734305a30faf6b8903421651871e9cdeff8d8e67c6796c70"},
+]
+
+[package.dependencies]
+cached-property = ">=1.5.1"
+eth-typing = ">=3.0.0"
+eth-utils = ">=2.0.0"
+
+[package.extras]
+dev = ["build (>=0.9.0)", "bumpversion (>=0.5.3)", "ipython", "pre-commit (>=3.4.0)", "pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)", "sphinx (>=6.0.0)", "sphinx-autobuild (>=2021.3.14)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)", "tox (>=4.0.0)", "twine", "wheel"]
+docs = ["sphinx (>=6.0.0)", "sphinx-autobuild (>=2021.3.14)", "sphinx-rtd-theme (>=1.0.0)", "towncrier (>=21,<22)"]
+test = ["pytest (>=7.0.0)", "pytest-xdist (>=2.4.0)"]
+
+[[package]]
 name = "pycparser"
 version = "2.22"
 description = "C parser in Python"
@@ -2328,13 +2363,13 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.25.2"
+version = "0.25.3"
 description = "Pytest support for asyncio"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "pytest_asyncio-0.25.2-py3-none-any.whl", hash = "sha256:0d0bb693f7b99da304a0634afc0a4b19e49d5e0de2d670f38dc4bfa5727c5075"},
-    {file = "pytest_asyncio-0.25.2.tar.gz", hash = "sha256:3f8ef9a98f45948ea91a0ed3dc4268b5326c0e7bce73892acc654df4262ad45f"},
+    {file = "pytest_asyncio-0.25.3-py3-none-any.whl", hash = "sha256:9e89518e0f9bd08928f97a3482fdc4e244df17529460bc038291ccaf8f85c7c3"},
+    {file = "pytest_asyncio-0.25.3.tar.gz", hash = "sha256:fc1da2cf9f125ada7e710b4ddad05518d4cee187ae9412e9ac9271003497f07a"},
 ]
 
 [package.dependencies]
@@ -3323,4 +3358,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "3c9cd13e27ee9576427268ced9644be5d53f5187a12f9a092a1078c60a38122d"
+content-hash = "23b59095d321fd82be682cf46e5fa2e6c5d6460b0e86f783511d329f4ddeeada"

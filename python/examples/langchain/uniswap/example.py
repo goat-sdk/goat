@@ -33,6 +33,7 @@ if chain_id != 8453:  # Base chain ID
 
 account: LocalAccount = Account.from_key(private_key)
 w3.eth.default_account = account.address  # Set the default account
+w3.eth.default_local_account = account
 w3.middleware_onion.add(
     construct_sign_and_send_raw_middleware(account)
 )  # Add middleware

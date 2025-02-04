@@ -4,7 +4,7 @@ from goat.classes.wallet_client_base import Balance, Signature
 from web3 import Web3
 from web3.types import Wei, TxParams
 from eth_utils.address import to_checksum_address
-from eth_account.messages import encode_typed_data
+from eth_account.messages import encode_defunct, encode_typed_data
 
 from goat.types.chain import EvmChain
 from goat_wallets.evm import EVMWalletClient
@@ -65,8 +65,11 @@ class Web3EVMWalletClient(EVMWalletClient):
         if not self._web3.eth.default_account:
             raise ValueError("No account connected")
 
-        signature = self._web3.eth.sign(self._web3.eth.default_account, text=message)
-        return {"signature": signature}
+
+        signable_message = encode_defunct(text=message)
+        signed_message = self._web3.eth.default_local_account.sign_message(signable_message)  # type: ignore
+
+        return {"signature": self._web3.to_hex(signed_message.signature)}
 
     def sign_typed_data(self, data: EVMTypedData) -> Signature:
         """Sign typed data according to EIP-712."""
@@ -76,10 +79,11 @@ class Web3EVMWalletClient(EVMWalletClient):
         # Convert chain_id to int if it's present
         if "chainId" in data["domain"]:
             data["domain"]["chainId"] = int(data["domain"]["chainId"])
-
+        
         structured_data = encode_typed_data(full_message=data)  # type: ignore
-        signature = self._web3.eth.sign(self._web3.eth.default_account, structured_data)
-        return {"signature": signature}
+        signed_message = self._web3.eth.default_local_account.sign_message(structured_data)  # type: ignore
+
+        return {"signature": self._web3.to_hex(signed_message.signature)}
 
     def send_transaction(self, transaction: EVMTransaction) -> Dict[str, str]:
         """Send a transaction on the EVM chain."""

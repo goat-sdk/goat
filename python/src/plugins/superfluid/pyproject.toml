@@ -9,12 +9,12 @@ homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
     { include = "goat_plugins/superfluid" },
-] 
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-goat-sdk = { path = "../../goat-sdk", develop = true }
-goat-sdk-wallet-evm = { path = "../../wallets/evm", develop = true }
+goat-sdk = "^0.1.1"
+goat-sdk-wallet-evm = "^0.1.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"

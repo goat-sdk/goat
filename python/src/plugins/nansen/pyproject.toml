@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goat-plugin-nansen"
+name = "goat-sdk-plugin-nansen"
 version = "0.1.0"
 description = "Nansen plugin for GOAT SDK"
 authors = ["GOAT SDK Team"]
