@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-zilliqa
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [36f9544]
+  - @goat-sdk/wallet-zilliqa@0.3.0
+
 ## 0.1.5
 
 ### Patch Changes
