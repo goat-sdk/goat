@@ -1,5 +1,20 @@
 # @goat-sdk/wallet-zilliqa
 
+## 0.3.0
+
+### Minor Changes
+
+- 36f9544: Add a wallet variant that wraps Viem client
+
+## 0.2.8
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+  - @goat-sdk/wallet-evm@0.2.8
+  - @goat-sdk/wallet-viem@0.2.8
+
 ## 0.2.7
 
 ### Patch Changes

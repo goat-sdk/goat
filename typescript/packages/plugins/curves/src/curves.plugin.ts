@@ -1,7 +1,7 @@
 import { Chain, PluginBase, createTool } from "@goat-sdk/core";
+import { EVMTransaction, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { Address, formatUnits, parseUnits } from "viem";
 import { z } from "zod";
-import { EVMTransaction, EVMWalletClient } from "../../../wallets/evm/dist";
 import { validateConfig } from "./curves.config";
 import { CurvesOptions } from "./types";
 

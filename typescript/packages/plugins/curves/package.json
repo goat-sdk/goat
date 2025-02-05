@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-curves",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,13 +13,14 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "abitype": "^1.0.6",
         "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-viem": "workspace:*"
+        "@goat-sdk/wallet-evm": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {

@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.7
+
+### Patch Changes
+
+- a21a1f3: Add Radix support
+
 ## 0.4.6
 
 ### Patch Changes

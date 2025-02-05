@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-debridge",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "private": true,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -27,7 +27,7 @@
         "@types/node": "^18.0.0",
         "tsup": "^6.7.0",
         "typescript": "^5.2.2",
-        "vitest": "^0.34.0"
+        "vitest": "^1.6.1"
     },
     "homepage": "https://app.debridge.finance/",
     "repository": {

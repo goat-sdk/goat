@@ -20,7 +20,7 @@ GOAT (Great Onchain Agent Toolkit) is a library that adds more than +200 onchain
 
 * **[+200 tools](#plugins)**: DeFi (Uniswap, Jupiter, KIM, Orca, etc.), minting (OpenSea, MagicEden, etc.), betting (Polymarket, etc.), analytics (CoinGecko, BirdEye, Allora, etc.) and more
 * **Chains**: EVM (Base, Polygon, Mode, Sei, etc.), Solana, Aptos, Chromia, Fuel, Sui, Starknet and Zilliqa
-* **[Wallets](#wallets)**: keypair, smart wallets (Crossmint, etc.), LIT, MPC (Coinbase, etc.)
+* **[Wallets](#wallets)**: keypair, smart wallets (Crossmint, Safe, etc.), LIT, MPC (Coinbase, etc.)
 * **[Agent Frameworks](#agent-frameworks-adapters)**: AI SDK, Langchain, Eliza, ZerePy, GAME, ElevenLabs, etc.
 
 
@@ -404,14 +404,16 @@ If you would like to see your wallet provider supported, please open an issue or
 ### Wallets
 | Wallet | NPM package |
 | --- | --- |
-|EVM | [@goat-sdk/wallet-evm](https://www.npmjs.com/package/@goat-sdk/wallet-evm) |
-|Viem | [@goat-sdk/wallet-evm-viem](https://www.npmjs.com/package/@goat-sdk/wallet-evm-viem) | [goat-sdk-wallet-evm](https://pypi.org/project/goat-sdk-wallet-evm/) |
-| Solana | [@goat-sdk/wallet-solana](https://www.npmjs.com/package/@goat-sdk/wallet-solana) | [@goat-sdk-wallet-solana](https://pypi.org/project/goat-sdk-wallet-solana/) |
-| Crossmint (smart and custodial wallets) | [@goat-sdk/wallet-crossmint](https://www.npmjs.com/package/@goat-sdk/wallet-crossmint) | [@goat-sdk-wallet-crossmint](https://pypi.org/project/goat-sdk-wallet-crossmint/) |
+| EVM | [@goat-sdk/wallet-evm](https://www.npmjs.com/package/@goat-sdk/wallet-evm) |
+| Viem | [@goat-sdk/wallet-viem](https://www.npmjs.com/package/@goat-sdk/wallet-viem) |
+| Solana | [@goat-sdk/wallet-solana](https://www.npmjs.com/package/@goat-sdk/wallet-solana) | 
+| Crossmint (smart and custodial wallets) | [@goat-sdk/wallet-crossmint](https://www.npmjs.com/package/@goat-sdk/wallet-crossmint) |
 | Aptos | [@goat-sdk/wallet-aptos](https://www.npmjs.com/package/@goat-sdk/wallet-aptos) |
 | Chromia | [@goat-sdk/wallet-chromia](https://www.npmjs.com/package/@goat-sdk/wallet-chromia) |
 | Cosmos | [@goat-sdk/wallet-cosmos](https://www.npmjs.com/package/@goat-sdk/wallet-cosmos) |
 | Fuel | [@goat-sdk/wallet-fuel](https://www.npmjs.com/package/@goat-sdk/wallet-fuel) |
+| Radix | [@goat-sdk/wallet-radix](https://www.npmjs.com/package/@goat-sdk/wallet-radix) |
+| Safe | [@goat-sdk/wallet-safe](https://www.npmjs.com/package/@goat-sdk/wallet-safe) |
 | Sui | [@goat-sdk/wallet-sui](https://www.npmjs.com/package/@goat-sdk/wallet-sui) |
 | Starknet | [@goat-sdk/wallet-starknet](https://www.npmjs.com/package/@goat-sdk/wallet-starknet) |
 | Zilliqa | [@goat-sdk/wallet-zilliqa](https://www.npmjs.com/package/@goat-sdk/wallet-zilliqa) |
@@ -421,9 +423,9 @@ If you would like to see your wallet provider supported, please open an issue or
 | --- | --- |
 | AI SDK | [@goat-sdk/adapter-vercel-ai](https://www.npmjs.com/package/@goat-sdk/adapter-vercel-ai) | 
 | Langchain | [@goat-sdk/adapter-langchain](https://www.npmjs.com/package/@goat-sdk/adapter-langchain) | 
-| ElevenLabs | [@goat-sdk/adapter-elevenlabs](https://www.npmjs.com/package/@goat-sdk/adapter-elevenlabs) |  |
-| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://www.npmjs.com/package/@goat-sdk/adapter-llamaindex) |  |
-| Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://www.npmjs.com/package/@goat-sdk/adapter-model-context-protocol) |  |
+| ElevenLabs | [@goat-sdk/adapter-elevenlabs](https://www.npmjs.com/package/@goat-sdk/adapter-elevenlabs) |
+| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://www.npmjs.com/package/@goat-sdk/adapter-llamaindex) | 
+| Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://www.npmjs.com/package/@goat-sdk/adapter-model-context-protocol) |
 
 **Eliza, ZerePy and GAME have direct integrations on their respective repos.*
 
@@ -461,19 +463,20 @@ If you would like to see your wallet provider supported, please open an issue or
 | Nansen | Get Nansen information using Nansen API | [@goat-sdk/plugin-nansen](https://www.npmjs.com/package/@goat-sdk/plugin-nansen) |
 | OpenSea | Get nft and sales information using OpenSea API | [@goat-sdk/plugin-opensea](https://www.npmjs.com/package/@goat-sdk/plugin-opensea) |
 | Orca | Create positions on Orca | [@goat-sdk/plugin-orca](https://www.npmjs.com/package/@goat-sdk/plugin-orca) |
+| PlunderSwap | Currency exchange on Zilliqa | [@goat-sdk/plugin-plunderswap](https://www.npmjs.com/package/@goat-sdk/plugin-plunderswap) |
 | Polymarket | Bet on Polymarket | [@goat-sdk/plugin-polymarket](https://www.npmjs.com/package/@goat-sdk/plugin-polymarket) |
 | Pump.fun | Launch a token on Pump.fun | [@goat-sdk/plugin-pump-fun](https://www.npmjs.com/package/@goat-sdk/plugin-pump-fun) |
 | Renzo | Create a position on Renzo | [@goat-sdk/plugin-renzo](https://www.npmjs.com/package/@goat-sdk/plugin-renzo) |
 | Rugcheck | Check SPL token validity on Rugcheck | [@goat-sdk/plugin-rugcheck](https://www.npmjs.com/package/@goat-sdk/plugin-rugcheck) |
 | SNS | Interact with SNS | [@goat-sdk/plugin-sns](https://www.npmjs.com/package/@goat-sdk/plugin-sns) |
 | Solana Magic Eden | Purchase NFTs on Magic Eden | [@goat-sdk/plugin-solana-magiceden](https://www.npmjs.com/package/@goat-sdk/plugin-solana-magiceden) |
-| Solana NFTs | Get NFT information using Solana NFTs API | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts) |  |
-| SPL Tokens | Interact with SPL tokens | [@goat-sdk/plugin-spl-tokens](https://www.npmjs.com/package/@goat-sdk/plugin-spl-tokens) |  |
-| Starknet Token | Interact with Starknet tokens | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token) |  |
-| Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) |  |
-| Tensor | Purchase tokens on Tensor | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor) |  |
-| Uniswap | Swap tokens on Uniswap | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap) |  |
-| Velodrome | Create a position on Velodrome | [@goat-sdk/plugin-velodrome](https://www.npmjs.com/package/@goat-sdk/plugin-velodrome) |  |
-| Worldstore | Purchase physical assets on Worldstore | [@goat-sdk/plugin-worldstore](https://www.npmjs.com/package/@goat-sdk/plugin-worldstore) |  |
-| ZeroDev Global Address | Create a global address on ZeroDev | [@goat-sdk/plugin-zero-dev-global-address](https://www.npmjs.com/package/@goat-sdk/plugin-zero-dev-global-address) |  |
-| Zilliqa | Interact with Zilliqa | [@goat-sdk/plugin-zilliqa](https://www.npmjs.com/package/@goat-sdk/plugin-zilliqa) |  |
+| Solana NFTs | Get NFT information using Solana NFTs API | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts) |
+| SPL Tokens | Interact with SPL tokens | [@goat-sdk/plugin-spl-tokens](https://www.npmjs.com/package/@goat-sdk/plugin-spl-tokens) |
+| Starknet Token | Interact with Starknet tokens | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token) |
+| Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) |
+| Tensor | Purchase tokens on Tensor | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor) |
+| Uniswap | Swap tokens on Uniswap | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap) |
+| Velodrome | Create a position on Velodrome | [@goat-sdk/plugin-velodrome](https://www.npmjs.com/package/@goat-sdk/plugin-velodrome) |
+| Worldstore | Purchase physical assets on Worldstore | [@goat-sdk/plugin-worldstore](https://www.npmjs.com/package/@goat-sdk/plugin-worldstore) |
+| ZeroDev Global Address | Create a global address on ZeroDev | [@goat-sdk/plugin-zero-dev-global-address](https://www.npmjs.com/package/@goat-sdk/plugin-zero-dev-global-address) |
+| Zilliqa | Interact with Zilliqa | [@goat-sdk/plugin-zilliqa](https://www.npmjs.com/package/@goat-sdk/plugin-zilliqa) |
