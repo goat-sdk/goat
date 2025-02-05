@@ -2030,8 +2030,8 @@ importers:
   packages/wallets/safe:
     dependencies:
       '@goat-sdk/core':
-        specifier: 0.4.6
-        version: 0.4.6(zod@3.24.1)
+        specifier: workspace:*
+        version: link:../../core
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../evm
@@ -4681,11 +4681,6 @@ packages:
 
   '@fuels/vm-asm@0.58.2':
     resolution: {integrity: sha512-1/5azTzKJP508BXbZvM6Y0V5bCCX5JgEnd/8mXdBFmFvNLOhiYbwb25yk26auqOokfBXvthSkdkrvipEFft6jQ==}
-
-  '@goat-sdk/core@0.4.6':
-    resolution: {integrity: sha512-jFk0G9d/WlR1juIhCKtgEr7HBi2v7/veqouP1Zm1KC6EU2bNHXMYrh2TkeO1wjep3ur1MK4DDY1c+rS4WSY/7g==}
-    peerDependencies:
-      zod: ^3.0.0
 
   '@google-cloud/vertexai@1.9.0':
     resolution: {integrity: sha512-8brlcJwFXI4fPuBtsDNQqCdWZmz8gV9jeEKOU0vc5H2SjehCQpXK/NwuSEr916zbhlBHtg/sU37qQQdgvh5BRA==}
@@ -16861,11 +16856,6 @@ snapshots:
       cli-table: 0.3.11
 
   '@fuels/vm-asm@0.58.2': {}
-
-  '@goat-sdk/core@0.4.6(zod@3.24.1)':
-    dependencies:
-      reflect-metadata: 0.2.2
-      zod: 3.24.1
 
   '@google-cloud/vertexai@1.9.0(encoding@0.1.13)':
     dependencies:
