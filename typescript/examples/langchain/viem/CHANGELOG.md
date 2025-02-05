@@ -1,5 +1,16 @@
 # goat-examples-langchain-viem
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+  - @goat-sdk/adapter-langchain@0.2.10
+  - @goat-sdk/plugin-erc20@0.2.10
+  - @goat-sdk/wallet-evm@0.2.8
+  - @goat-sdk/wallet-viem@0.2.8
+
 ## 0.2.12
 
 ### Patch Changes

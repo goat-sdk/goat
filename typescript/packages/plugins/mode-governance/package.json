@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-mode-governance",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

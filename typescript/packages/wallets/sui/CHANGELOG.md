@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-sui
 
+## 0.2.12
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+
 ## 0.2.11
 
 ### Patch Changes

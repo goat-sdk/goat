@@ -1,5 +1,14 @@
 # goat-examples-vercel-ai-fuel
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+  - @goat-sdk/adapter-vercel-ai@0.2.8
+  - @goat-sdk/wallet-fuel@0.1.7
+
 ## 0.1.7
 
 ### Patch Changes

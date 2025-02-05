@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-dexscreener
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+
 ## 0.1.4
 
 ### Patch Changes
