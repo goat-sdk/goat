@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goat-plugin-rugcheck"
+name = "goat-sdk-plugin-rugcheck"
 version = "0.1.0"
 description = "A Python rugcheck plugin for the GOAT SDK"
 authors = ["GOAT SDK Team"]
@@ -9,7 +9,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-goat-sdk = { path = "../../../.." }
+goat-sdk = "^0.1.1"
 aiohttp = "^3.8.4"
 pydantic = "^1.10"
 

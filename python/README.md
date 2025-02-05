@@ -101,7 +101,7 @@ print(response)
 ```
 
 ## How to create a plugin
-GOAT plugins enable your agent to interact with various blockchain protocols. 
+GOAT plugins enable your agent to interact with various blockchain protocols.
 
 Plugins can be chain-specific (EVM, Solana, etc.) or chain-agnostic. If a plugin is chain-specific it will fail to compile when being used with a wallet of a different chain.
 
@@ -265,14 +265,14 @@ Add your chain to the `chain.py` file in the [core package](https://github.com/g
 ```python
 class MyAwesomeChain(TypedDict):
     """MyAwesomeChain chain type definition
-    
+
     Args:
         type: Literal "my-awesome-chain" chain type identifier
     """
     type: Literal["my-awesome-chain"]
 
-# ... 
-Chain = Union[EvmChain, SolanaChain, MyAwesomeChain]    
+# ...
+Chain = Union[EvmChain, SolanaChain, MyAwesomeChain]
 ```
 
 ### 2. Create a new wallet provider package
@@ -385,7 +385,7 @@ If you would like to see your wallet provider supported, please open an issue or
 | Dexscreener | Get token information using Dexscreener API | [goat-sdk-plugin-dexscreener](https://pypi.org/project/goat-sdk-plugin-dexscreener/) |
 | ERC20 | Interact with any ERC20 token | [goat-sdk-plugin-erc20](https://pypi.org/project/goat-sdk-plugin-erc20/) |
 | Farcaster | Read and post casts on Farcaster | [goat-sdk-plugin-farcaster](https://pypi.org/project/goat-sdk-plugin-farcaster/) |
-| JSON RPC | Call any JSON RPC endpoint |[goat-sdk-plugin-json-rpc](https://pypi.org/project/goat-sdk-plugin-json-rpc/) |  |
+| JSON RPC | Call any JSON RPC endpoint |[goat-sdk-plugin-jsonrpc](https://pypi.org/project/goat-sdk-plugin-jsonrpc/) |  |
 | Jupiter | Get price predictions using Jupiter API | [goat-sdk-plugin-jupiter](https://pypi.org/project/goat-sdk-plugin-jupiter/) |  |
 | Nansen | Get wallet insights using Nansen API | [goat-sdk-plugin-nansen](https://pypi.org/project/goat-sdk-plugin-nansen/) |  |
 | OpenSea | Get NFT and sales data from OpenSea | [goat-sdk-plugin-opensea](https://pypi.org/project/goat-sdk-plugin-opensea/) |  |

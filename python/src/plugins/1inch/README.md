@@ -1,52 +1,52 @@
-# 1inch Plugin for GOAT
+# 1inch Plugin for GOAT SDK
 
-This plugin provides integration with the 1inch API for the GOAT SDK.
-
-## Features
-
-- Get token balances and allowances for a wallet address on a specific chain
+A plugin for the GOAT SDK that provides 1inch DEX aggregator functionality.
 
 ## Installation
 
 ```bash
-pip install goat-plugin-1inch
+# Install the plugin
+poetry add goat-sdk-plugin-1inch
+
+# Install required wallet dependency
+poetry add goat-sdk-wallet-evm
 ```
 
 ## Usage
 
 ```python
-from goat_plugins.inch1 import OneInchService
+from goat_plugins.inch1 import inch1, Inch1PluginOptions
 
-# Initialize the service with your API key
-service = OneInchService(api_key="your_api_key")
+# Initialize the plugin
+options = Inch1PluginOptions(
+    api_key="${INCH1_API_KEY}"  # Optional: API key for higher rate limits
+)
+plugin = inch1(options)
 
-# Get balances for a wallet
-balances = await service.get_aggregated_balances({
-    "wallet_address": "0x...",
-    "chain_id": 1  # Ethereum mainnet
-})
+# Get swap quote
+quote = await plugin.get_swap_quote(
+    chain_id=1,  # Ethereum mainnet
+    from_token_address="0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",  # ETH
+    to_token_address="0x6B175474E89094C44Da98b954EedeAC495271d0F",  # DAI
+    amount="1000000000000000000"  # 1 ETH in wei
+)
 ```
 
-## Configuration
+## Features
 
-The plugin requires a 1inch API key to function. You can obtain one from the [1inch Developer Portal](https://portal.1inch.dev/).
+- DEX aggregation across multiple chains
+- Swap quote functionality
+- Token price discovery
+- Supported chains:
+  - Ethereum
+  - Polygon
+  - BSC
+  - Arbitrum
+  - Optimism
+  - Avalanche
+  - Gnosis Chain
+  - Base
 
-Set your API key when initializing the service:
+## License
 
-```python
-service = OneInchService(api_key="your_api_key")
-```
-
-## Development
-
-To set up the development environment:
-
-1. Clone the repository
-2. Install dependencies with Poetry:
-   ```bash
-   poetry install
-   ```
-3. Run tests:
-   ```bash
-   poetry run pytest
-   ```
+This project is licensed under the terms of the MIT license.

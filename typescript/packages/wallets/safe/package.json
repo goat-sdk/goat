@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-safe",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -12,7 +12,7 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core": "0.4.6",
+        "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
         "@safe-global/protocol-kit": "5.2.1",
         "@safe-global/safe-core-sdk-types": "5.1.0",
@@ -20,6 +20,7 @@
         "viem": "catalog:"
     },
     "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:"
     },

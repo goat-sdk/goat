@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "goat-sdk-plugin-spl-token"
+name = "goat-sdk-plugin-spl-tokens"
 version = "0.1.0"
 description = "Goat plugin for spl_token"
 authors = ["Your Name <your_email@example.com>"]

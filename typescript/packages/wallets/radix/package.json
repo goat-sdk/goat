@@ -1,6 +1,6 @@
 {
-    "name": "@goat-sdk/plugin-curves",
-    "version": "0.0.2",
+    "name": "@goat-sdk/wallet-radix",
+    "version": "0.2.6",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,14 +13,12 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-evm": "workspace:*",
-        "abitype": "^1.0.6",
-        "viem": "catalog:",
+        "radix-web3.js": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallet-evm": "workspace:*"
+        "radix-web3.js": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
@@ -31,5 +29,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3", "form"]
+    "keywords": ["ai", "agents", "web3"]
 }

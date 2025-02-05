@@ -1,10 +1,11 @@
 import aiohttp
 import json
-from typing import Any, Dict
+from typing import Any, Dict, cast
+from eth_typing import HexStr
 from goat.decorators.tool import Tool
 from .parameters import CheckApprovalParameters, GetQuoteParameters
+from goat_wallets.evm import EVMTransaction, EVMTypedData
 from goat_wallets.evm import EVMWalletClient
-from goat_wallets.evm.types import EVMTransaction
 from goat_plugins.erc20.abi import ERC20_ABI
 
 
@@ -144,11 +145,32 @@ class UniswapService:
     async def swap_tokens(self, wallet_client: EVMWalletClient, parameters: dict):
         """Execute a token swap on Uniswap."""
         try:
-            quote = await self.get_quote(wallet_client, parameters)
+            quote_response = await self.get_quote(wallet_client, parameters)
+            quote = quote_response["quote"]
+            permit_data = quote_response.get("permitData")
+
+            swap_params = {
+                "quote": quote,
+            }
             
-            response = await self.make_request("swap", {
-                "quote": quote["quote"]
-            })
+            # Handle permit signature if permit data is present
+            if permit_data:
+                # Create properly typed data structure
+                typed_data: EVMTypedData = {
+                    "domain": permit_data["domain"],
+                    "types": permit_data["types"],
+                    "primaryType": list(permit_data["types"].keys())[0],
+                    "message": permit_data["values"]
+                }
+                signature = wallet_client.sign_typed_data(typed_data)
+
+                swap_params["permitData"] = permit_data
+                swap_params["signature"] = str(signature["signature"])
+
+            print(f"\nRequest parameters for swap:")
+            print(json.dumps(swap_params, indent=2))
+            
+            response = await self.make_request("swap", swap_params)
             
             swap = response["swap"]
             # Create properly typed transaction object using raw API response
@@ -161,11 +183,12 @@ class UniswapService:
             else:
                 value = int(value) if value else 0
             
-            transaction_params: EVMTransaction = {
-                "to": swap["to"],
-                "data": swap["data"],
-                "value": value
-            }
+            # Create and cast the transaction parameters
+            transaction_params = cast(EVMTransaction, {
+                "to": wallet_client.resolve_address(swap["to"]),
+                "value": value,
+                "data": HexStr(swap["data"])
+            })
             
             # Send the transaction
             transaction = wallet_client.send_transaction(transaction_params)

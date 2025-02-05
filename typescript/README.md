@@ -412,6 +412,7 @@ If you would like to see your wallet provider supported, please open an issue or
 | Chromia | [@goat-sdk/wallet-chromia](https://www.npmjs.com/package/@goat-sdk/wallet-chromia) |
 | Cosmos | [@goat-sdk/wallet-cosmos](https://www.npmjs.com/package/@goat-sdk/wallet-cosmos) |
 | Fuel | [@goat-sdk/wallet-fuel](https://www.npmjs.com/package/@goat-sdk/wallet-fuel) |
+| Radix | [@goat-sdk/wallet-radix](https://www.npmjs.com/package/@goat-sdk/wallet-radix) |
 | Sui | [@goat-sdk/wallet-sui](https://www.npmjs.com/package/@goat-sdk/wallet-sui) |
 | Starknet | [@goat-sdk/wallet-starknet](https://www.npmjs.com/package/@goat-sdk/wallet-starknet) |
 | Zilliqa | [@goat-sdk/wallet-zilliqa](https://www.npmjs.com/package/@goat-sdk/wallet-zilliqa) |
