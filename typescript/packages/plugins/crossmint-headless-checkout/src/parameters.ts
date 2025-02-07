@@ -98,10 +98,10 @@ export const physicalAddressSchema = z
 			});
 		}
 
-		if (data.country === "US" && isEmpty(data.state)) {
+		if (data.country === "US" && !data.state) {
 			ctx.addIssue({
 				code: z.ZodIssueCode.custom,
-				message: "State is required for US mailing address",
+				message: "State is required for US physical address",
 			});
 		}
 	})
