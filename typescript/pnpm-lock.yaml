@@ -706,7 +706,7 @@ importers:
     dependencies:
       '@ai-sdk/openai':
         specifier: ^1.0.4
-        version: 1.0.13(zod@3.23.8)
+        version: 1.0.13(zod@3.24.1)
       '@goat-sdk/adapter-vercel-ai':
         specifier: workspace:*
         version: link:../../../packages/adapters/vercel-ai
@@ -716,12 +716,6 @@ importers:
       '@goat-sdk/crossmint':
         specifier: workspace:*
         version: link:../../../packages/wallets/crossmint
-      '@goat-sdk/plugin-crossmint-headless-checkout':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/crossmint-headless-checkout
-      '@goat-sdk/plugin-worldstore':
-        specifier: workspace:*
-        version: link:../../../packages/plugins/worldstore
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -730,20 +724,13 @@ importers:
         version: link:../../../packages/wallets/viem
       ai:
         specifier: 'catalog:'
-        version: 4.0.3(react@18.3.1)(zod@3.23.8)
+        version: 4.0.3(react@18.3.1)(zod@3.24.1)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zod:
-        specifier: 'catalog:'
-        version: 3.23.8
-    devDependencies:
-      '@types/node':
-        specifier: 22.7.4
-        version: 22.7.4
+        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
 
   examples/vercel-ai/sns:
     dependencies:
