@@ -706,7 +706,7 @@ importers:
     dependencies:
       '@ai-sdk/openai':
         specifier: ^1.0.4
-        version: 1.0.13(zod@3.24.1)
+        version: 1.0.13(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
         specifier: workspace:*
         version: link:../../../packages/adapters/vercel-ai
@@ -716,6 +716,12 @@ importers:
       '@goat-sdk/crossmint':
         specifier: workspace:*
         version: link:../../../packages/wallets/crossmint
+      '@goat-sdk/plugin-crossmint-headless-checkout':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/crossmint-headless-checkout
+      '@goat-sdk/plugin-worldstore':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/worldstore
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../../packages/wallets/evm
@@ -724,13 +730,20 @@ importers:
         version: link:../../../packages/wallets/viem
       ai:
         specifier: 'catalog:'
-        version: 4.0.3(react@18.3.1)(zod@3.24.1)
+        version: 4.0.3(react@18.3.1)(zod@3.23.8)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
       viem:
         specifier: 2.21.49
-        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
+        version: 2.21.49(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+    devDependencies:
+      '@types/node':
+        specifier: 22.7.4
+        version: 22.7.4
 
   examples/vercel-ai/sns:
     dependencies:
@@ -1143,8 +1156,8 @@ importers:
   packages/plugins/crossmint-headless-checkout:
     dependencies:
       '@crossmint/client-sdk-base':
-        specifier: 1.4.4
-        version: 1.4.4
+        specifier: 1.4.6
+        version: 1.4.6
       '@crossmint/common-sdk-base':
         specifier: 0.3.1
         version: 0.3.1
@@ -3418,8 +3431,8 @@ packages:
   '@cosmjs/utils@0.33.0':
     resolution: {integrity: sha512-Y6glwHNlNjcOgwPg8YmNr1PSrNm307EhJVytFt8HmA/G7MRcIA+jIzCL0VlOrWGU4TrAOXvshM+oJZbTIldFRA==}
 
-  '@crossmint/client-sdk-base@1.4.4':
-    resolution: {integrity: sha512-TkerlGDrsiu8LqyU03PY1gqp5NlNZxU4mMnx82tu5v7pZBiU11gxh7xXVijw/oPQoAQkosmHzxKqGpMPac5+uA==}
+  '@crossmint/client-sdk-base@1.4.6':
+    resolution: {integrity: sha512-EcCy0PI/WpDFLi6sF1E7Y1UfbNLSBZFLs4nhncf7aees/TqBljKJGQ96zbs95rb76Ct2KMkoQw+n2FEuYIpoWw==}
 
   '@crossmint/client-sdk-window@0.2.2':
     resolution: {integrity: sha512-JGNdAz4HNoyUXGOCs9sBOiH/WLaC1iamXw1ZHVPl/Kxs0wYKYu6vkau7UJ693FHKHm4G64EoCYKEoacag/7vnw==}
@@ -6452,9 +6465,6 @@ packages:
 
   '@types/node@22.10.10':
     resolution: {integrity: sha512-X47y/mPNzxviAGY5TcYPtYL8JsY3kAq2n8fMmKoRCxq/c4v4pyGNCzM2R6+M5/umG4ZfHuT+sgqDYqWc9rJ6ww==}
-
-  '@types/node@22.10.5':
-    resolution: {integrity: sha512-F8Q+SeGimwOo86fiovQh8qiXfFEh2/ocYv7tU5pJ3EXMSSxk1Joj5wefpFK2fHTf/N6HKGSxIDBT9f3gCxXPkQ==}
 
   '@types/node@22.7.4':
     resolution: {integrity: sha512-y+NPi1rFzDs1NdQHHToqeiX2TIS79SWEAw9GYhkkx8bD0ChpfqC+n2j5OXOCpzfojBEBt6DnEnnG9MY0zk1XLg==}
@@ -13078,7 +13088,7 @@ snapshots:
 
   '@anthropic-ai/sdk@0.30.1(encoding@0.1.13)':
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -13090,7 +13100,7 @@ snapshots:
 
   '@anthropic-ai/sdk@0.32.1(encoding@0.1.13)':
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -15212,7 +15222,7 @@ snapshots:
 
   '@cosmjs/utils@0.33.0': {}
 
-  '@crossmint/client-sdk-base@1.4.4':
+  '@crossmint/client-sdk-base@1.4.6':
     dependencies:
       '@crossmint/client-sdk-window': 0.2.2
       '@crossmint/common-sdk-base': 0.3.1
@@ -17559,7 +17569,7 @@ snapshots:
   '@llamaindex/core@0.4.19(@aws-crypto/sha256-js@5.2.0)(@huggingface/transformers@3.2.4)(gpt-tokenizer@2.8.1)(js-tiktoken@1.0.16)(pathe@1.1.2)':
     dependencies:
       '@llamaindex/env': 0.1.25(@aws-crypto/sha256-js@5.2.0)(@huggingface/transformers@3.2.4)(gpt-tokenizer@2.8.1)(js-tiktoken@1.0.16)(pathe@1.1.2)
-      '@types/node': 22.10.5
+      '@types/node': 22.10.10
       magic-bytes.js: 1.10.0
       zod: 3.24.1
       zod-to-json-schema: 3.24.1(zod@3.24.1)
@@ -19804,10 +19814,6 @@ snapshots:
       undici-types: 6.19.8
 
   '@types/node@22.10.10':
-    dependencies:
-      undici-types: 6.20.0
-
-  '@types/node@22.10.5':
     dependencies:
       undici-types: 6.20.0
 
@@ -23400,7 +23406,7 @@ snapshots:
 
   groq-sdk@0.8.0(encoding@0.1.13):
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -24235,7 +24241,7 @@ snapshots:
       '@pinecone-database/pinecone': 4.0.0
       '@qdrant/js-client-rest': 1.12.0(typescript@5.6.3)
       '@types/lodash': 4.17.14
-      '@types/node': 22.10.5
+      '@types/node': 22.10.10
       '@types/pg': 8.11.10
       '@upstash/vector': 1.1.7
       '@zilliz/milvus2-sdk-node': 2.5.3
@@ -25100,7 +25106,7 @@ snapshots:
 
   openai@4.73.0(encoding@0.1.13)(zod@3.23.8):
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -25114,7 +25120,7 @@ snapshots:
 
   openai@4.77.3(encoding@0.1.13)(zod@3.23.8):
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -25129,7 +25135,7 @@ snapshots:
 
   openai@4.77.3(encoding@0.1.13)(zod@3.24.1):
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0
@@ -25628,7 +25634,7 @@ snapshots:
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
       '@types/long': 4.0.2
-      '@types/node': 22.10.10
+      '@types/node': 20.17.11
       long: 4.0.0
 
   protobufjs@7.4.0:
@@ -26871,7 +26877,7 @@ snapshots:
 
   together-ai@0.7.0(encoding@0.1.13):
     dependencies:
-      '@types/node': 18.19.69
+      '@types/node': 18.19.74
       '@types/node-fetch': 2.6.12
       abort-controller: 3.0.0
       agentkeepalive: 4.6.0

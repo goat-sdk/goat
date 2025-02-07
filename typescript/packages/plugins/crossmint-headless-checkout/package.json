@@ -14,7 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@crossmint/common-sdk-base": "0.3.1",
-        "@crossmint/client-sdk-base": "1.4.4",
+        "@crossmint/client-sdk-base": "1.4.6",
         "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:",
         "zod": "catalog:"
