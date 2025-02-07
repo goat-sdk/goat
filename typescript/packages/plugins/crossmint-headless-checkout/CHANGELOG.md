@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-crossmint-headless-checkout
 
+## 0.0.8
+
+### Patch Changes
+
+- ca7611b: headless: tweak plugin
+
 ## 0.0.7
 
 ### Patch Changes
