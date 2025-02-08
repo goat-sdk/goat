@@ -1,0 +1,40 @@
+{
+    "name": "@goat-sdk/plugin-mayan",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "sideEffects": false,
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3"],
+    "dependencies": {
+        "@goat-sdk/core": "0.4.6",
+        "@goat-sdk/wallet-evm": "0.2.7",
+        "@goat-sdk/wallet-solana": "0.2.12",
+        "@goat-sdk/wallet-sui": "0.2.11",
+        "@goat-sdk/wallet-viem": "0.2.8",
+        "@mayanfinance/swap-sdk": "10.2.0",
+        "@mysten/sui": "^1.18.0",
+        "@solana/web3.js": "1.98.0",
+        "abitype": "1.0.8",
+        "bs58": "^6.0.0",
+        "dotenv": "16.4.7",
+        "ethers": "6.13.5",
+        "viem": "2.22.21",
+        "zod": "catalog:"
+    }
+}
