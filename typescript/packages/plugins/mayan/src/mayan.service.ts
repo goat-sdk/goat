@@ -31,21 +31,12 @@ export class MayanService {
         name: "mayan_swap_from_solana",
         description: "Swap from solana to solana, EVM, sui chain",
     })
-    async swapSolanaTool(
-        walletClient: SolanaWalletClient,
-        params: SwapParameters
-    ): Promise<string> {
+    async swapSolanaTool(walletClient: SolanaWalletClient, params: SwapParameters): Promise<string> {
         if (params.fromToken.length < 32) {
-            params.fromToken = await this.findTokenContract(
-                params.fromToken,
-                "solana"
-            );
+            params.fromToken = await this.findTokenContract(params.fromToken, "solana");
         }
         if (params.toToken.length < 32) {
-            params.toToken = await this.findTokenContract(
-                params.toToken,
-                params.toChain
-            );
+            params.toToken = await this.findTokenContract(params.toToken, params.toChain);
         }
 
         const quotes = await fetchQuote({
@@ -57,27 +48,22 @@ export class MayanService {
             slippageBps: params.slippageBps ?? "auto",
         });
         if (quotes.length === 0) {
-            throw new Error(
-                "There is no quote available for the tokens you requested."
-            );
+            throw new Error("There is no quote available for the tokens you requested.");
         }
 
-        const { instructions, signers, lookupTables } =
-            await createSwapFromSolanaInstructions(
-                quotes[0],
-                walletClient.getAddress(),
-                params.dstAddr,
-                null,
-                walletClient.getConnection()
-            );
+        const { instructions, signers, lookupTables } = await createSwapFromSolanaInstructions(
+            quotes[0],
+            walletClient.getAddress(),
+            params.dstAddr,
+            null,
+            walletClient.getConnection(),
+        );
         let hash: string;
         try {
             hash = (
                 await walletClient.sendTransaction({
                     instructions,
-                    addressLookupTableAddresses: lookupTables.map((a) =>
-                        a.key.toString()
-                    ),
+                    addressLookupTableAddresses: lookupTables.map((a) => a.key.toString()),
                     accountsToSign: signers,
                 })
             ).hash;
@@ -86,10 +72,9 @@ export class MayanService {
                 throw error;
             }
 
+            await new Promise((f) => setTimeout(f, 3000));
             hash = error.signature;
-            const res = await fetch(
-                `https://explorer-api.mayan.finance/v3/swap/trx/${hash}`
-            );
+            const res = await fetch(`https://explorer-api.mayan.finance/v3/swap/trx/${hash}`);
             if (res.status !== 200) {
                 throw error;
             }
@@ -102,21 +87,12 @@ export class MayanService {
         name: "mayan_swap_from_evm",
         description: "Swap from EVM to solana, EVM, sui chain",
     })
-    async swapEVMTool(
-        walletClient: EVMWalletClient,
-        params: EVMSwapParameters
-    ): Promise<string> {
+    async swapEVMTool(walletClient: EVMWalletClient, params: EVMSwapParameters): Promise<string> {
         if (params.fromToken.length < 32) {
-            params.fromToken = await this.findTokenContract(
-                params.fromToken,
-                params.fromChain
-            );
+            params.fromToken = await this.findTokenContract(params.fromToken, params.fromChain);
         }
         if (params.toToken.length < 32) {
-            params.toToken = await this.findTokenContract(
-                params.toToken,
-                params.toChain
-            );
+            params.toToken = await this.findTokenContract(params.toToken, params.toChain);
         }
 
         const quotes = await fetchQuote({
@@ -128,36 +104,26 @@ export class MayanService {
             slippageBps: params.slippageBps ?? "auto",
         });
         if (quotes.length === 0) {
-            throw new Error(
-                "There is no quote available for the tokens you requested."
-            );
+            throw new Error("There is no quote available for the tokens you requested.");
         }
 
         const amountIn = BigInt(quotes[0].effectiveAmountIn64);
-        const allowance: bigint = await this.callERC20(
-            walletClient,
-            params.fromToken,
-            "allowance",
-            [walletClient.getAddress(), addresses.MAYAN_FORWARDER_CONTRACT]
-        );
+        const allowance: bigint = await this.callERC20(walletClient, params.fromToken, "allowance", [
+            walletClient.getAddress(),
+            addresses.MAYAN_FORWARDER_CONTRACT,
+        ]);
         if (allowance < amountIn) {
             // Approve the spender to spend the tokens
-            const approveTx = await this.callERC20(
-                walletClient,
-                params.fromToken,
-                "approve",
-                [addresses.MAYAN_FORWARDER_CONTRACT, amountIn]
-            );
+            const approveTx = await this.callERC20(walletClient, params.fromToken, "approve", [
+                addresses.MAYAN_FORWARDER_CONTRACT,
+                amountIn,
+            ]);
             await approveTx.wait();
         }
 
         let permit: Erc20Permit | undefined;
         if (quotes[0].fromToken.supportsPermit) {
-            permit = await this.getERC20Permit(
-                walletClient,
-                quotes[0],
-                amountIn
-            );
+            permit = await this.getERC20Permit(walletClient, quotes[0], amountIn);
         }
 
         const transactionReq = getSwapFromEvmTxPayload(
@@ -168,16 +134,12 @@ export class MayanService {
             walletClient.getAddress(),
             walletClient.getChain().id,
             null,
-            permit
+            permit,
         );
         const { hash } = await walletClient.sendTransaction({
             to: transactionReq.to as string,
-            value: transactionReq.value
-                ? BigInt(transactionReq.value)
-                : undefined,
-            data: transactionReq.data
-                ? (transactionReq.data as `0x${string}`)
-                : undefined,
+            value: transactionReq.value ? BigInt(transactionReq.value) : undefined,
+            data: transactionReq.data ? (transactionReq.data as `0x${string}`) : undefined,
         });
 
         return `https://explorer.mayan.finance/swap/${hash}`;
@@ -233,14 +195,9 @@ export class MayanService {
     //    return `https://explorer.mayan.finance/swap/${hash}`;
     //}
 
-    private async findTokenContract(
-        symbol: string,
-        chain: string
-    ): Promise<string> {
+    private async findTokenContract(symbol: string, chain: string): Promise<string> {
         const tokens = await fetchTokenList(chain as ChainName, true);
-        const token = tokens.find(
-            (t) => t.symbol.toLowerCase() === symbol.toLowerCase()
-        );
+        const token = tokens.find((t) => t.symbol.toLowerCase() === symbol.toLowerCase());
         if (!token) {
             throw new Error(`Couldn't find token with ${symbol} symbol`);
         }
@@ -252,7 +209,7 @@ export class MayanService {
         walletClient: EVMWalletClient,
         contract: string,
         functionName: string,
-        args?: unknown[]
+        args?: unknown[],
     ): Promise<any> {
         const ret = await walletClient.read({
             address: contract,
@@ -263,40 +220,19 @@ export class MayanService {
         return ret.value as any;
     }
 
-    private async getERC20Permit(
-        walletClient: EVMWalletClient,
-        quote: Quote,
-        amountIn: bigint
-    ): Promise<Erc20Permit> {
+    private async getERC20Permit(walletClient: EVMWalletClient, quote: Quote, amountIn: bigint): Promise<Erc20Permit> {
         const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
         const spender = addresses.MAYAN_FORWARDER_CONTRACT;
         const walletSrcAddr = walletClient.getAddress();
-        const nonce = await this.callERC20(
-            walletClient,
-            quote.fromToken.contract,
-            "nonces",
-            [walletSrcAddr]
-        );
+        const nonce = await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [walletSrcAddr]);
 
         const domain: TypedDataDomain = {
-            name: await this.callERC20(
-                walletClient,
-                quote.fromToken.contract,
-                "name"
-            ),
+            name: await this.callERC20(walletClient, quote.fromToken.contract, "name"),
             version: "1",
             chainId: quote.fromToken.chainId,
-            verifyingContract: await this.callERC20(
-                walletClient,
-                quote.fromToken.contract,
-                "getAddress"
-            ),
+            verifyingContract: await this.callERC20(walletClient, quote.fromToken.contract, "getAddress"),
         };
-        const domainSeparator = await this.callERC20(
-            walletClient,
-            quote.fromToken.contract,
-            "DOMAIN_SEPARATOR"
-        );
+        const domainSeparator = await this.callERC20(walletClient, quote.fromToken.contract, "DOMAIN_SEPARATOR");
         for (let i = 1; i < 11; i++) {
             domain.version = String(i);
             const hash = TypedDataEncoder.hashDomain(domain);
@@ -329,12 +265,15 @@ export class MayanService {
             message: value,
         });
         const { v, r, s } = Signature.from(signature);
-        const permitTx = await this.callERC20(
-            walletClient,
-            quote.fromToken.contract,
-            "permit",
-            [walletSrcAddr, spender, amountIn, deadline, v, r, s]
-        );
+        const permitTx = await this.callERC20(walletClient, quote.fromToken.contract, "permit", [
+            walletSrcAddr,
+            spender,
+            amountIn,
+            deadline,
+            v,
+            r,
+            s,
+        ]);
         await permitTx.wait();
 
         return {

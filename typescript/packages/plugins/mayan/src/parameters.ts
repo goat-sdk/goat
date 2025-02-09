@@ -5,7 +5,7 @@ const commonParams = {
     amount: z
         .string()
         .refine((val) => !Number.isNaN(+val) && Number(val).toString() === val, "amount is not a valid number")
-        .describe("The amount of tokens to swap in the tokens base unit"),
+        .describe("The amount of tokens to swap"),
     fromToken: z.string().describe("Token symbol or contract address"),
     toChain: z
         .enum(["solana", "ethereum", "bsc", "polygon", "avalanche", "arbitrum", "optimism", "base", "sui"])
