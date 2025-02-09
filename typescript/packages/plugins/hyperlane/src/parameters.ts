@@ -3,9 +3,9 @@ import { z } from "zod";
 
 export class HyperlaneDeployParameters extends createToolParameters(
     z.object({
-        origin: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
-        destination: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
-        token: z.string().describe("Token contract address"),
+        origin: z.string().min(1).describe("Origin chain name (e.g. baseSepolia, arbitrumSepolia)"),
+        destination: z.string().min(1).describe("Destination chain name (e.g. baseSepolia, arbitrumSepolia)"),
+        token: z.string().regex(/^0x[a-fA-F0-9]{40}$/).describe("Token contract address on the origin chain"),
     }),
 ) {}
 
@@ -168,25 +168,11 @@ export class HyperlaneDeployChainParameters extends createToolParameters(
     }),
 ) {}
 
-export class HyperlaneWarpTransferParameters extends createToolParameters(
-    z.object({
-        originChain: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
-        destinationChain: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
-        token: z.string().describe("Token contract address to transfer"),
-        amount: z.string().describe("Amount of tokens to transfer"),
-        recipient: z.string().describe("Recipient address on destination chain"),
-        gasAmount: z.string().optional().describe("Optional gas amount for message processing"),
-    }),
-) {}
-
 export class HyperlaneGetTokenParameters extends createToolParameters(
     z.object({
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
         tokenSymbol: z.string().optional().describe("Token symbol to search for (e.g. USDC)"),
-        tokenType: z
-            .enum(["collateral", "synthetic"])
-            .optional()
-            .describe("Type of token to filter (collateral or synthetic)"),
+        standard: z.enum(["EvmHypCollateral", "EvmHypSynthetic"]).optional().describe("Token standard (EvmHypCollateral or EvmHypSynthetic)"),
         routerAddress: z.string().optional().describe("Specific router address to get token for"),
     }),
 ) {}

@@ -14,12 +14,25 @@ import {
     TokenType,
     WarpRouteDeployConfig,
     WarpRouteDeployConfigSchema,
+    TOKEN_TYPE_TO_STANDARD,
+    TokenFactories,
+    WarpCoreConfig,
+    getTokenConnectionId,
+    isCollateralTokenConfig,
+    isTokenMetadata,
+    HyperlaneContractsMap,
+    MultiProtocolProvider,
+    WarpCore,
+    TokenAmount,
+    ChainMap,
+    TypedTransactionReceipt,
+    WarpTxCategory,
 } from "@hyperlane-xyz/sdk";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { EvmERC20WarpRouteReader } from "@hyperlane-xyz/sdk";
-import { ProtocolType } from "@hyperlane-xyz/utils";
+import { ProtocolType, toWei } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
-import ethers from "ethers";
+import { ethers } from "ethers";
 import {
     HyperlaneAnnounceValidatorParameters,
     HyperlaneDeployChainParameters,
@@ -35,7 +48,6 @@ import {
     HyperlaneSecurityMonitorParameters,
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
-    HyperlaneWarpTransferParameters,
 } from "./parameters";
 
 import * as dotenv from "dotenv";
@@ -51,10 +63,6 @@ interface ChainAddresses {
     [key: string]: string | undefined;
 }
 
-interface Log {
-    topics: string[];
-}
-
 interface DeployedContracts {
     warpRouter?: string;
     interchainGasPaymaster?: string;
@@ -64,8 +72,8 @@ interface DeployedContracts {
 
 export class HyperlaneService {
     @Tool({
-        name: "hyperlane_deploy_warp_route",
-        description: "Deploy a Hyperlane bridge (warp route) between two chains",
+        name: "make_hyperlane_warp",
+        description: "Deploy a Hyperlane Warp bridge between two chains",
     })
     async deployBridge(walletClient: EVMWalletClient, parameters: HyperlaneDeployParameters) {
         assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
@@ -76,7 +84,17 @@ export class HyperlaneService {
         const { origin, destination, token } = parameters;
         const owner = walletClient.getAddress();
 
+        // Get chain addresses and validate
         const chainAddresses = await registry.getAddresses();
+        console.log("Available chains:", Object.keys(chainAddresses));
+        
+        if (!chainAddresses[origin]?.mailbox) {
+            throw new Error(`No mailbox found for origin chain: ${origin}. Available chains: ${Object.keys(chainAddresses).join(", ")}`);
+        }
+        if (!chainAddresses[destination]?.mailbox) {
+            throw new Error(`No mailbox found for destination chain: ${destination}. Available chains: ${Object.keys(chainAddresses).join(", ")}`);
+        }
+
         const warpDeployConfig: WarpRouteDeployConfig = {
             [origin]: {
                 type: TokenType.collateral,
@@ -91,32 +109,20 @@ export class HyperlaneService {
             },
         };
 
-        // Validate config
+        console.log("Deploy config:", JSON.stringify(warpDeployConfig, null, 2));
         WarpRouteDeployConfigSchema.parse(warpDeployConfig);
 
-        // Deploy contracts
         const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
+        const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
 
-        // Return deployed contract addresses
-        return JSON.stringify(
-            {
-                message: "Bridge deployed successfully",
-                contracts: {
-                    origin: {
-                        chain: origin,
-                        router: deployedContracts[origin].router.address,
-                        token: deployedContracts[origin].token.address,
-                    },
-                    destination: {
-                        chain: destination,
-                        router: deployedContracts[destination].router.address,
-                        token: deployedContracts[destination].token.address,
-                    },
-                },
+        return JSON.stringify({
+            message: "Warp bridge deployed successfully",
+            contracts: {
+                origin: warpCoreConfig.tokens.find(t => t.chainName === origin),
+                destination: warpCoreConfig.tokens.find(t => t.chainName === destination)
             },
-            null,
-            2,
-        );
+            config: warpCoreConfig
+        }, null, 2);
     }
 
     @Tool({
@@ -1028,7 +1034,7 @@ export class HyperlaneService {
                         chain,
                         chainId,
                         domainId: chainMetadata.domainId,
-                        contracts: {
+            contracts: {
                             mailbox: deployedContracts.mailbox.address,
                             validatorAnnounce: deployedContracts.validatorAnnounce.address,
                             proxyAdmin: deployedContracts.proxyAdmin.address,
@@ -1056,146 +1062,52 @@ export class HyperlaneService {
     }
 
     @Tool({
-        name: "hyperlane_warp_transfer",
-        description: "Transfer tokens between chains using Hyperlane Warp Routes",
-    })
-    async transferViaWarpRoute(params: HyperlaneWarpTransferParameters): Promise<{
-        txHash: string;
-        messageId?: string;
-        estimatedGas?: string;
-    }> {
-        try {
-            const { originChain, destinationChain, token, amount, recipient, gasAmount } = params;
-
-            // Get chain addresses from deployed contracts
-            const result = await this.getDeployedContracts({ chain: originChain });
-            const deployedContracts = result as unknown as DeployedContracts;
-            if (!deployedContracts || typeof deployedContracts !== "object") {
-                throw new Error(`No deployed contracts found for chain ${originChain}`);
-            }
-
-            const warpRouter = deployedContracts.warpRouter;
-            const interchainGasPaymaster = deployedContracts.interchainGasPaymaster;
-            const mailbox = deployedContracts.mailbox;
-
-            if (!warpRouter) {
-                throw new Error(`No Warp Router found for chain ${originChain}`);
-            }
-
-            // Get token router contract
-            const provider = await this.getProvider(originChain);
-            const warpRouterContract = new ethers.Contract(
-                warpRouter,
-                [
-                    "function transferRemote(uint32 _destination, address _recipient, address _token, uint256 _amount) payable returns (bytes32)",
-                ],
-                provider.getSigner(),
-            );
-
-            // Get destination domain ID
-            const destinationDomain = await this.getDomainId(destinationChain);
-            if (!destinationDomain) {
-                throw new Error(`Could not get domain ID for chain ${destinationChain}`);
-            }
-
-            // Approve token transfer if needed
-            const tokenContract = new ethers.Contract(
-                token,
-                ["function approve(address spender, uint256 amount) returns (bool)"],
-                provider.getSigner(),
-            );
-            await tokenContract.approve(warpRouter, amount);
-
-            // Calculate gas payment if needed
-            let value = "0";
-            if (gasAmount && interchainGasPaymaster) {
-                const igp = new ethers.Contract(
-                    interchainGasPaymaster,
-                    ["function quoteGasPayment(uint32 _destinationDomain, uint256 _gasAmount) view returns (uint256)"],
-                    provider,
-                );
-                value = await igp.quoteGasPayment(destinationDomain, gasAmount);
-            }
-
-            const tx = await warpRouterContract.transferRemote(destinationDomain, recipient, token, amount, { value });
-            const receipt = await tx.wait();
-
-            let messageId;
-            if (receipt.logs) {
-                const dispatchLog = receipt.logs.find(
-                    (log: Log) =>
-                        log.topics[0] === "0x769f711d20c679153d382254f59892613b58a97cc876b249134ac25c80f9c814", // Dispatch event
-                );
-                if (dispatchLog) {
-                    messageId = dispatchLog.topics[1];
-                }
-            }
-
-            return {
-                txHash: receipt.transactionHash,
-                messageId,
-                estimatedGas: gasAmount,
-            };
-        } catch (error) {
-            throw new Error(`Failed to transfer via Warp Route: ${JSON.stringify(error)}`);
-        }
-    }
-
-    @Tool({
-        name: "hyperlane_get_tokens",
+        name: "get_hyperlane_tokens",
         description: "Get deployed tokens on Hyperlane Warp Routes from the registry",
     })
     async getTokens(parameters: HyperlaneGetTokenParameters) {
         try {
-            const { chain, tokenSymbol, tokenType, routerAddress } = parameters;
-            const { multiProvider, registry } = await getMultiProvider();
+            const { chain, tokenSymbol, standard, routerAddress } = parameters;
+            const { registry } = await getMultiProvider();
 
-            const chainAddresses = await registry.getChainAddresses(chain);
-            if (!chainAddresses) {
-                throw new Error(`No contracts found for chain: ${chain}`);
-            }
-
-            const tokenReader = new EvmERC20WarpRouteReader(multiProvider, chain);
-
-            // Get all warp routes
-            const warpRoutes = Object.entries(chainAddresses)
-                .filter(([name]) => name.toLowerCase().includes("warprouter"))
-                .map(([_, address]) => address);
+            // Get warp route configs
+            const warpRouteConfigs = await registry.getWarpRoutes();
+            console.log("Getting warp route configs...");
 
             const tokens = [];
 
-            for (const router of warpRoutes) {
-                try {
-                    if (routerAddress && router !== routerAddress) continue;
+            // Iterate through all configs to find matching tokens
+            for (const [routeId, config] of Object.entries(warpRouteConfigs)) {
+                if (!config || !Array.isArray(config.tokens)) continue;
 
-                    const type = await tokenReader.deriveTokenType(router);
+                for (const token of config.tokens) {
+                    // Skip if doesn't match our filters
+                    if (chain && token.chainName !== chain) continue;
+                    if (tokenSymbol && token.symbol !== tokenSymbol) continue;
+                    if (standard && token.standard !== standard) continue;
+                    if (routerAddress && token.addressOrDenom !== routerAddress) continue;
 
-                    if (tokenType && type !== tokenType) continue;
-
-                    const routerConfig = await tokenReader.deriveWarpRouteConfig(router);
-
-                    let tokenAddress = "";
-                    if ("token" in routerConfig) {
-                        tokenAddress = routerConfig.token;
-                    }
-
-                    const tokenMetadata = await tokenReader.fetchERC20Metadata(tokenAddress);
-                    const remoteRouters = await tokenReader.fetchRemoteRouters(router);
-
-                    if (tokenSymbol && tokenMetadata.symbol?.toLowerCase() !== tokenSymbol.toLowerCase()) continue;
+                    // Skip if missing required fields
+                    if (!token.name || !token.symbol || !token.decimals || !token.chainName || 
+                        !token.standard || !token.addressOrDenom || !token.connections) continue;
 
                     tokens.push({
-                        name: tokenMetadata.name || "",
-                        symbol: tokenMetadata.symbol || "",
-                        decimals: tokenMetadata.decimals || 18,
-                        type,
-                        routerAddress: router,
-                        tokenAddress,
-                        remoteRouters,
+                        routeId,
+                        name: token.name,
+                        symbol: token.symbol,
+                        decimals: token.decimals,
+                        chainName: token.chainName,
+                        standard: token.standard,
+                        routerAddress: token.addressOrDenom,
+                        tokenAddress: token.collateralAddressOrDenom || null,
+                        connections: token.connections.map((c: { token: string }) => {
+                            const [_, chainName, routerAddress] = c.token.split('|');
+                            return {
+                                chainName,
+                                routerAddress
+                            };
+                        })
                     });
-                } catch (err) {
-                    console.warn(`Failed to get token info for router ${router}:`, err);
-                    continue;
                 }
             }
 
@@ -1206,7 +1118,7 @@ export class HyperlaneService {
                         chain,
                         filters: {
                             tokenSymbol,
-                            tokenType,
+                            standard,
                             routerAddress,
                         },
                         tokens,
@@ -1255,4 +1167,66 @@ async function getMultiProvider(signer?: ethers.Signer) {
     const multiProvider = new MultiProvider(chainMetadata);
     if (signer) multiProvider.setSharedSigner(signer);
     return { multiProvider, registry };
+}
+
+async function getWarpCoreConfig(
+    multiProvider: MultiProvider,
+    warpDeployConfig: WarpRouteDeployConfig,
+    contracts: HyperlaneContractsMap<TokenFactories>,
+): Promise<WarpCoreConfig> {
+    const warpCoreConfig: WarpCoreConfig = { tokens: [] };
+
+    const tokenMetadata = await HypERC20Deployer.deriveTokenMetadata(multiProvider, warpDeployConfig);
+    assert(tokenMetadata && isTokenMetadata(tokenMetadata), "Missing required token metadata");
+    const { decimals, symbol, name } = tokenMetadata;
+    assert(decimals, "Missing decimals on token metadata");
+
+    generateTokenConfigs(warpCoreConfig, warpDeployConfig, contracts, symbol, name, decimals);
+
+    fullyConnectTokens(warpCoreConfig);
+
+    return warpCoreConfig;
+}
+
+function generateTokenConfigs(
+    warpCoreConfig: WarpCoreConfig,
+    warpDeployConfig: WarpRouteDeployConfig,
+    contracts: HyperlaneContractsMap<TokenFactories>,
+    symbol: string,
+    name: string,
+    decimals: number,
+): void {
+    for (const [chainName, contract] of Object.entries(contracts)) {
+        const config = warpDeployConfig[chainName];
+        const collateralAddressOrDenom = isCollateralTokenConfig(config)
+            ? config.token
+            : undefined;
+
+        const tokenType = config.type as keyof TokenFactories;
+        const tokenContract = contract[tokenType];
+        assert(tokenContract && tokenContract.address, "Missing token contract address");
+
+        warpCoreConfig.tokens.push({
+            chainName,
+            standard: TOKEN_TYPE_TO_STANDARD[config.type],
+            decimals,
+            symbol,
+            name,
+            addressOrDenom: tokenContract.address,
+            collateralAddressOrDenom,
+        });
+    }
+}
+
+function fullyConnectTokens(warpCoreConfig: WarpCoreConfig): void {
+    for (const token1 of warpCoreConfig.tokens) {
+        for (const token2 of warpCoreConfig.tokens) {
+            if (token1.chainName === token2.chainName && token1.addressOrDenom === token2.addressOrDenom) continue;
+            token1.connections ||= [];
+            assert(token2.addressOrDenom, "Invalid token2 address");
+            token1.connections.push({
+                token: getTokenConnectionId(ProtocolType.Ethereum, token2.chainName, token2.addressOrDenom),
+            });
+        }
+    }
 }
