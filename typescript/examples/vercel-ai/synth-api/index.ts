@@ -66,8 +66,11 @@ const walletClient = createWalletClient({
                     }
                 },
             });
-            console.log("RESPONSE");
-            console.log(result.text);
+            console.log("RESPONSE: ", result.text);
+            console.log(
+                "steps tool:",
+                result.steps.flatMap((step) => step.toolCalls),
+            );
         } catch (error) {
             console.error(error);
         }
