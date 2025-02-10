@@ -8,7 +8,7 @@ import { baseSepolia } from "viem/chains";
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 
 import { sendETH } from "@goat-sdk/wallet-evm";
-import { safe, getAddressPlugin } from "@goat-sdk/wallet-safe";
+import { getAddressPlugin, safe } from "@goat-sdk/wallet-safe";
 require("dotenv").config();
 
 const pk = process.env.WALLET_PRIVATE_KEY as `0x${string}`;
