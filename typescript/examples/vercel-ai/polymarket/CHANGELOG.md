@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-polymarket
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+  - @goat-sdk/adapter-vercel-ai@0.2.8
+  - @goat-sdk/plugin-polymarket@0.3.10
+  - @goat-sdk/wallet-viem@0.2.8
+
 ## 0.2.10
 
 ### Patch Changes

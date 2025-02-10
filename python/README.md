@@ -385,11 +385,11 @@ If you would like to see your wallet provider supported, please open an issue or
 | Dexscreener | Get token information using Dexscreener API | [goat-sdk-plugin-dexscreener](https://pypi.org/project/goat-sdk-plugin-dexscreener/) |
 | ERC20 | Interact with any ERC20 token | [goat-sdk-plugin-erc20](https://pypi.org/project/goat-sdk-plugin-erc20/) |
 | Farcaster | Read and post casts on Farcaster | [goat-sdk-plugin-farcaster](https://pypi.org/project/goat-sdk-plugin-farcaster/) |
-| JSON RPC | Call any JSON RPC endpoint |[goat-sdk-plugin-jsonrpc](https://pypi.org/project/goat-sdk-plugin-jsonrpc/) |  |
-| Jupiter | Get price predictions using Jupiter API | [goat-sdk-plugin-jupiter](https://pypi.org/project/goat-sdk-plugin-jupiter/) |  |
-| Nansen | Get wallet insights using Nansen API | [goat-sdk-plugin-nansen](https://pypi.org/project/goat-sdk-plugin-nansen/) |  |
-| OpenSea | Get NFT and sales data from OpenSea | [goat-sdk-plugin-opensea](https://pypi.org/project/goat-sdk-plugin-opensea/) |  |
-| Rugcheck | Check if tokens are legit with Rugcheck | [goat-sdk-plugin-rugcheck](https://pypi.org/project/goat-sdk-plugin-rugcheck/) |  |
-| SPL Tokens | Interact with SPL tokens | [goat-sdk-plugin-spl-tokens](https://pypi.org/project/goat-sdk-plugin-spl-tokens/) |  |
-| Superfluid | Create streams with Superfluid | [goat-sdk-plugin-superfluid](https://pypi.org/project/goat-sdk-plugin-superfluid/) |  |
-| Uniswap | Get quotes and swap on Uniswap | [goat-sdk-plugin-uniswap](https://pypi.org/project/goat-sdk-plugin-uniswap/) |  |
+| JSON RPC | Call any JSON RPC endpoint |[goat-sdk-plugin-jsonrpc](https://pypi.org/project/goat-sdk-plugin-jsonrpc/) |
+| Jupiter | Get price predictions using Jupiter API | [goat-sdk-plugin-jupiter](https://pypi.org/project/goat-sdk-plugin-jupiter/) |
+| Nansen | Get wallet insights using Nansen API | [goat-sdk-plugin-nansen](https://pypi.org/project/goat-sdk-plugin-nansen/) |
+| OpenSea | Get NFT and sales data from OpenSea | [goat-sdk-plugin-opensea](https://pypi.org/project/goat-sdk-plugin-opensea/) |
+| Rugcheck | Check if tokens are legit with Rugcheck | [goat-sdk-plugin-rugcheck](https://pypi.org/project/goat-sdk-plugin-rugcheck/) |
+| SPL Tokens | Interact with SPL tokens | [goat-sdk-plugin-spl-tokens](https://pypi.org/project/goat-sdk-plugin-spl-tokens/) |
+| Superfluid | Create streams with Superfluid | [goat-sdk-plugin-superfluid](https://pypi.org/project/goat-sdk-plugin-superfluid/) |
+| Uniswap | Get quotes and swap on Uniswap | [goat-sdk-plugin-uniswap](https://pypi.org/project/goat-sdk-plugin-uniswap/) |

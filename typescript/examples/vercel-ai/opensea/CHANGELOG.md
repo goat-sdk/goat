@@ -1,5 +1,15 @@
 # goat-examples-vercel-ai-opensea
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [a21a1f3]
+  - @goat-sdk/core@0.4.7
+  - @goat-sdk/adapter-vercel-ai@0.2.8
+  - @goat-sdk/plugin-opensea@0.1.4
+  - @goat-sdk/wallet-viem@0.2.8
+
 ## 0.1.5
 
 ### Patch Changes

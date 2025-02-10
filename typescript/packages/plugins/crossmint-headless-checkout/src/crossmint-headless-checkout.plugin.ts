@@ -14,7 +14,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
 
     constructor(
         private readonly crossmint: Crossmint,
-        private readonly callDataSchema: z.ZodSchema,
+        private readonly callDataSchema?: z.ZodSchema,
     ) {
         super("crossmint-headless-checkout", []);
 
@@ -32,7 +32,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     }
 
     supportsChain(chain: Chain): boolean {
-        return chain.type === "evm"; // TODO: Add support for more blockchains
+        return true;
     }
 
     async getTools(walletClient: EVMWalletClient) {
@@ -65,7 +65,10 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                         throw new Error(errorMessage);
                     }
 
-                    const { order } = (await res.json()) as { order: Order; orderClientSecret: string };
+                    const { order } = (await res.json()) as {
+                        order: Order;
+                        orderClientSecret: string;
+                    };
 
                     console.log("Created order:", order.orderId);
 
@@ -74,13 +77,22 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                         throw new Error("Insufficient funds");
                     }
 
+                    const isRequiresPhysicalAddress = order.quote.status === "requires-physical-address";
+                    if (isRequiresPhysicalAddress) {
+                        throw new Error("recipient.physicalAddress is required");
+                    }
+
                     const serializedTransaction =
                         order.payment.preparation != null && "serializedTransaction" in order.payment.preparation
                             ? order.payment.preparation.serializedTransaction
                             : undefined;
                     if (!serializedTransaction) {
                         throw new Error(
-                            `No serialized transaction found for order, this item may not be available for purchase:\n\n ${JSON.stringify(order, null, 2)}`,
+                            `No serialized transaction found for order, this item may not be available for purchase:\n\n ${JSON.stringify(
+                                order,
+                                null,
+                                2,
+                            )}`,
                         );
                     }
 
@@ -104,6 +116,6 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     }
 }
 
-export const crossmintHeadlessCheckout = (crossmint: Crossmint, callDataSchema: z.ZodSchema) => {
+export const crossmintHeadlessCheckout = (crossmint: Crossmint, callDataSchema?: z.ZodSchema) => {
     return new CrossmintHeadlessCheckoutPlugin(crossmint, callDataSchema);
 };
