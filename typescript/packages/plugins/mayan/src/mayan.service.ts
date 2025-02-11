@@ -225,7 +225,9 @@ export class MayanService {
         const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
         const spender = addresses.MAYAN_FORWARDER_CONTRACT;
         const walletSrcAddr = walletClient.getAddress();
-        const nonce = await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [walletSrcAddr]) as bigint;
+        const nonce = (await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [
+            walletSrcAddr,
+        ])) as bigint;
         const name = (await this.callERC20(walletClient, quote.fromToken.contract, "name")) as string;
 
         const domain: TypedDataDomain = {
