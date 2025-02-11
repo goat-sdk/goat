@@ -12,7 +12,7 @@ import {
     getSwapFromEvmTxPayload,
 } from "@mayanfinance/swap-sdk";
 import { TypedDataDomain } from "abitype";
-import { Signature, TypedDataEncoder } from "ethers";
+import { ContractTransactionResponse, Signature, TypedDataEncoder } from "ethers";
 import { parseAbi } from "viem";
 import { EVMSwapParameters, SwapParameters } from "./parameters";
 
@@ -67,8 +67,8 @@ export class MayanService {
                     accountsToSign: signers,
                 })
             ).hash;
-        } catch (error: any) {
-            if (!error.signature) {
+        } catch (error) {
+            if (!hasSignatureProperty(error) || !error.signature) {
                 throw error;
             }
 
@@ -108,16 +108,16 @@ export class MayanService {
         }
 
         const amountIn = BigInt(quotes[0].effectiveAmountIn64);
-        const allowance: bigint = await this.callERC20(walletClient, params.fromToken, "allowance", [
+        const allowance: bigint = (await this.callERC20(walletClient, params.fromToken, "allowance", [
             walletClient.getAddress(),
             addresses.MAYAN_FORWARDER_CONTRACT,
-        ]);
+        ])) as bigint;
         if (allowance < amountIn) {
             // Approve the spender to spend the tokens
-            const approveTx = await this.callERC20(walletClient, params.fromToken, "approve", [
+            const approveTx = (await this.callERC20(walletClient, params.fromToken, "approve", [
                 addresses.MAYAN_FORWARDER_CONTRACT,
                 amountIn,
-            ]);
+            ])) as ContractTransactionResponse;
             await approveTx.wait();
         }
 
@@ -210,14 +210,14 @@ export class MayanService {
         contract: string,
         functionName: string,
         args?: unknown[],
-    ): Promise<any> {
+    ): Promise<unknown> {
         const ret = await walletClient.read({
             address: contract,
             abi: ERC20_ABI,
             functionName,
             args,
         });
-        return ret.value as any;
+        return ret.value;
     }
 
     private async getERC20Permit(walletClient: EVMWalletClient, quote: Quote, amountIn: bigint): Promise<Erc20Permit> {
@@ -227,12 +227,20 @@ export class MayanService {
         const nonce = await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [walletSrcAddr]);
 
         const domain: TypedDataDomain = {
-            name: await this.callERC20(walletClient, quote.fromToken.contract, "name"),
+            name: (await this.callERC20(walletClient, quote.fromToken.contract, "name")) as string,
             version: "1",
             chainId: quote.fromToken.chainId,
-            verifyingContract: await this.callERC20(walletClient, quote.fromToken.contract, "getAddress"),
+            verifyingContract: (await this.callERC20(
+                walletClient,
+                quote.fromToken.contract,
+                "getAddress",
+            )) as `0x${string}`,
         };
-        const domainSeparator = await this.callERC20(walletClient, quote.fromToken.contract, "DOMAIN_SEPARATOR");
+        const domainSeparator = (await this.callERC20(
+            walletClient,
+            quote.fromToken.contract,
+            "DOMAIN_SEPARATOR",
+        )) as string;
         for (let i = 1; i < 11; i++) {
             domain.version = String(i);
             const hash = TypedDataEncoder.hashDomain(domain);
@@ -265,7 +273,7 @@ export class MayanService {
             message: value,
         });
         const { v, r, s } = Signature.from(signature);
-        const permitTx = await this.callERC20(walletClient, quote.fromToken.contract, "permit", [
+        const permitTx = (await this.callERC20(walletClient, quote.fromToken.contract, "permit", [
             walletSrcAddr,
             spender,
             amountIn,
@@ -273,7 +281,7 @@ export class MayanService {
             v,
             r,
             s,
-        ]);
+        ])) as ContractTransactionResponse;
         await permitTx.wait();
 
         return {
@@ -284,4 +292,8 @@ export class MayanService {
             s,
         };
     }
+}
+
+function hasSignatureProperty(error: unknown): error is { signature?: string } {
+    return typeof error === "object" && error !== null && "signature" in error;
 }
