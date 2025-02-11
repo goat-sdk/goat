@@ -12,7 +12,7 @@ import {
     getSwapFromEvmTxPayload,
 } from "@mayanfinance/swap-sdk";
 import { TypedDataDomain } from "abitype";
-import { ContractTransactionResponse, Signature, TypedDataEncoder } from "ethers";
+import { Signature, TypedDataEncoder } from "ethers";
 import { parseAbi } from "viem";
 import { EVMSwapParameters, SwapParameters } from "./parameters";
 
@@ -21,7 +21,6 @@ const ERC20_ABI = parseAbi([
     "function approve(address spender, uint256 amount) external returns (bool)",
     "function nonces(address owner) external returns (uint256)",
     "function name() external returns (string)",
-    "function getAddress() external returns (string)",
     "function DOMAIN_SEPARATOR() external returns (bytes32)",
     "function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s)",
 ]);
@@ -117,8 +116,10 @@ export class MayanService {
             const approveTx = (await this.callERC20(walletClient, params.fromToken, "approve", [
                 addresses.MAYAN_FORWARDER_CONTRACT,
                 amountIn,
-            ])) as ContractTransactionResponse;
-            await approveTx.wait();
+            ])) as boolean;
+            if (!approveTx) {
+                throw new Error("couldn't get approve for spending allowance");
+            }
         }
 
         let permit: Erc20Permit | undefined;
@@ -224,17 +225,14 @@ export class MayanService {
         const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
         const spender = addresses.MAYAN_FORWARDER_CONTRACT;
         const walletSrcAddr = walletClient.getAddress();
-        const nonce = await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [walletSrcAddr]);
+        const nonce = await this.callERC20(walletClient, quote.fromToken.contract, "nonces", [walletSrcAddr]) as bigint;
+        const name = (await this.callERC20(walletClient, quote.fromToken.contract, "name")) as string;
 
         const domain: TypedDataDomain = {
-            name: (await this.callERC20(walletClient, quote.fromToken.contract, "name")) as string,
+            name,
             version: "1",
             chainId: quote.fromToken.chainId,
-            verifyingContract: (await this.callERC20(
-                walletClient,
-                quote.fromToken.contract,
-                "getAddress",
-            )) as `0x${string}`,
+            verifyingContract: quote.fromToken.contract as `0x${string}`,
         };
         const domainSeparator = (await this.callERC20(
             walletClient,
@@ -262,8 +260,8 @@ export class MayanService {
             owner: walletSrcAddr,
             spender,
             value: amountIn,
-            nonce: nonce,
-            deadline: deadline,
+            nonce,
+            deadline,
         };
 
         const { signature } = await walletClient.signTypedData({
@@ -273,7 +271,7 @@ export class MayanService {
             message: value,
         });
         const { v, r, s } = Signature.from(signature);
-        const permitTx = (await this.callERC20(walletClient, quote.fromToken.contract, "permit", [
+        await this.callERC20(walletClient, quote.fromToken.contract, "permit", [
             walletSrcAddr,
             spender,
             amountIn,
@@ -281,8 +279,7 @@ export class MayanService {
             v,
             r,
             s,
-        ])) as ContractTransactionResponse;
-        await permitTx.wait();
+        ]);
 
         return {
             value: amountIn,
