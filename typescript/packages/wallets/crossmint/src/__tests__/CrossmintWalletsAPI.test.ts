@@ -93,10 +93,7 @@ describe("CrossmintWalletsAPI", () => {
                 };
                 mockFetchResponse(mockResponse);
 
-                const result = await api.createSmartWallet(
-                    undefined,
-                    "solana-smart-wallet"
-                );
+                const result = await api.createSmartWallet(undefined, "solana-smart-wallet");
                 expect(result).toEqual(mockResponse);
             });
 
@@ -111,11 +108,7 @@ describe("CrossmintWalletsAPI", () => {
                 mockFetchResponse(mockResponse);
 
                 // @ts-ignore - Using solana chain for testing
-                const result = await api.signMessageForSmartWallet(
-                    "solana123",
-                    "Hello Solana",
-                    "solana"
-                );
+                const result = await api.signMessageForSmartWallet("solana123", "Hello Solana", "solana");
                 expect(result).toEqual(mockResponse);
             });
 
@@ -135,7 +128,7 @@ describe("CrossmintWalletsAPI", () => {
                 const result = await api.createTransactionForSmartWallet(
                     "solana123",
                     "base58encodedtransaction",
-                    "solana"
+                    "solana",
                 );
                 expect(result).toEqual(mockResponse);
             });
