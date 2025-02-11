@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-safe
 
+## 0.1.2
+
+### Patch Changes
+
+- fb5252a: Release package
+
 ## 0.1.1
 
 ### Patch Changes
