@@ -5,7 +5,10 @@ export class HyperlaneDeployParameters extends createToolParameters(
     z.object({
         origin: z.string().min(1).describe("Origin chain name (e.g. baseSepolia, arbitrumSepolia)"),
         destination: z.string().min(1).describe("Destination chain name (e.g. baseSepolia, arbitrumSepolia)"),
-        token: z.string().regex(/^0x[a-fA-F0-9]{40}$/).describe("Token contract address on the origin chain"),
+        token: z
+            .string()
+            .regex(/^0x[a-fA-F0-9]{40}$/)
+            .describe("Token contract address on the origin chain"),
     }),
 ) {}
 
@@ -172,7 +175,10 @@ export class HyperlaneGetTokenParameters extends createToolParameters(
     z.object({
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
         tokenSymbol: z.string().optional().describe("Token symbol to search for (e.g. USDC)"),
-        standard: z.enum(["EvmHypCollateral", "EvmHypSynthetic"]).optional().describe("Token standard (EvmHypCollateral or EvmHypSynthetic)"),
+        standard: z
+            .enum(["EvmHypCollateral", "EvmHypSynthetic"])
+            .optional()
+            .describe("Token standard (EvmHypCollateral or EvmHypSynthetic)"),
         routerAddress: z.string().optional().describe("Specific router address to get token for"),
     }),
 ) {}

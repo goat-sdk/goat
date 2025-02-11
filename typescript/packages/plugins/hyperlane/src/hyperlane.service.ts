@@ -6,31 +6,24 @@ import {
     CoreConfig,
     HookType,
     HypERC20Deployer,
+    HyperlaneContractsMap,
     HyperlaneCore,
     HyperlaneCoreDeployer,
     HyperlaneIsmFactory,
     IsmType,
     MultiProvider,
-    TokenType,
-    WarpRouteDeployConfig,
-    WarpRouteDeployConfigSchema,
     TOKEN_TYPE_TO_STANDARD,
     TokenFactories,
+    TokenType,
     WarpCoreConfig,
+    WarpRouteDeployConfig,
+    WarpRouteDeployConfigSchema,
     getTokenConnectionId,
     isCollateralTokenConfig,
     isTokenMetadata,
-    HyperlaneContractsMap,
-    MultiProtocolProvider,
-    WarpCore,
-    TokenAmount,
-    ChainMap,
-    TypedTransactionReceipt,
-    WarpTxCategory,
 } from "@hyperlane-xyz/sdk";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
-import { EvmERC20WarpRouteReader } from "@hyperlane-xyz/sdk";
-import { ProtocolType, toWei } from "@hyperlane-xyz/utils";
+import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
 import { ethers } from "ethers";
 import {
@@ -87,12 +80,16 @@ export class HyperlaneService {
         // Get chain addresses and validate
         const chainAddresses = await registry.getAddresses();
         console.log("Available chains:", Object.keys(chainAddresses));
-        
+
         if (!chainAddresses[origin]?.mailbox) {
-            throw new Error(`No mailbox found for origin chain: ${origin}. Available chains: ${Object.keys(chainAddresses).join(", ")}`);
+            throw new Error(
+                `No mailbox found for origin chain: ${origin}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
+            );
         }
         if (!chainAddresses[destination]?.mailbox) {
-            throw new Error(`No mailbox found for destination chain: ${destination}. Available chains: ${Object.keys(chainAddresses).join(", ")}`);
+            throw new Error(
+                `No mailbox found for destination chain: ${destination}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
+            );
         }
 
         const warpDeployConfig: WarpRouteDeployConfig = {
@@ -115,14 +112,18 @@ export class HyperlaneService {
         const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
         const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
 
-        return JSON.stringify({
-            message: "Warp bridge deployed successfully",
-            contracts: {
-                origin: warpCoreConfig.tokens.find(t => t.chainName === origin),
-                destination: warpCoreConfig.tokens.find(t => t.chainName === destination)
+        return JSON.stringify(
+            {
+                message: "Warp bridge deployed successfully",
+                contracts: {
+                    origin: warpCoreConfig.tokens.find((t) => t.chainName === origin),
+                    destination: warpCoreConfig.tokens.find((t) => t.chainName === destination),
+                },
+                config: warpCoreConfig,
             },
-            config: warpCoreConfig
-        }, null, 2);
+            null,
+            2,
+        );
     }
 
     @Tool({
@@ -1034,7 +1035,7 @@ export class HyperlaneService {
                         chain,
                         chainId,
                         domainId: chainMetadata.domainId,
-            contracts: {
+                        contracts: {
                             mailbox: deployedContracts.mailbox.address,
                             validatorAnnounce: deployedContracts.validatorAnnounce.address,
                             proxyAdmin: deployedContracts.proxyAdmin.address,
@@ -1088,8 +1089,16 @@ export class HyperlaneService {
                     if (routerAddress && token.addressOrDenom !== routerAddress) continue;
 
                     // Skip if missing required fields
-                    if (!token.name || !token.symbol || !token.decimals || !token.chainName || 
-                        !token.standard || !token.addressOrDenom || !token.connections) continue;
+                    if (
+                        !token.name ||
+                        !token.symbol ||
+                        !token.decimals ||
+                        !token.chainName ||
+                        !token.standard ||
+                        !token.addressOrDenom ||
+                        !token.connections
+                    )
+                        continue;
 
                     tokens.push({
                         routeId,
@@ -1101,12 +1110,12 @@ export class HyperlaneService {
                         routerAddress: token.addressOrDenom,
                         tokenAddress: token.collateralAddressOrDenom || null,
                         connections: token.connections.map((c: { token: string }) => {
-                            const [_, chainName, routerAddress] = c.token.split('|');
+                            const [_, chainName, routerAddress] = c.token.split("|");
                             return {
                                 chainName,
-                                routerAddress
+                                routerAddress,
                             };
-                        })
+                        }),
                     });
                 }
             }
@@ -1198,9 +1207,7 @@ function generateTokenConfigs(
 ): void {
     for (const [chainName, contract] of Object.entries(contracts)) {
         const config = warpDeployConfig[chainName];
-        const collateralAddressOrDenom = isCollateralTokenConfig(config)
-            ? config.token
-            : undefined;
+        const collateralAddressOrDenom = isCollateralTokenConfig(config) ? config.token : undefined;
 
         const tokenType = config.type as keyof TokenFactories;
         const tokenContract = contract[tokenType];
