@@ -88,7 +88,7 @@ class Call(BaseModelWithoutNone):
 class SolanaSmartWalletTransactionParams(BaseModelWithoutNone):
     """Parameters for creating a Solana Smart Wallet transaction."""
     transaction: str = Field(description="Base58 encoded serialized Solana transaction")
-    requiredSigners: Optional[List[str]] = Field(
+    required_signers: Optional[List[str]] = Field(
         None,
         description="Optional array of additional signers required for the transaction"
     )

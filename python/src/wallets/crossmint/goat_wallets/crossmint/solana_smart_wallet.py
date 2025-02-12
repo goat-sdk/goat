@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional, Any, cast
 import base58
 import time
+from goat_wallets.crossmint.base import UnsupportedOperationException
 from solders.instruction import Instruction
 from solders.pubkey import Pubkey
 from solders.message import Message
@@ -34,57 +35,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         required_signers: Optional[List[str]] = None,
         signer: Optional[str] = None
     ) -> Signature:
-        try:
-            response = self._client.sign_message_for_smart_wallet(
-                self._address,
-                message,
-                "solana",
-                signer=signer,
-                required_signers=required_signers
-            )
-            
-            while True:
-                status = self._client.check_signature_status(
-                    response["id"],
-                    self._address
-                )
-                
-                if status["status"] == "success":
-                    if not status.get("outputSignature"):
-                        raise ValueError("Signature is undefined")
-                    return Signature(signature=status["outputSignature"])
-                
-                if status["status"] == "failed":
-                    error = status.get("error", {})
-                    message = error.get("message", "Unknown error")
-                    raise ValueError(f"Signature failed: {message}")
-                
-                if status["status"] == "awaiting-approval":
-                    if required_signers:
-                        approvals = []
-                        for required_signer in required_signers:
-                            approvals.append({
-                                "signer": required_signer,
-                                "signature": None
-                            })
-                        self._client.approve_signature_for_smart_wallet(
-                            response["id"],
-                            self._locator,
-                            approvals=approvals
-                        )
-                    else:
-                        self._client.approve_signature_for_smart_wallet(
-                            response["id"],
-                            self._locator,
-                            signer=signer
-                        )
-                elif status["status"] not in ["pending"]:
-                    raise ValueError(f"Unexpected signature status: {status['status']}")
-                
-                time.sleep(3)
-                
-        except Exception as e:
-            raise ValueError(f"Failed to sign message: {e}")
+        raise UnsupportedOperationException("Sign message is not supported for Solana smart wallets")
 
     def send_transaction(
         self,
@@ -110,7 +61,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         params = SolanaSmartWalletTransactionParams(
             transaction=serialized,
-            requiredSigners=required_signers,
+            required_signers=required_signers,
             signer=signer
         )
         try:
@@ -163,7 +114,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     ) -> Dict[str, str]:
         params = SolanaSmartWalletTransactionParams(
             transaction=transaction,
-            requiredSigners=required_signers,
+            required_signers=required_signers,
             signer=signer
         )
         try:
@@ -218,8 +169,6 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     def register_delegated_signer(
         self,
         signer: str,
-        expires_at: Optional[int] = None,
-        permissions: Optional[List[DelegatedSignerPermission]] = None
     ) -> Dict[str, Any]:
         """Register a delegated signer for this wallet.
         
@@ -234,9 +183,6 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         return self._client.register_delegated_signer(
             self._locator,
             signer,
-            self._chain,
-            expires_at,
-            permissions
         )
     
     def get_delegated_signer(self, signer_locator: str) -> Dict[str, Any]:

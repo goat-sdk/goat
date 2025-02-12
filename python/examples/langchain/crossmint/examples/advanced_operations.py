@@ -35,7 +35,7 @@ def multi_signer_transaction(
     
     params = SolanaSmartWalletTransactionParams(
         transaction=message.serialize().hex(),
-        requiredSigners=signers
+        required_signers=signers
     )
     
     response = api_client.create_transaction_for_smart_wallet(wallet_locator, params)

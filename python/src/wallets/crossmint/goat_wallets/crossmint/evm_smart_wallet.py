@@ -1,5 +1,5 @@
 import time
-from typing import Dict, List, Optional, TypedDict, Union, cast
+from typing import Dict, List, Optional, TypedDict, Union, cast, NewType
 from goat.classes.wallet_client_base import Balance, Signature
 from goat.types.chain import EvmChain
 from goat_wallets.evm import EVMWalletClient, EVMTransaction, EVMReadRequest, EVMTypedData, EVMReadResult
@@ -13,16 +13,24 @@ from ens import ENS
 from .api_client import CrossmintWalletsAPI, Call
 from .base_wallet import get_locator, BaseWalletClient
 
-CustodialSigner = str
+
+def validate_0x_string(value: str) -> str:
+    if not value.startswith("0x"):
+        raise ValueError("CustodialSigner must start with '0x'")
+    return value
+
+String0x = NewType('String0x', str)
+String0x.__supertype__ = staticmethod(validate_0x_string)  # type: ignore
+
+CustodialSigner = NewType('CustodialSigner', String0x)
 KeyPairSigner = TypedDict('KeyPairSigner', {
-    'secretKey': str,
-    'address': str
+    'secretKey': String0x,
 })
+
 Signer = Union[CustodialSigner, KeyPairSigner]
 
 # Use sync Web3 for encoding and address utilities
 w3_sync = Web3()
-
 
 def build_transaction_data(
     recipient_address: str,

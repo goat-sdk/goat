@@ -361,7 +361,7 @@ class CrossmintWalletsAPI:
             return self.create_transaction(
                 wallet_address,
                 params.transaction,
-                params.requiredSigners,
+                params.required_signers,
                 params.signer
             )
             
@@ -578,16 +578,16 @@ class CrossmintWalletsAPI:
         self,
         wallet_locator: str,
         signer: str,
-        chain: str,
-        expires_at: Optional[int] = None,
-        permissions: Optional[List[DelegatedSignerPermission]] = None
+        chain: Optional[str] = None, # Only for EVM
+        expires_at: Optional[int] = None, # Only for EVM
+        permissions: Optional[List[DelegatedSignerPermission]] = None # Only for EVM
     ) -> Dict[str, Any]:
         """Register a delegated signer for a smart wallet.
         
         Args:
             wallet_locator: Wallet identifier
             signer: The locator of the delegated signer
-            chain: Chain identifier
+            chain: Optional chain identifier
             expires_at: Optional expiry date in milliseconds since UNIX epoch
             permissions: Optional list of ERC-7715 permission objects
             
@@ -597,9 +597,10 @@ class CrossmintWalletsAPI:
         endpoint = f"/wallets/{quote(wallet_locator)}/signers"
         payload: Dict[str, Any] = {
             "signer": signer,
-            "chain": chain
         }
-        
+
+        if chain:
+            payload["chain"] = chain
         if expires_at:
             payload["expiresAt"] = str(expires_at)
         if permissions:
