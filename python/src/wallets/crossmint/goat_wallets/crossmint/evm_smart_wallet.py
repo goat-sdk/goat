@@ -23,9 +23,9 @@ String0x = NewType('String0x', str)
 String0x.__supertype__ = staticmethod(validate_0x_string)  # type: ignore
 
 CustodialSigner = NewType('CustodialSigner', String0x)
-KeyPairSigner = TypedDict('KeyPairSigner', {
-    'secretKey': String0x,
-})
+
+class KeyPairSigner(TypedDict):
+    secretKey: String0x
 
 Signer = Union[CustodialSigner, KeyPairSigner]
 

@@ -18,7 +18,7 @@ def register_delegated_signer(
     signer: Union[str, Dict[str, str]],
     chain: str,
     expires_at: Optional[int] = None,
-    permissions: Optional[List[DelegatedSignerPermission]] = None
+    permissions: Optional[List[DelegatedSignerPermission]] = None # Only for EVM
 ) -> Dict[str, Any]:
     return api_client.register_delegated_signer(
         wallet_locator,
@@ -70,17 +70,12 @@ def main():
     
     # Solana delegated signer example
     solana_wallet_locator = f"email:{email_str}:solana-smart-wallet"
-    solana_permissions = [
-        DelegatedSignerPermission(type="transaction", value="*"),
-        DelegatedSignerPermission(type="signature", value="*")
-    ]
     
     solana_signer = register_delegated_signer(
         api_client,
         solana_wallet_locator,
         {"email": delegated_email_str},
         "solana",
-        permissions=solana_permissions
     )
     print(f"Registered Solana delegated signer: {solana_signer}")
     

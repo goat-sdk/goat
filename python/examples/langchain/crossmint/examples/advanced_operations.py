@@ -72,17 +72,11 @@ def time_bound_delegated_signer(
     """Register a delegated signer with time-bound permissions."""
     expires_at = int(time.time() * 1000) + (duration_hours * 60 * 60 * 1000)
     
-    permissions = [
-        DelegatedSignerPermission(type="transaction", value="*"),
-        DelegatedSignerPermission(type="signature", value="*")
-    ]
-    
     return api_client.register_delegated_signer(
         wallet_locator,
         signer,
         chain,
         expires_at,
-        permissions
     )
 
 def main():

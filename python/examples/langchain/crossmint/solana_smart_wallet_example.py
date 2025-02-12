@@ -29,9 +29,6 @@ def main():
     
     signer_response = wallet.register_delegated_signer(
         "solana-keypair:BvzKvn6nUUAYtKu2pH3h5SbUkUNcRPQawg3TYz8aB8Zr",
-        permissions=[
-            DelegatedSignerPermission(type="transaction", value="*")
-        ]
     )
     print(f"Registered delegated signer: {signer_response}")
     

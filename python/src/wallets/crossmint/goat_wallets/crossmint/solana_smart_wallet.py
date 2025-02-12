@@ -9,7 +9,7 @@ from solana.rpc.api import Client as SolanaClient
 from goat.classes.wallet_client_base import Balance, Signature
 from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
-from .parameters import SolanaSmartWalletTransactionParams, DelegatedSignerPermission
+from .parameters import SolanaSmartWalletTransactionParams
 from .base_wallet import BaseWalletClient, get_locator
 
 
