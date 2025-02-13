@@ -128,7 +128,9 @@ def test_custodial_wallet_transaction(custodial_api, test_email, solana_connecti
     
     # Send transaction
     tx = client.send_transaction({
-        "instructions": [instruction]
+        "instructions": [instruction],
+        "address_lookup_table_addresses": [],
+        "accounts_to_sign": []
     })
     assert tx["status"] in ["success", "pending"]
     if tx["status"] == "success":

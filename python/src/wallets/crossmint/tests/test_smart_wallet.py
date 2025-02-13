@@ -1,16 +1,13 @@
 import pytest
-import os
+from typing import List
 from web3.main import Web3
-from web3.providers.rpc import HTTPProvider
 from eth_account import Account
-from eth_account.messages import encode_defunct
-from goat_wallets.crossmint.smart_wallet import SmartWalletClient
+from eth_typing import HexStr
+from goat_wallets.crossmint.evm_smart_wallet import EVMSmartWalletClient, KeyPairSigner
 from goat_wallets.crossmint.parameters import AdminSigner, CoreSignerType, WalletType
+from goat_wallets.evm.types import EVMTransaction
 from .utils.helpers import (
     compare_wallet_responses,
-    compare_transaction_responses,
-    compare_signature_responses,
-    compare_error_responses
 )
 
 
@@ -84,14 +81,14 @@ def test_smart_wallet_with_email(smart_api, test_email, test_wallet_options, tes
     )
     
     try:
-        client = SmartWalletClient(
+        signer: KeyPairSigner = {
+            "secretKey": test_keypair["secretKey"]
+        }
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
-            {
-                "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
-            },
+            signer,
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
         )
@@ -119,13 +116,12 @@ def test_smart_wallet_message_signing(smart_api, test_wallet_options, test_messa
     )
     
     try:
-        client = SmartWalletClient(
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
             {
                 "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
             },
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
@@ -160,13 +156,12 @@ def test_smart_wallet_transaction(smart_api, test_wallet_options, test_evm_trans
     )
     
     try:
-        client = SmartWalletClient(
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
             {
                 "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
             },
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
@@ -200,20 +195,19 @@ def test_smart_wallet_batch_transactions(smart_api, test_wallet_options, test_ke
     )
     
     try:
-        client = SmartWalletClient(
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
             {
-                "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
+                "secretKey": test_keypair["secretKey"]
             },
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
         )
         
         # Create batch of transactions
-        transactions = [
+        transactions: List[EVMTransaction] = [
             {
                 "to": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
                 "value": 1000000000000000
@@ -250,13 +244,12 @@ def test_smart_wallet_read_contract(smart_api, test_wallet_options, test_keypair
         linked_user="email:test@example.com",
         config={"adminSigner": admin_signer.model_dump()}
     )
-    client = SmartWalletClient(
+    client = EVMSmartWalletClient(
         wallet["address"],
         smart_api,
         test_wallet_options["chain"],
         {
             "secretKey": test_keypair["secretKey"],
-            "address": test_keypair["address"]
         },
         test_wallet_options["provider"],
         test_wallet_options["options"]["ensProvider"]
@@ -299,13 +292,12 @@ def test_smart_wallet_balance(smart_api, test_wallet_options, test_keypair):
     )
     
     try:
-        client = SmartWalletClient(
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
             {
                 "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
             },
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
@@ -344,13 +336,12 @@ def test_smart_wallet_ens_resolution(smart_api, test_wallet_options, test_keypai
     )
     
     try:
-        client = SmartWalletClient(
+        client = EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             test_wallet_options["chain"],
             {
                 "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
             },
             test_wallet_options["provider"],
             test_wallet_options["options"]["ensProvider"]
@@ -400,13 +391,12 @@ def test_smart_wallet_invalid_options(smart_api, invalid_options, test_wallet_op
     options = {**test_wallet_options, **invalid_options}
     
     with pytest.raises((Exception, ValueError)) as exc:
-        SmartWalletClient(
+        EVMSmartWalletClient(
             wallet["address"],
             smart_api,
             options["chain"],
             {
                 "secretKey": test_keypair["secretKey"],
-                "address": test_keypair["address"]
             },
             options["provider"],
             options["options"]["ensProvider"]

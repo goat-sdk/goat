@@ -10,7 +10,7 @@ from .utils.helpers import (
 
 class SolanaSmartWalletTransactionParams:
     """Parameters for Solana smart wallet transactions."""
-    def __init__(self, transaction: str, required_signers: list = None, signer: str = None):
+    def __init__(self, transaction: str, required_signers: list = [], signer: str = ""):
         self.transaction = transaction
         self.requiredSigners = required_signers or []
         self.signer = signer
