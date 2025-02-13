@@ -4,9 +4,9 @@ from .parameters import GetTokenReportParameters, NoParameters
 
 
 class RugCheckService:
-    def __init__(self, jwt_token: str = ""):
+    def __init__(self, jwt_token: str = "", base_url: str = "https://api.rugcheck.xyz/v1"):
         self.jwt_token = jwt_token
-        self.base_url = "https://api.rugcheck.xyz/v1"
+        self.base_url = base_url
 
     async def _make_request(self, endpoint: str):
         headers = {
