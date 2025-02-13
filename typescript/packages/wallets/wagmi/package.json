@@ -12,7 +12,8 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "devDependencies": {
-        "@goat-sdk/core": "workspace:*"
+        "@goat-sdk/core": "workspace:*",
+        "@wagmi/connectors": "^5.7.7"
     },
     "dependencies": {
         "@goat-sdk/wallet-evm": "workspace:*",
