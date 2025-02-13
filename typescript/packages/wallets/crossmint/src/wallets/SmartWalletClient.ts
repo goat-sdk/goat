@@ -1,18 +1,6 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
-import {
-    EVMReadRequest,
-    EVMSmartWalletClient,
-    EVMTransaction,
-    EVMTypedData,
-} from "@goat-sdk/wallet-evm";
-import {
-    Abi,
-    type PublicClient,
-    createPublicClient,
-    encodeFunctionData,
-    formatUnits,
-    http,
-} from "viem";
+import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
+import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
@@ -50,10 +38,7 @@ export type SmartWalletOptions = {
     };
 };
 
-function getLocator(
-    address: string | undefined,
-    linkedUser: LinkedUser | undefined
-) {
+function getLocator(address: string | undefined, linkedUser: LinkedUser | undefined) {
     if (linkedUser) {
         if ("email" in linkedUser) {
             return `email:${linkedUser.email}:evm-smart-wallet`;
@@ -67,9 +52,7 @@ function getLocator(
     }
 
     if (!address) {
-        throw new Error(
-            "A Smart Wallet address is required if no linked user is provided"
-        );
+        throw new Error("A Smart Wallet address is required if no linked user is provided");
     }
 
     return address;
@@ -134,11 +117,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return privateKeyToAccount(this.#signer.secretKey);
     }
 
-    constructor(
-        address: string,
-        apiClient: CrossmintWalletsAPI,
-        options: SmartWalletOptions
-    ) {
+    constructor(address: string, apiClient: CrossmintWalletsAPI, options: SmartWalletOptions) {
         super();
         this.#locator = getLocator(options.address, options.linkedUser);
         this.#address = address;
@@ -191,13 +170,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     }
 
     async signMessage(message: string) {
-        const { id: signatureId, approvals } =
-            await this.#client.signMessageForSmartWallet(
-                this.#address,
-                message,
-                this.#chain,
-                this.signerAccount?.address
-            );
+        const { id: signatureId, approvals } = await this.#client.signMessageForSmartWallet(
+            this.#address,
+            message,
+            this.#chain,
+            this.signerAccount?.address,
+        );
 
         if (!this.hasCustodialSigner) {
             const account = this.signerAccount;
@@ -213,15 +191,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
                 signatureId,
                 this.#address,
                 `evm-keypair:${this.signerAccount?.address}`,
-                signature
+                signature,
             );
         }
 
         while (true) {
-            const latestSignature = await this.#client.checkSignatureStatus(
-                signatureId,
-                this.#address
-            );
+            const latestSignature = await this.#client.checkSignatureStatus(signatureId, this.#address);
 
             if (latestSignature.status === "success") {
                 if (!latestSignature.outputSignature) {
@@ -242,13 +217,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     }
 
     async signTypedData(data: EVMTypedData) {
-        const { id: signatureId, approvals } =
-            await this.#client.signTypedDataForSmartWallet(
-                this.#address,
-                data,
-                this.#chain,
-                this.signerAccount?.address as `0x${string}`
-            );
+        const { id: signatureId, approvals } = await this.#client.signTypedDataForSmartWallet(
+            this.#address,
+            data,
+            this.#chain,
+            this.signerAccount?.address as `0x${string}`,
+        );
 
         if (!this.hasCustodialSigner) {
             const account = this.signerAccount;
@@ -264,15 +238,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
                 signatureId,
                 this.#address,
                 `evm-keypair:${this.signerAccount?.address}`,
-                signature
+                signature,
             );
         }
 
         while (true) {
-            const latestSignature = await this.#client.checkSignatureStatus(
-                signatureId,
-                this.#address
-            );
+            const latestSignature = await this.#client.checkSignatureStatus(signatureId, this.#address);
 
             if (latestSignature.status === "success") {
                 if (!latestSignature.outputSignature) {
@@ -331,13 +302,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
 
     private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {
         const transactionDatas = transactions.map((transaction) => {
-            const {
-                to: recipientAddress,
-                abi,
-                functionName,
-                args,
-                value,
-            } = transaction;
+            const { to: recipientAddress, abi, functionName, args, value } = transaction;
 
             return buildTransactionData({
                 recipientAddress,
@@ -352,7 +317,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             this.#address,
             transactionDatas,
             this.#chain,
-            this.signerAccount?.address as `0x${string}`
+            this.signerAccount?.address as `0x${string}`,
         );
 
         if (!this.hasCustodialSigner) {
@@ -360,8 +325,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             if (!account) {
                 throw new Error("Signer account is not available");
             }
-            const userOpHash =
-                transactionResponse.approvals?.pending[0].message;
+            const userOpHash = transactionResponse.approvals?.pending[0].message;
 
             if (!userOpHash) {
                 throw new Error("User operation hash is not available");
@@ -370,28 +334,18 @@ export class SmartWalletClient extends EVMSmartWalletClient {
                 message: { raw: userOpHash as `0x${string}` },
             });
 
-            await this.#client.approveTransaction(
-                this.#locator,
-                transactionResponse.id,
-                [
-                    {
-                        signature,
-                        signer: `evm-keypair:${this.signerAccount?.address}`,
-                    },
-                ]
-            );
+            await this.#client.approveTransaction(this.#locator, transactionResponse.id, [
+                {
+                    signature,
+                    signer: `evm-keypair:${this.signerAccount?.address}`,
+                },
+            ]);
         }
 
         while (true) {
-            const latestTransaction = await this.#client.checkTransactionStatus(
-                this.#locator,
-                transactionResponse.id
-            );
+            const latestTransaction = await this.#client.checkTransactionStatus(this.#locator, transactionResponse.id);
 
-            if (
-                latestTransaction.status === "success" ||
-                latestTransaction.status === "failed"
-            ) {
+            if (latestTransaction.status === "success" || latestTransaction.status === "failed") {
                 return {
                     hash: latestTransaction.onChain?.txId ?? "",
                     status: latestTransaction.status,
@@ -406,9 +360,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
 export function smartWalletFactory(crossmintClient: CrossmintApiClient) {
     const walletsApi = new CrossmintWalletsAPI(crossmintClient);
     return async function smartWallet(options: SmartWalletOptions) {
-        const { address } = await walletsApi.getWallet(
-            getLocator(options.address, options.linkedUser)
-        );
+        const { address } = await walletsApi.getWallet(getLocator(options.address, options.linkedUser));
         return new SmartWalletClient(address, walletsApi, options);
     };
 }

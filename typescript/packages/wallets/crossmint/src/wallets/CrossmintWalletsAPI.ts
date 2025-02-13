@@ -20,10 +20,7 @@ type AdminSigner = {
 // Create Wallet
 ////////////////////////////////////////////////////////////////////
 interface CreateWalletRequest {
-    type:
-        | "evm-smart-wallet"
-        | "solana-custodial-wallet"
-        | "solana-smart-wallet";
+    type: "evm-smart-wallet" | "solana-custodial-wallet" | "solana-smart-wallet";
     config?: {
         adminSigner?: AdminSigner;
     };
@@ -31,10 +28,7 @@ interface CreateWalletRequest {
 }
 
 interface CreateWalletResponse {
-    type:
-        | "evm-smart-wallet"
-        | "solana-custodial-wallet"
-        | "solana-smart-wallet";
+    type: "evm-smart-wallet" | "solana-custodial-wallet" | "solana-smart-wallet";
     address: string;
     config: {
         adminSigner?: AdminSigner;
@@ -52,10 +46,7 @@ interface GetWalletResponse extends CreateWalletResponse {}
 // Create Transaction
 ////////////////////////////////////////////////////////////////////
 interface TransactionApprovals {
-    pending: Omit<
-        ApprovalSubmission,
-        "signature" | "submittedAt" | "metadata"
-    >[];
+    pending: Omit<ApprovalSubmission, "signature" | "submittedAt" | "metadata">[];
 
     submitted: ApprovalSubmission[];
     required?: number; // For multisig scenarios, tentative until we support
@@ -242,10 +233,7 @@ export class CrossmintWalletsAPI {
      * @returns The parsed JSON response.
      * @throws An error if the response is not OK.
      */
-    private async request<T extends APIResponse>(
-        endpoint: string,
-        options: RequestInit = {}
-    ): Promise<T> {
+    private async request<T extends APIResponse>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const url = `${this.baseUrl}${endpoint}`;
 
         // Set default headers and merge with any additional headers
@@ -259,9 +247,7 @@ export class CrossmintWalletsAPI {
         const responseBody = (await response.json()) as T;
 
         if (!response.ok) {
-            throw new Error(
-                `Error ${response.status}: ${JSON.stringify(responseBody)}`
-            );
+            throw new Error(`Error ${response.status}: ${JSON.stringify(responseBody)}`);
         }
 
         return responseBody;
@@ -269,7 +255,7 @@ export class CrossmintWalletsAPI {
 
     public async createSmartWallet(
         adminSigner?: AdminSigner,
-        type: "evm-smart-wallet" | "solana-smart-wallet" = "evm-smart-wallet"
+        type: "evm-smart-wallet" | "solana-smart-wallet" = "evm-smart-wallet",
     ): Promise<CreateWalletResponse> {
         const endpoint = "/wallets";
         const payload: CreateWalletRequest = {
@@ -285,9 +271,7 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async createCustodialWallet(
-        linkedUser: string
-    ): Promise<CreateWalletResponse> {
+    public async createCustodialWallet(linkedUser: string): Promise<CreateWalletResponse> {
         const endpoint = "/wallets";
         const payload: CreateWalletRequest = {
             type: "solana-custodial-wallet",
@@ -307,10 +291,7 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async signMessageForCustodialWallet(
-        locator: string,
-        message: string
-    ): Promise<SignMessageResponse> {
+    public async signMessageForCustodialWallet(locator: string, message: string): Promise<SignMessageResponse> {
         const endpoint = `/wallets/${encodeURIComponent(locator)}/signatures`;
         const payload: SignMessageRequest = {
             type: "solana-message",
@@ -327,11 +308,9 @@ export class CrossmintWalletsAPI {
         walletAddress: string,
         message: string,
         chain: SupportedSmartWalletChains,
-        signer?: string
+        signer?: string,
     ): Promise<SignMessageResponse> {
-        const endpoint = `/wallets/${encodeURIComponent(
-            walletAddress
-        )}/signatures`;
+        const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/signatures`;
         const payload: SignMessageRequest = {
             type: "evm-message",
             params: {
@@ -351,11 +330,9 @@ export class CrossmintWalletsAPI {
         walletAddress: string,
         typedData: EVMTypedData,
         chain: SupportedSmartWalletChains,
-        signer: string
+        signer: string,
     ): Promise<SignTypedDataResponse> {
-        const endpoint = `/wallets/${encodeURIComponent(
-            walletAddress
-        )}/signatures`;
+        const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/signatures`;
 
         const payload: SignTypedDataRequest = {
             type: "evm-typed-data",
@@ -372,13 +349,8 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async checkSignatureStatus(
-        signatureId: string,
-        walletAddress: string
-    ): Promise<ApproveSignatureResponse> {
-        const endpoint = `/wallets/${encodeURIComponent(
-            walletAddress
-        )}/signatures/${encodeURIComponent(signatureId)}`;
+    public async checkSignatureStatus(signatureId: string, walletAddress: string): Promise<ApproveSignatureResponse> {
+        const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/signatures/${encodeURIComponent(signatureId)}`;
         return this.request<ApproveSignatureResponse>(endpoint, {
             method: "GET",
         });
@@ -388,10 +360,10 @@ export class CrossmintWalletsAPI {
         signatureId: string,
         locator: string,
         signer: string,
-        signature: string
+        signature: string,
     ): Promise<ApproveSignatureResponse> {
         const endpoint = `/wallets/${encodeURIComponent(
-            locator
+            locator,
         )}/signatures/${encodeURIComponent(signatureId)}/approvals`;
 
         const payload: ApproveSignatureRequest = {
@@ -412,7 +384,7 @@ export class CrossmintWalletsAPI {
     public async createSolanaTransaction(
         locator: string,
         transaction: string,
-        requiredSigners?: string[]
+        requiredSigners?: string[],
     ): Promise<CreateTransactionResponse> {
         const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions`;
         const payload: CreateTransactionRequest = {
@@ -432,11 +404,9 @@ export class CrossmintWalletsAPI {
         walletAddress: string,
         calls: Call[],
         chain: SupportedSmartWalletChains,
-        signer?: string
+        signer?: string,
     ): Promise<CreateTransactionResponse> {
-        const endpoint = `/wallets/${encodeURIComponent(
-            walletAddress
-        )}/transactions`;
+        const endpoint = `/wallets/${encodeURIComponent(walletAddress)}/transactions`;
         const payload: CreateTransactionRequest = {
             params: {
                 calls,
@@ -454,10 +424,10 @@ export class CrossmintWalletsAPI {
     public async approveTransaction(
         locator: string,
         transactionId: string,
-        approvals: SubmitApproval[]
+        approvals: SubmitApproval[],
     ): Promise<SubmitApprovalResponse> {
         const endpoint = `/wallets/${encodeURIComponent(
-            locator
+            locator,
         )}/transactions/${encodeURIComponent(transactionId)}/approvals`;
 
         const payload: SubmitApprovalRequest = {
@@ -470,13 +440,8 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async checkTransactionStatus(
-        locator: string,
-        transactionId: string
-    ): Promise<TransactionStatusResponse> {
-        const endpoint = `/wallets/${encodeURIComponent(
-            locator
-        )}/transactions/${encodeURIComponent(transactionId)}`;
+    public async checkTransactionStatus(locator: string, transactionId: string): Promise<TransactionStatusResponse> {
+        const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions/${encodeURIComponent(transactionId)}`;
 
         return this.request<TransactionStatusResponse>(endpoint, {
             method: "GET",
@@ -486,17 +451,14 @@ export class CrossmintWalletsAPI {
     public async waitForTransaction(
         locator: string,
         transactionId: string,
-        options: { interval?: number; maxAttempts?: number } = {}
+        options: { interval?: number; maxAttempts?: number } = {},
     ): Promise<TransactionStatusResponse> {
         const interval = options.interval || 1000;
         const maxAttempts = options.maxAttempts || 30;
         let attempts = 0;
 
         while (attempts < maxAttempts) {
-            const status = await this.checkTransactionStatus(
-                locator,
-                transactionId
-            );
+            const status = await this.checkTransactionStatus(locator, transactionId);
             if (status.status === "success" || status.status === "failed") {
                 return status;
             }
@@ -510,17 +472,14 @@ export class CrossmintWalletsAPI {
     public async waitForSignature(
         locator: string,
         signatureId: string,
-        options: { interval?: number; maxAttempts?: number } = {}
+        options: { interval?: number; maxAttempts?: number } = {},
     ): Promise<ApproveSignatureResponse> {
         const interval = options.interval || 1000;
         const maxAttempts = options.maxAttempts || 30;
         let attempts = 0;
 
         while (attempts < maxAttempts) {
-            const status = await this.checkSignatureStatus(
-                signatureId,
-                locator
-            );
+            const status = await this.checkSignatureStatus(signatureId, locator);
             if (status.status === "success" || status.status === "failed") {
                 return status;
             }
@@ -533,23 +492,17 @@ export class CrossmintWalletsAPI {
 
     public async waitForAction(
         actionId: string,
-        options: { interval?: number; maxAttempts?: number } = {}
+        options: { interval?: number; maxAttempts?: number } = {},
     ): Promise<ActionResponse> {
         const interval = options.interval || 1000;
         const maxAttempts = options.maxAttempts || 30;
         let attempts = 0;
 
         while (attempts < maxAttempts) {
-            const response = await this.request<ActionResponse>(
-                `/2022-06-09/actions/${encodeURIComponent(actionId)}`,
-                {
-                    method: "GET",
-                }
-            );
-            if (
-                response.status === "succeeded" ||
-                response.status === "failed"
-            ) {
+            const response = await this.request<ActionResponse>(`/2022-06-09/actions/${encodeURIComponent(actionId)}`, {
+                method: "GET",
+            });
+            if (response.status === "succeeded" || response.status === "failed") {
                 return response;
             }
             attempts++;
