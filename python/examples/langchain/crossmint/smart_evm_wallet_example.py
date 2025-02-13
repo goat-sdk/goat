@@ -1,5 +1,6 @@
 import os
-import asyncio
+import requests
+from eth_account import Account
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -15,21 +16,68 @@ from goat_plugins.erc20.token import USDC, PEPE
 from goat_wallets.evm.send_eth import send_eth
 from goat_wallets.crossmint import crossmint
 
-crossmint = crossmint(os.getenv("CROSSMINT_API_KEY"))
+def create_smart_wallet(signer_public_key: str, api_key: str, base_url: str = "https://staging.crossmint.com") -> dict:
+    """Create a new smart wallet using the Crossmint API."""
+    response = requests.post(
+        f"{base_url}/api/v1-alpha2/wallets",
+        headers={
+            "X-API-KEY": api_key,
+            "Content-Type": "application/json",
+        },
+        json={
+            "type": "evm-smart-wallet",
+            "config": {
+                "adminSigner": {
+                    "type": "evm-keypair",
+                    "address": signer_public_key,
+                },
+            },
+        },
+    )
+    return response.json()
 
-crossmint_wallet = crossmint["smartwallet"]({
-    "address": "0x60096F6E9143DbfdeB12aB81C81eD560584B2954",
-    "signer": "0x0b76745250FEF8fBa8e597b84CdaE46B5aC03573",
-    "provider": "https://base-mainnet.g.alchemy.com/v2/demo",
-    "ensProvider": "https://base-mainnet.g.alchemy.com/v2/demo",
-    "chain": "base",
-})
+def main():
+    # Get required environment variables
+    api_key = os.getenv("CROSSMINT_API_KEY")
+    if not api_key:
+        raise ValueError("CROSSMINT_API_KEY environment variable is required")
 
-# Initialize LLM
-llm = ChatOpenAI(model="gpt-4o-mini")
+    # Create Crossmint client
+    crossmint_client = crossmint(api_key)
 
-async def main():
-    
+    # Create a new smart wallet if address is not provided
+    secret_key = os.getenv("SIGNER_WALLET_SECRET_KEY")
+    if not secret_key:
+        raise ValueError("SIGNER_WALLET_SECRET_KEY environment variable is required")
+
+    signer_address = Account.from_key(secret_key).address
+
+    # Create the smart wallet
+    wallet_response = create_smart_wallet(
+        signer_public_key=signer_address,
+        api_key=api_key,
+        base_url=os.getenv("CROSSMINT_BASE_URL", "https://staging.crossmint.com")
+    )
+
+    if "error" in wallet_response:
+        raise Exception(f"Failed to create wallet: {wallet_response}")
+
+    print(f"Created smart wallet: {wallet_response['address']}")
+
+    # Initialize the smart wallet client
+    crossmint_wallet = crossmint_client["smartwallet"]({
+        "address": wallet_response["address"],
+        "signer": {
+            "secretKey": secret_key,
+        },
+        "provider": os.getenv("EVM_PROVIDER_URL", "https://base-mainnet.g.alchemy.com/v2/demo"),
+        "ensProvider": os.getenv("ENS_PROVIDER_URL", "https://base-mainnet.g.alchemy.com/v2/demo"),
+        "chain": "base",
+    })
+
+    # Initialize LLM
+    llm = ChatOpenAI(model="gpt-4o-mini")
+
     # Get the prompt template
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -74,4 +122,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

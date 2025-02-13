@@ -4,12 +4,12 @@ This package provides Crossmint wallet integration for the GOAT SDK, supporting 
 
 ## Features
 
-- EVM Smart Wallet support
-- Solana Custodial Wallet support
-- Async API client for Crossmint interactions
-- Support for multiple authentication methods (email, phone, user ID)
-- Transaction and signature management
-- Balance queries and ENS resolution
+-   EVM Smart Wallet support
+-   Solana Custodial Wallet support
+-   Async API client for Crossmint interactions
+-   Support for multiple authentication methods (email, phone, user ID)
+-   Transaction and signature management
+-   Balance queries and ENS resolution
 
 ## Installation
 
@@ -28,16 +28,31 @@ crossmint_client = CrossmintApiClient(...)
 
 # Create Smart Wallet
 smart_wallet = await smart_wallet_factory(crossmint_client)({
-    "chain": "ethereum",
-    "provider": "https://eth-mainnet.g.alchemy.com/v2/your-api-key",
-    "signer": {"secretKey": "0x..."}
+    # Required: One of the following to locate the wallet
+    "address": "0x...",  # Wallet address, or use linkedUser instead:
+    # "linkedUser": {
+    #     "email": "user@example.com",  # Or use phone/userId
+    #     # "phone": "+1234567890",
+    #     # "userId": "user-id"
+    # },
+    "chain": "base",  # or "ethereum", etc.
+    "signer": {
+        "secretKey": "0x..."  # Private key for signing
+    },
+    "provider": "https://base-mainnet.g.alchemy.com/v2/your-api-key",
+    "options": {
+        "ensProvider": "https://base-mainnet.g.alchemy.com/v2/your-api-key"  # Optional: For ENS resolution
+    }
 })
 
-# Create Custodial Wallet
+# Create Custodial Solana Wallet
 custodial_wallet = await custodial_factory(crossmint_client)({
-    "chain": "solana",
-    "connection": solana_connection,
-    "email": "user@example.com"
+    "connection": solana_connection,  # Solana RPC connection
+    # One of the following for wallet location:
+    "email": "user@example.com",
+    # "phone": "+1234567890",
+    # "userId": "user-id",
+    # "address": "solana-address"
 })
 ```
 

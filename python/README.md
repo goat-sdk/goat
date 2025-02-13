@@ -1,4 +1,3 @@
-
 <div align="center">
 
 [Website](https://ohmygoat.dev) | [X](https://x.com/goat_sdk) | [Discord](https://discord.gg/goat-sdk)
@@ -10,66 +9,84 @@ GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossm
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/goat-sdk)
 
-
 </div>
 
-# GOAT 🐐  (Python)
+# GOAT 🐐 (Python)
+
 ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/goat-sdk)
 
 GOAT (Great Onchain Agent Toolkit) is a library that adds more than +200 onchain tools to your AI agent.
 
-* **[+200 tools](#plugins)**: DeFi (Uniswap, Jupiter, KIM, Orca, etc.), minting (OpenSea, MagicEden, etc.), betting (Polymarket, etc.), analytics (CoinGecko, BirdEye, Allora, etc.) and more
-* **Chains**: EVM (Base, Polygon, Mode, Sei, etc.), Solana, Aptos, Chromia, Fuel, Sui, Starknet and Zilliqa
-* **[Wallets](#wallets)**: keypair, smart wallets (Crossmint, etc.), LIT, MPC (Coinbase, etc.)
-* **[Agent Frameworks](#agent-frameworks-adapters)**: AI SDK, Langchain, Eliza, ZerePy, GAME, ElevenLabs, etc.
-
+-   **[+200 tools](#plugins)**: DeFi (Uniswap, Jupiter, KIM, Orca, etc.), minting (OpenSea, MagicEden, etc.), betting (Polymarket, etc.), analytics (CoinGecko, BirdEye, Allora, etc.) and more
+-   **Chains**: EVM (Base, Polygon, Mode, Sei, etc.), Solana, Aptos, Chromia, Fuel, Sui, Starknet and Zilliqa
+-   **[Wallets](#wallets)**: keypair, smart wallets (Crossmint, etc.), LIT, MPC (Coinbase, etc.)
+-   **[Agent Frameworks](#agent-frameworks-adapters)**: AI SDK, Langchain, Eliza, ZerePy, GAME, ElevenLabs, etc.
 
 ## Table of Contens
-- [GOAT 🐐  (Python)](#goat---python)
-  - [Table of Contens](#table-of-contens)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [How to create a plugin](#how-to-create-a-plugin)
-    - [Using the Plugin Generator](#using-the-plugin-generator)
-    - [Manual Creation](#manual-creation)
-      - [1. Define your plugin extending the PluginBase class.](#1-define-your-plugin-extending-the-pluginbase-class)
-      - [2. Add tools to the plugin](#2-add-tools-to-the-plugin)
-      - [3. Add the plugin to the agent](#3-add-the-plugin-to-the-agent)
-      - [Next steps](#next-steps)
-  - [How to add a chain](#how-to-add-a-chain)
-    - [1. Add the chain to the `chain.py` file](#1-add-the-chain-to-the-chainpy-file)
-    - [2. Create a new wallet provider package](#2-create-a-new-wallet-provider-package)
-    - [3. Create a plugin to allow sending your native token to a wallet](#3-create-a-plugin-to-allow-sending-your-native-token-to-a-wallet)
-    - [4. Implement the wallet client](#4-implement-the-wallet-client)
-    - [5. Submit a PR](#5-submit-a-pr)
-  - [How to add a wallet provider](#how-to-add-a-wallet-provider)
-  - [Packages](#packages)
-    - [Core](#core)
-    - [Wallets](#wallets)
-    - [Agent Framework Adapters](#agent-framework-adapters)
-    - [Plugins](#plugins)
+
+-   [GOAT 🐐 (Python)](#goat--python)
+    -   [Table of Contens](#table-of-contens)
+    -   [Installation](#installation)
+    -   [Examples](#examples)
+    -   [Usage](#usage)
+    -   [How to create a plugin](#how-to-create-a-plugin)
+        -   [Using the Plugin Generator](#using-the-plugin-generator)
+        -   [Manual Creation](#manual-creation)
+            -   [1. Define your plugin extending the PluginBase class.](#1-define-your-plugin-extending-the-pluginbase-class)
+            -   [2. Add tools to the plugin](#2-add-tools-to-the-plugin)
+            -   [3. Add the plugin to the agent](#3-add-the-plugin-to-the-agent)
+            -   [Next steps](#next-steps)
+    -   [How to add a chain](#how-to-add-a-chain)
+        -   [1. Add the chain to the `chain.py` file](#1-add-the-chain-to-the-chainpy-file)
+        -   [2. Create a new wallet provider package](#2-create-a-new-wallet-provider-package)
+        -   [3. Create a plugin to allow sending your native token to a wallet](#3-create-a-plugin-to-allow-sending-your-native-token-to-a-wallet)
+        -   [4. Implement the wallet client](#4-implement-the-wallet-client)
+        -   [5. Submit a PR](#5-submit-a-pr)
+    -   [How to add a wallet provider](#how-to-add-a-wallet-provider)
+    -   [Packages](#packages)
+        -   [Core](#core)
+        -   [Wallets](#wallets)
+        -   [Agent Framework Adapters](#agent-framework-adapters)
+        -   [Plugins](#plugins)
 
 ## Installation
+
 1. Install the core package
+
 ```bash
 pip install goat-sdk
 ```
+
 2. Depending on the type of wallet you want to use, install the corresponding wallet (see all wallets [here](#wallets)):
+
 ```bash
 pip install goat-sdk-wallet-solana
 ```
+
 3. Install the plugins for the protocols you need (see all available plugins [here](#plugins))
 
 ```bash
-pip install goat-sdk-plugin-spl-tokens
+pip install goat-sdk-plugin-spl-token
 ```
+
 4. Install the adapter for the agent framework you want to use (see all available adapters [here](#adapters))
+
 ```bash
 pip install goat-sdk-adapter-langchain
 ```
 
+## Examples
+
+Check out our [examples](examples/) directory for complete working examples, including:
+
+-   Langchain integration examples
+-   Solana wallet examples
+-   And more!
+
 ## Usage
+
 1. Configure your wallet
+
 ```python
 from goat_wallets.solana import solana
 
@@ -80,6 +97,7 @@ wallet = solana(client, keypair)
 ```
 
 2. Configure your tools for the framework you want to use
+
 ```python
 # Initialize SPL Token plugin
 spl_token_plugin = spl_token(SplTokenPluginOptions(
@@ -95,6 +113,7 @@ tools = get_on_chain_tools(
 ```
 
 3. Plug into your agent framework
+
 ```python
 agent = create_tool_calling_agent(llm, tools, prompt)
 agent_executor = AgentExecutor(
@@ -111,6 +130,7 @@ print(response)
 ```
 
 ## How to create a plugin
+
 GOAT plugins enable your agent to interact with various blockchain protocols.
 
 Plugins can be chain-specific (EVM, Solana, etc.) or chain-agnostic. If a plugin is chain-specific it will fail to compile when being used with a wallet of a different chain.
@@ -118,6 +138,7 @@ Plugins can be chain-specific (EVM, Solana, etc.) or chain-agnostic. If a plugin
 You can see all available plugins [here](#plugins).
 
 ### Using the Plugin Generator
+
 Run the plugin generator script from the `python` directory:
 
 ```bash
@@ -126,16 +147,20 @@ python scripts/create_plugin.py <plugin-name> [--evm]
 ```
 
 Options:
-- `<plugin-name>`: Name of your plugin (e.g., 'my-token', 'my-service')
-- `--evm`: Optional flag to indicate if the plugin is EVM-compatible
+
+-   `<plugin-name>`: Name of your plugin (e.g., 'my-token', 'my-service')
+-   `--evm`: Optional flag to indicate if the plugin is EVM-compatible
 
 Examples:
+
 1. Create an EVM-compatible plugin:
+
 ```bash
 python scripts/create_plugin.py my-token --evm
 ```
 
 2. Create a chain-agnostic plugin:
+
 ```bash
 python scripts/create_plugin.py my-service
 ```
@@ -153,6 +178,7 @@ src/plugins/<plugin-name>/
 ```
 
 ### Manual Creation
+
 #### 1. Define your plugin extending the [PluginBase](https://github.com/goat-sdk/goat/tree/main/python/src/goat_sdk/goat/classes/plugin_base.py) class.
 
 ```python
@@ -173,6 +199,7 @@ my_plugin = () => MyPlugin()
 ```
 
 #### 2. Add tools to the plugin
+
 You can create a class and decorate its methods with the `@Tool` decorator to create tools.
 
 The tool methods will receive the wallet client as the first argument and the parameters as the second argument.
@@ -241,9 +268,11 @@ export class MyPlugin extends PluginBase<WalletClientBase> {
                     }),
                 },
                 async (parameters) => {
-                    const signed = await walletClient.signMessage(parameters.message);
+                    const signed = await walletClient.signMessage(
+                        parameters.message
+                    );
                     return signed.signedMessage;
-                },
+                }
             ),
         ];
     }
@@ -263,13 +292,14 @@ tools = get_on_chain_tools(
 ```
 
 #### Next steps
-- Share your plugin with others!
-- Open a PR to add it to the [plugins registry](https://github.com/goat-sdk/goat/tree/main/python/src/plugins) in the [GOAT SDK](https://github.com/goat-sdk/goat).
 
+-   Share your plugin with others!
+-   Open a PR to add it to the [plugins registry](https://github.com/goat-sdk/goat/tree/main/python/src/plugins) in the [GOAT SDK](https://github.com/goat-sdk/goat).
 
 ## How to add a chain
 
 ### 1. Add the chain to the `chain.py` file
+
 Add your chain to the `chain.py` file in the [core package](https://github.com/goat-sdk/goat/tree/main/python/src/goat_sdk/goat/types/chain.py).
 
 ```python
@@ -286,10 +316,12 @@ Chain = Union[EvmChain, SolanaChain, MyAwesomeChain]
 ```
 
 ### 2. Create a new wallet provider package
+
 Create a new package in the [wallets directory](https://github.com/goat-sdk/goat/tree/main/python/src/wallets) with the name of your chain (e.g. `my-awesome-chain`) or copy an existing one (e.g. `evm`).
 In this package you will define the abstract class for your chain's wallet client which will extend the `WalletClientBase` class defined in the [core package](https://github.com/goat-sdk/goat/tree/main/python/src/goat-sdk/goat/wallets/core.py).
 
 WalletClientBase only includes the methods that are supported by all chains such as:
+
 1. `get_address`
 2. `get_chain`
 3. `sign_message`
@@ -317,10 +349,10 @@ class MyAwesomeChainWalletClient(WalletClientBase):
 ```
 
 ### 3. Create a plugin to allow sending your native token to a wallet
+
 Create a plugin to allow sending your native token to a wallet. Create a file in the same package as your wallet client and create a new file like `send<native-token>.py`.
 
 Implement the core plugin.
-
 
 ```python
 class SendMYAWESOMETOKENPlugin(PluginBase[MyAwesomeChainWalletClient]):
@@ -345,6 +377,7 @@ class SendMYAWESOMETOKENPlugin(PluginBase[MyAwesomeChainWalletClient]):
 ```
 
 ### 4. Implement the wallet client
+
 Extend your abstract class with the methods you need to implement and create your first wallet client! (e.g `MyAwesomeChainKeyPairWalletClient`)
 
 ```python
@@ -357,9 +390,11 @@ my_awesome_chain_wallet_client = () => MyAwesomeChainKeyPairWalletClient()
 ```
 
 ### 5. Submit a PR
+
 Submit a PR to add your wallet provider to the [wallets directory](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets).
 
 ## How to add a wallet provider
+
 If you don't see your wallet provider supported, you can easily integrate it by implementing the specific [WalletClient](https://github.com/goat-sdk/goat/blob/main/python/src/wallets) interface for the chain and type of wallet you want to support:
 
 Checkout [here how the web3 client implementation](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/web3).
@@ -367,40 +402,45 @@ Checkout [here how the web3 client implementation](https://github.com/goat-sdk/g
 If you would like to see your wallet provider supported, please open an issue or submit a PR.
 
 ## Packages
+
 ### Core
-|  | PyPI package |
-| --- | --- |
+
+|      | PyPI package                                   |
+| ---- | ---------------------------------------------- |
 | Core | [goat-sdk](https://pypi.org/project/goat-sdk/) |
 
 ### Wallets
-| Wallet | PyPI package |
-| --- | --- |
-|EVM | [goat-sdk-wallet-evm](https://pypi.org/project/goat-sdk-wallet-evm/) |
-| Web3 | [goat-sdk-wallet-web3](https://pypi.org/project/goat-sdk-wallet-web3/) |
-| Solana | [goat-sdk-wallet-solana](https://pypi.org/project/goat-sdk-wallet-solana/) |
+
+| Wallet                                  | PyPI package                                                                     |
+| --------------------------------------- | -------------------------------------------------------------------------------- |
+| EVM                                     | [goat-sdk-wallet-evm](https://pypi.org/project/goat-sdk-wallet-evm/)             |
+| Web3                                    | [goat-sdk-wallet-web3](https://pypi.org/project/goat-sdk-wallet-web3/)           |
+| Solana                                  | [goat-sdk-wallet-solana](https://pypi.org/project/goat-sdk-wallet-solana/)       |
 | Crossmint (smart and custodial wallets) | [goat-sdk-wallet-crossmint](https://pypi.org/project/goat-sdk-wallet-crossmint/) |
 
 ### Agent Framework Adapters
-| Adapter | PyPI package |
-| --- | --- |
+
+| Adapter   | PyPI package                                                                       |
+| --------- | ---------------------------------------------------------------------------------- |
 | Langchain | [goat-sdk-adapter-langchain](https://pypi.org/project/goat-sdk-adapter-langchain/) |
 
-**ZerePy and GAME have direct integrations on their respective repos.*
+\*_ZerePy and GAME have direct integrations on their respective repos._
 
 ### Plugins
-| Plugin | Tools | PyPI package |
-| --- | --- | --- |
-| 1inch | Get wallet balances using 1inch API | [goat-sdk-plugin-1inch](https://pypi.org/project/goat-sdk-plugin-1inch/) |
-| Allora | Get price predictions using Allora API | [goat-sdk-plugin-allora](https://pypi.org/project/goat-sdk-plugin-allora/) |
-| CoinGecko | Get coin information using CoinGecko API | [goat-sdk-plugin-coingecko](https://pypi.org/project/goat-sdk-plugin-coingecko/) |
+
+| Plugin      | Tools                                       | PyPI package                                                                         |
+| ----------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| 1inch       | Get wallet balances using 1inch API         | [goat-sdk-plugin-1inch](https://pypi.org/project/goat-sdk-plugin-1inch/)             |
+| Allora      | Get price predictions using Allora API      | [goat-sdk-plugin-allora](https://pypi.org/project/goat-sdk-plugin-allora/)           |
+| CoinGecko   | Get coin information using CoinGecko API    | [goat-sdk-plugin-coingecko](https://pypi.org/project/goat-sdk-plugin-coingecko/)     |
 | Dexscreener | Get token information using Dexscreener API | [goat-sdk-plugin-dexscreener](https://pypi.org/project/goat-sdk-plugin-dexscreener/) |
-| ERC20 | Interact with any ERC20 token | [goat-sdk-plugin-erc20](https://pypi.org/project/goat-sdk-plugin-erc20/) |
-| Farcaster | Read and post casts on Farcaster | [goat-sdk-plugin-farcaster](https://pypi.org/project/goat-sdk-plugin-farcaster/) |
-| JSON RPC | Call any JSON RPC endpoint |[goat-sdk-plugin-jsonrpc](https://pypi.org/project/goat-sdk-plugin-jsonrpc/) |
-| Jupiter | Get price predictions using Jupiter API | [goat-sdk-plugin-jupiter](https://pypi.org/project/goat-sdk-plugin-jupiter/) |
-| Nansen | Get wallet insights using Nansen API | [goat-sdk-plugin-nansen](https://pypi.org/project/goat-sdk-plugin-nansen/) |
-| OpenSea | Get NFT and sales data from OpenSea | [goat-sdk-plugin-opensea](https://pypi.org/project/goat-sdk-plugin-opensea/) |
-| Rugcheck | Check if tokens are legit with Rugcheck | [goat-sdk-plugin-rugcheck](https://pypi.org/project/goat-sdk-plugin-rugcheck/) |
-| SPL Tokens | Interact with SPL tokens | [goat-sdk-plugin-spl-tokens](https://pypi.org/project/goat-sdk-plugin-spl-tokens/) |
-| Superfluid | Create streams with Superfluid | [goat-sdk-plugin-superfluid](https://pypi.org/project/goat-sdk-plugin-superfluid/) |
-| Uniswap | Get quotes and swap on Uniswap | [goat-sdk-plugin-uniswap](https://pypi.org/project/goat-sdk-plugin-uniswap/) |
+| ERC20       | Interact with any ERC20 token               | [goat-sdk-plugin-erc20](https://pypi.org/project/goat-sdk-plugin-erc20/)             |
+| Farcaster   | Read and post casts on Farcaster            | [goat-sdk-plugin-farcaster](https://pypi.org/project/goat-sdk-plugin-farcaster/)     |
+| JSON RPC    | Call any JSON RPC endpoint                  | [goat-sdk-plugin-jsonrpc](https://pypi.org/project/goat-sdk-plugin-jsonrpc/)         |
+| Jupiter     | Get price predictions using Jupiter API     | [goat-sdk-plugin-jupiter](https://pypi.org/project/goat-sdk-plugin-jupiter/)         |
+| Nansen      | Get wallet insights using Nansen API        | [goat-sdk-plugin-nansen](https://pypi.org/project/goat-sdk-plugin-nansen/)           |
+| OpenSea     | Get NFT and sales data from OpenSea         | [goat-sdk-plugin-opensea](https://pypi.org/project/goat-sdk-plugin-opensea/)         |
+| Rugcheck    | Check if tokens are legit with Rugcheck     | [goat-sdk-plugin-rugcheck](https://pypi.org/project/goat-sdk-plugin-rugcheck/)       |
+| SPL Tokens  | Interact with SPL tokens                    | [goat-sdk-plugin-spl-token](https://pypi.org/project/goat-sdk-plugin-spl-token/)     |
+| Superfluid  | Create streams with Superfluid              | [goat-sdk-plugin-superfluid](https://pypi.org/project/goat-sdk-plugin-superfluid/)   |
+| Uniswap     | Get quotes and swap on Uniswap              | [goat-sdk-plugin-uniswap](https://pypi.org/project/goat-sdk-plugin-uniswap/)         |

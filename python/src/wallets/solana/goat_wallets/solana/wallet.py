@@ -5,7 +5,6 @@ import base64
 from solana.rpc.api import Client as SolanaClient
 from solana.rpc.types import TxOpts
 from solana.rpc.commitment import Confirmed
-from solana.transaction import Transaction
 from solders.pubkey import Pubkey
 from solders.keypair import Keypair
 from solders.instruction import Instruction, AccountMeta, CompiledInstruction

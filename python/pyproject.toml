@@ -10,21 +10,35 @@ repository = "https://github.com/goat-sdk/goat"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.12"
-pydantic = "^2.10.0"
-goat-sdk = { path = "src/goat-sdk/" }
-goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/" }
-goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/" }
-goat-sdk-wallet-web3 = { path = "src/wallets/web3/" }
-goat-sdk-adapter-langchain = { path = "src/adapters/langchain/" }
-web3 = ">=6.20.3,<7.0.0"
+python = "^3.10"
 
-[tool.poetry.group.test.dependencies]
-pytest = "^8.3.4"
-pytest-asyncio = "^0.25.0"
-web3 = "^6.0.0"
-eth-account = "^0.8.0"
-eth-typing = "^3.5.0"
+# Core
+goat-sdk = { path = "src/goat-sdk/" }
+
+# Plugins
+goat-sdk-plugin-1inch = { path = "src/plugins/1inch/" }
+goat-sdk-plugin-allora = { path = "src/plugins/allora/" }
+goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/" }
+goat-sdk-plugin-dexscreener = { path = "src/plugins/dexscreener/" }
+goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/" }
+goat-sdk-plugin-farcaster = { path = "src/plugins/farcaster/" }
+goat-sdk-plugin-jsonrpc = { path = "src/plugins/jsonrpc/" }
+goat-sdk-plugin-jupiter = { path = "src/plugins/jupiter/" }
+goat-sdk-plugin-nansen = { path = "src/plugins/nansen/" }
+goat-sdk-plugin-opensea = { path = "src/plugins/opensea/" }
+goat-sdk-plugin-rugcheck = { path = "src/plugins/rugcheck/" }
+goat-sdk-plugin-spl-token = { path = "src/plugins/spl_token/" }
+goat-sdk-plugin-superfluid = { path = "src/plugins/superfluid/" }
+goat-sdk-plugin-uniswap = { path = "src/plugins/uniswap/" }
+
+# Wallets
+goat-sdk-wallet-crossmint = { path = "src/wallets/crossmint/" }
+goat-sdk-wallet-evm = { path = "src/wallets/evm/" }
+goat-sdk-wallet-solana = { path = "src/wallets/solana/" }
+goat-sdk-wallet-web3 = { path = "src/wallets/web3/" }
+
+# Adapters
+goat-sdk-adapter-langchain = { path = "src/adapters/langchain/" }
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
