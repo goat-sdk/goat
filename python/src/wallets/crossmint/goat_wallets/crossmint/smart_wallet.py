@@ -11,6 +11,7 @@ from eth_account.messages import encode_defunct
 from eth_account import Account
 
 from .api_client import CrossmintWalletsAPI, Call
+from .chains import is_supported_chain
 from ens import ENS
 
 CustodialSigner = str
@@ -98,7 +99,7 @@ class SmartWalletClient(EVMWalletClient):
         self._client = api_client
         
         # Validate chain
-        if chain not in ["base-sepolia", "ethereum", "polygon", "avalanche", "arbitrum"]:
+        if not is_supported_chain(chain):
             raise ValueError(f"Invalid chain: {chain}")
         self._chain = chain
         

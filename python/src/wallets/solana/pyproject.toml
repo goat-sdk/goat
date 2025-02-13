@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-solana"
-version = "0.1.2"
+version = "0.1.3"
 description = "Goat SDK Solana wallet implementation"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
