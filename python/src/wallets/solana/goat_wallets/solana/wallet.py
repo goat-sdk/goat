@@ -10,7 +10,7 @@ from solders.keypair import Keypair
 from solders.instruction import Instruction, AccountMeta, CompiledInstruction
 from solders.message import Message, MessageV0
 from solders.address_lookup_table_account import AddressLookupTableAccount
-from solders.transaction import VersionedTransaction
+from solders.transaction import VersionedTransaction, Transaction
 import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
@@ -178,7 +178,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
 
         instructions = []
         for compiled_ix in message.instructions:
-            ix = self._decompile_instruction(compiled_ix, account_keys, message)
+            ix = self._decompile_instruction(compiled_ix, account_keys, message) # type: ignore
             if ix is not None:
                 instructions.append(ix)
 
@@ -263,13 +263,10 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         recent_blockhash = self.client.get_latest_blockhash().value.blockhash
 
         # Create transaction
-        tx = Transaction()
-        tx.recent_blockhash = recent_blockhash
-        tx.fee_payer = self.keypair.pubkey()
-
-        # Add instructions
-        for instruction in transaction["instructions"]:
-            tx.add(instruction)
+        tx = Transaction.new_with_payer(
+            instructions=transaction["instructions"],
+            payer=self.keypair.pubkey(),
+        )
 
         # Add signers
         signers = [self.keypair]
@@ -278,7 +275,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
             signers.extend(additional_signers)
 
         # Sign and send transaction
-        tx.sign(*signers)
+        tx.sign(signers, recent_blockhash=recent_blockhash)
         result = self.client.send_transaction(
             tx,
             *signers,
@@ -318,7 +315,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
             account_keys=tx.message.account_keys,
             recent_blockhash=recent_blockhash,
             instructions=tx.message.instructions,
-            address_table_lookups=tx.message.address_table_lookups
+            address_table_lookups=tx.message.address_table_lookups # type: ignore
         )
         tx = VersionedTransaction(new_message, [self.keypair])
         
