@@ -1,6 +1,5 @@
 from typing import Dict, Optional, Any
-from goat.classes.wallet_client_base import Balance, Signature
-from goat_wallets.crossmint.solana_smart_wallet import LinkedUser
+from .types import LinkedUser
 from .api_client import CrossmintWalletsAPI
 
 

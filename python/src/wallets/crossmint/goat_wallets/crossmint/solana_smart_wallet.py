@@ -12,22 +12,25 @@ from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
 from .parameters import SolanaSmartWalletTransactionParams, AdminSigner
 from .base_wallet import BaseWalletClient, get_locator
+from .types import (
+    LinkedUser, TransactionApproval, BaseKeypairSigner,
+    BaseFireblocksSigner, BaseWalletConfig, BaseWalletOptions
+)
 
 
-class LinkedUser(TypedDict):
-    email: NotRequired[str]
-    phone: NotRequired[str]
-    userId: NotRequired[int]
-
-class SolanaKeypairSigner(TypedDict):
-    type: Literal["solana-keypair"]
-    secretKey: str
-
-class SolanaFireblocksSigner(TypedDict):
-    type: Literal["solana-fireblocks-custodial"]
+# Type aliases for Solana-specific signers
+SolanaKeypairSigner = BaseKeypairSigner  # type with solana-keypair
+SolanaFireblocksSigner = BaseFireblocksSigner  # type with solana-fireblocks-custodial
 
 class SolanaSmartWalletConfig(TypedDict):
+    """Configuration specific to Solana smart wallets."""
     adminSigner: Union[SolanaKeypairSigner, SolanaFireblocksSigner]
+
+class SolanaSmartWalletOptions(TypedDict):
+    """Options specific to Solana smart wallets."""
+    connection: SolanaClient
+    config: SolanaSmartWalletConfig
+    linkedUser: Optional[LinkedUser]
 
 class SolanaSmartWalletOptionsWithLinkedUser(TypedDict):
     connection: SolanaClient
@@ -38,11 +41,6 @@ class SolanaSmartWalletOptionsWithAddress(TypedDict):
     connection: SolanaClient
     config: SolanaSmartWalletConfig
     address: str
-
-class SolanaSmartWalletOptions(TypedDict):
-    connection: SolanaClient
-    config: SolanaSmartWalletConfig
-    linkedUser: Optional[LinkedUser]
 
 class TransactionApproval(TypedDict):
     signer: str
