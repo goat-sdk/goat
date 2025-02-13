@@ -11,27 +11,35 @@ import {
     VersionedTransaction,
 } from "@solana/web3.js";
 import bs58 from "bs58";
+import nacl from "tweetnacl";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
 
 export type SolanaSmartWalletOptions = {
     connection: Connection;
-    linkedUser?: {
-        email?: string;
-        phone?: string;
-        userId?: number;
-    };
     config: {
         adminSigner:
             | {
-                  address: string;
                   type: "solana-keypair";
+                  secretKey: string;
               }
             | {
                   type: "solana-fireblocks-custodial";
               };
     };
-    address?: string;
-};
+} & (
+    | {
+          linkedUser: {
+              email?: string;
+              phone?: string;
+              userId?: number;
+          };
+          address?: never;
+      }
+    | {
+          address: string;
+          linkedUser?: never;
+      }
+);
 
 function getLocator(
     address: string | undefined,
@@ -68,6 +76,54 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         this.#locator = getLocator(options.address, options.linkedUser);
     }
 
+    private static deriveAddressFromSecretKey(secretKey: string): string {
+        try {
+            const decoded = bs58.decode(secretKey);
+            const keyPair = nacl.sign.keyPair.fromSecretKey(decoded);
+            return bs58.encode(Buffer.from(keyPair.publicKey));
+        } catch (error) {
+            throw new Error(`Invalid secret key: ${error}`);
+        }
+    }
+
+    private async sendApprovals(
+        transactionId: string,
+        message: string,
+        signerPrivateKey: Uint8Array
+    ): Promise<void> {
+        try {
+            const signature = nacl.sign.detached(
+                bs58.decode(message),
+                signerPrivateKey
+            );
+            const encodedSignature = bs58.encode(signature);
+
+            const signerStr =
+                this.#adminSigner.type === "solana-keypair"
+                    ? "solana-keypair:" +
+                      SolanaSmartWalletClient.deriveAddressFromSecretKey(
+                          this.#adminSigner.secretKey
+                      )
+                    : "";
+
+            // Send approval with signature
+            const approvals = [
+                {
+                    signer: signerStr,
+                    signature: encodedSignature,
+                },
+            ];
+
+            await this.#api.approveTransaction(
+                this.#locator,
+                transactionId,
+                approvals
+            );
+        } catch (error) {
+            throw new Error(`Failed to send transaction approval: ${error}`);
+        }
+    }
+
     getAddress() {
         return this.#address;
     }
@@ -79,7 +135,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
     async sendTransaction({
         instructions,
         addressLookupTableAddresses = [],
-    }: SolanaTransaction) {
+    }: SolanaTransaction): Promise<{ hash: string }> {
         try {
             const publicKey = new PublicKey(this.#address);
             const message = new TransactionMessage({
@@ -97,38 +153,12 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
             const encodedVersionedTransaction = bs58.encode(
                 serializedVersionedTransaction
             );
-            const { id: transactionId, approvals } =
-                await this.#api.createSolanaTransaction(
-                    this.#locator,
-                    encodedVersionedTransaction
-                );
 
-            if (approvals) {
-                await this.#api.approveTransaction(
-                    this.#locator,
-                    transactionId,
-                    approvals
-                );
-            }
+            const hash = await this.sendRawTransaction(
+                encodedVersionedTransaction
+            );
 
-            while (true) {
-                const latestTransaction =
-                    await this.#api.checkTransactionStatus(
-                        this.#locator,
-                        transactionId
-                    );
-                if (latestTransaction.status === "success") {
-                    return {
-                        hash: latestTransaction.onChain?.txId ?? "",
-                    };
-                }
-                if (latestTransaction.status === "failed") {
-                    throw new Error(
-                        `Transaction failed: ${latestTransaction.error}`
-                    );
-                }
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-            }
+            return hash;
         } catch (error) {
             throw new Error(`Failed to send transaction: ${error}`);
         }
@@ -156,6 +186,19 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
                     throw new Error(
                         `Transaction failed: ${latestTransaction.error}`
                     );
+                }
+                if (latestTransaction.status === "awaiting-approval") {
+                    if (this.#adminSigner.type === "solana-keypair") {
+                        const message =
+                            latestTransaction.approvals?.pending?.[0]?.message;
+                        if (message) {
+                            await this.sendApprovals(
+                                transactionId,
+                                message,
+                                bs58.decode(this.#adminSigner.secretKey)
+                            );
+                        }
+                    }
                 }
                 await new Promise((resolve) => setTimeout(resolve, 2000));
             }

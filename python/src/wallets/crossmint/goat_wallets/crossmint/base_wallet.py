@@ -1,9 +1,10 @@
 from typing import Dict, Optional, Any
 from goat.classes.wallet_client_base import Balance, Signature
+from goat_wallets.crossmint.solana_smart_wallet import LinkedUser
 from .api_client import CrossmintWalletsAPI
 
 
-def get_locator(address: Optional[str] = None, linked_user: Optional[Dict] = None, wallet_type: str = "") -> str:
+def get_locator(address: Optional[str] = None, linked_user: Optional[LinkedUser] = None, wallet_type: str = "") -> str:
     """Get wallet locator from address or linked user.
     
     Args:

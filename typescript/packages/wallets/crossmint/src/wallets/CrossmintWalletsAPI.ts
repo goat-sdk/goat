@@ -130,11 +130,13 @@ interface TransactionStatusResponse extends CreateTransactionResponse {
 ////////////////////////////////////////////////////////////////////
 // Submit Approval
 ////////////////////////////////////////////////////////////////////
+interface SubmitApproval {
+    signer: string;
+    signature: string;
+}
+
 interface SubmitApprovalRequest {
-    approvals: {
-        signer: string;
-        signature: string;
-    }[];
+    approvals: SubmitApproval[];
 }
 
 interface SubmitApprovalResponse extends CreateTransactionResponse {}
@@ -452,17 +454,14 @@ export class CrossmintWalletsAPI {
     public async approveTransaction(
         locator: string,
         transactionId: string,
-        approvals: TransactionApprovals
+        approvals: SubmitApproval[]
     ): Promise<SubmitApprovalResponse> {
         const endpoint = `/wallets/${encodeURIComponent(
             locator
         )}/transactions/${encodeURIComponent(transactionId)}/approvals`;
 
         const payload: SubmitApprovalRequest = {
-            approvals: approvals.pending.map((approval) => ({
-                signer: approval.signer,
-                signature: approval.signature,
-            })),
+            approvals,
         };
 
         return this.request<SubmitApprovalResponse>(endpoint, {

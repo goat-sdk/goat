@@ -6,7 +6,8 @@ from .faucet_plugin import faucet_plugin
 from .mint_plugin import mint_plugin
 from .wallet_plugin import wallets_plugin
 from .custodial_solana_wallet import custodial_factory
-from .smart_wallet import EVMSmartWallet, SolanaSmartWallet, SmartWallet
+from .evm_smart_wallet import EVMSmartWalletClient
+from .solana_smart_wallet import SolanaSmartWalletClient
 from .evm_smart_wallet import smart_wallet_factory as evm_smart_wallet_factory
 from .solana_smart_wallet_factory import solana_smart_wallet_factory
 
@@ -32,7 +33,6 @@ def crossmint(api_key: str) -> Dict[str, Any]:
 
 __all__ = [
     "crossmint",
-    "EVMSmartWallet",
-    "SolanaSmartWallet",
-    "SmartWallet"
+    "EVMSmartWalletClient",
+    "SolanaSmartWalletClient",
 ]

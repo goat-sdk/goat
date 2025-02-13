@@ -36,7 +36,7 @@ class CrossmintWalletService:
     })
     def create_smart_wallet(self, wallet_client: EVMWalletClient, parameters: dict) -> WalletResponse:
         try:
-            response = self.api_client.create_smart_wallet(parameters.get("admin_signer"))
+            response = self.api_client.create_smart_wallet(parameters.get("admin_signer")) # type: ignore
             return WalletResponse(**response)
         except Exception as error:
             raise Exception(f"Failed to create smart wallet: {error}")
@@ -188,7 +188,7 @@ class CrossmintWalletService:
     })
     def create_wallet_for_twitter_user(self, wallet_client: EVMWalletClient, parameters: dict) -> WalletResponse:
         try:
-            response = self.api_client.create_wallet_for_twitter_user(
+            response = self.api_client.create_wallet_for_twitter(
                 parameters["username"],
                 parameters["chain"]
             )

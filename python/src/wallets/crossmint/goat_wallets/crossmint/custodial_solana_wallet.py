@@ -117,10 +117,10 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
         )
         
         # Create unsigned transaction first
-        transaction = Transaction.new_unsigned(message)
+        unsigned_transaction = Transaction.new_unsigned(message)
         
         # Convert to versioned transaction
-        versioned_transaction = VersionedTransaction.from_legacy(transaction)
+        versioned_transaction = VersionedTransaction.from_legacy(unsigned_transaction)
         
         # Serialize and encode transaction
         serialized = base58.b58encode(bytes(versioned_transaction)).decode()

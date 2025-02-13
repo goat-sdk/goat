@@ -2,6 +2,7 @@ import time
 from typing import Dict, List, Optional, TypedDict, Union, cast, NewType
 from goat.classes.wallet_client_base import Balance, Signature
 from goat.types.chain import EvmChain
+from goat_wallets.crossmint.solana_smart_wallet import LinkedUser
 from goat_wallets.evm import EVMWalletClient, EVMTransaction, EVMReadRequest, EVMTypedData, EVMReadResult
 from web3.main import Web3
 from web3.providers.rpc import HTTPProvider
@@ -62,7 +63,9 @@ def build_transaction_data(
     )
 
 
-class SmartWalletClient(EVMWalletClient, BaseWalletClient):
+class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
+    """EVM Smart Wallet implementation using Crossmint."""
+    
     def __init__(
         self,
         address: str,
@@ -72,6 +75,16 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
         provider_url: str,
         ens_provider_url: Optional[str] = None
     ):
+        """Initialize Smart Wallet client.
+        
+        Args:
+            address: Wallet address
+            api_client: Crossmint API client
+            chain: Chain identifier
+            signer: Signer configuration (address string or keypair dict)
+            provider_url: RPC provider URL
+            ens_provider_url: Optional ENS provider URL
+        """
         BaseWalletClient.__init__(self, address, api_client, chain)
         self._signer = signer
         
@@ -86,28 +99,34 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
     
     @property
     def has_custodial_signer(self) -> bool:
+        """Check if using custodial signer."""
         return isinstance(self._signer, str)
     
     @property
     def secret_key(self) -> Optional[str]:
+        """Get secret key if using keypair signer."""
         return cast(KeyPairSigner, self._signer)["secretKey"] if not self.has_custodial_signer else None
         
     @property
     def signerAccount(self) -> Optional[Account]:
+        """Get signer account if using keypair signer."""
         if self.has_custodial_signer:
             return None
         return Account.from_key(cast(KeyPairSigner, self._signer)["secretKey"])
     
     def get_address(self) -> str:
+        """Get wallet address."""
         return self._address
     
     def get_chain(self) -> EvmChain:
+        """Get chain information."""
         return EvmChain(
             type="evm",
             id=self._w3.eth.chain_id
         )
     
     def resolve_address(self, address: str) -> ChecksumAddress:
+        """Resolve ENS name to address."""
         try:
             return w3_sync.to_checksum_address(address)
         except ValueError:
@@ -123,6 +142,17 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
                 raise ValueError(f"Failed to resolve ENS name: {e}")
     
     def sign_message(self, message: str) -> Signature:
+        """Sign a message with the wallet's private key.
+        
+        Args:
+            message: Message to sign
+            
+        Returns:
+            Dict containing the signature
+            
+        Raises:
+            ValueError: If signature fails or is undefined
+        """
         signer_address = None
         if not self.has_custodial_signer:
             account = self.signerAccount
@@ -180,6 +210,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             time.sleep(2)
     
     def sign_typed_data(self, data: EVMTypedData) -> Signature:
+        """Sign typed data."""
         if not isinstance(self._signer, dict):
             raise ValueError("Keypair signer is required for typed data signing")
         
@@ -187,7 +218,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             self._address,
             data,
             self._chain,
-            cast(KeyPairSigner, self._signer)["address"]
+            Account.from_key(cast(KeyPairSigner, self._signer)["secretKey"]).address
         )
         
         if not self.has_custodial_signer:
@@ -224,14 +255,27 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             time.sleep(2)
     
     def send_transaction(self, transaction: EVMTransaction) -> Dict[str, str]:
+        """Send a single transaction."""
         return self._send_batch_of_transactions([transaction])
     
     def send_batch_of_transactions(
         self, transactions: List[EVMTransaction]
     ) -> Dict[str, str]:
+        """Send multiple transactions as a batch."""
         return self._send_batch_of_transactions(transactions)
     
     def read(self, request: EVMReadRequest) -> EVMReadResult:
+        """Read data from a smart contract.
+        
+        Args:
+            request: Read request parameters including address, ABI, function name and args
+            
+        Returns:
+            Dict containing the result value
+            
+        Raises:
+            ValueError: If ABI is not provided
+        """
         address = request.get("address")
         abi = request.get("abi")
         function_name = request.get("functionName")
@@ -250,6 +294,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
         return {"value": result}
     
     def balance_of(self, address: str) -> Balance:
+        """Get ETH balance of an address."""
         resolved = self.resolve_address(address)
         balance = self._w3.eth.get_balance(w3_sync.to_checksum_address(resolved))
         
@@ -264,6 +309,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
     def _send_batch_of_transactions(
         self, transactions: List[EVMTransaction]
     ) -> Dict[str, str]:
+        """Internal method to send batch transactions."""
         transaction_data = [
             build_transaction_data(
                 tx["to"],
@@ -279,7 +325,7 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             self._address,
             transaction_data,
             self._chain,
-            None if self.has_custodial_signer else cast(KeyPairSigner, self._signer)["address"]
+            None if self.has_custodial_signer else Account.from_key(cast(KeyPairSigner, self._signer)["secretKey"]).address
         )
         
         if not self.has_custodial_signer:
@@ -319,15 +365,15 @@ class SmartWalletClient(EVMWalletClient, BaseWalletClient):
             time.sleep(2)
 
 
-def get_evm_locator(address: Optional[str] = None, linked_user: Optional[Dict] = None) -> str:
+def get_evm_locator(address: Optional[str] = None, linked_user: Optional[LinkedUser] = None) -> str:
     return get_locator(address, linked_user, "evm-smart-wallet")
 
 def smart_wallet_factory(api_client: CrossmintWalletsAPI):
-    def create_smart_wallet(options: Dict) -> SmartWalletClient:
+    def create_smart_wallet(options: Dict) -> EVMSmartWalletClient:
         locator = get_evm_locator(options.get("address"), options.get("linkedUser"))
         wallet = api_client.get_wallet(locator)
         
-        return SmartWalletClient(
+        return EVMSmartWalletClient(
             wallet["address"],
             api_client,
             options["chain"],

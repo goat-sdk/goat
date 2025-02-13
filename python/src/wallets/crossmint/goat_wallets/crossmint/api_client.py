@@ -356,7 +356,7 @@ class CrossmintWalletsAPI:
         if isinstance(params, list):
             if not chain:
                 raise ValueError("Chain identifier is required for EVM transactions")
-            return self.create_transaction_for_evm_smart_wallet(wallet_address, params, chain, signer)
+            return self.create_transaction_for_evm_smart_wallet(wallet_address, cast(List[Call], params), chain, signer)
         else:
             return self.create_transaction(
                 wallet_address,
@@ -368,7 +368,7 @@ class CrossmintWalletsAPI:
     def create_transaction_for_evm_smart_wallet(
         self,
         wallet_address: str,
-        calls: List[Union[Call, Dict[str, str]]],
+        calls: List[Call],
         chain: str,
         signer: Optional[str] = None
     ) -> Dict[str, Any]:
@@ -389,9 +389,9 @@ class CrossmintWalletsAPI:
         formatted_calls = []
         for call in calls:
             if isinstance(call, dict):
-                formatted_calls.append(Call(**call).model_dump(by_alias=True))
+                formatted_calls.append(Call(**call).model_dump())
             else:
-                formatted_calls.append(call.model_dump(by_alias=True))
+                formatted_calls.append(call.model_dump())
         
         payload = {
             "params": {
@@ -409,7 +409,7 @@ class CrossmintWalletsAPI:
         self,
         locator: str,
         transaction_id: str,
-        approvals: List[Union[Dict[str, str], AdminSigner]]
+        approvals: List[Dict[str, str]]
     ) -> Dict[str, Any]:
         """Approve a transaction.
         
@@ -423,18 +423,7 @@ class CrossmintWalletsAPI:
         """
         endpoint = f"/wallets/{quote(locator)}/transactions/{quote(transaction_id)}/approvals"
         
-        formatted_approvals = []
-        for approval in approvals:
-            if isinstance(approval, AdminSigner):
-                formatted_approvals.append({
-                    "signer": f"admin:{approval.address}",
-                    "signature": approval.signature,
-                    "chain": approval.chain
-                })
-            else:
-                formatted_approvals.append(approval)
-        
-        payload = {"approvals": formatted_approvals}
+        payload = {"approvals": approvals}
         
         return self._request(endpoint, method="POST", json=payload)
     
