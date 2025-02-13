@@ -16,7 +16,6 @@ from ens import ENS
 CustodialSigner = str
 KeyPairSigner = TypedDict('KeyPairSigner', {
     'secretKey': str,
-    'address': str
 })
 Signer = Union[CustodialSigner, KeyPairSigner]
 
@@ -103,15 +102,11 @@ class SmartWalletClient(EVMWalletClient):
             raise ValueError(f"Invalid chain: {chain}")
         self._chain = chain
         
-        # Validate signer
-        if isinstance(signer, str):
-            if not signer.startswith("0x"):
-                raise ValueError("Invalid custodial signer address")
-        elif isinstance(signer, dict):
-            if not all(k in signer for k in ["secretKey", "address"]):
-                raise ValueError("Invalid keypair signer: missing secretKey or address")
-            if not signer["address"].startswith("0x"):
-                raise ValueError("Invalid keypair signer address")
+        if isinstance(signer, dict):
+            if not "secretKey" in signer.keys():
+                raise ValueError("Invalid keypair signer: missing secretKey")
+            if not signer["secretKey"].startswith("0x"):
+                raise ValueError("Invalid keypair signer secretKey")
         else:
             raise ValueError("Invalid signer type")
         self._signer = signer
@@ -265,7 +260,7 @@ class SmartWalletClient(EVMWalletClient):
             self._address,
             data,
             self._chain,
-            cast(KeyPairSigner, self._signer)["address"]
+            self._w3.eth.account.from_key(self.secret_key).address
         )
         
         if not self.has_custodial_signer:
@@ -373,7 +368,7 @@ class SmartWalletClient(EVMWalletClient):
             self._address,
             transaction_data,
             self._chain,
-            None if self.has_custodial_signer else cast(KeyPairSigner, self._signer)["address"]
+            None if self.has_custodial_signer else self._w3.eth.account.from_key(self.secret_key).address
         )
         
         if not self.has_custodial_signer:
