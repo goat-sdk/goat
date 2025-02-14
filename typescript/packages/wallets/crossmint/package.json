@@ -33,5 +33,10 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3"]
+    "keywords": ["ai", "agents", "web3"],
+    "devDependencies": {
+        "@jest/globals": "29.7.0",
+        "@types/jest": "29.5.14",
+        "jest": "29.7.0"
+    }
 }

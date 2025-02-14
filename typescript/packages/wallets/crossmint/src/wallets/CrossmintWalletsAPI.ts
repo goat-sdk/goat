@@ -100,7 +100,16 @@ interface Call {
 ////////////////////////////////////////////////////////////////////
 // Transaction Status
 ////////////////////////////////////////////////////////////////////
-interface TransactionStatusResponse extends CreateTransactionResponse {}
+interface TransactionStatusResponse extends CreateTransactionResponse {
+    hash?: string;
+    onChain?: {
+        userOperation?: object;
+        userOperationHash?: string;
+        chain?: string;
+        txId?: string;
+        hash?: string;
+    };
+}
 
 ////////////////////////////////////////////////////////////////////
 // Submit Approval
@@ -129,7 +138,7 @@ interface SignMessageRequest {
 interface SignMessageResponse {
     id: string;
     walletType: "evm-smart-wallet" | "solana-custodial-wallet";
-    status: string;
+    status: "awaiting-approval" | "pending" | "failed" | "success";
     outputSignature: string;
     approvals: TransactionApprovals;
     createdAt: string;
@@ -155,7 +164,7 @@ interface SignTypedDataResponse {
         chain?: string;
         signer: string;
     };
-    status: string;
+    status: "awaiting-approval" | "pending" | "failed" | "success";
     createdAt: string;
     approvals: TransactionApprovals;
 }
@@ -173,7 +182,7 @@ interface ApproveSignatureRequest {
 interface ApproveSignatureResponse {
     id: string;
     walletType: "evm-smart-wallet" | "solana-custodial-wallet";
-    status: string;
+    status: "awaiting-approval" | "pending" | "failed" | "success";
     outputSignature?: string;
     approvals: TransactionApprovals;
     createdAt: string;
@@ -183,6 +192,11 @@ interface ApproveSignatureResponse {
 // API
 ////////////////////////////////////////////////////////////////////
 
+interface ActionResponse {
+    status: "pending" | "succeeded" | "failed";
+    data: Record<string, unknown>;
+}
+
 type APIResponse =
     | CreateWalletResponse
     | CreateTransactionResponse
@@ -190,7 +204,8 @@ type APIResponse =
     | SubmitApprovalResponse
     | SignMessageResponse
     | SignTypedDataResponse
-    | ApproveSignatureResponse;
+    | ApproveSignatureResponse
+    | ActionResponse;
 
 export class CrossmintWalletsAPI {
     private baseUrl: string;
@@ -382,7 +397,7 @@ export class CrossmintWalletsAPI {
             params: {
                 calls,
                 chain,
-                signer: `evm-keypair:${signer}`,
+                ...(signer ? { signer: `evm-keypair:${signer}` } : {}),
             },
         };
 
@@ -417,5 +432,69 @@ export class CrossmintWalletsAPI {
         return this.request<TransactionStatusResponse>(endpoint, {
             method: "GET",
         });
+    }
+
+    public async waitForTransaction(
+        locator: string,
+        transactionId: string,
+        options: { interval?: number; maxAttempts?: number } = {},
+    ): Promise<TransactionStatusResponse> {
+        const interval = options.interval || 1000;
+        const maxAttempts = options.maxAttempts || 30;
+        let attempts = 0;
+
+        while (attempts < maxAttempts) {
+            const status = await this.checkTransactionStatus(locator, transactionId);
+            if (status.status === "success" || status.status === "failed") {
+                return status;
+            }
+            attempts++;
+            await new Promise((resolve) => setTimeout(resolve, interval));
+        }
+
+        throw new Error("Timed out waiting for transaction");
+    }
+
+    public async waitForSignature(
+        locator: string,
+        signatureId: string,
+        options: { interval?: number; maxAttempts?: number } = {},
+    ): Promise<ApproveSignatureResponse> {
+        const interval = options.interval || 1000;
+        const maxAttempts = options.maxAttempts || 30;
+        let attempts = 0;
+
+        while (attempts < maxAttempts) {
+            const status = await this.checkSignatureStatus(signatureId, locator);
+            if (status.status === "success" || status.status === "failed") {
+                return status;
+            }
+            attempts++;
+            await new Promise((resolve) => setTimeout(resolve, interval));
+        }
+
+        throw new Error("Timed out waiting for signature");
+    }
+
+    public async waitForAction(
+        actionId: string,
+        options: { interval?: number; maxAttempts?: number } = {},
+    ): Promise<ActionResponse> {
+        const interval = options.interval || 1000;
+        const maxAttempts = options.maxAttempts || 30;
+        let attempts = 0;
+
+        while (attempts < maxAttempts) {
+            const response = await this.request<ActionResponse>(`/2022-06-09/actions/${encodeURIComponent(actionId)}`, {
+                method: "GET",
+            });
+            if (response.status === "succeeded" || response.status === "failed") {
+                return response;
+            }
+            attempts++;
+            await new Promise((resolve) => setTimeout(resolve, interval));
+        }
+
+        throw new Error("Timed out waiting for action");
     }
 }
