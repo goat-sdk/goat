@@ -1,9 +1,9 @@
-import { mainnet } from "viem/chains";
+import { sepolia } from "viem/chains";
 import { http, createConfig } from "wagmi";
 import { injected, metaMask, safe, walletConnect } from "wagmi/connectors";
 
 export default createConfig({
-    chains: [mainnet],
+    chains: [sepolia],
     connectors: [
         injected(),
         walletConnect({
@@ -13,6 +13,6 @@ export default createConfig({
         safe(),
     ],
     transports: {
-        [mainnet.id]: http(),
+        [sepolia.id]: http(),
     },
 });

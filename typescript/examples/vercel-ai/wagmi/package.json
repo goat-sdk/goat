@@ -20,8 +20,8 @@
         "next": "15.1.2",
         "react": "^19.x",
         "react-dom": "^19.x",
-        "viem": "2.x",
-        "wagmi": "2.x"
+        "viem": "catalog:",
+        "wagmi": "^2.x"
     },
     "devDependencies": {
         "@types/react": "^19",

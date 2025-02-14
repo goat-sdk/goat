@@ -1,7 +1,7 @@
 "use client";
 import type { CoreMessage, ToolInvocation } from "ai";
 import { useChat } from "ai/react";
-import type { FC } from "react";
+import { type FC, Fragment } from "react";
 import { useConfig } from "wagmi";
 
 // utils
@@ -25,7 +25,7 @@ const Chat: FC = () => {
             }
 
             return await tool.execute(toolCall.args, {
-                toolCallId: toolCall.toolCallId,
+                // toolCallId: toolCall.toolCallId,
                 messages: messages as CoreMessage[],
             });
         },
@@ -50,7 +50,11 @@ const Chat: FC = () => {
                         nodes.push(<p>{JSON.stringify(toolInvocation.result)}</p>);
                     }
 
-                    return nodes;
+                    return (
+                        <Fragment key={message.id}>
+                            {nodes}
+                        </Fragment>
+                    );
                 })}
             </div>
 
