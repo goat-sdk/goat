@@ -8,6 +8,7 @@ import {
 } from "@goat-sdk/wallet-evm";
 import {
     type Config as WagmiConfig,
+    type GetEnsAddressErrorType,
     getAccount,
     getBalance,
     getChainId,
@@ -40,12 +41,23 @@ export default class WagmiWalletClient extends EVMWalletClient {
      * private methods
      */
 
+    /**
+     * Convenience function that simply gets the connected address.
+     * @returns {Address | undefined} The connected account's address or undefined if no account is not connected.
+     * @private
+     */
     private _address(): Address | undefined {
         const { address } = getAccount(this._config);
 
         return address;
     }
 
+    /**
+     * Convenience function that waits for a transaction receipt and returns the transaction hash.
+     * @param {Hash} hash - the transaction hash to wait for.
+     * @returns {Promise<EVMTransactionResult>} A promise that resolves to an evm transaction result.
+     * @private
+     */
     private async _waitForReceipt(hash: Hash): Promise<EVMTransactionResult> {
         const { transactionHash } = await waitForTransactionReceipt(this._config, {
             hash,
@@ -81,8 +93,8 @@ export default class WagmiWalletClient extends EVMWalletClient {
 
     public getChain(): EvmChain {
         return {
-            type: "evm",
             id: getChainId(this._config),
+            type: "evm",
         };
     }
 
@@ -95,10 +107,6 @@ export default class WagmiWalletClient extends EVMWalletClient {
     public async read(request: EVMReadRequest): Promise<EVMReadResult> {
         const { address, abi, functionName, args } = request;
 
-        if (!abi) {
-            throw new Error("read request must include abi for evm");
-        }
-
         return {
             value: await readContract(this._config, {
                 address: await this.resolveAddress(address),
@@ -109,24 +117,27 @@ export default class WagmiWalletClient extends EVMWalletClient {
         };
     }
 
+    /**
+     * Resolves an EVM address. If the provided address is an ENS, the associated EVM address is fetched.
+     * @param {string} address - An EIP-55 address or an ENS.
+     * @returns {Promise<Address>} A promise that resolves to the EIP-55 address for the given input.
+     * @throws {Error} If the provided ENS cannot be resolved to an address.
+     * @public
+     */
     public async resolveAddress(address: string): Promise<Address> {
         if (/^0x[a-fA-F0-9]{40}$/.test(address)) {
             return address as Address;
         }
 
-        try {
-            const resolvedAddress = await getEnsAddress(this._config, {
-                name: normalize(address),
-            });
+        const resolvedAddress = await getEnsAddress(this._config, {
+            name: normalize(address),
+        });
 
-            if (!resolvedAddress) {
-                throw new Error("failed to resolve ens name");
-            }
-
-            return resolvedAddress;
-        } catch (error) {
-            throw new Error(`failed to resolve ens name: ${error}`);
+        if (!resolvedAddress) {
+            throw new Error("Failed to resolve ENS name");
         }
+
+        return resolvedAddress;
     }
 
     public async sendTransaction({ to, abi, functionName, args, value, options, data }: EVMTransaction) {
@@ -168,7 +179,7 @@ export default class WagmiWalletClient extends EVMWalletClient {
             address: toAddress,
             args,
             functionName,
-            value: value,
+            value,
         });
 
         // without paymaster, we can pass the result of the simulate contract if it was successful
