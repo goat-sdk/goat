@@ -1,0 +1,30 @@
+{
+    "name": "goat-examples-vercel-ai-wagmi",
+    "version": "0.0.1",
+    "description": "example on using GOAT, Vercel's AI SDK and the wagmi wallet provider",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --port 8080 --turbopack",
+        "test": "exit 0"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-erc20": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@goat-sdk/wallet-wagmi": "workspace:*",
+        "@tanstack/react-query": "^5.62.2",
+        "ai": "catalog:",
+        "next": "15.1.2",
+        "react": "^19.x",
+        "react-dom": "^19.x",
+        "viem": "2.x",
+        "wagmi": "2.x"
+    },
+    "devDependencies": {
+        "@types/react": "^19",
+        "@types/react-dom": "^19"
+    }
+}

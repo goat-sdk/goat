@@ -8,6 +8,7 @@ npm install @goat-sdk/wallet-wagmi
 > ⚠️ **NOTE:** You will need to ensure you have correctly installed Wagmi. See [this](https://wagmi.sh/core/installation) guide on how to correctly install.
 
 ## Usage
+
 ```typescript
 import { http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -27,5 +28,4 @@ const wagmiConfig = createConfig({
 const tools = await getOnChainTools({
     wallet: wagmi(wagmiConfig),
 });
-
 ```
