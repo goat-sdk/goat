@@ -132,7 +132,7 @@ You can run `pnpm build:libs` to only build the libraries and not the examples.
 
 
 ## How to create a plugin
-GOAT plugins enable your agent to interact with various blockchain protocols. 
+GOAT plugins enable your agent to interact with various blockchain protocols.
 
 Plugins can be chain-specific (EVM, Solana, etc.) or chain-agnostic. If a plugin is chain-specific it will fail to compile when being used with a wallet of a different chain.
 
@@ -181,7 +181,7 @@ export const myPlugin = () => new MyPlugin();
 ```
 
 #### 2. Add tools to the plugin
-    
+
 There are two ways to add tools to the plugin:
 1. Using the `@Tool` decorator on our own class
 2. Using the `getTools` and `createTool` functions to create tools dynamically
@@ -402,29 +402,30 @@ If you would like to see your wallet provider supported, please open an issue or
 | Core | [@goat-sdk/core](https://www.npmjs.com/package/@goat-sdk/core) |
 
 ### Wallets
-| Wallet | NPM package |
-| --- | --- |
-| EVM | [@goat-sdk/wallet-evm](https://www.npmjs.com/package/@goat-sdk/wallet-evm) |
-| Viem | [@goat-sdk/wallet-viem](https://www.npmjs.com/package/@goat-sdk/wallet-viem) |
-| Solana | [@goat-sdk/wallet-solana](https://www.npmjs.com/package/@goat-sdk/wallet-solana) | 
+| Wallet                                  | NPM package                                                                            |
+|-----------------------------------------|----------------------------------------------------------------------------------------|
+| EVM                                     | [@goat-sdk/wallet-evm](https://www.npmjs.com/package/@goat-sdk/wallet-evm)             |
+| Viem                                    | [@goat-sdk/wallet-viem](https://www.npmjs.com/package/@goat-sdk/wallet-viem)           |
+| Solana                                  | [@goat-sdk/wallet-solana](https://www.npmjs.com/package/@goat-sdk/wallet-solana)       |
 | Crossmint (smart and custodial wallets) | [@goat-sdk/wallet-crossmint](https://www.npmjs.com/package/@goat-sdk/wallet-crossmint) |
-| Aptos | [@goat-sdk/wallet-aptos](https://www.npmjs.com/package/@goat-sdk/wallet-aptos) |
-| Chromia | [@goat-sdk/wallet-chromia](https://www.npmjs.com/package/@goat-sdk/wallet-chromia) |
-| Cosmos | [@goat-sdk/wallet-cosmos](https://www.npmjs.com/package/@goat-sdk/wallet-cosmos) |
-| Fuel | [@goat-sdk/wallet-fuel](https://www.npmjs.com/package/@goat-sdk/wallet-fuel) |
-| Radix | [@goat-sdk/wallet-radix](https://www.npmjs.com/package/@goat-sdk/wallet-radix) |
-| Safe | [@goat-sdk/wallet-safe](https://www.npmjs.com/package/@goat-sdk/wallet-safe) |
-| Sui | [@goat-sdk/wallet-sui](https://www.npmjs.com/package/@goat-sdk/wallet-sui) |
-| Starknet | [@goat-sdk/wallet-starknet](https://www.npmjs.com/package/@goat-sdk/wallet-starknet) |
-| Zilliqa | [@goat-sdk/wallet-zilliqa](https://www.npmjs.com/package/@goat-sdk/wallet-zilliqa) |
+| Aptos                                   | [@goat-sdk/wallet-aptos](https://www.npmjs.com/package/@goat-sdk/wallet-aptos)         |
+| Chromia                                 | [@goat-sdk/wallet-chromia](https://www.npmjs.com/package/@goat-sdk/wallet-chromia)     |
+| Cosmos                                  | [@goat-sdk/wallet-cosmos](https://www.npmjs.com/package/@goat-sdk/wallet-cosmos)       |
+| Fuel                                    | [@goat-sdk/wallet-fuel](https://www.npmjs.com/package/@goat-sdk/wallet-fuel)           |
+| Radix                                   | [@goat-sdk/wallet-radix](https://www.npmjs.com/package/@goat-sdk/wallet-radix)         |
+| Safe                                    | [@goat-sdk/wallet-safe](https://www.npmjs.com/package/@goat-sdk/wallet-safe)           |
+| Sui                                     | [@goat-sdk/wallet-sui](https://www.npmjs.com/package/@goat-sdk/wallet-sui)             |
+| Starknet                                | [@goat-sdk/wallet-starknet](https://www.npmjs.com/package/@goat-sdk/wallet-starknet)   |
+| Wagmi                                   | [@goat-sdk/wallet-wagmi](https://www.npmjs.com/package/@goat-sdk/wallet-wagmi)         |
+| Zilliqa                                 | [@goat-sdk/wallet-zilliqa](https://www.npmjs.com/package/@goat-sdk/wallet-zilliqa)     |
 
 ### Agent Framework Adapters
 | Adapter | NPM package |
 | --- | --- |
-| AI SDK | [@goat-sdk/adapter-vercel-ai](https://www.npmjs.com/package/@goat-sdk/adapter-vercel-ai) | 
-| Langchain | [@goat-sdk/adapter-langchain](https://www.npmjs.com/package/@goat-sdk/adapter-langchain) | 
+| AI SDK | [@goat-sdk/adapter-vercel-ai](https://www.npmjs.com/package/@goat-sdk/adapter-vercel-ai) |
+| Langchain | [@goat-sdk/adapter-langchain](https://www.npmjs.com/package/@goat-sdk/adapter-langchain) |
 | ElevenLabs | [@goat-sdk/adapter-elevenlabs](https://www.npmjs.com/package/@goat-sdk/adapter-elevenlabs) |
-| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://www.npmjs.com/package/@goat-sdk/adapter-llamaindex) | 
+| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://www.npmjs.com/package/@goat-sdk/adapter-llamaindex) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://www.npmjs.com/package/@goat-sdk/adapter-model-context-protocol) |
 
 **Eliza, ZerePy and GAME have direct integrations on their respective repos.*
