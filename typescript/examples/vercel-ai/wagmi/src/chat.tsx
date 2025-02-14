@@ -1,11 +1,11 @@
-'use client';
-import type { CoreMessage, ToolInvocation } from 'ai';
-import { useChat } from 'ai/react';
-import type { FC } from 'react';
-import { useConfig } from 'wagmi';
+"use client";
+import type { CoreMessage, ToolInvocation } from "ai";
+import { useChat } from "ai/react";
+import type { FC } from "react";
+import { useConfig } from "wagmi";
 
 // utils
-import getTools from './getTools';
+import getTools from "./getTools";
 
 const Chat: FC = () => {
     const config = useConfig();
@@ -46,7 +46,7 @@ const Chat: FC = () => {
                     }
 
                     // if the tool returned a result
-                    if (toolInvocation && toolInvocation.state === 'result') {
+                    if (toolInvocation && toolInvocation.state === "result") {
                         nodes.push(<p>{JSON.stringify(toolInvocation.result)}</p>);
                     }
 

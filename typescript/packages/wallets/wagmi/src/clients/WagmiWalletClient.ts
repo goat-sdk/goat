@@ -8,7 +8,6 @@ import {
 } from "@goat-sdk/wallet-evm";
 import {
     type Config as WagmiConfig,
-    type GetEnsAddressErrorType,
     getAccount,
     getBalance,
     getChainId,

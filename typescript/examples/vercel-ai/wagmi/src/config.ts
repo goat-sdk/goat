@@ -1,6 +1,6 @@
-import { mainnet } from 'viem/chains';
-import { createConfig, http } from 'wagmi';
-import { injected, metaMask, safe, walletConnect } from 'wagmi/connectors'
+import { mainnet } from "viem/chains";
+import { http, createConfig } from "wagmi";
+import { injected, metaMask, safe, walletConnect } from "wagmi/connectors";
 
 export default createConfig({
     chains: [mainnet],

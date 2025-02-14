@@ -1,14 +1,14 @@
 import type { EVMTransaction } from "@goat-sdk/wallet-evm";
 import {
     http,
+    type GetBalanceReturnType,
+    type ReadContractReturnType,
     type Config as WagmiConfig,
     createConfig,
-    type GetBalanceReturnType,
     getAccount,
     getBalance,
     getChainId,
     getEnsAddress,
-    type ReadContractReturnType,
     readContract,
     sendTransaction,
     signMessage,
@@ -30,39 +30,39 @@ vi.mock("@wagmi/core");
 describe(WagmiWalletClient.name, () => {
     const abi: Abi = [
         {
-            "inputs": [],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
+            inputs: [],
+            stateMutability: "nonpayable",
+            type: "constructor",
         },
         {
-            "inputs": [],
-            "name": "getMessage",
-            "outputs": [
+            inputs: [],
+            name: "getMessage",
+            outputs: [
                 {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
+                    internalType: "string",
+                    name: "",
+                    type: "string",
+                },
             ],
-            "stateMutability": "view",
-            "type": "function"
+            stateMutability: "view",
+            type: "function",
         },
         {
-            "inputs": [
+            inputs: [
                 {
-                    "internalType": "string",
-                    "name": "_message",
-                    "type": "string"
-                }
+                    internalType: "string",
+                    name: "_message",
+                    type: "string",
+                },
             ],
-            "name": "setMessage",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        }
+            name: "setMessage",
+            outputs: [],
+            stateMutability: "nonpayable",
+            type: "function",
+        },
     ];
     const account = privateKeyToAccount(generatePrivateKey());
-    const balanceInWei = parseEther('1');
+    const balanceInWei = parseEther("1");
     const disconnectedFn = vi.fn(() => ({
         address: undefined,
         addresses: undefined,
@@ -76,7 +76,7 @@ describe(WagmiWalletClient.name, () => {
         status: "disconnected",
     }));
     const hash = "0xmockedhash1234567890abcdef";
-    const message = 'hello humie!';
+    const message = "hello humie!";
     const signature = "0xmockedsignature1234567890abcdef";
     const toAccount = privateKeyToAccount(generatePrivateKey());
     let client: WagmiWalletClient;
@@ -107,14 +107,18 @@ describe(WagmiWalletClient.name, () => {
             })),
         );
         (getChainId as Mock).mockImplementation(vi.fn(() => anvil.id));
-        (getBalance as Mock).mockImplementation(vi.fn<[], Promise<GetBalanceReturnType>>(async () => ({
-            decimals: anvil.nativeCurrency.decimals,
-            formatted: '',
-            symbol: anvil.nativeCurrency.symbol,
-            value: balanceInWei,
-        })));
+        (getBalance as Mock).mockImplementation(
+            vi.fn<[], Promise<GetBalanceReturnType>>(async () => ({
+                decimals: anvil.nativeCurrency.decimals,
+                formatted: "",
+                symbol: anvil.nativeCurrency.symbol,
+                value: balanceInWei,
+            })),
+        );
         (getEnsAddress as Mock).mockImplementation(vi.fn(async () => account.address));
-        (readContract as Mock).mockImplementation(vi.fn<[], Promise<ReadContractReturnType<typeof abi, 'getMessage'>>>(async () => message));
+        (readContract as Mock).mockImplementation(
+            vi.fn<[], Promise<ReadContractReturnType<typeof abi, "getMessage">>>(async () => message),
+        );
         (sendTransaction as Mock).mockImplementation(vi.fn(async () => hash));
         (signMessage as Mock).mockImplementation(vi.fn(async () => signature));
         (signTypedData as Mock).mockImplementation(vi.fn(async () => signature));
@@ -127,7 +131,7 @@ describe(WagmiWalletClient.name, () => {
     });
 
     beforeEach(() => {
-       vi.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     describe("balanceOf", () => {
@@ -201,7 +205,7 @@ describe(WagmiWalletClient.name, () => {
             const result = await client.read({
                 abi,
                 address: account.address,
-                functionName: 'getMessage',
+                functionName: "getMessage",
             });
 
             expect(result.value).toBe(message);
@@ -262,8 +266,8 @@ describe(WagmiWalletClient.name, () => {
             const result = await client.sendTransaction(args);
 
             expect(result.hash).toBe(hash);
-            expect((sendTransaction as Mock)).toBeCalledWith(wagmiConfig, args);
-            expect((writeContract as Mock)).not.toBeCalled();
+            expect(sendTransaction as Mock).toBeCalledWith(wagmiConfig, args);
+            expect(writeContract as Mock).not.toBeCalled();
         });
 
         test("should throw an error if no function name has been specified", async () => {
@@ -285,7 +289,7 @@ describe(WagmiWalletClient.name, () => {
             const contractAddress = privateKeyToAccount(generatePrivateKey()).address;
             const args: EVMTransaction = {
                 abi,
-                args: ['What is the meaning of life?'],
+                args: ["What is the meaning of life?"],
                 to: contractAddress,
                 functionName: "setMessage",
             };
@@ -298,21 +302,23 @@ describe(WagmiWalletClient.name, () => {
                 account: null,
             };
 
-            (simulateContract as Mock).mockImplementationOnce(vi.fn(async () => ({
-                request,
-            })));
+            (simulateContract as Mock).mockImplementationOnce(
+                vi.fn(async () => ({
+                    request,
+                })),
+            );
 
             const result = await client.sendTransaction(args);
 
             expect(result.hash).toBe(hash);
-            expect((simulateContract as Mock)).toBeCalledWith(wagmiConfig, {
+            expect(simulateContract as Mock).toBeCalledWith(wagmiConfig, {
                 abi,
                 address: contractAddress,
                 args: args.args,
                 functionName: args.functionName,
             });
-            expect((sendTransaction as Mock)).not.toBeCalled();
-            expect((writeContract as Mock)).toBeCalledWith(wagmiConfig, request);
+            expect(sendTransaction as Mock).not.toBeCalled();
+            expect(writeContract as Mock).toBeCalledWith(wagmiConfig, request);
         });
     });
 

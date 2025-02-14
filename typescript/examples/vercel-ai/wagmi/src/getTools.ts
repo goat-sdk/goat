@@ -1,9 +1,9 @@
-import { getOnChainTools } from '@goat-sdk/adapter-vercel-ai';
-import { erc20, USDC, WETH } from '@goat-sdk/plugin-erc20';
-import { sendETH } from '@goat-sdk/wallet-evm';
-import { wagmi } from '@goat-sdk/wallet-wagmi';
-import type { CoreTool } from 'ai';
-import type { Config } from 'wagmi';
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
+import { USDC, WETH, erc20 } from "@goat-sdk/plugin-erc20";
+import { sendETH } from "@goat-sdk/wallet-evm";
+import { wagmi } from "@goat-sdk/wallet-wagmi";
+import type { CoreTool } from "ai";
+import type { Config } from "wagmi";
 
 /**
  * @property {boolean} client - True if the tools are being initialized client-side, false indicates they are being
@@ -38,7 +38,7 @@ export default async function getTools({ client, wagmiConfig }: Options): Promis
     // invoked on the client side, so that they are passed onto the useChat#onToolCall
     if (!client) {
         Object.keys(tools).map((name) => {
-            delete tools[name].execute; // you can filter only the client side tools that should be removed
+            tools[name].execute = undefined; // you can filter only the client side tools that should be removed
         });
     }
 

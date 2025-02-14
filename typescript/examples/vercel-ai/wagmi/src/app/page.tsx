@@ -1,8 +1,8 @@
-'use client';
-import type { NextPage } from 'next';
-import { type Connector, useAccount, useConnect } from 'wagmi';
+"use client";
+import type { NextPage } from "next";
+import { type Connector, useAccount, useConnect } from "wagmi";
 
-import Chat from '../chat';
+import Chat from "../chat";
 
 const IndexPage: NextPage = () => {
     const { isConnected } = useAccount();
@@ -11,16 +11,15 @@ const IndexPage: NextPage = () => {
 
     return (
         <main>
-          {isConnected ? (
-            <Chat />
-          ) : connectors.map((value) => (
-              <button
-                  key={value.id}
-                  onClick={handleOnConnectClick(value)}
-              >
-                  {value.name}
-              </button>
-          ))}
+            {isConnected ? (
+                <Chat />
+            ) : (
+                connectors.map((value) => (
+                    <button key={value.id} onClick={handleOnConnectClick(value)} type="button">
+                        {value.name}
+                    </button>
+                ))
+            )}
         </main>
     );
 };

@@ -12,17 +12,15 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "devDependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "@wagmi/connectors": "^5.7.7"
+        "@goat-sdk/core": "workspace:*"
     },
     "dependencies": {
         "@goat-sdk/wallet-evm": "workspace:*",
-        "@wagmi/core": "catalog:",
+        "@wagmi/core": "^2.x",
         "viem": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/wallet-evm": "workspace:*",
-        "@wagmi/core": "catalog:",
         "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
