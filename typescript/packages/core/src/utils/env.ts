@@ -9,7 +9,7 @@ export const validateEnvVars = (requiredVars: string[]) => {
     const missing = requiredVars.filter((v) => !process.env[v]);
     if (missing.length > 0) {
         throw new Error(
-            `Missing required environment variables: ${missing.join(", ")}\nSee docs/environment-variables.mdx for setup instructions`
+            `Missing required environment variables: ${missing.join(", ")}\nSee docs/environment-variables.mdx for setup instructions`,
         );
     }
 };
@@ -43,7 +43,7 @@ export const validateEnvVarFormats = (vars: Record<string, keyof typeof envSchem
     }
     if (errors.length > 0) {
         throw new Error(
-            `Environment variable format validation failed:\n${errors.join("\n")}\nSee docs/environment-variables.mdx for correct formats`
+            `Environment variable format validation failed:\n${errors.join("\n")}\nSee docs/environment-variables.mdx for correct formats`,
         );
     }
 };
