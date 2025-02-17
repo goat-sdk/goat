@@ -9,8 +9,7 @@ export const validateEnvVars = (requiredVars: string[]) => {
   const missing = requiredVars.filter(v => !process.env[v]);
   if (missing.length > 0) {
     throw new Error(
-      `Missing required environment variables: ${missing.join(", ")}\n` +
-      `See docs/environment-variables.mdx for setup instructions`
+      `Missing required environment variables: ${missing.join(", ")}\nSee docs/environment-variables.mdx for setup instructions`
     );
   }
 };
