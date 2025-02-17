@@ -31,19 +31,19 @@ export const envSchemas = {
  * @throws Error if any variables fail validation
  */
 export const validateEnvVarFormats = (vars: Record<string, keyof typeof envSchemas>) => {
-  const errors: string[] = [];
-  for (const [varName, schemaType] of Object.entries(vars)) {
-    const value = process.env[varName];
-    if (!value) continue; // Skip if not provided (handled by validateEnvVars)
+    const errors: string[] = [];
+    for (const [varName, schemaType] of Object.entries(vars)) {
+        const value = process.env[varName];
+        if (!value) continue; // Skip if not provided (handled by validateEnvVars)
 
-    const result = envSchemas[schemaType].safeParse(value);
-    if (!result.success) {
-      errors.push(`Invalid format for ${varName}: ${result.error.message}`);
+        const result = envSchemas[schemaType].safeParse(value);
+        if (!result.success) {
+            errors.push(`Invalid format for ${varName}: ${result.error.message}`);
+        }
     }
-  }
-  if (errors.length > 0) {
-    throw new Error(
-      `Environment variable format validation failed:\n${errors.join("\n")}\nSee docs/environment-variables.mdx for correct formats`
-    );
-  }
+    if (errors.length > 0) {
+        throw new Error(
+            `Environment variable format validation failed:\n${errors.join("\n")}\nSee docs/environment-variables.mdx for correct formats`
+        );
+    }
 };
