@@ -2,6 +2,17 @@
 
 Uniswap plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Uniswap.
 
+## Configuration
+Required environment variables:
+- `UNISWAP_API_KEY`: Your Uniswap API key
+  - Get it from: https://hub.uniswap.org/
+  - Format: 32-character string
+  - Required for: Accessing Uniswap's API for quotes and swaps
+- `UNISWAP_BASE_URL`: Uniswap API base URL
+  - Format: Full URL with protocol and version
+  - Default: https://api.uniswap.org/v1
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+
 ## Installation
 ```
 npm install @goat-sdk/plugin-uniswap

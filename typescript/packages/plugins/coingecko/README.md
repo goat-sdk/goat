@@ -2,6 +2,14 @@
 
 Coingecko plugin for Goat. Allows you to create tools for interacting with the CoinGecko API.
 
+## Configuration
+Required environment variables:
+- `COINGECKO_API_KEY`: Your Coingecko API key
+  - Get it from: https://www.coingecko.com/api/pricing
+  - Format: 32-character string
+  - Required for: Accessing market data and price information
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+
 ## Installation
 ```
 npm install @goat-sdk/plugin-coingecko
