@@ -41,7 +41,6 @@ export const validateEnvVarFormats = (vars: Record<string, keyof typeof envSchem
       errors.push(`Invalid format for ${varName}: ${result.error.message}`);
     }
   }
-  
   if (errors.length > 0) {
     throw new Error(
       `Environment variable format validation failed:\n${errors.join("\n")}\nSee docs/environment-variables.mdx for correct formats`
