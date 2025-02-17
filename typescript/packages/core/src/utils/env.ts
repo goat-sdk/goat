@@ -32,7 +32,6 @@ export const envSchemas = {
  */
 export const validateEnvVarFormats = (vars: Record<string, keyof typeof envSchemas>) => {
   const errors: string[] = [];
-
   for (const [varName, schemaType] of Object.entries(vars)) {
     const value = process.env[varName];
     if (!value) continue; // Skip if not provided (handled by validateEnvVars)
