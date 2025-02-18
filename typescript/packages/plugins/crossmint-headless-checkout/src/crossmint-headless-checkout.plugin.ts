@@ -103,7 +103,9 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
 
                     if (paymentMethod === "solana") {
                         if (!(walletClient instanceof SolanaWalletClient)) {
-                            throw new Error("Solana wallet client required");
+                            throw new Error(
+                                "Solana wallet client required. Use a solana wallet client, or change the payment method to one supported by your wallet client",
+                            );
                         }
                         const transaction = Transaction.from(base58.decode(serializedTransaction));
                         const sendRes = await walletClient.sendTransaction({
@@ -113,7 +115,9 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                     }
                     if (isEVMBlockchain(paymentMethod)) {
                         if (!(walletClient instanceof EVMWalletClient)) {
-                            throw new Error("EVM wallet client required");
+                            throw new Error(
+                                "EVM wallet client required. Use an evm wallet client, or change the payment method to one supported by your wallet client",
+                            );
                         }
                         const transaction = parseTransaction(serializedTransaction as `0x${string}`);
                         if (transaction.to == null) {
