@@ -6,11 +6,11 @@ import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 
 import type { Order } from "@crossmint/client-sdk-base";
+import { Transaction } from "@solana/web3.js";
+import base58 from "bs58";
 import { parseTransaction } from "viem";
 import packageJson from "../package.json";
 import { getCreateAndPayOrderParameters } from "./parameters";
-import { Transaction } from "@solana/web3.js";
-import base58 from "bs58";
 
 export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     private readonly crossmintApiClient: CrossmintApiClient;
