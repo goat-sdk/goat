@@ -1,4 +1,5 @@
 import os
+import asyncio
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -16,16 +17,18 @@ from goat_plugins.jupiter import jupiter, JupiterPluginOptions
 from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
 from goat_plugins.spl_token.tokens import SPL_TOKENS
 
-# Initialize Solana client and wallet
+# Initialize Solana client
 client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
+
+# Initialize regular Solana wallet
 keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
 wallet = solana(client, keypair)
 
 # Initialize LLM
 llm = ChatOpenAI(model="gpt-4o-mini")
 
-
 def main():
+    
     # Get the prompt template
     prompt = ChatPromptTemplate.from_messages(
         [

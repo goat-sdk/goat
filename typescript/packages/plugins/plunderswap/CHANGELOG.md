@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-plunderswap
 
+## 1.1.0
+
+### Minor Changes
+
+- 3a95d40: Remove parameter from PlunderSwap swap tool API.
+
 ## 1.0.0
 
 ### Patch Changes

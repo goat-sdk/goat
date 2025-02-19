@@ -1,10 +1,21 @@
-import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
-import Safe, { PredictedSafeProps, SafeAccountConfig, SigningMethod, Eip1193Provider } from "@safe-global/protocol-kit";
+import {
+    type EVMReadRequest,
+    EVMSmartWalletClient,
+    type EVMTransaction,
+    type EVMTypedData,
+} from "@goat-sdk/wallet-evm";
+import { SigningMethod } from "@safe-global/protocol-kit";
+import {
+    type SafeClient,
+    type SafeClientResult,
+    type SdkStarterKitConfig,
+    createSafeClient,
+} from "@safe-global/sdk-starter-kit";
 import {
     http,
-    Account,
-    Address,
-    Chain,
+    type Account,
+    type Address,
+    type Chain,
     type WalletClient as ViemWalletClient,
     createWalletClient,
     formatUnits,
@@ -42,7 +53,7 @@ class ChainNotConfiguredError extends SafeWalletError {
 export class SafeWalletClient extends EVMSmartWalletClient {
     #client: ViemWalletClient;
     #account: Account;
-    #safeAccount: Safe | undefined;
+    #safeAccount: SafeClient | undefined;
     #safeAddress: Address | undefined;
     #isDeployed = false;
     #saltNonce?: string;
@@ -66,40 +77,33 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         this.#saltNonce = saltNonce;
     }
 
-    async #initializeSafeAccount(): Promise<void> {
+    async initialize(): Promise<void> {
         if (!this.#client.chain?.rpcUrls.default.http[0]) {
             throw new ChainNotConfiguredError();
         }
 
-        const safeAccountConfig: SafeAccountConfig = {
+        const safeAccountConfig = {
             owners: [this.#account.address],
             threshold: 1,
+            saltNonce: this.#saltNonce ?? "0",
         };
 
-        const predictedSafe: PredictedSafeProps = {
-            safeAccountConfig,
-            safeDeploymentConfig: {
-                saltNonce: this.#saltNonce ?? "0",
-            },
-        };
-
-        const safeConfig =
+        const safeConfig: SdkStarterKitConfig =
             this.#isDeployed && this.#safeAddress
                 ? {
                       provider: this.#client.chain.rpcUrls.default.http[0],
-                      signer: this.#account.address,
+                      signer: this.#privateKey,
                       safeAddress: this.#safeAddress,
                   }
                 : {
                       provider: this.#client.chain.rpcUrls.default.http[0],
-                      signer: this.#account.address,
-                      predictedSafe,
+                      signer: this.#privateKey,
+                      safeOptions: safeAccountConfig,
                   };
-
         try {
-            this.#safeAccount = await Safe.init(safeConfig);
+            this.#safeAccount = await createSafeClient(safeConfig);
             this.#safeAddress = (await this.#safeAccount.getAddress()) as Address;
-            this.#isDeployed = await this.isDeployed();
+            this.#isDeployed = await this.#safeAccount.isDeployed();
         } catch (error) {
             throw new SafeWalletError(
                 `Failed to initialize Safe: ${error instanceof Error ? error.message : String(error)}`,
@@ -109,66 +113,23 @@ export class SafeWalletClient extends EVMSmartWalletClient {
 
     getAddress(): string {
         if (!this.#safeAddress) throw new SafeNotInitializedError();
+        console.log(this.#safeAddress, "safe address");
         return this.#safeAddress;
     }
 
-    async initialize(): Promise<void> {
-        if (!this.#safeAccount) {
-            await this.#initializeSafeAccount();
-        }
-    }
-
-    async deploySafe() {
+    async #createAndExecuteTransaction(
+        metaTransactions: Array<{ to: string; value: string; data: string }>,
+    ): Promise<SafeClientResult> {
         if (!this.#safeAccount) throw new SafeNotInitializedError();
-        if (this.#isDeployed) throw new SafeWalletError("Safe is already deployed");
-
-        try {
-            const deploymentTransaction = await this.#safeAccount.createSafeDeploymentTransaction();
-            const transactionHash = await this.#client.sendTransaction({
-                account: this.#account,
-                to: deploymentTransaction.to as `0x${string}`,
-                value: 0n,
-                data: deploymentTransaction.data as `0x${string}`,
-                chain: this.#client.chain,
-            });
-
-            await this.#client.extend(publicActions).waitForTransactionReceipt({ hash: transactionHash });
-            this.#isDeployed = true;
-            await this.#initializeSafeAccount();
-            return { hash: transactionHash };
-        } catch (error) {
-            throw new SafeWalletError(
-                `Failed to deploy Safe: ${error instanceof Error ? error.message : String(error)}`,
-            );
-        }
-    }
-
-    async #ensureSafeInitialized(): Promise<void> {
-        if (!this.#safeAccount) {
-            await this.#initializeSafeAccount();
-        }
-    }
-
-    async #ensureSafeDeployed(): Promise<void> {
-        await this.#ensureSafeInitialized();
-        if (!this.#isDeployed) {
-            throw new SafeNotDeployedError();
-        }
-    }
-
-    async #createAndExecuteTransaction(metaTransactions: Array<{ to: string; value: string; data: string }>) {
-        const transaction = await this.#safeAccount?.createTransaction({ transactions: metaTransactions });
+        const transaction = await this.#safeAccount.send({
+            transactions: metaTransactions,
+        });
         if (!transaction) throw new SafeWalletError("Failed to create Safe transaction");
 
-        const result = await this.#safeAccount?.executeTransaction(transaction);
-        if (!result) throw new SafeWalletError("Failed to execute Safe transaction");
-
-        return result;
+        return transaction;
     }
 
     async sendBatchOfTransactions(transactions: EVMTransaction[]): Promise<{ hash: string }> {
-        await this.#ensureSafeDeployed();
-
         try {
             const metaTransactions = transactions.map((tx) => ({
                 to: tx.to,
@@ -177,7 +138,7 @@ export class SafeWalletClient extends EVMSmartWalletClient {
             }));
 
             const result = await this.#createAndExecuteTransaction(metaTransactions);
-            return { hash: result.hash };
+            return { hash: result.transactions?.ethereumTxHash ?? "" };
         } catch (error) {
             throw new SafeWalletError(
                 `Failed to send batch transactions: ${error instanceof Error ? error.message : String(error)}`,
@@ -186,7 +147,6 @@ export class SafeWalletClient extends EVMSmartWalletClient {
     }
 
     async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
-        await this.#ensureSafeDeployed();
         try {
             const metaTransaction = {
                 to: transaction.to,
@@ -195,7 +155,7 @@ export class SafeWalletClient extends EVMSmartWalletClient {
             };
 
             const result = await this.#createAndExecuteTransaction([metaTransaction]);
-            return { hash: result.hash };
+            return { hash: result.transactions?.ethereumTxHash ?? "" };
         } catch (error) {
             throw new SafeWalletError(
                 `Failed to send transaction: ${error instanceof Error ? error.message : String(error)}`,
@@ -235,12 +195,11 @@ export class SafeWalletClient extends EVMSmartWalletClient {
     }
 
     async signMessage(message: string) {
-        await this.#ensureSafeDeployed();
         if (!this.#safeAccount) throw new SafeNotInitializedError();
 
         try {
-            const safeMessage = this.#safeAccount.createMessage(message);
-            const signature = await this.#safeAccount.signMessage(safeMessage, SigningMethod.ETH_SIGN);
+            const safeMessage = this.#safeAccount.protocolKit.createMessage(message);
+            const signature = await this.#safeAccount.protocolKit.signMessage(safeMessage, SigningMethod.ETH_SIGN);
             return { signature: signature.encodedSignatures() };
         } catch (error) {
             throw new SafeWalletError(
@@ -279,7 +238,6 @@ export class SafeWalletClient extends EVMSmartWalletClient {
     }
 
     async signTypedData(data: EVMTypedData) {
-        await this.#ensureSafeDeployed();
         if (!this.#safeAccount) throw new SafeNotInitializedError();
 
         try {
@@ -297,8 +255,8 @@ export class SafeWalletClient extends EVMSmartWalletClient {
                 primaryType: data.primaryType,
             };
 
-            const safeMessage = this.#safeAccount.createMessage(typeData);
-            const signature = await this.#safeAccount.signMessage(safeMessage, SigningMethod.ETH_SIGN);
+            const safeMessage = this.#safeAccount.protocolKit.createMessage(typeData);
+            const signature = await this.#safeAccount.protocolKit.signMessage(safeMessage, SigningMethod.ETH_SIGN);
             return { signature: signature.encodedSignatures() };
         } catch (error) {
             throw new SafeWalletError(
@@ -337,27 +295,12 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         if (!this.#safeAddress) throw new Error("Safe address not initialized");
         if (this.#isDeployed) return true;
 
-        const isDeployed = await this.#client.extend(publicActions).getCode({
-            address: this.#safeAddress,
-        });
-
-        this.#isDeployed = Boolean(isDeployed);
-        if (isDeployed && this.#client.chain?.rpcUrls.default.http[0]) {
-            this.#safeAccount = await Safe.init({
-                signer: this.#privateKey,
-                safeAddress: this.#safeAddress,
-                provider: { request: this.#client.request } as Eip1193Provider,
-            });
-        }
-        return this.#isDeployed;
+        return await this.#safeAccount.isDeployed();
     }
 }
 
 export async function safe(privateKey: `0x${string}`, chain: Chain, saltNonce?: string): Promise<SafeWalletClient> {
     const wallet = new SafeWalletClient(privateKey, chain, saltNonce);
     await wallet.initialize();
-    if (!(await wallet.isDeployed())) {
-        await wallet.deploySafe();
-    }
     return wallet;
 }

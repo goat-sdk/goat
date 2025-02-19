@@ -43,7 +43,6 @@ export class SwapParameters extends createToolParameters(
             .describe(
                 "minimum bound on how much of the other token, the last in the token path, must be received in exchange",
             ),
-        toAddress: z.string().describe("address of the account in which to deposit the tokens received in exchange"),
         deadline: z.coerce.date().describe("by when the exchange must be completed"),
     }),
 ) {}

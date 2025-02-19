@@ -2,6 +2,14 @@
 
 This plugin enables your agent to interact with the Ethereum blockchain data from Etherscan.
 
+## Configuration
+Required environment variables:
+- `ETHERSCAN_API_KEY`: Your Etherscan API key
+  - Get it from: https://etherscan.io/apis
+  - Format: 34-character string
+  - Required for: Accessing blockchain data, contract verification, and transaction history
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+
 ## Installation
 
 ```bash
