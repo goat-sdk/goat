@@ -26,9 +26,19 @@ cp .env.template .env
 
 ### Required Environment Variables:
 - `OPENAI_API_KEY`: Your OpenAI API key for the AI model
-- `SOLANA_PRIVATE_KEY`: Your Solana wallet's private key (Base58 encoded)
+  - Get from: https://platform.openai.com/api-keys
+  - Format: "sk-" followed by random characters
+- `SOLANA_PRIVATE_KEY`: Your Solana wallet's private key
+  - Format: Base58 encoded string
+  - ⚠️ Never share or commit your private key
 - `SOLANA_RPC_URL`: Solana RPC endpoint URL
+  - Format: Full URL (e.g., https://api.mainnet-beta.solana.com)
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
 - `COINGECKO_API_KEY`: Your Coingecko API key for market data
+  - Get from: https://www.coingecko.com/api/pricing
+  - Format: 32-character string
+
+For detailed information about environment variable formats and how to obtain API keys, see the [Environment Variables Guide](../../../docs/environment-variables.mdx).
 
 ## Usage
 

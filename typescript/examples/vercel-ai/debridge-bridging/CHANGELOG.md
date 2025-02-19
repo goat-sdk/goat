@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-debridge-bridging
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [73917b6]
+  - @goat-sdk/plugin-debridge@0.0.4
+
 ## 0.0.4
 
 ### Patch Changes

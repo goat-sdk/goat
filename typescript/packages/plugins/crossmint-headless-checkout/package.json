@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-crossmint-headless-checkout",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -12,16 +12,19 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "@crossmint/common-sdk-base": "0.3.1",
         "@crossmint/client-sdk-base": "1.4.6",
+        "@crossmint/common-sdk-base": "0.3.1",
+        "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
+        "@solana/web3.js": "catalog:",
+        "bs58": "^6.0.0",
         "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "viem": "catalog:",
-        "@goat-sdk/core": "workspace:*"
+        "@goat-sdk/core": "workspace:*",
+        "viem": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",
     "repository": {
