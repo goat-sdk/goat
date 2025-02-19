@@ -19,25 +19,6 @@ export type ChainSpecificToken = {
     contractAddress: `0x${string}`;
 };
 
-// ToDo: Add actual predefined tokens.
-export const ENJ: Token = {
-    decimals: 18,
-    symbol: "ENJ",
-    name: "Enjin",
-    id: 1,
-    chains: {
-        "1": {
-            contractAddress: "0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c",
-        },
-        "10": {
-            contractAddress: "0xc1c167cc44f7923cd0062c4370df962f9ddb16f5",
-        },
-        "8453": {
-            contractAddress: "0xb4fde59a779991bfb6a52253b51947828b982be3",
-        },
-    },
-};
-
 export function getTokensForNetwork(chainId: number, tokens: Token[]): ChainSpecificToken[] {
     const result: ChainSpecificToken[] = [];
 
