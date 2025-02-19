@@ -17,13 +17,9 @@ export class EnsoService {
 
     @Tool({
         name: "enso_route",
-        description:
-            "Find the most optimal route between tokenIn and tokenOut and execute it",
+        description: "Find the most optimal route between tokenIn and tokenOut and execute it",
     })
-    async route(
-        walletClient: EVMWalletClient,
-        { tokenIn, tokenOut, amountIn }: EnsoRouteParameters,
-    ) {
+    async route(walletClient: EVMWalletClient, { tokenIn, tokenOut, amountIn }: EnsoRouteParameters) {
         const chainId = walletClient.getChain().id;
         const sender = walletClient.getAddress() as Address;
         if (!ENSO_SUPPORTED_NETWORKS.has(chainId)) {
@@ -36,10 +32,7 @@ export class EnsoService {
                 address: tokenIn as Address,
                 includeMetadata: true,
             });
-            if (
-                tokenInRes.data.length === 0 ||
-                typeof tokenInRes.data[0].decimals !== "number"
-            ) {
+            if (tokenInRes.data.length === 0 || typeof tokenInRes.data[0].decimals !== "number") {
                 throw Error(`Token ${tokenIn} is not supported`);
             }
             const tokenInData = tokenInRes.data[0];
