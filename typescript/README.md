@@ -468,6 +468,7 @@ If you would like to see your wallet provider supported, please open an issue or
 | Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) |
 | KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
 | Lulo | Deposit USDC on Lulo | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo) |
+| Mayan | Cross-chain token swap using Mayan SDK (Solana, EVM, SUI) | [@goat-sdk/plugin-mayan](https://www.npmjs.com/package/@goat-sdk/plugin-mayan) |
 | Meteora | Create liquidity pools on Meteora | [@goat-sdk/plugin-meteora](https://www.npmjs.com/package/@goat-sdk/plugin-meteora) |
 | Mode Governance | Create a governance proposal on Mode | [@goat-sdk/plugin-mode-governance](https://www.npmjs.com/package/@goat-sdk/plugin-mode-governance) |
 | Mode Voting | Vote on a governance proposal on Mode | [@goat-sdk/plugin-mode-voting](https://www.npmjs.com/package/@goat-sdk/plugin-mode-voting) |

@@ -9,7 +9,7 @@ npm install @goat-sdk/plugin-mayan
 
 ## Usage
 ```typescript
-import { oneInch } from '@goat-sdk/plugin-mayan';
+import { mayan } from '@goat-sdk/plugin-mayan';
 
 const tools = await getOnChainTools({
     wallet: // ...
