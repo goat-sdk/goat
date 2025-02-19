@@ -5,10 +5,10 @@ import {
     FlowParameters,
     GetFlowrateParameters,
     GetMemberFlowRateParameters,
+    GetNetFlowRateParameters,
     GetTotalFlowRateParameters,
     GetUnitsParameters,
     UpdateMemberUnitsParameters,
-    GetNetFlowRateParameters,
 } from "./parameters";
 
 export class SuperfluidService {
