@@ -26,5 +26,4 @@ const tools = await getOnChainTools({
 
 ## Tools
 
-* Route
-* Check Approval
+- Find the most optimal route between 2 tokens and execute it
