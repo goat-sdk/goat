@@ -1,6 +1,14 @@
 # Goat Allora Plugin 🐐 (TypeScript)
 
-[Allora Network](https://allora.network) plugin for Goat. Allora Network is an AI-powered inference platform that delivers real-time, self-improving predictions and insights for various use cases. By aggregating and analyzing data from diverse sources—such as blockchain networks and off-chain APIs—Allora seamlessly provides low-latency, high-performance predictive analytics without requiring complex infrastructure. The platform’s intuitive approach allows developers to focus on building intelligence-driven solutions, while Allora takes care of the heavy lifting behind the scenes.
+[Allora Network](https://allora.network) plugin for Goat. Allora Network is an AI-powered inference platform that delivers real-time, self-improving predictions and insights for various use cases. By aggregating and analyzing data from diverse sources—such as blockchain networks and off-chain APIs—Allora seamlessly provides low-latency, high-performance predictive analytics without requiring complex infrastructure. The platform's intuitive approach allows developers to focus on building intelligence-driven solutions, while Allora takes care of the heavy lifting behind the scenes.
+
+## Configuration
+Required environment variables:
+- `ALLORA_API_KEY`: Your Allora API key
+  - Get it from: https://allora.network/api-access
+  - Format: 32-character string
+  - Required for: Accessing price predictions and market analysis
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
 
 ## Installation
 

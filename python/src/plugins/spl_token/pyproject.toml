@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "goat-sdk-plugin-spl-tokens"
-version = "0.1.0"
+name = "goat-sdk-plugin-spl-token"
+version = "0.1.2"
 description = "Goat plugin for spl_token"
 authors = ["Your Name <your_email@example.com>"]
 readme = "README.md"
@@ -15,9 +15,8 @@ packages = [
 python = "^3.10"
 goat-sdk = "*"
 goat-sdk-wallet-solana = "*"
-solders = "^0.18.0"
-solana = {version = "^0.30.2", extras = ["spl"]}
-anchorpy = "^0.18.0"
+solders = ">=0.18.0"
+solana = { version = ">=0.30.2", extras = ["spl"] }
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -41,7 +40,7 @@ build-backend = "poetry.core.masonry.api"
 ruff = "^0.8.6"
 goat-sdk = { path = "../../goat-sdk", develop = true }
 goat-sdk-wallet-solana = { path = "../../wallets/solana", develop = true }
-solana = {version = "^0.30.2", extras = ["spl"]}
+solana = {version = ">=0.30.2", extras = ["spl"]}
 
 [tool.ruff]
 line-length = 120

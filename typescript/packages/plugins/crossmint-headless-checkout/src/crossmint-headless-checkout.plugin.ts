@@ -1,10 +1,13 @@
-import { Crossmint, CrossmintApiClient, createCrossmint } from "@crossmint/common-sdk-base";
-import { Chain, PluginBase, createTool } from "@goat-sdk/core";
-import { z } from "zod";
+import { type Crossmint, CrossmintApiClient, createCrossmint, isEVMBlockchain } from "@crossmint/common-sdk-base";
+import { type Chain, PluginBase, createTool } from "@goat-sdk/core";
+import type { z } from "zod";
 
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { SolanaWalletClient } from "@goat-sdk/wallet-solana";
 
-import { Order } from "@crossmint/client-sdk-base";
+import type { Order } from "@crossmint/client-sdk-base";
+import { Transaction } from "@solana/web3.js";
+import base58 from "bs58";
 import { parseTransaction } from "viem";
 import packageJson from "../package.json";
 import { getCreateAndPayOrderParameters } from "./parameters";
@@ -14,7 +17,7 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
 
     constructor(
         private readonly crossmint: Crossmint,
-        private readonly callDataSchema: z.ZodSchema,
+        private readonly callDataSchema?: z.ZodSchema,
     ) {
         super("crossmint-headless-checkout", []);
 
@@ -32,10 +35,10 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
     }
 
     supportsChain(chain: Chain): boolean {
-        return chain.type === "evm"; // TODO: Add support for more blockchains
+        return true;
     }
 
-    async getTools(walletClient: EVMWalletClient) {
+    async getTools(walletClient: EVMWalletClient | SolanaWalletClient) {
         const superTools = await super.getTools(walletClient);
         return [
             ...superTools,
@@ -65,7 +68,10 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                         throw new Error(errorMessage);
                     }
 
-                    const { order } = (await res.json()) as { order: Order; orderClientSecret: string };
+                    const { order } = (await res.json()) as {
+                        order: Order;
+                        orderClientSecret: string;
+                    };
 
                     console.log("Created order:", order.orderId);
 
@@ -74,36 +80,65 @@ export class CrossmintHeadlessCheckoutPlugin extends PluginBase {
                         throw new Error("Insufficient funds");
                     }
 
+                    const isRequiresPhysicalAddress = order.quote.status === "requires-physical-address";
+                    if (isRequiresPhysicalAddress) {
+                        throw new Error("recipient.physicalAddress is required");
+                    }
+
                     const serializedTransaction =
                         order.payment.preparation != null && "serializedTransaction" in order.payment.preparation
                             ? order.payment.preparation.serializedTransaction
                             : undefined;
                     if (!serializedTransaction) {
                         throw new Error(
-                            `No serialized transaction found for order, this item may not be available for purchase:\n\n ${JSON.stringify(order, null, 2)}`,
+                            `No serialized transaction found for order, this item may not be available for purchase:\n\n ${JSON.stringify(
+                                order,
+                                null,
+                                2,
+                            )}`,
                         );
                     }
 
-                    const transaction = parseTransaction(serializedTransaction as `0x${string}`);
+                    const paymentMethod = order.payment.method;
 
-                    if (transaction.to == null) {
-                        throw new Error("Transaction to is null");
+                    if (paymentMethod === "solana") {
+                        if (!(walletClient instanceof SolanaWalletClient)) {
+                            throw new Error(
+                                "Solana wallet client required. Use a solana wallet client, or change the payment method to one supported by your wallet client",
+                            );
+                        }
+                        const transaction = Transaction.from(base58.decode(serializedTransaction));
+                        const sendRes = await walletClient.sendTransaction({
+                            instructions: transaction.instructions,
+                        });
+                        return { order, txId: sendRes.hash };
+                    }
+                    if (isEVMBlockchain(paymentMethod)) {
+                        if (!(walletClient instanceof EVMWalletClient)) {
+                            throw new Error(
+                                "EVM wallet client required. Use an evm wallet client, or change the payment method to one supported by your wallet client",
+                            );
+                        }
+                        const transaction = parseTransaction(serializedTransaction as `0x${string}`);
+                        if (transaction.to == null) {
+                            throw new Error("Transaction to is null");
+                        }
+                        console.log("Paying order:", order.orderId);
+                        const sendRes = await walletClient.sendTransaction({
+                            to: transaction.to,
+                            value: transaction.value || 0n,
+                            data: transaction.data,
+                        });
+                        return { order, txId: sendRes.hash };
                     }
 
-                    console.log("Paying order:", order.orderId);
-
-                    const sendRes = await walletClient.sendTransaction({
-                        to: transaction.to,
-                        value: transaction.value || 0n,
-                        data: transaction.data,
-                    });
-                    return { order, txId: sendRes.hash };
+                    throw new Error(`Unsupported payment method: ${paymentMethod}`);
                 },
             ),
         ];
     }
 }
 
-export const crossmintHeadlessCheckout = (crossmint: Crossmint, callDataSchema: z.ZodSchema) => {
+export const crossmintHeadlessCheckout = (crossmint: Crossmint, callDataSchema?: z.ZodSchema) => {
     return new CrossmintHeadlessCheckoutPlugin(crossmint, callDataSchema);
 };

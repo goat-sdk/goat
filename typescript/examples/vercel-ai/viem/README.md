@@ -16,10 +16,23 @@ cp .env.template .env
 
 ### Required Environment Variables:
 - `OPENAI_API_KEY`: Your OpenAI API key for the AI model
-- `WALLET_PRIVATE_KEY`: Your wallet's private key (with 0x prefix)
-- `RPC_PROVIDER_URL`: EVM network RPC URL (with Base)
+  - Get from: https://platform.openai.com/api-keys
+  - Format: "sk-" followed by random characters
+- `WALLET_PRIVATE_KEY`: Your wallet's private key
+  - Format: 64-character hex string with '0x' prefix
+  - ⚠️ Never share or commit your private key
+- `RPC_PROVIDER_URL`: EVM network RPC URL
+  - Format: Full URL with API key (if required)
+  - Example: https://mainnet.base.org
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
 - `UNISWAP_API_KEY`: Your Uniswap API key
+  - Get from: https://hub.uniswap.org
+  - Format: 32-character string
 - `UNISWAP_BASE_URL`: Uniswap API base URL
+  - Format: Full URL with protocol and version
+  - Default: https://api.uniswap.org/v1
+
+For detailed information about environment variable formats and how to obtain API keys, see the [Environment Variables Guide](../../../docs/environment-variables.mdx).
 
 ## Usage
 
