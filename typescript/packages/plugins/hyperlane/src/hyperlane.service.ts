@@ -360,7 +360,7 @@ export class HyperlaneService {
             if (contractType) {
                 filteredAddresses = Object.entries(chainAddresses)
                     .filter(([key]) => key.toLowerCase().includes(contractType.toLowerCase()))
-                    .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+                    .reduce((obj, [key, value]) => Object.assign(obj, { [key]: value }), {});
 
                 if (Object.keys(filteredAddresses).length === 0) {
                     throw new Error(`No ${contractType} contracts found for chain: ${chain}`);
@@ -436,6 +436,7 @@ export class HyperlaneService {
             // Create ISM factory
             const ismFactory = HyperlaneIsmFactory.fromAddressesMap(chainAddresses, multiProvider);
 
+            // biome-ignore lint/suspicious/noExplicitAny: na
             let ismConfig: any = { type };
 
             // Configure based on ISM type
@@ -569,7 +570,8 @@ export class HyperlaneService {
             const validatorConfig = await ismReader.deriveMultisigConfig(validator);
 
             // Create transaction based on action
-            let tx;
+            // biome-ignore lint/suspicious/noExplicitAny: na
+            let tx: any;
             const multisigContract = new ethers.Contract(
                 validator,
                 [
@@ -635,6 +637,7 @@ export class HyperlaneService {
             // Create ISM reader
             const ismReader = new EvmIsmReader(multiProvider, chain);
 
+            // biome-ignore lint/suspicious/noExplicitAny: na
             const result: any = {
                 chain,
                 status: "SECURE",
@@ -926,6 +929,7 @@ export class HyperlaneService {
                 multiProvider.getProvider(chain),
             );
 
+            // biome-ignore lint/suspicious/noExplicitAny: na
             const result: any = {
                 chain,
                 relayer: relayerAddress,
@@ -1152,6 +1156,7 @@ export class HyperlaneService {
     private async getProvider(chain: string): Promise<ethers.providers.JsonRpcProvider> {
         const { multiProvider } = await getMultiProvider();
         const provider = multiProvider.getProvider(chain);
+        // biome-ignore lint/suspicious/noExplicitAny: na
         const rpcUrl = (provider as any).connection?.url;
         if (!rpcUrl) {
             throw new Error(`Could not get RPC URL for chain ${chain}`);
@@ -1211,7 +1216,8 @@ function generateTokenConfigs(
 
         const tokenType = config.type as keyof TokenFactories;
         const tokenContract = contract[tokenType];
-        assert(tokenContract && tokenContract.address, "Missing token contract address");
+
+        assert(tokenContract?.address, "Missing token contract address");
 
         warpCoreConfig.tokens.push({
             chainName,
