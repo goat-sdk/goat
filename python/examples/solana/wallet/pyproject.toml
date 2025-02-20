@@ -13,11 +13,11 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.12"
-solana = "^0.30.2"
-solders = "^0.18.0"
+solana = ">=0.30.2"
+solders = ">=0.18.0"
 python-dotenv = "^1.0.1" 
-goat-sdk = "^0.1.0"
-goat-sdk-wallet-solana = "^0.1.0"
+goat-sdk = "*"
+goat-sdk-wallet-solana = "*"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/goat-sdk/goat/issues"

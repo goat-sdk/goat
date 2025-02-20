@@ -23,13 +23,22 @@ cp .env.template .env
 
 3. Edit your `.env` file with the following values:
    - `OPENAI_API_KEY`: Your OpenAI API key
-   - `WALLET_PRIVATE_KEY`: Your wallet's private key (with 0x prefix)
+     - Get from: https://platform.openai.com/api-keys
+     - Format: "sk-" followed by random characters
+   - `WALLET_PRIVATE_KEY`: Your wallet's private key
+     - Format: 64-character hex string with '0x' prefix
+     - ⚠️ Never share or commit your private key
    - `RPC_PROVIDER_URL`: Your Polygon RPC URL
+     - Format: Full URL with API key (if required)
+     - Example: https://polygon-mainnet.g.alchemy.com/v2/YOUR-API-KEY
+     - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
 
-   The following values will be populated in the next step:
-   - `POLYMARKET_API_KEY`
-   - `POLYMARKET_SECRET`
-   - `POLYMARKET_PASSPHRASE`
+   The following values will be populated by the `polymarket:api-key` script:
+   - `POLYMARKET_API_KEY`: Your Polymarket API key (UUID format)
+   - `POLYMARKET_SECRET`: Your Polymarket API secret (Base64 encoded)
+   - `POLYMARKET_PASSPHRASE`: Your Polymarket API passphrase
+
+For detailed information about environment variable formats and how to obtain API keys, see the [Environment Variables Guide](../../../docs/environment-variables.mdx).
 
 4. Create an API key for your wallet using Polymarket's API key creation tool:
 ```bash

@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-debridge
 
+## 0.0.4
+
+### Patch Changes
+
+- 73917b6: Release package
+
 ## 0.0.3
 
 ### Patch Changes

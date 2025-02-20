@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-crossmint-headless-checkout
 
+## 0.0.9
+
+### Patch Changes
+
+- 38903c9: headless: pay w sol
+
 ## 0.0.8
 
 ### Patch Changes
