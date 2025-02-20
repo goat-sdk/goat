@@ -10,5 +10,5 @@ export const ERC1155_ABI = parseAbi([
     "event TransferSingle(address indexed _operator, address indexed _from, address indexed _to, uint256 _id, uint256 _value)",
     "event TransferBatch(address indexed _operator, address indexed _from, address indexed _to, uint256[] _ids, uint256[] _values)",
     "event ApprovalForAll(address indexed _owner, address indexed _operator, bool _approved)",
-    "event URI(string _value, uint256 indexed _id)"
+    "event URI(string _value, uint256 indexed _id)",
 ]);

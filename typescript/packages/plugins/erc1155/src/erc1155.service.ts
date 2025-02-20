@@ -2,13 +2,13 @@ import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { ERC1155_ABI } from "./abi";
 import {
-    GetTokenInfoBySymbolParameters,
-    BalanceOfParameters,
     BalanceOfBatchParameters,
-    SafeTransferFromParameters,
+    BalanceOfParameters,
+    GetTokenInfoBySymbolParameters,
+    IsApprovedForAllParameters,
     SafeBatchTransferFromParameters,
+    SafeTransferFromParameters,
     SetApprovalForAllParameters,
-    IsApprovedForAllParameters
 } from "./parameters";
 import { type Token } from "./token";
 
@@ -20,7 +20,8 @@ export class Erc1155Service {
     }
 
     @Tool({
-        description: "Get the ERC1155 token info by its symbol, including the contract address, token id, decimals, name, metadata URI and total token supply",
+        description:
+            "Get the ERC1155 token info by its symbol, including the contract address, token id, decimals, name, metadata URI and total token supply",
     })
     async getTokenInfoBySymbol(walletClient: EVMWalletClient, parameters: GetTokenInfoBySymbolParameters) {
         const token = this.tokens.find((token) =>
@@ -75,7 +76,9 @@ export class Erc1155Service {
     })
     async balanceOfBatch(walletClient: EVMWalletClient, parameters: BalanceOfBatchParameters) {
         try {
-            const resolvedOwners = await Promise.all(parameters.owners.map(owner => walletClient.resolveAddress(owner)));
+            const resolvedOwners = await Promise.all(
+                parameters.owners.map((owner) => walletClient.resolveAddress(owner)),
+            );
 
             const rawBalances = await walletClient.read({
                 address: parameters.tokenAddress,
@@ -84,7 +87,7 @@ export class Erc1155Service {
                 args: [resolvedOwners, parameters.ids],
             });
 
-            const balances = (rawBalances.value as any[]).map(balance => Number(balance));
+            const balances = (rawBalances.value as (number | string)[]).map((balance) => Number(balance));
             return balances;
         } catch (error) {
             throw Error(`Failed to fetch batch balances: ${error}`);
