@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-allora
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [3040713]
+  - @goat-sdk/plugin-enso@0.1.1
+
 ## 0.1.7
 
 ### Patch Changes
