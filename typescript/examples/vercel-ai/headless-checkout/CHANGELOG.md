@@ -1,5 +1,19 @@
 # goat-examples-vercel-ai-headless-checkout
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [38903c9]
+  - @goat-sdk/plugin-crossmint-headless-checkout@0.0.9
+
+## 0.2.12
+
+### Patch Changes
+
+- Updated dependencies [ca7611b]
+  - @goat-sdk/plugin-crossmint-headless-checkout@0.0.8
+
 ## 0.2.11
 
 ### Patch Changes

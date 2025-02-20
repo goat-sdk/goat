@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-superfluid
 
+## 0.1.7
+
+### Patch Changes
+
+- 82a035e: Add new read functions
+
 ## 0.1.6
 
 ### Patch Changes

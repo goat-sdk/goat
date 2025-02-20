@@ -54,3 +54,10 @@ export class DeploySuperTokenWrapperParameters extends createToolParameters(
         symbol: z.string().describe("The symbol of the Super Token Wrapper"),
     }),
 ) {}
+
+export class GetNetFlowRateParameters extends createToolParameters(
+    z.object({
+        token: z.string().describe("The address of the Super Token to get the flow of"),
+        memberAddr: z.string().describe("The address of the member to get flow rate for"),
+    }),
+) {}

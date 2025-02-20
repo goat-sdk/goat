@@ -27,7 +27,7 @@ GOAT (Great Onchain Agent Toolkit) is a library that adds more than +200 onchain
 * **Agent Frameworks**: AI SDK, Langchain, Eliza, ZerePy, GAME, ElevenLabs, etc.
 
 
-## Table of Contens
+## Table of Contents
 - [📘 Typescript](https://github.com/goat-sdk/goat/tree/main/typescript)
   - [See all plugins](https://github.com/goat-sdk/goat/tree/main/typescript#plugins)
   - [Installation](https://github.com/goat-sdk/goat/tree/main/typescript#installation)

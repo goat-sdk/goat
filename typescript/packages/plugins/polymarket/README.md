@@ -2,6 +2,20 @@
 
 Polymarket plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Polymarket.
 
+## Configuration
+Required environment variables:
+- `POLYMARKET_API_KEY`: Your Polymarket API key
+  - Get it from: Using the `polymarket:api-key` script (see setup instructions)
+  - Format: UUID string
+  - Required for: Accessing Polymarket's API for trading and market data
+- `POLYMARKET_SECRET`: Your Polymarket API secret
+  - Generated alongside API key
+  - Format: Base64 encoded string
+- `POLYMARKET_PASSPHRASE`: Your Polymarket API passphrase
+  - Generated alongside API key
+  - Format: String
+  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+
 ## Installation
 ```
 npm install @goat-sdk/plugin-polymarket
