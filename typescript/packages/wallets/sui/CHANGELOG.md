@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-sui
 
+## 0.2.13
+
+### Patch Changes
+
+- 90b38da: Expose key pair wallet
+
 ## 0.2.12
 
 ### Patch Changes
