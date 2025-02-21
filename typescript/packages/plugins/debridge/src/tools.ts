@@ -18,9 +18,6 @@ import {
     getTokenInfoParametersSchema,
 } from "./parameters";
 
-/** Default referral code for DeBridge transactions */
-const REFERRAL_CODE = "21064";
-
 /**
  * Core tools for interacting with the DeBridge protocol
  * Provides methods for getting quotes, creating orders, and executing bridge transactions
@@ -157,13 +154,9 @@ From Solana:
             params.append("srcChainRefundAddress", parameters.senderAddress);
             // Always use dstChainTokenOutRecipient for destination chain authority
             params.append("dstChainOrderAuthorityAddress", parameters.dstChainTokenOutRecipient);
-            params.append("referralCode", parameters.referralCode || REFERRAL_CODE || "21064");
+            params.append("referralCode", "21064"); // Analytics
+            params.append("deBridgeApp", "GOAT"); // Analytics
             params.append("prependOperatingExpenses", "true");
-            // params.append("deBridgeApp", "goat");
-            // params.append("enableEstimate", parameters.enableEstimate?.toString() || "false");
-            // if (parameters.allowedTaker) {
-            //     params.append('allowedTaker', parameters.allowedTaker);
-            // }
 
             const url = `${this.options.baseUrl}/dln/order/create-tx?${params}`;
 
