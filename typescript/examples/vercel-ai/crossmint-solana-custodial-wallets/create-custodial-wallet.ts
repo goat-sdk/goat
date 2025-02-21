@@ -22,7 +22,7 @@ if (!apiKey || !email) {
 })();
 
 async function createWallet(email: string, apiKey: string) {
-    const response = await fetch("https://staging.crossmint.com/api/v1-alpha2/wallets", {
+    const response = await fetch("https://staging.crossmint.com/api/2022-06-09/wallets", {
         method: "POST",
         headers: {
             "X-API-KEY": apiKey,

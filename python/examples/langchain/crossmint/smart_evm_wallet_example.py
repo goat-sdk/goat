@@ -19,7 +19,7 @@ from goat_wallets.crossmint import crossmint
 def create_smart_wallet(signer_public_key: str, api_key: str, base_url: str = "https://staging.crossmint.com") -> dict:
     """Create a new smart wallet using the Crossmint API."""
     response = requests.post(
-        f"{base_url}/api/v1-alpha2/wallets",
+        f"{base_url}/api/2022-06-09/wallets",
         headers={
             "X-API-KEY": api_key,
             "Content-Type": "application/json",
