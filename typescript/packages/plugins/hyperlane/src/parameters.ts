@@ -1,6 +1,35 @@
 import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
+export class HyperlaneSendTestTransferParameters extends createToolParameters(
+    z.object({
+        warp: z.string().describe("Warp address"),
+        symbol: z.string().describe("Token symbol to transfer"),
+        router: z.string().describe("Router address"),
+        amount: z.string().describe("Amount to transfer"),
+        recipient: z.string().describe("Recipient address"),
+    }),
+) {}
+
+// --origin                             Origin chain to send message from
+// [string]
+// --destination                        Destination chain to send message to
+// [string]
+// --timeout                            Timeout in seconds
+// [number][default: 300]
+// --quick                              Skip wait for message to be delivered
+// [boolean][default: false]
+// --relay                              Handle self - relay of message on desti
+//                                            nation chain
+// [boolean][default: false]
+// --symbol                             Token symbol(e.g.ETH, USDC)[string]
+// --warp, --wc                         File path to Warp Route config
+// [string]
+// --amount                             Amount to send(in smallest unit)
+// [string][default: 1]
+// --recipient                          Token recipient address(defaults to
+//                                            sender)[string]
+
 export class HyperlaneDeployParameters extends createToolParameters(
     z.object({
         origin: z.string().min(1).describe("Origin chain name (e.g. baseSepolia, arbitrumSepolia)"),

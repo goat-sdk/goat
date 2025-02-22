@@ -1,21 +1,34 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { HypXERC20Lockbox__factory, HypXERC20__factory, IXERC20__factory } from "@hyperlane-xyz/core";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
+    ChainMap,
     ChainMetadata,
+    ChainName,
     CoreConfig,
+    DispatchedMessage,
+    EvmERC20WarpRouteReader,
     HookType,
     HypERC20Deployer,
     HyperlaneContractsMap,
     HyperlaneCore,
     HyperlaneCoreDeployer,
     HyperlaneIsmFactory,
+    HyperlaneRelayer,
     IsmType,
+    MultiProtocolProvider,
     MultiProvider,
+    ProviderType,
     TOKEN_TYPE_TO_STANDARD,
+    Token,
+    TokenAmount,
     TokenFactories,
+    TokenStandard,
     TokenType,
+    WarpCore,
     WarpCoreConfig,
+    WarpCoreConfigSchema,
     WarpRouteDeployConfig,
     WarpRouteDeployConfigSchema,
     getTokenConnectionId,
@@ -23,6 +36,7 @@ import {
     isTokenMetadata,
 } from "@hyperlane-xyz/sdk";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
+import { isAddressEvm, objMap, parseWarpRouteMessage, promiseObjAll } from "@hyperlane-xyz/utils";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
 import { ethers } from "ethers";
@@ -40,9 +54,11 @@ import {
     HyperlaneRelayerMonitorParameters,
     HyperlaneSecurityMonitorParameters,
     HyperlaneSendMessageParameters,
+    HyperlaneSendTestTransferParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
 
+import { log } from "console";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -112,7 +128,7 @@ export class HyperlaneService {
         const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
         const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
 
-        return JSON.stringify(
+        const response = JSON.stringify(
             {
                 message: "Warp bridge deployed successfully",
                 contracts: {
@@ -124,6 +140,132 @@ export class HyperlaneService {
             null,
             2,
         );
+
+        console.log(response);
+
+        return response;
+    }
+
+    @Tool({
+        name: "hyperlane_send_test_transfer",
+        description: "Send assets from one chain to another using Hyperlane",
+    })
+    async sendTestTransfer(walletClient: EVMWalletClient, parameters: HyperlaneSendTestTransferParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { multiProvider, registry } = await getMultiProvider(wallet);
+
+        const { warp, symbol, router, amount, recipient } = parameters;
+        const chainAddresses = await registry.getAddresses();
+
+        try {
+            const signer = multiProvider.getSigner(origin);
+            const recipientSigner = multiProvider.getSigner(destination);
+
+            const recipientAddress = await recipientSigner.getAddress();
+            const signerAddress = await signer.getAddress();
+
+            recipient ||= recipientAddress;
+
+            const chainAddresses = await registry.getAddresses();
+
+            const core = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
+
+            const provider = multiProvider.getProvider(origin);
+            const connectedSigner = signer.connect(provider);
+
+            const warpCore = WarpCore.FromConfig(
+                MultiProtocolProvider.fromMultiProvider(multiProvider),
+                warpCoreConfig,
+            );
+
+            let token: Token;
+            const tokensForRoute = warpCore.getTokensForRoute(origin, destination);
+            if (tokensForRoute.length === 0) {
+                console.log(`No Warp Routes found from ${origin} to ${destination}`);
+                throw new Error("Error finding warp route");
+            } else if (tokensForRoute.length === 1) {
+                token = tokensForRoute[0];
+            }
+            // else {
+            //     console.log(`Please select a token from the Warp config`);
+            //     const routerAddress = await runTokenSelectionStep(tokensForRoute);
+            //     token = warpCore.findToken(origin, routerAddress)!;
+            // }
+
+            const errors = await warpCore.validateTransfer({
+                originTokenAmount: token.amount(amount),
+                destination,
+                recipient,
+                sender: signerAddress,
+            });
+            if (errors) {
+                console.log("Error validating transfer", JSON.stringify(errors));
+                throw new Error("Error validating transfer");
+            }
+
+            // TODO: override hook address for self-relay
+            const transferTxs = await warpCore.getTransferRemoteTxs({
+                originTokenAmount: new TokenAmount(amount, token),
+                destination,
+                sender: signerAddress,
+                recipient,
+            });
+
+            const txReceipts = [];
+            for (const tx of transferTxs) {
+                if (tx.type === ProviderType.EthersV5) {
+                    const txResponse = await connectedSigner.sendTransaction(tx.transaction);
+                    const txReceipt = await multiProvider.handleTx(origin, txResponse);
+                    txReceipts.push(txReceipt);
+                }
+            }
+            const transferTxReceipt = txReceipts[txReceipts.length - 1];
+            const messageIndex: number = 0;
+            const message: DispatchedMessage = HyperlaneCore.getDispatchedMessages(transferTxReceipt)[messageIndex];
+
+            const parsed = parseWarpRouteMessage(message.parsed.body);
+
+            console.log(
+                `Sent transfer from sender (${signerAddress}) on ${origin} to recipient (${recipient}) on ${destination}.`,
+            );
+            console.log(`Message ID: ${message.id}`);
+            console.log(`Explorer Link: ${EXPLORER_URL}/message/${message.id}`);
+            console.log(`Message:\n${indentYamlOrJson(yamlStringify(message, null, 2), 4)}`);
+            console.log(`Body:\n${indentYamlOrJson(yamlStringify(parsed, null, 2), 4)}`);
+
+            if (selfRelay) {
+                const relayer = new HyperlaneRelayer({ core });
+
+                const hookAddress = await core.getSenderHookAddress(message);
+                const merkleAddress = chainAddresses[origin].merkleTreeHook;
+                stubMerkleTreeConfig(relayer, origin, hookAddress, merkleAddress);
+
+                log("Attempting self-relay of transfer...");
+                await relayer.relayMessage(transferTxReceipt, messageIndex, message);
+                console.log(WarpSendLogs.SUCCESS);
+                return;
+            }
+
+            if (skipWaitForDelivery) return;
+
+            // Max wait 10 minutes
+            await core.waitForMessageProcessed(transferTxReceipt, 10000, 60);
+            console.log(`Transfer sent to ${destination} chain!`);
+        } catch (error) {
+            console.error("Error details:", error);
+            return JSON.stringify(
+                {
+                    message: "Failed to send message",
+                    error: error instanceof Error ? error.message : String(error),
+                    originChain,
+                    destinationChain,
+                },
+                null,
+                2,
+            );
+        }
     }
 
     @Tool({
@@ -144,11 +286,13 @@ export class HyperlaneService {
             const hyperlane = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
 
             // Send the message using the SDK
+            const messageBytes = ethers.utils.toUtf8Bytes(message);
+            const messageHex = ethers.utils.hexlify(messageBytes);
             const { dispatchTx, message: dispatchedMessage } = await hyperlane.sendMessage(
                 originChain,
                 destinationChain,
                 destinationAddress,
-                message,
+                messageHex,
             );
 
             // Wait for message to be indexed
@@ -1242,4 +1386,158 @@ function fullyConnectTokens(warpCoreConfig: WarpCoreConfig): void {
             });
         }
     }
+}
+
+// Note, this is different than the function above which reads a config
+// for a DEPLOYMENT. This gets a config for using a warp route (aka WarpCoreConfig)
+function readWarpCoreConfig(filePath: string): WarpCoreConfig {
+    const config = readYamlOrJson(filePath);
+    if (!config) throw new Error(`No warp route config found at ${filePath}`);
+    return WarpCoreConfigSchema.parse(config);
+}
+
+async function selectRegistryWarpRoute(registry: any, symbol: string): Promise<WarpCoreConfig> {
+    const matching = await registry.getWarpRoutes({
+        symbol,
+    });
+    const routes = Object.entries(matching);
+
+    let warpCoreConfig: WarpCoreConfig;
+    if (routes.length === 0) {
+        console.log(`No warp routes found for symbol ${symbol}`);
+        process.exit(0);
+    } else if (routes.length === 1) {
+        warpCoreConfig = routes[0][1];
+    } else {
+        console.log(`Multiple warp routes found for symbol ${symbol}`);
+        const chosenRouteId = await select({
+            message: "Select from matching warp routes",
+            choices: routes.map(([routeId, _]) => ({
+                value: routeId,
+            })),
+        });
+        warpCoreConfig = matching[chosenRouteId];
+    }
+
+    return warpCoreConfig;
+}
+
+/**
+ * Gets a {@link WarpCoreConfig} based on the provided path or prompts the user to choose one:
+ * - if `symbol` is provided the user will have to select one of the available warp routes.
+ * - if `warp` is provided the config will be read by the provided file path.
+ * - if none is provided the CLI will exit.
+ */
+async function getWarpCoreConfigOrExit({
+    // context,
+    registry,
+    symbol,
+    warp,
+}: {
+    // context: CommandContext;
+    registry: any;
+    symbol?: string;
+    warp?: string;
+}): Promise<WarpCoreConfig> {
+    let warpCoreConfig: WarpCoreConfig;
+    if (symbol) {
+        // warpCoreConfig = await selectRegistryWarpRoute(context.registry, symbol);
+        warpCoreConfig = await selectRegistryWarpRoute(registry, symbol);
+    } else if (warp) {
+        warpCoreConfig = readWarpCoreConfig(warp);
+    } else {
+        console.log(`Please specify either a symbol or warp config`);
+        process.exit(0);
+    }
+
+    return warpCoreConfig;
+}
+
+async function runWarpRouteRead({
+    // context,
+    chain,
+    address,
+    warp,
+    symbol,
+}: {
+    // context: CommandContext;
+    chain?: ChainName;
+    warp?: string;
+    address?: string;
+    symbol?: string;
+}): Promise<Record<ChainName, any>> {
+    // const { multiProvider } = context;
+    assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+    const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+    const { multiProvider, registry } = await getMultiProvider(wallet);
+
+    let addresses: ChainMap<string>;
+    if (symbol || warp) {
+        const warpCoreConfig =
+            context.warpCoreConfig ?? // this case is be handled by MultiChainHandler.forWarpCoreConfig() interceptor
+            (await getWarpCoreConfigOrExit({
+                // context,
+                registry,
+                warp,
+                symbol,
+            }));
+
+        // TODO: merge with XERC20TokenAdapter and WarpRouteReader
+        const xerc20Limits = await Promise.all(
+            warpCoreConfig.tokens
+                .filter(
+                    (t) =>
+                        t.standard === TokenStandard.EvmHypXERC20 || t.standard === TokenStandard.EvmHypXERC20Lockbox,
+                )
+                .map(async (t) => {
+                    const provider = multiProvider.getProvider(t.chainName);
+                    const router = t.addressOrDenom!;
+                    const xerc20Address =
+                        t.standard === TokenStandard.EvmHypXERC20Lockbox
+                            ? await HypXERC20Lockbox__factory.connect(router, provider).xERC20()
+                            : await HypXERC20__factory.connect(router, provider).wrappedToken();
+
+                    const xerc20 = IXERC20__factory.connect(xerc20Address, provider);
+                    const mint = await xerc20.mintingCurrentLimitOf(router);
+                    const burn = await xerc20.burningCurrentLimitOf(router);
+
+                    const formattedLimits = objMap({ mint, burn }, (_, v) => ethers.utils.formatUnits(v, t.decimals));
+
+                    return [t.chainName, formattedLimits];
+                }),
+        );
+
+        if (xerc20Limits.length > 0) {
+            logGray("xERC20 Limits:");
+            logTable(Object.fromEntries(xerc20Limits));
+        }
+
+        addresses = Object.fromEntries(warpCoreConfig.tokens.map((t) => [t.chainName, t.addressOrDenom!]));
+    } else if (chain && address) {
+        addresses = {
+            [chain]: address,
+        };
+    } else {
+        console.log(`Please specify either a symbol, chain and address or warp file`);
+        process.exit(1);
+    }
+
+    // Check if there any non-EVM chains in the config and exit
+    const nonEvmChains = Object.entries(addresses)
+        .filter(([_, address]) => !isAddressEvm(address))
+        .map(([chain]) => chain);
+    if (nonEvmChains.length > 0) {
+        const chainList = nonEvmChains.join(", ");
+        console.log(`${chainList} ${nonEvmChains.length > 1 ? "are" : "is"} non-EVM and not compatible with the cli`);
+        process.exit(1);
+    }
+
+    const config = await promiseObjAll(
+        objMap(addresses, async (chain, address) =>
+            new EvmERC20WarpRouteReader(multiProvider, chain).deriveWarpRouteConfig(address),
+        ),
+    );
+
+    return config;
 }
