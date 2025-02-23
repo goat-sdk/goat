@@ -148,7 +148,7 @@ export class HyperlaneService {
 
         const { symbol } = parameters;
 
-        const routes = await selectRegistryWarpRoute(registry, symbol);
+        const routes = await listRegistryWarpRoutes(registry, symbol);
 
         return JSON.stringify(
             {
@@ -1381,30 +1381,16 @@ async function getWarpCoreConfig(
     return warpCoreConfig;
 }
 
-async function selectRegistryWarpRoute(registry: GithubRegistry, symbol: string): Promise<[string, unknown][]> {
+async function listRegistryWarpRoutes(registry: GithubRegistry, symbol: string): Promise<[string, unknown][]> {
     const matching = await registry.getWarpRoutes({
         symbol,
     });
     const routes = Object.entries(matching);
 
-    // let warpCoreConfig: WarpCoreConfig;
     if (routes.length === 0) {
         console.log(`No warp routes found for symbol ${symbol}`);
         process.exit(0);
     }
-    // else if (routes.length === 1) {
-    //     warpCoreConfig = routes[0][1];
-    // } else {
-    //     console.log(`Multiple warp routes found for symbol ${symbol}`);
-    //     const chosenRouteId = await select({
-    //         message: 'Select from matching warp routes',
-    //         choices: routes.map(([routeId, _]) => ({
-    //             value: routeId,
-    //         })),
-    //     });
-    //     warpCoreConfig = matching[chosenRouteId];
-    // }
 
-    // return warpCoreConfig;
     return routes;
 }
