@@ -23,8 +23,8 @@
     },
     "keywords": ["ai", "agents", "web3"],
     "dependencies": {
-        "@goat-sdk/core": "0.4.7",
-        "@goat-sdk/wallet-evm": "0.2.8",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "@hyperlane-xyz/core": "5.11.3",
         "@hyperlane-xyz/registry": "7.4.0",
         "@hyperlane-xyz/sdk": "8.6.1",
@@ -32,9 +32,9 @@
         "borsh": "0.7.0",
         "dotenv": "16.4.7",
         "ethers": "5.7.2",
-        "zod": "3.24.2"
+        "zod": "catalog:"
     },
     "peerDependencies": {
-        "@goat-sdk/core": "0.4.7"
+        "@goat-sdk/core": "workspace:*"
     }
 }
