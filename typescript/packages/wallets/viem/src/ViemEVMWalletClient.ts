@@ -3,6 +3,7 @@ import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits,
 import { mainnet } from "viem/chains";
 import { normalize } from "viem/ens";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
+import { DeployContractType } from "./types";
 
 export type ViemOptions = {
     paymaster?: {
@@ -191,6 +192,17 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             hash: txHash,
         });
         return { hash: receipt.transactionHash, status: receipt.status };
+    }
+
+    async deployContract(data: DeployContractType) {
+        const txHash = await this.#client.deployContract({
+            account: this.#client.account ?? null,
+            bytecode: data.bytecode,
+            args: data.args,
+            abi: data.abi,
+            chain: this.#client.chain,
+        });
+        return this.waitForReceipt(txHash);
     }
 }
 
