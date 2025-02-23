@@ -42,6 +42,7 @@ import {
     HyperlaneGetMailboxParameters,
     HyperlaneGetTokenParameters,
     HyperlaneIsmParameters,
+    HyperlaneListWarpRoutesParameters,
     HyperlaneReadMessageParameters,
     HyperlaneRelayerConfigParameters,
     HyperlaneRelayerMonitorParameters,
@@ -133,6 +134,29 @@ export class HyperlaneService {
         console.log(response);
 
         return response;
+    }
+
+    @Tool({
+        name: "hyperlane_list_warp_routes",
+        description: "List all available Warp routes",
+    })
+    async listWarpRoutes(walletClient: EVMWalletClient, parameters: HyperlaneListWarpRoutesParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { registry } = await getMultiProvider(wallet);
+
+        const { symbol } = parameters;
+
+        const routes = await selectRegistryWarpRoute(registry, symbol);
+
+        return JSON.stringify(
+            {
+                message: `Select one of the following: ${routes}`,
+            },
+            null,
+            2,
+        );
     }
 
     @Tool({
@@ -1355,4 +1379,32 @@ async function getWarpCoreConfig(
     fullyConnectTokens(warpCoreConfig);
 
     return warpCoreConfig;
+}
+
+async function selectRegistryWarpRoute(registry: GithubRegistry, symbol: string): Promise<[string, unknown][]> {
+    const matching = await registry.getWarpRoutes({
+        symbol,
+    });
+    const routes = Object.entries(matching);
+
+    // let warpCoreConfig: WarpCoreConfig;
+    if (routes.length === 0) {
+        console.log(`No warp routes found for symbol ${symbol}`);
+        process.exit(0);
+    }
+    // else if (routes.length === 1) {
+    //     warpCoreConfig = routes[0][1];
+    // } else {
+    //     console.log(`Multiple warp routes found for symbol ${symbol}`);
+    //     const chosenRouteId = await select({
+    //         message: 'Select from matching warp routes',
+    //         choices: routes.map(([routeId, _]) => ({
+    //             value: routeId,
+    //         })),
+    //     });
+    //     warpCoreConfig = matching[chosenRouteId];
+    // }
+
+    // return warpCoreConfig;
+    return routes;
 }

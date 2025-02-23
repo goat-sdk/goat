@@ -29,6 +29,12 @@ export class HyperlaneSendTestTransferParameters extends createToolParameters(
     }),
 ) {}
 
+export class HyperlaneListWarpRoutesParameters extends createToolParameters(
+    z.object({
+        symbol: z.string().describe("Token symbol to search for"),
+    }),
+) {}
+
 export class HyperlaneDeployParameters extends createToolParameters(
     z.object({
         origin: z.string().min(1).describe("Origin chain name (e.g. baseSepolia, arbitrumSepolia)"),
