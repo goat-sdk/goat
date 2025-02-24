@@ -44,6 +44,7 @@ import {
     HyperlaneIsmParameters,
     HyperlaneListWarpRoutesParameters,
     HyperlaneReadMessageParameters,
+    HyperlaneReadWarpRouteParameters,
     HyperlaneRelayerConfigParameters,
     HyperlaneRelayerMonitorParameters,
     HyperlaneSecurityMonitorParameters,
@@ -153,6 +154,33 @@ export class HyperlaneService {
         return JSON.stringify(
             {
                 message: `Select one of the following: ${routes}`,
+            },
+            null,
+            2,
+        );
+    }
+
+    @Tool({
+        name: "hyperlane_read_warp_route",
+        description: "Get config for warp route",
+    })
+    async readWarpRoute(walletClient: EVMWalletClient, parameters: HyperlaneReadWarpRouteParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { registry } = await getMultiProvider(wallet);
+
+        const { warp, symbol } = parameters;
+
+        const warpRouteConfig = await getWarpCoreConfigOrExit({
+            registry,
+            symbol,
+            warp,
+        });
+
+        return JSON.stringify(
+            {
+                message: `The warp route config is ${warpRouteConfig}`,
             },
             null,
             2,
@@ -1393,4 +1421,40 @@ async function listRegistryWarpRoutes(registry: GithubRegistry, symbol: string):
     }
 
     return routes;
+}
+
+async function getWarpCoreConfigOrExit({
+    registry,
+    symbol,
+    warp,
+}: {
+    registry: GithubRegistry;
+    symbol: string;
+    warp: string;
+}): Promise<WarpCoreConfig> {
+    return await selectRegistryWarpRoute(registry, symbol, warp);
+}
+
+async function selectRegistryWarpRoute(
+    registry: GithubRegistry,
+    symbol: string,
+    warp: string,
+): Promise<WarpCoreConfig> {
+    const matching = await registry.getWarpRoutes({
+        symbol,
+    });
+    const routes = Object.entries(matching);
+
+    let warpCoreConfig: WarpCoreConfig;
+    if (routes.length === 0) {
+        console.log(`No warp routes found for symbol ${symbol}`);
+        process.exit(0);
+    } else {
+        console.log(`Multiple warp routes found for symbol ${symbol}`);
+        const chosenRouteId = warp;
+        warpCoreConfig = matching[chosenRouteId];
+        console.log(`warpCoreConfig: ${warpCoreConfig}`);
+    }
+
+    return warpCoreConfig;
 }
