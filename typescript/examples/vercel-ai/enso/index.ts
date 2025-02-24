@@ -15,12 +15,13 @@ import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
+const account = privateKeyToAccount(
+    process.env.WALLET_PRIVATE_KEY as `0x${string}`,
+);
 
 const walletClient = createWalletClient({
     account: account,
     transport: http(),
-    //chain: sepolia,
     chain: base,
 });
 (async () => {
@@ -37,10 +38,8 @@ const walletClient = createWalletClient({
     //    model: openai("gpt-4o-mini"),
     //    tools: tools,
     //    maxSteps: 5,
-    //    prompt: "Route 0.5 USDC to WETH",
+    //    prompt: "Route 0.5 0x833589fcd6edb6e08f4c7c32d4f71b54bda02913 (USDC) to 0x4200000000000000000000000000000000000006 (WETH)",
     //});
-    //
-    //console.log(result.text);
 
     const rl = readline.createInterface({
         input: process.stdin,
@@ -58,6 +57,8 @@ const walletClient = createWalletClient({
         }
 
         try {
+            // Prompt example:
+            // "Route 0.5 0x833589fcd6edb6e08f4c7c32d4f71b54bda02913 (USDC) to 0x4200000000000000000000000000000000000006 (WETH)"
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,

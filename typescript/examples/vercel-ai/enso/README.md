@@ -1,4 +1,4 @@
-# Vercel AI Allora Example
+# Vercel AI Enso Example
 
 ## Setup
 
