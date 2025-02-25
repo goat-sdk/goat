@@ -4,7 +4,7 @@ import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-sol
 import { type Connection, Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
-import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
+import { CrossmintWalletsAPI, DelegatedSignerResponse } from "./CrossmintWalletsAPI";
 
 export type SolanaSmartWalletOptions = {
     connection: Connection;
@@ -67,11 +67,11 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
 
     private async handleApprovals(
         transactionId: string,
-        pendingApprovals: {signer: string, message: string}[],
-        signers: Keypair[]
+        pendingApprovals: { signer: string; message: string }[],
+        signers: Keypair[],
     ) {
         try {
-            const submitApprovals = pendingApprovals.map(pendingApproval => {
+            const submitApprovals = pendingApprovals.map((pendingApproval) => {
                 const signer = signers.find((signer) => pendingApproval.signer.includes(signer.publicKey.toBase58()));
                 if (!signer) {
                     throw new Error(`Signer not found for approval: ${pendingApproval.signer}`);
@@ -83,7 +83,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
                     signer: `solana-keypair:${signer.publicKey.toBase58()}`,
                     signature: encodedSignature,
                 };
-            })
+            });
 
             await this.#api.approveTransaction(this.#locator, transactionId, submitApprovals);
         } catch (error) {
@@ -91,10 +91,10 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         }
     }
 
-    async sendTransaction({
-        instructions,
-        addressLookupTableAddresses = [],
-    }: SolanaTransaction, additionalSigners: Keypair[] = []): Promise<{ hash: string }> {
+    async sendTransaction(
+        { instructions, addressLookupTableAddresses = [] }: SolanaTransaction,
+        additionalSigners: Keypair[] = [],
+    ): Promise<{ hash: string }> {
         try {
             const publicKey = new PublicKey(this.#address);
             const message = new TransactionMessage({
@@ -141,7 +141,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         }
     }
 
-    async registerDelegatedSigner(signer: string): Promise<Record<string, any>> {
+    async registerDelegatedSigner(signer: string): Promise<DelegatedSignerResponse> {
         try {
             return await this.#api.registerDelegatedSigner(this.#locator, signer);
         } catch (error) {
@@ -149,7 +149,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         }
     }
 
-    async getDelegatedSigner(signerLocator: string): Promise<Record<string, any>> {
+    async getDelegatedSigner(signerLocator: string): Promise<DelegatedSignerResponse> {
         try {
             return await this.#api.getDelegatedSigner(this.#locator, signerLocator);
         } catch (error) {

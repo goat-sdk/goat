@@ -198,6 +198,24 @@ interface ApproveSignatureResponse {
 }
 
 ////////////////////////////////////////////////////////////////////
+// Register Delegated Signer
+////////////////////////////////////////////////////////////////////
+
+interface EVMDelegatedSignerResponse {
+    type: "evm-keypair" | "evm-fireblocks-custodial";
+    address: string;
+    locator: string;
+}
+
+interface SolanaDelegatedSignerResponse {
+    type: "solana-keypair" | "solana-fireblocks-custodial";
+    address: string;
+    locator: string;
+}
+
+export type DelegatedSignerResponse = EVMDelegatedSignerResponse | SolanaDelegatedSignerResponse;
+
+////////////////////////////////////////////////////////////////////
 // API
 ////////////////////////////////////////////////////////////////////
 
@@ -214,6 +232,7 @@ type APIResponse =
     | SignMessageResponse
     | SignTypedDataResponse
     | ApproveSignatureResponse
+    | DelegatedSignerResponse
     | ActionResponse;
 
 export class CrossmintWalletsAPI {
@@ -512,10 +531,7 @@ export class CrossmintWalletsAPI {
         throw new Error("Timed out waiting for action");
     }
 
-    public async registerDelegatedSigner(
-        walletLocator: string,
-        signer: string,
-    ): Promise<Record<string, any>> {
+    public async registerDelegatedSigner(walletLocator: string, signer: string): Promise<DelegatedSignerResponse> {
         const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers`;
         const payload = {
             signer,
@@ -527,10 +543,7 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async getDelegatedSigner(
-        walletLocator: string,
-        signer: string,
-    ): Promise<Record<string, any>> {
+    public async getDelegatedSigner(walletLocator: string, signer: string): Promise<DelegatedSignerResponse> {
         const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers/${encodeURIComponent(signer)}`;
         return this.request(endpoint, {
             method: "GET",
