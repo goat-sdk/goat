@@ -65,7 +65,11 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 
     abstract sendTransaction(transaction: SolanaTransaction, additionalSigners?: Keypair[]): Promise<{ hash: string }>;
 
-    abstract sendRawTransaction(transaction: string, signer?: Keypair, additionalSigners?: Keypair[]): Promise<{ hash: string }>;
+    abstract sendRawTransaction(
+        transaction: string,
+        signer?: Keypair,
+        additionalSigners?: Keypair[],
+    ): Promise<{ hash: string }>;
 
     protected async getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
         const addressLookupTableAccountInfos = await this.connection.getMultipleAccountsInfo(

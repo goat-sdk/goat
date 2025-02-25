@@ -4,7 +4,7 @@ import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-sol
 import { type Connection, Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
-import { CrossmintWalletsAPI, SolanaDelegatedSignerResponse } from "./CrossmintWalletsAPI";
+import { CrossmintWalletsAPI, SolanaDelegatedSignerResponse, TransactionStatusResponse } from "./CrossmintWalletsAPI";
 
 export type SolanaSmartWalletOptions = {
     connection: Connection;
@@ -94,11 +94,11 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
     private async handleTransactionFlow(
         transactionId: string,
         signers: Keypair[],
-        errorPrefix: string = "Transaction"
-    ): Promise<any> {
+        errorPrefix = "Transaction",
+    ): Promise<TransactionStatusResponse> {
         // Check initial transaction status
         let currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
-        
+
         // Handle approvals if needed
         if (currentTransaction.status === "awaiting-approval") {
             const pendingApprovals = currentTransaction.approvals?.pending;
@@ -106,26 +106,26 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
                 await this.handleApprovals(transactionId, pendingApprovals, signers);
             }
         }
-        
+
         // Wait for transaction success
         while (currentTransaction.status !== "success") {
             currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
-            
+
             if (currentTransaction.status === "failed") {
                 throw new Error(`${errorPrefix} failed: ${currentTransaction.error}`);
             }
-            
+
             if (currentTransaction.status === "awaiting-approval") {
                 throw new Error(`${errorPrefix} still awaiting approval after submission`);
             }
-            
+
             if (currentTransaction.status === "success") {
                 break;
             }
-            
+
             await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-        
+
         return currentTransaction;
     }
 
@@ -153,19 +153,23 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         }
     }
 
-    async sendRawTransaction(transaction: string, signer?: Keypair, additionalSigners: Keypair[] = []): Promise<{ hash: string }> {
+    async sendRawTransaction(
+        transaction: string,
+        signer?: Keypair,
+        additionalSigners: Keypair[] = [],
+    ): Promise<{ hash: string }> {
         try {
             const { id: transactionId } = await this.#api.createSolanaTransaction(this.#locator, transaction, signer);
-            
+
             // Prepare signers array
             const signers = [
                 ...(this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : []),
                 ...additionalSigners,
             ];
-            
+
             // Handle transaction flow
             const completedTransaction = await this.handleTransactionFlow(transactionId, signers);
-            
+
             return {
                 hash: completedTransaction.onChain?.txId ?? "",
             };
@@ -176,19 +180,22 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
 
     async registerDelegatedSigner(signer: string): Promise<SolanaDelegatedSignerResponse> {
         try {
-            const response = await this.#api.registerDelegatedSigner(this.#locator, signer) as SolanaDelegatedSignerResponse;
-            
+            const response = (await this.#api.registerDelegatedSigner(
+                this.#locator,
+                signer,
+            )) as SolanaDelegatedSignerResponse;
+
             // For Solana non-custodial delegated signers, we need to handle the transaction approval
-            if ('transaction' in response && response.transaction) {
+            if ("transaction" in response && response.transaction) {
                 const transactionId = response.transaction.id;
-                
+
                 // For delegated signer registration, only the admin signer is needed
                 const signers = this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : [];
-                
+
                 // Handle transaction flow
                 await this.handleTransactionFlow(transactionId, signers, "Delegated signer registration");
             }
-            
+
             return response;
         } catch (error) {
             throw new Error(`Failed to register delegated signer: ${error}`);
@@ -197,7 +204,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
 
     async getDelegatedSigner(signerLocator: string): Promise<SolanaDelegatedSignerResponse> {
         try {
-            return await this.#api.getDelegatedSigner(this.#locator, signerLocator) as SolanaDelegatedSignerResponse;
+            return (await this.#api.getDelegatedSigner(this.#locator, signerLocator)) as SolanaDelegatedSignerResponse;
         } catch (error) {
             throw new Error(`Failed to get delegated signer info: ${error}`);
         }

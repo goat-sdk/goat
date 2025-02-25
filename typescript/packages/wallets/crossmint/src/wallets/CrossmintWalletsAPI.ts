@@ -107,7 +107,7 @@ interface Call {
 ////////////////////////////////////////////////////////////////////
 // Transaction Status
 ////////////////////////////////////////////////////////////////////
-interface TransactionStatusResponse extends CreateTransactionResponse {
+export interface TransactionStatusResponse extends CreateTransactionResponse {
     hash?: string;
     error?: string;
     onChain?: {
@@ -263,7 +263,9 @@ interface SolanaNonCustodialDelegatedSignerResponse {
     };
 }
 
-export type SolanaDelegatedSignerResponse = SolanaCustodialDelegatedSignerResponse | SolanaNonCustodialDelegatedSignerResponse;
+export type SolanaDelegatedSignerResponse =
+    | SolanaCustodialDelegatedSignerResponse
+    | SolanaNonCustodialDelegatedSignerResponse;
 
 export type DelegatedSignerResponse = EVMDelegatedSignerResponse | SolanaDelegatedSignerResponse;
 
@@ -586,27 +588,30 @@ export class CrossmintWalletsAPI {
     }
 
     public async registerDelegatedSigner(
-        walletLocator: string, 
-        signer: string, 
+        walletLocator: string,
+        signer: string,
         chain?: string,
         expiresAt?: number,
-        permissions?: DelegatedSignerPermission[]
+        permissions?: DelegatedSignerPermission[],
     ): Promise<DelegatedSignerResponse> {
         const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers`;
-        const payload: Record<string, any> = {
+        const payload: Record<string, string | DelegatedSignerPermission[]> = {
             signer,
         };
 
         if (chain) {
             payload.chain = chain;
         }
-        
+
         if (expiresAt) {
             payload.expiresAt = expiresAt.toString();
         }
-        
+
         if (permissions && permissions.length > 0) {
-            payload.permissions = permissions;
+            payload.permissions = permissions.map((permission) => ({
+                type: permission.type,
+                value: permission.value,
+            }));
         }
 
         return this.request(endpoint, {
