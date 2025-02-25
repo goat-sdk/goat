@@ -1,27 +1,21 @@
-from typing import Dict, List, Optional, Any, cast, TypedDict, Union, Literal, NotRequired, Sequence
+from typing import Dict, List, Optional, Any, TypedDict, Union
 import base58
-import time
 import nacl.signing
 from goat_wallets.crossmint.base import UnsupportedOperationException
 from solders.instruction import Instruction
+from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 from solders.message import Message
 from solana.rpc.api import Client as SolanaClient
 from goat.classes.wallet_client_base import Balance, Signature
 from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
-from .parameters import SolanaSmartWalletTransactionParams, AdminSigner
+from .parameters import SolanaSmartWalletTransactionParams
 from .base_wallet import BaseWalletClient, get_locator
-from .types import (
-    LinkedUser, TransactionApproval, BaseKeypairSigner,
-    BaseFireblocksSigner, BaseWalletConfig, BaseWalletOptions
-)
+from .types import LinkedUser, SolanaFireblocksSigner, SolanaKeypairSigner
 
 
 # Type aliases for Solana-specific signers
-SolanaKeypairSigner = BaseKeypairSigner  # type with solana-keypair
-SolanaFireblocksSigner = BaseFireblocksSigner  # type with solana-fireblocks-custodial
-
 class SolanaSmartWalletConfig(TypedDict):
     """Configuration specific to Solana smart wallets."""
     adminSigner: Union[SolanaKeypairSigner, SolanaFireblocksSigner]
@@ -72,8 +66,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     def send_transaction(
         self,
         transaction: SolanaTransaction,
-        required_signers: Optional[List[str]] = None,
-        signer: Optional[str] = None
+        additional_signers: List[Keypair] = []
     ) -> Dict[str, str]:
         instructions = []
         for instruction in transaction["instructions"]:
@@ -91,7 +84,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         serialized = base58.b58encode(bytes(message)).decode()
 
-        return self.send_raw_transaction(serialized, required_signers, signer)
+        return self.send_raw_transaction(serialized, additional_signers)
 
     def balance_of(self, address: str) -> Balance:
         pubkey = Pubkey.from_string(address)
@@ -105,11 +98,11 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             name="Solana"
         )
 
-    def send_approvals(
+    def handle_approvals(
         self,
         transaction_id: str,
-        message: str,
-        signer_private_key: bytes
+        pending_approvals: List[Dict[str, str]],
+        signers: List[Keypair]
     ) -> None:
         """Send approval signatures for a pending transaction.
         
@@ -122,16 +115,21 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             ValueError: If signature generation or approval submission fails
         """
         try:
-            # Generate detached signature using nacl
-            signing_key = nacl.signing.SigningKey(signer_private_key)
-            signature = signing_key.sign(base58.b58decode(message)).signature
-            encoded_signature = base58.b58encode(signature).decode()
+            approvals = []
+            for pending_approval in pending_approvals:
+                signer = next(
+                    (s for s in signers if pending_approval["signer"] in base58.b58encode(bytes(s.pubkey())).decode()),
+                    None
+                )
+                if not signer:
+                    raise ValueError(f"Signer not found for approval: {pending_approval['signer']}")
+                signature = signer.sign_message(base58.b58decode(pending_approval["message"]))
+                encoded_signature = base58.b58encode(signature.to_bytes()).decode()
 
-            # Send approval with signature
-            approvals: List[Dict[str, str]] = [{
-                "signer": "solana-keypair:" + self.derive_address_from_secret_key(self._admin_signer["secretKey"]) if "secretKey" in self._admin_signer else "",
-                "signature": encoded_signature
-            }]
+                approvals.append({
+                    "signer": "solana-keypair:" + base58.b58encode(bytes(signer.pubkey())).decode(),
+                    "signature": encoded_signature
+                })
             
             self._client.approve_transaction(
                 self._locator,
@@ -144,13 +142,12 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     def send_raw_transaction(
         self,
         transaction: str,
+        additional_signers: List[Keypair] = [],
         required_signers: Optional[List[str]] = None,
-        signer: Optional[str] = None
     ) -> Dict[str, str]:
         params = SolanaSmartWalletTransactionParams(
             transaction=transaction,
             required_signers=required_signers,
-            signer=signer
         )
         try:
             response = self._client.create_transaction_for_smart_wallet(
@@ -158,55 +155,29 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
                 params
             )
             
-            while True:
-                status = self._client.check_transaction_status(
-                    self._locator,
-                    response["id"]
-                )
-                
-                if status["status"] == "success":
-                    return {
-                        "hash": status.get("onChain", {}).get("txId", "")
-                    }
-                
-                if status["status"] == "failed":
-                    error = status.get("error", {})
-                    message = error.get("message", "Unknown error")
-                    raise ValueError(f"Transaction failed: {message}")
-                
-                if status["status"] == "awaiting-approval":
-                    if required_signers:
-                        approvals: List[Dict[str, str]] = []
-                        for required_signer in required_signers:
-                            approvals.append({
-                                "signer": required_signer,
-                                "signature": ""
-                            })
-                        self._client.approve_transaction(
-                            self._locator,
-                            response["id"],
-                            approvals=approvals
-                        )
-                    elif "secretKey" in self._admin_signer:
-                        # If we have an admin signer with a keypair, we should send the approval
-                        message = status.get("approvals", {}).get("pending", [{}])[0].get("message")
-                        if message:
-                            self.send_approvals(
-                                response["id"],
-                                message,
-                                base58.b58decode(self._admin_signer["secretKey"])
-                            )
-                    else:
-                        approvals: List[Dict[str, str]] = [{"signer": signer or "", "signature": ""}]
-                        self._client.approve_transaction(
-                            self._locator,
-                            response["id"],
-                            approvals=approvals
-                        )
-                elif status["status"] not in ["pending"]:
-                    raise ValueError(f"Unexpected transaction status: {status['status']}")
-                    
-                time.sleep(3)
+            status = self._client.check_transaction_status(
+                self._locator,
+                response["id"]
+            )
+            
+            if status["status"] == "failed":
+                error = status.get("error", {})
+                message = error.get("message", "Unknown error")
+                raise ValueError(f"Transaction failed: {message}")
+            
+            if status["status"] == "awaiting-approval":
+                pending_approvals = status.get("approvals", {}).get("pending", [{}])
+                message = pending_approvals[0].get("message")
+                if message:
+                    self.handle_approvals(
+                        response["id"],
+                        pending_approvals,
+                        [self._admin_signer["keyPair"]] if self._admin_signer["type"] == "solana-keypair" else [] + additional_signers
+                    )
+
+            return {
+                "hash": status.get("onChain", {}).get("txId", "")
+            }
                 
         except Exception as e:
             raise ValueError(f"Failed to create or process transaction: {str(e)}")
@@ -220,7 +191,6 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         Args:
             signer: The locator of the delegated signer
             expires_at: Optional expiry date in milliseconds since UNIX epoch
-            permissions: Optional list of ERC-7715 permission objects
             
         Returns:
             Delegated signer registration response
