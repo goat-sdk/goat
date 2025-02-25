@@ -309,6 +309,7 @@ class CrossmintWalletsAPI:
         self,
         wallet_locator: str,
         transaction: str,
+        signer: Optional[str] = None,
         required_signers: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """Create a new Solana transaction.
@@ -327,6 +328,7 @@ class CrossmintWalletsAPI:
             "params": {
                 "transaction": transaction,
                 "requiredSigners": required_signers,
+                "signer": signer
             }
         }
         payload["params"] = {k: v for k, v in payload["params"].items() if v is not None}
@@ -359,6 +361,7 @@ class CrossmintWalletsAPI:
             return self.create_transaction(
                 wallet_address,
                 params.transaction,
+                params.signer,
                 params.required_signers,
             )
             

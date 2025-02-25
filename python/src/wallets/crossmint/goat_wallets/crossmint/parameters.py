@@ -92,6 +92,10 @@ class SolanaSmartWalletTransactionParams(BaseModelWithoutNone):
         None,
         description="Optional array of additional signers required for the transaction"
     )
+    signer: Optional[str] = Field(
+        None,
+        description="Optional signer locator"
+    )
 
 
 class EVMTypedData(BaseModel):

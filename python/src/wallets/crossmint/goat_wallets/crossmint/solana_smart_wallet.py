@@ -1,3 +1,4 @@
+from time import sleep
 from typing import Dict, List, Optional, Any, TypedDict, Union
 import base58
 import nacl.signing
@@ -84,7 +85,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         serialized = base58.b58encode(bytes(message)).decode()
 
-        return self.send_raw_transaction(serialized, additional_signers)
+        return self.send_raw_transaction(serialized, additional_signers, transaction["signer"])
 
     def balance_of(self, address: str) -> Balance:
         pubkey = Pubkey.from_string(address)
@@ -108,8 +109,8 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         Args:
             transaction_id: The ID of the transaction to approve
-            message: The message to sign (usually transaction data)
-            signer_private_key: The private key bytes of the signer
+            pending_approvals: The pending approvals
+            signers: The signers to approve the transaction
             
         Raises:
             ValueError: If signature generation or approval submission fails
@@ -139,44 +140,94 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         except Exception as e:
             raise ValueError(f"Failed to send transaction approval: {str(e)}")
 
+    def handle_transaction_flow(
+        self,
+        transaction_id: str,
+        signers: List[Keypair],
+        error_prefix: str = "Transaction"
+    ) -> Dict[str, Any]:
+        """Handle the transaction approval flow and monitor transaction status until completion.
+        
+        Args:
+            transaction_id: The ID of the transaction to monitor
+            signers: Array of keypairs that can be used for signing approvals
+            error_prefix: Prefix for error messages
+            
+        Returns:
+            The successful transaction data
+            
+        Raises:
+            ValueError: If the transaction fails or remains in awaiting-approval state
+        """
+        # Check initial transaction status
+        status = self._client.check_transaction_status(
+            self._locator,
+            transaction_id
+        )
+        
+        # Handle approvals if needed
+        if status["status"] == "awaiting-approval":
+            pending_approvals = status["approvals"]["pending"]
+            if pending_approvals:
+                self.handle_approvals(
+                    transaction_id,
+                    pending_approvals,
+                    signers
+                )
+        
+        # Wait for transaction success
+        while status["status"] != "success":
+            status = self._client.check_transaction_status(
+                self._locator,
+                transaction_id
+            )
+            
+            if status["status"] == "failed":
+                error = status.get("error", {})
+                raise ValueError(f"{error_prefix} failed: {error}")
+            
+            if status["status"] == "awaiting-approval":
+                raise ValueError(f"{error_prefix} still awaiting approval after submission")
+            
+            if status["status"] == "success":
+                break
+            
+            sleep(1)
+        
+        return status
+
     def send_raw_transaction(
         self,
         transaction: str,
         additional_signers: List[Keypair] = [],
+        signer: Optional[Keypair] = None,
         required_signers: Optional[List[str]] = None,
     ) -> Dict[str, str]:
         params = SolanaSmartWalletTransactionParams(
             transaction=transaction,
             required_signers=required_signers,
+            signer=f"solana-keypair:{base58.b58encode(bytes(signer.pubkey())).decode()}" if signer else None
         )
         try:
             response = self._client.create_transaction_for_smart_wallet(
                 self._address,
-                params
+                params,
             )
             
-            status = self._client.check_transaction_status(
-                self._locator,
-                response["id"]
+            # Prepare signers array
+            signers = []
+            if self._admin_signer["type"] == "solana-keypair":
+                signers.append(self._admin_signer["keyPair"])
+            signers.extend(additional_signers)
+            
+            # Handle transaction flow
+            completed_transaction = self.handle_transaction_flow(
+                response["id"],
+                signers
             )
             
-            if status["status"] == "failed":
-                error = status.get("error", {})
-                message = error.get("message", "Unknown error")
-                raise ValueError(f"Transaction failed: {message}")
-            
-            if status["status"] == "awaiting-approval":
-                pending_approvals = status.get("approvals", {}).get("pending", [{}])
-                message = pending_approvals[0].get("message")
-                if message:
-                    self.handle_approvals(
-                        response["id"],
-                        pending_approvals,
-                        [self._admin_signer["keyPair"]] if self._admin_signer["type"] == "solana-keypair" else [] + additional_signers
-                    )
-
             return {
-                "hash": status.get("onChain", {}).get("txId", "")
+                "hash": completed_transaction.get("onChain", {}).get("txId", "")
             }
                 
         except Exception as e:
@@ -195,10 +246,31 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         Returns:
             Delegated signer registration response
         """
-        return self._client.register_delegated_signer(
-            self._locator,
-            signer,
-        )
+        try:
+            response = self._client.register_delegated_signer(
+                self._locator,
+                signer,
+            )
+            
+            # For Solana non-custodial delegated signers, we need to handle the transaction approval
+            if 'transaction' in response and response['transaction']:
+                transaction_id = response['transaction']['id']
+                
+                # For delegated signer registration, only the admin signer is needed
+                signers = []
+                if self._admin_signer["type"] == "solana-keypair":
+                    signers.append(self._admin_signer["keyPair"])
+                
+                # Handle transaction flow
+                self.handle_transaction_flow(
+                    transaction_id,
+                    signers,
+                    "Delegated signer registration"
+                )
+            
+            return response
+        except Exception as e:
+            raise ValueError(f"Failed to register delegated signer: {str(e)}")
     
     def get_delegated_signer(self, signer_locator: str) -> Dict[str, Any]:
         """Get information about a delegated signer.

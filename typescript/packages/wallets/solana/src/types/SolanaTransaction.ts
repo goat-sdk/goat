@@ -6,4 +6,5 @@ export type SolanaInstructionTransaction = {
     instructions: TransactionInstruction[];
     addressLookupTableAddresses?: string[];
     accountsToSign?: Keypair[];
+    signer?: Keypair;
 };
