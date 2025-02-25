@@ -2,6 +2,7 @@ import { WalletClientBase } from "@goat-sdk/core";
 import {
     AddressLookupTableAccount,
     type Connection,
+    Keypair,
     PublicKey,
     TransactionMessage,
     type VersionedTransaction,
@@ -62,9 +63,9 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         return TransactionMessage.decompile(versionedTransaction.message, decompileArgs).instructions;
     }
 
-    abstract sendTransaction(transaction: SolanaTransaction): Promise<{ hash: string }>;
+    abstract sendTransaction(transaction: SolanaTransaction, additionalSigners?: Keypair[]): Promise<{ hash: string }>;
 
-    abstract sendRawTransaction(transaction: string): Promise<{ hash: string }>;
+    abstract sendRawTransaction(transaction: string, additionalSigners?: Keypair[]): Promise<{ hash: string }>;
 
     protected async getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
         const addressLookupTableAccountInfos = await this.connection.getMultipleAccountsInfo(
