@@ -1,6 +1,47 @@
 import { createToolParameters } from "@goat-sdk/core";
 import { z } from "zod";
 
+const TokenSchema = z.object({
+    chainName: z.string(),
+    standard: z.string(),
+    decimals: z.number(),
+    symbol: z.string(),
+    name: z.string(),
+    addressOrDenom: z.string(),
+    connections: z.array(
+        z.object({
+            token: z.string(),
+        }),
+    ),
+});
+
+const WarpCoreConfigSchema = z.object({
+    tokens: z.array(TokenSchema),
+});
+
+export class HyperlaneSendTestTransferParameters extends createToolParameters(
+    z.object({
+        warpConfig: WarpCoreConfigSchema,
+        destination: z.string().describe("Destination chain name"),
+        origin: z.string().describe("Origin chain name"),
+        amount: z.string().describe("Amount to transfer"),
+        recipient: z.string().describe("Recipient address"),
+    }),
+) {}
+
+export class HyperlaneListWarpRoutesParameters extends createToolParameters(
+    z.object({
+        symbol: z.string().describe("Token symbol to search for"),
+    }),
+) {}
+
+export class HyperlaneReadWarpRouteParameters extends createToolParameters(
+    z.object({
+        warp: z.string().describe("warp Route"),
+        symbol: z.string().describe("Token symbol to search for"),
+    }),
+) {}
+
 export class HyperlaneDeployParameters extends createToolParameters(
     z.object({
         origin: z.string().min(1).describe("Origin chain name (e.g. baseSepolia, arbitrumSepolia)"),

@@ -4,6 +4,7 @@ import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
     CoreConfig,
+    DispatchedMessage,
     HookType,
     HypERC20Deployer,
     HyperlaneContractsMap,
@@ -11,10 +12,14 @@ import {
     HyperlaneCoreDeployer,
     HyperlaneIsmFactory,
     IsmType,
+    MultiProtocolProvider,
     MultiProvider,
+    ProviderType,
     TOKEN_TYPE_TO_STANDARD,
+    TokenAmount,
     TokenFactories,
     TokenType,
+    WarpCore,
     WarpCoreConfig,
     WarpRouteDeployConfig,
     WarpRouteDeployConfigSchema,
@@ -23,8 +28,10 @@ import {
     isTokenMetadata,
 } from "@hyperlane-xyz/sdk";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
+import { parseWarpRouteMessage } from "@hyperlane-xyz/utils";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
+import * as dotenv from "dotenv";
 import { ethers } from "ethers";
 import {
     HyperlaneAnnounceValidatorParameters,
@@ -35,15 +42,16 @@ import {
     HyperlaneGetMailboxParameters,
     HyperlaneGetTokenParameters,
     HyperlaneIsmParameters,
+    HyperlaneListWarpRoutesParameters,
     HyperlaneReadMessageParameters,
+    HyperlaneReadWarpRouteParameters,
     HyperlaneRelayerConfigParameters,
     HyperlaneRelayerMonitorParameters,
     HyperlaneSecurityMonitorParameters,
     HyperlaneSendMessageParameters,
+    HyperlaneSendTestTransferParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
-
-import * as dotenv from "dotenv";
 dotenv.config();
 
 const REGISTRY_URL = "https://github.com/hyperlane-xyz/hyperlane-registry";
@@ -94,8 +102,7 @@ export class HyperlaneService {
 
         const warpDeployConfig: WarpRouteDeployConfig = {
             [origin]: {
-                type: TokenType.collateral,
-                token,
+                type: TokenType.native,
                 owner,
                 mailbox: chainAddresses[origin].mailbox,
             },
@@ -112,9 +119,9 @@ export class HyperlaneService {
         const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
         const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
 
-        return JSON.stringify(
+        const response = JSON.stringify(
             {
-                message: "Warp bridge deployed successfully",
+                message: `Warp bridge deployed successfully. Here is the config: ${JSON.stringify(warpCoreConfig, null, 2)}`,
                 contracts: {
                     origin: warpCoreConfig.tokens.find((t) => t.chainName === origin),
                     destination: warpCoreConfig.tokens.find((t) => t.chainName === destination),
@@ -124,6 +131,162 @@ export class HyperlaneService {
             null,
             2,
         );
+
+        console.log(response);
+
+        return response;
+    }
+
+    @Tool({
+        name: "hyperlane_list_warp_routes",
+        description: "List all available Warp routes",
+    })
+    async listWarpRoutes(walletClient: EVMWalletClient, parameters: HyperlaneListWarpRoutesParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { registry } = await getMultiProvider(wallet);
+
+        const { symbol } = parameters;
+
+        const routes = await listRegistryWarpRoutes(registry, symbol);
+
+        return JSON.stringify(
+            {
+                message: `Select one of the following: ${routes}`,
+            },
+            null,
+            2,
+        );
+    }
+
+    @Tool({
+        name: "hyperlane_read_warp_route",
+        description: "Get config for warp route",
+    })
+    async readWarpRoute(walletClient: EVMWalletClient, parameters: HyperlaneReadWarpRouteParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { registry } = await getMultiProvider(wallet);
+
+        const { warp, symbol } = parameters;
+
+        const warpRouteConfig = await getWarpCoreConfigOrExit({
+            registry,
+            symbol,
+            warp,
+        });
+
+        return JSON.stringify(
+            {
+                message: `The warp route config is ${warpRouteConfig}`,
+            },
+            null,
+            2,
+        );
+    }
+
+    @Tool({
+        name: "hyperlane_send_test_transfer",
+        description: "Send assets from one chain to another using Hyperlane",
+    })
+    async sendTestTransfer(walletClient: EVMWalletClient, parameters: HyperlaneSendTestTransferParameters) {
+        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+
+        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
+        const { multiProvider, registry } = await getMultiProvider(wallet);
+
+        let { warpConfig, destination, amount, recipient, origin } = parameters;
+
+        const parsedAmount = ethers.utils.parseUnits(amount, 18);
+
+        try {
+            const signer = multiProvider.getSigner(origin);
+            const recipientSigner = multiProvider.getSigner(destination);
+
+            const recipientAddress = await recipientSigner.getAddress();
+            const signerAddress = await signer.getAddress();
+
+            recipient ||= recipientAddress;
+
+            const chainAddresses = await registry.getAddresses();
+
+            const core = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
+
+            const provider = multiProvider.getProvider(origin);
+            const connectedSigner = signer.connect(provider);
+
+            const warpCore = WarpCore.FromConfig(MultiProtocolProvider.fromMultiProvider(multiProvider), warpConfig);
+
+            const tokensForRoute = warpCore.getTokensForRoute(origin, destination);
+            if (tokensForRoute.length === 0) {
+                console.log(`No Warp Routes found from ${origin} to ${destination}`);
+                throw new Error("Error finding warp route");
+            }
+            // Take first
+            const token = tokensForRoute[0];
+
+            const errors = await warpCore.validateTransfer({
+                originTokenAmount: token.amount(parsedAmount.toString()),
+                destination,
+                recipient,
+                sender: signerAddress,
+            });
+            if (errors) {
+                console.log(errors);
+                console.log("Error validating transfer", JSON.stringify(errors));
+                throw new Error("Error validating transfer");
+            }
+
+            const transferTxs = await warpCore.getTransferRemoteTxs({
+                originTokenAmount: new TokenAmount(parsedAmount.toString(), token),
+                destination,
+                sender: signerAddress,
+                recipient,
+            });
+
+            const txReceipts = [];
+            for (const tx of transferTxs) {
+                if (tx.type === ProviderType.EthersV5) {
+                    const txResponse = await connectedSigner.sendTransaction(tx.transaction);
+                    const txReceipt = await multiProvider.handleTx(origin, txResponse);
+                    txReceipts.push(txReceipt);
+                }
+            }
+            const transferTxReceipt = txReceipts[txReceipts.length - 1];
+            const messageIndex: number = 0;
+            const message: DispatchedMessage = HyperlaneCore.getDispatchedMessages(transferTxReceipt)[messageIndex];
+
+            const parsed = parseWarpRouteMessage(message.parsed.body);
+
+            console.log(
+                `Sent transfer from sender (${signerAddress}) on ${origin} to recipient (${recipient}) on ${destination}.`,
+            );
+            console.log(`Message ID: ${message.id}`);
+
+            // Max wait 10 minutes
+            await core.waitForMessageProcessed(transferTxReceipt, 10000, 60);
+            console.log(`Transfer sent to ${destination} chain!`);
+
+            return JSON.stringify(
+                {
+                    message: `Sent ${amount} to ${recipient}!`,
+                },
+                null,
+                2,
+            );
+        } catch (error) {
+            console.error("Error details:", error);
+            return JSON.stringify(
+                {
+                    message: "Failed to send message",
+                    error: error instanceof Error ? error.message : String(error),
+                },
+                null,
+                2,
+            );
+        }
     }
 
     @Tool({
@@ -144,11 +307,13 @@ export class HyperlaneService {
             const hyperlane = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
 
             // Send the message using the SDK
+            const messageBytes = ethers.utils.toUtf8Bytes(message);
+            const messageHex = ethers.utils.hexlify(messageBytes);
             const { dispatchTx, message: dispatchedMessage } = await hyperlane.sendMessage(
                 originChain,
                 destinationChain,
                 destinationAddress,
-                message,
+                messageHex,
             );
 
             // Wait for message to be indexed
@@ -1183,25 +1348,6 @@ async function getMultiProvider(signer?: ethers.Signer) {
     return { multiProvider, registry };
 }
 
-async function getWarpCoreConfig(
-    multiProvider: MultiProvider,
-    warpDeployConfig: WarpRouteDeployConfig,
-    contracts: HyperlaneContractsMap<TokenFactories>,
-): Promise<WarpCoreConfig> {
-    const warpCoreConfig: WarpCoreConfig = { tokens: [] };
-
-    const tokenMetadata = await HypERC20Deployer.deriveTokenMetadata(multiProvider, warpDeployConfig);
-    assert(tokenMetadata && isTokenMetadata(tokenMetadata), "Missing required token metadata");
-    const { decimals, symbol, name } = tokenMetadata;
-    assert(decimals, "Missing decimals on token metadata");
-
-    generateTokenConfigs(warpCoreConfig, warpDeployConfig, contracts, symbol, name, decimals);
-
-    fullyConnectTokens(warpCoreConfig);
-
-    return warpCoreConfig;
-}
-
 function generateTokenConfigs(
     warpCoreConfig: WarpCoreConfig,
     warpDeployConfig: WarpRouteDeployConfig,
@@ -1242,4 +1388,73 @@ function fullyConnectTokens(warpCoreConfig: WarpCoreConfig): void {
             });
         }
     }
+}
+
+async function getWarpCoreConfig(
+    multiProvider: MultiProvider,
+    warpDeployConfig: WarpRouteDeployConfig,
+    contracts: HyperlaneContractsMap<TokenFactories>,
+): Promise<WarpCoreConfig> {
+    const warpCoreConfig: WarpCoreConfig = { tokens: [] };
+
+    const tokenMetadata = await HypERC20Deployer.deriveTokenMetadata(multiProvider, warpDeployConfig);
+    assert(tokenMetadata && isTokenMetadata(tokenMetadata), "Missing required token metadata");
+    const { decimals, symbol, name } = tokenMetadata;
+    assert(decimals, "Missing decimals on token metadata");
+
+    generateTokenConfigs(warpCoreConfig, warpDeployConfig, contracts, symbol, name, decimals);
+
+    fullyConnectTokens(warpCoreConfig);
+
+    return warpCoreConfig;
+}
+
+async function listRegistryWarpRoutes(registry: GithubRegistry, symbol: string): Promise<[string, unknown][]> {
+    const matching = await registry.getWarpRoutes({
+        symbol,
+    });
+    const routes = Object.entries(matching);
+
+    if (routes.length === 0) {
+        console.log(`No warp routes found for symbol ${symbol}`);
+        process.exit(0);
+    }
+
+    return routes;
+}
+
+async function getWarpCoreConfigOrExit({
+    registry,
+    symbol,
+    warp,
+}: {
+    registry: GithubRegistry;
+    symbol: string;
+    warp: string;
+}): Promise<WarpCoreConfig> {
+    return await selectRegistryWarpRoute(registry, symbol, warp);
+}
+
+async function selectRegistryWarpRoute(
+    registry: GithubRegistry,
+    symbol: string,
+    warp: string,
+): Promise<WarpCoreConfig> {
+    const matching = await registry.getWarpRoutes({
+        symbol,
+    });
+    const routes = Object.entries(matching);
+
+    let warpCoreConfig: WarpCoreConfig;
+    if (routes.length === 0) {
+        console.log(`No warp routes found for symbol ${symbol}`);
+        process.exit(0);
+    } else {
+        console.log(`Multiple warp routes found for symbol ${symbol}`);
+        const chosenRouteId = warp;
+        warpCoreConfig = matching[chosenRouteId];
+        console.log(`warpCoreConfig: ${warpCoreConfig}`);
+    }
+
+    return warpCoreConfig;
 }
