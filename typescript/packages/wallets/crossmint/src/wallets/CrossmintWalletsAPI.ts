@@ -511,4 +511,29 @@ export class CrossmintWalletsAPI {
 
         throw new Error("Timed out waiting for action");
     }
+
+    public async registerDelegatedSigner(
+        walletLocator: string,
+        signer: string,
+    ): Promise<Record<string, any>> {
+        const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers`;
+        const payload = {
+            signer,
+        };
+
+        return this.request(endpoint, {
+            method: "POST",
+            body: JSON.stringify(payload),
+        });
+    }
+
+    public async getDelegatedSigner(
+        walletLocator: string,
+        signer: string,
+    ): Promise<Record<string, any>> {
+        const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers/${encodeURIComponent(signer)}`;
+        return this.request(endpoint, {
+            method: "GET",
+        });
+    }
 }

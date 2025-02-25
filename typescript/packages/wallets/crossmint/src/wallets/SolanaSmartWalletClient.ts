@@ -140,6 +140,22 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
             throw new Error(`Failed to send raw transaction: ${error}`);
         }
     }
+
+    async registerDelegatedSigner(signer: string): Promise<Record<string, any>> {
+        try {
+            return await this.#api.registerDelegatedSigner(this.#locator, signer);
+        } catch (error) {
+            throw new Error(`Failed to register delegated signer: ${error}`);
+        }
+    }
+
+    async getDelegatedSigner(signerLocator: string): Promise<Record<string, any>> {
+        try {
+            return await this.#api.getDelegatedSigner(this.#locator, signerLocator);
+        } catch (error) {
+            throw new Error(`Failed to get delegated signer info: ${error}`);
+        }
+    }
 }
 
 export function solanaSmartWalletFactory(crossmintClient: CrossmintApiClient) {
