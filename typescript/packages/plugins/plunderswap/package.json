@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-plunderswap",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-coingecko
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [d7ecfe6]
+  - @goat-sdk/wallet-viem@0.2.9
+
 ## 0.2.3
 
 ### Patch Changes

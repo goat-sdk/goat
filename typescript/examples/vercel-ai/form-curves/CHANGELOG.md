@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-form-curves
 
+## 0.2.16
+
+### Patch Changes
+
+- Updated dependencies [d7ecfe6]
+  - @goat-sdk/wallet-viem@0.2.9
+
 ## 0.2.15
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-viem
 
+## 0.2.9
+
+### Patch Changes
+
+- d7ecfe6: Upgrade viem and add story protocol
+
 ## 0.2.8
 
 ### Patch Changes

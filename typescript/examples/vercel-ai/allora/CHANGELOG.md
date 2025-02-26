@@ -1,5 +1,12 @@
 # goat-examples-vercel-ai-allora
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies [d7ecfe6]
+  - @goat-sdk/wallet-viem@0.2.9
+
 ## 0.1.8
 
 ### Patch Changes

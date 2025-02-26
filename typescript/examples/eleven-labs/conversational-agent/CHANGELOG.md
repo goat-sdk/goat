@@ -1,5 +1,12 @@
 # conversational-agent
 
+## 0.2.17
+
+### Patch Changes
+
+- Updated dependencies [d7ecfe6]
+  - @goat-sdk/wallet-viem@0.2.9
+
 ## 0.2.16
 
 ### Patch Changes

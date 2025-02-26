@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.3.18
+
+### Patch Changes
+
+- d7ecfe6: Upgrade viem and add story protocol
+
 ## 0.3.17
 
 ### Patch Changes
