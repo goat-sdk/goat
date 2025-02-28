@@ -1,11 +1,5 @@
 # @goat-sdk/crossmint
 
-## 0.4.0
-
-### Minor Changes
-
-- 10e1fc7: Exposed solana smart wallet function
-
 ## 0.3.18
 
 ### Patch Changes
