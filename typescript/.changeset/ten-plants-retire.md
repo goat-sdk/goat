@@ -1,5 +1,5 @@
 ---
-"@goat-sdk/crossmint": patch
+"@goat-sdk/crossmint": minor
 ---
 
 Exposed solana smart wallet function
