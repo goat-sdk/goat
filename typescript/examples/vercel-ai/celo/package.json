@@ -1,0 +1,23 @@
+{
+    "name": "goat-examples-vercel-ai-celo",
+    "version": "0.2.14",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests",
+        "start": "node dist/index.js",
+        "dev": "ts-node index.ts"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "workspace:*",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-celo": "workspace:*",
+        "@goat-sdk/wallet-viem": "workspace:*",
+        "ai": "catalog:",
+        "dotenv": "^16.4.5",
+        "viem": "2.21.49"
+    }
+}
