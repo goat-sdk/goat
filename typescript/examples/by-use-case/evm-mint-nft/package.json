@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-evm-mint-nft",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "",
     "private": true,
     "scripts": {
@@ -12,7 +12,7 @@
         "@ai-sdk/openai": "~1.0.4",
         "@goat-sdk/adapter-vercel-ai": "0.2.8",
         "@goat-sdk/core": "0.4.7",
-        "@goat-sdk/crossmint": "0.3.18",
+        "@goat-sdk/crossmint": "0.4.0",
         "@goat-sdk/wallet-evm": "0.2.8",
         "@goat-sdk/wallet-viem": "0.2.9",
         "ai": "4.0.3",
