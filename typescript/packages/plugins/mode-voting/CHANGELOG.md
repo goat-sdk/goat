@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-mode-voting
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+
 ## 0.1.3
 
 ### Patch Changes

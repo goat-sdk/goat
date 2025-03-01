@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-plunderswap
 
+## 1.1.2
+
+### Patch Changes
+
+- @goat-sdk/wallet-zilliqa@0.3.2
+
 ## 1.1.1
 
 ### Patch Changes

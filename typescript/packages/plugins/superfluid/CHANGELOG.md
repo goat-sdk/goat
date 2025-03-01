@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-superfluid
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+
 ## 0.1.7
 
 ### Patch Changes

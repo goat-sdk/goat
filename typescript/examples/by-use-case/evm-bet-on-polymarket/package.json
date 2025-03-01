@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-evm-bet-on-polymarket",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "",
     "private": true,
     "scripts": {
@@ -15,8 +15,8 @@
         "@ai-sdk/openai": "~1.0.11",
         "@goat-sdk/adapter-vercel-ai": "0.2.8",
         "@goat-sdk/core": "0.4.7",
-        "@goat-sdk/plugin-polymarket": "0.3.10",
-        "@goat-sdk/wallet-viem": "0.2.9",
+        "@goat-sdk/plugin-polymarket": "0.3.11",
+        "@goat-sdk/wallet-viem": "0.2.10",
         "ai": "4.0.22",
         "dotenv": "^16.4.5",
         "viem": "2.23.4",

@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-0x
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+
 ## 0.1.5
 
 ### Patch Changes
