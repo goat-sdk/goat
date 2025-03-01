@@ -177,6 +177,59 @@ export * from "./parameters";
 `;
 }
 
+// Create README.md content
+function createReadmeContent(options: PluginOptions): string {
+    const { name } = options;
+    const className = kebabToPascalCase(name);
+    const functionName = name.replace(/-/g, "");
+
+    return `<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# ${className} GOAT Plugin
+
+Brief description of the ${className} plugin and what it does
+
+## Installation
+\`\`\`bash
+npm install @goat-sdk/plugin-${name}
+yarn add @goat-sdk/plugin-${name}
+pnpm add @goat-sdk/plugin-${name}
+\`\`\`
+
+## Usage
+\`\`\`typescript
+import { ${functionName} } from '@goat-sdk/plugin-${name}';
+
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+       ${functionName}()
+    ]
+});
+\`\`\`
+
+## Tools
+* Tool 1
+* Tool 2
+* Tool 3
+
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>
+`;
+}
+
 // Create all necessary files for the plugin
 async function createPlugin(options: PluginOptions): Promise<void> {
     const { name } = options;
@@ -214,6 +267,11 @@ async function createPlugin(options: PluginOptions): Promise<void> {
     fs.writeFileSync(packageJsonPath, createPackageJson(options));
     console.log("✓ Created package.json");
 
+    // Create README.md
+    const readmePath = path.join(pluginDir, "README.md");
+    fs.writeFileSync(readmePath, createReadmeContent(options));
+    console.log("✓ Created README.md");
+
     // Create source files
     const sourceFiles = {
         "parameters.ts": createParametersContent(),
@@ -234,6 +292,7 @@ async function createPlugin(options: PluginOptions): Promise<void> {
         path.join(pluginDir, "tsconfig.json"),
         path.join(pluginDir, "tsup.config.ts"),
         path.join(pluginDir, "turbo.json"),
+        readmePath,
         ...Object.keys(sourceFiles).map((file) => path.join(srcDir, file)),
     ];
 
