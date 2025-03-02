@@ -4,7 +4,6 @@ on:
     push:
         branches:
             - main
-            - test-python-ci-cd
         paths:
             - 'python/**'
 
