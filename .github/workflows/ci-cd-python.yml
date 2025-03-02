@@ -20,12 +20,10 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Setup Python, Poetry, and install dependencies
+            - name: Setup Python, Poetry, and install dependencies from monorepo to check for conflicts
               uses: ./.github/actions/poetry-install
-
-            - name: Install dependencies for all sub-packages to check for conflicts
-              working-directory: ./python
-              run: poetry install --no-root
+              with:
+                  install-args: --no-root
 
     release-packages:
         name: Release Python Packages
@@ -37,8 +35,10 @@ jobs:
               with:
                   fetch-depth: 0
 
-            - name: Setup Python, Poetry, and install dependencies
+            - name: Setup Python, Poetry, and install dependencies from monorepo to check for conflicts
               uses: ./.github/actions/poetry-install
+              with:
+                  install-args: --no-root
 
             - name: Configure PyPI token
               run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}

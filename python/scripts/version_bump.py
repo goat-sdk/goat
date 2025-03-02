@@ -116,9 +116,9 @@ def update_monorepo_dependencies(packages: List[Path]) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="Bump versions of Python packages")
-    parser.add_argument("--package", help="Package name to bump (or 'all' for all packages)")
+    parser.add_argument("--package", help="Package name to bump (or 'all' for all packages, defaults to all packages)")
     parser.add_argument("--type", type=BumpType, choices=list(BumpType), default=BumpType.PATCH,
-                        help="Type of version bump (patch, minor, major)")
+                        help="Type of version bump (patch, minor, major, defaults to patch)")
     
     args = parser.parse_args()
     
