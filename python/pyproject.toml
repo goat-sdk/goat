@@ -57,3 +57,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+tomli = "^2.0.1"
+tomli-w = "^1.0.0"
