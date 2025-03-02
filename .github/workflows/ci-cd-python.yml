@@ -74,10 +74,10 @@ jobs:
               run: |
                 for pkg_dir in ${{ steps.find-changes.outputs.packages_to_publish }}; do
                   echo "Publishing package in $pkg_dir"
-                  cd $pkg_dir
+                  pushd $pkg_dir
                   poetry build
                   poetry publish --no-interaction
-                  cd ../../../
+                  popd
                 done
               env:
                 POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }} 
