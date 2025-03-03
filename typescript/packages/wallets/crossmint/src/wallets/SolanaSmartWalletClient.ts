@@ -1,10 +1,10 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Signature } from "@goat-sdk/core";
 import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { type Connection, Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
-import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
+import { CreateTransactionResponse, CrossmintWalletsAPI, SolanaDelegatedSignerResponse } from "./CrossmintWalletsAPI";
 
 export type SolanaSmartWalletOptions = {
     connection: Connection;
@@ -12,7 +12,7 @@ export type SolanaSmartWalletOptions = {
         adminSigner:
             | {
                   type: "solana-keypair";
-                  secretKey: string;
+                  keypair: Keypair;
               }
             | {
                   type: "solana-fireblocks-custodial";
@@ -57,40 +57,6 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         this.#locator = getLocator(options.address, options.linkedUser);
     }
 
-    private static deriveAddressFromSecretKey(secretKey: string): string {
-        try {
-            const decoded = bs58.decode(secretKey);
-            const keyPair = nacl.sign.keyPair.fromSecretKey(decoded);
-            return bs58.encode(Buffer.from(keyPair.publicKey));
-        } catch (error) {
-            throw new Error(`Invalid secret key: ${error}`);
-        }
-    }
-
-    private async sendApprovals(transactionId: string, message: string, signerPrivateKey: Uint8Array): Promise<void> {
-        try {
-            const signature = nacl.sign.detached(bs58.decode(message), signerPrivateKey);
-            const encodedSignature = bs58.encode(signature);
-
-            const signerStr =
-                this.#adminSigner.type === "solana-keypair"
-                    ? `solana-keypair:${SolanaSmartWalletClient.deriveAddressFromSecretKey(this.#adminSigner.secretKey)}`
-                    : "";
-
-            // Send approval with signature
-            const approvals = [
-                {
-                    signer: signerStr,
-                    signature: encodedSignature,
-                },
-            ];
-
-            await this.#api.approveTransaction(this.#locator, transactionId, approvals);
-        } catch (error) {
-            throw new Error(`Failed to send transaction approval: ${error}`);
-        }
-    }
-
     getAddress() {
         return this.#address;
     }
@@ -99,10 +65,76 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         throw new Error("Signing not supported for smart wallets");
     }
 
-    async sendTransaction({
-        instructions,
-        addressLookupTableAddresses = [],
-    }: SolanaTransaction): Promise<{ hash: string }> {
+    private async handleApprovals(
+        transactionId: string,
+        pendingApprovals: { signer: string; message: string }[],
+        signers: Keypair[],
+    ) {
+        try {
+            const submitApprovals = pendingApprovals.map((pendingApproval) => {
+                const signer = signers.find((signer) => pendingApproval.signer.includes(signer.publicKey.toBase58()));
+                if (!signer) {
+                    throw new Error(`Signer not found for approval: ${pendingApproval.signer}`);
+                }
+                const signature = nacl.sign.detached(bs58.decode(pendingApproval.message), signer.secretKey);
+                const encodedSignature = bs58.encode(signature);
+
+                return {
+                    signer: `solana-keypair:${signer.publicKey.toBase58()}`,
+                    signature: encodedSignature,
+                };
+            });
+
+            await this.#api.approveTransaction(this.#locator, transactionId, submitApprovals);
+        } catch (error) {
+            throw new Error(`Failed to send transaction approvals: ${error}`);
+        }
+    }
+
+    private async handleTransactionFlow(
+        transactionId: string,
+        signers: Keypair[],
+        errorPrefix = "Transaction",
+    ): Promise<CreateTransactionResponse> {
+        // Check initial transaction status
+        let currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
+
+        // Handle approvals if needed
+        if (currentTransaction.status === "awaiting-approval") {
+            const pendingApprovals = currentTransaction.approvals?.pending;
+            if (pendingApprovals && pendingApprovals.length > 0) {
+                await this.handleApprovals(transactionId, pendingApprovals, signers);
+            }
+        }
+
+        // Wait for transaction success
+        while (currentTransaction.status !== "success") {
+            currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
+
+            if (currentTransaction.status === "failed") {
+                throw new Error(
+                    `${errorPrefix} failed: ${currentTransaction.error?.reason}, ${currentTransaction.error?.message}`,
+                );
+            }
+
+            if (currentTransaction.status === "awaiting-approval") {
+                throw new Error(`${errorPrefix} still awaiting approval after submission`);
+            }
+
+            if (currentTransaction.status === "success") {
+                break;
+            }
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+
+        return currentTransaction;
+    }
+
+    async sendTransaction(
+        { instructions, signer, addressLookupTableAddresses = [] }: SolanaTransaction,
+        additionalSigners: Keypair[] = [],
+    ): Promise<{ hash: string }> {
         try {
             const publicKey = new PublicKey(this.#address);
             const message = new TransactionMessage({
@@ -115,7 +147,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
             const serializedVersionedTransaction = transaction.serialize();
             const encodedVersionedTransaction = bs58.encode(serializedVersionedTransaction);
 
-            const hash = await this.sendRawTransaction(encodedVersionedTransaction);
+            const hash = await this.sendRawTransaction(encodedVersionedTransaction, signer, additionalSigners);
 
             return hash;
         } catch (error) {
@@ -123,31 +155,64 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         }
     }
 
-    async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+    async sendRawTransaction(
+        transaction: string,
+        signer?: Keypair,
+        additionalSigners: Keypair[] = [],
+    ): Promise<{ hash: string }> {
         try {
-            const { id: transactionId } = await this.#api.createSolanaTransaction(this.#locator, transaction);
-            while (true) {
-                const latestTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
-                if (latestTransaction.status === "success") {
-                    return {
-                        hash: latestTransaction.onChain?.txId ?? "",
-                    };
-                }
-                if (latestTransaction.status === "failed") {
-                    throw new Error(`Transaction failed: ${latestTransaction.error}`);
-                }
-                if (latestTransaction.status === "awaiting-approval") {
-                    if (this.#adminSigner.type === "solana-keypair") {
-                        const message = latestTransaction.approvals?.pending?.[0]?.message;
-                        if (message) {
-                            await this.sendApprovals(transactionId, message, bs58.decode(this.#adminSigner.secretKey));
-                        }
-                    }
-                }
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-            }
+            const { id: transactionId } = await this.#api.createSolanaTransaction(this.#locator, transaction, signer);
+
+            // Prepare signers array
+            const signers = [
+                // Only include adminSigner if no custom signer is provided and it's a non-custodial signer
+                ...(signer ? [signer] : this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : []),
+                ...additionalSigners,
+            ];
+
+            // Handle transaction flow
+            const completedTransaction = await this.handleTransactionFlow(transactionId, signers);
+
+            return {
+                hash: completedTransaction.onChain?.txId ?? "",
+            };
         } catch (error) {
             throw new Error(`Failed to send raw transaction: ${error}`);
+        }
+    }
+
+    async registerDelegatedSigner(signer: string): Promise<SolanaDelegatedSignerResponse> {
+        try {
+            const response = (await this.#api.registerDelegatedSigner(
+                this.#locator,
+                signer,
+            )) as SolanaDelegatedSignerResponse;
+
+            if (!("transaction" in response) || !response.transaction) {
+                throw new Error(
+                    `Expected transaction in response for non-custodial delegated signer registration. Response: ${JSON.stringify(response)}`,
+                );
+            }
+
+            const transactionId = response.transaction.id;
+
+            // For delegated signer registration, only the admin signer is needed
+            const signers = this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : [];
+
+            // Handle transaction flow
+            await this.handleTransactionFlow(transactionId, signers, "Delegated signer registration");
+
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to register delegated signer: ${error}`);
+        }
+    }
+
+    async getDelegatedSigner(signerLocator: string): Promise<SolanaDelegatedSignerResponse> {
+        try {
+            return (await this.#api.getDelegatedSigner(this.#locator, signerLocator)) as SolanaDelegatedSignerResponse;
+        } catch (error) {
+            throw new Error(`Failed to get delegated signer info: ${error}`);
         }
     }
 }

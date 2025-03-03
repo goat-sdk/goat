@@ -23,6 +23,7 @@ class SolanaTransaction(TypedDict):
     instructions: List[Instruction]
     address_lookup_table_addresses: Optional[List[str]]
     accounts_to_sign: Optional[List[Keypair]]
+    signer: Keypair
 
 
 class SolanaOptions:

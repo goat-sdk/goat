@@ -309,8 +309,8 @@ class CrossmintWalletsAPI:
         self,
         wallet_locator: str,
         transaction: str,
+        signer: Optional[str] = None,
         required_signers: Optional[List[str]] = None,
-        signer: Optional[str] = None
     ) -> Dict[str, Any]:
         """Create a new Solana transaction.
         
@@ -361,8 +361,8 @@ class CrossmintWalletsAPI:
             return self.create_transaction(
                 wallet_address,
                 params.transaction,
+                params.signer,
                 params.required_signers,
-                params.signer
             )
             
     def create_transaction_for_evm_smart_wallet(
@@ -452,7 +452,7 @@ class CrossmintWalletsAPI:
         Returns:
             Collection creation response
         """
-        endpoint = "/2022-06-09/collections/"
+        endpoint = "/collections/"
         payload = {**parameters, "chain": chain}
         return self._request(endpoint, method="POST", json=payload)
 
@@ -462,7 +462,7 @@ class CrossmintWalletsAPI:
         Returns:
             List of collections
         """
-        endpoint = "/2022-06-09/collections/"
+        endpoint = "/collections/"
         return self._request(endpoint)
 
     def mint_nft(self, collection_id: str, recipient: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
@@ -476,7 +476,7 @@ class CrossmintWalletsAPI:
         Returns:
             Minted NFT details
         """
-        endpoint = f"/2022-06-09/collections/{quote(collection_id)}/nfts"
+        endpoint = f"/collections/{quote(collection_id)}/nfts"
         payload = {
             "recipient": recipient,
             "metadata": metadata
@@ -631,7 +631,7 @@ class CrossmintWalletsAPI:
         attempts = 0
         while attempts < max_attempts:
             attempts += 1
-            endpoint = f"/2022-06-09/actions/{quote(action_id)}"
+            endpoint = f"/actions/{quote(action_id)}"
             response = self._request(endpoint)
             
             if response.get("status") == "succeeded":

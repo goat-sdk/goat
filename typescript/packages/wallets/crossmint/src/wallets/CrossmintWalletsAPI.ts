@@ -1,5 +1,6 @@
 import type { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import type { EVMTypedData } from "@goat-sdk/wallet-evm";
+import { Keypair } from "@solana/web3.js";
 import type { SupportedSmartWalletChains } from "../chains";
 
 type CoreSignerType =
@@ -64,16 +65,17 @@ interface CreateTransactionRequest {
     params: EVMTransactionParams | SolanaTransactionParams;
 }
 
-interface CreateTransactionResponse {
+export interface CreateTransactionResponse {
     id: string;
     walletType: "evm-smart-wallet" | "solana-custodial-wallet";
     status: "awaiting-approval" | "pending" | "failed" | "success";
     approvals?: TransactionApprovals;
     params: EVMTransactionParams | SolanaTransactionParams;
+    error?: {
+        reason: string;
+        message: string;
+    };
     onChain?: {
-        userOperation?: object;
-        userOperationHash?: string;
-        chain?: string;
         txId?: string;
     };
     createdAt: string;
@@ -101,21 +103,6 @@ interface Call {
     to: string;
     value: string;
     data: string;
-}
-
-////////////////////////////////////////////////////////////////////
-// Transaction Status
-////////////////////////////////////////////////////////////////////
-interface TransactionStatusResponse extends CreateTransactionResponse {
-    hash?: string;
-    error?: string;
-    onChain?: {
-        userOperation?: object;
-        userOperationHash?: string;
-        chain?: string;
-        txId?: string;
-        hash?: string;
-    };
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -198,6 +185,77 @@ interface ApproveSignatureResponse {
 }
 
 ////////////////////////////////////////////////////////////////////
+// Register Delegated Signer
+////////////////////////////////////////////////////////////////////
+
+interface DelegatedSignerPermission {
+    type: string;
+    value: string;
+}
+
+interface EVMCustodialDelegatedSignerResponse {
+    type: "evm-fireblocks-custodial";
+    address: string;
+    locator: string;
+}
+
+interface ChainStatus {
+    status: "active" | "awaiting-approval";
+    id?: string;
+    approvals?: {
+        pending: {
+            signer: string;
+            message: string;
+        }[];
+        submitted: {
+            signer: string;
+            message: string;
+            signature: string;
+            submittedAt: string;
+        }[];
+    };
+}
+
+interface EVMNonCustodialDelegatedSignerResponse {
+    type: "evm-keypair";
+    address: string;
+    locator: string;
+    chains: {
+        [chainName: string]: ChainStatus;
+    };
+}
+
+export type EVMDelegatedSignerResponse = EVMCustodialDelegatedSignerResponse | EVMNonCustodialDelegatedSignerResponse;
+
+interface SolanaCustodialDelegatedSignerResponse {
+    type: "solana-fireblocks-custodial";
+    address: string;
+    locator: string;
+}
+
+interface SolanaNonCustodialDelegatedSignerResponse {
+    type: "solana-keypair";
+    address: string;
+    locator: string;
+    transaction: {
+        onChain: {
+            transaction: string;
+            lastValidBlockHeight?: number;
+        };
+        id: string;
+        status: "awaiting-approval" | "pending" | "failed" | "success";
+        approvals: TransactionApprovals;
+        createdAt: string;
+    };
+}
+
+export type SolanaDelegatedSignerResponse =
+    | SolanaCustodialDelegatedSignerResponse
+    | SolanaNonCustodialDelegatedSignerResponse;
+
+export type DelegatedSignerResponse = EVMDelegatedSignerResponse | SolanaDelegatedSignerResponse;
+
+////////////////////////////////////////////////////////////////////
 // API
 ////////////////////////////////////////////////////////////////////
 
@@ -214,6 +272,7 @@ type APIResponse =
     | SignMessageResponse
     | SignTypedDataResponse
     | ApproveSignatureResponse
+    | DelegatedSignerResponse
     | ActionResponse;
 
 export class CrossmintWalletsAPI {
@@ -384,12 +443,14 @@ export class CrossmintWalletsAPI {
     public async createSolanaTransaction(
         locator: string,
         transaction: string,
+        signer?: Keypair,
         requiredSigners?: string[],
     ): Promise<CreateTransactionResponse> {
         const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions`;
         const payload: CreateTransactionRequest = {
             params: {
                 transaction: transaction,
+                ...(signer ? { signer: `solana-keypair:${signer.publicKey.toBase58()}` } : {}),
                 ...(requiredSigners ? { requiredSigners } : {}),
             },
         };
@@ -440,10 +501,10 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async checkTransactionStatus(locator: string, transactionId: string): Promise<TransactionStatusResponse> {
+    public async checkTransactionStatus(locator: string, transactionId: string): Promise<CreateTransactionResponse> {
         const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions/${encodeURIComponent(transactionId)}`;
 
-        return this.request<TransactionStatusResponse>(endpoint, {
+        return this.request<CreateTransactionResponse>(endpoint, {
             method: "GET",
         });
     }
@@ -452,7 +513,7 @@ export class CrossmintWalletsAPI {
         locator: string,
         transactionId: string,
         options: { interval?: number; maxAttempts?: number } = {},
-    ): Promise<TransactionStatusResponse> {
+    ): Promise<CreateTransactionResponse> {
         const interval = options.interval || 1000;
         const maxAttempts = options.maxAttempts || 30;
         let attempts = 0;
@@ -510,5 +571,45 @@ export class CrossmintWalletsAPI {
         }
 
         throw new Error("Timed out waiting for action");
+    }
+
+    public async registerDelegatedSigner(
+        walletLocator: string,
+        signer: string,
+        chain?: string,
+        expiresAt?: number,
+        permissions?: DelegatedSignerPermission[],
+    ): Promise<DelegatedSignerResponse> {
+        const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers`;
+        const payload: Record<string, string | DelegatedSignerPermission[]> = {
+            signer,
+        };
+
+        if (chain) {
+            payload.chain = chain;
+        }
+
+        if (expiresAt) {
+            payload.expiresAt = expiresAt.toString();
+        }
+
+        if (permissions && permissions.length > 0) {
+            payload.permissions = permissions.map((permission) => ({
+                type: permission.type,
+                value: permission.value,
+            }));
+        }
+
+        return this.request(endpoint, {
+            method: "POST",
+            body: JSON.stringify(payload),
+        });
+    }
+
+    public async getDelegatedSigner(walletLocator: string, signer: string): Promise<DelegatedSignerResponse> {
+        const endpoint = `/wallets/${encodeURIComponent(walletLocator)}/signers/${encodeURIComponent(signer)}`;
+        return this.request(endpoint, {
+            method: "GET",
+        });
     }
 }

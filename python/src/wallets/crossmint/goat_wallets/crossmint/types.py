@@ -1,4 +1,5 @@
 from typing import NotRequired, TypedDict, Optional, Dict, Union, Literal
+from solders.keypair import Keypair
 
 class LinkedUser(TypedDict):
     """Type definition for a linked user."""
@@ -11,18 +12,20 @@ class TransactionApproval(TypedDict):
     signer: str
     signature: Optional[str]
 
-class BaseKeypairSigner(TypedDict):
-    """Base type for keypair-based signers."""
-    type: Literal["solana-keypair", "evm-keypair"]  # Add all possible values
-    secretKey: str
-
 class BaseFireblocksSigner(TypedDict):
     """Base type for Fireblocks-based signers."""
     type: Literal["solana-fireblocks-custodial", "evm-fireblocks-custodial"]  # Add all possible values
 
+class SolanaKeypairSigner(TypedDict):
+    type: Literal["solana-keypair"]
+    keyPair: Keypair
+
+class SolanaFireblocksSigner(TypedDict):
+    type: Literal["solana-fireblocks-custodial"]
+
 class BaseWalletConfig(TypedDict):
     """Base configuration for any wallet type."""
-    adminSigner: Union[BaseKeypairSigner, BaseFireblocksSigner]
+    adminSigner: Union[SolanaKeypairSigner, SolanaFireblocksSigner]
 
 class BaseWalletOptions(TypedDict):
     """Base options for any wallet type."""

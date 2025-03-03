@@ -94,7 +94,7 @@ class SolanaSmartWalletTransactionParams(BaseModelWithoutNone):
     )
     signer: Optional[str] = Field(
         None,
-        description="Optional signer locator that defaults to admin signer"
+        description="Optional signer locator"
     )
 
 
