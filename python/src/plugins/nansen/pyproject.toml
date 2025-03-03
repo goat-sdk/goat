@@ -1,10 +1,19 @@
 [tool.poetry]
 name = "goat-sdk-plugin-nansen"
-version = "0.1.0"
+version = "0.1.1"
 description = "Nansen plugin for GOAT SDK"
-authors = ["GOAT SDK Team"]
+authors = [
+    "GOAT SDK Team",
+]
 readme = "README.md"
-keywords = ["goat", "sdk", "web3", "agents", "ai", "nansen"]
+keywords = [
+    "goat",
+    "sdk",
+    "web3",
+    "agents",
+    "ai",
+    "nansen",
+]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
@@ -26,11 +35,10 @@ pytest-asyncio = "^0.25.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.6"
-goat-sdk = { path = "../../goat-sdk", develop = true }
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.group.dev.dependencies.goat-sdk]
+path = "../../goat-sdk"
+develop = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -38,3 +46,9 @@ asyncio_mode = "auto"
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"

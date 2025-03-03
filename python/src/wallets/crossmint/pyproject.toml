@@ -1,10 +1,20 @@
 [tool.poetry]
 name = "goat-sdk-wallet-crossmint"
-version = "0.1.5"
+version = "0.1.6"
 description = "Crossmint wallet implementation for GOAT SDK"
-authors = ["GOAT SDK Team"]
+authors = [
+    "GOAT SDK Team",
+]
 readme = "README.md"
-keywords = ["goat", "sdk", "web3", "agents", "ai", "crossmint", "wallet"]
+keywords = [
+    "goat",
+    "sdk",
+    "web3",
+    "agents",
+    "ai",
+    "crossmint",
+    "wallet",
+]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 packages = [
@@ -25,26 +35,37 @@ setuptools = ">=70"
 pytest = "^8.3"
 pytest-asyncio = "^0.25"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8"
+
+[tool.poetry.group.dev.dependencies.goat-sdk]
+path = "../../goat-sdk"
+develop = true
+
+[tool.poetry.group.dev.dependencies.goat-sdk-wallet-evm]
+path = "../evm"
+develop = true
+
+[tool.poetry.group.dev.dependencies.goat-sdk-wallet-solana]
+path = "../solana"
+develop = true
+
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
 
 [tool.pytest.ini_options]
 addopts = [
-  "--import-mode=importlib",
+    "--import-mode=importlib",
 ]
 pythonpath = "src"
 asyncio_default_fixture_loop_scope = "function"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-goat-sdk = { path = "../../goat-sdk", develop = true }
-goat-sdk-wallet-evm = { path = "../evm", develop = true }
-goat-sdk-wallet-solana = { path = "../solana", develop = true }
-ruff = "^0.8"
-
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"

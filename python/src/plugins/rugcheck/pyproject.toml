@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "goat-sdk-plugin-rugcheck"
-version = "0.1.2"
+version = "0.1.3"
 description = "A Python rugcheck plugin for the GOAT SDK"
-authors = ["GOAT SDK Team"]
+authors = [
+    "GOAT SDK Team",
+]
 packages = [
-    { include = "goat_plugins" }
+    { include = "goat_plugins" },
 ]
 
 [tool.poetry.dependencies]

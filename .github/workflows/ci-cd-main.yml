@@ -4,6 +4,8 @@ on:
     push:
         branches:
             - main
+        paths-ignore:
+            - 'python/**'
 
 env:
     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}

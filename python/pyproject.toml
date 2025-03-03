@@ -1,59 +1,105 @@
 [tool.poetry]
 name = "goat-sdk-monorepo"
-version = "0.0.1"
+version = "0.1.0"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
-authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
+authors = [
+    "Andrea Villa <andreakarimodm@gmail.com>",
+]
 readme = "README.md"
-keywords = ["goat", "sdk", "web3", "agents", "ai"]
+keywords = [
+    "goat",
+    "sdk",
+    "web3",
+    "agents",
+    "ai",
+]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
-package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
-# Core
-goat-sdk = { path = "src/goat-sdk/" }
+[tool.poetry.dependencies.goat-sdk]
+path = "src/goat-sdk/"
 
-# Plugins
-goat-sdk-plugin-1inch = { path = "src/plugins/1inch/" }
-goat-sdk-plugin-allora = { path = "src/plugins/allora/" }
-goat-sdk-plugin-coingecko = { path = "src/plugins/coingecko/" }
-goat-sdk-plugin-dexscreener = { path = "src/plugins/dexscreener/" }
-goat-sdk-plugin-erc20 = { path = "src/plugins/erc20/" }
-goat-sdk-plugin-farcaster = { path = "src/plugins/farcaster/" }
-goat-sdk-plugin-jsonrpc = { path = "src/plugins/jsonrpc/" }
-goat-sdk-plugin-jupiter = { path = "src/plugins/jupiter/" }
-goat-sdk-plugin-nansen = { path = "src/plugins/nansen/" }
-goat-sdk-plugin-opensea = { path = "src/plugins/opensea/" }
-goat-sdk-plugin-rugcheck = { path = "src/plugins/rugcheck/" }
-goat-sdk-plugin-spl-token = { path = "src/plugins/spl_token/" }
-goat-sdk-plugin-superfluid = { path = "src/plugins/superfluid/" }
-goat-sdk-plugin-uniswap = { path = "src/plugins/uniswap/" }
+[tool.poetry.dependencies.goat-sdk-plugin-1inch]
+path = "src/plugins/1inch/"
 
-# Wallets
-goat-sdk-wallet-crossmint = { path = "src/wallets/crossmint/" }
-goat-sdk-wallet-evm = { path = "src/wallets/evm/" }
-goat-sdk-wallet-solana = { path = "src/wallets/solana/" }
-goat-sdk-wallet-web3 = { path = "src/wallets/web3/" }
+[tool.poetry.dependencies.goat-sdk-plugin-allora]
+path = "src/plugins/allora/"
 
-# Adapters
-goat-sdk-adapter-langchain = { path = "src/adapters/langchain/" }
+[tool.poetry.dependencies.goat-sdk-plugin-coingecko]
+path = "src/plugins/coingecko/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-dexscreener]
+path = "src/plugins/dexscreener/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-erc20]
+path = "src/plugins/erc20/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-farcaster]
+path = "src/plugins/farcaster/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-jsonrpc]
+path = "src/plugins/jsonrpc/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-jupiter]
+path = "src/plugins/jupiter/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-nansen]
+path = "src/plugins/nansen/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-opensea]
+path = "src/plugins/opensea/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-rugcheck]
+path = "src/plugins/rugcheck/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-spl-token]
+path = "src/plugins/spl_token/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-superfluid]
+path = "src/plugins/superfluid/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-uniswap]
+path = "src/plugins/uniswap/"
+
+[tool.poetry.dependencies.goat-sdk-wallet-crossmint]
+path = "src/wallets/crossmint/"
+
+[tool.poetry.dependencies.goat-sdk-wallet-evm]
+path = "src/wallets/evm/"
+
+[tool.poetry.dependencies.goat-sdk-wallet-solana]
+path = "src/wallets/solana/"
+
+[tool.poetry.dependencies.goat-sdk-wallet-web3]
+path = "src/wallets/web3/"
+
+[tool.poetry.dependencies.goat-sdk-adapter-langchain]
+path = "src/adapters/langchain/"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+tomli = "^2.0.1"
+tomli-w = "^1.0.0"
+
 [tool.pytest.ini_options]
 addopts = [
-  "--import-mode=importlib",
+    "--import-mode=importlib",
 ]
 pythonpath = "src"
 asyncio_default_fixture_loop_scope = "function"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"
