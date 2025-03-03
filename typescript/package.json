@@ -10,9 +10,10 @@
         "build:libs:prod": "cross-env NODE_ENV=production pnpm build:libs",
         "clean:dist": "pnpm rimraf \"**/dist\" --glob",
         "clean:node_modules": "pnpm rimraf \"**/node_modules\" --glob",
+        "clean:examples": "tsx scripts/cleanExamples.ts",
         "change:add": "pnpm changeset add",
         "change:publish": "pnpm build:libs:prod && pnpm changeset publish --no-git-tag",
-        "change:version": "pnpm changeset version && pnpm lint:fix",
+        "change:version": "pnpm changeset version && pnpm lint:fix && pnpm clean:examples && pnpm install --no-frozen-lockfile",
         "lint": "biome check --diagnostic-level=error --max-diagnostics=200",
         "lint:fix": "biome check --write",
         "test": "pnpm turbo test"

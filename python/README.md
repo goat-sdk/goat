@@ -1,7 +1,6 @@
 <div>
   <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 
-
 <div>
 <img src="https://img.shields.io/npm/dm/%40goat-sdk%2Fcore" alt="NPM Downloads">
 
@@ -13,9 +12,16 @@
 <img src="https://img.shields.io/pypi/pyversions/goat-sdk" alt="PyPI - Python Version">
 </div>
 
-GOAT is free software, MIT licensed, sponsored by [Crossmint](https://www.crossmint.com)
-
+<br>
+<div align="center">
+<div style="margin-bottom: 5px;">
+<b>Sponsored by</b>
 </div>
+<div>
+<a href="https://www.crossmint.com" target="_blank"> <img src="https://github.com/user-attachments/assets/f3bdfbe3-2a87-48ec-aacb-a5e72737018c" alt="Crossmint logo" width="180px" height="auto" style="object-fit: contain;"></a>
+</div>
+</div>
+
 
 ## Table of Contents
 - [🐐 Overview](#-overview)
@@ -53,6 +59,10 @@ If you don't find what you need on our more than 200 integrations you can easily
 4. Integrate a new agent framework
 
 See how to do it [here](#-contributing).
+
+**License**
+
+GOAT is free software, MIT licensed.
 
 # 🚀 Quickstarts
 - **EVM**

@@ -1,5 +1,12 @@
 # @goat-sdk/adapter-model-context-protocol
 
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.2.8
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.8
+
+### Patch Changes
+
+- 3091a49: Update docs
+
 ## 0.4.7
 
 ### Patch Changes

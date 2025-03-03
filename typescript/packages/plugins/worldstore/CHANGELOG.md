@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-worldstore
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.0.3
 
 ### Patch Changes
