@@ -578,7 +578,9 @@ describe("CrossmintWalletsAPI", () => {
                         Promise.resolve({
                             id: "tx123",
                             status: "success",
-                            hash: "0xhash123",
+                            onChain: {
+                                txId: "0xhash123",
+                            },
                         }),
                 });
 
