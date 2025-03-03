@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-aptos
 
+## 0.2.8
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.2.7
 
 ### Patch Changes

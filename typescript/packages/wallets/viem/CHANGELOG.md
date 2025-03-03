@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-viem
 
+## 0.2.11
+
+### Patch Changes
+
+- @goat-sdk/wallet-evm@0.2.10
+
 ## 0.2.10
 
 ### Patch Changes

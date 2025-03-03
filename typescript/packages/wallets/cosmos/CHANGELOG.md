@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-cosmos
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.0.4
 
 ### Patch Changes

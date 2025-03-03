@@ -1,5 +1,14 @@
 # @goat-sdk/plugin-crossmint-headless-checkout
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+  - @goat-sdk/wallet-evm@0.2.10
+  - @goat-sdk/wallet-solana@0.2.14
+
 ## 0.0.10
 
 ### Patch Changes

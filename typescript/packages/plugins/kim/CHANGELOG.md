@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-kim
 
+## 0.1.12
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+  - @goat-sdk/wallet-evm@0.2.10
+
 ## 0.1.11
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-coinmarketcap
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.1.4
 
 ### Patch Changes

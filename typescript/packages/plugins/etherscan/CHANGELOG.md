@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-etherscan
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
     "name": "goat-examples-cosmos-send-and-receive-tokens",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "",
     "private": true,
     "scripts": {
@@ -9,10 +9,10 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@goat-sdk/adapter-langchain": "0.2.10",
-        "@goat-sdk/plugin-cosmosbank": "0.0.4",
-        "@goat-sdk/wallet-cosmos": "0.0.4",
-        "@goat-sdk/core": "0.4.7",
+        "@goat-sdk/adapter-langchain": "0.2.11",
+        "@goat-sdk/plugin-cosmosbank": "0.0.5",
+        "@goat-sdk/wallet-cosmos": "0.0.5",
+        "@goat-sdk/core": "0.4.8",
         "@cosmjs/cosmwasm-stargate": "^0.33.0",
         "@langchain/core": "0.3.6",
         "@langchain/cohere": "^0.3.2",

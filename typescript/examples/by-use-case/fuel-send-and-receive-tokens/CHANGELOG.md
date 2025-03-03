@@ -1,0 +1,10 @@
+# goat-examples-fuel-send-and-receive-tokens
+
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [3091a49]
+  - @goat-sdk/core@0.4.8
+  - @goat-sdk/adapter-vercel-ai@0.2.9
+  - @goat-sdk/wallet-fuel@0.1.8

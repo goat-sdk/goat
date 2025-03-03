@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-zilliqa",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
