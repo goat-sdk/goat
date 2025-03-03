@@ -1,5 +1,22 @@
 # @goat-sdk/crossmint
 
+## 0.4.0
+
+### Minor Changes
+
+- f4cacc7: Exposed solana smart wallet function
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+
+## 0.3.18
+
+### Patch Changes
+
+- d7ecfe6: Upgrade viem and add story protocol
+
 ## 0.3.17
 
 ### Patch Changes

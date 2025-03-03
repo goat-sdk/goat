@@ -1,27 +1,31 @@
-# GOAT Adapter Model Context Protocol (Claude) 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Model Context Protocol Adapter for GOAT
+
+Integrate the more than +200 onchain tools of GOAT with [Model Context Protocol](https://modelcontextprotocol.io).
 
 ## Installation
 ```
 npm install @goat-sdk/adapter-model-context-protocol
+yarn add @goat-sdk/adapter-model-context-protocol
+pnpm add @goat-sdk/adapter-model-context-protocol
 ```
 
 ## Usage
 
-Check out the [viem example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/model-context-protocol/viem) for a full MCP server example.
+See a full working example [here](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/model-context-protocol).
 
-```ts
-const { listOfTools, toolHandler } = await getOnChainTools({
-    wallet: viem(walletClient),
-    plugins: [sendETH(), erc20({ tokens: [USDC, MODE] }), kim()],
-});
-```
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+<div>
+</footer>

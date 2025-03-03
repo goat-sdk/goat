@@ -1,0 +1,32 @@
+{
+    "name": "goat-examples-model-context-protocol-viem",
+    "version": "0.2.14",
+    "type": "module",
+    "description": "",
+    "private": true,
+    "bin": {
+        "goat": "./build/index.js"
+    },
+    "scripts": {
+        "test": "vitest run --passWithNoTests",
+        "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+    },
+    "files": ["build"],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-model-context-protocol": "0.2.8",
+        "@goat-sdk/core": "0.4.7",
+        "@goat-sdk/plugin-erc20": "0.2.11",
+        "@goat-sdk/wallet-evm": "0.2.9",
+        "@goat-sdk/wallet-viem": "0.2.10",
+        "@modelcontextprotocol/sdk": "1.0.4",
+        "dotenv": "^16.4.5",
+        "viem": "2.23.4",
+        "zod": "3.23.8"
+    },
+    "devDependencies": {
+        "@types/node": "22.7.4"
+    }
+}

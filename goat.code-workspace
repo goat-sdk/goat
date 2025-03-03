@@ -53,10 +53,6 @@
         {
             "name": "🐍 Examples",
             "path": "./python/examples"
-        },
-        {
-            "name": "📚 Docs",
-            "path": "./docs"
         }
     ],
     "settings": {

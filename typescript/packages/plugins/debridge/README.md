@@ -1,10 +1,19 @@
-# Goat DeBridge Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-DeBridge plugin for Goat. Allows you to create tools for bridging tokens across different chains using the DeBridge Liquidity Network (DLN).
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# DeBridge GOAT Plugin
+
+[DeBridge](https://debridge.finance/) plugin for Goat. Allows you to create tools for bridging tokens across different chains using the DeBridge Liquidity Network (DLN).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-debridge
+yarn add @goat-sdk/plugin-debridge
+pnpm add @goat-sdk/plugin-debridge
 ```
 
 ## Setup
@@ -21,23 +30,18 @@ const plugin = debridge({
 });
 ```
 
-## Available Actions
+## Tools
 
-### Create Bridge Order
-Creates a cross-chain token transfer order.
+1. Create Bridge Order
+2. Get Bridge Quote
+3. Execute Bridge Transaction
 
-### Get Bridge Quote
-Gets a quote for a cross-chain token transfer.
-
-### Execute Bridge Transaction
-Signs and broadcasts the bridge transaction.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [API](https://dln.debridge.finance/v1.0) | [Discord](https://discord.com/invite/debridge) </div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets. 
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

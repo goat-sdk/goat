@@ -3,7 +3,6 @@ import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } fr
 import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
-import { normalize } from "viem/ens";
 import { SupportedSmartWalletChains, getViemChain } from "../chains";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
 
@@ -147,28 +146,6 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         };
     }
 
-    async resolveAddress(address: string) {
-        if (/^0x[a-fA-F0-9]{40}$/.test(address)) {
-            return address as `0x${string}`;
-        }
-
-        if (!this.#ensClient) {
-            throw new Error("ENS provider is not configured.");
-        }
-
-        try {
-            const resolvedAddress = (await this.#ensClient.getEnsAddress({
-                name: normalize(address),
-            })) as `0x${string}`;
-            if (!resolvedAddress) {
-                throw new Error("ENS name could not be resolved.");
-            }
-            return resolvedAddress as `0x${string}`;
-        } catch (error) {
-            throw new Error(`Failed to resolve ENS name: ${error}`);
-        }
-    }
-
     async signMessage(message: string) {
         const { id: signatureId, approvals } = await this.#client.signMessageForSmartWallet(
             this.#address,
@@ -276,7 +253,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
         const result = await this.#viemClient.readContract({
-            address: await this.resolveAddress(address),
+            address: address as `0x${string}`,
             abi,
             functionName,
             args,
@@ -286,9 +263,8 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     }
 
     async balanceOf(address: string) {
-        const resolvedAddress = await this.resolveAddress(address);
         const balance = await this.#viemClient.getBalance({
-            address: resolvedAddress,
+            address: address as `0x${string}`,
         });
 
         return {

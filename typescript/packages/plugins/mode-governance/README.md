@@ -1,10 +1,17 @@
-# Goat Mode Governance Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Mode governance plugin for Goat. Allows you to interact with Mode's governance system including staking MODE and BPT tokens.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+[Mode](https://mode.network/) governance plugin for Goat. Allows you to interact with Mode's governance system including staking MODE and BPT tokens.
 
 ## Installation
 ```bash
 npm install @goat-sdk/plugin-mode-governance
+yarn add @goat-sdk/plugin-mode-governance
+pnpm add @goat-sdk/plugin-mode-governance
 ```
 
 ## Usage
@@ -12,26 +19,25 @@ npm install @goat-sdk/plugin-mode-governance
 ```typescript
 import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
 
-const plugin = modeGovernance();
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+        modeGovernance()
+    ]
+});
 ```
 
-## Available Actions
+## Tools
+- Stake MODE or BPT tokens
+- Get staking information
+- Get balance of MODE, BPT, veMode, or veBPT tokens
 
-### Stake Tokens
-Stakes MODE or BPT tokens in the Mode governance system.
-
-### Get Stake Info
-Gets staking information including warmup and cooldown periods.
-
-### Get Balance
-Gets the balance of MODE, BPT, veMode, or veBPT tokens.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets. 
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

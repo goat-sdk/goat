@@ -3,7 +3,6 @@ import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
 import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
 import { formatEther, formatUnits, isAddress, publicActions } from "viem";
 import { mainnet } from "viem/chains";
-import { normalize } from "viem/ens";
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
 import type { LitEVMWalletOptions } from "./types";
 
@@ -53,22 +52,6 @@ export class LitEVMWalletClient extends EVMWalletClient {
                 value: pkpAddress,
             },
         };
-    }
-
-    async resolveAddress(address: string): Promise<`0x${string}`> {
-        if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
-
-        try {
-            const resolvedAddress = (await this.viemPublicClient.getEnsAddress({
-                name: normalize(address),
-            })) as `0x${string}`;
-            if (!resolvedAddress) {
-                throw new Error("ENS name could not be resolved.");
-            }
-            return resolvedAddress;
-        } catch (error) {
-            throw new Error(`Failed to resolve ENS name: ${error}`);
-        }
     }
 
     private async waitForReceipt(hash: `0x${string}`): Promise<{ hash: string; status: string }> {
@@ -122,7 +105,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
 
     async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
         const { to, abi, functionName, args, value } = transaction;
-        const toAddress = await this.resolveAddress(to);
+        const toAddress = to as `0x${string}`;
 
         // Simple ETH transfer (no ABI)
         if (!abi) {
@@ -168,7 +151,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
         const result = await this.viemPublicClient.readContract({
-            address: await this.resolveAddress(address),
+            address: address as `0x${string}`,
             abi,
             functionName,
             args,
@@ -178,9 +161,8 @@ export class LitEVMWalletClient extends EVMWalletClient {
     }
 
     async balanceOf(address: string) {
-        const resolvedAddress = await this.resolveAddress(address);
         const balance = await this.viemPublicClient.getBalance({
-            address: resolvedAddress,
+            address: address as `0x${string}`,
         });
 
         const chain = this.viemWalletClient.chain ?? mainnet;

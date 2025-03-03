@@ -1,0 +1,24 @@
+{
+    "name": "goat-examples-chromia-send-and-receive-tokens",
+    "version": "0.1.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "~1.0.4",
+        "@chromia/ft4": "1.0.1",
+        "@goat-sdk/adapter-vercel-ai": "0.2.8",
+        "@goat-sdk/core": "0.4.7",
+        "@goat-sdk/wallet-chromia": "0.2.9",
+        "@langchain/langgraph": "^0.2.0",
+        "ai": "4.0.3",
+        "chalk": "5.3.0",
+        "dotenv": "^16.4.5",
+        "postchain-client": "1.20.1",
+        "zod": "3.23.8"
+    }
+}

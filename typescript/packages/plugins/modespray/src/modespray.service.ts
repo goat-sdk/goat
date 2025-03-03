@@ -18,12 +18,11 @@ export class ModeSprayService {
             }
 
             const address = this.getContractAddress(network.id);
-            const sprayAddress = await walletClient.resolveAddress(address);
 
             const totalValue = amounts.reduce((sum, amount) => sum + BigInt(amount), BigInt(0));
 
             const { hash } = await walletClient.sendTransaction({
-                to: sprayAddress,
+                to: address,
                 abi: MODESPRAY_ABI,
                 functionName: "sprayEther",
                 args: [recipients, amounts],

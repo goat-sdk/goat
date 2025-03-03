@@ -1,7 +1,6 @@
 import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
 import { mainnet } from "viem/chains";
-import { normalize } from "viem/ens";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
 export type ViemOptions = {
@@ -42,22 +41,6 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         };
     }
 
-    async resolveAddress(address: string) {
-        if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
-
-        try {
-            const resolvedAddress = (await this.publicClient.getEnsAddress({
-                name: normalize(address),
-            })) as `0x${string}`;
-            if (!resolvedAddress) {
-                throw new Error("ENS name could not be resolved.");
-            }
-            return resolvedAddress as `0x${string}`;
-        } catch (error) {
-            throw new Error(`Failed to resolve ENS name: ${error}`);
-        }
-    }
-
     async signMessage(message: string) {
         if (!this.#client.account) throw new Error("No account connected");
         const signature = await this.#client.signMessage({
@@ -89,7 +72,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         const { to, abi, functionName, args, value, options, data } = transaction;
         if (!this.#client.account) throw new Error("No account connected");
 
-        const toAddress = await this.resolveAddress(to);
+        const toAddress = to as `0x${string}`;
 
         const paymaster = options?.paymaster?.address ?? this.#defaultPaymaster;
         const paymasterInput = options?.paymaster?.input ?? this.#defaultPaymasterInput;
@@ -160,7 +143,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
         const result = await this.publicClient.readContract({
-            address: await this.resolveAddress(address),
+            address: address as `0x${string}`,
             abi,
             functionName,
             args,
@@ -170,9 +153,8 @@ export class ViemEVMWalletClient extends EVMWalletClient {
     }
 
     async balanceOf(address: string) {
-        const resolvedAddress = await this.resolveAddress(address);
         const balance = await this.publicClient.getBalance({
-            address: resolvedAddress,
+            address: address as `0x${string}`,
         });
 
         const chain = this.#client.chain ?? mainnet;

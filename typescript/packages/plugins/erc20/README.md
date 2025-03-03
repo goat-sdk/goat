@@ -1,10 +1,19 @@
-# Goat ERC20 Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# ERC20 GOAT Plugin
 
 ERC20 plugin for Goat. Allows you to create tools for transferring and getting the balance of ERC20 tokens.
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-erc20
+yarn add @goat-sdk/plugin-erc20
+pnpm add @goat-sdk/plugin-erc20
 ```
 
 ## Usage
@@ -40,12 +49,24 @@ const plugin = erc20({
 });
 ```
 
-## Goat
+## Tools
 
-<div align="center">
-Go out and eat some grass.
+1. Get token info by symbol
+2. Get balance
+3. Transfer
+4. Approve
+5. Get allowance
+6. Total supply
+7. Revoke approval
+8. Convert to base unit
+9. Convert from base unit
 
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

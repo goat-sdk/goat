@@ -1,5 +1,20 @@
 # @goat-sdk/plugin-mayan
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+  - @goat-sdk/wallet-viem@0.2.10
+
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [d7ecfe6]
+  - @goat-sdk/wallet-viem@0.2.9
+
 ## 0.1.2
 
 ### Patch Changes

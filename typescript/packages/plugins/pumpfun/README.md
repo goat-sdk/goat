@@ -1,10 +1,19 @@
-# Goat Pump.fun Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Pump.fun plugin for Goat. Allows you to create tools for interacting with the Pump.fun API.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Pump.fun GOAT Plugin
+
+Create and buy tokens on [Pump.fun](https://pump.fun/).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-pumpfun
+yarn add @goat-sdk/plugin-pumpfun
+pnpm add @goat-sdk/plugin-pumpfun
 ```
 
 ## Setup
@@ -12,29 +21,23 @@ npm install @goat-sdk/plugin-pumpfun
 ```typescript
 import { pumpfun } from "@goat-sdk/plugin-pumpfun";
 
-const plugin = pumpfun();
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+        pumpfun(),
+    ],
+});
 ```
 
-## Available Actions
+## Tools
+- Create and buy the created token
 
-### Create and Buy Token
-Creates a token and buys it using pump.fun.
-
-Parameters:
-- `name`: The name of the token.
-- `symbol`: The symbol of the token.
-- `description`: The description of the token.
-- `imageUrl`: The image URL of the token.
-- `amountToBuyInSol`: The amount of tokens to buy in SOL base units.
-- `slippage`: The slippage percentage.
-- `priorityFee`: The priority fee in lamports.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

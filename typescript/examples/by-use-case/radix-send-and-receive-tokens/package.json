@@ -1,0 +1,20 @@
+{
+    "name": "goat-examples-radix-send-and-receive-tokens",
+    "version": "0.2.17",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "vitest run --passWithNoTests"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "^1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "0.2.8",
+        "@goat-sdk/core": "0.4.7",
+        "@goat-sdk/wallet-radix": "0.2.7",
+        "radix-web3.js": "0.3.1",
+        "ai": "4.0.3",
+        "dotenv": "^16.4.5",
+        "zod": "3.23.8"
+    }
+}

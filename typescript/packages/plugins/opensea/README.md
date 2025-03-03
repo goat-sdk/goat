@@ -1,18 +1,18 @@
-# Goat Opensea Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Opensea plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for getting NFT collection data from Opensea.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
 
-## Configuration
-Required environment variables:
-- `OPENSEA_API_KEY`: Your OpenSea API key
-  - Get it from: https://docs.opensea.io/reference/api-keys
-  - Format: 32-character string
-  - Required for: Accessing NFT collection data and marketplace information
-  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+# Opensea GOAT Plugin
+Allows you to create tools for getting NFT collection data from [Opensea](https://opensea.io/).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-opensea
+yarn add @goat-sdk/plugin-opensea
+pnpm add @goat-sdk/plugin-opensea
 ```
 
 ## Usage
@@ -25,16 +25,16 @@ const plugin = opensea({
 });
 ```
 
-## Working example
+## Tools
+- Get NFT collection statistics
+- Get recent NFT sales
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/opensea) for a working example of how to use the Opensea plugin.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/2F8zTVnnFz)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a> 
+</div>
+</footer>

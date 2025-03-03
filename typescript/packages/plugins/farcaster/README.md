@@ -1,13 +1,22 @@
-# Goat Farcaster Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Farcaster plugin for Goat. Allows you to create tools for interacting with the Farcaster social protocol through the Neynar API.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Farcaster GOAT Plugin
+
+[Farcaster](https://farcaster.xyz/) plugin for Goat. Allows you to create tools for interacting with the Farcaster social protocol through the Neynar API.
 
 ## Installation
 ```bash
 npm install @goat-sdk/plugin-farcaster
+yarn add @goat-sdk/plugin-farcaster
+pnpm add @goat-sdk/plugin-farcaster
 ```
 
-## Setup
+## Usage
     
 ```typescript
 import { farcaster } from "@goat-sdk/plugin-farcaster";
@@ -18,7 +27,7 @@ const plugin = farcaster({
 ```
 
 
-## Features
+## Tools
 
 - Full Farcaster protocol support through Neynar API
 - Cast creation and interaction
@@ -28,21 +37,12 @@ const plugin = farcaster({
 - Proper error handling
 - TypeScript support with complete type definitions
 
-## API Reference
-
-### Plugin Configuration
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| apiKey | string | Your Neynar API key |
-| baseUrl | string | (Optional) Custom API base URL |
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

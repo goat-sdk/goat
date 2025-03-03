@@ -1,10 +1,19 @@
-# Goat Superfluid Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-[Superfluid Protocol](https://docs.superfluid.finance/) plugin for Goat. Allows you to create tools for interacting with the Superfluid Protocol.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Superfluid GOAT Plugin
+
+Interact with the [Superfluid Protocol](https://docs.superfluid.finance/).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-superfluid
+yarn add @goat-sdk/plugin-superfluid
+pnpm add @goat-sdk/plugin-superfluid
 ```
 
 ## Setup
@@ -12,33 +21,27 @@ npm install @goat-sdk/plugin-superfluid
 ```typescript
 import { superfluid } from "@goat-sdk/plugin-superfluid";
 
-const plugin = superfluid({
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+        superfluid(),
+    ],
 });
 ```
 
-## Available Actions
+## Tools
+- Create or Update or Delete Flow
+- Get Flow Rate
+- Get Units
+- Update Member Units
+- Get Total Flow Rate
 
-### Create or Update or Delete Flow
-Creates, updates, or deletes a flow of tokens from sender to receiver.
-
-### Get Flow Rate
-Fetches the current flow rate of a token from sender to receiver.
-
-### Get Units
-Fetches the current units of a member in a pool.
-
-### Update Member Units
-Updates the units of a member in a pool.
-
-### Get Total Flow Rate
-Fetches the total flow rate of a pool of a pool.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

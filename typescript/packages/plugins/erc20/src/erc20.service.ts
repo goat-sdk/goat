@@ -55,13 +55,11 @@ export class Erc20Service {
     })
     async getTokenBalance(walletClient: EVMWalletClient, parameters: GetTokenBalanceParameters) {
         try {
-            const resolvedWalletAddress = await walletClient.resolveAddress(parameters.wallet);
-
             const rawBalance = await walletClient.read({
                 address: parameters.tokenAddress,
                 abi: ERC20_ABI,
                 functionName: "balanceOf",
-                args: [resolvedWalletAddress],
+                args: [parameters.wallet],
             });
 
             return Number(rawBalance.value);
@@ -75,7 +73,7 @@ export class Erc20Service {
     })
     async transfer(walletClient: EVMWalletClient, parameters: TransferParameters) {
         try {
-            const to = await walletClient.resolveAddress(parameters.to);
+            const to = parameters.to as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -111,8 +109,8 @@ export class Erc20Service {
     })
     async getTokenAllowance(walletClient: EVMWalletClient, parameters: GetTokenAllowanceParameters) {
         try {
-            const owner = await walletClient.resolveAddress(parameters.owner);
-            const spender = await walletClient.resolveAddress(parameters.spender);
+            const owner = parameters.owner as `0x${string}`;
+            const spender = parameters.spender as `0x${string}`;
 
             const rawAllowance = await walletClient.read({
                 address: parameters.tokenAddress,
@@ -131,7 +129,7 @@ export class Erc20Service {
     })
     async approve(walletClient: EVMWalletClient, parameters: ApproveParameters) {
         try {
-            const spender = await walletClient.resolveAddress(parameters.spender);
+            const spender = parameters.spender as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -150,7 +148,7 @@ export class Erc20Service {
     })
     async revokeApproval(walletClient: EVMWalletClient, parameters: RevokeApprovalParameters) {
         try {
-            const spender = await walletClient.resolveAddress(parameters.spender);
+            const spender = parameters.spender as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -169,8 +167,8 @@ export class Erc20Service {
     })
     async transferFrom(walletClient: EVMWalletClient, parameters: TransferFromParameters) {
         try {
-            const from = await walletClient.resolveAddress(parameters.from);
-            const to = await walletClient.resolveAddress(parameters.to);
+            const from = parameters.from as `0x${string}`;
+            const to = parameters.to as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,

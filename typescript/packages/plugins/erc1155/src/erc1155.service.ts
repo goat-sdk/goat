@@ -56,13 +56,11 @@ export class Erc1155Service {
     })
     async balanceOf(walletClient: EVMWalletClient, parameters: BalanceOfParameters) {
         try {
-            const resolvedWalletAddress = await walletClient.resolveAddress(parameters.owner);
-
             const rawBalance = await walletClient.read({
                 address: parameters.tokenAddress,
                 abi: ERC1155_ABI,
                 functionName: "balanceOf",
-                args: [resolvedWalletAddress, parameters.id],
+                args: [parameters.owner, parameters.id],
             });
 
             return Number(rawBalance.value);
@@ -76,15 +74,11 @@ export class Erc1155Service {
     })
     async balanceOfBatch(walletClient: EVMWalletClient, parameters: BalanceOfBatchParameters) {
         try {
-            const resolvedOwners = await Promise.all(
-                parameters.owners.map((owner) => walletClient.resolveAddress(owner)),
-            );
-
             const rawBalances = await walletClient.read({
                 address: parameters.tokenAddress,
                 abi: ERC1155_ABI,
                 functionName: "balanceOfBatch",
-                args: [resolvedOwners, parameters.ids],
+                args: [parameters.owners, parameters.ids],
             });
 
             const balances = (rawBalances.value as (number | string)[]).map((balance) => Number(balance));
@@ -99,8 +93,8 @@ export class Erc1155Service {
     })
     async safeTransferFrom(walletClient: EVMWalletClient, parameters: SafeTransferFromParameters) {
         try {
-            const from = await walletClient.resolveAddress(parameters.from);
-            const to = await walletClient.resolveAddress(parameters.to);
+            const from = parameters.from as `0x${string}`;
+            const to = parameters.to as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -119,8 +113,8 @@ export class Erc1155Service {
     })
     async safeBatchTransferFrom(walletClient: EVMWalletClient, parameters: SafeBatchTransferFromParameters) {
         try {
-            const from = await walletClient.resolveAddress(parameters.from);
-            const to = await walletClient.resolveAddress(parameters.to);
+            const from = parameters.from as `0x${string}`;
+            const to = parameters.to as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -139,7 +133,7 @@ export class Erc1155Service {
     })
     async setApprovalForAll(walletClient: EVMWalletClient, parameters: SetApprovalForAllParameters) {
         try {
-            const operator = await walletClient.resolveAddress(parameters.operator);
+            const operator = parameters.operator as `0x${string}`;
 
             const hash = await walletClient.sendTransaction({
                 to: parameters.tokenAddress,
@@ -158,8 +152,8 @@ export class Erc1155Service {
     })
     async isApprovedForAll(walletClient: EVMWalletClient, parameters: IsApprovedForAllParameters) {
         try {
-            const owner = await walletClient.resolveAddress(parameters.owner);
-            const operator = await walletClient.resolveAddress(parameters.operator);
+            const owner = parameters.owner as `0x${string}`;
+            const operator = parameters.operator as `0x${string}`;
 
             const approved = await walletClient.read({
                 address: parameters.tokenAddress,

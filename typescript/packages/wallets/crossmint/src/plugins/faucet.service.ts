@@ -19,7 +19,6 @@ export class CrossmintFaucetService {
     })
     async topUpUsdc(walletClient: EVMWalletClient, parameters: TopUpBalanceParameters) {
         const wallet = parameters.wallet ?? walletClient.getAddress();
-        const resolvedWalletAddress = await walletClient.resolveAddress(wallet);
 
         const network = walletClient.getChain();
 
@@ -48,10 +47,7 @@ export class CrossmintFaucetService {
 
         console.log("options", options);
 
-        const response = await fetch(
-            `${this.client.baseUrl}/api/v1-alpha2/wallets/${resolvedWalletAddress}/balances`,
-            options,
-        );
+        const response = await fetch(`${this.client.baseUrl}/api/v1-alpha2/wallets/${wallet}/balances`, options);
 
         if (response.ok) {
             return "Balance topped up successfully";

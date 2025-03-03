@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-debridge
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [9371f33]
+  - @goat-sdk/wallet-evm@0.2.9
+
 ## 0.0.4
 
 ### Patch Changes

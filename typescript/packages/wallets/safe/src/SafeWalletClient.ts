@@ -23,7 +23,6 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
-import { normalize } from "viem/ens";
 
 class SafeWalletError extends Error {
     constructor(message: string) {
@@ -168,30 +167,13 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
         const result = await this.#client.extend(publicActions).readContract({
-            address: await this.resolveAddress(address),
+            address: address as `0x${string}`,
             abi,
             functionName,
             args,
         });
 
         return { value: result };
-    }
-
-    async resolveAddress(address: string): Promise<`0x${string}`> {
-        if (!this.#safeAccount) throw new Error("Safe account not initialized");
-        if (/^0x[a-fA-F0-9]{40}$/.test(address)) return address as `0x${string}`;
-
-        try {
-            const resolvedAddress = (await this.#client.extend(publicActions).getEnsAddress({
-                name: normalize(address),
-            })) as `0x${string}`;
-            if (!resolvedAddress) {
-                throw new Error("ENS name could not be resolved.");
-            }
-            return resolvedAddress as `0x${string}`;
-        } catch (error) {
-            throw new Error(`Failed to resolve ENS name: ${error}`);
-        }
     }
 
     async signMessage(message: string) {
@@ -266,9 +248,8 @@ export class SafeWalletClient extends EVMSmartWalletClient {
     }
 
     async balanceOf(address: string) {
-        const resolvedAddress = await this.resolveAddress(address);
         const balance = await this.#client.extend(publicActions).getBalance({
-            address: resolvedAddress,
+            address: address as `0x${string}`,
         });
 
         const chain = this.#client.chain ?? mainnet;

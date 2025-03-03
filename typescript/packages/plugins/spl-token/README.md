@@ -1,10 +1,19 @@
-# Goat SPL Token Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-SPL Token plugin for Goat. Allows you to create tools for transferring and getting the balance of SPL tokens.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Goat SPL Token GOAT Plugin
+
+Transfer and get the balance of SPL tokens.
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-spl-token
+yarn add @goat-sdk/plugin-spl-token
+pnpm add @goat-sdk/plugin-spl-token
 ```
 
 ## Usage
@@ -39,12 +48,17 @@ const plugin = splToken({
 });
 ```
 
-## Goat
+## Tools
+- Get token info by symbol
+- Transfer SPL token
+- Get the balance of SPL token
 
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

@@ -1,24 +1,23 @@
-# GOAT Etherscan Plugin
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-This plugin enables your agent to interact with the Ethereum blockchain data from Etherscan.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
 
-## Configuration
-Required environment variables:
-- `ETHERSCAN_API_KEY`: Your Etherscan API key
-  - Get it from: https://etherscan.io/apis
-  - Format: 34-character string
-  - Required for: Accessing blockchain data, contract verification, and transaction history
-  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+# Etherscan GOAT Plugin
+
+This plugin enables your agent to interact with the Ethereum blockchain data from [Etherscan](https://etherscan.io/).
 
 ## Installation
 
 ```bash
+npm install @goat-sdk/plugin-etherscan
+yarn add @goat-sdk/plugin-etherscan
 pnpm add @goat-sdk/plugin-etherscan
 ```
 
-## Configuration
-
-To use the Etherscan plugin, you'll need an API key from [Etherscan](https://etherscan.io/apis).
+## Usage
 
 ```typescript
 import { etherscan } from "@goat-sdk/plugin-etherscan";
@@ -32,7 +31,7 @@ const tools = getOnChainTools({
 });
 ```
 
-## Features
+## Tools
 
 - Account balance and transaction history
 - Contract ABI and source code retrieval
@@ -42,34 +41,11 @@ const tools = getOnChainTools({
 - Gas price tracking
 - Event logs
 
-## Network Support
-
-The plugin supports both mainnet and testnet networks:
-- Ethereum Mainnet
-- Goerli Testnet
-- Sepolia Testnet
-
-## Example Usage
-
-```typescript
-// Get account balance
-const balance = await tools.get_account_balance({
-  address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-  network: "mainnet",
-});
-
-// Get contract ABI
-const abi = await tools.get_contract_abi({
-  address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-  network: "mainnet",
-});
-
-// Get gas price
-const gasPrice = await tools.get_gas_price({
-  network: "mainnet",
-});
-```
-
-## API Reference
-
-For detailed API documentation, please refer to the TypeScript types and JSDoc comments in the source code.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>

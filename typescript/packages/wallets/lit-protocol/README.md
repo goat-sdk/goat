@@ -1,5 +1,12 @@
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
 <!-- omit in toc -->
-# Lit Protocol Wallet Client
+# Lit Protocol Wallets for GOAT
 
 A GOAT wallet client implementation for Lit Protocol, supporting both EVM and Solana chains.
 
@@ -43,6 +50,8 @@ A GOAT wallet client implementation for Lit Protocol, supporting both EVM and So
 
 ```bash
 npm install @goat-sdk/wallet-lit
+yarn add @goat-sdk/wallet-lit
+pnpm add @goat-sdk/wallet-lit
 ```
 
 ## Chain Support
@@ -387,3 +396,11 @@ type LitSolanaWalletOptions = {
 
 const litWallet = lit(options: LitSolanaWalletOptions);
 ```
+
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>

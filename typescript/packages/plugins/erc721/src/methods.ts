@@ -15,13 +15,11 @@ export async function balanceOf(
     parameters: z.infer<typeof getBalanceParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedWalletAddress = await walletClient.resolveAddress(parameters.wallet);
-
         const rawBalance = await walletClient.read({
             address: token.contractAddress,
             abi: ERC721_ABI,
             functionName: "balanceOf",
-            args: [resolvedWalletAddress],
+            args: [parameters.wallet],
         });
 
         return (rawBalance.value as bigint).toString();
@@ -36,13 +34,13 @@ export async function transfer(
     parameters: z.infer<typeof transferParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedRecipientAddress = await walletClient.resolveAddress(parameters.to);
+        const to = parameters.to as `0x${string}`;
 
         const hash = await walletClient.sendTransaction({
             to: token.contractAddress,
             abi: ERC721_ABI,
             functionName: "safeTransferFrom",
-            args: [await walletClient.getAddress(), resolvedRecipientAddress, parameters.tokenId],
+            args: [walletClient.getAddress(), to, parameters.tokenId],
         });
 
         return hash.hash;
@@ -71,13 +69,13 @@ export async function approve(
     parameters: z.infer<typeof approveParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedSpenderAddress = await walletClient.resolveAddress(parameters.spender);
+        const spender = parameters.spender as `0x${string}`;
 
         const hash = await walletClient.sendTransaction({
             to: token.contractAddress,
             abi: ERC721_ABI,
             functionName: "approve",
-            args: [resolvedSpenderAddress, parameters.tokenId],
+            args: [spender, parameters.tokenId],
         });
 
         return hash.hash;
@@ -92,14 +90,14 @@ export async function transferFrom(
     parameters: z.infer<typeof transferFromParametersSchema>,
 ): Promise<string> {
     try {
-        const resolvedFromAddress = await walletClient.resolveAddress(parameters.from);
-        const resolvedToAddress = await walletClient.resolveAddress(parameters.to);
+        const from = parameters.from as `0x${string}`;
+        const to = parameters.to as `0x${string}`;
 
         const hash = await walletClient.sendTransaction({
             to: token.contractAddress,
             abi: ERC721_ABI,
             functionName: "safeTransferFrom",
-            args: [resolvedFromAddress, resolvedToAddress, parameters.tokenId],
+            args: [from, to, parameters.tokenId],
         });
 
         return hash.hash;

@@ -1,34 +1,31 @@
-# Goat Uniswap Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Uniswap plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Uniswap.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
 
-## Configuration
-Required environment variables:
-- `UNISWAP_API_KEY`: Your Uniswap API key
-  - Get it from: https://hub.uniswap.org/
-  - Format: 32-character string
-  - Required for: Accessing Uniswap's API for quotes and swaps
-- `UNISWAP_BASE_URL`: Uniswap API base URL
-  - Format: Full URL with protocol and version
-  - Default: https://api.uniswap.org/v1
-  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+# Uniswap GOAT Plugin
+Swap tokens on [Uniswap](https://uniswap.org/).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-uniswap
+yarn add @goat-sdk/plugin-uniswap
+pnpm add @goat-sdk/plugin-uniswap
 ```
 
+## Usage
 You can get your Uniswap API key [here](https://hub.uniswap.org/).
 
 For testing purposes, you can use the following base URL and API key:
 
-```
-https://trade-api.gateway.uniswap.org/v1
-kHEhfIPvCE3PO5PeT0rNb1CA3JJcnQ8r7kJDXN5X
+```typescript
+UNISWAP_BASE_URL="https://trade-api.gateway.uniswap.org/v1"
+UNISWAP_API_KEY="kHEhfIPvCE3PO5PeT0rNb1CA3JJcnQ8r7kJDXN5X"
 ```
 
-## Usage
-
+Use the plugin in your code:
 ```typescript
 import { uniswap } from "@goat-sdk/plugin-uniswap";
 
@@ -39,16 +36,16 @@ const plugin = uniswap({
 });
 ```
 
-## Working example
+## Tools
+- Get quote
+- Swap tokens
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/uniswap) for a working example of how to use the Uniswap plugin.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/2F8zTVnnFz)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

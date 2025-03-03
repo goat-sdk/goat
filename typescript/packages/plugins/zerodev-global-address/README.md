@@ -1,33 +1,32 @@
-# Goat ZeroDev Global Address Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-ZeroDev Global Address plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for managing global addresses that can receive tokens from multiple chains.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# ZeroDev Global Address Plugin
+Create global addresses that can receive tokens from multiple chains with [ZeroDev](https://docs.zerodev.app/global-address).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-zerodev-global-address
+yarn add @goat-sdk/plugin-zerodev-global-address
+pnpm add @goat-sdk/plugin-zerodev-global-address
 ```
 
 ## Usage
 
 ```typescript
-import { ZeroDevGlobalAddressService } from "@goat-sdk/plugin-zerodev-global-address";
-import { optimism } from 'viem/chains';
+import { zeroDevGlobalAddress } from "@goat-sdk/plugin-zerodev-global-address";
 
-const plugin = new ZeroDevGlobalAddressService(
-  // Optional parameter with default:
-  defaultSlippage = 5000 // Slippage tolerance in basis points (50%)
-);
-
-// Create a global address with custom parameters
-await plugin.createGlobalAddressConfig({
-  owner: '0x...', // Required: Address that will own the global address
-  destChain: optimism, // Optional: Destination chain (defaults to Optimism)
-  slippage: 5000 // Optional: Slippage tolerance in basis points (50%)
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [zeroDevGlobalAddress()],
 });
 ```
 
-## Features
-
+## Tools
 - Create global addresses that can receive tokens from multiple chains
 - Automatic token bridging to your destination chain
 - Support for multiple chains:
@@ -44,16 +43,12 @@ await plugin.createGlobalAddressConfig({
   - USDC
   - Wrapped native tokens
 
-## Working example
-
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/zerdev-global-address-transfer) for a working example of how to use the ZeroDev Global Address plugin.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/2F8zTVnnFz)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

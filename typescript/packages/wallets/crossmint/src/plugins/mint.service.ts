@@ -1,22 +1,28 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { getCrossmintChainString } from "../chains";
+import { getCrossmintChainString, isStoryChain } from "../chains";
 import { GetAllCollectionsParameters, MintNFTParameters } from "./mint.parameters";
 
 export class CrossmintMintService {
     constructor(private readonly client: CrossmintApiClient) {}
+
+    getEndpointRoot(chain: string) {
+        return isStoryChain(chain) ? "/api/v1/ip" : "/api/2022-06-09";
+    }
 
     @Tool({
         description: "Create a new collection and return the id of the collection",
     })
     async createCollection(walletClient: EVMWalletClient, parameters: MintNFTParameters) {
         // TODO: add chain as a parameter
-        const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/collections/`, {
+        const chain = getCrossmintChainString(walletClient.getChain());
+
+        const response = await fetch(`${this.client.baseUrl}${this.getEndpointRoot(chain)}/collections`, {
             method: "POST",
             body: JSON.stringify({
                 ...parameters,
-                chain: getCrossmintChainString(walletClient.getChain()),
+                chain,
             }),
             headers: {
                 ...this.client.authHeaders,
@@ -32,9 +38,7 @@ export class CrossmintMintService {
 
         const { id, actionId } = result;
 
-        const action = await this.waitForAction(actionId);
-
-        const chain = getCrossmintChainString(walletClient.getChain());
+        const action = await this.waitForAction(actionId, chain);
 
         return {
             collectionId: id,
@@ -47,7 +51,9 @@ export class CrossmintMintService {
         description: "Get all collections created by the user",
     })
     async getAllCollections(walletClient: EVMWalletClient, parameters: GetAllCollectionsParameters) {
-        const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/collections/`, {
+        const chain = getCrossmintChainString(walletClient.getChain());
+
+        const response = await fetch(`${this.client.baseUrl}${this.getEndpointRoot(chain)}/collections/`, {
             headers: {
                 ...this.client.authHeaders,
                 "Content-Type": "application/json",
@@ -71,8 +77,12 @@ export class CrossmintMintService {
             recipient = `${getCrossmintChainString(walletClient.getChain())}:${parameters.recipient}`;
         }
 
+        const chain = getCrossmintChainString(walletClient.getChain());
+
+        const endpointEnding = isStoryChain(chain) ? "/ipass" : "/nfts";
+
         const response = await fetch(
-            `${this.client.baseUrl}/api/2022-06-09/collections/${parameters.collectionId}/nfts`,
+            `${this.client.baseUrl}${this.getEndpointRoot(chain)}/collections/${parameters.collectionId}${endpointEnding}`,
             {
                 method: "POST",
                 body: JSON.stringify({
@@ -94,7 +104,7 @@ export class CrossmintMintService {
 
         const { id, actionId, onChain } = result;
 
-        const action = await this.waitForAction(actionId);
+        const action = await this.waitForAction(actionId, chain);
 
         return {
             id: id,
@@ -104,11 +114,11 @@ export class CrossmintMintService {
         };
     }
 
-    private async waitForAction(actionId: string) {
+    private async waitForAction(actionId: string, chain: string) {
         let attempts = 0;
         while (true) {
             attempts++;
-            const response = await fetch(`${this.client.baseUrl}/api/2022-06-09/actions/${actionId}`, {
+            const response = await fetch(`${this.client.baseUrl}${this.getEndpointRoot(chain)}/actions/${actionId}`, {
                 headers: {
                     ...this.client.authHeaders,
                     "Content-Type": "application/json",

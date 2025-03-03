@@ -1,28 +1,23 @@
-# Goat Polymarket Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-Polymarket plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to create tools for interacting with Polymarket.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
 
-## Configuration
-Required environment variables:
-- `POLYMARKET_API_KEY`: Your Polymarket API key
-  - Get it from: Using the `polymarket:api-key` script (see setup instructions)
-  - Format: UUID string
-  - Required for: Accessing Polymarket's API for trading and market data
-- `POLYMARKET_SECRET`: Your Polymarket API secret
-  - Generated alongside API key
-  - Format: Base64 encoded string
-- `POLYMARKET_PASSPHRASE`: Your Polymarket API passphrase
-  - Generated alongside API key
-  - Format: String
-  - See: [Environment Variables Guide](../../../docs/environment-variables.mdx)
+# Polymarket GOAT Plugin
+Make bets and get market data from [Polymarket](https://polymarket.com/).
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-polymarket
+yarn add @goat-sdk/plugin-polymarket
+pnpm add @goat-sdk/plugin-polymarket
 ```
 
 ## Usage
 
+**Follow the instructions in the [example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-bet-on-polymarket) to get your API key** and start using the plugin:
 ```typescript
 import { polymarket } from "@goat-sdk/plugin-polymarket";
 
@@ -36,16 +31,20 @@ const plugin = polymarket({
 });
 ```
 
-## Working example
+## Tools
+- Get events
+- Get market info
+- Create order
+- Get active orders
+- Cancel order
+- Cancel all orders
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/polymarket) for a working example of how to use the Polymarket plugin.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a> 
+</div>
+</footer>

@@ -1,10 +1,19 @@
-# Goat SNS Plugin 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-SNS plugin for [Goat 🐐](https://ohmygoat.dev). Allows you to resolve SNS domain names to Solana addresses.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Goat SNS Plugin
+
+Resolve [SNS](https://www.sns.id/) domain names to Solana addresses.
 
 ## Installation
 ```
 npm install @goat-sdk/plugin-sns
+yarn add @goat-sdk/plugin-sns
+pnpm add @goat-sdk/plugin-sns
 ```
 
 ## Usage
@@ -12,19 +21,23 @@ npm install @goat-sdk/plugin-sns
 ```typescript
 import { sns } from "@goat-sdk/plugin-sns";
 
-const plugin = sns();
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+        sns(),
+    ],
+});
 ```
 
-## Working example
+## Tools
+- Resolve SNS domain names to Solana addresses
 
-See the [Vercel AI example](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/sns) for a working example of how to use the SNS plugin.
-
-## Goat
-
-<div align="center">
-Go out and eat some grass.
-
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/2F8zTVnnFz)</div>
-
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

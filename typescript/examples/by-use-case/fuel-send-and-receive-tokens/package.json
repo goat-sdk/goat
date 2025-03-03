@@ -1,0 +1,22 @@
+{
+    "name": "goat-examples-fuel-send-and-receive-tokens",
+    "version": "0.1.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "send-eth": "ts-node index.ts",
+        "test": "vitest run --passWithNoTests"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@ai-sdk/openai": "~1.0.4",
+        "@goat-sdk/adapter-vercel-ai": "0.2.8",
+        "@goat-sdk/core": "0.4.7",
+        "@goat-sdk/wallet-fuel": "0.1.7",
+        "fuels": "0.97.2",
+        "ai": "~4.0.3",
+        "dotenv": "^16.4.5",
+        "zod": "3.23.8"
+    }
+}

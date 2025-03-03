@@ -1,41 +1,46 @@
-# @goat/starknet-token
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
 
-A Goat plugin for interacting with tokens on the Starknet blockchain.
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
 
-## Features
+# Starknet Token GOAT Plugin
 
-- Support for ERC20 tokens on Starknet
-- Balance checking
-- Token transfers
-- Allowance management (approve/check allowance)
-- Pre-configured common tokens (ETH, USDC, STRK)
-- Support for mainnet network for now
+Interact with tokens on the [Starknet](https://www.starknet.io/) blockchain.
+
 
 ## Installation
 
 ```bash
-npm install @goat/starknet-token
+npm install @goat-sdk/plugin-starknet-token
+yarn add @goat-sdk/plugin-starknet-token
+pnpm add @goat-sdk/plugin-starknet-token
 ```
+
 ## Usage
 ```typescript
 import { starknetToken, STARKNET_TOKENS } from "@goat-sdk/plugin-starknet-token";
 
-const plugin = starknetToken({ tokens: STARKNET_TOKENS });
+const tools = await getOnChainTools({
+    wallet: // ...
+    plugins: [
+        starknetToken({ tokens: STARKNET_TOKENS }),
+    ],
+});
 ```
 
-## Working example
-See the [Vercel AI example](https://github.com/MahmoudMohajer/goat/tree/starknet_demo/typescript/examples/vercel-ai/avnu) for a working example of how to use the Starknet Token plugin.
-## Supported Networks
+## Tools
+- Get token info by symbol
+- Transfer token
+- Get the balance of token
 
-- Mainnet
-
-## Pre-configured Tokens
-
-- ETH (Ether)
-- USDC (USD Coin)
-- STRK (Starknet Token)
-- EKUBO (Ekubo Token)
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. 
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>

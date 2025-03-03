@@ -5,7 +5,7 @@ packages:
     - "!**/dist/**"
 
 catalog:
-    viem: 2.21.49
+    viem: 2.23.4
     zod: 3.23.8
     zod-to-json-schema: 3.23.5
     "@solana/spl-token": 0.4.9

@@ -1,16 +1,46 @@
-# Goat Adapter Vercel AI 🐐 - TypeScript
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
+# Vercel AI SDK Adapter for GOAT
+
+Integrate the more than +200 onchain tools of GOAT with [Vercel AI SDK](https://sdk.vercel.ai).
 
 ## Installation
 ```
 npm install @goat-sdk/adapter-vercel-ai
+yarn add @goat-sdk/adapter-vercel-ai
+pnpm add @goat-sdk/adapter-vercel-ai
 ```
 
-## Goat
+## Usage
 
-<div align="center">
-Go out and eat some grass.
+See a full working example [here](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/vercel-ai).
 
-[Docs](https://ohmygoat.dev) | [Examples](https://github.com/goat-sdk/goat/tree/main/typescript/examples) | [Discord](https://discord.gg/goat-sdk)</div>
+```ts
+import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 
-## Goat 🐐
-Goat 🐐 (Great Onchain Agent Toolkit) is an open-source library enabling AI agents to interact with blockchain protocols and smart contracts via their own wallets.
+const tools = await getOnChainTools({
+    wallet: // your wallet
+    plugins: // your plugins
+});
+
+const result = await generateText({
+    model: openai("gpt-4o-mini"),
+    tools: tools,
+    prompt: "Your prompt here",
+});
+```
+
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+<div>
+</footer>

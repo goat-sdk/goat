@@ -125,7 +125,7 @@ export class KimService {
     })
     async swapExactInputMultiHop(walletClient: EVMWalletClient, parameters: ExactInputParams): Promise<string> {
         try {
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = parameters.recipient as `0x${string}`;
 
             // Get first and last token decimals
             const tokenInDecimals = Number(
@@ -182,7 +182,7 @@ export class KimService {
     })
     async swapExactOutputMultiHop(walletClient: EVMWalletClient, parameters: ExactOutputParams): Promise<string> {
         try {
-            const recipient = await walletClient.resolveAddress(parameters.recipient);
+            const recipient = parameters.recipient as `0x${string}`;
 
             // Get first and last token decimals
             const tokenInDecimals = Number(
