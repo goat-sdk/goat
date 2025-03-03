@@ -587,7 +587,7 @@ describe("CrossmintWalletsAPI", () => {
                 maxAttempts: 2,
             });
             expect(result.status).toBe("success");
-            expect(result.hash).toBe("0xhash123");
+            expect(result.onChain?.txId).toBe("0xhash123");
         });
 
         it("should poll signature verification until completion", async () => {

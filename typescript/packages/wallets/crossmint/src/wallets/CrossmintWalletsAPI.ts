@@ -65,16 +65,17 @@ interface CreateTransactionRequest {
     params: EVMTransactionParams | SolanaTransactionParams;
 }
 
-interface CreateTransactionResponse {
+export interface CreateTransactionResponse {
     id: string;
     walletType: "evm-smart-wallet" | "solana-custodial-wallet";
     status: "awaiting-approval" | "pending" | "failed" | "success";
     approvals?: TransactionApprovals;
     params: EVMTransactionParams | SolanaTransactionParams;
+    error?: {
+        reason: string;
+        message: string;
+    };
     onChain?: {
-        userOperation?: object;
-        userOperationHash?: string;
-        chain?: string;
         txId?: string;
     };
     createdAt: string;
@@ -102,21 +103,6 @@ interface Call {
     to: string;
     value: string;
     data: string;
-}
-
-////////////////////////////////////////////////////////////////////
-// Transaction Status
-////////////////////////////////////////////////////////////////////
-export interface TransactionStatusResponse extends CreateTransactionResponse {
-    hash?: string;
-    error?: string;
-    onChain?: {
-        userOperation?: object;
-        userOperationHash?: string;
-        chain?: string;
-        txId?: string;
-        hash?: string;
-    };
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -515,10 +501,10 @@ export class CrossmintWalletsAPI {
         });
     }
 
-    public async checkTransactionStatus(locator: string, transactionId: string): Promise<TransactionStatusResponse> {
+    public async checkTransactionStatus(locator: string, transactionId: string): Promise<CreateTransactionResponse> {
         const endpoint = `/wallets/${encodeURIComponent(locator)}/transactions/${encodeURIComponent(transactionId)}`;
 
-        return this.request<TransactionStatusResponse>(endpoint, {
+        return this.request<CreateTransactionResponse>(endpoint, {
             method: "GET",
         });
     }
@@ -527,7 +513,7 @@ export class CrossmintWalletsAPI {
         locator: string,
         transactionId: string,
         options: { interval?: number; maxAttempts?: number } = {},
-    ): Promise<TransactionStatusResponse> {
+    ): Promise<CreateTransactionResponse> {
         const interval = options.interval || 1000;
         const maxAttempts = options.maxAttempts || 30;
         let attempts = 0;

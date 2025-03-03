@@ -4,7 +4,7 @@ import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-sol
 import { type Connection, Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
-import { CrossmintWalletsAPI, SolanaDelegatedSignerResponse, TransactionStatusResponse } from "./CrossmintWalletsAPI";
+import { CreateTransactionResponse, CrossmintWalletsAPI, SolanaDelegatedSignerResponse } from "./CrossmintWalletsAPI";
 
 export type SolanaSmartWalletOptions = {
     connection: Connection;
@@ -95,7 +95,7 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
         transactionId: string,
         signers: Keypair[],
         errorPrefix = "Transaction",
-    ): Promise<TransactionStatusResponse> {
+    ): Promise<CreateTransactionResponse> {
         // Check initial transaction status
         let currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
 
@@ -112,7 +112,9 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
             currentTransaction = await this.#api.checkTransactionStatus(this.#locator, transactionId);
 
             if (currentTransaction.status === "failed") {
-                throw new Error(`${errorPrefix} failed: ${currentTransaction.error}`);
+                throw new Error(
+                    `${errorPrefix} failed: ${currentTransaction.error?.reason}, ${currentTransaction.error?.message}`,
+                );
             }
 
             if (currentTransaction.status === "awaiting-approval") {
@@ -163,7 +165,8 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
 
             // Prepare signers array
             const signers = [
-                ...(this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : []),
+                // Only include adminSigner if no custom signer is provided and it's a non-custodial signer
+                ...(signer ? [signer] : this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : []),
                 ...additionalSigners,
             ];
 
@@ -185,16 +188,19 @@ export class SolanaSmartWalletClient extends SolanaWalletClient {
                 signer,
             )) as SolanaDelegatedSignerResponse;
 
-            // For Solana non-custodial delegated signers, we need to handle the transaction approval
-            if ("transaction" in response && response.transaction) {
-                const transactionId = response.transaction.id;
-
-                // For delegated signer registration, only the admin signer is needed
-                const signers = this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : [];
-
-                // Handle transaction flow
-                await this.handleTransactionFlow(transactionId, signers, "Delegated signer registration");
+            if (!("transaction" in response) || !response.transaction) {
+                throw new Error(
+                    `Expected transaction in response for non-custodial delegated signer registration. Response: ${JSON.stringify(response)}`,
+                );
             }
+
+            const transactionId = response.transaction.id;
+
+            // For delegated signer registration, only the admin signer is needed
+            const signers = this.#adminSigner.type === "solana-keypair" ? [this.#adminSigner.keypair] : [];
+
+            // Handle transaction flow
+            await this.handleTransactionFlow(transactionId, signers, "Delegated signer registration");
 
             return response;
         } catch (error) {
