@@ -14,7 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "zod": "catalog:",
-        "axios": "1.7.9"
+        "axios": "1.8.0"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
