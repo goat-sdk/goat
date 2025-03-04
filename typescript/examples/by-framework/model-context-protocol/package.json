@@ -11,7 +11,9 @@
         "test": "vitest run --passWithNoTests",
         "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
     },
-    "files": ["build"],
+    "files": [
+        "build"
+    ],
     "author": "",
     "license": "MIT",
     "dependencies": {
