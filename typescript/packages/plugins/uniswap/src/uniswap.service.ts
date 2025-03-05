@@ -2,6 +2,7 @@ import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { CheckApprovalBodySchema, GetQuoteParameters } from "./parameters";
 import type { UniswapCtorParams } from "./types/UniswapCtorParams";
+import { resolveTokenAddress } from "../src/token-lookup";
 
 export class UniswapService {
     constructor(private readonly params: UniswapCtorParams) {}
@@ -62,12 +63,24 @@ export class UniswapService {
         description: "Get the quote for a swap",
     })
     async getQuote(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
-        return this.makeRequest("quote", {
-            ...parameters,
-            tokenInChainId: walletClient.getChain().id,
-            tokenOutChainId: parameters.tokenOutChainId ?? walletClient.getChain().id,
-            swapper: walletClient.getAddress(),
-        });
+        const chainId = walletClient.getChain().id;
+        const targetChainId = parameters.tokenOutChainId ?? chainId;
+
+        try {            
+            const tokenInAddress = await resolveTokenAddress(parameters.tokenIn, chainId);
+            const tokenOutAddress = await resolveTokenAddress(parameters.tokenOut, targetChainId);
+
+            return this.makeRequest("quote", {
+                ...parameters,
+                tokenIn: tokenInAddress,
+                tokenOut: tokenOutAddress,
+                tokenInChainId: chainId,
+                tokenOutChainId: targetChainId,
+                swapper: await walletClient.getAddress(),
+            });
+        } catch (error) {
+            throw new Error(`Failed to get quote: ${error instanceof Error ? error.message : String(error)}`);
+        }
     }
 
     @Tool({
