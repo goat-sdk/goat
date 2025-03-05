@@ -84,7 +84,7 @@ GOAT is free software, MIT licensed.
   - Swap tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-swap-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-swap-tokens)]
   - Create and manage DeFi positions [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-defi-agent), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-defi-agent)]
   - Mint NFTs [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-mint-nft), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-mint-nft)]
-  - Make bets on Polymarket [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/polymarket)]
+  - Make bets on Polymarket [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-bet-on-polymarket)]
   - Launch a token on Pump.fun [[Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-launch-token)]
   - Purchase physical assets [coming soon]
 - **By framework**
