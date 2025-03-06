@@ -26,7 +26,7 @@ export function createRouletteTool(walletClient: EVMWalletClient, theGraphKey?: 
                     .gte(MIN_SELECTABLE_ROULETTE_NUMBER)
                     .lte(MAX_SELECTABLE_ROULETTE_NUMBER)
                     .array()
-                    .min(MIN_SELECTABLE_ROULETTE_NUMBER)
+                    .min(1)
                     .max(MAX_SELECTABLE_ROULETTE_NUMBER)
                     .describe("The numbers to bet on"),
                 ...casinoBetParams,
