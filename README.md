@@ -101,7 +101,7 @@ GOAT is free software, MIT licensed.
   - [Safe](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/safe)
 
 - **See all typescript quickstarts [here](https://github.com/goat-sdk/goat/tree/main/typescript/examples).**
-  
+
 ## 🐍 Python
 - **By use case**
   - Send and receive tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/web3), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
@@ -124,6 +124,7 @@ GOAT is free software, MIT licensed.
 | Avnu | Swap tokens on Starknet | [@goat-sdk/plugin-avnu](https://www.npmjs.com/package/@goat-sdk/plugin-avnu) |
 | Balancer | Swap tokens and provide liquidity on Balancer | [@goat-sdk/plugin-balancer](https://www.npmjs.com/package/@goat-sdk/plugin-balancer) |
 | Balmy | Swap tokens on Balmy | [@goat-sdk/plugin-balmy](https://www.npmjs.com/package/@goat-sdk/plugin-balmy) |
+| BetSwirl | Play casino games | [@goat-sdk/plugin-betswirl](https://www.npmjs.com/package/@goat-sdk/plugin-betswirl) |
 | BirdEye | Get token insights using BirdEye API | [@goat-sdk/plugin-birdeye](https://www.npmjs.com/package/@goat-sdk/plugin-birdeye) |
 | BMX | Get token insights using BMX API | [@goat-sdk/plugin-bmx](https://www.npmjs.com/package/@goat-sdk/plugin-bmx) |
 | CoinGecko | Get coin information using CoinGecko API | [@goat-sdk/plugin-coingecko](https://www.npmjs.com/package/@goat-sdk/plugin-coingecko) | [goat-sdk-plugin-coingecko](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/coingecko) |
@@ -133,7 +134,7 @@ GOAT is free software, MIT licensed.
 | Crossmint Mint, Faucet, Wallets | Create a wallet, mint tokens and get test tokens on any chain using Crossmint | [@goat-sdk/plugin-crossmint-mint-faucet-wallets](https://www.npmjs.com/package/@goat-sdk/plugin-crossmint-mint-faucet-wallets) |
 | DeBridge | Bridge tokens on DeBridge | [@goat-sdk/plugin-debridge](https://www.npmjs.com/package/@goat-sdk/plugin-debridge) | [goat-sdk-plugin-debridge](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/debridge) |
 | Dexscreener | Get token information using Dexscreener API | [@goat-sdk/plugin-dexscreener](https://www.npmjs.com/package/@goat-sdk/plugin-dexscreener) | [goat-sdk-plugin-dexscreener](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/dexscreener) |
-| ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) | 
+| ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) |
 | Enso | Find the most optimal route between tokens | [@goat-sdk/plugin-enso](https://www.npmjs.com/package/@goat-sdk/plugin-enso) |
 | ERC20 | Interact with any ERC20 token | [@goat-sdk/plugin-erc20](https://www.npmjs.com/package/@goat-sdk/plugin-erc20) | [goat-sdk-plugin-erc20](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/erc20) |
 | ERC721 | Interact with any ERC721 token | [@goat-sdk/plugin-erc721](https://www.npmjs.com/package/@goat-sdk/plugin-erc721) |
@@ -180,9 +181,9 @@ GOAT is free software, MIT licensed.
 | Viem / Web3 (any EVM compatible chain) | [@goat-sdk/wallet-viem](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/viem) | [goat-sdk-wallet-web3](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/web3) |
 | Solana | [@goat-sdk/wallet-solana](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/solana) | [goat-sdk-wallet-solana](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/solana) |
 | Crossmint | [@goat-sdk/wallet-crossmint](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | [goat-sdk-wallet-crossmint](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/crossmint) |
-| Aptos | [@goat-sdk/wallet-aptos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/aptos) | 
-| Chromia | [@goat-sdk/wallet-chromia](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/chromia) | 
-| Cosmos | [@goat-sdk/wallet-cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/cosmos) | 
+| Aptos | [@goat-sdk/wallet-aptos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/aptos) |
+| Chromia | [@goat-sdk/wallet-chromia](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/chromia) |
+| Cosmos | [@goat-sdk/wallet-cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/cosmos) |
 | Fuel | [@goat-sdk/wallet-fuel](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/fuel) |
 | Lit | [@goat-sdk/wallet-lit](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/lit) |
 | Radix | [@goat-sdk/wallet-radix](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/radix) |
@@ -197,11 +198,11 @@ GOAT is free software, MIT licensed.
 | AI SDK | [@goat-sdk/adapter-vercel-ai](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/vercel-ai) |
 | Langchain | [@goat-sdk/adapter-langchain](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/langchain) | [goat-sdk-adapter-langchain](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/langchain)
 | ElevenLabs | [@goat-sdk/adapter-eleven-labs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/eleven-labs)
-| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) | 
+| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/model-context-protocol) |
 | Eliza | [@elizaos/plugin-goat](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
-| ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) | 
+| ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) |
 
 
 # 💻 Contributing
