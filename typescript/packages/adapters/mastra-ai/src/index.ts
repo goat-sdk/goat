@@ -1,6 +1,6 @@
-import { getTools, type GetToolsParams, type ToolBase, type WalletClientBase } from "@goat-sdk/core";
+import { type GetToolsParams, type ToolBase, type WalletClientBase, getTools } from "@goat-sdk/core";
 import type { Tool } from "@mastra/core";
-import { createTool } from "@mastra/core/tools";
+import { createTool } from "@mastra/core";
 
 export type GetOnChainToolsParams<TWalletClient extends WalletClientBase> = GetToolsParams<TWalletClient>;
 
@@ -13,7 +13,8 @@ export async function getOnChainTools<TWalletClient extends WalletClientBase>({
         plugins,
     });
 
-    const mastraTools: { [key: string]: Tool } = {};
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    const mastraTools: { [key: string]: Tool<string, any, any> } = {};
 
     for (const t of tools) {
         mastraTools[t.name] = createTool({
