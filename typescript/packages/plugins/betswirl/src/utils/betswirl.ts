@@ -209,7 +209,8 @@ export async function getBet(walletClient: EVMWalletClient, txHash: Hex, theGrap
         }
         if (betData.error) {
             throw new Error(`[${betData.error.code}] Error fetching bet: ${betData.error.message}`);
-        } else if (!betData.bet) {
+        }
+        if (!betData.bet) {
             throw new Error(`Error fetching bet: ${txHash}`);
         }
         const bet = betData.bet;
@@ -225,7 +226,7 @@ export async function getBet(walletClient: EVMWalletClient, txHash: Hex, theGrap
             rolled: bet.decodedRolled,
             payout: bet.formattedPayout,
             rollTxnHash: bet.rollTxnHash,
-            rollTxnLink: formatTxnUrl(bet.rollTxnHash!, chainId),
+            rollTxnLink: bet.rollTxnHash ? formatTxnUrl(bet.rollTxnHash, chainId) : null,
             linkOnBetSwirl: `https://www.betswirl.com/${slugById[chainId]}/casino/${bet.game}/${bet.id}`,
         };
     } catch (error) {

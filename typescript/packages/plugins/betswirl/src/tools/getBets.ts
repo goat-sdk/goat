@@ -55,7 +55,7 @@ async function getSubgraphBets(chainId: CasinoChainId, bettor: Hex, game: CASINO
             rolled: bet.decodedRolled,
             payout: bet.formattedPayout,
             rollTxnHash: bet.rollTxnHash,
-            rollTxnLink: formatTxnUrl(bet.rollTxnHash!, chainId),
+            rollTxnLink: bet.rollTxnHash ? formatTxnUrl(bet.rollTxnHash, chainId) : null,
             linkOnBetSwirl: `https://www.betswirl.com/${slugById[chainId]}/casino/${bet.game}/${bet.id}`,
         }));
     } catch (error) {
