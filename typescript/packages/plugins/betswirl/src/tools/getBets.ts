@@ -3,14 +3,14 @@ import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { type Hex } from "viem";
 import { z } from "zod";
 
-import { CASINO_GAME_TYPE, CasinoChainId, fetchBets } from "@betswirl/sdk-core";
+import { CASINO_GAME_TYPE, CasinoChainId, FORMAT_TYPE, fetchBets, formatTxnUrl, slugById } from "@betswirl/sdk-core";
 
 import { hexAddress } from "../parameters";
 
 export function createGetBetsTool(walletClient: EVMWalletClient, theGraphKey?: string) {
     return createTool(
         {
-            name: "betswirl.getBets",
+            name: "betswirl_getBets",
             description:
                 "Get bets from BetSwirl. If no player is specified its listing the current connected player bets. If no game is specified its listing all games bets.",
             parameters: z.object({
@@ -32,7 +32,7 @@ export function createGetBetsTool(walletClient: EVMWalletClient, theGraphKey?: s
 async function getSubgraphBets(chainId: CasinoChainId, bettor: Hex, game: CASINO_GAME_TYPE, theGraphKey?: string) {
     try {
         const bets = await fetchBets(
-            { chainId, theGraphKey },
+            { chainId, theGraphKey, formatType: FORMAT_TYPE.PRECISE },
             {
                 bettor,
                 game,
@@ -43,7 +43,21 @@ async function getSubgraphBets(chainId: CasinoChainId, bettor: Hex, game: CASINO
         if (bets.error) {
             throw new Error(`[${bets.error.code}] Error fetching bets: ${bets.error.message}`);
         }
-        return bets.bets;
+        return bets.bets.map((bet) => ({
+            id: String(bet.id),
+            input: bet.decodedInput,
+            betTxnHash: bet.betTxnHash,
+            betTxnLink: formatTxnUrl(bet.betTxnHash, chainId),
+            betAmount: bet.formattedBetAmount,
+            token: bet.token.symbol,
+            isWin: bet.isWin,
+            payoutMultiplier: bet.payoutMultiplier,
+            rolled: bet.decodedRolled,
+            payout: bet.formattedPayout,
+            rollTxnHash: bet.rollTxnHash,
+            rollTxnLink: formatTxnUrl(bet.rollTxnHash!, chainId),
+            linkOnBetSwirl: `https://www.betswirl.com/${slugById[chainId]}/casino/${bet.game}/${bet.id}`,
+        }));
     } catch (error) {
         throw new Error(`An error occured while getting the bet: ${error}`);
     }

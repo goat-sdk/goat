@@ -1,6 +1,7 @@
 import {
     type CASINO_GAME_TYPE,
     type CasinoChainId,
+    FORMAT_TYPE,
     type GameEncodedInput,
     type RawBetRequirements,
     type RawCasinoToken,
@@ -8,11 +9,13 @@ import {
     casinoChainById,
     chainNativeCurrencyToToken,
     fetchBetByHash,
+    formatTxnUrl,
     getBetRequirementsFunctionData,
     getCasinoTokensFunctionData,
     getPlaceBetFunctionData,
     parseRawBetRequirements,
     rawTokenToToken,
+    slugById,
 } from "@betswirl/sdk-core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { type Hex, parseUnits } from "viem";
@@ -100,7 +103,7 @@ async function getChainlinkVrfCost(
             betCount: betCount.toString(),
             chainId: chainId.toString(),
         });
-        const response = await fetch(`https://api.betswirl.com/vrfFees?${params}`, {});
+        const response = await fetch(`https://api.betswirl.com/api/vrfFees?${params}`, {});
 
         if (!response.ok) {
             throw new Error(`An error occured while fetching the chainlink vrf cost from API: ${response.statusText}`);
@@ -160,13 +163,16 @@ export async function placeBet(
         //         120n) /
         //     100n;
 
-        const vrfCost = await getChainlinkVrfCost(
-            walletClient,
-            game,
-            casinoGameParams.betToken.address,
-            casinoGameParams.betCount,
-            0n, //gasPrice that we couldn't get from provider
-        );
+        const vrfCost =
+            ((await getChainlinkVrfCost(
+                walletClient,
+                game,
+                casinoGameParams.betToken.address,
+                casinoGameParams.betCount,
+                0n, //gasPrice that we couldn't get from provider
+            )) *
+                120n) /
+            100n;
         const { hash: betHash } = await walletClient.sendTransaction({
             to: functionData.data.to,
             functionName: functionData.data.functionName,
@@ -181,9 +187,14 @@ export async function placeBet(
     }
 }
 
-export async function getBet(chainId: CasinoChainId, txHash: Hex, theGraphKey?: string) {
+export async function getBet(walletClient: EVMWalletClient, txHash: Hex, theGraphKey?: string) {
+    const chainId = walletClient.getChain().id as CasinoChainId;
     try {
-        let betData = await fetchBetByHash(txHash, { chainId, theGraphKey });
+        let betData = await fetchBetByHash(txHash, {
+            chainId,
+            theGraphKey,
+            formatType: FORMAT_TYPE.PRECISE,
+        });
         const startTime = Date.now(); // Record the start time
         const timeout = 60000; // 1 minute timeout
         while ((!betData.bet || !betData.bet.isResolved) && !betData.error) {
@@ -198,8 +209,25 @@ export async function getBet(chainId: CasinoChainId, txHash: Hex, theGraphKey?: 
         }
         if (betData.error) {
             throw new Error(`[${betData.error.code}] Error fetching bet: ${betData.error.message}`);
+        } else if (!betData.bet) {
+            throw new Error(`Error fetching bet: ${txHash}`);
         }
-        return betData.bet;
+        const bet = betData.bet;
+        return {
+            id: String(bet.id),
+            input: bet.decodedInput,
+            betTxnHash: bet.betTxnHash,
+            betTxnLink: formatTxnUrl(bet.betTxnHash, chainId),
+            betAmount: bet.formattedBetAmount,
+            token: bet.token.symbol,
+            isWin: bet.isWin,
+            payoutMultiplier: bet.payoutMultiplier,
+            rolled: bet.decodedRolled,
+            payout: bet.formattedPayout,
+            rollTxnHash: bet.rollTxnHash,
+            rollTxnLink: formatTxnUrl(bet.rollTxnHash!, chainId),
+            linkOnBetSwirl: `https://www.betswirl.com/${slugById[chainId]}/casino/${bet.game}/${bet.id}`,
+        };
     } catch (error) {
         throw new Error(`An error occured while getting the bet: ${error}`);
     }

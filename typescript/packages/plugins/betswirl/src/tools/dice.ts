@@ -12,14 +12,14 @@ import {
 } from "@betswirl/sdk-core";
 
 import { casinoBetParams, getMaxBetCountParam } from "../parameters";
-import { getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
+import { getBet, getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
 
-export function createDiceTool(walletClient: EVMWalletClient) {
+export function createDiceTool(walletClient: EVMWalletClient, theGraphKey?: string) {
     return createTool(
         {
-            name: "betswirl.dice",
+            name: "betswirl_dice",
             description:
-                "Play the BetSwirl Dice. The player is betting that the rolled number will be above this chosen number.",
+                "Play the BetSwirl Dice. The player is betting that the rolled number will be above this chosen number. The user input also contains the bet amount (in ether unit), and the token symbol.",
             parameters: z.object({
                 number: z
                     .number()
@@ -54,7 +54,7 @@ export function createDiceTool(walletClient: EVMWalletClient) {
                 },
             );
 
-            return hash;
+            return await getBet(walletClient, hash, theGraphKey);
         },
     );
 }

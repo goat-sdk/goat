@@ -6,13 +6,14 @@ import { z } from "zod";
 import { CASINO_GAME_TYPE, COINTOSS_FACE, CoinToss } from "@betswirl/sdk-core";
 
 import { casinoBetParams, getMaxBetCountParam } from "../parameters";
-import { getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
+import { getBet, getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
 
-export function createCoinTossTool(walletClient: EVMWalletClient) {
+export function createCoinTossTool(walletClient: EVMWalletClient, theGraphKey?: string) {
     return createTool(
         {
-            name: "betswirl.coinToss",
-            description: "Flip a coin on BetSwirl. The player is betting that the rolled face will be the one chosen.",
+            name: "betswirl_coinToss",
+            description:
+                "Flip a coin on BetSwirl. The player is betting that the rolled face will be the one chosen. The user input also contains the bet amount (in ether unit), and the token symbol.",
             parameters: z.object({
                 face: z.nativeEnum(COINTOSS_FACE).describe("The face of the coin"),
                 ...casinoBetParams,
@@ -43,7 +44,7 @@ export function createCoinTossTool(walletClient: EVMWalletClient) {
                 },
             );
 
-            return hash;
+            return await getBet(walletClient, hash, theGraphKey);
         },
     );
 }

@@ -12,14 +12,14 @@ import {
 } from "@betswirl/sdk-core";
 
 import { casinoBetParams, getMaxBetCountParam } from "../parameters";
-import { getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
+import { getBet, getBetAmountInWei, getBetToken, placeBet } from "../utils/betswirl";
 
-export function createRouletteTool(walletClient: EVMWalletClient) {
+export function createRouletteTool(walletClient: EVMWalletClient, theGraphKey?: string) {
     return createTool(
         {
-            name: "betswirl.roulette",
+            name: "betswirl_roulette",
             description:
-                "Play the BetSwirl Roulette. The player is betting that the rolled number will be one of the chosen numbers.",
+                "Play the BetSwirl Roulette. The player is betting that the rolled number will be one of the chosen numbers. The user input also contains the bet amount (in ether unit), and the token symbol.",
             parameters: z.object({
                 numbers: z
                     .number()
@@ -57,7 +57,7 @@ export function createRouletteTool(walletClient: EVMWalletClient) {
                 },
             );
 
-            return hash;
+            return await getBet(walletClient, hash, theGraphKey);
         },
     );
 }
