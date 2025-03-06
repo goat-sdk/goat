@@ -211,7 +211,7 @@ export async function getBet(walletClient: EVMWalletClient, txHash: Hex, theGrap
             throw new Error(`[${betData.error.code}] Error fetching bet: ${betData.error.message}`);
         }
         if (!betData.bet) {
-            throw new Error(`Error fetching bet: ${txHash}`);
+            throw new Error(`The bet hasn't been indexed in time, please retry later: ${txHash}`);
         }
         const bet = betData.bet;
         return {
