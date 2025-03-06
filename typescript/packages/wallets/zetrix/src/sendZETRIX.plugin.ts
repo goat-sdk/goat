@@ -28,8 +28,8 @@ export class SendZETRIXPlugin extends PluginBase<ZetrixWalletClient> {
 export const sendZETRIX = () => new SendZETRIXPlugin();
 
 const sendZETRIXParametersSchema = z.object({
-    to: z.string().describe("The address to send APT to"),
-    amount: z.string().describe("The amount of APT to send"),
+    to: z.string().describe("The address to send ZETRIX to"),
+    amount: z.string().describe("The amount of ZETRIX to send"),
 });
 
 async function sendZETRIXMethod(
@@ -45,4 +45,3 @@ async function sendZETRIXMethod(
         throw new Error(`Failed to send ZETRIX: ${error}`);
     }
 }
-

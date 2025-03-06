@@ -1,5 +1,6 @@
 import ZtxChainSDK from "zetrix-sdk-nodejs";
 import { WalletClientBase } from "@goat-sdk/core";
+import BigNumber from 'bignumber.js';
 
 export type ZETRIXWalletCtorParams = {
     zetrixSDK: ZtxChainSDK;
@@ -63,12 +64,11 @@ export class ZetrixWalletClient extends WalletClientBase {
 
     async buildSendZETRIXBlob(to: string, amount: string) {
         let nonce = await this.getNonce(this.zetrixAccount);
-        nonce = nonce + 1;
-
+        nonce = new BigNumber(nonce).plus(1).toString(10);
         const operationInfo = this.sdk.operation.gasSendOperation({
             sourceAddress: this.zetrixAccount,
             destAddress: to,
-            gasAmount: amount.toString(),
+            gasAmount: (Number(amount)*10**6).toString(),
             metadata: 'Send ZETRIX',
         });
         const operationItem = operationInfo.result.operation;
@@ -76,12 +76,11 @@ export class ZetrixWalletClient extends WalletClientBase {
         const blobInfo = this.sdk.transaction.buildBlob({
             sourceAddress: this.zetrixAccount,
             gasPrice: '1000',
-            feeLimit: '30000',
+            feeLimit: '500000',
             nonce,
             operations: [ operationItem ],
         });
         const blob = blobInfo.result.transactionBlob;
-
         return blob;
     }
 }

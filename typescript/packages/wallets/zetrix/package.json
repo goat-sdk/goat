@@ -16,6 +16,7 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
+        "bignumber.js": "9.1.2",
         "viem": "catalog:",
         "zetrix-sdk-nodejs": "^1.0.1",
         "zod": "catalog:"
@@ -37,5 +38,8 @@
         "ai",
         "agents",
         "web3"
-    ]
+    ],
+    "devDependencies": {
+        "@types/zetrix-sdk-nodejs": "^1.0.1"
+    }
 }
