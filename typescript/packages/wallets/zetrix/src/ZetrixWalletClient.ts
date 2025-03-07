@@ -52,7 +52,7 @@ export class ZetrixWalletClient extends WalletClientBase {
             decimals: 6,
             symbol: "ZETRIX",
             name: "ZETRIX",
-            value: data.result.balance.toString(),
+            value: (Number(data.result.balance)*10**-6).toString(),
             inBaseUnits: data.result.balance.toString(),
         };
     }
