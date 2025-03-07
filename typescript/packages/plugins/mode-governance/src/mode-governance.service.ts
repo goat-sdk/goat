@@ -1,32 +1,63 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { formatUnits, parseUnits } from "viem";
+import { erc20Abi, formatUnits } from "viem";
 import { VOTING_ESCROW_ABI } from "./abi";
-import { BPT_VOTING_ESCROW, MODE_VOTING_ESCROW } from "./constants";
-import { GetBalanceParameters, GetStakeInfoParameters, StakeParameters } from "./parameters";
+import { BPT_TOKEN_ADDRESS, BPT_VOTING_ESCROW, MODE_TOKEN_ADDRESS, MODE_VOTING_ESCROW } from "./constants";
+import { ExecuteGovernanceStakeParameters, GetBalanceParameters, GetModeGovernanceInfoParameters } from "./parameters";
 
 export class ModeGovernanceService {
     @Tool({
-        description:
-            "Stake MODE or BPT tokens in the Mode governance system. Requires MODE or BPT tokens to be approved first.",
+        description: "Executes the staking transaction of MODE or BPT tokens for governance.",
     })
-    async stakeTokensForModeGovernance(walletClient: EVMWalletClient, parameters: StakeParameters) {
-        const escrowAddress = parameters.tokenType === "MODE" ? MODE_VOTING_ESCROW : BPT_VOTING_ESCROW;
+    async executeGovernanceStake(walletClient: EVMWalletClient, parameters: ExecuteGovernanceStakeParameters) {
+        try {
+            const escrowAddress = parameters.tokenType === "MODE" ? MODE_VOTING_ESCROW : BPT_VOTING_ESCROW;
+            const tokenAddress = parameters.tokenType === "MODE" ? MODE_TOKEN_ADDRESS : BPT_TOKEN_ADDRESS;
 
-        const stakeHash = await walletClient.sendTransaction({
-            to: escrowAddress,
-            abi: VOTING_ESCROW_ABI,
-            functionName: "createLock",
-            args: [parseUnits(parameters.amount, 18)],
-        });
+            const amount = BigInt(parameters.amount ?? "0");
 
-        return stakeHash.hash;
+            const currentAllowance = await walletClient.read({
+                address: tokenAddress,
+                abi: erc20Abi,
+                functionName: "allowance",
+                args: [walletClient.getAddress(), escrowAddress],
+            });
+
+            if (!currentAllowance || currentAllowance.value === undefined) {
+                throw new Error("Allowance value is undefined");
+            }
+            const allowance = BigInt(currentAllowance.value as string);
+
+            if (allowance < amount) {
+                await walletClient.sendTransaction({
+                    to: tokenAddress,
+                    abi: erc20Abi,
+                    functionName: "approve",
+                    args: [escrowAddress, amount],
+                });
+            }
+
+            const stakeTx = await walletClient.sendTransaction({
+                to: escrowAddress,
+                abi: VOTING_ESCROW_ABI,
+                functionName: "createLock",
+                args: [amount],
+            });
+
+            return {
+                amount: amount.toString(),
+                allowance: allowance.toString(),
+                stakeHash: stakeTx,
+            };
+        } catch (error) {
+            return { error };
+        }
     }
 
     @Tool({
-        description: "Get Mode governance staking information including lock period and voting power",
+        description: "Retrieves detailed MODE governance information, staked tokens, and voting power.",
     })
-    async getModeGovernanceStakeInfo(walletClient: EVMWalletClient, parameters: GetStakeInfoParameters) {
+    async getModeGovernanceInfo(walletClient: EVMWalletClient, parameters: GetModeGovernanceInfoParameters) {
         const escrowAddress = parameters.tokenType === "MODE" ? MODE_VOTING_ESCROW : BPT_VOTING_ESCROW;
         const userAddress = await walletClient.getAddress();
 

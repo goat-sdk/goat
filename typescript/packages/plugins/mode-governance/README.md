@@ -32,6 +32,23 @@ const tools = await getOnChainTools({
 - Get staking information
 - Get balance of MODE, BPT, veMode, or veBPT tokens
 
+## Advanced Usage with GPT-4o and ERC20 Plugin
+
+For improved integration with the GPT-4o model and to work seamlessly with the ERC20 plugin, you can configure your tools as follows:
+
+```typescript
+import { MODE, erc20 } from "@goat-sdk/plugin-erc20";
+import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
+
+const tools = await getOnChainTools({
+    wallet: viem(walletClient),
+    plugins: [
+        erc20({ tokens: [MODE] }),
+        modeGovernance()
+    ]
+});
+```
+
 <footer>
 <br/>
 <br/>
