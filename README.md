@@ -190,6 +190,7 @@ GOAT is free software, MIT licensed.
 | Safe | [@goat-sdk/wallet-safe](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/safe) |
 | Sui | [@goat-sdk/wallet-sui](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/sui) |
 | Starknet | [@goat-sdk/wallet-starknet](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/starknet) |
+| Zetrix | [@goat-sdk/wallet-zetrix](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zetrix) |
 | Zilliqa | [@goat-sdk/wallet-zilliqa](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zilliqa) |
 
 ## Agent Frameworks
@@ -203,6 +204,7 @@ GOAT is free software, MIT licensed.
 | Eliza | [@elizaos/plugin-goat](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
 | ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) |
+
 
 
 # 💻 Contributing
