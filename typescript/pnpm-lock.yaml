@@ -1073,8 +1073,8 @@ importers:
         specifier: workspace:*
         version: link:../../core
       axios:
-        specifier: 1.8.1
-        version: 1.8.1
+        specifier: 1.8.2
+        version: 1.8.2
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -9154,9 +9154,6 @@ packages:
   axios@1.7.4:
     resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
 
-  axios@1.8.1:
-    resolution: {integrity: sha512-NN+fvwH/kV01dYUQ3PTOZns4LWtWhOFCAhQ/pHb88WQ1hNe5V/dvFwc4VJcDL11LT9xSX0QtsR8sWUuyOuOq7g==}
-
   axios@1.8.2:
     resolution: {integrity: sha512-ls4GYBm5aig9vWx8AWDSGLpnpDQRtWAfrjU+EuytuODrFBkqesN2RkOQCBzrA1RQNHw1SmRMSDDDSwzNAYQ6Rg==}
 
@@ -12802,6 +12799,11 @@ packages:
 
   nanoid@3.3.8:
     resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@3.3.9:
+    resolution: {integrity: sha512-SppoicMGpZvbF1l3z4x7No3OlIjP7QJvC9XR7AhZr1kL133KHnKPztkKDc+Ir4aJ/1VhTySrtKhrsycmrMQfvg==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -19044,7 +19046,7 @@ snapshots:
       '@cosmjs/socket': 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@cosmjs/stream': 0.32.4
       '@cosmjs/utils': 0.32.4
-      axios: 1.8.1
+      axios: 1.8.2
       readonly-date: 1.0.0
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -19061,7 +19063,7 @@ snapshots:
       '@cosmjs/socket': 0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@cosmjs/stream': 0.33.0
       '@cosmjs/utils': 0.33.0
-      axios: 1.8.1
+      axios: 1.8.2
       readonly-date: 1.0.0
       xstream: 11.14.0
     transitivePeerDependencies:
@@ -19627,7 +19629,7 @@ snapshots:
 
   '@ensofinance/sdk@1.0.10':
     dependencies:
-      axios: 1.8.1
+      axios: 1.8.2
       prettier: 3.5.1
     transitivePeerDependencies:
       - debug
@@ -22546,7 +22548,7 @@ snapshots:
       '@types/crypto-js': 4.2.2
       '@types/lodash': 4.17.16
       '@types/node': 22.13.9
-      axios: 1.8.1
+      axios: 1.8.2
       big.js: 6.2.2
       brotli: 1.3.3
       buffer-reverse: 1.0.1
@@ -27859,14 +27861,6 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.8.1:
-    dependencies:
-      follow-redirects: 1.15.9(debug@4.4.0)
-      form-data: 4.0.2
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   axios@1.8.2:
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.0)
@@ -27874,7 +27868,6 @@ snapshots:
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
-    optional: true
 
   axobject-query@4.1.0: {}
 
@@ -32382,6 +32375,8 @@ snapshots:
 
   nanoid@3.3.8: {}
 
+  nanoid@3.3.9: {}
+
   nanoid@5.0.4: {}
 
   nanomatch@1.2.13:
@@ -33278,7 +33273,7 @@ snapshots:
 
   postcss@8.5.3:
     dependencies:
-      nanoid: 3.3.8
+      nanoid: 3.3.9
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -36216,7 +36211,7 @@ snapshots:
 
   wikipedia@2.1.2:
     dependencies:
-      axios: 1.8.1
+      axios: 1.8.2
       infobox-parser: 3.6.4
     transitivePeerDependencies:
       - debug
