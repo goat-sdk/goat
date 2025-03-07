@@ -13,7 +13,7 @@
         "clean:examples": "tsx scripts/cleanExamples.ts",
         "change:add": "pnpm changeset add",
         "change:publish": "pnpm build:libs:prod && pnpm changeset publish --no-git-tag",
-        "change:version": "pnpm changeset version && pnpm lint:fix && pnpm clean:examples && pnpm install --no-frozen-lockfile",
+        "change:version": "pnpm changeset version && pnpm clean:examples && pnpm lint:fix && pnpm install --no-frozen-lockfile",
         "lint": "biome check --diagnostic-level=error --max-diagnostics=200",
         "lint:fix": "biome check --write",
         "test": "pnpm turbo test"
