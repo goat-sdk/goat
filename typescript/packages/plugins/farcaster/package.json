@@ -24,7 +24,7 @@
         "@goat-sdk/core": "workspace:*"
     },
     "devDependencies": {
-        "tsup": "^7.2.0",
+        "tsup": "^8.3.5",
         "typescript": "^5.2.2",
         "vitest": "^2.1.9"
     },
