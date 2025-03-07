@@ -1,6 +1,6 @@
-import ZtxChainSDK from "zetrix-sdk-nodejs";
 import { WalletClientBase } from "@goat-sdk/core";
-import BigNumber from 'bignumber.js';
+import BigNumber from "bignumber.js";
+import ZtxChainSDK from "zetrix-sdk-nodejs";
 
 export type ZETRIXWalletCtorParams = {
     zetrixSDK: ZtxChainSDK;
@@ -32,7 +32,7 @@ export class ZetrixWalletClient extends WalletClientBase {
 
     async signMessage(message: string) {
         const signatureInfo = await this.sdk.transaction.sign({
-            privateKeys: [ this.zetrixAccountPrivateKey ],
+            privateKeys: [this.zetrixAccountPrivateKey],
             blob: message,
         });
         return signatureInfo.result.signatures;
@@ -41,7 +41,7 @@ export class ZetrixWalletClient extends WalletClientBase {
     async sendTransaction(blob: string, signature: string) {
         const transactionInfo = await this.sdk.transaction.submit({
             blob,
-            signature
+            signature,
         });
         return transactionInfo.result.hash;
     }
@@ -52,7 +52,7 @@ export class ZetrixWalletClient extends WalletClientBase {
             decimals: 6,
             symbol: "ZETRIX",
             name: "ZETRIX",
-            value: (Number(data.result.balance)*10**-6).toString(),
+            value: (Number(data.result.balance) * 10 ** -6).toString(),
             inBaseUnits: data.result.balance.toString(),
         };
     }
@@ -68,17 +68,17 @@ export class ZetrixWalletClient extends WalletClientBase {
         const operationInfo = this.sdk.operation.gasSendOperation({
             sourceAddress: this.zetrixAccount,
             destAddress: to,
-            gasAmount: (Number(amount)*10**6).toString(),
-            metadata: 'Send ZETRIX',
+            gasAmount: (Number(amount) * 10 ** 6).toString(),
+            metadata: "Send ZETRIX",
         });
         const operationItem = operationInfo.result.operation;
 
         const blobInfo = this.sdk.transaction.buildBlob({
             sourceAddress: this.zetrixAccount,
-            gasPrice: '1000',
-            feeLimit: '500000',
+            gasPrice: "1000",
+            feeLimit: "500000",
             nonce,
-            operations: [ operationItem ],
+            operations: [operationItem],
         });
         const blob = blobInfo.result.transactionBlob;
         return blob;
