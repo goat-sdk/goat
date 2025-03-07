@@ -79,8 +79,8 @@ export class CheckApprovalBodySchema extends createToolParameters(
 
 export class GetQuoteParameters extends createToolParameters(
     z.object({
-        tokenIn: z.string(),
-        tokenOut: z.string(),
+        tokenIn: z.string().describe("The token to swap from. Can be a token symbol (e.g., 'WETH') or address (e.g., '0x...')"),
+        tokenOut: z.string().describe("The token to swap to. Can be a token symbol (e.g., 'WBTC') or address (e.g., '0x...')"),
         tokenOutChainId: z.number().optional(),
         amount: z.string().describe("The amount of tokens to swap in base units"),
         type: z.nativeEnum(SwapType).default(SwapType.EXACT_INPUT),
