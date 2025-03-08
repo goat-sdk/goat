@@ -1440,6 +1440,21 @@ importers:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.13.9)(terser@5.37.0)
 
+  packages/plugins/hedgey:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      ethers:
+        specifier: 5.7.2
+        version: 5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
   packages/plugins/hyperlane:
     dependencies:
       '@goat-sdk/core':
