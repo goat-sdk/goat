@@ -34,4 +34,12 @@ class ChromiaChain(TypedDict):
     """
     type: Literal["chromia"]
 
-Chain = Union[EvmChain, SolanaChain, AptosChain, ChromiaChain]
+class MultiversXChain(TypedDict):
+    """MultiversX chain type definition
+    
+    Args:
+        type: Literal "multiversx" chain type identifier
+    """
+    type: Literal["multiversx"]
+
+Chain = Union[EvmChain, SolanaChain, AptosChain, ChromiaChain, MultiversXChain]
