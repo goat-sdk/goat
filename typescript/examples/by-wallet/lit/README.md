@@ -5,7 +5,7 @@
 # Using Lit wallets
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT with **[Lit wallets](https://lit.dev/)**.
+This example demonstrates how to use GOAT with **[Lit wallets](https://developer.litprotocol.com)**.
 
 You can use this example with any other agent framework, protocols and chains of your choice.
 
