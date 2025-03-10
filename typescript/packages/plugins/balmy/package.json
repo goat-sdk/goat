@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-balmy",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-evm
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.2.10
 
 ### Patch Changes

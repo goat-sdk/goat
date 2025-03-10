@@ -1,15 +1,10 @@
-# @goat-sdk/plugin-merkl
-
-## 0.1.2
-
-### Patch Changes
-
-- Updated dependencies [f73ce74]
-  - @goat-sdk/core@0.4.9
-  - @goat-sdk/wallet-evm@0.2.11
+# @goat-sdk/plugin-hedgey
 
 ## 0.1.1
 
 ### Patch Changes
 
-- 64e826a: Release package
+- d4f7716: Release package
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+  - @goat-sdk/wallet-evm@0.2.11

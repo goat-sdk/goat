@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-balancer",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

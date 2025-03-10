@@ -1,5 +1,12 @@
 # @goat-sdk/adapter-llamaindex
 
+## 0.2.8
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.2.7
 
 ### Patch Changes

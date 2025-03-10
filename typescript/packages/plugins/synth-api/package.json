@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-synth-api",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

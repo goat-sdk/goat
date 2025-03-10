@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-coingecko",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

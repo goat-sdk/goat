@@ -11,9 +11,9 @@
     "license": "MIT",
     "dependencies": {
         "@ai-sdk/openai": "~1.0.4",
-        "@goat-sdk/adapter-vercel-ai": "0.2.9",
-        "@goat-sdk/core": "0.4.8",
-        "@goat-sdk/wallet-fuel": "0.1.8",
+        "@goat-sdk/adapter-vercel-ai": "0.2.10",
+        "@goat-sdk/core": "0.4.9",
+        "@goat-sdk/wallet-fuel": "0.1.9",
         "fuels": "0.97.2",
         "ai": "~4.0.3",
         "dotenv": "^16.4.5",

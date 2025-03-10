@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-rugcheck
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.1.4
 
 ### Patch Changes

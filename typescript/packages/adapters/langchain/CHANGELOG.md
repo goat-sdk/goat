@@ -1,5 +1,12 @@
 # @goat-sdk/adapter-langchain
 
+## 0.2.12
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.2.11
 
 ### Patch Changes

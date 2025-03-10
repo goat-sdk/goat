@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-evm",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

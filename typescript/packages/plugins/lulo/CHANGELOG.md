@@ -1,5 +1,13 @@
 # @goat-sdk/plugin-lulo
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+  - @goat-sdk/wallet-solana@0.2.15
+
 ## 0.1.3
 
 ### Patch Changes

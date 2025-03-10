@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-betswirl",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -25,7 +25,7 @@
         "@betswirl/sdk-core": "0.0.2",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
-        "@goat-sdk/wallet-viem": "0.2.8",
+        "@goat-sdk/wallet-viem": "0.2.12",
         "viem": "2.23.2",
         "zod": "catalog:"
     },

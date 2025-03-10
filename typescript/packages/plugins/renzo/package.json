@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-renzo",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

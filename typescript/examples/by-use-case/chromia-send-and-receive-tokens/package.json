@@ -11,9 +11,9 @@
     "dependencies": {
         "@ai-sdk/openai": "~1.0.4",
         "@chromia/ft4": "1.0.1",
-        "@goat-sdk/adapter-vercel-ai": "0.2.9",
-        "@goat-sdk/core": "0.4.8",
-        "@goat-sdk/wallet-chromia": "0.2.10",
+        "@goat-sdk/adapter-vercel-ai": "0.2.10",
+        "@goat-sdk/core": "0.4.9",
+        "@goat-sdk/wallet-chromia": "0.2.11",
         "@langchain/langgraph": "^0.2.0",
         "ai": "4.0.3",
         "chalk": "5.3.0",

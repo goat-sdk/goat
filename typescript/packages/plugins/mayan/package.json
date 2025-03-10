@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-mayan",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

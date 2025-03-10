@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-sns",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
