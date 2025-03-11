@@ -11,7 +11,7 @@
     "dependencies": {
         "@goat-sdk/adapter-langchain": "0.2.12",
         "@goat-sdk/core": "0.4.9",
-        "@goat-sdk/plugin-erc20": "0.2.13",
+        "@goat-sdk/plugin-erc20": "0.2.14",
         "@goat-sdk/wallet-viem": "0.2.12",
         "@goat-sdk/wallet-evm": "0.2.11",
         "@langchain/core": "0.3.6",

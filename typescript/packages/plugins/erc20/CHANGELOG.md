@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-erc20
 
+## 0.2.14
+
+### Patch Changes
+
+- 31c7bce: Make numbers strings
+
 ## 0.2.13
 
 ### Patch Changes

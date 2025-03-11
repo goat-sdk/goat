@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-uniswap
 
+## 0.2.15
+
+### Patch Changes
+
+- 31c7bce: Handle permit2
+
 ## 0.2.14
 
 ### Patch Changes
