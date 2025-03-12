@@ -929,6 +929,40 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
 
+  examples/by-use-case/zetrix-send-native:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ~1.0.4
+        version: 1.0.20(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: 0.2.9
+        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.8
+        version: 0.4.8(zod@3.23.8)
+      '@goat-sdk/wallet-zetrix':
+        specifier: 0.1.1
+        version: 0.1.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zetrix-sdk-nodejs@1.0.1)
+      ai:
+        specifier: ~4.0.3
+        version: 4.0.22(react@18.3.1)(zod@3.23.8)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.7
+      viem:
+        specifier: 2.23.4
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zetrix-sdk-nodejs:
+        specifier: ^1.0.1
+        version: 1.0.1
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/zetrix-sdk-nodejs':
+        specifier: ^1.0.1
+        version: 1.0.1
+
   examples/by-wallet/crossmint-smart-wallets:
     dependencies:
       '@ai-sdk/openai':
@@ -5169,6 +5203,18 @@ packages:
       ai: 4.0.3
       zod: ^3.0.0
 
+  '@goat-sdk/adapter-vercel-ai@0.2.9':
+    resolution: {integrity: sha512-dIbnxKn0WN1jszwf5GNL4L7POoZSqJjtGbVvWOg3SOTSCehbn4Rf3HvgUKtQcAfrNv5qS0zdSTodq/GVf2upnQ==}
+    peerDependencies:
+      '@goat-sdk/core': 0.4.8
+      ai: 4.0.3
+      zod: ^3.0.0
+
+  '@goat-sdk/core@0.4.8':
+    resolution: {integrity: sha512-g48v98lmyiOyfcbH0QCqWih3R5fjxUgy+ko7GCtCw9CD8k9ymXumaK1Jz4O60WBbZa/OqQ22qW+q6ce1NYT4IA==}
+    peerDependencies:
+      zod: ^3.0.0
+
   '@goat-sdk/core@0.4.9':
     resolution: {integrity: sha512-Z152kNW/iTd89t2Z59+rTGlr/XGZ0eSDzXFu8jEZfwKrr2p6AZ5JWNAe0RrVc1LcZLsXU1oGxjGytxKGyXMB7Q==}
     peerDependencies:
@@ -5302,6 +5348,12 @@ packages:
     peerDependencies:
       '@goat-sdk/wallet-evm': 0.2.11
       viem: 2.23.4
+
+  '@goat-sdk/wallet-zetrix@0.1.1':
+    resolution: {integrity: sha512-oc9gyPbCaYemig6TYxwsCLseP3PD+9vHveDtwQJHUtyoFv6oev5fn7MHfTO6A9SlrFdGSDzznMKXXl0x9odZ8A==}
+    peerDependencies:
+      '@goat-sdk/core': 0.4.9
+      zetrix-sdk-nodejs: ^1.0.1
 
   '@google-cloud/paginator@5.0.2':
     resolution: {integrity: sha512-DJS3s0OVH4zFDB1PzjxAsHqJT6sKVbRwwML0ZBP9PbU7Yebtu/7SWMRzvO2J3nUi9pRNITCfu4LJeooM2w4pjg==}
@@ -20941,6 +20993,17 @@ snapshots:
       ai: 4.0.3(react@18.3.1)(zod@3.23.8)
       zod: 3.23.8
 
+  '@goat-sdk/adapter-vercel-ai@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
+    dependencies:
+      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      ai: 4.0.22(react@18.3.1)(zod@3.23.8)
+      zod: 3.23.8
+
+  '@goat-sdk/core@0.4.8(zod@3.23.8)':
+    dependencies:
+      reflect-metadata: 0.2.2
+      zod: 3.23.8
+
   '@goat-sdk/core@0.4.9(zod@3.23.8)':
     dependencies:
       reflect-metadata: 0.2.2
@@ -21261,6 +21324,18 @@ snapshots:
     dependencies:
       '@goat-sdk/wallet-evm': link:packages/wallets/evm
       viem: 2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+
+  '@goat-sdk/wallet-zetrix@0.1.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zetrix-sdk-nodejs@1.0.1)':
+    dependencies:
+      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      bignumber.js: 9.1.2
+      viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zetrix-sdk-nodejs: 1.0.1
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
 
   '@google-cloud/paginator@5.0.2':
     dependencies:
