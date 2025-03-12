@@ -2,6 +2,7 @@ import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
 import { z } from "zod";
 import { ZetrixWalletClient } from "./ZetrixWalletClient";
+import BigNumber from "bignumber.js";
 
 export class SendZETRIXPlugin extends PluginBase<ZetrixWalletClient> {
     constructor() {
@@ -37,7 +38,25 @@ async function sendZETRIXMethod(
     parameters: z.infer<typeof sendZETRIXParametersSchema>,
 ): Promise<string> {
     try {
-        const blob = await walletClient.buildSendZETRIXBlob(parameters.to, parameters.amount);
+        let nonce = await walletClient.getNonce(walletClient.zetrixAccount);
+        nonce = new BigNumber(nonce).plus(1).toString(10);
+        const operationInfo = walletClient.sdk.operation.gasSendOperation({
+            sourceAddress: walletClient.zetrixAccount,
+            destAddress: parameters.to,
+            gasAmount: (Number(parameters.amount) * 10 ** 6).toString(),
+            metadata: "Send ZETRIX",
+        });
+        const operationItem = operationInfo.result.operation;
+
+        const blobInfo = walletClient.sdk.transaction.buildBlob({
+            sourceAddress: walletClient.zetrixAccount,
+            gasPrice: "1000",
+            feeLimit: "500000",
+            nonce,
+            operations: [operationItem],
+        });
+
+        const blob = blobInfo.result.transactionBlob;
         const signature = await walletClient.signMessage(blob);
         const tx = await walletClient.sendTransaction(blob, signature);
         return tx;
