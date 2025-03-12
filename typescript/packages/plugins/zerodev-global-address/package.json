@@ -14,6 +14,7 @@
     "dependencies": {
         "@zerodev/global-address": "^0.0.22",
         "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:",
         "zod": "catalog:"
     },

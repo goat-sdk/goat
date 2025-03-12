@@ -103,7 +103,10 @@ export class ZeroDevGlobalAddressService {
         walletClient: EVMWalletClient,
         params: CreateGlobalAddressConfigParams,
     ): Promise<FormattedGlobalAddressResponse & { logs: string }> {
-        const destChain = params.destinationChain || this.supportedChains.find(({ id }) => id === walletClient.getChain().id) || optimism;
+        const destChain =
+            params.destinationChain ||
+            this.supportedChains.find(({ id }) => id === walletClient.getChain().id) ||
+            optimism;
         const slippage = params.slippage ?? this.defaultSlippage;
         const owner = params.owner ?? walletClient.getAddress();
         const allSrcTokens = this.getSourceTokens();
