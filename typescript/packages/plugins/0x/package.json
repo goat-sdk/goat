@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-0x",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -24,7 +24,8 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "zod": "catalog:",
-        "@goat-sdk/wallet-evm": "workspace:*"
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"

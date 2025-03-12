@@ -62,7 +62,7 @@ export class UniswapService {
         description: "Get the quote for a swap",
     })
     async getQuote(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
-        return this.makeRequest("quote", {
+        return await this.makeRequest("quote", {
             ...parameters,
             tokenInChainId: walletClient.getChain().id,
             tokenOutChainId: parameters.tokenOutChainId ?? walletClient.getChain().id,
@@ -72,25 +72,41 @@ export class UniswapService {
 
     @Tool({
         name: "uniswap_swap_tokens",
-        description: "Swap tokens on Uniswap",
+        description:
+            "Swap tokens on Uniswap. Make sure to check the approval with the uniswap_check_approval tool before calling this tool. No need to call uniswap_get_quote before calling this tool.",
     })
-    async getSwapTransaction(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
-        const quote = await this.getQuote(walletClient, parameters);
+    async swapTokens(walletClient: EVMWalletClient, parameters: GetQuoteParameters) {
+        const { quote, permitData } = await this.getQuote(walletClient, parameters);
+
+        let signature: string | undefined;
+
+        if (permitData) {
+            signature = (
+                await walletClient.signTypedData({
+                    domain: permitData.domain,
+                    types: permitData.types,
+                    primaryType: "PermitSingle",
+                    message: permitData.values,
+                })
+            ).signature;
+        }
 
         const response = await this.makeRequest("swap", {
-            quote: quote.quote,
+            signature: signature,
+            quote: quote,
+            permitData: permitData ?? undefined,
         });
 
         const swap = response.swap;
 
-        const transaction = await walletClient.sendTransaction({
+        const tx = await walletClient.sendTransaction({
             to: swap.to,
             value: swap.value,
             data: swap.data,
         });
 
         return {
-            txHash: transaction.hash,
+            txHash: tx.hash,
         };
     }
 }

@@ -2,18 +2,27 @@ import {
     AddLiquidity,
     AddLiquidityInput,
     AddLiquidityKind,
+    BALANCER_BATCH_ROUTER,
+    BALANCER_ROUTER,
     BalancerApi,
     ChainId,
+    ExactInQueryOutput,
     InputAmount,
+    MaxSigDeadline,
+    PERMIT2,
+    PermitDetails,
     RemoveLiquidity,
     RemoveLiquidityInput,
     RemoveLiquidityKind,
     Slippage,
     Swap,
+    SwapBuildCallInput,
     SwapBuildOutputExactIn,
     SwapKind,
     Token,
     TokenAmount,
+    erc20Abi,
+    permit2Abi,
 } from "@balancer/sdk";
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
@@ -44,6 +53,9 @@ export class BalancerService {
         const tokenIn = new Token(chainId, parameters.tokenIn as `0x${string}`, parameters.tokenInDecimals);
         const tokenOut = new Token(chainId, parameters.tokenOut as `0x${string}`, parameters.tokenOutDecimals);
         const swapAmount = TokenAmount.fromRawAmount(tokenIn, parameters.amountIn);
+        const deadline = parameters.deadline
+            ? BigInt(Math.floor(Date.now() / 1000) + (parameters.deadline || 3600))
+            : 999999999999999999n; // Infinite deadline if not provided
 
         const sorPaths = await balancerApi.sorSwapPaths.fetchSorSwapPaths({
             chainId,
@@ -51,6 +63,7 @@ export class BalancerService {
             tokenOut: tokenOut.address,
             swapKind: SwapKind.GivenIn,
             swapAmount,
+            useProtocolVersion: 3,
         });
 
         const swap = new Swap({
@@ -59,15 +72,98 @@ export class BalancerService {
             swapKind: SwapKind.GivenIn,
         });
 
-        const updated = await swap.query(this.rpcUrl);
+        const queryOutput = (await swap.query(this.rpcUrl)) as ExactInQueryOutput;
 
-        const callData = swap.buildCall({
-            slippage: Slippage.fromPercentage(`${Number(parameters.slippage)}`),
-            deadline: BigInt(Math.floor(Date.now() / 1000) + (parameters.deadline || 3600)),
-            queryOutput: updated,
-            wethIsEth: parameters.wethIsEth ?? false,
+        const slippage = Slippage.fromPercentage(`${Number(parameters.slippage)}`);
+        const wethIsEth = parameters.wethIsEth ?? false;
+
+        // Check if Permit2 is approved
+        const allowance = await walletClient.read({
+            address: tokenIn.address,
+            abi: erc20Abi,
+            functionName: "allowance",
+            args: [walletClient.getAddress() as `0x${string}`, PERMIT2[chainId]],
+        });
+
+        if (BigInt(allowance.value as string) < BigInt(parameters.amountIn)) {
+            await walletClient.sendTransaction({
+                to: tokenIn.address,
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [PERMIT2[chainId], parameters.amountIn],
+            });
+        }
+
+        const swapBuildCallInput: SwapBuildCallInput = {
             sender: walletClient.getAddress() as `0x${string}`,
             recipient: walletClient.getAddress() as `0x${string}`,
+            slippage,
+            deadline,
+            wethIsEth,
+            queryOutput,
+        };
+
+        // Sign Permit2
+        const maxAmountIn = queryOutput.amountIn;
+
+        const spender = queryOutput.pathAmounts ? BALANCER_BATCH_ROUTER[chainId] : BALANCER_ROUTER[chainId];
+
+        const nonceQuery = await walletClient.read({
+            abi: permit2Abi,
+            address: PERMIT2[chainId],
+            functionName: "allowance",
+            args: [walletClient.getAddress() as `0x${string}`, tokenIn.address, spender],
+        });
+
+        const details: PermitDetails = {
+            token: tokenIn.address,
+            amount: maxAmountIn.amount,
+            expiration: Number(deadline),
+            nonce: (nonceQuery.value as [number, number, number])[2],
+        };
+
+        const batch = {
+            details: [details],
+            spender,
+            sigDeadline: MaxSigDeadline,
+        };
+
+        const PERMIT2_DOMAIN_NAME = "Permit2";
+        const domain = {
+            name: PERMIT2_DOMAIN_NAME,
+            chainId,
+            verifyingContract: PERMIT2[chainId],
+        };
+
+        const permitData = {
+            domain,
+            types: {
+                PermitDetails: [
+                    { name: "token", type: "address" },
+                    { name: "amount", type: "uint160" },
+                    { name: "expiration", type: "uint48" },
+                    { name: "nonce", type: "uint48" },
+                ],
+                PermitBatch: [
+                    { name: "details", type: "PermitDetails[]" },
+                    { name: "spender", type: "address" },
+                    { name: "sigDeadline", type: "uint256" },
+                ],
+            },
+            primaryType: "PermitBatch",
+            values: batch,
+        };
+
+        const signature = await walletClient.signTypedData({
+            domain,
+            types: permitData.types,
+            primaryType: permitData.primaryType,
+            message: permitData.values,
+        });
+
+        const callData = swap.buildCallWithPermit2(swapBuildCallInput, {
+            signature: signature.signature as `0x${string}`,
+            batch,
         }) as SwapBuildOutputExactIn;
 
         const tx = await walletClient.sendTransaction({

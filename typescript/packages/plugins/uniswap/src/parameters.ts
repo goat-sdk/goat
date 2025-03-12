@@ -6,20 +6,8 @@ enum SwapType {
     EXACT_OUTPUT = "EXACT_OUTPUT",
 }
 
-enum Protocol {
-    V2 = "V2",
-    V3 = "V3",
-}
-
 enum Routing {
     CLASSIC = "CLASSIC",
-    UNISWAPX = "UNISWAPX",
-    UNISWAPX_V2 = "UNISWAPX_V2",
-    V3_ONLY = "V3_ONLY",
-    V2_ONLY = "V2_ONLY",
-    BEST_PRICE = "BEST_PRICE",
-    BEST_PRICE_V2 = "BEST_PRICE_V2",
-    FASTEST = "FASTEST",
 }
 
 export const QuoteSchema = z.object({
@@ -84,12 +72,9 @@ export class GetQuoteParameters extends createToolParameters(
         tokenOutChainId: z.number().optional(),
         amount: z.string().describe("The amount of tokens to swap in base units"),
         type: z.nativeEnum(SwapType).default(SwapType.EXACT_INPUT),
-        protocols: z.array(z.nativeEnum(Protocol)),
         routingPreference: z
             .nativeEnum(Routing)
             .default(Routing.CLASSIC)
-            .describe(
-                "The routing preference determines which protocol to use for the swap. If the routing preference is UNISWAPX, then the swap will be routed through the UniswapX Dutch Auction Protocol. If the routing preference is CLASSIC, then the swap will be routed through the Classic Protocol. If the routing preference is BEST_PRICE, then the swap will be routed through the protocol that provides the best price. When UNIXWAPX_V2 is passed, the swap will be routed through the UniswapX V2 Dutch Auction Protocol. When V3_ONLY is passed, the swap will be routed ONLY through the Uniswap V3 Protocol. When V2_ONLY is passed, the swap will be routed ONLY through the Uniswap V2 Protocol.",
-            ),
+            .describe("The routing preference determines which protocol to use for the swap."),
     }),
 ) {}

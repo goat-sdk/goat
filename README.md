@@ -86,7 +86,7 @@ GOAT is free software, MIT licensed.
   - Mint NFTs [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-mint-nft), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-mint-nft)]
   - Make bets on Polymarket [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-bet-on-polymarket)]
   - Launch a token on Pump.fun [[Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-launch-token)]
-  - Purchase physical assets [coming soon]
+  - Purchase any item on Amazon [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-purchase-on-amazon), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-purchase-on-amazon)]
 - **By framework**
   - [Vercel AI](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/vercel-ai)
   - [Langchain](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/langchain)
@@ -94,6 +94,7 @@ GOAT is free software, MIT licensed.
   - [GAME Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/virtuals-game)
   - [MCP (Model Context Protocol)](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/model-context-protocol)
   - [Voice agent with ElevenLabs](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/eleven-labs)
+  - [GPT with REST API](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/chatgpt)
 - **By wallet**
   - [Crossmint Smart Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)
   - [Crossmint Custodial Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-solana-custodial-wallets)
@@ -193,6 +194,7 @@ GOAT is free software, MIT licensed.
 | Starknet | [@goat-sdk/wallet-starknet](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/starknet) |
 | Zetrix | [@goat-sdk/wallet-zetrix](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zetrix) |
 | Zilliqa | [@goat-sdk/wallet-zilliqa](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zilliqa) |
+| MultiversX |   | [goat-sdk-wallet-multiversx](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/multiversx) |
 
 ## Agent Frameworks
 | Adapter | Typescript | Python |

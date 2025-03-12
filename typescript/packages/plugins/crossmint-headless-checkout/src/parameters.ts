@@ -8,16 +8,10 @@ import { z } from "zod";
 export function getCreateAndPayOrderParameters(callDataSchema?: z.ZodSchema) {
     return z.object({
         recipient: z
-            .union([
-                z.object({
-                    walletAddress: z.string(),
-                    physicalAddress: physicalAddressSchema.optional(),
-                }),
-                z.object({
-                    email: z.string().email(),
-                    physicalAddress: physicalAddressSchema.optional(),
-                }),
-            ])
+            .object({
+                email: z.string().email(),
+                physicalAddress: physicalAddressSchema.optional(),
+            })
             .describe(
                 "Where the tokens will be sent to - either a wallet address or email, if email is provided a Crossmint wallet will be created and associated with the email",
             ),

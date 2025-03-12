@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-0x
 
+## 0.1.9
+
+### Patch Changes
+
+- c747ec5: Support permit2
+
 ## 0.1.8
 
 ### Patch Changes

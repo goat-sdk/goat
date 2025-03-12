@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-balancer",
-    "version": "0.1.13",
+    "version": "0.1.15",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -12,7 +12,7 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@balancer/sdk": "^1.1.0",
+        "@balancer/sdk": "2.4.0",
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
         "viem": "catalog:",

@@ -3,7 +3,7 @@
 <img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
-# EVM
+# Send and receive tokens on EVM
 ## 🚀 Quickstart
 
 This example demonstrates how to use GOAT to **send and receive ETH and ERC-20 tokens** on EVM networks. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
