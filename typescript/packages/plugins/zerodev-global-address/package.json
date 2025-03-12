@@ -14,7 +14,7 @@
     "dependencies": {
         "@zerodev/global-address": "^0.0.19",
         "@goat-sdk/core": "workspace:*",
-        "viem": "~2.17.11",
+        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {
