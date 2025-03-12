@@ -142,23 +142,23 @@ importers:
         specifier: 4.0.0-alpha.45
         version: 4.0.0-alpha.45(o25jks3kpnrhqrowsq2g7vcoly)
       '@goat-sdk/adapter-eleven-labs':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-coingecko':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-coingecko':
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-solana':
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@tanstack/react-query':
         specifier: ^5.62.2
         version: 5.62.15(react@18.3.1)
@@ -197,20 +197,20 @@ importers:
   examples/by-framework/langchain:
     dependencies:
       '@goat-sdk/adapter-langchain':
-        specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/core@0.4.8(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
         specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.12(@goat-sdk/core@0.4.9(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-evm':
-        specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@langchain/core':
         specifier: 0.3.6
         version: 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
@@ -236,26 +236,26 @@ importers:
         specifier: ^1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-model-context-protocol':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(@modelcontextprotocol/sdk@1.0.4)(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/plugin-spl-token':
-        specifier: 0.2.16
-        version: 0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(@modelcontextprotocol/sdk@1.0.4)(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/plugin-spl-token':
+        specifier: 0.2.17
+        version: 0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-solana':
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@modelcontextprotocol/sdk':
         specifier: 1.0.4
         version: 1.0.4
@@ -288,20 +288,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: ~4.0.3
         version: 4.0.22(react@18.3.1)(zod@3.23.8)
@@ -324,14 +324,14 @@ importers:
         specifier: 1.0.1
         version: 1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-chromia':
         specifier: 0.2.10
-        version: 0.2.10(@chromia/ft4@1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(typescript@5.6.3)(utf-8-validate@5.0.10)
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-chromia':
+        specifier: 0.2.11
+        version: 0.2.11(@chromia/ft4@1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@langchain/langgraph':
         specifier: ^0.2.0
         version: 0.2.38(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))
@@ -360,17 +360,17 @@ importers:
         specifier: ^0.32.4
         version: 0.32.4
       '@goat-sdk/adapter-langchain':
-        specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/core@0.4.8(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/core@0.4.9(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-cosmosbank':
-        specifier: 0.0.5
-        version: 0.0.5(@cosmjs/stargate@0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(cosmjs-types@0.9.0)(utf-8-validate@5.0.10)
+        specifier: 0.0.6
+        version: 0.0.6(@cosmjs/stargate@0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(cosmjs-types@0.9.0)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-cosmos':
-        specifier: 0.0.5
-        version: 0.0.5(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+        specifier: 0.0.6
+        version: 0.0.6(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@langchain/cohere':
         specifier: ^0.3.2
         version: 0.3.2(@aws-sdk/client-sso-oidc@3.721.0(@aws-sdk/client-sts@3.721.0))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
@@ -393,17 +393,17 @@ importers:
         specifier: ~1.0.11
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-polymarket':
-        specifier: 0.3.12
-        version: 0.3.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        specifier: 0.3.13
+        version: 0.3.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-viem':
-        specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: 4.0.22
         version: 4.0.22(react@18.3.1)(zod@3.23.8)
@@ -423,26 +423,26 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/plugin-ionic':
-        specifier: 0.1.5
-        version: 0.1.5(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/plugin-kim':
-        specifier: 0.1.12
-        version: 0.1.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/plugin-ionic':
+        specifier: 0.1.6
+        version: 0.1.6(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/plugin-kim':
+        specifier: 0.1.13
+        version: 0.1.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: 4.0.3
         version: 4.0.3(react@18.3.1)(zod@3.23.8)
@@ -462,20 +462,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/crossmint':
-        specifier: 0.4.1
-        version: 0.4.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/crossmint':
+        specifier: 0.4.2
+        version: 0.4.2(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: 4.0.3
         version: 4.0.3(react@18.3.1)(zod@3.23.8)
@@ -495,20 +495,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: ~4.0.3
         version: 4.0.22(react@18.3.1)(zod@3.23.8)
@@ -528,23 +528,23 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/plugin-uniswap':
-        specifier: 0.2.13
-        version: 0.2.13(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-viem':
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/plugin-uniswap':
+        specifier: 0.2.14
+        version: 0.2.14(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
         specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       ai:
         specifier: ~4.0.3
         version: 4.0.22(react@18.3.1)(zod@3.23.8)
@@ -564,14 +564,14 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/wallet-fuel':
-        specifier: 0.1.8
-        version: 0.1.8(@goat-sdk/core@0.4.8(zod@3.23.8))(fuels@0.97.2(encoding@0.1.13)(vitest@2.1.9(@types/node@22.13.9)(terser@5.37.0)))
+        specifier: 0.1.9
+        version: 0.1.9(@goat-sdk/core@0.4.9(zod@3.23.8))(fuels@0.97.2(encoding@0.1.13)(vitest@2.1.9(@types/node@22.13.9)(terser@5.37.0)))
       ai:
         specifier: ~4.0.3
         version: 4.0.22(react@18.3.1)(zod@3.23.8)
@@ -591,14 +591,14 @@ importers:
         specifier: ^1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/wallet-radix':
-        specifier: 0.2.8
-        version: 0.2.8(@goat-sdk/core@0.4.8(zod@3.23.8))(radix-web3.js@0.3.1)
+        specifier: 0.2.9
+        version: 0.2.9(@goat-sdk/core@0.4.9(zod@3.23.8))(radix-web3.js@0.3.1)
       ai:
         specifier: 4.0.3
         version: 4.0.3(react@18.3.1)(zod@3.23.8)
@@ -618,23 +618,23 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-jupiter':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/plugin-orca':
-        specifier: 0.2.17
-        version: 0.2.17(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.18
+        version: 0.2.18(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/plugin-spl-token':
-        specifier: 0.2.16
-        version: 0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.17
+        version: 0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -660,20 +660,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-pumpfun':
-        specifier: 0.1.7
-        version: 0.1.7(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.1.8
+        version: 0.1.8(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/plugin-spl-token':
-        specifier: 0.2.16
-        version: 0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.17
+        version: 0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -699,17 +699,17 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/crossmint':
-        specifier: 0.4.1
-        version: 0.4.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.4.2
+        version: 0.4.2(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -729,17 +729,17 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-spl-token':
-        specifier: 0.2.16
-        version: 0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.17
+        version: 0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -765,20 +765,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/plugin-jupiter':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/plugin-spl-token':
-        specifier: 0.2.16
-        version: 0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.17
+        version: 0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -804,20 +804,20 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/crossmint':
-        specifier: 0.4.1
-        version: 0.4.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
-      '@goat-sdk/wallet-evm':
         specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/crossmint':
+        specifier: 0.4.2
+        version: 0.4.2(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       ai:
         specifier: 4.0.3
         version: 4.0.3(react@18.3.1)(zod@3.23.8)
@@ -837,17 +837,17 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-vercel-ai':
-        specifier: 0.2.9
-        version: 0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
       '@goat-sdk/crossmint':
-        specifier: 0.4.1
-        version: 0.4.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.4.2
+        version: 0.4.2(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -867,23 +867,23 @@ importers:
   examples/by-wallet/lit:
     dependencies:
       '@goat-sdk/adapter-langchain':
-        specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/core@0.4.8(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
         specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.12(@goat-sdk/core@0.4.9(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-evm':
-        specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-lit':
-        specifier: 0.2.17
-        version: 0.2.17(@goat-sdk/core@0.4.8(zod@3.23.8))(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(bufferutil@4.0.9)(date-and-time@2.4.3)(encoding@0.1.13)(multiformats@11.0.2)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        specifier: 0.2.18
+        version: 0.2.18(@goat-sdk/core@0.4.9(zod@3.23.8))(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(date-and-time@2.4.3)(encoding@0.1.13)(multiformats@11.0.2)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(web-vitals@3.5.2)
       '@goat-sdk/wallet-solana':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.15
+        version: 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@langchain/core':
         specifier: 0.3.6
         version: 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
@@ -915,20 +915,20 @@ importers:
   examples/by-wallet/safe:
     dependencies:
       '@goat-sdk/adapter-langchain':
-        specifier: 0.2.11
-        version: 0.2.11(@goat-sdk/core@0.4.8(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
-      '@goat-sdk/core':
-        specifier: 0.4.8
-        version: 0.4.8(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
         specifier: 0.2.12
-        version: 0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        version: 0.2.12(@goat-sdk/core@0.4.9(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.13
+        version: 0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-evm':
-        specifier: 0.2.10
-        version: 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@goat-sdk/wallet-safe':
-        specifier: 0.1.4
-        version: 0.1.4(@goat-sdk/core@0.4.8(zod@3.23.8))(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(webauthn-p256@0.0.10)
+        specifier: 0.1.5
+        version: 0.1.5(@goat-sdk/core@0.4.9(zod@3.23.8))(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(webauthn-p256@0.0.10)
       '@langchain/core':
         specifier: 0.3.6
         version: 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
@@ -1160,8 +1160,8 @@ importers:
         specifier: workspace:*
         version: link:../../wallets/evm
       '@goat-sdk/wallet-viem':
-        specifier: 0.2.8
-        version: 0.2.8(@goat-sdk/wallet-evm@packages+wallets+evm)(viem@2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@packages+wallets+evm)(viem@2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))
       viem:
         specifier: 2.23.2
         version: 2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -2005,11 +2005,11 @@ importers:
         specifier: workspace:*
         version: link:../../core
       '@zerodev/global-address':
-        specifier: ^0.0.19
-        version: 0.0.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: ^0.0.22
+        version: 0.0.22(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       viem:
-        specifier: ~2.17.11
-        version: 2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 'catalog:'
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -5005,165 +5005,159 @@ packages:
     resolution: {integrity: sha512-pSXE9xdPj6wmdcmoT7ETlbEjpvQvyFIZT1CoyzcUEupPplugm59ieUiX5E41oLeByQ7M1dliq2b96d/iIIA3kw==}
     engines: {node: '>=14.0.0'}
 
-  '@goat-sdk/adapter-eleven-labs@0.2.9':
-    resolution: {integrity: sha512-b5S/5FAJo60Ye7aykNvqNaCTbA0gHz4DCHzC5Q7DQY7BOo+5mhzDWOA0M+gVNB3DAwv/28hrNQO+qd8LEQ6TAA==}
+  '@goat-sdk/adapter-eleven-labs@0.2.10':
+    resolution: {integrity: sha512-6HmeUVHQCHWjR/yIF34gX96Z8UCCpv5v1PCfCeOVenhNmKWv7q+5x/LerLFV8M7QT+M+Dd/nEFJAg4jow5t3tw==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       zod: ^3.0.0
 
-  '@goat-sdk/adapter-langchain@0.2.11':
-    resolution: {integrity: sha512-o3rIiyoyhaerhv8kl2b4JkMqIsc3NsPPkuDFxY6QTrd2R969YY89oon1wHfu1xHx7Nw32wMMNM6oe4ZNFAaP1Q==}
+  '@goat-sdk/adapter-langchain@0.2.12':
+    resolution: {integrity: sha512-hDDjiYu3N/h85Nni4ASaBeDPiD33A3cos+qVA2m6uURPZI33lfCXUer7ynfO30QvA7LTjm8it7u4S6/EGyekGQ==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       '@langchain/core': 0.3.6
       zod: ^3.0.0
 
-  '@goat-sdk/adapter-model-context-protocol@0.2.9':
-    resolution: {integrity: sha512-vRPvfg9GEJzB9DFtB1gxLWNv63zODU/YPBoN9oD1/RcALuH/dywvxl9S1FdrFT7KjQMASJy0yWo7e1AMuwmUwA==}
+  '@goat-sdk/adapter-model-context-protocol@0.2.10':
+    resolution: {integrity: sha512-k7gkHwCl32rWheL/cAQ575BI/IBuk1FvqdX9j8RxTyjfniwilOhPoh6GzcRoQI1JHjbpcnMMpuTXvgmh//2srQ==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       '@modelcontextprotocol/sdk': 1.0.4
 
-  '@goat-sdk/adapter-vercel-ai@0.2.9':
-    resolution: {integrity: sha512-dIbnxKn0WN1jszwf5GNL4L7POoZSqJjtGbVvWOg3SOTSCehbn4Rf3HvgUKtQcAfrNv5qS0zdSTodq/GVf2upnQ==}
+  '@goat-sdk/adapter-vercel-ai@0.2.10':
+    resolution: {integrity: sha512-1noBvOSppbxkWfQ07xqk8DkBTZb0LgQBpLRlkFKb2H/dX2whg4SJoPP58n/YpjZuVMak21MvF7vl7NQqJmYseg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       ai: 4.0.3
       zod: ^3.0.0
 
-  '@goat-sdk/core@0.4.8':
-    resolution: {integrity: sha512-g48v98lmyiOyfcbH0QCqWih3R5fjxUgy+ko7GCtCw9CD8k9ymXumaK1Jz4O60WBbZa/OqQ22qW+q6ce1NYT4IA==}
+  '@goat-sdk/core@0.4.9':
+    resolution: {integrity: sha512-Z152kNW/iTd89t2Z59+rTGlr/XGZ0eSDzXFu8jEZfwKrr2p6AZ5JWNAe0RrVc1LcZLsXU1oGxjGytxKGyXMB7Q==}
     peerDependencies:
       zod: ^3.0.0
 
-  '@goat-sdk/crossmint@0.4.1':
-    resolution: {integrity: sha512-WPJ1HOpFi7kcmqdu3ShHT09a/Ua7KgUaJJcTIBDr0M4Mh/u+nBXyAlHySFDkFpY6JNyG/30zG7OWNr3GsxSRew==}
+  '@goat-sdk/crossmint@0.4.2':
+    resolution: {integrity: sha512-nca406eROCJEcltDe+RIZ0qlnV/GKN/yfi139rg5cvxYHcLune/Llf1/vpZyymM4AyMSP/iV/jhRmz7//NGi9g==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/plugin-coingecko@0.2.9':
-    resolution: {integrity: sha512-Ylo+Xeq4Z8cKWJn/2pcHQQsiJWrLGfKM4obgNW8ikkH2sEHnFE5adyiFFqKDaJYLkVOsrGJ8yCeCzXcNasUXdw==}
+  '@goat-sdk/plugin-coingecko@0.2.10':
+    resolution: {integrity: sha512-RCcFUXTuw2R6wKUvRt916XjaEPG5QhP8o49joncA7mqJY2LZ6EWdWFze7gLlNJZHnPggbv9QOoG8LsPYLDjUGg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/plugin-cosmosbank@0.0.5':
-    resolution: {integrity: sha512-0M2wWQgFuz9Len4PWPxx5SmM1m0j3xpEBmZuyDbs/c1uwVFwwNB5LQisHc4xcxlfcPti5nAdhdJHP4YdBYmMCw==}
+  '@goat-sdk/plugin-cosmosbank@0.0.6':
+    resolution: {integrity: sha512-Kz1W+J57HZy2ZzENQTFgSrSa5oFduKphJltLt8SaknKTZi1AOIX4v6Jr20v3hSSu9bEg2NKFs+h7eTrrAYbSYA==}
     engines: {node: '>=20.12.2 <21', npm: please-use-pnpm, pnpm: '>=9', yarn: please-use-pnpm}
     peerDependencies:
       '@cosmjs/stargate': ^0.32.4
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       cosmjs-types: ^0.9.0
 
-  '@goat-sdk/plugin-erc20@0.2.12':
-    resolution: {integrity: sha512-LFqHUGp/SZlYSdRi72ncSP93bS5+aQpiKtFjiZnzpMYWSPt17K+dJNrQTotTqMffUcaQPBCcf7tO/DKhg8JyAg==}
+  '@goat-sdk/plugin-erc20@0.2.13':
+    resolution: {integrity: sha512-2HlacAjUAQXuBxBg2a2txSaEI5ep2zTXy0VKSaDagiIR9SIzOu1VCIHpCkwa8vsDszarmpHdf8dmBoNxJpta4Q==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/plugin-ionic@0.1.5':
-    resolution: {integrity: sha512-/KhM3Kfr9xqSSEXUsBfUZQHGt8viURFklwcqGbvl13Lb4tA78kj7kyuzPeuQkfdjeEXrsS8IVJr7upGVLS0M/w==}
+  '@goat-sdk/plugin-ionic@0.1.6':
+    resolution: {integrity: sha512-jl3S9bX+WRTLBcWr7dS0Y09Wg7q7SFTlPzRk6deTRVNUXpcm0f1JjSDL3KwvCU8aVwD/kLCbQ3AL3y8DuhZl6g==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/plugin-jupiter@0.2.14':
-    resolution: {integrity: sha512-61AmHzHuEwh0ihQ6Lz5Gsxu3Ak4PTdc6I4C5Y2qTRNQTf8SjzNsMdrCRUrSd2XBb4T2RfpFwXIAWo+5e5Qydgg==}
+  '@goat-sdk/plugin-jupiter@0.2.15':
+    resolution: {integrity: sha512-WlFU626r5nWd2SfO+N3QzjpAwtGIBhYodRxtg14X3kciVIzlTsOYGd5qAMSEhJ+WZzKGeOrW/nhfcGW1QhblUg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       '@jup-ag/api': 6.0.31
 
-  '@goat-sdk/plugin-kim@0.1.12':
-    resolution: {integrity: sha512-+QHP3rcxbjT+klShOVfOg31h+Dzng3z2tDOltHjSqwfstz7aedLczbkF6KNMs4T8zkTk74Cav0nowVye4JwM4Q==}
+  '@goat-sdk/plugin-kim@0.1.13':
+    resolution: {integrity: sha512-55SodQtrxpFC1KccVgautyUVi5SjvvOCPTOt3jhhUqK4zdjRLaRJDZhVH1TkvGqqo817BB1m8fANm6IfX/egrA==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/plugin-orca@0.2.17':
-    resolution: {integrity: sha512-irzV91PjXRKMAAfZsDz1s243gfXxLR7R0qYtrlXjgiMG65uwukbrf19YVj3xPL/swNYn2cjc495AQqg1v4cw/Q==}
+  '@goat-sdk/plugin-orca@0.2.18':
+    resolution: {integrity: sha512-x1CzXilWhIJtrLNd4kML2L0pbVBKQr+IFrZ7qrGQW2POd23cU4Q2/TvHbFrGLqGsvz6MFb666V1Rzbm5dPjKEg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/plugin-polymarket@0.3.12':
-    resolution: {integrity: sha512-bI3wu2j5byEpYUISAVirlCRWbl4o8n/YvL8NxXIgiUogx9nuD5WHtsKKBYut9gqoNG7dlLdreoLNIaBqJAwt8A==}
+  '@goat-sdk/plugin-polymarket@0.3.13':
+    resolution: {integrity: sha512-PltXTs8oD4lmIhax9AVJDaeVFnG0OLPpntKNaITXoRCrR97xGPUctSHnfpzyN66YyfFxqvhhesmteNoBsfRS8A==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/plugin-pumpfun@0.1.7':
-    resolution: {integrity: sha512-khjYT6KioUE1IP6S2MYJos8ZunNziMht4tQqB1+oYvRo5WB85lW455dO5At72Ah+Ni8nMNqtQupU9jvQ2jTk3A==}
+  '@goat-sdk/plugin-pumpfun@0.1.8':
+    resolution: {integrity: sha512-o/DR4Qs1goGLdtDi7q1G/jHY88U5iGAZoxUEtIQ2BEgVUnV2lQbC6MsPil8SATkwQFJcuxsd2kEqOCZmZ48FZA==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/plugin-spl-token@0.2.16':
-    resolution: {integrity: sha512-vxc8kN327r38zAx4fKPNrxVhK4bZVAM9UVqo9HZYmqlTxW2HKo9LoOWWxZ0/bYK20UtRfVR1hp1V4wkIxjEiqA==}
+  '@goat-sdk/plugin-spl-token@0.2.17':
+    resolution: {integrity: sha512-T46YGZtDMqFlqptXMenRqBeY3NySyXEZMOL3w6G1Vbbuyp85sdDfVw2/Z1UqW+LfplpkierqRDG7aLREn1MuSA==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/plugin-uniswap@0.2.13':
-    resolution: {integrity: sha512-pDXI0AEFWRl29O3XgjEJN/AZviHoFfwwDPeCErpT58Pc8WvNXZMawgz5cIFaO2Gq23r4bdNYLoeFZho2LZRA6Q==}
+  '@goat-sdk/plugin-uniswap@0.2.14':
+    resolution: {integrity: sha512-gS1G2IIWM27BhhYrDyAhORJKUvAyHXTxW+9sKbBq831HoQVuswXLtmoh/IBrDFG0A3A9xkjMT0HAFbOZfMtirg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/wallet-chromia@0.2.10':
-    resolution: {integrity: sha512-UqVnJC2DWcLWqzLEQkqWx27Sctb3FA5J8TkvoP6ZzHFUtDFeJMCUAv1YOuZk8K7ytdyt8a/r5B7tTBwots2UAw==}
+  '@goat-sdk/wallet-chromia@0.2.11':
+    resolution: {integrity: sha512-kJrkaNsXl5NsN1ER0Hx3japvmSIlZEcX7Tgay2QApaxcd4AFgy7b/WmNxhsIp7DN51dRPaAPsESOVKfdTetdSQ==}
     peerDependencies:
       '@chromia/ft4': 1.0.1
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       postchain-client: 1.20.1
 
-  '@goat-sdk/wallet-cosmos@0.0.5':
-    resolution: {integrity: sha512-DP3ITzE2q3xIyo181eF87Y3YGR0CXLt+9ECE1QV84W3Pi6WZxc66kZ2r6kJ5rT5myovc6jzGl3hOBvzoIXQcXA==}
+  '@goat-sdk/wallet-cosmos@0.0.6':
+    resolution: {integrity: sha512-eUCV5mHQQBTzZh+i2fSKBS2WuXlMD25KRR1acaUFI5HYiPm5q0umo15JZCeGd9PcN8WBirhpo3q1gCmNx4xXyQ==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/wallet-evm@0.2.10':
-    resolution: {integrity: sha512-LOXlXBgHAFqTmGH1rKV4e7GggS1qaAGIMOTLQQzFvDSit2e/TjXXCcpd0mf8ebGafznD9+1CEiPJZLyD9KcUzQ==}
+  '@goat-sdk/wallet-evm@0.2.11':
+    resolution: {integrity: sha512-87FY4/SwpG2Vee7yAvJ7ywnTkC9q6F3KWbOCtXco09+yr6lnnh7xqoQd4xrpVMaoqvA6eCigqFCtF357thK7ig==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
 
-  '@goat-sdk/wallet-fuel@0.1.8':
-    resolution: {integrity: sha512-zJmRxQXBBLgsCWqO1IPzzr2FCez5/+Cei2tlphdG5YcT4uVou6GM0Bc5nAX2opw8fr8xgcL3+dvrUUaqECYe5g==}
+  '@goat-sdk/wallet-fuel@0.1.9':
+    resolution: {integrity: sha512-RGRdZ2Le3f8pp148zUoRPh3kmMaJVnsrKqfY1vcsSxRpAqeCKjRqE8vrFbU4oXzlQ2+vN2kJkIPawGAHSJlwGg==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       fuels: 0.97.2
 
-  '@goat-sdk/wallet-lit@0.2.17':
-    resolution: {integrity: sha512-gjOojLXiFR39d5jEASK/3VXyHHtpQ+IzcydU6fgaehZd9qCe7BwnAsbK5OPm33/MlKbWkInIFMItZahcvsOv2w==}
+  '@goat-sdk/wallet-lit@0.2.18':
+    resolution: {integrity: sha512-FioPqNYEJuohyDj/zHML2W/0EOQ2gxdwnj6x6cvlkx82hVC4ieKNZTefAlir8fmQCX22jgOczzDHMCyPku3Hag==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       viem: 2.23.4
 
-  '@goat-sdk/wallet-radix@0.2.8':
-    resolution: {integrity: sha512-OXVIAV70Vf5x9iulfpHlhDfKxKhcDTc5NeQeHNIcDMkcRlLzV79sPvAHlo2eGhbaw8stxriMMUbxlW3EBa5qFA==}
+  '@goat-sdk/wallet-radix@0.2.9':
+    resolution: {integrity: sha512-HzQSPHTVqTStesaS8OAa1uo1Qu/A+vDnyIczQFQjnV+qSxHqEmxsyfo759kFsvkhijyCw/mcMENeGeOL0cmKWw==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       radix-web3.js: 0.3.1
 
-  '@goat-sdk/wallet-safe@0.1.4':
-    resolution: {integrity: sha512-KYaXx6TtOF9P5eWU5TftX0jTeeATfbsDVerqIARAE4cec03OwJAy0QT2Gr0nwtjo3Xanz85dhpk4UJjQ+/mL7A==}
+  '@goat-sdk/wallet-safe@0.1.5':
+    resolution: {integrity: sha512-MxJBnC30uItdUU6DiBG+cCsZc07vrBLR7ghoP3qolx4WIi8VYvnQ1Ln0OyoGLCjHpVr5g4vNGXvH2rgua3LzsA==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
-      '@goat-sdk/wallet-evm': 0.2.10
+      '@goat-sdk/core': 0.4.9
+      '@goat-sdk/wallet-evm': 0.2.11
       viem: 2.23.4
 
-  '@goat-sdk/wallet-solana@0.2.14':
-    resolution: {integrity: sha512-3WzQ3oBt9eGC8uPi7slmNPJIluGHbIH8Rts35aMEO101zZKuQtWxqp+AUlWEZsyyIaJWDb3lWHw7pNFJrhpFzA==}
+  '@goat-sdk/wallet-solana@0.2.15':
+    resolution: {integrity: sha512-s/JN1/JeHzf4M1hIgwS1tUI2gfK/qv/sF/4ZUWYn9o4SxeA54NhdTEjmFJSu4k2likzFsD1Wujm4maOZuRSmmw==}
     peerDependencies:
-      '@goat-sdk/core': 0.4.8
+      '@goat-sdk/core': 0.4.9
       '@solana/web3.js': 1.98.0
 
-  '@goat-sdk/wallet-viem@0.2.11':
-    resolution: {integrity: sha512-Ahi9Yo6xX48cYGe7X845VUeNYe4GlkuNtnulHU7ILSz8reh1Yk9us3NYykgQ3VB9Ov4wWtfNNX2+f/pKsUrRZw==}
+  '@goat-sdk/wallet-viem@0.2.12':
+    resolution: {integrity: sha512-9TEUCGOqAk6TwL7BgdEHnUv+HbjbOBVesSCJnZJ6MCzXMjABTLwwbZ+nYHF6/yUNKxl23sfuhd7gfuDn5iimxA==}
     peerDependencies:
-      '@goat-sdk/wallet-evm': 0.2.10
+      '@goat-sdk/wallet-evm': 0.2.11
       viem: 2.23.4
-
-  '@goat-sdk/wallet-viem@0.2.8':
-    resolution: {integrity: sha512-0e7wR0qbbaMfH92f+hGlByZmahddovuJaFwTFkknvnwq64wDafO2Sco6YLMK+ZBO1Lxz4yZXe6Jilhd2LMNuCg==}
-    peerDependencies:
-      '@goat-sdk/wallet-evm': 0.2.8
-      viem: 2.21.49
 
   '@google-cloud/paginator@5.0.2':
     resolution: {integrity: sha512-DJS3s0OVH4zFDB1PzjxAsHqJT6sKVbRwwML0ZBP9PbU7Yebtu/7SWMRzvO2J3nUi9pRNITCfu4LJeooM2w4pjg==}
@@ -8758,8 +8752,8 @@ packages:
   '@yarnpkg/lockfile@1.1.0':
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
 
-  '@zerodev/global-address@0.0.19':
-    resolution: {integrity: sha512-pQxe/oWp6uD4v+Dr6d7Apas9Y8rPWyX9ryeuHF2FyZAmlKzI5UFlFQlkYapmkCHAGVmcdpqJc0utGpDv73oYZA==}
+  '@zerodev/global-address@0.0.22':
+    resolution: {integrity: sha512-f4NBnsbyHlnZoJyAwrYAcJkn38JHEKj9uWLi/yROD5NQgc6D9dAwKoaR6AKeWYHevE9Z9FY/AD9InSSn4zXieg==}
     peerDependencies:
       typescript: ^5.0.0
 
@@ -15545,14 +15539,6 @@ packages:
     resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
     engines: {'0': node >=0.6.0}
 
-  viem@2.17.11:
-    resolution: {integrity: sha512-4dqMQyLVx0dWzuzVNPKzru6qrzHc4opD1WxeL/+NEtQaHcVGfE6f2uAqfoo0k0wwzWgLXbYLkODZ3s/3GDFXYA==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   viem@2.18.4:
     resolution: {integrity: sha512-JGdN+PgBnZMbm7fc9o0SfHvL0CKyfrlhBUtaz27V+PeHO43Kgc9Zd4WyIbM8Brafq4TvVcnriRFW/FVGOzwEJw==}
     peerDependencies:
@@ -20627,48 +20613,48 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@goat-sdk/adapter-eleven-labs@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(zod@3.23.8)':
+  '@goat-sdk/adapter-eleven-labs@0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(zod@3.23.8)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       zod: 3.23.8
 
-  '@goat-sdk/adapter-langchain@0.2.11(@goat-sdk/core@0.4.8(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)':
+  '@goat-sdk/adapter-langchain@0.2.12(@goat-sdk/core@0.4.9(zod@3.23.8))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(zod@3.23.8)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       '@langchain/core': 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
       zod: 3.23.8
 
-  '@goat-sdk/adapter-model-context-protocol@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(@modelcontextprotocol/sdk@1.0.4)(zod@3.23.8)':
+  '@goat-sdk/adapter-model-context-protocol@0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(@modelcontextprotocol/sdk@1.0.4)(zod@3.23.8)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       '@modelcontextprotocol/sdk': 1.0.4
       zod-to-json-schema: 3.23.5(zod@3.23.8)
     transitivePeerDependencies:
       - zod
 
-  '@goat-sdk/adapter-vercel-ai@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
+  '@goat-sdk/adapter-vercel-ai@0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       ai: 4.0.22(react@18.3.1)(zod@3.23.8)
       zod: 3.23.8
 
-  '@goat-sdk/adapter-vercel-ai@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
+  '@goat-sdk/adapter-vercel-ai@0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       ai: 4.0.3(react@18.3.1)(zod@3.23.8)
       zod: 3.23.8
 
-  '@goat-sdk/core@0.4.8(zod@3.23.8)':
+  '@goat-sdk/core@0.4.9(zod@3.23.8)':
     dependencies:
       reflect-metadata: 0.2.2
       zod: 3.23.8
 
-  '@goat-sdk/crossmint@0.4.1(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/crossmint@0.4.2(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@crossmint/common-sdk-base': 0.3.1
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       abitype: 1.0.8(typescript@5.6.3)(zod@3.23.8)
       bs58: 6.0.0
@@ -20681,16 +20667,16 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-coingecko@0.2.9(@goat-sdk/core@0.4.8(zod@3.23.8))':
+  '@goat-sdk/plugin-coingecko@0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       zod: 3.23.8
 
-  '@goat-sdk/plugin-cosmosbank@0.0.5(@cosmjs/stargate@0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(cosmjs-types@0.9.0)(utf-8-validate@5.0.10)':
+  '@goat-sdk/plugin-cosmosbank@0.0.6(@cosmjs/stargate@0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(cosmjs-types@0.9.0)(utf-8-validate@5.0.10)':
     dependencies:
       '@cosmjs/stargate': 0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-cosmos': 0.0.5(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-cosmos': 0.0.6(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       chain-registry: 1.69.94
       cosmjs-types: 0.9.0
       zod: 3.23.8
@@ -20699,10 +20685,10 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@goat-sdk/plugin-erc20@0.2.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/plugin-erc20@0.2.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -20710,10 +20696,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-ionic@0.1.5(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/plugin-ionic@0.1.6(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -20721,10 +20707,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-jupiter@0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/plugin-jupiter@0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@jup-ag/api@6.0.31)(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@jup-ag/api': 6.0.31
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       zod: 3.23.8
@@ -20734,10 +20720,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-kim@0.1.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/plugin-kim@0.1.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -20745,11 +20731,11 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-orca@0.2.17(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/plugin-orca@0.2.18(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.29.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@orca-so/common-sdk': 0.6.4(@solana/spl-token@0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(decimal.js@10.4.3)
       '@orca-so/whirlpools-sdk': 0.13.13(@coral-xyz/anchor@0.29.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(@orca-so/common-sdk@0.6.4(@solana/spl-token@0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(decimal.js@10.4.3))(@solana/spl-token@0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(decimal.js@10.4.3)
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -20763,10 +20749,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-polymarket@0.3.12(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/plugin-polymarket@0.3.13(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       crypto: 1.0.1
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
@@ -20775,10 +20761,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-pumpfun@0.1.7(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/plugin-pumpfun@0.1.8(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -20787,10 +20773,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-spl-token@0.2.16(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/plugin-spl-token@0.2.17(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       zod: 3.23.8
@@ -20801,10 +20787,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/plugin-uniswap@0.2.13(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/plugin-uniswap@0.2.14(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
     transitivePeerDependencies:
@@ -20812,10 +20798,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/wallet-chromia@0.2.10(@chromia/ft4@1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/wallet-chromia@0.2.11(@chromia/ft4@1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10))(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@chromia/ft4': 1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       postchain-client: 1.20.1(buffer@6.0.3)(events@3.3.0)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
@@ -20824,7 +20810,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/wallet-cosmos@0.0.5(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
+  '@goat-sdk/wallet-cosmos@0.0.6(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(utf-8-validate@5.0.10)':
     dependencies:
       '@chain-registry/types': 0.50.50
       '@cosmjs/cosmwasm-stargate': 0.33.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -20832,7 +20818,7 @@ snapshots:
       '@cosmjs/proto-signing': 0.32.4
       '@cosmjs/stargate': 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@cosmjs/tendermint-rpc': 0.32.4(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       chain-registry: 1.69.94
       cosmjs-types: 0.9.0
     transitivePeerDependencies:
@@ -20840,9 +20826,9 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       abitype: 1.0.8(typescript@5.6.3)(zod@3.23.8)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       zod: 3.23.8
@@ -20851,17 +20837,17 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/wallet-fuel@0.1.8(@goat-sdk/core@0.4.8(zod@3.23.8))(fuels@0.97.2(encoding@0.1.13)(vitest@2.1.9(@types/node@22.13.9)(terser@5.37.0)))':
+  '@goat-sdk/wallet-fuel@0.1.9(@goat-sdk/core@0.4.9(zod@3.23.8))(fuels@0.97.2(encoding@0.1.13)(vitest@2.1.9(@types/node@22.13.9)(terser@5.37.0)))':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       fuels: 0.97.2(encoding@0.1.13)(vitest@2.1.9(@types/node@22.13.9)(terser@5.37.0))
       zod: 3.23.8
 
-  '@goat-sdk/wallet-lit@0.2.17(@goat-sdk/core@0.4.8(zod@3.23.8))(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(bufferutil@4.0.9)(date-and-time@2.4.3)(encoding@0.1.13)(multiformats@11.0.2)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/wallet-lit@0.2.18(@goat-sdk/core@0.4.9(zod@3.23.8))(@simplewebauthn/browser@9.0.1)(@simplewebauthn/typescript-types@7.4.0)(@walletconnect/modal@2.7.0)(bufferutil@4.0.9)(date-and-time@2.4.3)(encoding@0.1.13)(multiformats@11.0.2)(tslib@2.8.1)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(web-vitals@3.5.2)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@goat-sdk/wallet-solana': 0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-solana': 0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/auth-helpers': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/constants': 7.0.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@lit-protocol/contracts-sdk': 7.0.2(bufferutil@4.0.9)(date-and-time@2.4.3)(multiformats@11.0.2)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -20903,16 +20889,16 @@ snapshots:
       - utf-8-validate
       - web-vitals
 
-  '@goat-sdk/wallet-radix@0.2.8(@goat-sdk/core@0.4.8(zod@3.23.8))(radix-web3.js@0.3.1)':
+  '@goat-sdk/wallet-radix@0.2.9(@goat-sdk/core@0.4.9(zod@3.23.8))(radix-web3.js@0.3.1)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       radix-web3.js: 0.3.1
       zod: 3.23.8
 
-  '@goat-sdk/wallet-safe@0.1.4(@goat-sdk/core@0.4.8(zod@3.23.8))(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(webauthn-p256@0.0.10)':
+  '@goat-sdk/wallet-safe@0.1.5(@goat-sdk/core@0.4.9(zod@3.23.8))(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))(webauthn-p256@0.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@safe-global/protocol-kit': 5.2.1(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@safe-global/safe-core-sdk-types': 5.1.0(typescript@5.6.3)(zod@3.24.1)
       '@safe-global/sdk-starter-kit': 1.1.5(bufferutil@4.0.9)(encoding@0.1.13)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.1)
@@ -20927,9 +20913,9 @@ snapshots:
       - utf-8-validate
       - webauthn-p256
 
-  '@goat-sdk/wallet-solana@0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/wallet-solana@0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       '@solana/web3.js': 1.92.1(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       tweetnacl: 1.0.3
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -20939,9 +20925,9 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/wallet-solana@0.2.14(@goat-sdk/core@0.4.8(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@goat-sdk/wallet-solana@0.2.15(@goat-sdk/core@0.4.9(zod@3.23.8))(@solana/web3.js@1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
-      '@goat-sdk/core': 0.4.8(zod@3.23.8)
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
       tweetnacl: 1.0.3
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -20951,12 +20937,12 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@goat-sdk/wallet-viem@0.2.11(@goat-sdk/wallet-evm@0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/wallet-viem@0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
-      '@goat-sdk/wallet-evm': 0.2.10(@goat-sdk/core@0.4.8(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-evm': 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
 
-  '@goat-sdk/wallet-viem@0.2.8(@goat-sdk/wallet-evm@packages+wallets+evm)(viem@2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
+  '@goat-sdk/wallet-viem@0.2.12(@goat-sdk/wallet-evm@packages+wallets+evm)(viem@2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8))':
     dependencies:
       '@goat-sdk/wallet-evm': link:packages/wallets/evm
       viem: 2.23.2(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -24049,7 +24035,7 @@ snapshots:
       '@opentelemetry/propagator-b3': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/propagator-jaeger': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
-      semver: 7.6.3
+      semver: 7.7.1
 
   '@opentelemetry/semantic-conventions@1.27.0': {}
 
@@ -24710,7 +24696,7 @@ snapshots:
   '@safe-global/safe-apps-sdk@9.1.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@safe-global/safe-gateway-typescript-sdk': 3.22.4
-      viem: 2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -27407,10 +27393,10 @@ snapshots:
 
   '@yarnpkg/lockfile@1.1.0': {}
 
-  '@zerodev/global-address@0.0.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@zerodev/global-address@0.0.22(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       typescript: 5.6.3
-      viem: 2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+      viem: 2.23.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -35482,23 +35468,6 @@ snapshots:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
       extsprintf: 1.3.0
-
-  viem@2.17.11(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8):
-    dependencies:
-      '@adraffy/ens-normalize': 1.10.0
-      '@noble/curves': 1.4.0
-      '@noble/hashes': 1.4.0
-      '@scure/bip32': 1.4.0
-      '@scure/bip39': 1.3.0
-      abitype: 1.0.5(typescript@5.6.3)(zod@3.23.8)
-      isows: 1.0.4(ws@8.17.1(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      ws: 8.17.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-    optionalDependencies:
-      typescript: 5.6.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - zod
 
   viem@2.18.4(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8):
     dependencies:

@@ -12,7 +12,7 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@zerodev/global-address": "^0.0.19",
+        "@zerodev/global-address": "^0.0.22",
         "@goat-sdk/core": "workspace:*",
         "viem": "catalog:",
         "zod": "catalog:"
