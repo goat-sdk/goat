@@ -13,7 +13,7 @@ You can use this example with any other agent framework, chain, and wallet of yo
 ## Setup
 1. Clone the repository:
 ```bash
-git clone https://github.com/goat-sdk/goat
+git clone https://github.com/goat-sdk/goat.git
 ```
 
 2. Go to the example directory:
