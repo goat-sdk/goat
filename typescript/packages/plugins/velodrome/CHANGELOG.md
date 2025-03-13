@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-velodrome
 
+## 0.1.8
+
+### Patch Changes
+
+- a29b40e: Fix swap execution errors
+
 ## 0.1.7
 
 ### Patch Changes
