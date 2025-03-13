@@ -1,5 +1,11 @@
 # @goat-sdk/wallet-zetrix
 
+## 0.1.2
+
+### Patch Changes
+
+- 9e0a898: Minor fixes
+
 ## 0.1.1
 
 ### Patch Changes
