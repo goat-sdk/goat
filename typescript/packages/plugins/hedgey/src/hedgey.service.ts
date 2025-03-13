@@ -1,12 +1,28 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-
 import { CAMPAIGN_ABI, CAMPAIGN_ADDRESS } from "./abi/hedgey.abi";
+import { API_CONFIG } from "./config/config";
+import { getErrorMessage } from "./helpers/error.helper";
 import { fetchJSON, postJSON, toBytes16 } from "./helpers/http.helper";
 import { ClaimStakingRewardsParams } from "./parameters";
-import { ClaimHedgeyRewardsResponse, HedgeyProofResponse, NewsEntryProps } from "./types/types";
+import {
+    ActiveCampaign,
+    CampaignInfo,
+    ClaimHedgeyRewardsResponse,
+    ClaimableCampaign,
+    HedgeyClaimsResponse,
+    HedgeyProofResponse,
+    NewsEntryProps,
+    ProofResult,
+} from "./types/types";
 
-import { API_CONFIG } from "./config/config";
+const GET_CLAIMS_FOR_ADDRESS_QUERY = `
+  query GetClaimsForAddress($input: TokenCampaignEventsResolverInput) {
+    TokenCampaignEvents(input: $input) {
+      events { campaignId }
+    }
+  }
+`;
 
 const NO_CLAIMABLE_MESSAGE = "No claimable tokens available";
 
@@ -27,13 +43,16 @@ export class HedgeyService {
             if (!network?.id) {
                 throw new Error("Unable to determine chain ID from wallet client");
             }
-            // Filter campaigns: only process those that are active and haven't been claimed yet
-            const activeCampaignIds = await this.filterActiveCampaigns(campaignIds, userAddress);
-            if (activeCampaignIds.length === 0) {
+            if (parameters.campaignIds && parameters.campaignIds.length > 0) {
+                campaignIds.push(...parameters.campaignIds);
+            }
+
+            const activeCampaigns = await this.filterActiveCampaigns(campaignIds, userAddress);
+            if (activeCampaigns.length === 0) {
                 return [{ campaignId: "", detail: NO_CLAIMABLE_MESSAGE }];
             }
-            const proofPromises = activeCampaignIds.map((campaignId) =>
-                this.fetchProofForCampaign(campaignId, userAddress),
+            const proofPromises = activeCampaigns.map((campaign) =>
+                this.fetchProofForCampaign(campaign.campaignId, userAddress),
             );
             const settledProofResults = await Promise.allSettled(proofPromises);
 
@@ -48,10 +67,8 @@ export class HedgeyService {
                 return { campaignId, data: null, error: result.reason };
             });
 
-            // Process proof results
-            const { claimableCampaigns, results } = this.processProofResults(proofResults);
+            const { claimableCampaigns, results } = this.processProofResults(proofResults, activeCampaigns);
 
-            // If there are claimable campaigns, execute the transaction
             if (claimableCampaigns.length > 0) {
                 const { transactionHash } = await this.executeClaimTransaction(walletClient, claimableCampaigns);
                 for (const claim of claimableCampaigns) {
@@ -60,42 +77,40 @@ export class HedgeyService {
                         detail: "Claimed",
                         amount: claim.claimAmount,
                         transactionHash: transactionHash,
+                        chain: network.id,
+                        tokenName: claim.tokenName,
                     });
                 }
             }
 
             if (results.length === 0) {
-                return [{ campaignId: "", detail: NO_CLAIMABLE_MESSAGE }];
+                return [{ campaignId: "", detail: NO_CLAIMABLE_MESSAGE, chain: network.id }];
             }
 
             return results;
         } catch (error) {
-            throw new Error(`Failed to claim tokens: ${error instanceof Error ? error.message : error}`);
+            throw new Error(`Failed to claim tokens: ${getErrorMessage(error)}`);
         }
     }
 
-    private async filterActiveCampaigns(campaignIds: string[], userAddress: string): Promise<string[]> {
-        // Obtain information for each campaign to verify its status.
+    private async filterActiveCampaigns(campaignIds: string[], userAddress: string): Promise<ActiveCampaign[]> {
         const campaignInfoPromises = campaignIds.map(async (campaignId) => {
             try {
                 const url = `${API_CONFIG.HEDGEY_TOKEN_CLAIMS_INFO_URL}/${campaignId}`;
-                const info = await fetchJSON(url);
-                return { campaignId, info };
+                const rawData = await fetchJSON(url);
+                const info = rawData as CampaignInfo;
+                const tokenName = info?.campaign?.token?.ticker ?? "";
+
+                return { campaignId, tokenName, info };
             } catch (e) {
                 return { campaignId, info: null, error: e };
             }
         });
         const campaignInfoResults = await Promise.all(campaignInfoPromises);
 
-        // Query the claim events for the user's address via the GraphQL endpoint.
         const graphqlBody = {
             operationName: "GetClaimsForAddress",
-            query: `
-        query GetClaimsForAddress($input: TokenCampaignEventsResolverInput) {
-          TokenCampaignEvents(input: $input) {
-            events { campaignId }
-          }
-        }`,
+            query: GET_CLAIMS_FOR_ADDRESS_QUERY,
             variables: { input: { eventType: "TokensClaimed", address: userAddress, includeTestnets: true } },
         };
         const rawData = await postJSON(API_CONFIG.HEDGEY_GRAPHQL_ENDPOINT, graphqlBody);
@@ -109,19 +124,17 @@ export class HedgeyService {
                 }
             }
         }
-        // Filter the campaigns that are active and haven't been claimed yet.
-        const activeCampaignIds: string[] = [];
+        const activeCampaigns: ActiveCampaign[] = [];
         for (const result of campaignInfoResults) {
-            // Using type assertion or defining an interface for result.info
             if (
                 result.info &&
                 (result.info as { campaignStatus: string }).campaignStatus === "active" &&
                 !claimedCampaignIds.has(result.campaignId)
             ) {
-                activeCampaignIds.push(result.campaignId);
+                activeCampaigns.push({ campaignId: result.campaignId, tokenName: result.tokenName });
             }
         }
-        return activeCampaignIds;
+        return activeCampaigns;
     }
 
     private async fetchCampaignIds(): Promise<string[]> {
@@ -135,10 +148,7 @@ export class HedgeyService {
             .filter((campaignId): campaignId is string => !!campaignId);
     }
 
-    private async fetchProofForCampaign(
-        campaignId: string,
-        userAddress: string,
-    ): Promise<{ campaignId: string; data: HedgeyProofResponse | null; error: unknown }> {
+    private async fetchProofForCampaign(campaignId: string, userAddress: string): Promise<ProofResult> {
         const proofUrl = `${API_CONFIG.HEDGEY_PROOF_URL}/${campaignId}/${userAddress}`;
         try {
             const data = await fetchJSON(proofUrl);
@@ -149,20 +159,19 @@ export class HedgeyService {
     }
 
     private processProofResults(
-        proofResults: Array<{ campaignId: string; data: HedgeyProofResponse | null; error: unknown }>,
+        proofResults: ProofResult[],
+        activeCampaigns: ActiveCampaign[],
     ): {
-        claimableCampaigns: Array<{ campaignId: string; claimAmount: string; proof: string[] }>;
+        claimableCampaigns: ClaimableCampaign[];
         results: ClaimHedgeyRewardsResponse[];
     } {
-        const claimableCampaigns: Array<{ campaignId: string; claimAmount: string; proof: string[] }> = [];
+        const claimableCampaigns: ClaimableCampaign[] = [];
         const results: ClaimHedgeyRewardsResponse[] = [];
         for (const result of proofResults) {
             if (result.error) {
                 results.push({
                     campaignId: result.campaignId,
-                    detail: `Error: ${
-                        result.error instanceof Error ? result.error.message : JSON.stringify(result.error)
-                    }`,
+                    detail: `Error: ${getErrorMessage(result.error)}`,
                 });
             } else if (!result.data?.canClaim) {
                 results.push({
@@ -170,10 +179,12 @@ export class HedgeyService {
                     detail: NO_CLAIMABLE_MESSAGE,
                 });
             } else {
+                const campaignInfo = activeCampaigns.find((c) => c.campaignId === result.campaignId);
                 claimableCampaigns.push({
                     campaignId: result.campaignId,
                     claimAmount: result.data.amount,
                     proof: result.data.proof,
+                    tokenName: campaignInfo ? campaignInfo.tokenName : "$$",
                 });
             }
         }
@@ -182,7 +193,7 @@ export class HedgeyService {
 
     private async executeClaimTransaction(
         walletClient: EVMWalletClient,
-        claimableCampaigns: Array<{ campaignId: string; claimAmount: string; proof: string[] }>,
+        claimableCampaigns: ClaimableCampaign[],
     ): Promise<{ transactionHash: string }> {
         const campaignIdsBytes16 = claimableCampaigns.map((claim) => toBytes16(claim.campaignId));
         const proofs = claimableCampaigns.map((claim) => claim.proof);
@@ -196,45 +207,7 @@ export class HedgeyService {
             });
             return { transactionHash: txResponse.hash };
         } catch (txError) {
-            throw new Error(
-                `Transaction failed: ${txError instanceof Error ? txError.message : JSON.stringify(txError)}`,
-            );
+            throw new Error(`Transaction failed: ${getErrorMessage(txError)}`);
         }
     }
-
-    private async executeClaimTransactions(
-        walletClient: EVMWalletClient,
-        claimableCampaigns: Array<{ campaignId: string; claimAmount: string; proof: string[] }>,
-    ): Promise<{ transactionHash: string }> {
-        const transactionHashes: string[] = [];
-
-        for (const campaign of claimableCampaigns) {
-            try {
-                const txResponse = await walletClient.sendTransaction({
-                    to: CAMPAIGN_ADDRESS as `0x${string}`,
-                    abi: CAMPAIGN_ABI,
-                    functionName: "claim",
-                    args: [toBytes16(campaign.campaignId), campaign.proof, campaign.claimAmount],
-                });
-
-                transactionHashes.push(txResponse.hash);
-            } catch (txError) {
-                throw new Error(
-                    `Transaction failed for campaignId=${campaign.campaignId}: ${
-                        txError instanceof Error ? txError.message : JSON.stringify(txError)
-                    }`,
-                );
-            }
-        }
-
-        return { transactionHash: transactionHashes.join(",") };
-    }
-}
-
-interface HedgeyClaimsResponse {
-    data?: {
-        TokenCampaignEvents?: {
-            events?: Array<{ campaignId?: string }>;
-        };
-    };
 }

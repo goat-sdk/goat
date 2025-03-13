@@ -1,17 +1,9 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { erc20Abi } from "viem";
 import { quoterabi } from "./abi/quoterabi";
 import { routerabi } from "./abi/routerabi";
 import { AddLiquidityParams, SwapExactTokensParams } from "./parameters";
-
-// Router addresses for different chains
-const UNIVERSAL_ROUTER_ADDRESSES: Record<number, string> = {
-    10: "0x4bF3E32de155359D1D75e8B474b66848221142fc",
-    34443: "0x652e53C6a4FE39B6B30426d9c96376a105C89A95",
-    252: "0x652e53C6a4FE39B6B30426d9c96376a105C89A95",
-    1750: "0x652e53C6a4FE39B6B30426d9c96376a105C89A95",
-    1135: "0x652e53C6a4FE39B6B30426d9c96376a105C89A95",
-};
 
 const ROUTER_ADDRESS: Record<number, string> = {
     34443: "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45",
@@ -50,15 +42,40 @@ export class VelodromeService {
                 throw new Error(`Router not found for chain ${chain.id}`);
             }
 
+            const tokenInLower = parameters.tokenIn.toLowerCase();
+            const tokenOutLower = parameters.tokenOut.toLowerCase();
+
+            // Specify exact stablecoin addresses
+            const usdtAddress = "0xf0f161fda2712db8b566946122a5af183995e2ed".toLowerCase();
+            const usdcAddress = "0xd988097fb8612cc24eec14542bc03424c656005f".toLowerCase();
+
+            // Verify if it is a stablecoin pair
+            if (
+                (tokenInLower === usdtAddress && tokenOutLower === usdcAddress) ||
+                (tokenInLower === usdcAddress && tokenOutLower === usdtAddress)
+            ) {
+                // Force stable: true for USDC-USDT regardless of the incoming parameters
+                parameters.stable = true;
+                console.log("Forcing a stable pool for the USDC-USDT pair");
+            }
+
             const wethAddress = WETH_ADDRESS[chain.id];
-            const isETHIn = parameters.tokenIn.toLowerCase() === wethAddress.toLowerCase();
-            const isETHOut = parameters.tokenOut.toLowerCase() === wethAddress.toLowerCase();
+
+            const isETHIn =
+                parameters.tokenIn.toLowerCase() === wethAddress.toLowerCase() ||
+                parameters.tokenIn.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ||
+                parameters.tokenIn.toLowerCase() === "weth";
+
+            const isETHOut =
+                parameters.tokenOut.toLowerCase() === wethAddress.toLowerCase() ||
+                parameters.tokenOut.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ||
+                parameters.tokenOut.toLowerCase() === "weth";
 
             // Get quote first
             const amountOutMin = await this.getQuote(
                 walletClient,
-                parameters.tokenIn,
-                parameters.tokenOut,
+                isETHIn ? wethAddress : parameters.tokenIn,
+                isETHOut ? wethAddress : parameters.tokenOut,
                 parameters.amountIn,
                 parameters.stable,
             );
@@ -71,11 +88,21 @@ export class VelodromeService {
             // Create route array
             const routes = [
                 {
-                    from: parameters.tokenIn,
-                    to: parameters.tokenOut,
+                    from: isETHIn ? wethAddress : parameters.tokenIn,
+                    to: isETHOut ? wethAddress : parameters.tokenOut,
                     stable: parameters.stable,
                 },
             ];
+
+            // If the input is not ETH, we need to approve first
+            if (!isETHIn) {
+                const approvalHash = await walletClient.sendTransaction({
+                    to: parameters.tokenIn as `0x${string}`,
+                    abi: erc20Abi,
+                    functionName: "approve",
+                    args: [routerAddress, parameters.amountIn],
+                });
+            }
 
             let txHash: { hash: string };
 

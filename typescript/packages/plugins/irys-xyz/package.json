@@ -1,24 +1,16 @@
 {
-    "name": "@goat-sdk/plugin-allora",
-    "version": "0.1.7",
+    "name": "@goat-sdk/plugin-irys-xyz",
+    "version": "0.1.0",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
         "clean": "rm -rf dist",
         "test": "vitest run --passWithNoTests"
     },
-    "sideEffects": false,
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-    "dependencies": {
-        "@goat-sdk/core": "workspace:*",
-        "zod": "catalog:",
-        "axios": "1.8.3"
-    },
-    "peerDependencies": {
-        "@goat-sdk/core": "workspace:*"
-    },
+    "sideEffects": false,
     "homepage": "https://ohmygoat.dev",
     "repository": {
         "type": "git",
@@ -28,5 +20,15 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3", "allora"]
+    "keywords": ["ai", "agents", "web3"],
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@irys/upload": "0.0.15",
+        "@irys/upload-ethereum": "0.0.16",
+        "zod": "catalog:"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*"
+    }
 }

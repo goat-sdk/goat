@@ -105,12 +105,15 @@ GOAT is free software, MIT licensed.
 
 ## 🐍 Python
 - **By use case**
-  - Send and receive tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/web3), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
-  - Swap tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/uniswap), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
+  - Send and receive tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/evm-send-and-receive-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/solana-send-and-receive-tokens)]
+  - Swap tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/evm-swap-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/solana-swap-tokens)]
 - **By framework**
-  - Langchain [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/web3), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
-  - GAME Agent [[EVM](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)]
-  - ZerePy [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/zerepy/web3)]
+  - [Langchain](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/langchain)
+  - [OpenAI Agents SDK](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/openai-agents-sdk)
+  - [GAME Agent](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
+  - [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py)
+- **By wallet**
+  - [Crossmint](https://github.com/goat-sdk/goat/tree/main/python/examples/by-wallet/crossmint)
 - **See all python quickstarts [here](https://github.com/goat-sdk/goat/tree/main/python/examples).**
 
 # 🛠️ Supported tools and frameworks
@@ -144,6 +147,7 @@ GOAT is free software, MIT licensed.
 | Hedgey | Claim rewards on Hedgey | [@goat-sdk/plugin-hedgey](https://www.npmjs.com/package/@goat-sdk/plugin-hedgey) |
 | Ionic | Borrow and lend on Ionic | [@goat-sdk/plugin-ionic](https://www.npmjs.com/package/@goat-sdk/plugin-ionic) |
 | Ironclad | Create positions on Ironclad | [@goat-sdk/plugin-ironclad](https://www.npmjs.com/package/@goat-sdk/plugin-ironclad) |
+| Irys | Deploy Irys plugins | [@goat-sdk/plugin-irys-xyz](https://www.npmjs.com/package/@goat-sdk/plugin-irys-xyz) |
 | JSON RPC | Call any JSON RPC endpoint |[@goat-sdk/plugin-json-rpc](https://www.npmjs.com/package/@goat-sdk/plugin-json-rpc) | [goat-sdk-plugin-json-rpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/json_rpc) |
 | Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter) |
 | KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
@@ -203,6 +207,7 @@ GOAT is free software, MIT licensed.
 | Langchain | [@goat-sdk/adapter-langchain](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/langchain) | [goat-sdk-adapter-langchain](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/langchain)
 | ElevenLabs | [@goat-sdk/adapter-eleven-labs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/eleven-labs)
 | LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
+| OpenAI Agents SDK |  | [goat-sdk-adapter-openai-agents-sdk](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/openai_agents_sdk) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/model-context-protocol) |
 | Eliza | [@elizaos/plugin-goat](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)

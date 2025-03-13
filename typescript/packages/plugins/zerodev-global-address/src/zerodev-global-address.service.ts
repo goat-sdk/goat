@@ -1,6 +1,7 @@
 import { Tool } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { FLEX, createCall, createGlobalAddress } from "@zerodev/global-address";
-import { type Address, erc20Abi } from "viem";
+import { type Address, type Chain, erc20Abi } from "viem";
 import { arbitrum, base, mainnet, mode, optimism, scroll } from "viem/chains";
 import { CreateGlobalAddressConfigParams } from "./parameters";
 import { GlobalAddressResponse, TokenActions, TokenConfig } from "./types";
@@ -37,6 +38,8 @@ interface FeeData {
 }
 
 export class ZeroDevGlobalAddressService {
+    private readonly supportedChains: Chain[] = [arbitrum, base, mainnet, mode, optimism, scroll];
+
     constructor(private readonly defaultSlippage: number = 5000) {}
 
     private getChainName(chainId: number): string {
@@ -88,30 +91,31 @@ export class ZeroDevGlobalAddressService {
     @Tool({
         description: `Creates a global address that can receive tokens from multiple chains.
     A global address allows you to receive tokens on any supported chain and have them automatically bridged to your destination chain.
-    
+
     Example prompts:
-    - "Create a global address" (uses default settings: Optimism as destination chain)
+    - "Create a global address" (uses default wallet settings)
     - "Create a global address on base" (specifies base as destination chain)
     - "Create a global address for wallet 0x123...abc" (specifies owner address)
     - "Create a global address on arbitrum with 30% slippage"
     `,
     })
     async createGlobalAddressConfig(
+        walletClient: EVMWalletClient,
         params: CreateGlobalAddressConfigParams,
     ): Promise<FormattedGlobalAddressResponse & { logs: string }> {
-        const { owner, destinationChain = optimism, slippage = this.defaultSlippage } = params;
-
-        if (!owner) {
-            throw new Error("Owner address is required");
-        }
-
+        const destChain =
+            params.destinationChain ||
+            this.supportedChains.find(({ id }) => id === walletClient.getChain().id) ||
+            optimism;
+        const slippage = params.slippage ?? this.defaultSlippage;
+        const owner = params.owner ?? walletClient.getAddress();
         const allSrcTokens = this.getSourceTokens();
-        const srcTokens = allSrcTokens.filter((token) => token.chain.id !== destinationChain.id);
-        const actions = this.createActionConfig(owner);
+        const srcTokens = allSrcTokens.filter((token) => token.chain.id !== destChain.id);
+        const actions = this.createActionConfig(owner as `0x${string}`);
 
         try {
             const { globalAddress, estimatedFees } = await createGlobalAddress({
-                destChain: destinationChain,
+                destChain,
                 owner,
                 slippage,
                 actions,
@@ -120,7 +124,7 @@ export class ZeroDevGlobalAddressService {
 
             const formattedFees = this.formatEstimatedFees(estimatedFees);
             const logs = this.formatLogsToString(globalAddress, formattedFees);
-            const targetChain_name = `destination chain: ${this.getChainName(destinationChain.id)} (${destinationChain.id})`;
+            const targetChain_name = `destination chain: ${this.getChainName(destChain.id)} (${destChain.id})`;
 
             return {
                 globalAddress,

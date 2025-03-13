@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-zerodev-global-address
 
+## 0.1.7
+
+### Patch Changes
+
+- 1fb1677: Use wallet client for param defaults
+
 ## 0.1.6
 
 ### Patch Changes
