@@ -1,5 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { erc20Abi } from "viem";
 import { quoterabi } from "./abi/quoterabi";
 import { routerabi } from "./abi/routerabi";
 import { AddLiquidityParams, SwapExactTokensParams } from "./parameters";
@@ -59,12 +60,14 @@ export class VelodromeService {
             }
 
             const wethAddress = WETH_ADDRESS[chain.id];
-            
-            const isETHIn = parameters.tokenIn.toLowerCase() === wethAddress.toLowerCase() ||
+
+            const isETHIn =
+                parameters.tokenIn.toLowerCase() === wethAddress.toLowerCase() ||
                 parameters.tokenIn.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ||
                 parameters.tokenIn.toLowerCase() === "weth";
 
-            const isETHOut = parameters.tokenOut.toLowerCase() === wethAddress.toLowerCase() ||
+            const isETHOut =
+                parameters.tokenOut.toLowerCase() === wethAddress.toLowerCase() ||
                 parameters.tokenOut.toLowerCase() === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" ||
                 parameters.tokenOut.toLowerCase() === "weth";
 
