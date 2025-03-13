@@ -209,7 +209,7 @@ GOAT is free software, MIT licensed.
 | LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
 | OpenAI Agents SDK |  | [goat-sdk-adapter-openai-agents-sdk](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/openai_agents_sdk) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/model-context-protocol) |
-| Eliza | [@elizaos/plugin-goat](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) |
+| Eliza | [@elizaos/plugin-goat](https://github.com/elizaos-plugins/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
 | ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) |
 

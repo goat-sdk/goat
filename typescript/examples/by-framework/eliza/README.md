@@ -7,7 +7,7 @@
 - [Eliza Agent on EVM](https://github.com/goat-sdk/eliza-mode-example)
 - [Eliza Agent on Solana](https://github.com/goat-sdk/eliza-solana-example)
 
-Checkout the [Eliza GOAT plugin](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) to see how to integrate GOAT with Eliza.
+Checkout the [Eliza GOAT plugin](https://github.com/elizaos-plugins/plugin-goat) to see how to integrate GOAT with Eliza.
 
 ## Using in production
 In production, developers require advanced wallet setups that utilize [smart wallets](https://docs.goat-sdk.com/concepts/smart-wallets), which allow them to:
