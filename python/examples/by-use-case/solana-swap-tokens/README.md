@@ -1,6 +1,6 @@
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+<img src="https://raw.githubusercontent.com/goat-sdk/goat/main/assets/logo.png" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
 # Swap tokens on Solana
@@ -13,7 +13,7 @@ You can use this example with any other agent framework, chain, and wallet of yo
 ## Setup
 1. Clone the repository:
 ```bash
-git clone https://github.com/goat-sdk/goat.git
+git clone https://github.com/goat-sdk/goat
 ```
 
 2. Go to the example directory:
@@ -44,7 +44,7 @@ poetry run python example.py
 - Swap 1 USDC for GOAT
 
 ## Using in production
-In production, developers require advanced wallet setups that utilize [smart wallets](https://docs.goat-sdk.com/concepts/smart-wallets), which allow them to:
+In production, developers require advanced wallet setups that utilize [smart wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), which allow them to:
 1. **Increase security** by setting programmable permissions (e.g. limiting fund amounts, restricting contract interactions, and defining required signatures)
 2. **Maintain regulatory compliance** by ensuring agent wallets are non-custodial. This means that:
      - Launchpads, wallet providers, or agent platforms never have access to agents' wallets.
@@ -61,7 +61,7 @@ To integrate Agent Wallets with GOAT, check out the following quickstarts:
 <br/>
 <br/>
 <div>
-  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+  <img src="https://raw.githubusercontent.com/goat-sdk/goat/main/assets/logo.png" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 
 <div>
 </footer>
