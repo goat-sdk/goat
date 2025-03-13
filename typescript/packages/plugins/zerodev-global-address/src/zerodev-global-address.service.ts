@@ -111,7 +111,7 @@ export class ZeroDevGlobalAddressService {
         const owner = params.owner ?? walletClient.getAddress();
         const allSrcTokens = this.getSourceTokens();
         const srcTokens = allSrcTokens.filter((token) => token.chain.id !== destChain.id);
-        const actions = this.createActionConfig(owner);
+        const actions = this.createActionConfig(owner as `0x${string}`);
 
         try {
             const { globalAddress, estimatedFees } = await createGlobalAddress({
