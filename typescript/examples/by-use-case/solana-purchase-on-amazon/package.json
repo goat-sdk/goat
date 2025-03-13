@@ -5,12 +5,11 @@
     "description": "",
     "private": true,
     "bin": {
-        "goat-evm": "./build/evm.js",
-        "goat-solana": "./build/solana.js"
+        "goat-solana": "./build/index.js"
     },
     "scripts": {
         "test": "vitest run --passWithNoTests",
-        "build": "tsc && node -e \"require('fs').chmodSync('build/evm.js', '755')\" && node -e \"require('fs').chmodSync('build/solana.js', '755')\""
+        "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
     },
     "files": ["build"],
     "author": "",

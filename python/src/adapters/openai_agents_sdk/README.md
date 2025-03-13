@@ -5,24 +5,22 @@
 </a>
 </div>
 
-# Langchain Adapter for GOAT
+# OpenAI Agents SDK Adapter for GOAT
 
-Integrate the more than +200 onchain tools of GOAT with [Langchain](https://langchain.com).
+Integrate the more than +200 onchain tools of GOAT with [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/).
 
 ## Installation
 ```
-pip install goat-sdk-adapter-langchain
-poetry add goat-sdk-adapter-langchain
+pip install goat-sdk-adapter-openai-agents-sdk
+poetry add goat-sdk-adapter-openai-agents-sdk
 ```
 
 ## Usage
 
-See a full working example [here](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/langchain).
+See a full working example [here](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/openai-agents-sdk).
 
 ```python
-from goat_adapters.langchain.adapter import get_on_chain_tools
-
-llm = ChatOpenAI(model="gpt-4o-mini")
+from goat_adapters.openai_agents_sdk.adapter import get_on_chain_tools
 
 tools = get_on_chain_tools(
     wallet=# Your wallet,
@@ -31,12 +29,13 @@ tools = get_on_chain_tools(
     ],
 )
 
-agent = create_tool_calling_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, handle_parsing_errors=True, verbose=True)
-
-agent_executor.invoke({
-    "input": "Your prompt here"
-})
+agent = Agent(
+    name="GOAT Agent",
+    instructions=(
+        "You are a helpful agent that can interact onchain using the GOAT SDK. "
+    ),
+    tools=tools
+)
 ```
 
 <footer>

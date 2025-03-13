@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-balancer
 
+## 0.1.15
+
+### Patch Changes
+
+- d484c19: Support permit2 on swaps
+
 ## 0.1.14
 
 ### Patch Changes
