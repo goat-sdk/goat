@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-hedgey
 
+## 0.1.2
+
+### Patch Changes
+
+- e0ae242: Minor improvements
+
 ## 0.1.1
 
 ### Patch Changes
