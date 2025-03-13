@@ -1,8 +1,8 @@
 import { Chain, PluginBase } from "@goat-sdk/core";
 import { createTool } from "@goat-sdk/core";
+import BigNumber from "bignumber.js";
 import { z } from "zod";
 import { ZetrixWalletClient } from "./ZetrixWalletClient";
-import BigNumber from "bignumber.js";
 
 export class SendZETRIXPlugin extends PluginBase<ZetrixWalletClient> {
     constructor() {

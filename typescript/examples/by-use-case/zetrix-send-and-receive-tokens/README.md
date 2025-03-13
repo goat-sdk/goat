@@ -25,7 +25,7 @@ pnpm build
 
 3. Go to the example directory:
 ```bash
-cd examples/by-use-case/zetrix-send-native
+cd examples/by-use-case/zetrix-send-and-receive-tokens
 ```
 
 4. Copy the `.env.template` and populate with your values:

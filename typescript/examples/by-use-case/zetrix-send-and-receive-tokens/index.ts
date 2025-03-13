@@ -1,9 +1,9 @@
 import readline from "node:readline";
 
 import { openai } from "@ai-sdk/openai";
-import { generateText } from "ai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { zetrix, sendZETRIX } from "@goat-sdk/wallet-zetrix";
+import { sendZETRIX, zetrix } from "@goat-sdk/wallet-zetrix";
+import { generateText } from "ai";
 import ZtxChainSDK from "zetrix-sdk-nodejs";
 
 require("dotenv").config();
@@ -12,14 +12,14 @@ require("dotenv").config();
     const sdk = new ZtxChainSDK({
         host: "test-node.zetrix.com", // "node.zetrix.com" for mainnet
         secure: true,
-    });      
+    });
 
     // 2. Get your onchain tools for your wallet
     const tools = await getOnChainTools({
         wallet: zetrix({
             zetrixSDK: sdk,
             zetrixAccount: process.env.ZETRIX_ACCOUNT as string,
-            zetrixAccountPrivateKey: process.env.ZETRIX_ACCOUNT_PRIVATE_KEY as string
+            zetrixAccountPrivateKey: process.env.ZETRIX_ACCOUNT_PRIVATE_KEY as string,
         }),
         plugins: [sendZETRIX()],
     });
