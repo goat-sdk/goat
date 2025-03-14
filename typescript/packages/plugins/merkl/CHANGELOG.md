@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-merkl
 
+## 0.1.3
+
+### Patch Changes
+
+- a4c7af3: Improved output
+
 ## 0.1.2
 
 ### Patch Changes
