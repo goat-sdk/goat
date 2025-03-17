@@ -1,5 +1,11 @@
 # @goat-sdk/adapter-model-context-protocol
 
+## 0.2.11
+
+### Patch Changes
+
+- 025d947: Handle empty parameters
+
 ## 0.2.10
 
 ### Patch Changes
