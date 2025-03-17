@@ -14,6 +14,8 @@ from solders.keypair import Keypair
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.solana import solana
 from goat_plugins.lulo import lulo, LuloPluginOptions
+from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
+from goat_plugins.spl_token.tokens import SPL_TOKENS
 
 # Initialize Solana client
 client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
@@ -41,6 +43,10 @@ def main():
         wallet=wallet,
         plugins=[
             lulo(LuloPluginOptions()),
+            spl_token(SplTokenPluginOptions(
+                network="mainnet",  # Using mainnet for SPL tokens
+                tokens=SPL_TOKENS
+            )),
         ],
     )
 
