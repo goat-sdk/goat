@@ -278,7 +278,6 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         tx.sign(signers, recent_blockhash=recent_blockhash)
         result = self.client.send_transaction(
             tx,
-            *signers,
             opts=TxOpts(
                 skip_preflight=False,
                 max_retries=10,
