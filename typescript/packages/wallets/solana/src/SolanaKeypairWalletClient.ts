@@ -63,7 +63,6 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
         const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
 
         const latestBlockhash = await this.connection.getLatestBlockhash();
-        tx.message.recentBlockhash = latestBlockhash.blockhash;
 
         tx.sign([this.#keypair]);
 
