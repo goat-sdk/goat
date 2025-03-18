@@ -16,7 +16,7 @@ class LuloService:
         """Deposit USDC into Lulo."""
         try:
             response = await self._make_deposit_request(wallet_client, parameters["amount"])
-            tx = await wallet_client.send_raw_transaction(response["transaction"])
+            tx = wallet_client.send_raw_transaction(response["transaction"])
             return tx["hash"]
         except Exception as error:
             raise Exception(f"Failed to deposit USDC: {error}")
