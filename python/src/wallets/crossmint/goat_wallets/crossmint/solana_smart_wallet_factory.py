@@ -6,31 +6,27 @@ from .parameters import WalletType, AdminSigner
 from .solana_smart_wallet import SolanaSmartWalletClient, LinkedUser, SolanaSmartWalletOptions
 from .base_wallet import get_locator
 
+def generate_user_locator(linked_user: LinkedUser) -> str:
+    if "email" in linked_user:
+        return f"email:{linked_user['email']}"
+    elif "phone" in linked_user:
+        return f"phone:{linked_user['phone']}"
+    elif "userId" in linked_user:
+        return f"userId:{linked_user['userId']}"
+    elif "twitter" in linked_user:
+        return f"x:{linked_user['twitter']}"
+    else:
+        raise ValueError("Invalid linked user")
 
 def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None) -> Dict:
     admin_signer = None
-    linked_user = None
-    
-    if config:
-        if "adminSigner" in config:
-            admin_signer = AdminSigner(**config["adminSigner"])
-        if "linkedUser" in config:
-            linked_user = config["linkedUser"]
-        elif any(key in config for key in ["email", "phone", "userId", "twitter"]):
-            if "email" in config:
-                linked_user = f"email:{config['email']}"
-            elif "phone" in config:
-                linked_user = f"phone:{config['phone']}"
-            elif "twitter" in config:
-                linked_user = f"x:{config['twitter']}"
-            else:
-                linked_user = f"userId:{config['userId']}"
+    user_locator = generate_user_locator(config["linkedUser"])
     
     try:
         wallet = api_client.create_smart_wallet(
             WalletType.SOLANA_SMART_WALLET,
             admin_signer,
-            linked_user
+            user_locator
         )
         return wallet
     except Exception as e:
@@ -38,6 +34,7 @@ def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None
 
 def solana_smart_wallet_factory(api_client: CrossmintWalletsAPI):
     def create_smart_wallet(options: Dict) -> SolanaSmartWalletClient:
+        print(f"Creating smart wallet with options: {options}")
         linked_user: Optional[LinkedUser] = None
         if "linkedUser" in options:
             linked_user = cast(LinkedUser, options["linkedUser"])
@@ -53,14 +50,22 @@ def solana_smart_wallet_factory(api_client: CrossmintWalletsAPI):
         locator = get_locator(options.get("address"), linked_user, "solana-smart-wallet")
         
         try:
+            print(f"Getting wallet with locator: {locator}")
             wallet = api_client.get_wallet(locator)
         except Exception:
-            wallet = create_wallet(api_client, options)
+            print(f"Creating wallet with options: {options}")
+            wallet = create_wallet(api_client, {
+                "adminSigner": options["adminSigner"],
+                "linkedUser": locator
+            })
         
+        print(f"Returning wallet: {wallet}")
         return SolanaSmartWalletClient(
             wallet["address"],
             api_client,
-            cast(SolanaSmartWalletOptions, options)
+            {
+                "adminSigner": options["adminSigner"],
+            }
         )
     
     return create_smart_wallet

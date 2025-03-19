@@ -6,8 +6,10 @@ from goat_wallets.crossmint.base import UnsupportedOperationException
 from solders.instruction import Instruction
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
+from solders.null_signer import NullSigner
 from solders.message import Message
 from solana.rpc.api import Client as SolanaClient
+from solders.transaction import VersionedTransaction
 from goat.classes.wallet_client_base import Balance, Signature
 from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
@@ -80,10 +82,14 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         message = Message(
             instructions=instructions,
-            payer=Pubkey.from_string(self._address),
+            payer=transaction["signer"].pubkey()
+        )
+        versioned_transaction = VersionedTransaction(
+            message,
+            [NullSigner(self._admin_signer["keyPair"].pubkey())]+[NullSigner(signer.pubkey()) for signer in additional_signers]
         )
         
-        serialized = base58.b58encode(bytes(message)).decode()
+        serialized = base58.b58encode(bytes(versioned_transaction)).decode()
 
         return self.send_raw_transaction(serialized, additional_signers, transaction["signer"])
 
@@ -119,14 +125,16 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             approvals = []
             for pending_approval in pending_approvals:
                 signer = next(
-                    (s for s in signers if pending_approval["signer"] in base58.b58encode(bytes(s.pubkey())).decode()),
+                    (s for s in signers if str(s.pubkey()) in pending_approval["signer"]),
                     None
                 )
+                print(f"Signer: {signer}")
                 if not signer:
                     raise ValueError(f"Signer not found for approval: {pending_approval['signer']}")
+                print(f"Signing message: {pending_approval['message']}")
                 signature = signer.sign_message(base58.b58decode(pending_approval["message"]))
                 encoded_signature = base58.b58encode(signature.to_bytes()).decode()
-
+                print(f"Encoded signature: {encoded_signature}")
                 approvals.append({
                     "signer": "solana-keypair:" + base58.b58encode(bytes(signer.pubkey())).decode(),
                     "signature": encoded_signature
@@ -209,13 +217,14 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             signer=f"solana-keypair:{base58.b58encode(bytes(signer.pubkey())).decode()}" if signer else None
         )
         try:
+            print(f"Creating transaction for smart wallet {self._address} with params: {params}")
             response = self._client.create_transaction_for_smart_wallet(
                 self._address,
                 params,
             )
             
             # Prepare signers array
-            signers = []
+            signers = additional_signers
             if self._admin_signer["type"] == "solana-keypair":
                 signers.append(self._admin_signer["keyPair"])
             signers.extend(additional_signers)

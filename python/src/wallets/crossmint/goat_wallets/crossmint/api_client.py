@@ -70,34 +70,30 @@ class CrossmintWalletsAPI:
         self,
         wallet_type: WalletType,
         admin_signer: Optional[AdminSigner] = None,
-        email: Optional[str] = None,
-        user_id: Optional[str] = None,
+        linked_user: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Create a new smart wallet.
         
         Args:
             wallet_type: Type of smart wallet (EVM_SMART_WALLET or SOLANA_SMART_WALLET)
             admin_signer: Optional admin signer configuration
-            email: Optional email to link the wallet to
-            user_id: Optional user ID to link the wallet to
+            linked_user: Linked user locator
         
         Returns:
             Wallet creation response
         
         Raises:
-            ValueError: If neither email nor user_id is provided
+            ValueError: If no user locator is provided
         """
-        if not email and not user_id:
-            raise ValueError("Either email or user_id must be provided")
-            
-        linked_user = f"email:{email}" if email else f"userId:{user_id}"
+
         payload = {
             "type": wallet_type.value,
             "config": {
                 "adminSigner": admin_signer.model_dump() if admin_signer else None
             },
-            "linkedUser": linked_user
         }
+        if linked_user:
+            payload["linkedUser"] = linked_user
         
         if admin_signer:
             payload["config"]["adminSigner"] = admin_signer.model_dump()
