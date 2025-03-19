@@ -48,9 +48,10 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         self,
         address: str,
         api_client: CrossmintWalletsAPI,
-        options: SolanaSmartWalletOptions
+        options: SolanaSmartWalletOptions,
+        connection: SolanaClient = SolanaClient("https://api.devnet.solana.com")
     ):
-        SolanaWalletClient.__init__(self, options.get("connection"))
+        SolanaWalletClient.__init__(self, connection)
         BaseWalletClient.__init__(self, address, api_client, "solana")
         self._locator = get_locator(address, options.get("linkedUser", None), "solana-smart-wallet")
         self._admin_signer = options["config"]["adminSigner"]
@@ -82,16 +83,16 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         
         message = Message(
             instructions=instructions,
-            payer=transaction["signer"].pubkey()
+            payer=Pubkey.from_string(self._address)
         )
         versioned_transaction = VersionedTransaction(
             message,
-            [NullSigner(self._admin_signer["keyPair"].pubkey())]+[NullSigner(signer.pubkey()) for signer in additional_signers]
+            [NullSigner(Pubkey.from_string(self._address))]+[NullSigner(signer.pubkey()) for signer in additional_signers]
         )
         
         serialized = base58.b58encode(bytes(versioned_transaction)).decode()
 
-        return self.send_raw_transaction(serialized, additional_signers, transaction["signer"])
+        return self.send_raw_transaction(serialized, additional_signers, transaction.get("signer", None))
 
     def balance_of(self, address: str) -> Balance:
         pubkey = Pubkey.from_string(address)
@@ -128,13 +129,10 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
                     (s for s in signers if str(s.pubkey()) in pending_approval["signer"]),
                     None
                 )
-                print(f"Signer: {signer}")
                 if not signer:
-                    raise ValueError(f"Signer not found for approval: {pending_approval['signer']}")
-                print(f"Signing message: {pending_approval['message']}")
+                    raise ValueError(f"Signer not found for approval: {pending_approval['signer']}. Available signers: {[str(s.pubkey()) for s in signers]}")
                 signature = signer.sign_message(base58.b58decode(pending_approval["message"]))
                 encoded_signature = base58.b58encode(signature.to_bytes()).decode()
-                print(f"Encoded signature: {encoded_signature}")
                 approvals.append({
                     "signer": "solana-keypair:" + base58.b58encode(bytes(signer.pubkey())).decode(),
                     "signature": encoded_signature
@@ -217,7 +215,6 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             signer=f"solana-keypair:{base58.b58encode(bytes(signer.pubkey())).decode()}" if signer else None
         )
         try:
-            print(f"Creating transaction for smart wallet {self._address} with params: {params}")
             response = self._client.create_transaction_for_smart_wallet(
                 self._address,
                 params,
@@ -227,6 +224,8 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             signers = additional_signers
             if self._admin_signer["type"] == "solana-keypair":
                 signers.append(self._admin_signer["keyPair"])
+            if signer:
+                signers.append(signer)
             signers.extend(additional_signers)
             
             # Handle transaction flow
@@ -273,10 +272,10 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
                 # Handle transaction flow
                 self.handle_transaction_flow(
                     transaction_id,
-                    signers,
+                    [self._admin_signer["keyPair"]],
                     "Delegated signer registration"
                 )
-            
+                return self.get_delegated_signer(response["locator"])
             return response
         except Exception as e:
             raise ValueError(f"Failed to register delegated signer: {str(e)}")
