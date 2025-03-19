@@ -6,6 +6,7 @@ from .parameters import WalletType, AdminSigner
 from .solana_smart_wallet import SolanaSmartWalletClient, LinkedUser, SolanaSmartWalletOptions
 from .base_wallet import get_locator
 
+# This should be enforced by the type, not by a successive if-else
 def generate_user_locator(linked_user: LinkedUser) -> str:
     if "email" in linked_user:
         return f"email:{linked_user['email']}"
