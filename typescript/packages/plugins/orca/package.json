@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-orca",
-    "version": "0.2.18",
+    "version": "0.2.19",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

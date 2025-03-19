@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-meteora",
-    "version": "0.2.15",
+    "version": "0.2.16",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

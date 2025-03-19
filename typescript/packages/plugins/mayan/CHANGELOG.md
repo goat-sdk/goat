@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-mayan
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [a374315]
+  - @goat-sdk/wallet-solana@0.2.16
+
 ## 0.1.6
 
 ### Patch Changes

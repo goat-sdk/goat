@@ -19,7 +19,7 @@
         "@goat-sdk/core": "0.4.9",
         "@goat-sdk/plugin-coingecko": "0.2.10",
         "@goat-sdk/wallet-evm": "0.2.11",
-        "@goat-sdk/wallet-solana": "0.2.15",
+        "@goat-sdk/wallet-solana": "0.2.16",
         "@goat-sdk/wallet-viem": "0.2.12",
         "@tanstack/react-query": "^5.62.2",
         "next": "15.1.2",

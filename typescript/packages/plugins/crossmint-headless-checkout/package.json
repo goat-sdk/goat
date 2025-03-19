@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-crossmint-headless-checkout",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
