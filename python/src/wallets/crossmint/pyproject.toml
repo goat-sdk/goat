@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-crossmint"
-version = "0.1.6"
+version = "0.1.7"
 description = "Crossmint wallet implementation for GOAT SDK"
 authors = [
     "GOAT SDK Team",
