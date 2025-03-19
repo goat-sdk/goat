@@ -306,7 +306,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         # Deserialize the transaction from base64
         tx = VersionedTransaction.from_bytes(base64.b64decode(transaction))
         
-        # Create new message with updated blockhash
+        # Extract the message from the transaction and sign it, forming a new transaction
         tx_signed = VersionedTransaction(tx.message, [self.keypair])
         
         # Send the transaction
