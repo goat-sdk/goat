@@ -25,7 +25,6 @@ class SolanaSmartWalletConfig(TypedDict):
 
 class SolanaSmartWalletOptions(TypedDict):
     """Options specific to Solana smart wallets."""
-    connection: SolanaClient
     config: SolanaSmartWalletConfig
     linkedUser: Optional[LinkedUser]
 
