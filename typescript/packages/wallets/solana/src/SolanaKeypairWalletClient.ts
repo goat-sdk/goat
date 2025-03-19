@@ -60,6 +60,8 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
     }
 
     async sendRawTransaction(transaction: string): Promise<{ hash: string }> {
+        // The received transaction may be coming already signed, so we just need to deserialize it and counter-sign it.
+        // If we were to modify the transaction in any way, we would invalidate the existing signature.
         const tx = VersionedTransaction.deserialize(Buffer.from(transaction, "base64"));
 
         const latestBlockhash = await this.connection.getLatestBlockhash();
