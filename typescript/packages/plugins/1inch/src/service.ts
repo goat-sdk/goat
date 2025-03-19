@@ -13,7 +13,7 @@ export class BalanceService {
     }
 
     @Tool({
-        name: "1inch.get_balances",
+        name: "1inch_get_balances",
         description: "Get the balances of a wallet address on a specific chain",
     })
     async getAggregatedBalancesAndAllowances(

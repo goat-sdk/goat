@@ -15,7 +15,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@goat-sdk/adapter-model-context-protocol": "0.2.10",
+        "@goat-sdk/adapter-model-context-protocol": "0.2.11",
         "@goat-sdk/core": "0.4.9",
         "@goat-sdk/plugin-crossmint-headless-checkout": "0.0.12",
         "@goat-sdk/plugin-spl-token": "0.2.17",

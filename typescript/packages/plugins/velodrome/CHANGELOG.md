@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-velodrome
 
+## 0.1.9
+
+### Patch Changes
+
+- f302235: Improve token validation
+
 ## 0.1.8
 
 ### Patch Changes

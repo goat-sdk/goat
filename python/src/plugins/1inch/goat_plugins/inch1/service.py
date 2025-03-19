@@ -9,7 +9,7 @@ class OneInchService:
         self.base_url = "https://api.1inch.dev"
 
     @Tool({
-        "name": "1inch.get_balances",
+        "name": "1inch_get_balances",
         "description": "Get the balances of a wallet address on a specific chain",
         "parameters_schema": GetBalancesParameters
     })

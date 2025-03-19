@@ -29,7 +29,7 @@ export async function getOnChainTools<TWalletClient extends WalletClientBase>({
                 throw new Error(`Tool ${name} not found`);
             }
 
-            const parsedParameters = tool.parameters.parse(parameters);
+            const parsedParameters = tool.parameters.parse(parameters ?? {});
             const result = await tool.execute(parsedParameters);
 
             return {

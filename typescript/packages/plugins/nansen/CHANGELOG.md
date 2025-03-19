@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-nansen
 
+## 0.1.7
+
+### Patch Changes
+
+- 8fb5907: Remove dot from tool name
+
 ## 0.1.6
 
 ### Patch Changes

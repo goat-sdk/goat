@@ -58,6 +58,9 @@ path = "src/plugins/rugcheck/"
 [tool.poetry.dependencies.goat-sdk-plugin-spl-token]
 path = "src/plugins/spl_token/"
 
+[tool.poetry.dependencies.goat-sdk-plugin-lulo]
+path = "src/plugins/lulo/"
+
 [tool.poetry.dependencies.goat-sdk-plugin-superfluid]
 path = "src/plugins/superfluid/"
 

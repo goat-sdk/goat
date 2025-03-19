@@ -23,7 +23,7 @@ pnpm add @goat-sdk/plugin-allora
 import { allora } from '@goat-sdk/plugin-allora'
 
 const plugin = allora({ 
-    apiKey: process.env.ALLORA_API_KEY, // Get it from: https://allora.network/api-access
+    apiKey: process.env.ALLORA_API_KEY, // Contact the Allora team on Discord for access to API keys
 })
 ```
 

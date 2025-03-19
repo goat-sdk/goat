@@ -25,7 +25,7 @@ export class NansenService {
     }
 
     @Tool({
-        name: "nansen.getTokenDetails",
+        name: "nansen_get_token_details",
         description: "Get details for a specific token from Nansen",
     })
     async getTokenDetails(parameters: GetTokenDetailsParams) {
@@ -34,7 +34,7 @@ export class NansenService {
     }
 
     @Tool({
-        name: "nansen.getTokenTrades",
+        name: "nansen_get_token_trades",
         description: "Get trades for a specific token from Nansen",
     })
     async getTokenTrades(parameters: GetTokenTradesParams) {
@@ -44,7 +44,7 @@ export class NansenService {
     }
 
     @Tool({
-        name: "nansen.getNFTDetails",
+        name: "nansen_get_nft_details",
         description: "Get details for a specific NFT collection or token from Nansen",
     })
     async getNFTDetails(parameters: GetNFTDetailsParams) {
@@ -54,7 +54,7 @@ export class NansenService {
     }
 
     @Tool({
-        name: "nansen.getNFTTrades",
+        name: "nansen_get_nft_trades",
         description: "Get trades for a specific NFT collection or token from Nansen",
     })
     async getNFTTrades(parameters: GetNFTTradesParams) {
@@ -74,7 +74,7 @@ export class NansenService {
     }
 
     @Tool({
-        name: "nansen.getTradingSignal",
+        name: "nansen_get_trading_signal",
         description: "Get trading signals and alerts based on onchain data and patterns",
     })
     async getTradingSignal(parameters: GetTradingSignalParams) {

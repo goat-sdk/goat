@@ -278,7 +278,6 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         tx.sign(signers, recent_blockhash=recent_blockhash)
         result = self.client.send_transaction(
             tx,
-            *signers,
             opts=TxOpts(
                 skip_preflight=False,
                 max_retries=10,
@@ -306,22 +305,12 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         # Deserialize the transaction from base64
         tx = VersionedTransaction.from_bytes(base64.b64decode(transaction))
         
-        # Get latest blockhash
-        recent_blockhash = self.client.get_latest_blockhash().value.blockhash
-        
-        # Create new message with updated blockhash
-        new_message = MessageV0(
-            header=tx.message.header,
-            account_keys=tx.message.account_keys,
-            recent_blockhash=recent_blockhash,
-            instructions=tx.message.instructions,
-            address_table_lookups=tx.message.address_table_lookups # type: ignore
-        )
-        tx = VersionedTransaction(new_message, [self.keypair])
+        # Extract the message from the transaction and sign it, forming a new transaction
+        tx_signed = VersionedTransaction(tx.message, [self.keypair])
         
         # Send the transaction
         result = self.client.send_transaction(
-            tx,
+            tx_signed,
             opts=TxOpts(
                 skip_preflight=False,
                 max_retries=10,

@@ -17,7 +17,7 @@ export class DexscreenerService {
     }
 
     @Tool({
-        name: "dexscreener.get_pairs_by_chain_and_pair",
+        name: "dexscreener_get_pairs_by_chain_and_pair",
         description: "Fetch pairs by chainId and pairId from Dexscreener",
     })
     async getPairsByChainAndPair(parameters: GetPairsByChainAndPairParameters) {
@@ -26,7 +26,7 @@ export class DexscreenerService {
     }
 
     @Tool({
-        name: "dexscreener.search_pairs",
+        name: "dexscreener_search_pairs",
         description: "Search for DEX pairs matching a query string on Dexscreener",
     })
     async searchPairs(parameters: SearchPairsParameters) {
@@ -35,7 +35,7 @@ export class DexscreenerService {
     }
 
     @Tool({
-        name: "dexscreener.get_token_pairs_by_token_address",
+        name: "dexscreener_get_token_pairs_by_token_address",
         description: "Get all DEX pairs for given token addresses (up to 30) from Dexscreener",
     })
     async get_token_pairs_by_token_address(parameters: GetTokenPairsParameters) {

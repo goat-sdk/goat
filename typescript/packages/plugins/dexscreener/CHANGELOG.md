@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-dexscreener
 
+## 0.1.9
+
+### Patch Changes
+
+- 8fb5907: Remove dot from tool name
+
 ## 0.1.8
 
 ### Patch Changes
