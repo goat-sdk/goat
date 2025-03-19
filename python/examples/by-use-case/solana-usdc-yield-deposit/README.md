@@ -1,66 +1,66 @@
-# Solana USDC Yield Deposit Example
+<div align="center">
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</div>
 
-This example demonstrates how to use the GOAT SDK with the Lulo plugin to deposit USDC into Lulo's yield platform on Solana.
+# Deposit USDC into Lulo Yield Platform
+## 🚀 Quickstart
 
-## What is Lulo?
+This example demonstrates how to use GOAT to **deposit USDC into [Lulo](https://lulo.fi/)** on Solana to earn yield.
 
-Lulo is a yield-generating platform on Solana that allows users to deposit USDC and earn yield. This example shows how to interact with Lulo's services using a language model agent.
-
-## Prerequisites
-
-- Python 3.12+
-- Poetry package manager
-- A Solana wallet with USDC tokens
-- Access to a Solana RPC endpoint
+You can use this example with any other agent framework, chain, and wallet of your choice.
 
 ## Setup
-
-1. Install dependencies using Poetry:
-
+1. Clone the repository:
 ```bash
-# Navigate to the example directory
-cd python/examples/by-use-case/solana-usdc-yield-deposit
+git clone https://github.com/goat-sdk/goat.git
+```
 
-# Install dependencies with Poetry
+2. Go to the example directory:
+```bash
+cd python/examples/by-use-case/solana-usdc-yield-deposit
+```
+
+3. Copy the `.env.template` and populate with your values:
+```bash
+cp .env.template .env
+```
+- `OPENAI_API_KEY`
+- `SOLANA_RPC_ENDPOINT`
+- `SOLANA_WALLET_SEED`
+
+4. Install dependencies:
+```bash
 poetry install
 ```
 
-2. Create a `.env` file in the same directory with the following variables:
-
-```
-# OpenAI API Key for the language model
-OPENAI_API_KEY=your_openai_api_key
-
-# Solana Wallet Configuration
-SOLANA_WALLET_SEED=your_base58_encoded_private_key
-SOLANA_RPC_ENDPOINT=https://api.mainnet-beta.solana.com
-```
-
-## Running the Example
-
-Run the example with Poetry:
-
+## Usage
+1. Run the interactive CLI:
 ```bash
 poetry run python example.py
 ```
 
-Once running, you can interact with the assistant. Try commands like:
+2. Chat with the agent:
+- Deposit 5 USDC into Lulo
 
-- "Deposit 5 USDC into Lulo"
-- "What can I do with Lulo?"
+## Using in production
+In production, developers require advanced wallet setups that utilize [smart wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), which allow them to:
+1. **Increase security** by setting programmable permissions (e.g. limiting fund amounts, restricting contract interactions, and defining required signatures)
+2. **Maintain regulatory compliance** by ensuring agent wallets are non-custodial. This means that:
+     - Launchpads, wallet providers, or agent platforms never have access to agents' wallets.
+     - Agent platforms do not require money transmitter licenses.
 
-## How It Works
+### Agent Wallets
+[Crossmint](https://docs.crossmint.com/wallets/quickstarts/agent-wallets) offers one of the most advanced solutions for agent developers and launchpads: [Agent Wallets](https://docs.crossmint.com/wallets/quickstarts/agent-wallets).
 
-This example:
+To integrate Agent Wallets with GOAT, check out the following quickstarts:
+1. Agent Wallets Quickstart [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/by-wallet/crossmint), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-wallet/crossmint)]
+2. [Agent Launchpad Starter Kit](https://github.com/Crossmint/agent-launchpad-starter-kit/)
 
-1. Sets up a Solana wallet using your private key
-2. Initializes the Lulo plugin for the GOAT SDK
-3. Creates a language model agent with the Lulo tools
-4. Processes user requests to interact with the Lulo platform
-5. Handles USDC deposits via Lulo's API
+<footer>
+<br/>
+<br/>
+<div>
+  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 
-## Important Notes
-
-- Make sure your wallet has enough USDC for deposits
-- Keep your wallet private key secure and never share it
-- You may want to use a burner wallet for testing purposes 
+<div>
+</footer> 
