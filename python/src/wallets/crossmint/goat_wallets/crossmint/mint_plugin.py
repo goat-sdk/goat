@@ -1,6 +1,5 @@
 from typing import Callable
-from goat import Chain
-from .base import PluginBase
+from goat import Chain, PluginBase
 from .mint import CrossmintMintService
 from .api_client import CrossmintWalletsAPI
 from .chains import is_chain_supported_by_minting

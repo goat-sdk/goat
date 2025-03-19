@@ -2,7 +2,6 @@ from time import sleep
 from typing import Dict, List, Optional, Any, TypedDict, Union
 import base58
 import nacl.signing
-from goat_wallets.crossmint.base import UnsupportedOperationException
 from solders.instruction import Instruction
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
@@ -13,7 +12,7 @@ from goat_wallets.solana import SolanaWalletClient, SolanaTransaction
 from .api_client import CrossmintWalletsAPI
 from .parameters import SolanaSmartWalletTransactionParams
 from .base_wallet import BaseWalletClient, get_locator
-from .types import LinkedUser, SolanaFireblocksSigner, SolanaKeypairSigner
+from .types import LinkedUser, SolanaFireblocksSigner, SolanaKeypairSigner, UnsupportedOperationException
 
 
 # Type aliases for Solana-specific signers
