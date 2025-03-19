@@ -1,6 +1,6 @@
-# lulo Plugin for GOAT SDK
+# Lulo Plugin for GOAT SDK
 
-A plugin for the GOAT SDK that provides lulo functionality.
+A plugin for the GOAT SDK that provides LULO deposit functionality.
 
 ## Installation
 
@@ -18,17 +18,13 @@ poetry add goat-sdk-wallet-solana
 from goat_plugins.lulo import lulo, LuloPluginOptions
 
 # Initialize the plugin
-options = LuloPluginOptions(
-    api_key="your-api-key"
-)
+options = LuloPluginOptions()
 plugin = lulo(options)
 ```
 
 ## Features
 
-- Example query functionality
-- Example action functionality
-- Solana chain support
+- Deposit USDC
 
 ## License
 
