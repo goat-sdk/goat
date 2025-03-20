@@ -4,11 +4,23 @@ from typing import Dict, Any, List
 
 from .parameters import CollectionParameters, MintNFTParameters, EmptyParameters
 from .api_client import CrossmintWalletsAPI
+from .chains import get_crossmint_chain_string, is_story_chain
 
 
 class CrossmintMintService:
     def __init__(self, api_client: CrossmintWalletsAPI):
         self.api_client = api_client
+
+    def _get_endpoint_root(self, chain: str) -> str:
+        """Get the appropriate endpoint root based on chain type.
+        
+        Args:
+            chain: Chain identifier
+            
+        Returns:
+            str: API endpoint root path
+        """
+        return "/api/v1/ip" if is_story_chain(chain) else "/api/2022-06-09"
 
     @Tool({
         "description": "Create a new NFT collection",
@@ -16,7 +28,9 @@ class CrossmintMintService:
     })
     def create_collection(self, wallet_client: EVMWalletClient, parameters: dict) -> dict:
         try:
-            result = self.api_client.create_collection(parameters, "polygon")
+            chain = get_crossmint_chain_string(wallet_client.get_chain())
+            
+            result = self.api_client.create_collection(parameters, chain)
             if result.get("error"):
                 raise Exception(result["message"])
             
@@ -24,7 +38,7 @@ class CrossmintMintService:
             
             return {
                 "collectionId": result["id"],
-                "chain": "polygon",
+                "chain": chain,
                 "contractAddress": action["data"]["collection"]["contractAddress"]
             }
         except Exception as error:
@@ -36,7 +50,8 @@ class CrossmintMintService:
     })
     def get_all_collections(self, wallet_client: EVMWalletClient, parameters: dict) -> List[Dict[str, Any]]:
         try:
-            collections = self.api_client.get_all_collections()
+            chain = get_crossmint_chain_string(wallet_client.get_chain())
+            collections = self.api_client.get_all_collections(chain)
             return list(collections.values()) if isinstance(collections, dict) else collections
         except Exception as error:
             raise Exception(f"Failed to get collections: {error}")
@@ -47,12 +62,16 @@ class CrossmintMintService:
     })
     def mint_nft(self, wallet_client: EVMWalletClient, parameters: dict) -> dict:
         try:
-            recipient = f"email:{parameters["recipient"]}:polygon" if parameters["recipient_type"] == "email" else f"polygon:{parameters["recipient"]}"
+            chain = get_crossmint_chain_string(wallet_client.get_chain())
+            
+            # Format recipient appropriately based on chain and recipient type
+            recipient = f"email:{parameters["recipient"]}:{chain}" if parameters["recipient_type"] == "email" else f"{chain}:{parameters["recipient"]}"
             
             result = self.api_client.mint_nft(
                 parameters["collection_id"],
                 recipient,
-                parameters["metadata"]
+                parameters["metadata"],
+                chain
             )
             
             if result.get("error"):

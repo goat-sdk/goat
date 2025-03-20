@@ -1,6 +1,10 @@
 from typing import NotRequired, TypedDict, Optional, Dict, Union, Literal
 from solders.keypair import Keypair
 
+class UnsupportedOperationException(Exception):
+    """Exception raised when an operation is not supported by the wallet or service."""
+    pass
+
 class LinkedUser(TypedDict):
     """Type definition for a linked user."""
     email: NotRequired[str]
