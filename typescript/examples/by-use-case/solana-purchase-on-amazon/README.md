@@ -38,7 +38,7 @@ cp mcp-solana.example.json mcp-solana.json
 - Absolute path to the parent folder of the `model-context-protocol` folder, you can get it by running `pwd` in the `model-context-protocol` folder
 - `WALLET_PRIVATE_KEY`
 - `RPC_PROVIDER_URL`
-- `CROSSMINT_API_KEY`
+- `CROSSMINT_API_KEY` (Note: The project configured for CROSSMINT_API_KEY should be a project that has MPC wallets configured instead of smart wallets. To do this, go to https://www.staging.crossmint.com/console or https://www.crossmint.com/console, and configure type of wallets in the Wallets dropdown.)
 
 3. Copy/update the json file and rename it to `claude_desktop_config.json` file to the `~/Library/Application Support/Claude/` directory:
 ```bash
@@ -60,6 +60,36 @@ This tells Claude for Desktop:
 
 2. Chat with the agent:
 - Purchase <link-to-amazon-item>
+
+### Expected JSON Schema for MCP buy_token Tool Response
+
+The MCP buy_token tool should return a response in the following format:
+
+```json
+{
+  "lineItems": [
+    {
+      "productLocator": <AMAZON_PRODUCT_LOCATOR>
+    }
+  ],
+  "recipient": {
+    "email": <EMAIL>,
+    "physicalAddress": {
+      "name": <NAME>,
+      "line1": <ADDRESS LINE 1>,
+      "city": <CITY>,
+      "state": <STATE>,
+      "postalCode": <POSTAL CODE>,
+      "country": "US"
+    }
+  },
+  "payment": {
+    "method": <CHAIN_NAME>,
+    "currency": <CURRENCY>,
+    "payerAddress": <WALLET_ADDRESS>
+  }
+}
+```
 
 For more information on how to use the model context protocol, check out the [docs](https://modelcontextprotocol.io/quickstart/server).
 
