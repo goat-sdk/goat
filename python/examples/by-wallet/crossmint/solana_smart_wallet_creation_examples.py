@@ -65,8 +65,8 @@ def main():
     factory = SolanaSmartWalletFactory(api_client, connection)
 
     # Signer configurations
-    # create_wallet(factory, "solana-keypair")
-    # create_wallet(factory, "solana-fireblocks-custodial")
+    create_wallet(factory, "solana-keypair")
+    create_wallet(factory, "solana-fireblocks-custodial")
 
     # Idempotency key configurations (both requests will return the same wallet)
     idempotency_key = str(uuid.uuid4())
@@ -76,12 +76,12 @@ def main():
                   idempotency_key=idempotency_key)
 
     # Linked user configurations. Creations with the same linked user will return the same wallet.
-    # create_wallet(factory, "solana-keypair", "email:example@example.com")
-    # create_wallet(factory, "solana-fireblocks-custodial",
-    #               "phoneNumber:+1234567890")
-    # create_wallet(factory, "solana-keypair", "twitter:example")
-    # create_wallet(factory, "solana-fireblocks-custodial", "userId:1234567890")
-    # create_wallet(factory, "solana-keypair", "x:example")
+    create_wallet(factory, "solana-keypair", "email:example@example.com")
+    create_wallet(factory, "solana-fireblocks-custodial",
+                  "phoneNumber:+1234567890")
+    create_wallet(factory, "solana-keypair", "twitter:example")
+    create_wallet(factory, "solana-fireblocks-custodial", "userId:1234567890")
+    create_wallet(factory, "solana-keypair", "x:example")
 
 
 if __name__ == "__main__":
