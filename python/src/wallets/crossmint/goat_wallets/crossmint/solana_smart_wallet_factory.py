@@ -1,72 +1,132 @@
-from typing import Dict, Optional, cast
-from solders.pubkey import Pubkey
+from typing import Optional, TypedDict, get_type_hints
 from solana.rpc.api import Client as SolanaClient
 from .api_client import CrossmintWalletsAPI
-from .parameters import WalletType, AdminSigner
-from .solana_smart_wallet import SolanaSmartWalletClient, LinkedUser, SolanaSmartWalletOptions
-from .base_wallet import get_locator
+from .parameters import AdminSigner, CoreSignerType
+from .solana_smart_wallet import SolanaSmartWalletClient, SolanaSmartWalletConfig, SolanaSmartWalletOptions
+from .types import SolanaFireblocksSigner, SolanaKeypairSigner
+import sys
+import os
 
-# This should be enforced by the type, not by a successive if-else
-def generate_user_locator(linked_user: LinkedUser) -> str:
-    if "email" in linked_user:
-        return f"email:{linked_user['email']}"
-    elif "phone" in linked_user:
-        return f"phone:{linked_user['phone']}"
-    elif "userId" in linked_user:
-        return f"userId:{linked_user['userId']}"
-    elif "twitter" in linked_user:
-        return f"x:{linked_user['twitter']}"
-    else:
-        raise ValueError("Invalid linked user")
 
-def create_wallet(api_client: CrossmintWalletsAPI, config: Optional[Dict] = None) -> Dict:
-    admin_signer = None
-    user_locator = generate_user_locator(config["linkedUser"])
-    
-    try:
-        wallet = api_client.create_smart_wallet(
-            WalletType.SOLANA_SMART_WALLET,
-            admin_signer,
-            user_locator
-        )
-        return wallet
-    except Exception as e:
-        raise ValueError(f"Failed to create Solana Smart Wallet: {str(e)}")
+class UserLocatorParams(TypedDict, total=False):
+    linkedUser: str
+    email: str
+    phone: str
+    userId: str
+    twitter: str
+    x: str
 
-def solana_smart_wallet_factory(api_client: CrossmintWalletsAPI):
-    def create_smart_wallet(options: Dict) -> SolanaSmartWalletClient:
-        print(f"Creating smart wallet with options: {options}")
-        linked_user: Optional[LinkedUser] = None
-        if "linkedUser" in options:
-            linked_user = cast(LinkedUser, options["linkedUser"])
-        elif any(key in options for key in ["email", "phone", "userId"]):
-            linked_user = {}
-            if "email" in options:
-                linked_user["email"] = options["email"]
-            elif "phone" in options:
-                linked_user["phone"] = options["phone"]
-            else:
-                linked_user["userId"] = options["userId"]
-                
-        locator = get_locator(options.get("address"), linked_user, "solana-smart-wallet")
-        
+
+user_locator_identifier_fields = get_type_hints(UserLocatorParams)
+
+
+class SolanaSmartWalletCreationParams(TypedDict, UserLocatorParams, total=False):
+    config: SolanaSmartWalletConfig
+
+
+class SolanaSmartWalletFactory:
+    def __init__(self, api_client: CrossmintWalletsAPI, connection: Optional[SolanaClient] = None):
+        self.api_client = api_client
+        self.connection = connection
+        if not self.connection:
+            connection_url = os.getenv("SOLANA_RPC_ENDPOINT", None)
+            default_connection_url = "https://api.devnet.solana.com"
+            if (connection_url is None):
+                print(
+                    f"Environment variable SOLANA_RPC_ENDPOINT is not set, using default endpoint: {default_connection_url}", file=sys.stderr)
+            self.connection = SolanaClient(connection_url)
+
+    def get_or_create(self, config: SolanaSmartWalletCreationParams, idempotency_key: Optional[str] = None) -> SolanaSmartWalletClient:
+        if self.connection is None:
+            raise ValueError(
+                f"Connection is not set, call {self.__class__.__name__}.set_connection(<connection>) first")
+
+        validated_params = self._validate_creation_params(config)
+        wallet_locator = self._get_wallet_locator(
+            validated_params["linkedUser"])
         try:
-            print(f"Getting wallet with locator: {locator}")
-            wallet = api_client.get_wallet(locator)
-        except Exception:
-            print(f"Creating wallet with options: {options}")
-            wallet = create_wallet(api_client, {
-                "adminSigner": options["adminSigner"],
-                "linkedUser": locator
-            })
-        
-        print(f"Returning wallet: {wallet}")
+            wallet = self._get_wallet(wallet_locator)
+            if wallet:
+                print("Wallet found! Returning existing wallet", file=sys.stderr)
+            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"])
+        except Exception as e:
+            print("Wallet not found, creating new wallet", file=sys.stderr)
+
+        try:
+            wallet = self.api_client.create_wallet(
+                "solana-smart-wallet", validated_params["linkedUser"], self._project_config_to_api_params(validated_params["config"]), idempotency_key)
+            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"])
+        except Exception as e:
+            raise Exception(
+                f"Failed to create wallet: {e}") from e
+
+    def set_connection(self, connection: SolanaClient):
+        self.connection = connection
+
+    def _get_wallet(self, wallet_locator: str):
+        """Internal method to get wallet."""
+        return self.api_client.get_wallet(wallet_locator)
+
+    def _get_linked_user_from_config(self, config: SolanaSmartWalletCreationParams) -> str | None:
+        """Internal method to extract linked user from config."""
+        present_fields = [
+            field for field in user_locator_identifier_fields if field in config]
+        if len(present_fields) > 1:
+            raise ValueError(
+                f"Exactly one identifier field among {user_locator_identifier_fields} must be present. Found: {present_fields}"
+            )
+        if len(present_fields) == 1:
+            present_field = present_fields[0]
+            if present_field == "linkedUser":
+                return config["linkedUser"]
+            return f"{present_fields[0]}:{config[present_fields[0]]}"
+        return None
+
+    def _instantiate_wallet(self, address: str, admin_signer: AdminSigner) -> SolanaSmartWalletClient:
+        """Internal method to create wallet instance."""
         return SolanaSmartWalletClient(
-            wallet["address"],
-            api_client,
-            {
-                "adminSigner": options["adminSigner"],
-            }
+            address,
+            self.api_client,
+            {"config": {"adminSigner": admin_signer}},
+            self.connection
         )
-    
-    return create_smart_wallet
+
+    def _get_wallet_locator(self, linked_user: str) -> str:
+        """Internal method to generate wallet locator."""
+        return f"{linked_user}:solana-smart-wallet"
+
+    def _validate_creation_params(self, params: SolanaSmartWalletCreationParams) -> SolanaSmartWalletOptions:
+        """Internal method to validate parameters."""
+        present_fields = [
+            field for field in user_locator_identifier_fields if field in params]
+
+        if len(present_fields) > 1:
+            raise ValueError(
+                f"At most one identifier among {user_locator_identifier_fields} must be present. Found: {present_fields}"
+            )
+
+        return SolanaSmartWalletOptions(
+            config=params["config"],
+            linkedUser=self._get_linked_user_from_config(params)
+        )
+
+    def _project_config_to_api_params(self, config: SolanaSmartWalletConfig):
+        admin_signer = config.get("adminSigner")
+        if not admin_signer:
+            return {}
+        type = admin_signer.get("type")
+        if type == CoreSignerType.SOLANA_FIREBLOCKS_CUSTODIAL:
+            return {
+                "adminSigner": {
+                    "type": "solana-fireblocks-custodial",
+                }
+            }
+        if type == CoreSignerType.SOLANA_KEYPAIR:
+            return {
+                "adminSigner": {
+                    "type": "solana-keypair",
+                    "address": str(config["adminSigner"]["keyPair"].pubkey()),
+                }
+            }
+        raise ValueError(
+            f"Invalid admin signer type: {type}")
