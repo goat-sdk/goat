@@ -19,3 +19,6 @@ export class TronKeyPairWalletClient extends TronWalletClient {
         this.fromAddress = address;
     }
 }
+
+// Export the wallet client with a factory function.
+export const tron = (privateKey: string): TronKeyPairWalletClient => new TronKeyPairWalletClient(privateKey);

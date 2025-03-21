@@ -1,5 +1,3 @@
-// src/TronWalletClient.ts
-
 import { Chain, WalletClientBase } from "@goat-sdk/core";
 import { TronWeb } from "tronweb";
 
@@ -9,8 +7,8 @@ export abstract class TronWalletClient extends WalletClientBase {
 
     constructor() {
         super();
-        // Initialize TronWeb using public endpoints (adjust these URLs if needed)
-        this.tronWeb = new TronWeb("https://api.trongrid.io", "https://api.trongrid.io", "https://api.trongrid.io");
+        // Initialize TronWeb using the Nile testnet endpoints.
+        this.tronWeb = new TronWeb("https://nile.trongrid.io", "https://nile.trongrid.io", "https://nile.trongrid.io");
     }
 
     // Return a minimal chain object identifying this chain as "tron"
@@ -64,13 +62,11 @@ export abstract class TronWalletClient extends WalletClientBase {
         }
         // Convert the amount from TRX to SUN.
         const amountSun = Math.floor(value * 1_000_000);
-
-        // Build an unsigned transaction
+        // Build an unsigned transaction.
         const unsignedTx = await this.tronWeb.transactionBuilder.sendTrx(to, amountSun, this.fromAddress);
-
-        // Sign the transaction (the private key must already be set on tronWeb)
+        // Sign the transaction (the private key must already be set on tronWeb).
         const signedTx = await this.tronWeb.trx.sign(unsignedTx);
-        // Broadcast the signed transaction
+        // Broadcast the signed transaction.
         const broadcast = await this.tronWeb.trx.sendRawTransaction(signedTx);
         if (broadcast.result) {
             return { hash: signedTx.txID };
