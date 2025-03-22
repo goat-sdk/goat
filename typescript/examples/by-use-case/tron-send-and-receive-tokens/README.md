@@ -3,10 +3,10 @@
 <img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
-# Solana
+# TRON
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to **send and receive SOL and SPL tokens** on the Solana network.
+This example demonstrates how to use GOAT to **send and receive TRX tokens** on the TRON network.
 
 You can use this example with any other agent framework and wallet of your choice.
 
@@ -25,7 +25,7 @@ pnpm build
 
 3. Go to the example directory:
 ```bash
-cd examples/by-use-case/solana-send-and-receive-tokens
+cd examples/by-use-case/tron-send-and-receive-tokens
 ```
 
 4. Copy the `.env.template` and populate with your values:
@@ -33,8 +33,8 @@ cd examples/by-use-case/solana-send-and-receive-tokens
 cp .env.template .env
 ```
 - `OPENAI_API_KEY`
-- `SOLANA_PRIVATE_KEY`
-- `SOLANA_RPC_URL`
+- `TRON_PRIVATE_KEY`
+- `TRON_RPC_URL`
 
 ## Usage
 1. Run the interactive CLI:
@@ -43,12 +43,9 @@ pnpm ts-node index.ts
 ```
 
 2. Chat with the agent:
-- Check your balance for SOL
-- Send SOL to another address
-- Check your balance again to see the SOL you just sent
-- Check your balance for SPL tokens
-- Send SPL tokens to another address
-- Check your balance again to see the SPL tokens you just sent
+- Check your balance for TRX
+- Send TRX to another address
+- Check your balance again to see the TRX you just sent
 
 ## Using in production
 In production, developers require advanced wallet setups that utilize [smart wallets](https://docs.goat-sdk.com/concepts/smart-wallets), which allow them to:
@@ -61,7 +58,7 @@ In production, developers require advanced wallet setups that utilize [smart wal
 [Crossmint](https://docs.crossmint.com/wallets/quickstarts/agent-wallets) offers one of the most advanced solutions for agent developers and launchpads: [Agent Wallets](https://docs.crossmint.com/wallets/quickstarts/agent-wallets).
 
 To integrate Agent Wallets with GOAT, check out the following quickstarts:
-1. Agent Wallets Quickstart [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)]
+1. Agent Wallets Quickstart [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), [TRON](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)]
 2. [Agent Launchpad Starter Kit](https://github.com/Crossmint/agent-launchpad-starter-kit/)
 
 
