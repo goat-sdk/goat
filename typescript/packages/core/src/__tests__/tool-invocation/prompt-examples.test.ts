@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
 import { getTools } from "../../utils/getTools";
-import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
+import { mockWalletClient } from "./mock-utils";
+import { vi } from "vitest";
+import { WalletClientBase } from "../../classes";
 import { createMockParameters, createMockPlugin } from "./test-utils";
 
 describe("Jupiter token swap examples", () => {
-    const swapSpy = createToolExecutionSpy();
+    const swapSpy = vi.fn();
 
     class SwapParameters extends createMockParameters(
         z.object({
@@ -22,7 +24,7 @@ describe("Jupiter token swap examples", () => {
         @Tool({
             description: "Swap tokens on Jupiter DEX",
         })
-        async swapTokens(wallet: MockWalletClient, params: SwapParameters) {
+        async swapTokens(wallet: WalletClientBase, params: SwapParameters) {
             return swapSpy(wallet, params);
         }
     }
@@ -33,7 +35,7 @@ describe("Jupiter token swap examples", () => {
     });
 
     it("should handle 'I want to trade 5 USDC for SOL'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("jupiter", new JupiterService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -56,7 +58,7 @@ describe("Jupiter token swap examples", () => {
     });
 
     it("should handle 'Exchange 1 SOL for JUP tokens'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("jupiter", new JupiterService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -79,7 +81,7 @@ describe("Jupiter token swap examples", () => {
     });
 
     it("should handle 'Swap 10 USDC for JUP with 1% slippage'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("jupiter", new JupiterService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -105,7 +107,7 @@ describe("Jupiter token swap examples", () => {
 });
 
 describe("Solana transfer examples", () => {
-    const transferSpy = createToolExecutionSpy();
+    const transferSpy = vi.fn();
 
     class TransferParameters extends createMockParameters(
         z.object({
@@ -119,7 +121,7 @@ describe("Solana transfer examples", () => {
         @Tool({
             description: "Transfer tokens to an address",
         })
-        async transfer(wallet: MockWalletClient, params: TransferParameters) {
+        async transfer(wallet: WalletClientBase, params: TransferParameters) {
             return transferSpy(wallet, params);
         }
     }
@@ -130,7 +132,7 @@ describe("Solana transfer examples", () => {
     });
 
     it("should handle 'Can you transfer 0.0001 sol to GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB?'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("transfer", new TransferService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -151,7 +153,7 @@ describe("Solana transfer examples", () => {
     });
 
     it("should handle 'Can you transfer like two sol to GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB for testing?'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("transfer", new TransferService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -172,7 +174,7 @@ describe("Solana transfer examples", () => {
     });
 
     it("should handle 'Send 250 USDC to GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("transfer", new TransferService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -196,7 +198,7 @@ describe("Solana transfer examples", () => {
 });
 
 describe("Solana compressed airdrop examples", () => {
-    const airdropSpy = createToolExecutionSpy();
+    const airdropSpy = vi.fn();
 
     class AirdropParameters extends createMockParameters(
         z.object({
@@ -211,7 +213,7 @@ describe("Solana compressed airdrop examples", () => {
         @Tool({
             description: "Airdrop tokens to multiple recipients",
         })
-        async compressedAirdrop(wallet: MockWalletClient, params: AirdropParameters) {
+        async compressedAirdrop(wallet: WalletClientBase, params: AirdropParameters) {
             return airdropSpy(wallet, params);
         }
     }
@@ -222,7 +224,7 @@ describe("Solana compressed airdrop examples", () => {
     });
 
     it("should handle 'Airdrop 100 tokens of mint 4h2cMlJ5byq4iqZ73rKRSz9rLmLjQvEDf9lm6JFgNu to [9aUn5swQzUTRanaaTwmszxiv89cvFwUCjF'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("airdrop", new AirdropService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -245,7 +247,7 @@ describe("Solana compressed airdrop examples", () => {
     });
 
     it("should handle 'Send 50 tokens from E5fU1X4TTq3XdVXz1wdYzbUYBzYQu5YnvLalwa0e2d1t to 2 recipients, each gets 50, with no logs.'", async () => {
-        const wallet = new MockWalletClient();
+        const wallet = mockWalletClient();
         const plugin = createMockPlugin("airdrop", new AirdropService());
         const tools = await getTools({ wallet, plugins: [plugin] });
 
