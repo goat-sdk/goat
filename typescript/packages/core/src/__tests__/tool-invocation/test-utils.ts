@@ -6,8 +6,8 @@ import { createToolParameters } from "../../utils/createToolParameters";
 export function createMockParameters(schema: z.ZodTypeAny) {
     return class extends createToolParameters(schema) {
         static schema = schema;
-        
-        constructor(data?: any) {
+
+        constructor(data?: Record<string, unknown>) {
             super();
             if (data) {
                 const parsed = schema.safeParse(data);
@@ -23,18 +23,14 @@ export function createMockParameters(schema: z.ZodTypeAny) {
 // Create a mock plugin with the given service
 export function createMockPlugin(name: string, service: object) {
     class MockPlugin extends PluginBase {
-        constructor(name: string, services: object[]) {
-            super(name, services);
-        }
-
         supportsChain() {
             return true;
         }
 
-        async execute(methodName: string, params: any) {
+        async execute(methodName: string, params: Record<string, unknown>) {
             // Get the tool from the parent class
             const tools = await this.getTools(null);
-            const tool = tools.find(t => t.name === methodName);
+            const tool = tools.find((t) => t.name === methodName);
             if (!tool) {
                 throw new Error(`Tool ${methodName} not found`);
             }
