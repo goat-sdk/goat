@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
 import { getTools } from "../../utils/getTools";
-import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
+import { mockWalletClient } from "./mock-utils";
+import { vi } from "vitest";
 import { createMockParameters, createMockPlugin } from "./test-utils";
+import { WalletClientBase } from "../../classes";
 
 describe("Edge cases and error handling", () => {
     describe("parameter validation", () => {
-        const transferSpy = createToolExecutionSpy();
+        const transferSpy = vi.fn();
 
         class TransferParameters extends createMockParameters(
             z.object({
@@ -21,7 +23,7 @@ describe("Edge cases and error handling", () => {
             @Tool({
                 description: "Transfer tokens to an address",
             })
-            async transfer(wallet: MockWalletClient, params: TransferParameters) {
+            async transfer(wallet: WalletClientBase, params: TransferParameters) {
                 return transferSpy(wallet, params);
             }
         }
@@ -32,7 +34,7 @@ describe("Edge cases and error handling", () => {
         });
 
         it("should validate parameters before calling the tool", async () => {
-            const wallet = new MockWalletClient();
+            const wallet = mockWalletClient();
             const plugin = createMockPlugin("transfer", new TransferService());
             const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -50,7 +52,7 @@ describe("Edge cases and error handling", () => {
     });
 
     describe("missing required parameters", () => {
-        const swapSpy = createToolExecutionSpy();
+        const swapSpy = vi.fn();
 
         class SwapParameters extends createMockParameters(
             z.object({
@@ -64,7 +66,7 @@ describe("Edge cases and error handling", () => {
             @Tool({
                 description: "Swap one token for another",
             })
-            async swap(wallet: MockWalletClient, params: SwapParameters) {
+            async swap(wallet: WalletClientBase, params: SwapParameters) {
                 return swapSpy(wallet, params);
             }
         }
@@ -75,7 +77,7 @@ describe("Edge cases and error handling", () => {
         });
 
         it("should validate required parameters are present", async () => {
-            const wallet = new MockWalletClient();
+            const wallet = mockWalletClient();
             const plugin = createMockPlugin("swap", new SwapService());
             const tools = await getTools({ wallet, plugins: [plugin] });
 
@@ -96,7 +98,7 @@ describe("Edge cases and error handling", () => {
     });
 
     describe("parameter type validation", () => {
-        const mintSpy = createToolExecutionSpy();
+        const mintSpy = vi.fn();
 
         class MintParameters extends createMockParameters(
             z.object({
@@ -110,7 +112,7 @@ describe("Edge cases and error handling", () => {
             @Tool({
                 description: "Mint a new token",
             })
-            async mintToken(wallet: MockWalletClient, params: MintParameters) {
+            async mintToken(wallet: WalletClientBase, params: MintParameters) {
                 return mintSpy(wallet, params);
             }
         }
@@ -121,7 +123,7 @@ describe("Edge cases and error handling", () => {
         });
 
         it("should validate parameter types", async () => {
-            const wallet = new MockWalletClient();
+            const wallet = mockWalletClient();
             const plugin = createMockPlugin("mint", new MintService());
             const tools = await getTools({ wallet, plugins: [plugin] });
 
