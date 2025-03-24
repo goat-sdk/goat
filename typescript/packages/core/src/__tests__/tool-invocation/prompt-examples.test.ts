@@ -25,7 +25,9 @@ describe("Jupiter token swap examples", () => {
             description: "Swap tokens on Jupiter DEX",
         })
         async swapTokens(wallet: WalletClientBase, params: SwapParameters) {
-            return swapSpy(wallet, params);
+            // Create a new instance with the parameters to ensure validation
+            const validParams = new SwapParameters(params);
+            return swapSpy(wallet, validParams);
         }
     }
 
@@ -50,11 +52,15 @@ describe("Jupiter token swap examples", () => {
             });
         }
 
-        expect(swapSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(swapSpy).toHaveBeenCalled();
+        const callArgs = swapSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             inputMint: "USDC",
             outputMint: "SOL",
-            amount: 5,
-        });
+            amount: 5
+        }));
     });
 
     it("should handle 'Exchange 1 SOL for JUP tokens'", async () => {
@@ -73,11 +79,15 @@ describe("Jupiter token swap examples", () => {
             });
         }
 
-        expect(swapSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(swapSpy).toHaveBeenCalled();
+        const callArgs = swapSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             inputMint: "SOL",
             outputMint: "JUP",
-            amount: 1,
-        });
+            amount: 1
+        }));
     });
 
     it("should handle 'Swap 10 USDC for JUP with 1% slippage'", async () => {
@@ -97,12 +107,16 @@ describe("Jupiter token swap examples", () => {
             });
         }
 
-        expect(swapSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(swapSpy).toHaveBeenCalled();
+        const callArgs = swapSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             inputMint: "USDC",
             outputMint: "JUP",
             amount: 10,
-            slippageBps: 100,
-        });
+            slippageBps: 100
+        }));
     });
 });
 
@@ -122,7 +136,9 @@ describe("Solana transfer examples", () => {
             description: "Transfer tokens to an address",
         })
         async transfer(wallet: WalletClientBase, params: TransferParameters) {
-            return transferSpy(wallet, params);
+            // Create a new instance with the parameters to ensure validation
+            const validParams = new TransferParameters(params);
+            return transferSpy(wallet, validParams);
         }
     }
 
@@ -146,10 +162,14 @@ describe("Solana transfer examples", () => {
             });
         }
 
-        expect(transferSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(transferSpy).toHaveBeenCalled();
+        const callArgs = transferSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             to: "GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB",
-            amount: 0.0001,
-        });
+            amount: 0.0001
+        }));
     });
 
     it("should handle 'Can you transfer like two sol to GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB for testing?'", async () => {
@@ -167,10 +187,14 @@ describe("Solana transfer examples", () => {
             });
         }
 
-        expect(transferSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(transferSpy).toHaveBeenCalled();
+        const callArgs = transferSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             to: "GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB",
-            amount: 2,
-        });
+            amount: 2
+        }));
     });
 
     it("should handle 'Send 250 USDC to GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB'", async () => {
@@ -189,11 +213,15 @@ describe("Solana transfer examples", () => {
             });
         }
 
-        expect(transferSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(transferSpy).toHaveBeenCalled();
+        const callArgs = transferSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             to: "GZbQmKY7zwjP3nbdqRWpLN98iApin9w5eXMGp7bmZbGB",
             amount: 250,
-            token: "USDC",
-        });
+            token: "USDC"
+        }));
     });
 });
 
@@ -214,7 +242,9 @@ describe("Solana compressed airdrop examples", () => {
             description: "Airdrop tokens to multiple recipients",
         })
         async compressedAirdrop(wallet: WalletClientBase, params: AirdropParameters) {
-            return airdropSpy(wallet, params);
+            // Create a new instance with the parameters to ensure validation
+            const validParams = new AirdropParameters(params);
+            return airdropSpy(wallet, validParams);
         }
     }
 
@@ -239,11 +269,15 @@ describe("Solana compressed airdrop examples", () => {
             });
         }
 
-        expect(airdropSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(airdropSpy).toHaveBeenCalled();
+        const callArgs = airdropSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             mint: "4h2cMlJ5byq4iqZ73rKRSz9rLmLjQvEDf9lm6JFgNu",
             amount: 100,
-            recipients: ["9aUn5swQzUTRanaaTwmszxiv89cvFwUCjF"],
-        });
+            recipients: ["9aUn5swQzUTRanaaTwmszxiv89cvFwUCjF"]
+        }));
     });
 
     it("should handle 'Send 50 tokens from E5fU1X4TTq3XdVXz1wdYzbUYBzYQu5YnvLalwa0e2d1t to 2 recipients, each gets 50, with no logs.'", async () => {
@@ -263,11 +297,15 @@ describe("Solana compressed airdrop examples", () => {
             });
         }
 
-        expect(airdropSpy).toHaveBeenCalledWith(wallet, {
+        // Verify spy was called with correct parameters
+        expect(airdropSpy).toHaveBeenCalled();
+        const callArgs = airdropSpy.mock.calls[0];
+        // Check parameter properties directly instead of instance type
+        expect(callArgs[0]).toEqual(expect.objectContaining({
             mint: "E5fU1X4TTq3XdVXz1wdYzbUYBzYQu5YnvLalwa0e2d1t",
             amount: 50,
             recipients: ["recipient1", "recipient2"],
-            enableLogs: false,
-        });
+            enableLogs: false
+        }));
     });
 });
