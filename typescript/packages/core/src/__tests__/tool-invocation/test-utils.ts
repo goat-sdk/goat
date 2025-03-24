@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PluginBase } from "../../classes/PluginBase";
+import { WalletClientBase } from "../../classes";
 import { createToolParameters } from "../../utils/createToolParameters";
 
 // Utility to create parameters class with validation
@@ -29,7 +30,20 @@ export function createMockPlugin(name: string, service: object) {
 
         async execute(methodName: string, params: Record<string, unknown>) {
             // Get the tool from the parent class
-            const tools = await this.getTools(null);
+            const mockWallet = {
+                getAddress: () => "0xmockaddress",
+                getChain: () => ({ type: "evm", id: 1 }),
+                signMessage: async () => ({ signature: "0xmocksignature" }),
+                balanceOf: async () => ({
+                    decimals: 18,
+                    symbol: "ETH",
+                    name: "Ethereum",
+                    value: "100",
+                    inBaseUnits: "100000000000000000000"
+                }),
+                getCoreTools: () => []
+            } as WalletClientBase;
+            const tools = await this.getTools(mockWallet);
             const tool = tools.find((t) => t.name === methodName);
             if (!tool) {
                 throw new Error(`Tool ${methodName} not found`);
