@@ -6,7 +6,7 @@
 # Mastra
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to allow a [Mastra](https://github.com/mastra-ai/mastra) agent to **send and receive ETH and ERC-20 tokens** on EVM networks. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
+This example demonstrates how to use GOAT to allow a [Mastra](https://github.com/mastra-ai/mastra) agent to **send and receive USDC** on EVM networks. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
 
 You can use this example with any other agent framework, chain, and wallet of your choice.
 

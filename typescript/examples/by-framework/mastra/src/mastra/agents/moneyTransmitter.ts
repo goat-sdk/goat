@@ -9,7 +9,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-mastra";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
+import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
 import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
@@ -26,7 +26,7 @@ const tools = await getOnChainTools({
     wallet: viem(walletClient),
     plugins: [
         sendETH(), // Enable ETH transfers
-        erc20({ tokens: [USDC, PEPE] }), // Enable ERC20 token operations
+        erc20({ tokens: [USDC] }), // Enable ERC20 token operations
     ],
 });
 
