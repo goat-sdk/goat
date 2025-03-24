@@ -12,7 +12,7 @@
         "@ai-sdk/openai": "~1.0.4",
         "@goat-sdk/adapter-vercel-ai": "0.2.10",
         "@goat-sdk/core": "0.4.9",
-        "@goat-sdk/crossmint": "0.4.2",
+        "@goat-sdk/crossmint": "0.4.3",
         "@goat-sdk/wallet-evm": "0.2.11",
         "@goat-sdk/wallet-viem": "0.2.12",
         "ai": "4.0.3",

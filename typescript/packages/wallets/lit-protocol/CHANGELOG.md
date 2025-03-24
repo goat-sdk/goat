@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-lit
 
+## 0.2.19
+
+### Patch Changes
+
+- Updated dependencies [a374315]
+  - @goat-sdk/wallet-solana@0.2.16
+
 ## 0.2.18
 
 ### Patch Changes

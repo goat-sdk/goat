@@ -1,5 +1,12 @@
 # @goat-sdk/plugin-tensor
 
+## 0.2.17
+
+### Patch Changes
+
+- Updated dependencies [a374315]
+  - @goat-sdk/wallet-solana@0.2.16
+
 ## 0.2.16
 
 ### Patch Changes
