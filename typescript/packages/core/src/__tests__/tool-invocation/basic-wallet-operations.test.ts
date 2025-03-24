@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
@@ -17,7 +18,7 @@ describe("Basic wallet operations", () => {
 
         class BalanceService {
             @Tool({
-                description: "Check the balance of a wallet",
+                description: "Check the balance of a wallet"
             })
             async checkBalance(params: BalanceParameters) {
                 return balanceCheckSpy(params);
