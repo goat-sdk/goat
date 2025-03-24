@@ -125,8 +125,8 @@ describe("Plugin-specific operations", () => {
             @Tool({
                 description: "Get cryptocurrency price from CoinGecko",
             })
-            async getPrice(params: CoinGeckoParameters) {
-                return priceSpy(params);
+            async getPrice(wallet: MockWalletClient, params: CoinGeckoParameters) {
+                return priceSpy(wallet, params);
             }
         }
 

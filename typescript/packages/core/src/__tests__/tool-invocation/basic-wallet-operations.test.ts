@@ -13,15 +13,19 @@ describe("Basic wallet operations", () => {
         class BalanceParameters extends createMockParameters(
             z.object({
                 address: z.string().describe("Wallet address to check"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                address: z.string().describe("Wallet address to check"),
+            });
+        }
 
         class BalanceService {
             @Tool({
                 description: "Check the balance of a wallet"
             })
-            async checkBalance(params: BalanceParameters) {
-                return balanceCheckSpy(params);
+            async checkBalance(wallet: MockWalletClient, params: BalanceParameters) {
+                return balanceCheckSpy(wallet, params);
             }
         }
 
