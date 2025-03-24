@@ -291,8 +291,8 @@ importers:
         specifier: ~1.0.4
         version: 1.0.20(zod@3.23.8)
       '@goat-sdk/adapter-mastra':
-        specifier: workspace:*
-        version: link:../../../packages/adapters/mastra
+        specifier: 0.1.0
+        version: 0.1.0(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.2.0(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
       '@goat-sdk/core':
         specifier: 0.4.9
         version: 0.4.9(zod@3.23.8)
@@ -5515,6 +5515,13 @@ packages:
     peerDependencies:
       '@goat-sdk/core': 0.4.9
       '@langchain/core': 0.3.6
+      zod: ^3.0.0
+
+  '@goat-sdk/adapter-mastra@0.1.0':
+    resolution: {integrity: sha512-fedyhpCuKapnbBrbZCba6A+hfrJPdiFSp4zaL7hEyTnow2BLmBeSa/o410RgxiScbQQHTHNSBpyE3BGAj1Bm8g==}
+    peerDependencies:
+      '@goat-sdk/core': 0.4.9
+      ai: 4.0.3
       zod: ^3.0.0
 
   '@goat-sdk/adapter-model-context-protocol@0.2.11':
@@ -17594,6 +17601,14 @@ snapshots:
     optionalDependencies:
       zod: 3.23.8
 
+  '@ai-sdk/provider-utils@2.2.0(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 1.1.0
+      eventsource-parser: 3.0.0
+      nanoid: 3.3.11
+      secure-json-parse: 2.7.0
+      zod: 3.23.8
+
   '@ai-sdk/provider-utils@2.2.0(zod@3.24.2)':
     dependencies:
       '@ai-sdk/provider': 1.1.0
@@ -17656,6 +17671,16 @@ snapshots:
       react: 18.3.1
       zod: 3.23.8
 
+  '@ai-sdk/react@1.2.0(react@18.3.1)(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider-utils': 2.2.0(zod@3.23.8)
+      '@ai-sdk/ui-utils': 1.2.0(zod@3.23.8)
+      react: 18.3.1
+      swr: 2.3.0(react@18.3.1)
+      throttleit: 2.1.0
+    optionalDependencies:
+      zod: 3.23.8
+
   '@ai-sdk/react@1.2.0(react@18.3.1)(zod@3.24.2)':
     dependencies:
       '@ai-sdk/provider-utils': 2.2.0(zod@3.24.2)
@@ -17708,6 +17733,13 @@ snapshots:
       zod-to-json-schema: 3.24.1(zod@3.23.8)
     optionalDependencies:
       zod: 3.23.8
+
+  '@ai-sdk/ui-utils@1.2.0(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 1.1.0
+      '@ai-sdk/provider-utils': 2.2.0(zod@3.23.8)
+      zod: 3.23.8
+      zod-to-json-schema: 3.24.1(zod@3.23.8)
 
   '@ai-sdk/ui-utils@1.2.0(zod@3.24.2)':
     dependencies:
@@ -22154,6 +22186,12 @@ snapshots:
     dependencies:
       '@goat-sdk/core': 0.4.9(zod@3.23.8)
       '@langchain/core': 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
+      zod: 3.23.8
+
+  '@goat-sdk/adapter-mastra@0.1.0(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.2.0(react@18.3.1)(zod@3.23.8))(zod@3.23.8)':
+    dependencies:
+      '@goat-sdk/core': 0.4.9(zod@3.23.8)
+      ai: 4.2.0(react@18.3.1)(zod@3.23.8)
       zod: 3.23.8
 
   '@goat-sdk/adapter-model-context-protocol@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(@modelcontextprotocol/sdk@1.0.4)(zod@3.23.8)':
@@ -29821,6 +29859,19 @@ snapshots:
     optionalDependencies:
       react: 18.3.1
       zod: 3.23.8
+
+  ai@4.2.0(react@18.3.1)(zod@3.23.8):
+    dependencies:
+      '@ai-sdk/provider': 1.1.0
+      '@ai-sdk/provider-utils': 2.2.0(zod@3.23.8)
+      '@ai-sdk/react': 1.2.0(react@18.3.1)(zod@3.23.8)
+      '@ai-sdk/ui-utils': 1.2.0(zod@3.23.8)
+      '@opentelemetry/api': 1.9.0
+      eventsource-parser: 3.0.0
+      jsondiffpatch: 0.6.0
+      zod: 3.23.8
+    optionalDependencies:
+      react: 18.3.1
 
   ai@4.2.0(react@18.3.1)(zod@3.24.2):
     dependencies:
