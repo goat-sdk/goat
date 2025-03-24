@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
 import { createToolParameters } from "../../utils/createToolParameters";
