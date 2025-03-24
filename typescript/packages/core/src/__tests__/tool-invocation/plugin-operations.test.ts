@@ -1,6 +1,6 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
-import { Tool } from "../../decorators/Tool";
+import { beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
+import { Tool } from "../../decorators/Tool";
 import { getTools } from "../../utils/getTools";
 import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
 import { createMockParameters, createMockPlugin } from "./test-utils";

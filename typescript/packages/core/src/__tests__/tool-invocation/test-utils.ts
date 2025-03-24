@@ -1,8 +1,6 @@
 import { z } from "zod";
-import { Tool } from "../../decorators/Tool";
-import { createToolParameters } from "../../utils/createToolParameters";
 import { PluginBase } from "../../classes/PluginBase";
-import { MockWalletClient } from "./mock-utils";
+import { createToolParameters } from "../../utils/createToolParameters";
 
 // Utility to create parameters class
 export function createMockParameters(schema: z.ZodTypeAny) {
@@ -10,7 +8,7 @@ export function createMockParameters(schema: z.ZodTypeAny) {
 }
 
 // Create a mock plugin with the given service
-export function createMockPlugin(name: string, service: any) {
+export function createMockPlugin(name: string, service: object) {
     class MockPlugin extends PluginBase {
         supportsChain() {
             return true;

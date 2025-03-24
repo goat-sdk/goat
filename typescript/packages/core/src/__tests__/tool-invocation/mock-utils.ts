@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { WalletClientBase, Signature, Balance } from "../../classes/WalletClientBase";
+import { Balance, Signature, WalletClientBase } from "../../classes/WalletClientBase";
 import { SolanaChain } from "../../types/Chain";
 
 // Mock wallet client
