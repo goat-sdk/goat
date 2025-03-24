@@ -13,10 +13,11 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@mastra/core": "0.6.3"
+        "ai": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
+        "ai": "catalog:",
         "zod": "^3.0.0"
     },
     "devDependencies": {

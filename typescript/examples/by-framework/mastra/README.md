@@ -3,10 +3,10 @@
 <img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
-# Vercel AI SDK
+# Mastra
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to allow a [Vercel AI SDK](https://sdk.vercel.ai/) agent to **send and receive ETH and ERC-20 tokens** on EVM networks. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
+This example demonstrates how to use GOAT to allow a [Mastra](https://github.com/mastra-ai/mastra) agent to **send and receive ETH and ERC-20 tokens** on EVM networks. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
 
 You can use this example with any other agent framework, chain, and wallet of your choice.
 
@@ -25,7 +25,7 @@ pnpm build
 
 3. Go to the example directory:
 ```bash
-cd examples/by-framework/vercel-ai
+cd examples/by-framework/mastra
 ```
 
 4. Copy the `.env.template` and populate with your values:
@@ -41,7 +41,7 @@ cp .env.template .env
 ## Usage
 1. Run the interactive CLI:
 ```bash
-pnpm ts-node index.ts
+pnpm tsx src/index.ts
 ```
 
 2. Chat with the agent:
