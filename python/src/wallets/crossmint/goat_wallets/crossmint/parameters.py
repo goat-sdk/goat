@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Any, Literal, Union
 
 class BaseModelWithoutNone(BaseModel):
     """Base model that excludes None values from model_dump output."""
+
     def model_dump(self) -> Dict[str, Any]:  # type: ignore
         """Convert model to dictionary, filtering out None values."""
         data = super().model_dump()
@@ -35,6 +36,21 @@ class AdminSigner(BaseModelWithoutNone):
     locator: Optional[str] = None
     signature: Optional[str] = None
     chain: Optional[str] = None
+
+
+class SolanaFireblocksSigner(BaseModelWithoutNone):
+    """Configuration for Solana Fireblocks custodial signer."""
+    type: Literal[CoreSignerType.SOLANA_FIREBLOCKS_CUSTODIAL]
+    address: str
+
+
+class SolanaKeypairSigner(BaseModelWithoutNone):
+    """Configuration for Solana keypair signer."""
+    type: Literal[CoreSignerType.SOLANA_KEYPAIR]
+    address: str
+
+
+SolanaSmartWalletSigner = Union[SolanaFireblocksSigner, SolanaKeypairSigner]
 
 
 class CreateSmartWalletParameters(BaseModelWithoutNone):
@@ -87,7 +103,8 @@ class Call(BaseModelWithoutNone):
 
 class SolanaSmartWalletTransactionParams(BaseModelWithoutNone):
     """Parameters for creating a Solana Smart Wallet transaction."""
-    transaction: str = Field(description="Base58 encoded serialized Solana transaction")
+    transaction: str = Field(
+        description="Base58 encoded serialized Solana transaction")
     required_signers: Optional[List[str]] = Field(
         None,
         description="Optional array of additional signers required for the transaction"
@@ -105,10 +122,12 @@ class EVMTypedData(BaseModel):
     domain: Dict[str, Any]
     message: Dict[str, Any]
 
+
 class TransactionParams(BaseModelWithoutNone):
     """Parameters for transaction creation."""
     calls: Optional[List[Call]] = None
-    chain: Optional[Literal["ethereum", "polygon", "avalanche", "arbitrum", "optimism", "base", "sepolia"]] = None
+    chain: Optional[Literal["ethereum", "polygon", "avalanche",
+                            "arbitrum", "optimism", "base", "sepolia"]] = None
     signer: Optional[str] = None
     transaction: Optional[str] = None
     signers: Optional[List[str]] = None
@@ -132,14 +151,17 @@ class TransactionApprovals(BaseModelWithoutNone):
 
 class SignMessageRequest(BaseModelWithoutNone):
     """Request parameters for message signing."""
-    type: str = Field(description="Message type (evm-message or solana-message)")
-    params: Dict[str, Any] = Field(description="Message parameters including the message to sign")
+    type: str = Field(
+        description="Message type (evm-message or solana-message)")
+    params: Dict[str, Any] = Field(
+        description="Message parameters including the message to sign")
 
 
 class SignTypedDataRequest(BaseModelWithoutNone):
     """Request parameters for typed data signing."""
     type: Literal["evm-typed-data"]
-    params: Dict[str, Any] = Field(description="Parameters including typed data and chain")
+    params: Dict[str, Any] = Field(
+        description="Parameters including typed data and chain")
 
 
 class SignatureResponse(BaseModelWithoutNone):
@@ -166,8 +188,10 @@ class TransactionResponse(BaseModelWithoutNone):
 class CollectionMetadata(BaseModelWithoutNone):
     name: str = Field(description="The name of the collection")
     description: str = Field(description="A description of the NFT collection")
-    image: Optional[str] = Field(None, description="URL pointing to an image that represents the collection")
-    symbol: Optional[str] = Field(None, description="Shorthand identifier for the NFT collection (Max length: 10)")
+    image: Optional[str] = Field(
+        None, description="URL pointing to an image that represents the collection")
+    symbol: Optional[str] = Field(
+        None, description="Shorthand identifier for the NFT collection (Max length: 10)")
 
 
 class CollectionParameters(BaseModelWithoutNone):
@@ -179,7 +203,8 @@ class CollectionParameters(BaseModelWithoutNone):
             symbol=None
         )
     )
-    fungibility: Literal["semi-fungible", "non-fungible"] = Field(default="non-fungible")
+    fungibility: Literal["semi-fungible",
+                         "non-fungible"] = Field(default="non-fungible")
     transferable: bool = Field(default=True)
 
 
@@ -192,12 +217,15 @@ class NFTMetadata(BaseModelWithoutNone):
     name: str = Field(description="The name of the NFT")
     description: str = Field(description="The description of the NFT")
     image: str = Field(description="URL pointing to the NFT image")
-    animation_url: Optional[str] = Field(None, description="URL pointing to the NFT animation")
-    attributes: Optional[List[NFTAttribute]] = Field(None, description="The attributes of the NFT")
+    animation_url: Optional[str] = Field(
+        None, description="URL pointing to the NFT animation")
+    attributes: Optional[List[NFTAttribute]] = Field(
+        None, description="The attributes of the NFT")
 
 
 class MintNFTParameters(BaseModelWithoutNone):
-    collection_id: str = Field(description="The ID of the collection to mint the NFT in")
+    collection_id: str = Field(
+        description="The ID of the collection to mint the NFT in")
     recipient: str = Field(description="The recipient of the NFT")
     recipient_type: Literal["wallet", "email"] = Field(
         default="email",
@@ -236,7 +264,8 @@ class GetWalletByEmailParameters(BaseModelWithoutNone):
 
 class RequestFaucetTokensParameters(BaseModelWithoutNone):
     """Parameters for requesting tokens from faucet."""
-    wallet_address: str = Field(description="The wallet address to receive tokens")
+    wallet_address: str = Field(
+        description="The wallet address to receive tokens")
     chain_id: str = Field(description="The chain ID for the faucet request")
 
 
@@ -282,9 +311,11 @@ class CreateTransactionCustodialParameters(BaseModelWithoutNone):
 class CreateTransactionSmartParameters(BaseModelWithoutNone):
     """Parameters for creating a transaction with a smart wallet."""
     wallet_address: str = Field(description="The wallet address")
-    calls: Optional[List[Call]] = Field(None, description="The transaction calls for EVM")
+    calls: Optional[List[Call]] = Field(
+        None, description="The transaction calls for EVM")
     chain: str = Field(description="The chain of the wallet")
-    transaction: Optional[str] = Field(None, description="Base58 encoded serialized Solana transaction")
+    transaction: Optional[str] = Field(
+        None, description="Base58 encoded serialized Solana transaction")
     signer: Optional[str] = Field(None, description="Optional signer address")
 
 
@@ -298,7 +329,8 @@ class ApproveTransactionParameters(BaseModelWithoutNone):
     """Parameters for approving a transaction."""
     locator: str = Field(description="The wallet locator")
     transaction_id: str = Field(description="The transaction ID")
-    approvals: List[ApprovalItem] = Field(description="List of transaction approvals")
+    approvals: List[ApprovalItem] = Field(
+        description="List of transaction approvals")
 
 
 class CheckTransactionStatusParameters(BaseModelWithoutNone):
@@ -317,8 +349,10 @@ class RegisterDelegatedSignerParameters(BaseModelWithoutNone):
     """Parameters for registering a delegated signer."""
     signer: str = Field(description="The locator of the delegated signer")
     chain: str = Field(description="Chain identifier")
-    expires_at: Optional[int] = Field(None, description="Optional expiry date in milliseconds since UNIX epoch")
-    permissions: Optional[List[DelegatedSignerPermission]] = Field(None, description="Optional list of ERC-7715 permission objects")
+    expires_at: Optional[int] = Field(
+        None, description="Optional expiry date in milliseconds since UNIX epoch")
+    permissions: Optional[List[DelegatedSignerPermission]] = Field(
+        None, description="Optional list of ERC-7715 permission objects")
 
 
 class GetDelegatedSignerParameters(BaseModelWithoutNone):

@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-superfluid",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",

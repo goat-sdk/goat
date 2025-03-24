@@ -14,7 +14,7 @@ export class BirdeyeDefiService {
     constructor(private readonly birdeyeApi: BirdeyeApi) {}
 
     @Tool({
-        name: "birdeye.get_token_price",
+        name: "birdeye_get_token_price",
         description: "Get price information for a token or multiple tokens (max 100)",
     })
     async getTokenPrice(params: GetTokenPriceParameters) {
@@ -26,7 +26,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.get_token_history_price",
+        name: "birdeye_get_token_history_price",
         description: "Get historical price line chart for a token",
     })
     async getTokenHistoryPrice(params: GetTokenHistoryPriceParameters) {
@@ -43,7 +43,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.get_ohlcv",
+        name: "birdeye_get_ohlcv",
         description: "Get OHLCV price of token",
     })
     async getOhlcv(params: GetOhlcvParameters) {
@@ -59,7 +59,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.get_ohlcv_pair",
+        name: "birdeye_get_ohlcv_pair",
         description: "Get OHLCV price of pair",
     })
     async getOhlcvPair(params: GetOhlcvPairParameters) {
@@ -74,7 +74,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.get_token_security",
+        name: "birdeye_get_token_security",
         description: "Get security information of a token",
     })
     async getTokenSecurity(params: GetTokenSecurityParameters) {
@@ -84,7 +84,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.get_trending_tokens",
+        name: "birdeye_get_trending_tokens",
         description: "Get trending tokens",
     })
     async getTrendingTokens(params: GetTrendingTokensParameters) {
@@ -99,7 +99,7 @@ export class BirdeyeDefiService {
     }
 
     @Tool({
-        name: "birdeye.search_token",
+        name: "birdeye_search_token",
         description: "Search for a token",
     })
     async searchToken(params: SearchTokenParameters) {

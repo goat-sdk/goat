@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-sui",
-    "version": "0.2.14",
+    "version": "0.2.15",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

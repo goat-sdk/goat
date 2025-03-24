@@ -20,7 +20,7 @@ from goat_plugins.allora import allora, AlloraPluginOptions
 
 # Initialize the plugin
 options = AlloraPluginOptions(
-    api_key="${OPENAI_API_KEY}",  # Your Allora API key
+    api_key="${OPENAI_API_KEY}",  # Contact the Allora team on Discord for access to API keys
     model="allora-v1"  # Optional: Specify model version
 )
 plugin = allora(options)

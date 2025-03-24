@@ -3,7 +3,7 @@ from .classes.wallet_client_base import WalletClientBase
 from .classes.plugin_base import PluginBase
 from .utils.snake_case import snake_case
 from .utils.get_tools import get_tools
-from .types.chain import Chain, EvmChain, SolanaChain, AptosChain, ChromiaChain
+from .types.chain import Chain, EvmChain, SolanaChain, AptosChain, ChromiaChain, MultiversXChain
 
 __all__ = [
     # Classes
@@ -20,4 +20,5 @@ __all__ = [
     "SolanaChain",
     "AptosChain",
     "ChromiaChain",
+    "MultiversXChain",
 ]

@@ -12,7 +12,8 @@ export type Chain =
     | ZilliqaChain
     | CosmosChain
     | StarknetChain
-    | RadixChain;
+    | RadixChain
+    | ZetrixChain;
 
 export type SuiChain = {
     type: "sui";
@@ -56,4 +57,8 @@ export type StarknetChain = {
 export type RadixChain = {
     type: "radix";
     id: number;
+};
+
+export type ZetrixChain = {
+    type: "zetrix";
 };

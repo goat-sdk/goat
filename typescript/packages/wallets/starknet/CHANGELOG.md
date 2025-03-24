@@ -1,5 +1,12 @@
 # @goat-sdk/wallet-starknet
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.1.3
 
 ### Patch Changes

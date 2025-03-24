@@ -1,5 +1,11 @@
 # @goat-sdk/core
 
+## 0.4.9
+
+### Patch Changes
+
+- f73ce74: Add Zetrix chain
+
 ## 0.4.8
 
 ### Patch Changes

@@ -3,8 +3,8 @@ import { z } from "zod";
 
 export class SwapExactTokensParams extends createToolParameters(
     z.object({
-        tokenIn: z.string().describe("The address of the token to swap from"),
-        tokenOut: z.string().describe("The address of the token to swap to"),
+        tokenIn: z.string().describe("The address of the token to swap from. if this is ETH, use 0x0."),
+        tokenOut: z.string().describe("The address of the token to swap to. if this is ETH, use 0x0."),
         amountIn: z.string().describe("The amount of input tokens to swap in base units"),
         amountOutMin: z.string().describe("The minimum amount of output tokens to receive in base units"),
         stable: z.boolean().describe("Whether to use stable or volatile pool for swap"),
@@ -12,8 +12,14 @@ export class SwapExactTokensParams extends createToolParameters(
         deadline: z
             .number()
             .optional()
-            .default(60 * 60 * 24)
+            .default(() => Math.floor(Date.now() / 1000) + 3600)
             .describe("The deadline for the swap in seconds from now"),
+    }),
+) {}
+
+export class GetInfoVelodromeTokensParams extends createToolParameters(
+    z.object({
+        tokenName: z.string().describe("Get info for tokens suported by velodrome."),
     }),
 ) {}
 

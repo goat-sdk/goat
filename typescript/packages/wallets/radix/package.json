@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-radix",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

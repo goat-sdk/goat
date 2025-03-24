@@ -1,9 +1,9 @@
 import { type Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { fraxtal, metalL2, mode, optimism } from "viem/chains";
+import { mode } from "viem/chains";
 import { VelodromeService } from "./velodrome.service";
 
-const SUPPORTED_CHAINS = [mode, optimism, fraxtal, metalL2];
+const SUPPORTED_CHAINS = [mode];
 
 export class VelodromePlugin extends PluginBase<EVMWalletClient> {
     constructor() {

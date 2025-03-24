@@ -25,3 +25,10 @@ Now you can run the examples in the `examples` directory. Follow the README in e
 Every time you make changes to a plugin/wallet/adapter/etc., you will need to run the build command again to use it in the examples.
 
 You can run `pnpm build:libs` to only build the libraries and not the examples.
+
+
+## Video Installation Guide
+
+<a href="https://www.youtube.com/watch?v=h3tGxd-WSXg">
+  <img src="https://github.com/user-attachments/assets/626ebac2-868c-4090-857b-66b47b222a61" width="800" alt="Watch the video"/>
+</a>

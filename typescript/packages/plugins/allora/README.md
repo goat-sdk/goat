@@ -23,7 +23,7 @@ pnpm add @goat-sdk/plugin-allora
 import { allora } from '@goat-sdk/plugin-allora'
 
 const plugin = allora({ 
-    apiKey: process.env.ALLORA_API_KEY, // Get it from: https://allora.network/api-access
+    apiKey: process.env.ALLORA_API_KEY, // Contact the Allora team on Discord for access to API keys
 })
 ```
 
@@ -35,7 +35,7 @@ const plugin = allora({
 <br/>
 <div>
 <a href="https://github.com/goat-sdk/goat">
-  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+  <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 </a>
 </div>
 </footer>

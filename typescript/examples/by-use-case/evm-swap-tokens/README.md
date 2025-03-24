@@ -45,8 +45,8 @@ pnpm ts-node index.ts
 ```
 
 2. Chat with the agent:
-- Swap USDC for PEPE
-- Swap PEPE for USDC
+- Swap 1 USDC for PEPE
+- Swap 100 PEPE for USDC
 - Check your balance again to see the tokens you just swapped
 
 ## Using in production
@@ -70,7 +70,7 @@ To integrate Agent Wallets with GOAT, check out the following quickstarts:
 <br/>
 <br/>
 <div>
-  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+  <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 
 <div>
 </footer>

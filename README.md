@@ -1,7 +1,7 @@
 
 
 <div>
-  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+  <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 
 <div>
 <img src="https://img.shields.io/npm/dm/%40goat-sdk%2Fcore" alt="NPM Downloads">
@@ -37,27 +37,31 @@
 - [🤝 Community](#-community)
 
 # 🐐 Overview
-GOAT (Great Onchain Agent Toolkit) is the **largest library of onchain tools** for your AI agent:
+GOAT is the **largest agentic finance toolkit** for AI agents. 
 
+**Create agents that can:**
+- Send and receive payments
+- Purchase physical and digital goods and services
+- Engage in various investment strategies:
+  - Earn yield
+  - Bet on prediction markets
+  - Purchase crypto assets
+- Tokenize any asset
+- Get financial insights
+
+**How it works**
+
+GOAT leverages blockchains, stablecoins, and smart wallets as the infrastructure to enable agents to transact anywhere:
 1. Give your agent a **[wallet](https://github.com/goat-sdk/goat/tree/main#chains-and-wallets)**
-2. Allow it to transact on **[any chain](https://github.com/goat-sdk/goat/tree/main#chains-and-wallets)**
-3. Use more than **[+200 onchain tools](https://github.com/goat-sdk/goat/tree/main#tools)**
+2. Allow it to transact **[anywhere](https://github.com/goat-sdk/goat/tree/main#chains-and-wallets)**
+3. Use more than **[+200 tools](https://github.com/goat-sdk/goat/tree/main#tools)**
 4. Use it with **[any agent framework](https://github.com/goat-sdk/goat/tree/main#agent-frameworks)** of your choice
 
 See everything GOAT supports [here](#️-supported-tools-and-frameworks).
 
-**Create agents that can**
-- Transfer funds between wallets
-- Swap tokens
-- Make bets on Polymarket
-- Create and manage DeFi positions
-- Create, buy and sell NFTs
-- Purchase physical assets onchain with crypto
-- Get onchain insights
-
 **Lightweight and extendable**
 
-Different from other agent kits, GOAT is designed to be lightweight and extendable by keeping its core minimal and allowing you to **install only the tools you need**.
+Different from other toolkits, GOAT is designed to be lightweight and extendable by keeping its core minimal and allowing you to **install only the tools you need**.
 
 If you don't find what you need on our more than 200 integrations you can easily:
 1. Create your own plugin
@@ -66,8 +70,6 @@ If you don't find what you need on our more than 200 integrations you can easily
 4. Integrate a new agent framework
 
 See how to do it [here](#-contributing).
-
-
 
 **License**
 
@@ -80,20 +82,26 @@ GOAT is free software, MIT licensed.
 ## 📘 Typescript
 
 - **By use case**
-  - Send and receive tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-send-and-receive-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-send-and-receive-tokens), [Chromia](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/chromia-send-and-receive-tokens), [Cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/cosmos-send-and-receive-tokens), [Fuel](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/fuel-send-and-receive-tokens), [Radix](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/radix-send-and-receive-tokens)]
-  - Swap tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-swap-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-swap-tokens)]
-  - Create and manage DeFi positions [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-defi-agent), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-defi-agent)]
-  - Mint NFTs [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-mint-nft), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-mint-nft)]
-  - Make bets on Polymarket [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/vercel-ai/polymarket)]
-  - Launch a token on Pump.fun [[Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-launch-token)]
-  - Purchase physical assets [coming soon]
+  - **Money transmission**
+    - Send and receive payments [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-send-and-receive-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-send-and-receive-tokens), [Chromia](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/chromia-send-and-receive-tokens), [Cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/cosmos-send-and-receive-tokens), [Fuel](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/fuel-send-and-receive-tokens), [Radix](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/radix-send-and-receive-tokens), [Zetrix](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/zetrix-send-and-receive-tokens)]
+  - **Commerce**
+    - Purchase any item on Amazon [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-purchase-on-amazon), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-purchase-on-amazon)]
+  - **Investing**
+    - Earn yield [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-defi-agent), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-defi-agent)]
+    - Prediction markets [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-bet-on-polymarket)]
+    - Purchase crypto assets [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-swap-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-swap-tokens)]
+  - **Tokenization**
+    - Tokenize non-fungible assets [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/evm-mint-nft), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-mint-nft)]
+    - Tokenize fungible assets [[Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-use-case/solana-launch-token)]
 - **By framework**
   - [Vercel AI](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/vercel-ai)
   - [Langchain](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/langchain)
-  - [Eliza Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/eliza)
-  - [GAME Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/virtuals-game)
+  - [LlamaIndex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex)
   - [MCP (Model Context Protocol)](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/model-context-protocol)
   - [Voice agent with ElevenLabs](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/eleven-labs)
+  - [OpenAI GPT via REST API](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/chatgpt)
+  - [Eliza Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/eliza)
+  - [GAME Agent](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-framework/virtuals-game)
 - **By wallet**
   - [Crossmint Smart Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)
   - [Crossmint Custodial Wallets](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-solana-custodial-wallets)
@@ -101,15 +109,21 @@ GOAT is free software, MIT licensed.
   - [Safe](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/safe)
 
 - **See all typescript quickstarts [here](https://github.com/goat-sdk/goat/tree/main/typescript/examples).**
-  
+
 ## 🐍 Python
 - **By use case**
-  - Send and receive tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/web3), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
-  - Swap tokens [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/uniswap), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
+  - **Money transmission**
+    - Send and receive payments [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/evm-send-and-receive-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/solana-send-and-receive-tokens)]
+  - **Investing**
+    - Generate yield [[Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/solana-usdc-yield-deposit)]
+    - Purchase crypto assets [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/evm-swap-tokens), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/by-use-case/solana-swap-tokens)]
 - **By framework**
-  - Langchain [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/web3), [Solana](https://github.com/goat-sdk/goat/tree/main/python/examples/langchain/solana)]
-  - GAME Agent [[EVM](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)]
-  - ZerePy [[EVM](https://github.com/goat-sdk/goat/tree/main/python/examples/zerepy/web3)]
+  - [Langchain](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/langchain)
+  - [OpenAI Agents SDK](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/openai-agents-sdk)
+  - [GAME Agent](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
+  - [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py)
+- **By wallet**
+  - [Crossmint](https://github.com/goat-sdk/goat/tree/main/python/examples/by-wallet/crossmint)
 - **See all python quickstarts [here](https://github.com/goat-sdk/goat/tree/main/python/examples).**
 
 # 🛠️ Supported tools and frameworks
@@ -124,6 +138,7 @@ GOAT is free software, MIT licensed.
 | Avnu | Swap tokens on Starknet | [@goat-sdk/plugin-avnu](https://www.npmjs.com/package/@goat-sdk/plugin-avnu) |
 | Balancer | Swap tokens and provide liquidity on Balancer | [@goat-sdk/plugin-balancer](https://www.npmjs.com/package/@goat-sdk/plugin-balancer) |
 | Balmy | Swap tokens on Balmy | [@goat-sdk/plugin-balmy](https://www.npmjs.com/package/@goat-sdk/plugin-balmy) |
+| BetSwirl | Play casino games | [@goat-sdk/plugin-betswirl](https://www.npmjs.com/package/@goat-sdk/plugin-betswirl) |
 | BirdEye | Get token insights using BirdEye API | [@goat-sdk/plugin-birdeye](https://www.npmjs.com/package/@goat-sdk/plugin-birdeye) |
 | BMX | Get token insights using BMX API | [@goat-sdk/plugin-bmx](https://www.npmjs.com/package/@goat-sdk/plugin-bmx) |
 | CoinGecko | Get coin information using CoinGecko API | [@goat-sdk/plugin-coingecko](https://www.npmjs.com/package/@goat-sdk/plugin-coingecko) | [goat-sdk-plugin-coingecko](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/coingecko) |
@@ -133,15 +148,17 @@ GOAT is free software, MIT licensed.
 | Crossmint Mint, Faucet, Wallets | Create a wallet, mint tokens and get test tokens on any chain using Crossmint | [@goat-sdk/plugin-crossmint-mint-faucet-wallets](https://www.npmjs.com/package/@goat-sdk/plugin-crossmint-mint-faucet-wallets) |
 | DeBridge | Bridge tokens on DeBridge | [@goat-sdk/plugin-debridge](https://www.npmjs.com/package/@goat-sdk/plugin-debridge) | [goat-sdk-plugin-debridge](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/debridge) |
 | Dexscreener | Get token information using Dexscreener API | [@goat-sdk/plugin-dexscreener](https://www.npmjs.com/package/@goat-sdk/plugin-dexscreener) | [goat-sdk-plugin-dexscreener](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/dexscreener) |
-| ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) | 
+| ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) |
 | Enso | Find the most optimal route between tokens | [@goat-sdk/plugin-enso](https://www.npmjs.com/package/@goat-sdk/plugin-enso) |
 | ERC20 | Interact with any ERC20 token | [@goat-sdk/plugin-erc20](https://www.npmjs.com/package/@goat-sdk/plugin-erc20) | [goat-sdk-plugin-erc20](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/erc20) |
 | ERC721 | Interact with any ERC721 token | [@goat-sdk/plugin-erc721](https://www.npmjs.com/package/@goat-sdk/plugin-erc721) |
 | Etherscan | Get transaction information using Etherscan API | [@goat-sdk/plugin-etherscan](https://www.npmjs.com/package/@goat-sdk/plugin-etherscan) |
 | Farcaster | Read and post casts on Farcaster | [@goat-sdk/plugin-farcaster](https://www.npmjs.com/package/@goat-sdk/plugin-farcaster) | [goat-sdk-plugin-farcaster](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/farcaster) |
+| Hedgey | Claim rewards on Hedgey | [@goat-sdk/plugin-hedgey](https://www.npmjs.com/package/@goat-sdk/plugin-hedgey) |
 | Ionic | Borrow and lend on Ionic | [@goat-sdk/plugin-ionic](https://www.npmjs.com/package/@goat-sdk/plugin-ionic) |
 | Ironclad | Create positions on Ironclad | [@goat-sdk/plugin-ironclad](https://www.npmjs.com/package/@goat-sdk/plugin-ironclad) |
-| JSON RPC | Call any JSON RPC endpoint |[@goat-sdk/plugin-json-rpc](https://www.npmjs.com/package/@goat-sdk/plugin-json-rpc) | [goat-sdk-plugin-json-rpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/json_rpc) |
+| Irys | Deploy Irys plugins | [@goat-sdk/plugin-irys-xyz](https://www.npmjs.com/package/@goat-sdk/plugin-irys-xyz) |
+| JSON RPC | Call any JSON RPC endpoint |[@goat-sdk/plugin-jsonrpc](https://www.npmjs.com/package/@goat-sdk/plugin-jsonrpc) | [goat-sdk-plugin-jsonrpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jsonrpc) |
 | Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter) |
 | KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
 | Lulo | Deposit USDC on Lulo | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo) |
@@ -180,16 +197,18 @@ GOAT is free software, MIT licensed.
 | Viem / Web3 (any EVM compatible chain) | [@goat-sdk/wallet-viem](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/viem) | [goat-sdk-wallet-web3](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/web3) |
 | Solana | [@goat-sdk/wallet-solana](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/solana) | [goat-sdk-wallet-solana](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/solana) |
 | Crossmint | [@goat-sdk/wallet-crossmint](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/crossmint) | [goat-sdk-wallet-crossmint](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/crossmint) |
-| Aptos | [@goat-sdk/wallet-aptos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/aptos) | 
-| Chromia | [@goat-sdk/wallet-chromia](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/chromia) | 
-| Cosmos | [@goat-sdk/wallet-cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/cosmos) | 
+| Aptos | [@goat-sdk/wallet-aptos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/aptos) |
+| Chromia | [@goat-sdk/wallet-chromia](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/chromia) |
+| Cosmos | [@goat-sdk/wallet-cosmos](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/cosmos) |
 | Fuel | [@goat-sdk/wallet-fuel](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/fuel) |
 | Lit | [@goat-sdk/wallet-lit](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/lit) |
 | Radix | [@goat-sdk/wallet-radix](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/radix) |
 | Safe | [@goat-sdk/wallet-safe](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/safe) |
 | Sui | [@goat-sdk/wallet-sui](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/sui) |
 | Starknet | [@goat-sdk/wallet-starknet](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/starknet) |
+| Zetrix | [@goat-sdk/wallet-zetrix](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zetrix) |
 | Zilliqa | [@goat-sdk/wallet-zilliqa](https://github.com/goat-sdk/goat/tree/main/typescript/packages/wallets/zilliqa) |
+| MultiversX |   | [goat-sdk-wallet-multiversx](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/multiversx) |
 
 ## Agent Frameworks
 | Adapter | Typescript | Python |
@@ -197,11 +216,13 @@ GOAT is free software, MIT licensed.
 | AI SDK | [@goat-sdk/adapter-vercel-ai](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/vercel-ai) |
 | Langchain | [@goat-sdk/adapter-langchain](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/langchain) | [goat-sdk-adapter-langchain](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/langchain)
 | ElevenLabs | [@goat-sdk/adapter-eleven-labs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/eleven-labs)
-| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) | 
+| LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
+| OpenAI Agents SDK |  | [goat-sdk-adapter-openai-agents-sdk](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/openai_agents_sdk) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/model-context-protocol) |
-| Eliza | [@elizaos/plugin-goat](https://github.com/elizaOS/community-plugins/tree/develop/packages/plugin-goat) |
+| Eliza | [@elizaos/plugin-goat](https://github.com/elizaos-plugins/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
-| ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) | 
+| ZerePy | | [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py) |
+
 
 
 # 💻 Contributing

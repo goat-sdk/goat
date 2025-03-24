@@ -6,9 +6,11 @@
 </div>
 
 # ZeroDev Global Address Plugin
+
 Create global addresses that can receive tokens from multiple chains with [ZeroDev](https://docs.zerodev.app/global-address).
 
 ## Installation
+
 ```
 npm install @goat-sdk/plugin-zerodev-global-address
 yarn add @goat-sdk/plugin-zerodev-global-address
@@ -27,6 +29,7 @@ const tools = await getOnChainTools({
 ```
 
 ## Tools
+
 - Create global addresses that can receive tokens from multiple chains
 - Automatic token bridging to your destination chain
 - Support for multiple chains:
@@ -43,12 +46,19 @@ const tools = await getOnChainTools({
   - USDC
   - Wrapped native tokens
 
+## Examples
+
+* `Create a global address` - creates a global address using the connected wallet settings.
+* `Create a global address on base` - creates a global address on the Base chain.
+* `Create a global address for wallet 0x123...abc` - creates a global address for the specific owner address.
+* `Create a global address on arbitrum with 30% slippage` - creates a global address on Arbitum with a slippage of 30% (default slippage is 15%).
+
 <footer>
 <br/>
 <br/>
 <div>
 <a href="https://github.com/goat-sdk/goat">
-  <img src="https://github.com/user-attachments/assets/4821833e-52e5-4126-a2a1-59e9fa9bebd7" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+  <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
 </a>
 </div>
 </footer>

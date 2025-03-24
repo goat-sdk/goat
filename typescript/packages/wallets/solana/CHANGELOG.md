@@ -1,5 +1,18 @@
 # @goat-sdk/wallet-solana
 
+## 0.2.16
+
+### Patch Changes
+
+- a374315: Fix raw tx error
+
+## 0.2.15
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+
 ## 0.2.14
 
 ### Patch Changes

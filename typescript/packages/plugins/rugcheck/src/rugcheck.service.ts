@@ -6,7 +6,7 @@ export class RugCheckService {
     constructor(private readonly api: RugCheckApi) {}
 
     @Tool({
-        name: "rugcheck.get_recently_detected_tokens",
+        name: "rugcheck_get_recently_detected_tokens",
         description: "Get recently detected tokens from RugCheck",
     })
     async getRecentlyDetectedTokens(params: NoParameters) {
@@ -15,7 +15,7 @@ export class RugCheckService {
     }
 
     @Tool({
-        name: "rugcheck.get_trending_tokens_24h",
+        name: "rugcheck_get_trending_tokens_24h",
         description: "Get trending tokens in the last 24h from RugCheck",
     })
     async getTrendingTokens24h(params: NoParameters) {
@@ -24,7 +24,7 @@ export class RugCheckService {
     }
 
     @Tool({
-        name: "rugcheck.get_most_voted_tokens_24h",
+        name: "rugcheck_get_most_voted_tokens_24h",
         description: "Get tokens with the most votes in the last 24h from RugCheck",
     })
     async getMostVotedTokens24h(params: NoParameters) {
@@ -33,7 +33,7 @@ export class RugCheckService {
     }
 
     @Tool({
-        name: "rugcheck.get_recently_verified_tokens",
+        name: "rugcheck_get_recently_verified_tokens",
         description: "Get recently verified tokens from RugCheck",
     })
     async getRecentlyVerifiedTokens(params: NoParameters) {
@@ -42,7 +42,7 @@ export class RugCheckService {
     }
 
     @Tool({
-        name: "rugcheck.generate_token_report_summary",
+        name: "rugcheck_generate_token_report_summary",
         description: "Generate a report summary for the given token mint",
     })
     async generateTokenReportSummary(params: GetTokenReportParameters) {

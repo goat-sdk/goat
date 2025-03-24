@@ -18,11 +18,6 @@ require("dotenv").config();
 const connection = new Connection(process.env.SOLANA_RPC_URL as string);
 const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_KEY as string));
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
 async function chat() {
     // 2. Get the onchain tools for the wallet
     const tools = await getOnChainTools({
@@ -46,6 +41,11 @@ async function chat() {
     console.log("Chat started. Type 'exit' to end the conversation.");
 
     const conversationHistory: Message[] = [];
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
 
     const askQuestion = () => {
         rl.question("You: ", async (prompt) => {

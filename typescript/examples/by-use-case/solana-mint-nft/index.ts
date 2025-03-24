@@ -16,11 +16,6 @@ require("dotenv").config();
 const connection = new Connection(process.env.SOLANA_RPC_URL as string);
 const keypair = Keypair.fromSecretKey(base58.decode(process.env.SOLANA_PRIVATE_KEY as string));
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
 // Use staging key for development, production key for mainnet
 const apiKey = process.env.CROSSMINT_API_KEY;
 
@@ -31,7 +26,7 @@ if (!apiKey) {
 // Initialize Crossmint plugins for wallet creation and NFT minting
 const { wallets, mint } = crossmint(apiKey);
 
-(async () => {
+async function chat() {
     // 2. Get your onchain tools for your wallet
     const tools = await getOnChainTools({
         wallet: solana({
@@ -45,42 +40,54 @@ const { wallets, mint } = crossmint(apiKey);
     });
 
     // 3. Create a readline interface to interact with the agent
+    type Message = {
+        role: "user" | "assistant";
+        content: string;
+    };
+
+    console.log("Chat started. Type 'exit' to end the conversation.");
+
+    const conversationHistory: Message[] = [];
+
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
 
-    while (true) {
-        const prompt = await new Promise<string>((resolve) => {
-            rl.question('Enter your prompt (or "exit" to quit): ', resolve);
-        });
+    const askQuestion = () => {
+        rl.question("You: ", async (prompt) => {
+            if (prompt.toLowerCase() === "exit") {
+                rl.close();
+                return;
+            }
 
-        if (prompt === "exit") {
-            rl.close();
-            break;
-        }
+            conversationHistory.push({ role: "user", content: prompt });
 
-        console.log("\n-------------------\n");
-        console.log("TOOLS CALLED");
-        console.log("\n-------------------\n");
-        try {
             const result = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
                 maxSteps: 10, // Maximum number of tool invocations per request
-                prompt: prompt,
+                prompt: `You are a based crypto degen assistant. You're knowledgeable about DeFi, NFTs, and trading. You use crypto slang naturally and stay up to date with Solana ecosystem. You help users with their trades and provide market insights. Keep responses concise and use emojis occasionally.
+
+Previous conversation:
+${conversationHistory.map((m) => `${m.role}: ${m.content}`).join("\n")}
+
+Current request: ${prompt}`,
                 onStepFinish: (event) => {
-                    console.log(event.toolResults);
+                    console.log("Tool execution:", event.toolResults);
                 },
             });
 
-            console.log("\n-------------------\n");
-            console.log("RESPONSE");
-            console.log("\n-------------------\n");
-            console.log(result.text);
-        } catch (error) {
-            console.error(error);
-        }
-        console.log("\n-------------------\n");
-    }
-})();
+            conversationHistory.push({
+                role: "assistant",
+                content: result.text,
+            });
+            console.log("Assistant:", result.text);
+            askQuestion();
+        });
+    };
+
+    askQuestion();
+}
+
+chat().catch(console.error);

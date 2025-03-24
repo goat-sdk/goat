@@ -1,5 +1,20 @@
 # @goat-sdk/plugin-sns
 
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [a374315]
+  - @goat-sdk/wallet-solana@0.2.16
+
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+  - @goat-sdk/wallet-solana@0.2.15
+
 ## 0.1.6
 
 ### Patch Changes

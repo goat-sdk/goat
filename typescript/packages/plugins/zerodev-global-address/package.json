@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-zerodev-global-address",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -12,9 +12,10 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@zerodev/global-address": "^0.0.19",
+        "@zerodev/global-address": "^0.0.22",
         "@goat-sdk/core": "workspace:*",
-        "viem": "~2.17.11",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:",
         "zod": "catalog:"
     },
     "peerDependencies": {

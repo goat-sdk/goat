@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-zilliqa",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

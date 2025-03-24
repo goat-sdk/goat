@@ -1,5 +1,19 @@
 # @goat-sdk/plugin-1inch
 
+## 0.1.9
+
+### Patch Changes
+
+- 8fb5907: Remove dot from tool name
+
+## 0.1.8
+
+### Patch Changes
+
+- Updated dependencies [f73ce74]
+  - @goat-sdk/core@0.4.9
+  - @goat-sdk/wallet-evm@0.2.11
+
 ## 0.1.7
 
 ### Patch Changes

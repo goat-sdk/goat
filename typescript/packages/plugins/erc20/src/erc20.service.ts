@@ -62,7 +62,7 @@ export class Erc20Service {
                 args: [parameters.wallet],
             });
 
-            return Number(rawBalance.value);
+            return String(rawBalance.value);
         } catch (error) {
             throw Error(`Failed to fetch balance: ${error}`);
         }
@@ -118,7 +118,7 @@ export class Erc20Service {
                 functionName: "allowance",
                 args: [owner, spender],
             });
-            return Number(rawAllowance.value);
+            return String(rawAllowance.value);
         } catch (error) {
             throw Error(`Failed to fetch allowance: ${error}`);
         }
@@ -188,7 +188,7 @@ export class Erc20Service {
     async convertToBaseUnit(parameters: ConvertToBaseUnitParameters) {
         const { amount, decimals } = parameters;
         const baseUnit = amount * 10 ** decimals;
-        return Number(baseUnit);
+        return String(baseUnit);
     }
 
     @Tool({
@@ -197,6 +197,6 @@ export class Erc20Service {
     async convertFromBaseUnit(parameters: ConvertFromBaseUnitParameters) {
         const { amount, decimals } = parameters;
         const decimalUnit = amount / 10 ** decimals;
-        return Number(decimalUnit);
+        return String(decimalUnit);
     }
 }

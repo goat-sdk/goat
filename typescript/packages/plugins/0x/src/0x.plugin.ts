@@ -1,10 +1,11 @@
 import { PluginBase } from "@goat-sdk/core";
 import { Chain } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { ZeroExService } from "./0x.service";
+import { Referrer, ZeroExService } from "./0x.service";
 
 export type ZeroExCtorParams = {
     apiKey: string;
+    referrer?: Referrer;
 };
 
 const supportedChains = [
@@ -25,7 +26,7 @@ const supportedChains = [
 
 export class ZeroExPlugin extends PluginBase<EVMWalletClient> {
     constructor(params: ZeroExCtorParams) {
-        super("0x", [new ZeroExService(params.apiKey)]);
+        super("0x", [new ZeroExService(params.apiKey, params.referrer)]);
     }
 
     supportsChain = (chain: Chain) => chain.type === "evm" && supportedChains.includes(chain.id.toString());

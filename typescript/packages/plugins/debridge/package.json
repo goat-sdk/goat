@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/plugin-debridge",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
@@ -24,7 +24,7 @@
     },
     "devDependencies": {
         "@types/node": "^18.0.0",
-        "tsup": "^6.7.0",
+        "tsup": "^8.3.5",
         "typescript": "^5.2.2",
         "vitest": "^2.1.9"
     },

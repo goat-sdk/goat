@@ -30,6 +30,6 @@ const GetBalanceSchema = z.object({
         .describe("The address to check balance for. If not provided, uses the wallet's address"),
 });
 
-export class StakeParameters extends createToolParameters(StakeSchema) {}
-export class GetStakeInfoParameters extends createToolParameters(GetStakeInfoSchema) {}
+export class ExecuteGovernanceStakeParameters extends createToolParameters(StakeSchema) {}
+export class GetModeGovernanceInfoParameters extends createToolParameters(GetStakeInfoSchema) {}
 export class GetBalanceParameters extends createToolParameters(GetBalanceSchema) {}
