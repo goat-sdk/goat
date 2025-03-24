@@ -16,8 +16,15 @@ describe("NFT operations", () => {
                 description: z.string().describe("NFT description"),
                 image: z.string().describe("NFT image URL"),
                 recipient: z.string().optional().describe("Recipient address"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                name: z.string().describe("NFT name"),
+                description: z.string().describe("NFT description"),
+                image: z.string().describe("NFT image URL"),
+                recipient: z.string().optional().describe("Recipient address"),
+            });
+        }
 
         class NFTService {
             @Tool({
@@ -67,8 +74,14 @@ describe("NFT operations", () => {
                 tokenId: z.string().describe("NFT token ID"),
                 contractAddress: z.string().describe("NFT contract address"),
                 to: z.string().describe("Recipient address"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                tokenId: z.string().describe("NFT token ID"),
+                contractAddress: z.string().describe("NFT contract address"),
+                to: z.string().describe("Recipient address"),
+            });
+        }
 
         class NFTTransferService {
             @Tool({

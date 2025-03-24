@@ -16,8 +16,15 @@ describe("Token operations", () => {
                 outputMint: z.string().describe("The token address to swap to"),
                 amount: z.number().describe("Amount to swap"),
                 slippage: z.number().optional().describe("Slippage tolerance"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                inputMint: z.string().describe("The token address to swap from"),
+                outputMint: z.string().describe("The token address to swap to"),
+                amount: z.number().describe("Amount to swap"),
+                slippage: z.number().optional().describe("Slippage tolerance"),
+            });
+        }
 
         class SwapService {
             @Tool({
@@ -86,8 +93,14 @@ describe("Token operations", () => {
                 tokenAddress: z.string().describe("The token contract address"),
                 to: z.string().describe("Recipient address"),
                 amount: z.number().describe("Amount to transfer"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                tokenAddress: z.string().describe("The token contract address"),
+                to: z.string().describe("Recipient address"),
+                amount: z.number().describe("Amount to transfer"),
+            });
+        }
 
         class TokenTransferService {
             @Tool({

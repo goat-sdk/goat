@@ -16,8 +16,15 @@ describe("Plugin-specific operations", () => {
                 amount: z.number().describe("Amount to airdrop"),
                 recipients: z.array(z.string()).describe("Recipient addresses"),
                 enableLogs: z.boolean().optional().describe("Enable logs"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                mint: z.string().describe("Token mint address"),
+                amount: z.number().describe("Amount to airdrop"),
+                recipients: z.array(z.string()).describe("Recipient addresses"),
+                enableLogs: z.boolean().optional().describe("Enable logs"),
+            });
+        }
 
         class AirdropService {
             @Tool({
@@ -68,8 +75,15 @@ describe("Plugin-specific operations", () => {
                 outputMint: z.string().describe("Output token mint address"),
                 amount: z.number().describe("Amount to swap"),
                 slippage: z.number().optional().describe("Slippage tolerance in percentage"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                inputMint: z.string().describe("Input token mint address"),
+                outputMint: z.string().describe("Output token mint address"),
+                amount: z.number().describe("Amount to swap"),
+                slippage: z.number().optional().describe("Slippage tolerance in percentage"),
+            });
+        }
 
         class JupiterService {
             @Tool({
@@ -118,8 +132,13 @@ describe("Plugin-specific operations", () => {
             z.object({
                 coinId: z.string().describe("CoinGecko coin ID"),
                 vsCurrency: z.string().describe("Currency to get price in"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                coinId: z.string().describe("CoinGecko coin ID"),
+                vsCurrency: z.string().describe("Currency to get price in"),
+            });
+        }
 
         class CoinGeckoService {
             @Tool({

@@ -60,8 +60,13 @@ describe("Basic wallet operations", () => {
             z.object({
                 to: z.string().describe("Recipient address"),
                 amount: z.string().describe("Amount to transfer"),
-            }),
-        ) {}
+            })
+        ) {
+            static schema = z.object({
+                to: z.string().describe("Recipient address"),
+                amount: z.string().describe("Amount to transfer"),
+            });
+        }
 
         class TransferService {
             @Tool({
