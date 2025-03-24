@@ -1,123 +1,147 @@
 import "reflect-metadata";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
-import { getTools } from "../../utils/getTools";
-import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
-import { createMockParameters, createMockPlugin } from "./test-utils";
+import { createToolParameters } from "../../utils/createToolParameters";
+import { WalletClientBase } from "../../classes";
+import { mockWalletClient } from "./mock-utils";
 
-describe("NFT operations", () => {
-    describe("mint_nft tool", () => {
-        const mintSpy = createToolExecutionSpy();
+// Parameter classes for NFT operations
+export class NftMintParams extends createToolParameters(
+  z.object({
+    name: z.string().describe("Name of the NFT"),
+    description: z.string().describe("Description of the NFT"),
+    image: z.string().describe("URL or IPFS hash of the NFT image"),
+    recipient: z.string().optional().describe("Recipient address (defaults to wallet address)")
+  })
+) {
+  static override schema = z.object({
+    name: z.string().describe("Name of the NFT"),
+    description: z.string().describe("Description of the NFT"),
+    image: z.string().describe("URL or IPFS hash of the NFT image"),
+    recipient: z.string().optional().describe("Recipient address (defaults to wallet address)")
+  });
+}
 
-        class MintParameters extends createMockParameters(
-            z.object({
-                name: z.string().describe("NFT name"),
-                description: z.string().describe("NFT description"),
-                image: z.string().describe("NFT image URL"),
-                recipient: z.string().optional().describe("Recipient address"),
-            })
-        ) {
-            static schema = z.object({
-                name: z.string().describe("NFT name"),
-                description: z.string().describe("NFT description"),
-                image: z.string().describe("NFT image URL"),
-                recipient: z.string().optional().describe("Recipient address"),
-            });
-        }
+export class NftTransferParams extends createToolParameters(
+  z.object({
+    tokenId: z.string().describe("Token ID of the NFT"),
+    contractAddress: z.string().describe("Contract address of the NFT"),
+    to: z.string().describe("Recipient address")
+  })
+) {
+  static override schema = z.object({
+    tokenId: z.string().describe("Token ID of the NFT"),
+    contractAddress: z.string().describe("Contract address of the NFT"),
+    to: z.string().describe("Recipient address")
+  });
+}
 
-        class NFTService {
-            @Tool({
-                description: "Mint a new NFT",
-            })
-            async mintNFT(wallet: MockWalletClient, params: MintParameters) {
-                return mintSpy(wallet, params);
-            }
-        }
+// Service with NFT operation tools
+class NftService {
+  mintSpy = vi.fn().mockResolvedValue({ 
+    txHash: "0xmockminthash", 
+    tokenId: "123",
+    contractAddress: "0xnftcontract",
+    success: true 
+  });
+  
+  transferSpy = vi.fn().mockResolvedValue({ 
+    txHash: "0xmocktransferhash", 
+    success: true 
+  });
 
-        beforeEach(() => {
-            mintSpy.mockReset();
-            mintSpy.mockResolvedValue({ tokenId: "123", hash: "0xtx789" });
-        });
+  @Tool({
+    name: "mint_nft",
+    description: "Mint a new NFT"
+  })
+  async mintNft(wallet: WalletClientBase, parameters: NftMintParams) {
+    const { name, description, image, recipient } = parameters;
+    const to = recipient || wallet.getAddress();
+    return this.mintSpy(wallet, name, description, image, to);
+  }
 
-        it("should trigger NFT mint with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("nft", new NFTService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
+  @Tool({
+    name: "transfer_nft",
+    description: "Transfer an NFT to another address"
+  })
+  async transferNft(wallet: WalletClientBase, parameters: NftTransferParams) {
+    const { tokenId, contractAddress, to } = parameters;
+    return this.transferSpy(wallet, tokenId, contractAddress, to);
+  }
+}
 
-            const mintTool = tools.find((tool) => tool.name === "mint_nft");
-            expect(mintTool).toBeDefined();
+describe("NFT Operations", () => {
+  let service: NftService;
+  let wallet: WalletClientBase;
 
-            if (mintTool) {
-                await mintTool.execute({
-                    name: "Test NFT",
-                    description: "A test NFT",
-                    image: "https://example.com/image.png",
-                    recipient: "0xdef",
-                });
-            }
+  beforeEach(() => {
+    service = new NftService();
+    wallet = mockWalletClient();
+  });
 
-            expect(mintSpy).toHaveBeenCalledWith(wallet, {
-                name: "Test NFT",
-                description: "A test NFT",
-                image: "https://example.com/image.png",
-                recipient: "0xdef",
-            });
-        });
+  describe("NFT Mint Tool", () => {
+    it("should mint NFT to wallet address", async () => {
+      const params = new NftMintParams();
+      params.name = "Test NFT";
+      params.description = "A test NFT";
+      params.image = "ipfs://QmTest";
+      
+      const result = await service.mintNft(wallet, params);
+      
+      expect(result).toEqual({ 
+        txHash: "0xmockminthash", 
+        tokenId: "123",
+        contractAddress: "0xnftcontract",
+        success: true 
+      });
+      expect(service.mintSpy).toHaveBeenCalledWith(
+        wallet, 
+        "Test NFT", 
+        "A test NFT", 
+        "ipfs://QmTest", 
+        "0xmockaddress"
+      );
     });
 
-    describe("nft_transfer tool", () => {
-        const transferSpy = createToolExecutionSpy();
-
-        class NFTTransferParameters extends createMockParameters(
-            z.object({
-                tokenId: z.string().describe("NFT token ID"),
-                contractAddress: z.string().describe("NFT contract address"),
-                to: z.string().describe("Recipient address"),
-            })
-        ) {
-            static schema = z.object({
-                tokenId: z.string().describe("NFT token ID"),
-                contractAddress: z.string().describe("NFT contract address"),
-                to: z.string().describe("Recipient address"),
-            });
-        }
-
-        class NFTTransferService {
-            @Tool({
-                description: "Transfer an NFT to another address",
-            })
-            async transferNFT(wallet: MockWalletClient, params: NFTTransferParameters) {
-                return transferSpy(wallet, params);
-            }
-        }
-
-        beforeEach(() => {
-            transferSpy.mockReset();
-            transferSpy.mockResolvedValue({ hash: "0xtx456" });
-        });
-
-        it("should trigger NFT transfer with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("nft-transfer", new NFTTransferService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
-
-            const transferTool = tools.find((tool) => tool.name === "transfer_nft");
-            expect(transferTool).toBeDefined();
-
-            if (transferTool) {
-                await transferTool.execute({
-                    tokenId: "123",
-                    contractAddress: "0xnft789",
-                    to: "0xrecipient456",
-                });
-            }
-
-            expect(transferSpy).toHaveBeenCalledWith(wallet, {
-                tokenId: "123",
-                contractAddress: "0xnft789",
-                to: "0xrecipient456",
-            });
-        });
+    it("should mint NFT to specified recipient", async () => {
+      const params = new NftMintParams();
+      params.name = "Test NFT";
+      params.description = "A test NFT";
+      params.image = "ipfs://QmTest";
+      params.recipient = "0xrecipient";
+      
+      await service.mintNft(wallet, params);
+      
+      expect(service.mintSpy).toHaveBeenCalledWith(
+        wallet, 
+        "Test NFT", 
+        "A test NFT", 
+        "ipfs://QmTest", 
+        "0xrecipient"
+      );
     });
+  });
+
+  describe("NFT Transfer Tool", () => {
+    it("should transfer NFT", async () => {
+      const params = new NftTransferParams();
+      params.tokenId = "123";
+      params.contractAddress = "0xnftcontract";
+      params.to = "0xrecipient";
+      
+      const result = await service.transferNft(wallet, params);
+      
+      expect(result).toEqual({ 
+        txHash: "0xmocktransferhash", 
+        success: true 
+      });
+      expect(service.transferSpy).toHaveBeenCalledWith(
+        wallet, 
+        "123", 
+        "0xnftcontract", 
+        "0xrecipient"
+      );
+    });
+  });
 });

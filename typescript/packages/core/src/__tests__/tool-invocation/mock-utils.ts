@@ -1,52 +1,21 @@
-import { vi } from "vitest";
-import { Balance, Signature, WalletClientBase } from "../../classes/WalletClientBase";
-import { SolanaChain } from "../../types/Chain";
+import { WalletClientBase } from "../../classes";
+import { EvmChain } from "../../types/Chain";
 
-// Mock wallet client
-export class MockWalletClient extends WalletClientBase {
-    getChain(): SolanaChain {
-        return { type: "solana" };
-    }
-
-    getAddress() {
-        return "0xmockaddress";
-    }
-
-    async signMessage(message: string): Promise<Signature> {
-        return { signature: `mock-signature-for-${message}` };
-    }
-
-    async balanceOf(address: string): Promise<Balance> {
-        return {
-            decimals: 18,
-            symbol: "MOCK",
-            name: "Mock Token",
-            value: "100.0",
-            inBaseUnits: "100000000000000000000",
-        };
-    }
-
-    getCoreTools() {
-        return [];
-    }
+/**
+ * Creates a mock wallet client for testing
+ */
+export function mockWalletClient(): WalletClientBase {
+  return {
+    getAddress: () => "0xmockaddress",
+    getChain: () => ({ type: "evm", id: 1 } as EvmChain),
+    signMessage: async () => ({ signature: "0xmocksignature" }),
+    balanceOf: async () => ({
+      decimals: 18,
+      symbol: "ETH",
+      name: "Ethereum",
+      value: "100",
+      inBaseUnits: "100000000000000000000"
+    }),
+    getCoreTools: () => []
+  } as WalletClientBase;
 }
-
-// Mock fetch response helper
-export const mockFetchResponse = (response: unknown, status = 200, ok = true) => {
-    const mockResponse = {
-        ok,
-        status,
-        statusText: ok ? "OK" : "Error",
-        json: () => Promise.resolve(response),
-    } as Response;
-
-    if (!ok) {
-        vi.fn().mockRejectedValueOnce(new Error(`Error ${status}: ${JSON.stringify(response)}`));
-    } else {
-        vi.fn().mockResolvedValueOnce(mockResponse);
-    }
-    return vi.fn().mockResolvedValueOnce(mockResponse);
-};
-
-// Create execution spy
-export const createToolExecutionSpy = () => vi.fn();

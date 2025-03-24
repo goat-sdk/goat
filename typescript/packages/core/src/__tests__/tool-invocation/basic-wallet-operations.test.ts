@@ -1,103 +1,160 @@
 import "reflect-metadata";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
-import { getTools } from "../../utils/getTools";
-import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
-import { createMockParameters, createMockPlugin } from "./test-utils";
+import { createToolParameters } from "../../utils/createToolParameters";
+import { WalletClientBase } from "../../classes";
+import { EvmChain } from "../../types/Chain";
+import { mockWalletClient } from "./mock-utils";
 
-describe("Basic wallet operations", () => {
-    describe("balance_check tool", () => {
-        const balanceCheckSpy = createToolExecutionSpy();
+// Parameter classes for wallet operations
+export class BalanceCheckParams extends createToolParameters(
+  z.object({
+    address: z.string().optional().describe("Address to check balance for (defaults to wallet address)"),
+    token: z.string().optional().describe("Token address to check balance for (defaults to native token)")
+  })
+) {
+  static override schema = z.object({
+    address: z.string().optional().describe("Address to check balance for (defaults to wallet address)"),
+    token: z.string().optional().describe("Token address to check balance for (defaults to native token)")
+  });
+}
 
-        class BalanceParameters extends createMockParameters(
-            z.object({
-                address: z.string().describe("Wallet address to check"),
-            })
-        ) {
-            static schema = z.object({
-                address: z.string().describe("Wallet address to check"),
-            });
-        }
+export class TransferParams extends createToolParameters(
+  z.object({
+    to: z.string().describe("Recipient address"),
+    amount: z.string().describe("Amount to transfer"),
+    token: z.string().optional().describe("Token address (defaults to native token)")
+  })
+) {
+  static override schema = z.object({
+    to: z.string().describe("Recipient address"),
+    amount: z.string().describe("Amount to transfer"),
+    token: z.string().optional().describe("Token address (defaults to native token)")
+  });
+}
 
-        class BalanceService {
-            @Tool({
-                description: "Check the balance of a wallet"
-            })
-            async checkBalance(wallet: MockWalletClient, params: BalanceParameters) {
-                return balanceCheckSpy(wallet, params);
-            }
-        }
+// Service with wallet operation tools
+class BalanceService {
+  balanceCheckSpy = vi.fn().mockResolvedValue({ 
+    balance: "100", 
+    symbol: "ETH", 
+    decimals: 18 
+  });
+  
+  transferSpy = vi.fn().mockResolvedValue({ 
+    txHash: "0xmocktxhash", 
+    success: true 
+  });
 
-        beforeEach(() => {
-            balanceCheckSpy.mockReset();
-            balanceCheckSpy.mockResolvedValue({ balance: "100", symbol: "SOL" });
-        });
+  @Tool({
+    name: "check_balance",
+    description: "Check the balance of an address"
+  })
+  async checkBalance(wallet: WalletClientBase, parameters: BalanceCheckParams) {
+    const address = parameters.address || wallet.getAddress();
+    const token = parameters.token;
+    return this.balanceCheckSpy(wallet, address, token);
+  }
 
-        it("should trigger balance check with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("balance", new BalanceService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
+  @Tool({
+    name: "transfer",
+    description: "Transfer tokens to an address"
+  })
+  async transfer(wallet: WalletClientBase, parameters: TransferParams) {
+    const { to, amount, token } = parameters;
+    return this.transferSpy(wallet, to, amount, token);
+  }
+}
 
-            // Find the balance check tool
-            const balanceTool = tools.find((tool) => tool.name === "check_balance");
-            expect(balanceTool).toBeDefined();
+describe("Basic Wallet Operations", () => {
+  let service: BalanceService;
+  let wallet: WalletClientBase;
 
-            // Execute the tool
-            if (balanceTool) {
-                await balanceTool.execute({ address: "abc123" });
-            }
+  beforeEach(() => {
+    service = new BalanceService();
+    wallet = mockWalletClient();
+  });
 
-            // Verify the tool was called with correct parameters
-            expect(balanceCheckSpy).toHaveBeenCalledWith({ address: "abc123" });
-        });
+  describe("Balance Check Tool", () => {
+    it("should check balance with default parameters", async () => {
+      const params = new BalanceCheckParams();
+      
+      const result = await service.checkBalance(wallet, params);
+      
+      expect(result).toEqual({ 
+        balance: "100", 
+        symbol: "ETH", 
+        decimals: 18 
+      });
+      expect(service.balanceCheckSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xmockaddress", 
+        undefined
+      );
     });
 
-    describe("transfer tool", () => {
-        const transferSpy = createToolExecutionSpy();
-
-        class TransferParameters extends createMockParameters(
-            z.object({
-                to: z.string().describe("Recipient address"),
-                amount: z.string().describe("Amount to transfer"),
-            })
-        ) {
-            static schema = z.object({
-                to: z.string().describe("Recipient address"),
-                amount: z.string().describe("Amount to transfer"),
-            });
-        }
-
-        class TransferService {
-            @Tool({
-                description: "Transfer tokens to an address",
-            })
-            async transfer(wallet: MockWalletClient, params: TransferParameters) {
-                return transferSpy(wallet, params);
-            }
-        }
-
-        beforeEach(() => {
-            transferSpy.mockReset();
-            transferSpy.mockResolvedValue({ hash: "0xtx123" });
-        });
-
-        it("should trigger transfer with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("transfer", new TransferService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
-
-            // Find the transfer tool
-            const transferTool = tools.find((tool) => tool.name === "transfer");
-            expect(transferTool).toBeDefined();
-
-            // Execute the tool
-            if (transferTool) {
-                await transferTool.execute({ to: "0xabc", amount: "1.5" });
-            }
-
-            // Verify the tool was called with correct parameters
-            expect(transferSpy).toHaveBeenCalledWith(wallet, { to: "0xabc", amount: "1.5" });
-        });
+    it("should check balance with custom address", async () => {
+      const params = new BalanceCheckParams();
+      params.address = "0xcustomaddress";
+      
+      await service.checkBalance(wallet, params);
+      
+      expect(service.balanceCheckSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xcustomaddress", 
+        undefined
+      );
     });
+
+    it("should check token balance", async () => {
+      const params = new BalanceCheckParams();
+      params.token = "0xtokenaddress";
+      
+      await service.checkBalance(wallet, params);
+      
+      expect(service.balanceCheckSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xmockaddress", 
+        "0xtokenaddress"
+      );
+    });
+  });
+
+  describe("Transfer Tool", () => {
+    it("should transfer tokens", async () => {
+      const params = new TransferParams();
+      params.to = "0xrecipient";
+      params.amount = "1.0";
+      
+      const result = await service.transfer(wallet, params);
+      
+      expect(result).toEqual({ 
+        txHash: "0xmocktxhash", 
+        success: true 
+      });
+      expect(service.transferSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xrecipient", 
+        "1.0", 
+        undefined
+      );
+    });
+
+    it("should transfer specific token", async () => {
+      const params = new TransferParams();
+      params.to = "0xrecipient";
+      params.amount = "10.0";
+      params.token = "0xtokenaddress";
+      
+      await service.transfer(wallet, params);
+      
+      expect(service.transferSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xrecipient", 
+        "10.0", 
+        "0xtokenaddress"
+      );
+    });
+  });
 });

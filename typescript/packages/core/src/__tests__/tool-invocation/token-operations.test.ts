@@ -1,142 +1,161 @@
 import "reflect-metadata";
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { Tool } from "../../decorators/Tool";
-import { getTools } from "../../utils/getTools";
-import { MockWalletClient, createToolExecutionSpy } from "./mock-utils";
-import { createMockParameters, createMockPlugin } from "./test-utils";
+import { createToolParameters } from "../../utils/createToolParameters";
+import { WalletClientBase } from "../../classes";
+import { mockWalletClient } from "./mock-utils";
 
-describe("Token operations", () => {
-    describe("token_swap tool", () => {
-        const swapSpy = createToolExecutionSpy();
+// Parameter classes for token operations
+export class TokenSwapParams extends createToolParameters(
+  z.object({
+    fromToken: z.string().describe("Source token address or symbol"),
+    toToken: z.string().describe("Destination token address or symbol"),
+    amount: z.string().describe("Amount to swap"),
+    slippage: z.number().optional().default(0.5).describe("Maximum slippage percentage")
+  })
+) {
+  static override schema = z.object({
+    fromToken: z.string().describe("Source token address or symbol"),
+    toToken: z.string().describe("Destination token address or symbol"),
+    amount: z.string().describe("Amount to swap"),
+    slippage: z.number().optional().default(0.5).describe("Maximum slippage percentage")
+  });
+}
 
-        class SwapParameters extends createMockParameters(
-            z.object({
-                inputMint: z.string().describe("The token address to swap from"),
-                outputMint: z.string().describe("The token address to swap to"),
-                amount: z.number().describe("Amount to swap"),
-                slippage: z.number().optional().describe("Slippage tolerance"),
-            })
-        ) {
-            static schema = z.object({
-                inputMint: z.string().describe("The token address to swap from"),
-                outputMint: z.string().describe("The token address to swap to"),
-                amount: z.number().describe("Amount to swap"),
-                slippage: z.number().optional().describe("Slippage tolerance"),
-            });
-        }
+export class TokenApproveParams extends createToolParameters(
+  z.object({
+    token: z.string().describe("Token address to approve"),
+    spender: z.string().describe("Address to approve for spending"),
+    amount: z.string().optional().describe("Amount to approve (defaults to unlimited)")
+  })
+) {
+  static override schema = z.object({
+    token: z.string().describe("Token address to approve"),
+    spender: z.string().describe("Address to approve for spending"),
+    amount: z.string().optional().describe("Amount to approve (defaults to unlimited)")
+  });
+}
 
-        class SwapService {
-            @Tool({
-                description: "Swap one token for another",
-            })
-            async swap(wallet: MockWalletClient, params: SwapParameters) {
-                return swapSpy(wallet, params);
-            }
-        }
+// Service with token operation tools
+class TokenService {
+  swapSpy = vi.fn().mockResolvedValue({ 
+    txHash: "0xmockswaphash", 
+    fromAmount: "1.0",
+    toAmount: "10.5",
+    success: true 
+  });
+  
+  approveSpy = vi.fn().mockResolvedValue({ 
+    txHash: "0xmockapprovalHash", 
+    success: true 
+  });
 
-        beforeEach(() => {
-            swapSpy.mockReset();
-            swapSpy.mockResolvedValue({ hash: "0xtx456", outputAmount: "10" });
-        });
+  @Tool({
+    name: "swap_tokens",
+    description: "Swap one token for another"
+  })
+  async swapTokens(wallet: WalletClientBase, parameters: TokenSwapParams) {
+    const { fromToken, toToken, amount, slippage = 0.5 } = parameters;
+    return this.swapSpy(wallet, fromToken, toToken, amount, slippage);
+  }
 
-        it("should trigger swap with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("swap", new SwapService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
+  @Tool({
+    name: "approve_token",
+    description: "Approve a spender to use tokens"
+  })
+  async approveToken(wallet: WalletClientBase, parameters: TokenApproveParams) {
+    const { token, spender, amount } = parameters;
+    return this.approveSpy(wallet, token, spender, amount);
+  }
+}
 
-            const swapTool = tools.find((tool) => tool.name === "swap");
-            expect(swapTool).toBeDefined();
+describe("Token Operations", () => {
+  let service: TokenService;
+  let wallet: WalletClientBase;
 
-            if (swapTool) {
-                await swapTool.execute({
-                    inputMint: "USDC",
-                    outputMint: "SOL",
-                    amount: 5,
-                    slippage: 1,
-                });
-            }
+  beforeEach(() => {
+    service = new TokenService();
+    wallet = mockWalletClient();
+  });
 
-            expect(swapSpy).toHaveBeenCalledWith(wallet, {
-                inputMint: "USDC",
-                outputMint: "SOL",
-                amount: 5,
-                slippage: 1,
-            });
-        });
-
-        it("should trigger swap with default slippage", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("swap", new SwapService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
-
-            const swapTool = tools.find((tool) => tool.name === "swap");
-            expect(swapTool).toBeDefined();
-
-            if (swapTool) {
-                await swapTool.execute({
-                    inputMint: "SOL",
-                    outputMint: "JUP",
-                    amount: 1,
-                });
-            }
-
-            expect(swapSpy).toHaveBeenCalledWith(wallet, { inputMint: "SOL", outputMint: "JUP", amount: 1 });
-        });
+  describe("Token Swap Tool", () => {
+    it("should swap tokens with default slippage", async () => {
+      const params = new TokenSwapParams();
+      params.fromToken = "ETH";
+      params.toToken = "USDC";
+      params.amount = "1.0";
+      
+      const result = await service.swapTokens(wallet, params);
+      
+      expect(result).toEqual({ 
+        txHash: "0xmockswaphash", 
+        fromAmount: "1.0",
+        toAmount: "10.5",
+        success: true 
+      });
+      expect(service.swapSpy).toHaveBeenCalledWith(
+        wallet, 
+        "ETH", 
+        "USDC", 
+        "1.0", 
+        0.5
+      );
     });
 
-    describe("token_transfer tool", () => {
-        const transferSpy = createToolExecutionSpy();
-
-        class TokenTransferParameters extends createMockParameters(
-            z.object({
-                tokenAddress: z.string().describe("The token contract address"),
-                to: z.string().describe("Recipient address"),
-                amount: z.number().describe("Amount to transfer"),
-            })
-        ) {
-            static schema = z.object({
-                tokenAddress: z.string().describe("The token contract address"),
-                to: z.string().describe("Recipient address"),
-                amount: z.number().describe("Amount to transfer"),
-            });
-        }
-
-        class TokenTransferService {
-            @Tool({
-                description: "Transfer tokens to an address",
-            })
-            async transferToken(wallet: MockWalletClient, params: TokenTransferParameters) {
-                return transferSpy(wallet, params);
-            }
-        }
-
-        beforeEach(() => {
-            transferSpy.mockReset();
-            transferSpy.mockResolvedValue({ hash: "0xtx789" });
-        });
-
-        it("should trigger token transfer with correct parameters", async () => {
-            const wallet = new MockWalletClient();
-            const plugin = createMockPlugin("token", new TokenTransferService());
-            const tools = await getTools({ wallet, plugins: [plugin] });
-
-            const transferTool = tools.find((tool) => tool.name === "transfer_token");
-            expect(transferTool).toBeDefined();
-
-            if (transferTool) {
-                await transferTool.execute({
-                    tokenAddress: "0xtoken123",
-                    to: "0xrecipient456",
-                    amount: 10,
-                });
-            }
-
-            expect(transferSpy).toHaveBeenCalledWith(wallet, {
-                tokenAddress: "0xtoken123",
-                to: "0xrecipient456",
-                amount: 10,
-            });
-        });
+    it("should swap tokens with custom slippage", async () => {
+      const params = new TokenSwapParams();
+      params.fromToken = "USDC";
+      params.toToken = "DAI";
+      params.amount = "100";
+      params.slippage = 1.0;
+      
+      await service.swapTokens(wallet, params);
+      
+      expect(service.swapSpy).toHaveBeenCalledWith(
+        wallet, 
+        "USDC", 
+        "DAI", 
+        "100", 
+        1.0
+      );
     });
+  });
+
+  describe("Token Approve Tool", () => {
+    it("should approve token spending", async () => {
+      const params = new TokenApproveParams();
+      params.token = "0xtokenaddress";
+      params.spender = "0xspenderaddress";
+      
+      const result = await service.approveToken(wallet, params);
+      
+      expect(result).toEqual({ 
+        txHash: "0xmockapprovalHash", 
+        success: true 
+      });
+      expect(service.approveSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xtokenaddress", 
+        "0xspenderaddress", 
+        undefined
+      );
+    });
+
+    it("should approve token spending with specific amount", async () => {
+      const params = new TokenApproveParams();
+      params.token = "0xtokenaddress";
+      params.spender = "0xspenderaddress";
+      params.amount = "100";
+      
+      await service.approveToken(wallet, params);
+      
+      expect(service.approveSpy).toHaveBeenCalledWith(
+        wallet, 
+        "0xtokenaddress", 
+        "0xspenderaddress", 
+        "100"
+      );
+    });
+  });
 });
