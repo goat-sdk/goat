@@ -37,7 +37,7 @@ export function createMockWallet(overrides?: Partial<WalletClientBase>): WalletC
  * @param methods Object containing mock methods to include in the service
  * @returns A mock service object with the specified methods
  */
-export function createMockService<T extends Record<string, any>>(methods: T): T {
+export function createMockService<T extends Record<string, unknown>>(methods: T): T {
   return methods;
 }
 
@@ -48,7 +48,7 @@ export function createMockService<T extends Record<string, any>>(methods: T): T 
  * @throws Error if any required field is missing
  */
 export function validateParams(
-  params: Record<string, any>,
+  params: Record<string, unknown>,
   requiredFields: string[]
 ): void {
   for (const field of requiredFields) {
@@ -67,8 +67,8 @@ export function validateParams(
  */
 export function mockExtractParamsFromPrompt(
   prompt: string,
-  paramMapping: Record<string, (prompt: string) => Record<string, any>>
-): Record<string, any> {
+  paramMapping: Record<string, (prompt: string) => Record<string, unknown>>
+): Record<string, unknown> {
   // Find the matching pattern
   for (const pattern in paramMapping) {
     if (prompt.includes(pattern)) {
