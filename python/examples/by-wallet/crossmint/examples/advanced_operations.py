@@ -7,7 +7,6 @@ from solders.pubkey import Pubkey
 from solders.message import Message
 from goat_wallets.crossmint.api_client import CrossmintWalletsAPI
 from goat_wallets.crossmint.parameters import (
-    DelegatedSignerPermission,
     SolanaSmartWalletTransactionParams
 )
 
