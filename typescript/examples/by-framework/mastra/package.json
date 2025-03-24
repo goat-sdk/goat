@@ -11,7 +11,7 @@
     "license": "MIT",
     "dependencies": {
         "@ai-sdk/openai": "~1.0.4",
-        "@goat-sdk/adapter-mastra": "0.1.0",
+        "@goat-sdk/adapter-mastra": "0.1.1",
         "@goat-sdk/core": "0.4.9",
         "@goat-sdk/plugin-erc20": "0.2.14",
         "@goat-sdk/wallet-evm": "0.2.11",
