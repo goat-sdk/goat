@@ -15,7 +15,7 @@ export class OpengradientService {
     private getClient(clientConfig: OpenGradientConfig): Client {
         if (!this.client) {
             this.client = new Client({
-                privateKey: clientConfig.privateKey, // Use environment variable in production
+                privateKey: clientConfig.privateKey,
             });
         }
         return this.client;
