@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, TypedDict
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from goat.classes.tool_base import ToolBase, create_tool
 from goat.types.chain import Chain
@@ -11,7 +11,7 @@ class EmptyParams(BaseModel):
 
 
 class BalanceParams(BaseModel):
-    address: str
+    address: str = Field(description="The wallet address to check the balance of")
 
 
 class Signature(TypedDict):

@@ -47,7 +47,7 @@ class TransferFromParameters(BaseModel):
         description="The address of the token to get the balance of"
     )
     from_: str = Field(
-        alias="from", description="The address to transfer the token from"
+        description="The address to transfer the token from"
     )
     to: str = Field(description="The address to transfer the token to")
     amount: str = Field(description="The amount of tokens to transfer in base units")
