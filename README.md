@@ -158,7 +158,7 @@ GOAT is free software, MIT licensed.
 | Hedgey | Claim rewards on Hedgey | [@goat-sdk/plugin-hedgey](https://www.npmjs.com/package/@goat-sdk/plugin-hedgey) |
 | Ionic | Borrow and lend on Ionic | [@goat-sdk/plugin-ionic](https://www.npmjs.com/package/@goat-sdk/plugin-ionic) |
 | Ironclad | Create positions on Ironclad | [@goat-sdk/plugin-ironclad](https://www.npmjs.com/package/@goat-sdk/plugin-ironclad) |
-| Irys | Deploy Irys plugins | [@goat-sdk/plugin-irys-xyz](https://www.npmjs.com/package/@goat-sdk/plugin-irys-xyz) |
+| Irys | Interact with Irys datachain | [@goat-sdk/plugin-irys](https://www.npmjs.com/package/@goat-sdk/plugin-irys) |
 | JSON RPC | Call any JSON RPC endpoint |[@goat-sdk/plugin-jsonrpc](https://www.npmjs.com/package/@goat-sdk/plugin-jsonrpc) | [goat-sdk-plugin-jsonrpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jsonrpc) |
 | Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter) |
 | KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
