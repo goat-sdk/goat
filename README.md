@@ -121,6 +121,7 @@ GOAT is free software, MIT licensed.
 - **By framework**
   - [Langchain](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/langchain)
   - [OpenAI Agents SDK](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/openai-agents-sdk)
+  - [AG2](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/ag2)
   - [GAME Agent](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
   - [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py)
 - **By wallet**
@@ -220,6 +221,7 @@ GOAT is free software, MIT licensed.
 | LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
 | Mastra | [@goat-sdk/adapter-mastra](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/mastra) |
 | OpenAI Agents SDK |  | [goat-sdk-adapter-openai-agents-sdk](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/openai_agents_sdk) |
+| AG2 |  | [goat-sdk-adapter-ag2](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/ag2) |
 | Model Context Protocol | [@goat-sdk/adapter-model-context-protocol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/model-context-protocol) |
 | Eliza | [@elizaos/plugin-goat](https://github.com/elizaos-plugins/plugin-goat) |
 | GAME | [game-node](https://github.com/game-by-virtuals/game-node/tree/main/plugins/onChainActionsPlugin) | [game-python](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
