@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "solana-purchase-on-amazon"
+version = "0.1.0"
+description = "Example of purchasing Amazon products with Crossmint on Solana"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+goat-sdk = "^0.1.0"
+goat-sdk-plugin-spl-token = "^0.1.0"
+goat-sdk-plugin-crossmint-headless-checkout = { path = "../../../src/plugins/crossmint-headless-checkout", develop = true }
+goat-sdk-wallet-solana = "^0.1.0"
+goat-sdk-adapter-langchain = "^0.1.0"
+python-dotenv = "^1.0.0"
+langchain-openai = "^0.0.2"
+solders = "^0.20.0"
+solana = "^0.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
