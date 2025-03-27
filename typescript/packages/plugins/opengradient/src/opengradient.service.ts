@@ -1,16 +1,13 @@
 import { Tool } from "@goat-sdk/core";
 import { WalletClientBase } from "@goat-sdk/core";
-import { Client } from "ts-sdk";
-import {
-    ClientConfigParameters,
-    LLMChatParameters,
-    LLMCompletionParameters,
-    ModelInferenceParameters,
-} from "./parameters";
+import { Client } from "opengradient-sdk";
+import { LLMChatParameters, LLMCompletionParameters, ModelInferenceParameters } from "./parameters";
 import { OpenGradientConfig } from "./types";
 
 export class OpengradientService {
     private client: Client | null = null;
+
+    constructor(private config: OpenGradientConfig) {}
 
     private getClient(clientConfig: OpenGradientConfig): Client {
         if (!this.client) {
@@ -25,12 +22,8 @@ export class OpengradientService {
         name: "opengradient_model_inference",
         description: "Run inference on a machine learning model using OpenGradient",
     })
-    async runModelInference(
-        walletClient: WalletClientBase,
-        parameters: ModelInferenceParameters,
-        clientConfig: ClientConfigParameters,
-    ) {
-        const client = this.getClient(clientConfig);
+    async runModelInference(walletClient: WalletClientBase, parameters: ModelInferenceParameters) {
+        const client = this.getClient(this.config);
         const [txHash, modelOutput] = await client.infer(
             parameters.modelCid,
             parameters.inferenceMode,
@@ -47,12 +40,8 @@ export class OpengradientService {
         name: "opengradient_llm_completion",
         description: "Generate text completions using an LLM through OpenGradient",
     })
-    async runLLMCompletion(
-        walletClient: WalletClientBase,
-        parameters: LLMCompletionParameters,
-        clientConfig: ClientConfigParameters,
-    ) {
-        const client = this.getClient(clientConfig);
+    async runLLMCompletion(walletClient: WalletClientBase, parameters: LLMCompletionParameters) {
+        const client = this.getClient(this.config);
         const [txHash, completion] = await client.llmCompletion(
             parameters.modelCid,
             parameters.inferenceMode,
@@ -72,12 +61,8 @@ export class OpengradientService {
         name: "opengradient_llm_chat",
         description: "Interact with an LLM using a chat interface through OpenGradient",
     })
-    async runLLMChat(
-        walletClient: WalletClientBase,
-        parameters: LLMChatParameters,
-        clientConfig: ClientConfigParameters,
-    ) {
-        const client = this.getClient(clientConfig);
+    async runLLMChat(walletClient: WalletClientBase, parameters: LLMChatParameters) {
+        const client = this.getClient(this.config);
         const [txHash, finishReason, message] = await client.llmChat(
             parameters.modelCid,
             parameters.inferenceMode,

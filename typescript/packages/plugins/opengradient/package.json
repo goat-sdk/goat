@@ -23,7 +23,7 @@
     "keywords": ["ai", "agents", "web3"],
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "ts-sdk": "github:OpenGradient/ts-sdk",
+        "opengradient-sdk": "1.0.0",
         "web3": "4.16.0",
         "zod": "catalog:"
     },

@@ -8,7 +8,7 @@ export type OpengradientPluginCtorParams = {
 
 export class OpengradientPlugin extends PluginBase {
     constructor({ config }: OpengradientPluginCtorParams) {
-        super("opengradient", [new OpengradientService()]);
+        super("opengradient", [new OpengradientService(config)]);
     }
 
     supportsChain = (_chain: Chain) => true;
