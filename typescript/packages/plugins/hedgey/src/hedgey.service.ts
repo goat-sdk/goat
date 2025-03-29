@@ -35,14 +35,14 @@ export class HedgeyService {
         walletClient: EVMWalletClient,
         parameters: ClaimStakingRewardsParams,
     ): Promise<ClaimHedgeyRewardsResponse[]> {
+        const userAddress = walletClient.getAddress();
+        const network = walletClient.getChain();
+        if (!network?.id) {
+            throw new Error("Unable to determine chain ID from wallet client");
+        }
         try {
             const campaignIds = await this.fetchCampaignIds();
 
-            const userAddress = walletClient.getAddress();
-            const network = walletClient.getChain();
-            if (!network?.id) {
-                throw new Error("Unable to determine chain ID from wallet client");
-            }
             if (parameters.campaignIds && parameters.campaignIds.length > 0) {
                 campaignIds.push(...parameters.campaignIds);
             }
@@ -89,7 +89,7 @@ export class HedgeyService {
 
             return results;
         } catch (error) {
-            throw new Error(`Failed to claim tokens: ${getErrorMessage(error)}`);
+            return [{ campaignId: "", detail: `Failed to claim tokens: ${getErrorMessage(error)}`, chain: network.id }];
         }
     }
 
