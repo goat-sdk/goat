@@ -14,7 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
-        "axios": "1.8.3",
+        "axios": "1.8.4",
         "viem": "catalog:",
         "zod": "catalog:"
     },
