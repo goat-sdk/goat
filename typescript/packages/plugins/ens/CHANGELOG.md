@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-ens
 
+## 0.1.4
+
+### Patch Changes
+
+- 72bd15f: Allow to specify chain id
+
 ## 0.1.3
 
 ### Patch Changes
