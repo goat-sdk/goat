@@ -2,12 +2,12 @@
 <img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
-# AG2
+# CrewAI
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to allow an [AG2](https://github.com/ag2ai/ag2) agent to **send and receive ETH and ERC-20 tokens** on EVM networks. This example can be implemented with any other EVM network by changing the chain and RPC URL.
+This example demonstrates how to use GOAT to allow a [CrewAI](https://github.com/crewAIInc/crewAI) agent to **query Solana SPL token balances** using GOAT tools. This example uses the Solana network and the `spl-token` plugin.
 
-You can use this example with any other agent framework, chain, and wallet of your choice.
+You can adapt this example for other agent frameworks, chains, wallets, and GOAT plugins.
 
 ## Setup
 1. Clone the repository:
@@ -17,16 +17,16 @@ git clone https://github.com/goat-sdk/goat.git
 
 2. Go to the example directory:
 ```bash
-cd python/examples/by-framework/ag2
+cd python/examples/by-framework/crewai
 ```
 
 3. Copy the `.env.template` and populate with your values:
 ```bash
 cp .env.template .env
 ```
-- `OPENAI_API_KEY`
-- `WALLET_PRIVATE_KEY`
-- `RPC_PROVIDER_URL`
+- `OPENAI_API_KEY` (Required by CrewAI's default configuration)
+- `SOLANA_WALLET_SEED` (Your Solana wallet's private key as a base58 string)
+- `SOLANA_RPC_ENDPOINT` (Your Solana RPC provider URL)
 
 4. Install dependencies:
 ```bash
@@ -39,12 +39,15 @@ poetry install
 poetry run python example.py
 ```
 
-2. The example script demonstrates (non-interactive):
-- Checking ERC-20 token balances
-- Registered AG2 tools for interacting with ETH and ERC-20 tokens
-- Interaction between a crypto agent and an executor agent
+2. The example script demonstrates (interactive):
+- Setting up a Solana wallet using GOAT.
+- Initializing the `spl-token` GOAT plugin.
+- Generating CrewAI-compatible tools using the `goat-sdk-adapter-crewai`.
+- Defining a CrewAI agent (`Solana SPL Token Analyst`) equipped with the GOAT tools.
+- Defining a CrewAI task to answer user questions about SPL tokens.
+- Running an interactive loop where you can ask the agent questions (e.g., "What is the balance of USDC for my wallet?"). The agent will use the GOAT tools to find the answer.
 
-The script runs with a predefined query to check the balance of a specific token.
+Type 'quit' in the interactive prompt to exit the script.
 
 ### Agent Wallets
 [Crossmint](https://docs.crossmint.com/wallets/quickstarts/agent-wallets) offers one of the most advanced solutions for agent developers and launchpads: [Agent Wallets](https://docs.crossmint.com/wallets/quickstarts/agent-wallets).
