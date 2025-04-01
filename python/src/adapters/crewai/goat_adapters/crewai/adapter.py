@@ -1,5 +1,6 @@
 from typing import List, Any
 from goat import WalletClientBase, get_tools
+import traceback
 
 # Add CrewAI and Pydantic v2 imports
 from crewai.tools import BaseTool
@@ -27,6 +28,7 @@ class GoatToolWrapper(BaseTool):
             'description': goat_tool.description,
             'args_schema': goat_tool.parameters,
             'goat_tool': goat_tool,
+            'cache_function': lambda _args=None, _result=None: False, # never cache tools
             'result_as_answer': False,
         }
         super().__init__(**basetool_spec)
@@ -40,7 +42,9 @@ class GoatToolWrapper(BaseTool):
         try:
             return self.goat_tool.execute(kwargs)
         except Exception as e:
-            return f"Error executing tool {self.name}: {e}"
+            # Get the full traceback
+            error_details = traceback.format_exc()
+            raise Exception(f"Error executing tool {self.name}: {error_details}")
 
 # Rename and adapt the function to return CrewAI tools
 def get_crewai_tools(wallet: WalletClientBase, plugins: List[Any]) -> List[BaseTool]:
