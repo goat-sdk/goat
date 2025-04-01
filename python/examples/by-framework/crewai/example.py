@@ -38,7 +38,7 @@ try:
     wallet = solana(client, keypair)
 
     spl_token_plugin = spl_token(SplTokenPluginOptions(
-        network="devnet", # Make sure this matches your .env settings and seed key network
+        network="mainnet", # Make sure this matches your .env settings and seed key network
         tokens=SPL_TOKENS
     ))
 
@@ -71,6 +71,7 @@ crypto_analyst = Agent(
   ),
   verbose=True,
   allow_delegation=False,
+
   tools=goat_crewai_tools # Pass the generated GOAT tools
   # Assumes OPENAI_API_KEY is set in the environment
 )
