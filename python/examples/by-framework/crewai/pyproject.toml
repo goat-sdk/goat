@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "goat-sdk-example-by-framework-ag2"
+name = "goat-sdk-example-by-framework-crewai"
 version = "0.1.0"
-description = "GOAT example for AG2 with web3.py"
+description = "GOAT example for CrewAI with Solana SPL token plugin"
 authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
 keywords = ["goat", "sdk", "web3", "agents", "ai"]
