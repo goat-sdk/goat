@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-hedgey
 
+## 0.1.3
+
+### Patch Changes
+
+- 9cb1f7b: Improve error handling
+
 ## 0.1.2
 
 ### Patch Changes
