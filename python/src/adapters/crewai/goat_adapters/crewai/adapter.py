@@ -1,11 +1,10 @@
 from typing import List, Any
-from goat import WalletClientBase, get_tools
 import traceback
-
 from crewai.tools import BaseTool
+from goat.classes.plugin_base import PluginBase
 from litellm import ConfigDict
 from pydantic import BaseModel, Field
-
+from goat import WalletClientBase, get_tools
 from goat.classes.tool_base import ToolBase
 
 class GoatToolWrapper(BaseTool):
@@ -42,7 +41,7 @@ class GoatToolWrapper(BaseTool):
             error_details = traceback.format_exc()
             raise Exception(f"Error executing tool {self.name}: {error_details}")
 
-def get_crewai_tools(wallet: WalletClientBase, plugins: List[Any]) -> List[BaseTool]:
+def get_crewai_tools(wallet: WalletClientBase, plugins: List[PluginBase]) -> List[BaseTool]:
     """Create CrewAI-compatible tools from GOAT tools.
 
     Args:
