@@ -61,6 +61,12 @@ def test_solana_transaction():
 
 
 @pytest.fixture
+def test_solana_transaction_base64():
+    """Fixture providing test Solana transaction encoded in base64."""
+    return "AVXo5X7UNzpuOmYzkZ+fqHDGiRLTSMlWlUCcZKzEV5CIKlrdvZa3/2GrJJfPrXgZqJbYDaGiOnP99tI/sRJfiwwBAAEDRQ/n5E5CLbMbHanUG3+iVvBAWZu0WFM6NoB5xfybQ7kNwwgfIhv6odn2qTUu/gOisDtaeCW1qlwW/gx3ccr/4wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvsInicc+E3IZzLqeA+iM5cn9kSaeFzOuClz1Z2kZQy0BAgIAAQwCAAAAAPIFKgEAAAA="
+
+
+@pytest.fixture
 def solana_connection():
     """Fixture providing Solana RPC client connection."""
     return SolanaClient("https://api.devnet.solana.com")
