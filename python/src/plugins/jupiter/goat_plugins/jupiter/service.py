@@ -153,7 +153,7 @@ class JupiterService:
 
                     # Send the raw transaction directly
                     result = wallet_client.send_raw_transaction(
-                        swap_transaction)
+                        base58_tx)
 
                     return {
                         "hash": result["hash"]
