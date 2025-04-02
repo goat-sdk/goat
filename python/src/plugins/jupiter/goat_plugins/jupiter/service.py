@@ -1,4 +1,5 @@
 import base64
+import base58
 import aiohttp
 from goat.decorators.tool import Tool
 from goat_wallets.solana.wallet import SolanaTransaction
@@ -36,14 +37,16 @@ class JupiterService:
                 async with session.get(f"{self.base_url}/quote", params=request_params) as response:
                     response_text = await response.text()
                     print(f"Got response: {response_text}")
-                    
+
                     if response.status != 200:
                         try:
                             error_data = await response.json()
-                            raise Exception(f"Failed to get quote: {error_data.get('error', 'Unknown error')}")
+                            raise Exception(
+                                f"Failed to get quote: {error_data.get('error', 'Unknown error')}")
                         except:
-                            raise Exception(f"Failed to get quote: {response_text}")
-                    
+                            raise Exception(
+                                f"Failed to get quote: {response_text}")
+
                     response_data = await response.json()
                     QuoteResponse.model_validate(response_data)
 
@@ -68,7 +71,7 @@ class JupiterService:
         try:
             # First get the quote
             quote_response = await self.get_quote(parameters)
-            
+
             # Transform quote response following the same structure as in TypeScript
             transformed_quote_response = {
                 "inputMint": quote_response.get("inputMint"),
@@ -98,7 +101,8 @@ class JupiterService:
             }
 
             # Remove None values from the transformed response
-            transformed_quote_response = {k: v for k, v in transformed_quote_response.items() if v is not None}
+            transformed_quote_response = {
+                k: v for k, v in transformed_quote_response.items() if v is not None}
 
             # Add optional fields if they exist
             for field in ["computedAutoSlippage", "contextSlot", "timeTaken"]:
@@ -129,26 +133,31 @@ class JupiterService:
                 "useTokenLedger": False,
                 "destinationTokenAccount": None  # Can be specified if needed
             }
-            
+
             # Get swap transaction
             async with aiohttp.ClientSession(timeout=self._timeout) as session:
                 async with session.post(f"{self.base_url}/swap", json=swap_request) as response:
                     if response.status != 200:
                         error_data = await response.json()
-                        raise Exception(f"Failed to create swap transaction: {error_data.get('error', 'Unknown error')}")
-                    
+                        raise Exception(
+                            f"Failed to create swap transaction: {error_data.get('error', 'Unknown error')}")
+
                     swap_response = await response.json()
                     swap_transaction = swap_response.get("swapTransaction")
-                    
+
                     if not swap_transaction:
                         raise Exception("No swap transaction returned")
-                    
+
+                    base58_tx = base58.b58encode(
+                        base64.b64decode(swap_transaction)).decode()
+
                     # Send the raw transaction directly
-                    result = wallet_client.send_raw_transaction(swap_transaction)
-                    
+                    result = wallet_client.send_raw_transaction(
+                        swap_transaction)
+
                     return {
                         "hash": result["hash"]
                     }
-                    
+
         except Exception as error:
             raise Exception(f"Failed to swap tokens: {error}")

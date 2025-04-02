@@ -23,6 +23,7 @@ packages = [
 python = "^3.10"
 goat-sdk = "^0.1.0"
 goat-sdk-wallet-solana = "^0.1.1"
+base58 = ">=2.1"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"

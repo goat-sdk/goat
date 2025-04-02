@@ -1,6 +1,7 @@
 from time import sleep
 from typing import Dict, List, Optional, Any, TypedDict, Union
 import base58
+import base64
 import nacl.signing
 from solders.instruction import Instruction
 from solders.keypair import Keypair
@@ -211,6 +212,16 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         signer: Optional[Keypair] = None,
         required_signers: Optional[List[str]] = None,
     ) -> Dict[str, str]:
+        try:
+            base58.b58decode(transaction)
+        except Exception:
+            print("Transaction is not base58 encoded, trying to decode as base64")
+            try:
+                transaction = base64.b64decode(transaction)
+            except Exception:
+                raise ValueError(
+                    "Transaction is not base58 or base64 encoded")
+
         params = SolanaSmartWalletTransactionParams(
             transaction=transaction,
             required_signers=required_signers,
