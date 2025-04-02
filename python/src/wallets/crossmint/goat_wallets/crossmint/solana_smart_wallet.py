@@ -217,7 +217,8 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         except Exception:
             print("Transaction is not base58 encoded, trying to decode as base64")
             try:
-                transaction = base64.b64decode(transaction)
+                transaction = base58.b58encode(
+                    base64.b64decode(transaction)).decode()
             except Exception:
                 raise ValueError(
                     "Transaction is not base58 or base64 encoded")
