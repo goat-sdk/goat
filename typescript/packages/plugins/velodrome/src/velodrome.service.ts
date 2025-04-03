@@ -270,7 +270,10 @@ export class VelodromeService {
         name: "add_liquidity",
         description: "Add liquidity to a Velodrome pool. Gets quote first and ensures sufficient allowance.",
     })
-    async addLiquidity(walletClient: EVMWalletClient, parameters: AddLiquidityParams): Promise<{ hash?: string, chainId?: number, error?: string }> {
+    async addLiquidity(
+        walletClient: EVMWalletClient,
+        parameters: AddLiquidityParams,
+    ): Promise<{ hash?: string; chainId?: number; error?: string }> {
         try {
             const userAddress = await walletClient.getAddress();
             if (!userAddress) {
@@ -310,13 +313,15 @@ export class VelodromeService {
                 throw new Error("Insufficient liquidity minted");
             }
 
-            const adjustedAmount0Min = BigInt(amount0Optimal) < BigInt(parameters.amount0Min)
-                ? amount0Optimal.toString()
-                : parameters.amount0Min;
+            const adjustedAmount0Min =
+                BigInt(amount0Optimal) < BigInt(parameters.amount0Min)
+                    ? amount0Optimal.toString()
+                    : parameters.amount0Min;
 
-            const adjustedAmount1Min = BigInt(amount1Optimal) < BigInt(parameters.amount1Min)
-                ? amount1Optimal.toString()
-                : parameters.amount1Min;
+            const adjustedAmount1Min =
+                BigInt(amount1Optimal) < BigInt(parameters.amount1Min)
+                    ? amount1Optimal.toString()
+                    : parameters.amount1Min;
 
             const approvalHash0 = await walletClient.sendTransaction({
                 to: token0 as Address,
@@ -354,7 +359,7 @@ export class VelodromeService {
 
             return { hash: hash.hash, chainId: chain.id };
         } catch (error) {
-            return { error: error instanceof Error ? error.message : JSON.stringify(error) }
+            return { error: error instanceof Error ? error.message : JSON.stringify(error) };
         }
     }
 
@@ -382,7 +387,7 @@ export class VelodromeService {
             abi: ROUTER_ABI,
             functionName: "poolFor",
             args: [token0, token1, stable],
-         });
+        });
         return poolContract.value as Address;
     }
 
