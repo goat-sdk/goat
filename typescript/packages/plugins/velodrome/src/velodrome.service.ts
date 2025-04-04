@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { erc20Abi } from "viem";
+import { Address, erc20Abi } from "viem";
 import { QUOTER_ABI } from "./abi/quoter.abi";
 import { ROUTER_ABI } from "./abi/router.abi";
 import { AddLiquidityParams, GetInfoVelodromeTokensParams, SwapExactTokensParams } from "./parameters";
@@ -9,9 +9,6 @@ const ROUTER_ADDRESS: Record<number, string> = {
     34443: "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45",
 };
 
-const FACTORY_ADDRESS: Record<number, string> = {
-    34443: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a",
-};
 const QUOTER_ADDRESS: Record<number, string> = {
     34443: "0x2f7150B288ef1cc553207bD9fbd40D4e0e093B24",
 };
@@ -273,7 +270,10 @@ export class VelodromeService {
         name: "add_liquidity",
         description: "Add liquidity to a Velodrome pool. Gets quote first and ensures sufficient allowance.",
     })
-    async addLiquidity(walletClient: EVMWalletClient, parameters: AddLiquidityParams) {
+    async addLiquidity(
+        walletClient: EVMWalletClient,
+        parameters: AddLiquidityParams,
+    ): Promise<{ hash?: string; chainId?: number; error?: string }> {
         try {
             const userAddress = await walletClient.getAddress();
             if (!userAddress) {
@@ -293,7 +293,6 @@ export class VelodromeService {
             // Get pool info and quotes
             const [token0, token1] = await this.sortTokens(walletClient, parameters.token0, parameters.token1);
 
-            // Get reserves from factory
             const poolAddress = await this.getPool(walletClient, token0, token1, parameters.stable);
 
             const [reserve0, reserve1] = await this.getReserves(walletClient, poolAddress);
@@ -313,6 +312,30 @@ export class VelodromeService {
             ) {
                 throw new Error("Insufficient liquidity minted");
             }
+
+            const adjustedAmount0Min =
+                BigInt(amount0Optimal) < BigInt(parameters.amount0Min)
+                    ? amount0Optimal.toString()
+                    : parameters.amount0Min;
+
+            const adjustedAmount1Min =
+                BigInt(amount1Optimal) < BigInt(parameters.amount1Min)
+                    ? amount1Optimal.toString()
+                    : parameters.amount1Min;
+
+            const approvalHash0 = await walletClient.sendTransaction({
+                to: token0 as Address,
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [routerAddress as Address, parameters.amount0Desired],
+            });
+
+            const approvalHash1 = await walletClient.sendTransaction({
+                to: token1 as Address,
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [routerAddress as Address, parameters.amount1Desired],
+            });
 
             const timestamp = Math.floor(Date.now() / 1000) + parameters.deadline;
 
@@ -334,21 +357,21 @@ export class VelodromeService {
                 ],
             });
 
-            return hash.hash;
+            return { hash: hash.hash, chainId: chain.id };
         } catch (error) {
-            console.error("Error in addLiquidity:", error);
-            throw error;
+            return { error: error instanceof Error ? error.message : JSON.stringify(error) };
         }
     }
 
-    private async sortTokens(walletClient: EVMWalletClient, tokenA: string, tokenB: string): Promise<[string, string]> {
+    private async sortTokens(walletClient: EVMWalletClient, tokenA: string, tokenB: string) {
         const routerAddress = ROUTER_ADDRESS[walletClient.getChain()?.id || 34443];
-        const result = (await walletClient.read({
-            address: routerAddress,
+        const resultRaw = await walletClient.read({
+            address: routerAddress as Address,
             abi: ROUTER_ABI,
             functionName: "sortTokens",
-            args: [tokenA, tokenB],
-        })) as unknown as [string, string];
+            args: [tokenA as Address, tokenB as Address],
+        });
+        const result = resultRaw.value as [Address, Address];
         return [result[0], result[1]];
     }
 
@@ -358,30 +381,19 @@ export class VelodromeService {
         token1: string,
         stable: boolean,
     ): Promise<string> {
-        const factoryAddress = FACTORY_ADDRESS[walletClient.getChain()?.id || 34443];
-        return (await walletClient.read({
-            address: factoryAddress,
-            abi: [
-                {
-                    inputs: [
-                        { internalType: "address", name: "tokenA", type: "address" },
-                        { internalType: "address", name: "tokenB", type: "address" },
-                        { internalType: "bool", name: "stable", type: "bool" },
-                    ],
-                    name: "getPair",
-                    outputs: [{ internalType: "address", name: "", type: "address" }],
-                    stateMutability: "view",
-                    type: "function",
-                },
-            ],
-            functionName: "getPair",
+        const routerAddress = ROUTER_ADDRESS[walletClient.getChain()?.id || 34443];
+        const poolContract = await walletClient.read({
+            address: routerAddress,
+            abi: ROUTER_ABI,
+            functionName: "poolFor",
             args: [token0, token1, stable],
-        })) as unknown as string;
+        });
+        return poolContract.value as Address;
     }
 
-    private async getReserves(walletClient: EVMWalletClient, poolAddress: string): Promise<[bigint, bigint]> {
-        const result = (await walletClient.read({
-            address: poolAddress,
+    private async getReserves(walletClient: EVMWalletClient, poolAddress: string) {
+        const resultRaw = await walletClient.read({
+            address: poolAddress as Address,
             abi: [
                 {
                     inputs: [],
@@ -396,7 +408,8 @@ export class VelodromeService {
                 },
             ],
             functionName: "getReserves",
-        })) as unknown as [bigint, bigint];
+        });
+        const result = resultRaw.value as [bigint, bigint];
         return [result[0], result[1]];
     }
 
