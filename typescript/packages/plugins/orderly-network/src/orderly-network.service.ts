@@ -167,15 +167,11 @@ export class OrderlyNetworkService {
 
         if (convertedOrderType === OrderType.MARKET) {
             parameters.order_price = undefined;
-        }
-
-        if (convertedOrderType === OrderType.MARKET && parameters.side === "BUY") {
-            if (parameters.order_amount !== undefined) {
-                throw new Error(
-                    "In Futures mode, BUY orders do not support order_amount. Please use order_quantity instead.",
-                );
+            if (parameters.side === "BUY") {
+                parameters.order_amount = undefined;
             }
         }
+
         const order = {
             ...parameters,
             order_type: convertedOrderType,
@@ -260,7 +256,7 @@ export class OrderlyNetworkService {
         };
 
         const allowedSymbol =
-            symbols.data.rows.find(({ symbol }) => symbol.includes(`_${parameters.token}_`))?.symbol ??
+            symbols.data.rows.find(({ symbol }) => symbol.includes(`_${parameters.token.toUpperCase()}_`))?.symbol ??
             symbols.data.rows[0].symbol;
         return allowedSymbol;
     }
