@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "goat-sdk-plugin-github"
+version = "0.1.0"
+description = "A GOAT SDK plugin for GitHub repository management and operations"
+authors = ["Developer <philosanjay5@gmail.com>"]
+readme = "README.md"
+keywords = ["goat", "sdk", "agents", "ai", "github", "git", "repository", "version-control"]
+homepage = "https://ohmygoat.dev/"
+repository = "https://github.com/goat-sdk/goat"
+packages = [
+    { include = "goat_plugins/github" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+goat-sdk = "^0.1.0"
+aiohttp = "^3.9.3"
+PyGithub = "^2.1.1"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.0"
+pytest-cov = "^4.1.0"
+httpx = "^0.26.0"
+responses = "^0.25.0"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
+"Documentation" = "https://docs.ohmygoat.dev/plugins/github"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "--cov=goat_plugins.github",
+    "--cov-report=term-missing",
+]
+pythonpath = "src"
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+black = "^24.1.1"
+mypy = "^1.8.0"
+goat-sdk = { path = "../../goat-sdk", develop = true }
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true

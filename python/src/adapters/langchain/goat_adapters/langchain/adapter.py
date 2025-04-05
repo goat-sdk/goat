@@ -22,12 +22,15 @@ def get_on_chain_tools(wallet: WalletClientBase, plugins: List[Any]) -> List[Bas
 
     langchain_tools = []
     for t in tools:
+        # Get the schema from the Pydantic model
+        schema = t.parameters.model_json_schema() if hasattr(t.parameters, 'model_json_schema') else t.parameters
+        
         # Create a LangChain Tool for each GOAT tool
         tool = StructuredTool(
             name=t.name,
             description=t.description,
             func=lambda t=t, **args: _execute_tool(t, **args),
-            args_schema=t.parameters,
+            args_schema=schema,
         )
         langchain_tools.append(tool)
 
