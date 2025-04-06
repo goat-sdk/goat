@@ -99,8 +99,13 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         )
 
         serialized = base58.b58encode(bytes(versioned_transaction)).decode()
-        return self.send_raw_transaction(serialized, additional_signers, transaction.get("signer", None))
+        signer = transaction.get("signer", None)
 
+        if signer is None and self._admin_signer["type"] == "solana-keypair":
+            signer = self._admin_signer["keyPair"]
+
+        return self.send_raw_transaction(serialized, additional_signers, signer)
+    
     def balance_of(self, address: str) -> Balance:
         pubkey = Pubkey.from_string(address)
         balance_lamports = self.client.get_balance(pubkey).value
@@ -235,12 +240,11 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             )
 
             # Prepare signers array
-            signers = additional_signers
+            signers = list(additional_signers)
             if self._admin_signer["type"] == "solana-keypair":
                 signers.append(self._admin_signer["keyPair"])
             if signer:
                 signers.append(signer)
-            signers.extend(additional_signers)
 
             # Handle transaction flow
             completed_transaction = self.handle_transaction_flow(
