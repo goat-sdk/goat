@@ -1,0 +1,29 @@
+{
+  "name": "goat-examples-llamaindex",
+  "version": "0.0.0",
+  "description": "Example using GOAT SDK with LlamaIndex for onchain operations",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx index.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@goat-sdk/adapter-llamaindex": "latest",
+    "@goat-sdk/core": "latest",
+    "@goat-sdk/plugin-erc20": "latest",
+    "@goat-sdk/wallet-viem": "latest",
+    "@goat-sdk/wallet-evm": "latest",
+    "@google/generative-ai": "^0.2.1",
+    "dotenv": "^16.4.5",
+    "llamaindex": "^0.2.0",
+    "viem": "2.23.4",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
+  }
+} 
