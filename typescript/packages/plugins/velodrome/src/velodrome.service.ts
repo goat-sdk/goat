@@ -418,7 +418,256 @@ export class VelodromeService {
         const amount0Optimal = (amount1Desired * reserve0) / reserve1;
         return [amount0Optimal, amount1Desired];
     }
+@Tool({
+        name: "remove_liquidity",
+        description: "remove liquidity to a Velodrome pool.",
+    })
+    async removeLiquidity(walletClient: EVMWalletClient, parameters: removeLiquidityParams) {
+        try {
+
+            const userAddress = walletClient.getAddress();
+
+            const chain = walletClient.getChain();
+            if (!chain) {
+                throw new Error("Chain not configured in wallet client");
+            }
+
+            const routerAddress = ROUTER_ADDRESS[chain.id];
+            if (!routerAddress) {
+                throw new Error(`Router not found for chain ${chain.id}`);
+            }
+
+            // Get tokens in correct order
+            const [token0, token1] = await this.sortTokens(walletClient, parameters.token0, parameters.token1);
+
+            // Get pool address
+            const poolContract = await this.getPool(walletClient, token0, token1, parameters.stable);
+
+            let poolAddress: string;
+            if (typeof poolContract === 'object' && poolContract !== null) {
+                const poolObj = poolContract as any;
+                if ('value' in poolObj && typeof poolObj.value === 'string') {
+                    poolAddress = poolObj.value;
+                } else if ('address' in poolObj && typeof poolObj.address === 'string') {
+                    poolAddress = poolObj.address;
+                } else {
+                    console.error('Pool contract is an object but does not have expected properties:',
+                        JSON.stringify(poolContract, null, 2));
+                    throw new Error("Could not extract pool address from pool contract");
+                }
+            } else if (typeof poolContract === 'string') {
+                poolAddress = poolContract;
+            } else {
+                console.error('Unexpected pool contract value:', poolContract);
+                throw new Error("Pool address is not in a valid format");
+            }
+
+            // Get LP token balance for this pool
+            let lpTokenBalanceRaw;
+            try {
+                lpTokenBalanceRaw = await walletClient.read({
+                    address: poolAddress as Address,
+                    abi: erc20Abi,
+                    functionName: "balanceOf",
+                    args: [userAddress]
+                });
+            } catch (error) {
+                console.error("Error reading LP token balance:", error);
+                return { error: `Failed to read LP token balance: ${String(error)}` };
+            }
+
+            let lpTokenBalance: string;
+            try {
+                if (lpTokenBalanceRaw === null || lpTokenBalanceRaw === undefined) {
+                    lpTokenBalance = '0';
+                } else if (typeof lpTokenBalanceRaw === 'bigint') {
+                    lpTokenBalance = (lpTokenBalanceRaw as number).toString();
+                } else if (typeof lpTokenBalanceRaw === 'number') {
+                    lpTokenBalance = (lpTokenBalanceRaw as number).toString();
+                } else if (typeof lpTokenBalanceRaw === 'string') {
+                    // Ensure it's a numeric string
+                    if (/^\d+$/.test(lpTokenBalanceRaw)) {
+                        lpTokenBalance = lpTokenBalanceRaw;
+                    } else {
+                        console.error("LP token balance is not a numeric string:", lpTokenBalanceRaw);
+                        lpTokenBalance = '0';
+                    }
+                } else if (typeof lpTokenBalanceRaw === 'object' && lpTokenBalanceRaw !== null) {
+                    if ('toString' in lpTokenBalanceRaw && typeof lpTokenBalanceRaw.toString === 'function') {
+                        const stringVal = lpTokenBalanceRaw.toString();
+                        if (/^\d+$/.test(stringVal)) {
+                            lpTokenBalance = stringVal;
+                        } else {
+                            if ('value' in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
+                                const valueStr = String(lpTokenBalanceRaw.value);
+                                if (/^\d+$/.test(valueStr)) {
+                                    lpTokenBalance = valueStr;
+                                } else {
+                                    lpTokenBalance = '0';
+                                }
+                            } else {
+                                lpTokenBalance = '0';
+                            }
+                        }
+                    } else if ('value' in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
+                        const valueStr = String(lpTokenBalanceRaw.value);
+                        if (/^\d+$/.test(valueStr)) {
+                            lpTokenBalance = valueStr;
+                        } else {
+                            lpTokenBalance = '0';
+                        }
+                    } else {
+                        lpTokenBalance = '0';
+                    }
+                } else {
+                    console.error("Unexpected LP token balance type:", typeof lpTokenBalanceRaw);
+                    lpTokenBalance = '0';
+                }
+            } catch (error) {
+                console.error("Error processing LP token balance:", error);
+                lpTokenBalance = '0';
+            }
+
+            if (!/^\d+$/.test(lpTokenBalance) || lpTokenBalance === '0') {
+                if (lpTokenBalance === '0') {
+                    return { error: "You don't have any LP tokens in this pool" };
+                } else {
+                    return { error: `Invalid LP token balance: ${lpTokenBalance}` };
+                }
+            }
+
+            // Calculate the amount to withdraw
+            let liquidityToRemove: string;
+            let percentToRemove = 1.0; // Default to 100%
+
+            try {
+                // Handle the 'amount' parameter (as text)
+                if (parameters.amount) {
+                    const amountText = String(parameters.amount).toLowerCase();
+
+                    if (amountText.includes('half') || amountText.includes('50%')) {
+                        percentToRemove = 0.5;
+                        const halfAmount = BigInt(lpTokenBalance) * BigInt(50) / BigInt(100);
+                        liquidityToRemove = halfAmount.toString();
+                    } else if (amountText.includes('quarter') || amountText.includes('25%')) {
+                        percentToRemove = 0.25;
+                        const quarterAmount = BigInt(lpTokenBalance) * BigInt(25) / BigInt(100);
+                        liquidityToRemove = quarterAmount.toString();
+                    } else if (amountText.includes('all') || amountText.includes('100%') || amountText === 'all') {
+                        percentToRemove = 1.0;
+                        liquidityToRemove = lpTokenBalance;
+                    } else {
+                        // If it's a specific numeric value
+                        const parsedAmount = parseInt(amountText);
+                        if (!isNaN(parsedAmount)) {
+                            liquidityToRemove = parsedAmount.toString();
+                        } else {
+                            // If it can't be parsed, use the entire balance
+                            liquidityToRemove = lpTokenBalance;
+                        }
+                    }
+                } else if (parameters.liquidity) {
+                    const liquidityParam = String(parameters.liquidity);
+                    if (liquidityParam.toLowerCase() === 'all') {
+                        liquidityToRemove = lpTokenBalance;
+                    } else {
+                        if (/^\d+$/.test(liquidityParam)) {
+                            liquidityToRemove = liquidityParam;
+                        } else {
+                            liquidityToRemove = lpTokenBalance;
+                        }
+                    }
+                } else {
+                    liquidityToRemove = lpTokenBalance;
+                }
+
+                if (!/^\d+$/.test(liquidityToRemove)) {
+                    console.error(`liquidityToRemove is not a valid number: ${liquidityToRemove}`);
+                    return { error: `Invalid liquidity amount: ${liquidityToRemove}` };
+                }
+
+                // Validate there is enough liquidity to withdraw
+                if (BigInt(liquidityToRemove) <= BigInt(0)) {
+                    return { error: "No liquidity to remove" };
+                }
+            } catch (error) {
+                console.error("Error calculating liquidity to remove:", error);
+                return { error: `Failed to calculate removal amount: ${String(error)}` };
+            }
+
+            // Approve LP tokens to the router
+            try {
+                const approvalHash = await walletClient.sendTransaction({
+                    to: poolAddress as Address,
+                    abi: erc20Abi,
+                    functionName: "approve",
+                    args: [routerAddress as Address, liquidityToRemove]
+                });
+            } catch (approvalError) {
+                console.error("Approval error details:", approvalError);
+                return {
+                    error: `Approval failed: ${String(approvalError)}`,
+                    details: { approvalError }
+                };
+            }
+
+            // Calculate deadline
+            const deadline = parameters.deadline || 1800; // Default to 30 minutes
+            const timestamp = Math.floor(Date.now() / 1000) + deadline;
+
+            // Set amountAMin and amountBMin if not defined
+            const amountAMin = parameters.amountAMin || "0";
+            const amountBMin = parameters.amountBMin || "0";
+
+            try {
+
+                const removeTx = await walletClient.sendTransaction({
+                    to: routerAddress as Address,
+                    abi: ROUTER_ABI,
+                    functionName: "removeLiquidity",
+                    args: [
+                        token0,
+                        token1,
+                        parameters.stable,
+                        liquidityToRemove,
+                        amountAMin,
+                        amountBMin,
+                        parameters.to || userAddress,
+                        timestamp
+                    ]
+                });
+
+                const txHash = removeTx.hash || (typeof removeTx === 'string' ? removeTx : 'unknown');
+
+
+                return {
+                    success: true,
+                    transactionHash: txHash,
+                    liquidityRemoved: liquidityToRemove,
+                    percentage: `${percentToRemove * 100}%`,
+                    tokens: {
+                        token0,
+                        token1
+                    }
+                };
+            } catch (txError) {
+                console.error("Transaction error details:", txError);
+                return {
+                    error: `Transaction failed: ${String(txError)}`,
+                    approvalSuccess: true,
+                    details: { txError }
+                };
+            }
+        } catch (error) {
+            console.error("Error in removeLiquidity:", error);
+            return {
+                error: String(error),
+                details: { error }
+            };
+        }
+    }
 }
+
 
 type Token = {
     decimals: number;
