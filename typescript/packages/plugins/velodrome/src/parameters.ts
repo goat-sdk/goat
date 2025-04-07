@@ -40,3 +40,21 @@ export class AddLiquidityParams extends createToolParameters(
             .describe("The deadline for the transaction in seconds from now"),
     }),
 ) {}
+
+export class removeLiquidityParams extends createToolParameters(
+    z.object({
+        token0: z.string().describe("Address of the first token"),
+        token1: z.string().describe("Address of the second token"),
+        stable: z.boolean().describe("Whether the pool is stable or volatile"),
+        amount: z.string().optional().describe("Amount to remove (e.g., 'half', 'all')"),
+        liquidity: z.string().optional().describe("Specific amount of LP tokens to remove"),
+        amountAMin: z.string().optional().describe("Minimum amount of token0 to receive"),
+        amountBMin: z.string().optional().describe("Minimum amount of token1 to receive"),
+        to: z.string().optional().describe("Address to receive tokens, defaults to sender"),
+        deadline: z
+            .number()
+            .optional()
+            .default(() => Math.floor(Date.now() / 1000) + 3600)
+            .describe("Deadline for the transaction in seconds"),
+    }),
+) { }
