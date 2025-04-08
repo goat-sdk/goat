@@ -4,13 +4,15 @@ import "dotenv/config";
 let ryeHeaders = {};
 try {
     ryeHeaders = JSON.parse(process.env.RYE_API_KEY || "{}");
+    console.log("Successfully parsed Rye API key JSON");
 } catch (e) {
+    console.error("Failed to parse Rye API key as JSON, falling back to string format:", e);
     ryeHeaders = {
-        authorization: `Bearer ${process.env.RYE_API_KEY}`,
+        Authorization: `Bearer ${process.env.RYE_API_KEY}`,
     };
 }
 
-const client = new GraphQLClient("https://graphql.api.rye.com/v1/query", {
+const client = new GraphQLClient("https://api.rye.com/graphql", {
     headers: ryeHeaders,
 });
 
