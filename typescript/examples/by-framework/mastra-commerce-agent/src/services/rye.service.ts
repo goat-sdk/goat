@@ -3,7 +3,7 @@ import "dotenv/config";
 
 let ryeHeaders = {};
 try {
-    ryeHeaders = JSON.parse(process.env.RYE_API_KEY || '{}');
+    ryeHeaders = JSON.parse(process.env.RYE_API_KEY || "{}");
 } catch (e) {
     ryeHeaders = {
         authorization: `Bearer ${process.env.RYE_API_KEY}`,
