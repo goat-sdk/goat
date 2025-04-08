@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-modespray
 
+## 0.1.9
+
+### Patch Changes
+
+- 450f33e: Minor updates
+
 ## 0.1.8
 
 ### Patch Changes

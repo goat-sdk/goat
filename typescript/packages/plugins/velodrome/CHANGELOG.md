@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-velodrome
 
+## 0.1.10
+
+### Patch Changes
+
+- 450f33e: Minor updates
+
 ## 0.1.9
 
 ### Patch Changes
