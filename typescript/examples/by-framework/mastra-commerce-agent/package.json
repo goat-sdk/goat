@@ -14,7 +14,6 @@
         "@goat-sdk/adapter-mastra": "latest",
         "@goat-sdk/core": "latest",
         "@goat-sdk/plugin-crossmint-headless-checkout": "latest",
-        "@goat-sdk/wallet-evm": "latest",
         "@goat-sdk/wallet-viem": "latest",
         "@mastra/core": "latest",
         "ai": "latest",
