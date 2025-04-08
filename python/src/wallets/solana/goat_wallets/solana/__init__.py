@@ -5,6 +5,8 @@ from .wallet import (
     SolanaOptions,
     solana,
 )
+# Import the new plugin and factory
+from .send_sol import send_sol
 
 __all__ = [
     "SolanaWalletClient",
@@ -12,4 +14,5 @@ __all__ = [
     "SolanaTransaction",
     "SolanaOptions",
     "solana",
+    "send_sol",
 ]
