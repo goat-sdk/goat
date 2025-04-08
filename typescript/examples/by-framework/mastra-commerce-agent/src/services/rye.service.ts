@@ -10,7 +10,7 @@ try {
     };
 }
 
-const client = new GraphQLClient("https://api.rye.com/v1/graphql", {
+const client = new GraphQLClient("https://graphql.api.rye.com/v1/query", {
     headers: ryeHeaders,
 });
 
