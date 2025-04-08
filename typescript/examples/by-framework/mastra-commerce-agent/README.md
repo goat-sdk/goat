@@ -10,7 +10,7 @@ This example demonstrates how to use GOAT to build a Shopify store customer serv
 
 1. Receive and respond to SMS messages via [Twilio](https://www.twilio.com/)
 2. Search for products in the Gymshark Shopify store based on customer queries using [Rye's API](https://docs.rye.com/)
-3. Process purchases using [Crossmint's headless checkout](https://docs.crossmint.com/payments/headless/guides/physical-good-purchases) on Base blockchain
+3. Provide product recommendations and customer service assistance
 
 You can use this example with any other agent framework, chain, and wallet of your choice.
 
