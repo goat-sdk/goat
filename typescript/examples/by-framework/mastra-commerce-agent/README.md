@@ -166,6 +166,18 @@ RYE_API_KEY={"Authorization":"Basic YOUR_RYE_BASIC_AUTH_TOKEN","Rye-Shopper-IP":
 
 2. Check the console logs for any error messages related to the Rye API
 3. Ensure you have proper internet connectivity to reach the Rye API endpoint
+4. Verify that the GraphQL query structure matches Rye's current API requirements:
+   - The API endpoint should be `https://graphql.api.rye.com/v1/query`
+   - The query must use `input` and `pagination` parameters:
+   ```graphql
+   query SearchProducts($input: productsByDomainInput!, $pagination: OffsetPaginationInput!) {
+     productsByDomainV2(input: $input, pagination: $pagination) {
+       products {
+         # fields
+       }
+     }
+   }
+   ```
 
 ### Twilio SMS Issues
 
