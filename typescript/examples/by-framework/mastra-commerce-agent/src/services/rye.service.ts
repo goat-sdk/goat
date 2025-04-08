@@ -18,6 +18,9 @@ interface Product {
     id: string;
     title: string;
     description: string;
+    vendor: string;
+    isAvailable: boolean;
+    tags: string[];
     price: {
         value: number;
         currency: string;
@@ -41,6 +44,10 @@ const SEARCH_PRODUCTS_QUERY = gql`
         id
         title
         description
+        vendor
+        url
+        isAvailable
+        tags
         price {
           value
           currency
@@ -48,7 +55,6 @@ const SEARCH_PRODUCTS_QUERY = gql`
         images {
           url
         }
-        url
       }
     }
   }
@@ -84,11 +90,14 @@ export function formatProductsForDisplay(products: Product[]): string {
         .map((product, index) => {
             const price = `${product.price.currency} ${product.price.value}`;
             const imageUrl = product.images && product.images.length > 0 ? product.images[0].url : "No image available";
+            const availability = product.isAvailable ? "In Stock" : "Out of Stock";
+            const tags = product.tags && product.tags.length > 0 ? product.tags.join(", ") : "No tags";
 
             return `
-${index + 1}. ${product.title}
-   Price: ${price}
+${index + 1}. ${product.title} by ${product.vendor}
+   Price: ${price} (${availability})
    Description: ${product.description ? `${product.description.substring(0, 100)}...` : "No description available"}
+   Tags: ${tags}
    URL: ${product.url}
 `;
         })
