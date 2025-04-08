@@ -65,7 +65,7 @@ class CrossmintMintService:
             chain = get_crossmint_chain_string(wallet_client.get_chain())
             
             # Format recipient appropriately based on chain and recipient type
-            recipient = f"email:{parameters["recipient"]}:{chain}" if parameters["recipient_type"] == "email" else f"{chain}:{parameters["recipient"]}"
+            recipient = f"email:{parameters['recipient']}:{chain}" if parameters["recipient_type"] == "email" else f"{chain}:{parameters['recipient']}"
             
             result = self.api_client.mint_nft(
                 parameters["collection_id"],
