@@ -3,7 +3,12 @@ import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { Address, erc20Abi } from "viem";
 import { QUOTER_ABI } from "./abi/quoter.abi";
 import { ROUTER_ABI } from "./abi/router.abi";
-import { removeLiquidityParams, AddLiquidityParams, GetInfoVelodromeTokensParams, SwapExactTokensParams } from "./parameters";
+import {
+    AddLiquidityParams,
+    GetInfoVelodromeTokensParams,
+    SwapExactTokensParams,
+    removeLiquidityParams,
+} from "./parameters";
 
 const ROUTER_ADDRESS: Record<number, string> = {
     34443: "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45",
@@ -437,7 +442,6 @@ export class VelodromeService {
     })
     async removeLiquidity(walletClient: EVMWalletClient, parameters: removeLiquidityParams) {
         try {
-
             const userAddress = walletClient.getAddress();
 
             const chain = walletClient.getChain();
@@ -464,7 +468,8 @@ export class VelodromeService {
                 } else if ("address" in poolObj && typeof poolObj.address === "string") {
                     poolAddress = poolObj.address;
                 } else {
-                    console.error("Pool contract is an object but does not have expected properties:",
+                    console.error(
+                        "Pool contract is an object but does not have expected properties:",
                         JSON.stringify(poolContract, null, 2),
                     );
                     throw new Error("Could not extract pool address from pool contract");
@@ -495,9 +500,9 @@ export class VelodromeService {
                 if (lpTokenBalanceRaw === null || lpTokenBalanceRaw === undefined) {
                     lpTokenBalance = "0";
                 } else if (typeof lpTokenBalanceRaw === "bigint") {
-                    lpTokenBalance = (lpTokenBalanceRaw as number).toString();
+                    lpTokenBalance = lpTokenBalanceRaw.toString();
                 } else if (typeof lpTokenBalanceRaw === "number") {
-                    lpTokenBalance = (lpTokenBalanceRaw as number).toString();
+                    lpTokenBalance = lpTokenBalanceRaw.toString();
                 } else if (typeof lpTokenBalanceRaw === "string") {
                     // Ensure it's a numeric string
                     if (/^\d+$/.test(lpTokenBalanceRaw)) {
@@ -546,7 +551,7 @@ export class VelodromeService {
                 if (lpTokenBalance === "0") {
                     return { error: "You don't have any LP tokens in this pool" };
                 }
-                    return { error: `Invalid LP token balance: ${lpTokenBalance}` };
+                return { error: `Invalid LP token balance: ${lpTokenBalance}` };
             }
 
             // Calculate the amount to withdraw
@@ -633,7 +638,6 @@ export class VelodromeService {
             const amountBMin = parameters.amountBMin || "0";
 
             try {
-
                 const removeTx = await walletClient.sendTransaction({
                     to: routerAddress as Address,
                     abi: ROUTER_ABI,
@@ -646,12 +650,11 @@ export class VelodromeService {
                         amountAMin,
                         amountBMin,
                         parameters.to || userAddress,
-                        timestamp
-                    ]
+                        timestamp,
+                    ],
                 });
 
-                const txHash = removeTx.hash || (typeof removeTx === 'string' ? removeTx : 'unknown');
-
+                const txHash = removeTx.hash || (typeof removeTx === "string" ? removeTx : "unknown");
 
                 return {
                     success: true,
@@ -660,27 +663,26 @@ export class VelodromeService {
                     percentage: `${percentToRemove * 100}%`,
                     tokens: {
                         token0,
-                        token1
-                    }
+                        token1,
+                    },
                 };
             } catch (txError) {
                 console.error("Transaction error details:", txError);
                 return {
                     error: `Transaction failed: ${String(txError)}`,
                     approvalSuccess: true,
-                    details: { txError }
+                    details: { txError },
                 };
             }
         } catch (error) {
             console.error("Error in removeLiquidity:", error);
             return {
                 error: String(error),
-                details: { error }
+                details: { error },
             };
         }
     }
 }
-
 
 type Token = {
     decimals: number;

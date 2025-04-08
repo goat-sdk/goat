@@ -57,4 +57,4 @@ export class removeLiquidityParams extends createToolParameters(
             .default(() => Math.floor(Date.now() / 1000) + 3600)
             .describe("Deadline for the transaction in seconds"),
     }),
-) { }
+) {}
