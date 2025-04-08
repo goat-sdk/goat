@@ -167,13 +167,26 @@ RYE_API_KEY={"Authorization":"Basic YOUR_RYE_BASIC_AUTH_TOKEN","Rye-Shopper-IP":
 2. Check the console logs for any error messages related to the Rye API
 3. Ensure you have proper internet connectivity to reach the Rye API endpoint
 4. Verify that the GraphQL query structure matches Rye's current API requirements:
-   - The API endpoint should be `https://graphql.api.rye.com/v1/query`
+   - The API endpoint should be `https://api.rye.com/graphql`
    - The query must use `input` and `pagination` parameters:
    ```graphql
    query SearchProducts($input: productsByDomainInput!, $pagination: OffsetPaginationInput!) {
      productsByDomainV2(input: $input, pagination: $pagination) {
        products {
-         # fields
+         id
+         title
+         description
+         vendor
+         url
+         isAvailable
+         tags
+         price {
+           value
+           currency
+         }
+         images {
+           url
+         }
        }
      }
    }
@@ -187,6 +200,53 @@ If you encounter issues with Twilio SMS:
 2. Check that your ngrok tunnel is running and accessible
 3. Verify the webhook URL in your Twilio phone number settings
 4. Check the Twilio console for any error messages
+
+## Testing this PR
+
+To test this PR, follow these steps:
+
+1. Clone the repository and checkout the branch:
+```bash
+git clone https://github.com/goat-sdk/goat.git
+cd goat
+git checkout devin/1744070619-mastra-commerce-agent
+```
+
+2. Install dependencies and build the project:
+```bash
+cd typescript
+pnpm install
+pnpm build
+```
+
+3. Set up the environment variables:
+```bash
+cd examples/by-framework/mastra-commerce-agent
+cp .env.template .env
+```
+
+4. Edit the `.env` file to add your API keys:
+   - Add your OpenAI API key
+   - Add your Rye API key in JSON format:
+   ```
+   RYE_API_KEY={"Authorization":"Basic YOUR_RYE_BASIC_AUTH_TOKEN","Rye-Shopper-IP":"YOUR_SHOPPER_IP"}
+   ```
+
+5. Run the CLI to test product search:
+```bash
+pnpm tsx src/index.ts
+```
+
+6. Try searching for Gymshark products with queries like:
+   - "I'm looking for men's workout shirts"
+   - "Do you have any women's leggings?"
+   - "I need some running shorts"
+
+7. To test the Twilio SMS integration, you'll need to:
+   - Add your Twilio credentials to the `.env` file
+   - Start the Twilio server with `pnpm tsx src/twilio/server.ts`
+   - Use ngrok to expose your local server
+   - Configure your Twilio webhook as described in the Twilio SMS Server section
 
 ## Using in Production
 
