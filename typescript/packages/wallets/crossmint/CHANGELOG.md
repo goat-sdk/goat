@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.4.4
+
+### Patch Changes
+
+- 46bc590: Fix signTypedData bug
+
 ## 0.4.3
 
 ### Patch Changes

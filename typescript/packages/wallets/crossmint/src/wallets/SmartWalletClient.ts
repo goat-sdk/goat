@@ -198,7 +198,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             this.#address,
             data,
             this.#chain,
-            this.signerAccount?.address as `0x${string}`,
+            `evm-keypair:${this.signerAccount?.address}`,
         );
 
         if (!this.hasCustodialSigner) {

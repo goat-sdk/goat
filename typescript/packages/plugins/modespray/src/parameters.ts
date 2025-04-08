@@ -29,12 +29,7 @@ export class SprayEtherParams extends createToolParameters(
  */
 export class SprayErc20TokenParams extends createToolParameters(
     z.object({
-        token: z
-            .string()
-            .regex(
-                /^0x[a-fA-F0-9]{40}$/,
-                "The token address must be a valid Ethereum address 42 hexadecimal characters included 0x-prefixed.",
-            ),
+        token: z.string().describe("The address of the erc20 token suported by modespray."),
         recipients: z
             .array(
                 z
@@ -52,5 +47,11 @@ export class SprayErc20TokenParams extends createToolParameters(
             .nonempty({
                 message: "The amounts array must have at least one valid amount specified in the token unit.",
             }),
+    }),
+) {}
+
+export class GetInfoModeSprayTokensParams extends createToolParameters(
+    z.object({
+        token: z.string().describe("The symbol of the erc20 token to get info for tokens suported by modespray."),
     }),
 ) {}

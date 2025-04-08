@@ -60,7 +60,8 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         self._locator = get_locator(address, options.get(
             "linkedUser", None), "solana-smart-wallet")
         self._admin_signer = options["config"]["adminSigner"]
-        self._admin_signer["address"] = self._retrieve_admin_signer_address()
+        if self._admin_signer["type"] == "solana-keypair":
+            self._admin_signer["address"] = str(self._admin_signer['keyPair'].pubkey())
 
     def get_address(self) -> str:
         return self._address
@@ -99,8 +100,13 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         )
 
         serialized = base58.b58encode(bytes(versioned_transaction)).decode()
-        return self.send_raw_transaction(serialized, additional_signers, transaction.get("signer", None))
+        signer = transaction.get("signer", None)
 
+        if signer is None and self._admin_signer["type"] == "solana-keypair":
+            signer = self._admin_signer["keyPair"]
+
+        return self.send_raw_transaction(serialized, additional_signers, signer)
+    
     def balance_of(self, address: str) -> Balance:
         pubkey = Pubkey.from_string(address)
         balance_lamports = self.client.get_balance(pubkey).value
@@ -223,10 +229,17 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
     ) -> Dict[str, str]:
         transaction = self.parse_serialized_transaction(transaction)
 
+        if signer:
+            resolved_signer = signer
+        elif self._admin_signer["type"] == "solana-keypair":
+            resolved_signer = self._admin_signer["keyPair"]
+        else:
+            resolved_signer = None
+
         params = SolanaSmartWalletTransactionParams(
             transaction=transaction,
             required_signers=required_signers,
-            signer=f"solana-keypair:{base58.b58encode(bytes(signer.pubkey())).decode()}" if signer else None
+            signer=f"solana-keypair:{base58.b58encode(bytes(resolved_signer.pubkey())).decode()}" if resolved_signer else None
         )
         try:
             response = self._client.create_transaction_for_smart_wallet(
@@ -235,12 +248,11 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             )
 
             # Prepare signers array
-            signers = additional_signers
+            signers = list(additional_signers)
             if self._admin_signer["type"] == "solana-keypair":
                 signers.append(self._admin_signer["keyPair"])
-            if signer:
-                signers.append(signer)
-            signers.extend(additional_signers)
+            if resolved_signer:
+                signers.append(resolved_signer)
 
             # Handle transaction flow
             completed_transaction = self.handle_transaction_flow(
@@ -324,15 +336,6 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
             amount: The amount of SOL to fund the wallet with
         """
         return self.connection.request_airdrop(Pubkey.from_string(self._address), amount_lamports)
-
-    def _retrieve_admin_signer_address(self) -> str:
-        wallet = self._client.get_wallet(self._address)
-        address = wallet.get("config", {}).get(
-            "adminSigner", {}).get("address", None)
-        if not address:
-            raise ValueError(
-                f"Admin signer address not found for wallet {self._address}")
-        return address
 
     def parse_serialized_transaction(self, transaction: str) -> str:
         try:
