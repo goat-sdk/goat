@@ -1,10 +1,17 @@
 import { GraphQLClient, gql } from "graphql-request";
 import "dotenv/config";
 
-const client = new GraphQLClient("https://api.rye.com/graphql", {
-    headers: {
+let ryeHeaders = {};
+try {
+    ryeHeaders = JSON.parse(process.env.RYE_API_KEY || '{}');
+} catch (e) {
+    ryeHeaders = {
         authorization: `Bearer ${process.env.RYE_API_KEY}`,
-    },
+    };
+}
+
+const client = new GraphQLClient("https://api.rye.com/graphql", {
+    headers: ryeHeaders,
 });
 
 interface Product {
