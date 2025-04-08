@@ -1,12 +1,13 @@
+[Home](../../../../README.md) | [Python Examples](../../../README.md)
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
 </div>
 
-# Swap tokens on Solana
+# Swap tokens on Solana using a Delegated Key
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to **swap tokens using [Jupiter](https://jup.ag/)** on Solana.
+This example demonstrates how to use GOAT to **swap tokens using [Jupiter](https://jup.ag/)** on Solana with a **delegated key via Crossmint**.
 
 You can use this example with any other agent framework, chain, and wallet of your choice.
 
@@ -18,7 +19,7 @@ git clone https://github.com/goat-sdk/goat.git
 
 2. Go to the example directory:
 ```bash
-cd python/examples/by-use-case/solana-swap-tokens
+cd python/examples/by-use-case/solana-swap-tokens-delegated-key
 ```
 
 3. Copy the `.env.template` and populate with your values:
@@ -27,7 +28,10 @@ cp .env.template .env
 ```
 - `OPENAI_API_KEY`
 - `SOLANA_RPC_ENDPOINT`
-- `SOLANA_WALLET_SEED`
+- `CROSSMINT_API_KEY`
+- `SOLANA_DELEGATED_KEY`
+- `SOLANA_WALLET_ADDRESS`
+- `CROSSMINT_WALLET_USERID`
 
 4. Install dependencies:
 ```bash
