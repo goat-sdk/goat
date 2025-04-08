@@ -35,8 +35,8 @@ interface SearchProductsResponse {
 }
 
 const SEARCH_PRODUCTS_QUERY = gql`
-  query SearchProducts($domain: String!, $query: String!, $first: Int!) {
-    productsByDomainV2(domain: $domain, query: $query, first: $first) {
+  query SearchProducts($input: productsByDomainInput!, $pagination: OffsetPaginationInput!) {
+    productsByDomainV2(input: $input, pagination: $pagination) {
       products {
         id
         title
@@ -57,9 +57,14 @@ const SEARCH_PRODUCTS_QUERY = gql`
 export async function searchGymsharkProducts(query: string, limit = 5): Promise<Product[]> {
     try {
         const variables = {
-            domain: "gymshark.com",
-            query,
-            first: limit,
+            input: {
+                domain: "gymshark.com",
+                query,
+            },
+            pagination: {
+                offset: 0,
+                limit,
+            },
         };
 
         const data = await client.request<SearchProductsResponse>(SEARCH_PRODUCTS_QUERY, variables);
