@@ -1,9 +1,9 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { erc20Abi } from "viem";
+import { Address, erc20Abi } from "viem";
 import { QUOTER_ABI } from "./abi/quoter.abi";
 import { ROUTER_ABI } from "./abi/router.abi";
-import { AddLiquidityParams, GetInfoVelodromeTokensParams, SwapExactTokensParams } from "./parameters";
+import { removeLiquidityParams, AddLiquidityParams, GetInfoVelodromeTokensParams, SwapExactTokensParams } from "./parameters";
 
 const ROUTER_ADDRESS: Record<number, string> = {
     34443: "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45",
@@ -418,7 +418,7 @@ export class VelodromeService {
         const amount0Optimal = (amount1Desired * reserve0) / reserve1;
         return [amount0Optimal, amount1Desired];
     }
-@Tool({
+    @Tool({
         name: "remove_liquidity",
         description: "remove liquidity to a Velodrome pool.",
     })
@@ -444,32 +444,33 @@ export class VelodromeService {
             const poolContract = await this.getPool(walletClient, token0, token1, parameters.stable);
 
             let poolAddress: string;
-            if (typeof poolContract === 'object' && poolContract !== null) {
-                const poolObj = poolContract as any;
-                if ('value' in poolObj && typeof poolObj.value === 'string') {
+            if (typeof poolContract === "object" && poolContract !== null) {
+                const poolObj = poolContract as Record<string, unknown>;
+                if ("value" in poolObj && typeof poolObj.value === "string") {
                     poolAddress = poolObj.value;
-                } else if ('address' in poolObj && typeof poolObj.address === 'string') {
+                } else if ("address" in poolObj && typeof poolObj.address === "string") {
                     poolAddress = poolObj.address;
                 } else {
-                    console.error('Pool contract is an object but does not have expected properties:',
-                        JSON.stringify(poolContract, null, 2));
+                    console.error("Pool contract is an object but does not have expected properties:",
+                        JSON.stringify(poolContract, null, 2),
+                    );
                     throw new Error("Could not extract pool address from pool contract");
                 }
-            } else if (typeof poolContract === 'string') {
+            } else if (typeof poolContract === "string") {
                 poolAddress = poolContract;
             } else {
-                console.error('Unexpected pool contract value:', poolContract);
+                console.error("Unexpected pool contract value:", poolContract);
                 throw new Error("Pool address is not in a valid format");
             }
 
             // Get LP token balance for this pool
-            let lpTokenBalanceRaw;
+            let lpTokenBalanceRaw: unknown;
             try {
                 lpTokenBalanceRaw = await walletClient.read({
                     address: poolAddress as Address,
                     abi: erc20Abi,
                     functionName: "balanceOf",
-                    args: [userAddress]
+                    args: [userAddress],
                 });
             } catch (error) {
                 console.error("Error reading LP token balance:", error);
@@ -479,61 +480,60 @@ export class VelodromeService {
             let lpTokenBalance: string;
             try {
                 if (lpTokenBalanceRaw === null || lpTokenBalanceRaw === undefined) {
-                    lpTokenBalance = '0';
-                } else if (typeof lpTokenBalanceRaw === 'bigint') {
+                    lpTokenBalance = "0";
+                } else if (typeof lpTokenBalanceRaw === "bigint") {
                     lpTokenBalance = (lpTokenBalanceRaw as number).toString();
-                } else if (typeof lpTokenBalanceRaw === 'number') {
+                } else if (typeof lpTokenBalanceRaw === "number") {
                     lpTokenBalance = (lpTokenBalanceRaw as number).toString();
-                } else if (typeof lpTokenBalanceRaw === 'string') {
+                } else if (typeof lpTokenBalanceRaw === "string") {
                     // Ensure it's a numeric string
                     if (/^\d+$/.test(lpTokenBalanceRaw)) {
                         lpTokenBalance = lpTokenBalanceRaw;
                     } else {
                         console.error("LP token balance is not a numeric string:", lpTokenBalanceRaw);
-                        lpTokenBalance = '0';
+                        lpTokenBalance = "0";
                     }
-                } else if (typeof lpTokenBalanceRaw === 'object' && lpTokenBalanceRaw !== null) {
-                    if ('toString' in lpTokenBalanceRaw && typeof lpTokenBalanceRaw.toString === 'function') {
+                } else if (typeof lpTokenBalanceRaw === "object" && lpTokenBalanceRaw !== null) {
+                    if ("toString" in lpTokenBalanceRaw && typeof lpTokenBalanceRaw.toString === "function") {
                         const stringVal = lpTokenBalanceRaw.toString();
                         if (/^\d+$/.test(stringVal)) {
                             lpTokenBalance = stringVal;
                         } else {
-                            if ('value' in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
+                            if ("value" in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
                                 const valueStr = String(lpTokenBalanceRaw.value);
                                 if (/^\d+$/.test(valueStr)) {
                                     lpTokenBalance = valueStr;
                                 } else {
-                                    lpTokenBalance = '0';
+                                    lpTokenBalance = "0";
                                 }
                             } else {
-                                lpTokenBalance = '0';
+                                lpTokenBalance = "0";
                             }
                         }
-                    } else if ('value' in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
+                    } else if ("value" in lpTokenBalanceRaw && lpTokenBalanceRaw.value !== undefined) {
                         const valueStr = String(lpTokenBalanceRaw.value);
                         if (/^\d+$/.test(valueStr)) {
                             lpTokenBalance = valueStr;
                         } else {
-                            lpTokenBalance = '0';
+                            lpTokenBalance = "0";
                         }
                     } else {
-                        lpTokenBalance = '0';
+                        lpTokenBalance = "0";
                     }
                 } else {
                     console.error("Unexpected LP token balance type:", typeof lpTokenBalanceRaw);
-                    lpTokenBalance = '0';
+                    lpTokenBalance = "0";
                 }
             } catch (error) {
                 console.error("Error processing LP token balance:", error);
-                lpTokenBalance = '0';
+                lpTokenBalance = "0";
             }
 
-            if (!/^\d+$/.test(lpTokenBalance) || lpTokenBalance === '0') {
-                if (lpTokenBalance === '0') {
+            if (!/^\d+$/.test(lpTokenBalance) || lpTokenBalance === "0") {
+                if (lpTokenBalance === "0") {
                     return { error: "You don't have any LP tokens in this pool" };
-                } else {
-                    return { error: `Invalid LP token balance: ${lpTokenBalance}` };
                 }
+                    return { error: `Invalid LP token balance: ${lpTokenBalance}` };
             }
 
             // Calculate the amount to withdraw
@@ -545,21 +545,21 @@ export class VelodromeService {
                 if (parameters.amount) {
                     const amountText = String(parameters.amount).toLowerCase();
 
-                    if (amountText.includes('half') || amountText.includes('50%')) {
+                    if (amountText.includes("half") || amountText.includes("50%")) {
                         percentToRemove = 0.5;
-                        const halfAmount = BigInt(lpTokenBalance) * BigInt(50) / BigInt(100);
+                        const halfAmount = (BigInt(lpTokenBalance) * BigInt(50)) / BigInt(100);
                         liquidityToRemove = halfAmount.toString();
-                    } else if (amountText.includes('quarter') || amountText.includes('25%')) {
+                    } else if (amountText.includes("quarter") || amountText.includes("25%")) {
                         percentToRemove = 0.25;
-                        const quarterAmount = BigInt(lpTokenBalance) * BigInt(25) / BigInt(100);
+                        const quarterAmount = (BigInt(lpTokenBalance) * BigInt(25)) / BigInt(100);
                         liquidityToRemove = quarterAmount.toString();
-                    } else if (amountText.includes('all') || amountText.includes('100%') || amountText === 'all') {
+                    } else if (amountText.includes("all") || amountText.includes("100%") || amountText === "all") {
                         percentToRemove = 1.0;
                         liquidityToRemove = lpTokenBalance;
                     } else {
                         // If it's a specific numeric value
-                        const parsedAmount = parseInt(amountText);
-                        if (!isNaN(parsedAmount)) {
+                        const parsedAmount = Number.parseInt(amountText);
+                        if (!Number.isNaN(parsedAmount)) {
                             liquidityToRemove = parsedAmount.toString();
                         } else {
                             // If it can't be parsed, use the entire balance
@@ -568,7 +568,7 @@ export class VelodromeService {
                     }
                 } else if (parameters.liquidity) {
                     const liquidityParam = String(parameters.liquidity);
-                    if (liquidityParam.toLowerCase() === 'all') {
+                    if (liquidityParam.toLowerCase() === "all") {
                         liquidityToRemove = lpTokenBalance;
                     } else {
                         if (/^\d+$/.test(liquidityParam)) {
@@ -601,13 +601,13 @@ export class VelodromeService {
                     to: poolAddress as Address,
                     abi: erc20Abi,
                     functionName: "approve",
-                    args: [routerAddress as Address, liquidityToRemove]
+                    args: [routerAddress as Address, liquidityToRemove],
                 });
             } catch (approvalError) {
                 console.error("Approval error details:", approvalError);
                 return {
                     error: `Approval failed: ${String(approvalError)}`,
-                    details: { approvalError }
+                    details: { approvalError },
                 };
             }
 
