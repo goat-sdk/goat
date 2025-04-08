@@ -5,13 +5,13 @@ import { Agent } from "@mastra/core/agent";
 import { tool } from "ai";
 import { z } from "zod";
 
+import { formatProductsForDisplay, searchGymsharkProducts as searchProducts } from "../../services/rye.service.js";
+
 // Define the schema for product search parameters
 const searchProductsSchema = z.object({
     query: z.string().describe("Search query for finding products on Gymshark"),
     limit: z.number().optional().describe("Maximum number of products to return"),
 });
-
-import { formatProductsForDisplay, searchGymsharkProducts as searchProducts } from "../../services/rye.service.js";
 
 // Define the product search function
 const searchGymsharkProducts = async (query: string, limit = 5) => {
