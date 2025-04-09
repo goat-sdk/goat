@@ -10,20 +10,24 @@ import { base } from "viem/chains";
 // Import product search function directly to avoid potential import issues
 import { searchGymsharkProducts } from "./services/rye.service.js";
 
-// User information from memory
-const DEFAULT_USER_INFO = {
-    name: "Joyce Lee",
-    email: "crossmintdemo@gmail.com",
+// Import the UserInfo interface
+import { UserInfo } from "./services/checkout.service.js";
+
+// Sample user info for testing - this would normally come from user input
+// In a real agent scenario, the agent would collect this information from the user
+const TEST_USER_INFO: UserInfo = {
+    name: process.env.USER_NAME || "Test User",
+    email: process.env.USER_EMAIL || "test@example.com",
     shippingAddress: {
-        name: "Joyce Lee",
-        line1: "1 SE 3rd Ave",
-        city: "Miami",
-        state: "FL",
-        postalCode: "33131",
-        country: "US",
+        name: process.env.SHIPPING_NAME || "Test User",
+        line1: process.env.SHIPPING_LINE1 || "123 Test St",
+        city: process.env.SHIPPING_CITY || "Test City",
+        state: process.env.SHIPPING_STATE || "TS",
+        postalCode: process.env.SHIPPING_POSTAL_CODE || "12345",
+        country: process.env.SHIPPING_COUNTRY || "US",
     },
-    paymentMethod: "USDC",
-    blockchain: "base",
+    paymentMethod: process.env.PAYMENT_METHOD || "USDC",
+    blockchain: process.env.BLOCKCHAIN || "base", // Base mainnet
 };
 
 /**
@@ -58,7 +62,9 @@ async function testCheckout() {
         };
 
         const checkoutTools = await getOnChainTools({
-            wallet: viem(walletClient),
+            // Use type assertion to fix compatibility issues
+            // biome-ignore lint/suspicious/noExplicitAny: Required for type compatibility
+            wallet: viem(walletClient) as any,
             plugins: [
                 // Using type assertion to resolve compatibility issues
                 crossmintHeadlessCheckout({
@@ -112,12 +118,12 @@ async function testCheckout() {
                 },
             ],
             recipient: {
-                email: DEFAULT_USER_INFO.email,
-                physicalAddress: DEFAULT_USER_INFO.shippingAddress,
+                email: TEST_USER_INFO.email,
+                physicalAddress: TEST_USER_INFO.shippingAddress,
             },
             payment: {
-                method: DEFAULT_USER_INFO.blockchain,
-                currency: DEFAULT_USER_INFO.paymentMethod,
+                method: TEST_USER_INFO.blockchain,
+                currency: TEST_USER_INFO.paymentMethod,
             },
         });
 

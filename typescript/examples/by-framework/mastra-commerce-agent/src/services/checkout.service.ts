@@ -7,21 +7,21 @@ import { getOnChainTools } from "@goat-sdk/adapter-mastra";
 import { crossmintHeadlessCheckout } from "@goat-sdk/plugin-crossmint-headless-checkout";
 import { viem } from "@goat-sdk/wallet-viem";
 
-// User information from memory
-const DEFAULT_USER_INFO = {
-    name: "Joyce Lee",
-    email: "crossmintdemo@gmail.com",
+// Interface for user information required for checkout
+export interface UserInfo {
+    name: string;
+    email: string;
     shippingAddress: {
-        name: "Joyce Lee",
-        line1: "1 SE 3rd Ave",
-        city: "Miami",
-        state: "FL",
-        postalCode: "33131",
-        country: "US",
-    },
-    paymentMethod: "USDC",
-    blockchain: "base", // Using Base as requested
-};
+        name: string;
+        line1: string;
+        city: string;
+        state: string;
+        postalCode: string;
+        country: string;
+    };
+    paymentMethod: string; // Default: USDC
+    blockchain: string; // Default: base (mainnet)
+}
 
 // Initialize wallet client
 let walletClient: WalletClient;
@@ -37,17 +37,24 @@ export async function initializeCheckout() {
             return false;
         }
 
-        const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
+        // Add 0x prefix to private key if it doesn't have one
+        const privateKey = process.env.WALLET_PRIVATE_KEY?.startsWith("0x")
+            ? process.env.WALLET_PRIVATE_KEY
+            : `0x${process.env.WALLET_PRIVATE_KEY}`;
+        const account = privateKeyToAccount(privateKey as `0x${string}`);
 
+        // Ensure we're using Base mainnet
         walletClient = createWalletClient({
             account,
             transport: http(process.env.RPC_PROVIDER_URL || "https://mainnet.base.org"),
-            chain: base,
+            chain: base, // This is Base mainnet
         });
 
         // Initialize checkout tools with Crossmint plugin
         checkoutTools = await getOnChainTools({
-            wallet: viem(walletClient),
+            // Use type assertion to fix compatibility issues
+            // biome-ignore lint/suspicious/noExplicitAny: Required for type compatibility
+            wallet: viem(walletClient) as any,
             plugins: [
                 // Using type assertion to resolve compatibility issues with the plugin
                 crossmintHeadlessCheckout({
@@ -73,7 +80,7 @@ export interface CheckoutProduct {
     variantId?: string; // Add variant ID for Shopify products
 }
 
-export async function createShopifyCheckout(product: CheckoutProduct, userInfo = DEFAULT_USER_INFO) {
+export async function createShopifyCheckout(product: CheckoutProduct, userInfo: UserInfo) {
     try {
         if (!checkoutTools) {
             const initialized = await initializeCheckout();
@@ -83,9 +90,11 @@ export async function createShopifyCheckout(product: CheckoutProduct, userInfo =
         }
 
         // Format the product locator according to Crossmint Shopify integration requirements
-        // Format: shopify:<product-url>:<variant-id>
+        // Format: shopify:<full-product-url>:<variant-id>
         const variantId = product.variantId || "";
-        const productLocator = `shopify:${product.url}:${variantId}`;
+        // Ensure the URL is a full URL including the domain
+        const productUrl = product.url.startsWith("http") ? product.url : `https://www.gymshark.com${product.url}`;
+        const productLocator = `shopify:${productUrl}:${variantId}`;
 
         console.log(`Creating checkout with product locator: ${productLocator}`);
 
@@ -101,8 +110,8 @@ export async function createShopifyCheckout(product: CheckoutProduct, userInfo =
                 physicalAddress: userInfo.shippingAddress,
             },
             payment: {
-                method: userInfo.blockchain, // Using Base blockchain
-                currency: userInfo.paymentMethod, // Using USDC
+                method: userInfo.blockchain, // Use blockchain as the method (e.g., 'base')
+                currency: userInfo.paymentMethod, // Currency (e.g., 'USDC')
             },
         });
 

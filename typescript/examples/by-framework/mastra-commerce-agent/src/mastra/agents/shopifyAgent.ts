@@ -94,15 +94,15 @@ Your primary tasks are:
 6. Assist with checkout if they want to make a purchase
 
 When a user wants to purchase a product:
-1. Use the checkoutProduct tool to create a checkout for the selected product
-2. Inform the user that they can complete their purchase using USDC on Base blockchain
-3. Provide them with the checkout URL
-
-User Information:
-- Name: Joyce Lee
-- Email: crossmintdemo@gmail.com
-- Shipping Address: 1 SE 3rd Ave, Miami, FL 33131, US
-- Payment Method: USDC on Base blockchain
+1. Ask for the following information if not already provided:
+   - Full name
+   - Complete shipping address (street, city, state, zip code, country)
+   - Email address
+   - Preferred blockchain (default to Base - do not use Base-Sepolia)
+   - Preferred payment method (default to usdc - must be lowercase)
+2. Use the checkoutProduct tool to create a checkout for the selected product with the collected information
+3. Inform the user that they can complete their purchase using their selected payment method
+4. Provide them with the checkout URL
 
 Be friendly, knowledgeable about fitness apparel, and helpful. When recommending products, explain why you think they'd be a good fit based on the customer's needs.
 
@@ -118,14 +118,32 @@ Always remain focused on helping customers find the right Gymshark products for 
         }),
         checkoutProduct: tool({
             description: "Create a checkout for a Gymshark product using Crossmint",
-            parameters: checkoutProductSchema,
+            parameters: checkoutProductSchema.extend({
+                userName: z.string().describe("User's full name"),
+                userEmail: z.string().email().describe("User's email address"),
+                shippingAddress: z.object({
+                    name: z.string().describe("Full name for shipping"),
+                    line1: z.string().describe("Street address"),
+                    city: z.string().describe("City"),
+                    state: z.string().describe("State or province"),
+                    postalCode: z.string().describe("Postal or ZIP code"),
+                    country: z.string().describe("Country code (e.g., US)"),
+                }).describe("Complete shipping address"),
+                paymentMethod: z.string().default("usdc").describe("Payment method (default: usdc - must be lowercase)"),
+                blockchain: z.string().default("base").describe("Blockchain for payment (default: base)"),
+            }),
             execute: async ({
                 productId,
                 productTitle,
                 productPrice,
                 productUrl,
                 productVariantId,
-            }: z.infer<typeof checkoutProductSchema>) => {
+                userName,
+                userEmail,
+                shippingAddress,
+                paymentMethod,
+                blockchain,
+            }) => {
                 const product: CheckoutProduct = {
                     id: productId,
                     title: productTitle,
@@ -134,7 +152,15 @@ Always remain focused on helping customers find the right Gymshark products for 
                     variantId: productVariantId,
                 };
 
-                const result = await createShopifyCheckout(product);
+                const userInfo = {
+                    name: userName,
+                    email: userEmail,
+                    shippingAddress,
+                    paymentMethod,
+                    blockchain,
+                };
+
+                const result = await createShopifyCheckout(product, userInfo);
                 return {
                     success: result.success,
                     message: result.message,

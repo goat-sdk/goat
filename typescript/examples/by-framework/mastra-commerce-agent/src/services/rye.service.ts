@@ -36,6 +36,7 @@ export interface Product {
     price: {
         value: number;
         currency: string;
+        displayValue?: string;
     };
     images: {
         url: string;
@@ -49,6 +50,7 @@ interface SearchProductsResponse {
     productsByDomainV2: Product[];
 }
 
+// Updated query based on Rye API documentation
 const SEARCH_PRODUCTS_QUERY = gql`
   query DemoShopifyProductByDomain($input: productsByDomainInput!, $pagination: OffsetPaginationInput!) {
     productsByDomainV2(input: $input, pagination: $pagination) {
@@ -60,9 +62,11 @@ const SEARCH_PRODUCTS_QUERY = gql`
       isAvailable
       tags
       price {
-        value
-        currency
-        displayValue
+        ... on Price {
+          value
+          currency
+          displayValue
+        }
       }
       images {
         url
@@ -71,11 +75,6 @@ const SEARCH_PRODUCTS_QUERY = gql`
       variants {
         id
         title
-        price {
-          value
-          currency
-        }
-        isAvailable
       }
     }
   }
@@ -101,13 +100,27 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
             (term) => !["the", "a", "an", "and", "or", "for", "from", "with", "in", "on", "at"].includes(term),
         );
 
-        // Determine if we're specifically looking for men's items
-        const isMensSearch = queryTerms.some((term) => term.includes("men"));
-        // Determine if we're specifically looking for shorts
-        const isShortSearch = queryTerms.some((term) => term.includes("short"));
+        // Filter products based on search terms
+        const filteredProducts = data.productsByDomainV2.filter((product) => {
+            const productText = `${product.title} ${product.description}`.toLowerCase();
+            return importantTerms.some((term) => productText.includes(term));
+        });
 
-        // Process the products to extract variant information
-        const processedProducts = data.productsByDomainV2.map((product) => {
+        // Sort products by relevance (how many search terms they match)
+        const sortedProducts = filteredProducts.sort((a, b) => {
+            const aText = `${a.title} ${a.description}`.toLowerCase();
+            const bText = `${b.title} ${b.description}`.toLowerCase();
+
+            const aMatches = importantTerms.filter((term) => aText.includes(term)).length;
+            const bMatches = importantTerms.filter((term) => bText.includes(term)).length;
+
+            return bMatches - aMatches;
+        });
+
+        // Products already have price field from the API
+
+        // Process the products to extract variant IDs for Shopify products
+        const processedProducts = sortedProducts.map((product) => {
             // If there are variants, use the first available variant ID
             // This is a simplification - in a real app, you'd want to let the user select the variant
             if (product.variants && product.variants.length > 0) {
@@ -123,14 +136,26 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
 
         // Now filter the processed products
 
-        // Filter products that match the search terms in title, description, or tags
-        const filteredProducts = processedProducts.filter((product) => {
+        // Determine if we're specifically looking for men's or women's items
+        const isMensSearch = queryTerms.some(term => term.includes('men'));
+        const isWomensSearch = queryTerms.some(term => term.includes('women'));
+        
+        // Determine if we're specifically looking for shorts
+        const isShortSearch = queryTerms.some(term => term.includes('short'));
+        
+        // Filter products further based on specific criteria
+        const finalFilteredProducts = processedProducts.filter((product) => {
             const title = product.title?.toLowerCase() || "";
             const description = product.description?.toLowerCase() || "";
             const tags = product.tags?.map((tag) => tag.toLowerCase()) || [];
 
             // If specifically looking for men's items, exclude women's items
             if (isMensSearch && (title.includes("women") || title.includes("ladies") || title.includes("female"))) {
+                return false;
+            }
+            
+            // If specifically looking for women's items, exclude men's items
+            if (isWomensSearch && (title.includes("men") && !title.includes("women"))) {
                 return false;
             }
 
@@ -147,62 +172,19 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
                         extraMatches++;
                     }
                 }
-                // Only include non-shorts if they match almost all other terms
-                if (extraMatches < importantTerms.length - 1) {
-                    return false;
-                }
+                // Only include if it has at least 2 other matching terms
+                return extraMatches >= 2;
             }
 
-            // Count how many important terms match
-            let matchCount = 0;
-            for (const term of importantTerms) {
-                if (title.includes(term) || description.includes(term) || tags.some((tag) => tag.includes(term))) {
-                    matchCount++;
-                }
-            }
-
-            // Product must match at least half of the important terms or at least one term if there are few terms
-            const minMatches = Math.max(1, Math.floor(importantTerms.length / 2));
-            return matchCount >= minMatches;
-        });
-
-        // Sort by relevance (number of matching terms)
-        filteredProducts.sort((a, b) => {
-            const titleA = a.title?.toLowerCase() || "";
-            const titleB = b.title?.toLowerCase() || "";
-
-            // Prioritize products with 'men' and 'short' in the title
-            const aMenShort =
-                titleA.includes("men") && titleA.includes("short")
-                    ? 2
-                    : titleA.includes("men") || titleA.includes("short")
-                      ? 1
-                      : 0;
-            const bMenShort =
-                titleB.includes("men") && titleB.includes("short")
-                    ? 2
-                    : titleB.includes("men") || titleB.includes("short")
-                      ? 1
-                      : 0;
-
-            if (aMenShort !== bMenShort) {
-                return bMenShort - aMenShort;
-            }
-
-            // Then count matching terms
-            let aMatches = 0;
-            let bMatches = 0;
-
-            for (const term of importantTerms) {
-                if (titleA.includes(term)) aMatches++;
-                if (titleB.includes(term)) bMatches++;
-            }
-
-            return bMatches - aMatches;
+            // For other searches, include if any important term matches
+            return importantTerms.some(
+                (term) =>
+                    title.includes(term) || description.includes(term) || tags.some((tag) => tag.includes(term)),
+            );
         });
 
         // Return the filtered products, limited to the specified count
-        return filteredProducts.slice(0, limit);
+        return finalFilteredProducts.slice(0, limit);
     } catch (error) {
         console.error("Error searching Gymshark products:", error);
         throw new Error(`Failed to search products: ${error instanceof Error ? error.message : String(error)}`);
