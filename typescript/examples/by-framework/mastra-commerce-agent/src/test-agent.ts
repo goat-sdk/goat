@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { shopifyAgent } from "./mastra/agents/shopifyAgent.js";
+import { CheckoutProduct, UserInfo, createShopifyCheckout } from "./services/checkout.service.js";
 import { searchGymsharkProducts } from "./services/rye.service.js";
-import { createShopifyCheckout, CheckoutProduct, UserInfo } from "./services/checkout.service.js";
 
 async function testAgent() {
     console.log("Testing Gymshark Agent...");
@@ -16,7 +16,7 @@ async function testAgent() {
                 // Print limited product info to avoid token limits
                 console.log("First product title:", products[0].title);
                 console.log("Price:", products[0].price.currency, products[0].price.value);
-                
+
                 // Test checkout with the first product
                 console.log("\n--- Testing Checkout Functionality ---");
                 const testProduct: CheckoutProduct = {
@@ -24,9 +24,9 @@ async function testAgent() {
                     title: products[0].title,
                     price: products[0].price.value.toString(),
                     url: products[0].url,
-                    variantId: products[0].variantId
+                    variantId: products[0].variantId,
                 };
-                
+
                 // Test user info from memory
                 const testUserInfo: UserInfo = {
                     name: "Joyce Lee",
@@ -37,12 +37,12 @@ async function testAgent() {
                         city: "Miami",
                         state: "FL",
                         postalCode: "33131",
-                        country: "US"
+                        country: "US",
                     },
                     paymentMethod: "usdc", // Must be lowercase
-                    blockchain: "base" // This is one of the supported blockchains from the error message
+                    blockchain: "base", // This is one of the supported blockchains from the error message
                 };
-                
+
                 try {
                     const checkoutResult = await createShopifyCheckout(testProduct, testUserInfo);
                     console.log("Checkout result:", JSON.stringify(checkoutResult, null, 2));

@@ -137,12 +137,12 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
         // Now filter the processed products
 
         // Determine if we're specifically looking for men's or women's items
-        const isMensSearch = queryTerms.some(term => term.includes('men'));
-        const isWomensSearch = queryTerms.some(term => term.includes('women'));
-        
+        const isMensSearch = queryTerms.some((term) => term.includes("men"));
+        const isWomensSearch = queryTerms.some((term) => term.includes("women"));
+
         // Determine if we're specifically looking for shorts
-        const isShortSearch = queryTerms.some(term => term.includes('short'));
-        
+        const isShortSearch = queryTerms.some((term) => term.includes("short"));
+
         // Filter products further based on specific criteria
         const finalFilteredProducts = processedProducts.filter((product) => {
             const title = product.title?.toLowerCase() || "";
@@ -153,9 +153,9 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
             if (isMensSearch && (title.includes("women") || title.includes("ladies") || title.includes("female"))) {
                 return false;
             }
-            
+
             // If specifically looking for women's items, exclude men's items
-            if (isWomensSearch && (title.includes("men") && !title.includes("women"))) {
+            if (isWomensSearch && title.includes("men") && !title.includes("women")) {
                 return false;
             }
 
@@ -178,8 +178,7 @@ export async function searchGymsharkProducts(query: string, limit = 3): Promise<
 
             // For other searches, include if any important term matches
             return importantTerms.some(
-                (term) =>
-                    title.includes(term) || description.includes(term) || tags.some((tag) => tag.includes(term)),
+                (term) => title.includes(term) || description.includes(term) || tags.some((tag) => tag.includes(term)),
             );
         });
 

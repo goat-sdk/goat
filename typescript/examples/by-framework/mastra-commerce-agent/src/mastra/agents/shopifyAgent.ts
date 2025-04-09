@@ -121,15 +121,20 @@ Always remain focused on helping customers find the right Gymshark products for 
             parameters: checkoutProductSchema.extend({
                 userName: z.string().describe("User's full name"),
                 userEmail: z.string().email().describe("User's email address"),
-                shippingAddress: z.object({
-                    name: z.string().describe("Full name for shipping"),
-                    line1: z.string().describe("Street address"),
-                    city: z.string().describe("City"),
-                    state: z.string().describe("State or province"),
-                    postalCode: z.string().describe("Postal or ZIP code"),
-                    country: z.string().describe("Country code (e.g., US)"),
-                }).describe("Complete shipping address"),
-                paymentMethod: z.string().default("usdc").describe("Payment method (default: usdc - must be lowercase)"),
+                shippingAddress: z
+                    .object({
+                        name: z.string().describe("Full name for shipping"),
+                        line1: z.string().describe("Street address"),
+                        city: z.string().describe("City"),
+                        state: z.string().describe("State or province"),
+                        postalCode: z.string().describe("Postal or ZIP code"),
+                        country: z.string().describe("Country code (e.g., US)"),
+                    })
+                    .describe("Complete shipping address"),
+                paymentMethod: z
+                    .string()
+                    .default("usdc")
+                    .describe("Payment method (default: usdc - must be lowercase)"),
                 blockchain: z.string().default("base").describe("Blockchain for payment (default: base)"),
             }),
             execute: async ({
