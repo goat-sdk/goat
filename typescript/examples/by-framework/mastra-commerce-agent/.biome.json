@@ -1,0 +1,11 @@
+{
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "suspicious": {
+                "noExplicitAny": "off"
+            }
+        },
+        "ignore": ["node_modules", "dist"]
+    }
+}
