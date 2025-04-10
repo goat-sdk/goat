@@ -26,13 +26,18 @@ from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
 from goat_plugins.spl_token.tokens import SPL_TOKENS
 from goat_wallets.solana import solana
 
+# Load environment variables
 load_dotenv()
 solana_rpc_endpoint = os.getenv("SOLANA_RPC_ENDPOINT")
 solana_wallet_seed = os.getenv("SOLANA_WALLET_SEED")
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Make sure environment variables are set
 if not solana_rpc_endpoint or not solana_wallet_seed:
     raise ValueError("SOLANA_RPC_ENDPOINT and SOLANA_WALLET_SEED must be set in .env")
+
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY must be set in .env to use GPT-4o")
 
 client = SolanaClient(solana_rpc_endpoint)
 keypair = Keypair.from_base58_string(solana_wallet_seed)
@@ -44,7 +49,7 @@ spl_token_plugin = spl_token(SplTokenPluginOptions(
 ))
 
 # --- Import Smolagents and the GOAT Adapter --- 
-from smolagents import CodeAgent, HfApiModel
+from smolagents import OpenAIServerModel, ToolCallingAgent
 from goat_adapters.smolagents import get_smolagents_tools
 
 # --- Generate Smolagents Tools from GOAT --- 
@@ -54,12 +59,21 @@ goat_smolagents_tools = get_smolagents_tools(
 )
 
 # --- Define Smolagents Agent using GOAT Tools --- 
-model = HfApiModel("Qwen/Qwen2.5-Coder-32B-Instruct")  # Or any other supported model
+model = OpenAIServerModel(
+    model_id="gpt-4o",
+)
 
-agent = CodeAgent(
+agent = ToolCallingAgent(
     tools=goat_smolagents_tools,
     model=model,
-    add_base_tools=True  # Include Smolagents default tools
+    add_base_tools=False  # Don't include Smolagents default tools
+)
+
+# Set custom system prompt
+agent.prompt_templates["system_prompt"] = (
+    "You are an expert analyst focused on the Solana blockchain and its SPL token ecosystem. "
+    "You have access to specialized tools that can query SPL token balances and potentially other relevant information directly from the blockchain. "
+    "Your task is to understand the user's question, use the appropriate tool(s) if necessary, and provide a clear, concise answer."
 )
 
 # --- Run the agent with a specific task ---
@@ -72,7 +86,7 @@ print(result)
 You can also create a Smolagents ToolCollection to manage your GOAT tools:
 
 ```python
-from smolagents import ToolCollection, CodeAgent
+from smolagents import ToolCollection, ToolCallingAgent
 
 # Create the tools first
 goat_tools = get_smolagents_tools(wallet=wallet, plugins=[spl_token_plugin])
@@ -83,10 +97,10 @@ my_tool_collection = ToolCollection(
 )
 
 # Now use this collection with your agent
-agent = CodeAgent(
+agent = ToolCallingAgent(
     tools=my_tool_collection.tools,
     model=model,
-    add_base_tools=True
+    add_base_tools=False
 )
 ```
 
