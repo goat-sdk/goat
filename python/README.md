@@ -83,6 +83,7 @@ GOAT is free software, MIT licensed.
   - [OpenAI Agents SDK](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/openai-agents-sdk)
   - [AG2](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/ag2)
   - [CrewAI](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/crewai)
+  - [Smolagents](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/smolagents)
   - [GAME Agent](https://github.com/game-by-virtuals/game-python/tree/main/plugins/onchain_actions)
   - [ZerePy](https://github.com/blorm-network/ZerePy/blob/main/src/connections/goat_connection.py)
 - **By wallet**

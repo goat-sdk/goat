@@ -219,6 +219,7 @@ GOAT is free software, MIT licensed.
 | AI SDK | [@goat-sdk/adapter-vercel-ai](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/vercel-ai) |
 | Langchain | [@goat-sdk/adapter-langchain](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/langchain) | [goat-sdk-adapter-langchain](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/langchain)
 | CrewAI |  | [goat-sdk-adapter-crewai](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/crewai) |
+| Smolagents |  | [goat-sdk-adapter-smolagents](https://github.com/goat-sdk/goat/tree/main/python/src/adapters/smolagents) |
 | ElevenLabs | [@goat-sdk/adapter-eleven-labs](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/eleven-labs)
 | LlamaIndex | [@goat-sdk/adapter-llamaindex](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/llamaindex) |
 | Mastra | [@goat-sdk/adapter-mastra](https://github.com/goat-sdk/goat/tree/main/typescript/packages/adapters/mastra) |
