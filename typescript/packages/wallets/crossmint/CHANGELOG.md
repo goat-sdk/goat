@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.4.5
+
+### Patch Changes
+
+- 7b0c336: Fix smart wallets compatibility
+
 ## 0.4.4
 
 ### Patch Changes

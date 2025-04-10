@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-0x
 
+## 0.1.10
+
+### Patch Changes
+
+- 7b0c336: Fix smart wallets compatibility
+
 ## 0.1.9
 
 ### Patch Changes
