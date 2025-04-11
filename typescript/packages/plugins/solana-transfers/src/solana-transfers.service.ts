@@ -9,28 +9,15 @@ import {
     getAssociatedTokenAddress,
     getMint,
 } from "@solana/spl-token";
-import {
-    AccountInfo,
-    PublicKey,
-    SystemProgram,
-    TransactionInstruction,
-} from "@solana/web3.js";
-import {
-    CheckSPLTokenInfoParams,
-    NativeSPLTransferParams,
-    NativeSolTransferParams,
-} from "./parameters";
+import { AccountInfo, PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
+import { CheckSPLTokenInfoParams, NativeSPLTransferParams, NativeSolTransferParams } from "./parameters";
 
 export class SolanaTransfersService {
     @Tool({
         name: "native_sol_transfer",
-        description:
-            "Transfer Solana (SOL) natively (Crossmint wallets supported)",
+        description: "Transfer Solana (SOL) natively (Crossmint wallets supported)",
     })
-    async nativeSolTransfer(
-        walletClient: SolanaWalletClient,
-        parameters: NativeSolTransferParams,
-    ) {
+    async nativeSolTransfer(walletClient: SolanaWalletClient, parameters: NativeSolTransferParams) {
         const fromPublicKey = new PublicKey(walletClient.getAddress());
         const toPublicKey = new PublicKey(parameters.recipient);
 
@@ -49,16 +36,11 @@ export class SolanaTransfersService {
 
     @Tool({
         name: "check_spl_token_info",
-        description:
-            "Check all SPL token accounts for a wallet, including non-standard accounts",
+        description: "Check all SPL token accounts for a wallet, including non-standard accounts",
     })
-    async checkSPLTokenInfo(
-        walletClient: SolanaWalletClient,
-        parameters: CheckSPLTokenInfoParams,
-    ) {
+    async checkSPLTokenInfo(walletClient: SolanaWalletClient, parameters: CheckSPLTokenInfoParams) {
         const connection = walletClient.getConnection();
-        const ownerAddress =
-            parameters.walletAddress || walletClient.getAddress();
+        const ownerAddress = parameters.walletAddress || walletClient.getAddress();
 
         const tokenMintPublicKey = new PublicKey(parameters.tokenMint);
         const walletPublicKey = new PublicKey(ownerAddress);
@@ -67,10 +49,7 @@ export class SolanaTransfersService {
         const mintInfo = await getMint(connection, tokenMintPublicKey);
 
         // Get all token accounts owned by the wallet for this specific mint
-        const tokenAccounts = await connection.getTokenAccountsByOwner(
-            walletPublicKey,
-            { mint: tokenMintPublicKey },
-        );
+        const tokenAccounts = await connection.getTokenAccountsByOwner(walletPublicKey, { mint: tokenMintPublicKey });
 
         // Calculate total balance across all accounts
         let totalRawBalance = 0;
@@ -86,10 +65,7 @@ export class SolanaTransfersService {
             accountDetails.push({
                 address: accountAddress,
                 rawBalance: rawBalance.toString(),
-                formattedBalance: this._formatTokenAmount(
-                    rawBalance,
-                    mintInfo.decimals,
-                ),
+                formattedBalance: this._formatTokenAmount(rawBalance, mintInfo.decimals),
             });
         }
 
@@ -108,10 +84,7 @@ export class SolanaTransfersService {
         );
 
         // Calculate total balance in token units
-        const totalFormattedBalance = this._formatTokenAmount(
-            totalRawBalance,
-            mintInfo.decimals,
-        );
+        const totalFormattedBalance = this._formatTokenAmount(totalRawBalance, mintInfo.decimals);
 
         return {
             tokenMint: parameters.tokenMint,
@@ -129,21 +102,15 @@ export class SolanaTransfersService {
 
     @Tool({
         name: "native_spl_transfer",
-        description:
-            "Transfer SPL tokens between wallets (Crossmint wallets supported)",
+        description: "Transfer SPL tokens between wallets (Crossmint wallets supported)",
     })
-    async nativeSPLTransfer(
-        walletClient: SolanaWalletClient,
-        parameters: NativeSPLTransferParams,
-    ) {
+    async nativeSPLTransfer(walletClient: SolanaWalletClient, parameters: NativeSPLTransferParams) {
         const senderPublicKey = new PublicKey(walletClient.getAddress());
         const recipientPublicKey = new PublicKey(parameters.recipient);
         const tokenMintPublicKey = new PublicKey(parameters.tokenMint);
 
         // Convert amount based on decimals and handle floating point precision
-        const amountToSend = Math.round(
-            parameters.amount * 10 ** parameters.decimals,
-        );
+        const amountToSend = Math.round(parameters.amount * 10 ** parameters.decimals);
 
         // Get the associated token accounts
         const senderTokenAccount = await getAssociatedTokenAddress(
@@ -166,9 +133,7 @@ export class SolanaTransfersService {
 
         // Check if recipient token account exists
         const connection = walletClient.getConnection();
-        const recipientAccountInfo = await connection.getAccountInfo(
-            recipientTokenAccount,
-        );
+        const recipientAccountInfo = await connection.getAccountInfo(recipientTokenAccount);
 
         // Create the associated token account if it doesn't exist
         if (!recipientAccountInfo) {
@@ -213,10 +178,7 @@ export class SolanaTransfersService {
      * @returns Formatted amount string
      * @private
      */
-    private _formatTokenAmount(
-        amount: number | bigint,
-        decimals: number,
-    ): string {
+    private _formatTokenAmount(amount: number | bigint, decimals: number): string {
         return (Number(amount) / 10 ** decimals).toFixed(decimals);
     }
 }
