@@ -1,0 +1,52 @@
+[tool.poetry]
+name = "goat-sdk-example-by-use-case-uniswap-crewai"
+version = "0.1.0"
+description = "GOAT example for token swaps and price quotes using Uniswap with CrewAI and Gemini"
+authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
+readme = "README.md"
+keywords = ["goat", "sdk", "web3", "agents", "ai", "uniswap", "defi", "swap"]
+homepage = "https://ohmygoat.dev/"
+repository = "https://github.com/goat-sdk/goat"
+packages = [
+    { include = "example.py" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+crewai = "^0.28.8"
+python-dotenv = "^1.0.1" 
+web3 = "^6.12.0"
+eth-account = "^0.10.0"
+goat-sdk = "^0.1.0"
+goat-sdk-wallet-web3 = "^0.1.0"
+goat-sdk-plugin-uniswap = "^0.1.0"
+goat-sdk-adapter-crewai = "^0.1.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
+pytest-asyncio = "^0.25.0"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/goat-sdk/goat/issues"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--import-mode=importlib",
+]
+pythonpath = "src"
+asyncio_default_fixture_loop_scope = "function"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.8.6"
+goat-sdk = { path = "../../../src/goat-sdk", develop = true }
+goat-sdk-wallet-web3 = { path = "../../../src/wallets/web3", develop = true }
+goat-sdk-plugin-uniswap = { path = "../../../src/plugins/uniswap", develop = true }
+goat-sdk-adapter-crewai = { path = "../../../src/adapters/crewai", develop = true }
+
+[tool.ruff]
+line-length = 120
+target-version = "py312" 
