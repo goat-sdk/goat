@@ -50,11 +50,11 @@ To provide personalized data streams for your agents, you can create and publish
 
 1. Run the plugin and invoke method directly to start consuming message:
 ```bash
-pnpm example.py
+pnpm start
 ```
 2. Run the interactive CLI:
 ```bash
-pnpm llm_example.py
+pnpm llm_example
 ```
 
 2. Chat with the agent:
