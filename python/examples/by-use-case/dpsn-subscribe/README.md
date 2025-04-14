@@ -52,8 +52,9 @@ poetry run python example.py
 ```bash
 poetry run python llm_example.py
 ```
-
-2. Chat with the agent:
+  Chat with the agent:
+   
+  e.g when subscibing to BTC price updates using  dpsn topic from [Binance top tokens price feed](https://streams.dpsn.org/topic/0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4)
 - Subscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
 - Unsubscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
 
