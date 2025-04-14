@@ -2,17 +2,9 @@
 name = "goat-sdk-monorepo"
 version = "0.1.0"
 description = "Goat 🐐 (Great Onchain Agent Toolkit) is an open-source framework for connecting AI agents to any onchain app"
-authors = [
-    "Andrea Villa <andreakarimodm@gmail.com>",
-]
+authors = ["Andrea Villa <andreakarimodm@gmail.com>"]
 readme = "README.md"
-keywords = [
-    "goat",
-    "sdk",
-    "web3",
-    "agents",
-    "ai",
-]
+keywords = ["goat", "sdk", "web3", "agents", "ai"]
 homepage = "https://ohmygoat.dev/"
 repository = "https://github.com/goat-sdk/goat"
 
@@ -33,6 +25,9 @@ path = "src/plugins/coingecko/"
 
 [tool.poetry.dependencies.goat-sdk-plugin-dexscreener]
 path = "src/plugins/dexscreener/"
+
+[tool.poetry.dependencies.goat-sdk-plugin-dpsn]
+path = "src/plugins/dpsn/"
 
 [tool.poetry.dependencies.goat-sdk-plugin-erc20]
 path = "src/plugins/erc20/"
@@ -91,9 +86,7 @@ tomli = "^2.0.1"
 tomli-w = "^1.0.0"
 
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+addopts = ["--import-mode=importlib"]
 pythonpath = "src"
 asyncio_default_fixture_loop_scope = "function"
 
@@ -102,7 +95,5 @@ line-length = 120
 target-version = "py312"
 
 [build-system]
-requires = [
-    "poetry-core",
-]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
