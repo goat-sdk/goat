@@ -48,12 +48,11 @@ plugin.subscribe("0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4
 
 #unsubscribe to topic
 plugin.unsubscribe("0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker")
-
-
+```
 ## Tools
 * Subscribe to a dpsn topic
 * Unsubscribe to a dpsn topic
-```
+
 
 <footer>
 <br/>
