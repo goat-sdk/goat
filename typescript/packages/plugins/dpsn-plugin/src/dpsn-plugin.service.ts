@@ -29,7 +29,6 @@ export class DpsnPluginService {
         description: "Unsubscribe from given dpsn_topic",
     })
     async unsubscribeToDpsnTopic(params: UnsubscribeFromTopicParameters) {
-
         const res = await this.dpsnService.unsubscribe(params.dpsn_topic);
         if (res) {
             return `Unsubscribed from ${params.dpsn_topic} successfully`;
