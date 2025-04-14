@@ -35,7 +35,7 @@ pnpm add @goat-sdk/dpsn-plugin
 import { dpsnplugin } from '@goat-sdk/dpsn-plugin';
 const dpsn_plugin=dpsnplugin({
         DPSN_URL: process.env.DPSN_URL,
-        EVM_WALLET_PVT_KEY: process.env.DPSN_EVM_WALLET_PVT_KEY
+        EVM_WALLET_PVT_KEY: process.env.EVM_WALLET_PVT_KEY
     });
     //Event listener setup to listen to messages on subscribing to dpsn topics.
      const DpsnDataStreamHandler=dpsn_plugin.DpsnDataStream;
