@@ -12,7 +12,7 @@ You can use this example with any other agent framework, chain, and wallet of yo
 You can use this example with any other agent framework of your choice.
 
 ## Prerequisites
-- A
+- An EVM wallet pvt key used for authentication , no on-chain transactions are invoked.
 
 ## Setup
 1. Clone the repository:
