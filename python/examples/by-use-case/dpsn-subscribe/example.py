@@ -17,12 +17,12 @@ from goat_wallets.web3 import Web3EVMWalletClient
 
 load_dotenv()
 dpsn_url = os.getenv('DPSN_URL')
-dpsn_pvt_key = os.getenv('DPSN_PRIVATE_KEY')
+dpsn_pvt_key = os.getenv('EVM_WALLET_PVT_KEY')
 
 
 BASE_RPC_URL = os.getenv("BASE_RPC_URL", "https://mainnet.base.org")
 w3 = Web3(Web3.HTTPProvider(BASE_RPC_URL))
-private_key = os.getenv("DPSN_PRIVATE_KEY")
+private_key = os.getenv("EVM_WALLET_PVT_KEY")
 assert private_key is not None, "You must set WALLET_PRIVATE_KEY environment variable"
 assert private_key.startswith("0x"), "Private key must start with 0x hex prefix"
 
