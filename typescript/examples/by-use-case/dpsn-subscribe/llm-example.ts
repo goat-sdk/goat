@@ -110,14 +110,13 @@ async function setupAndRun() {
 
             // Check if toolResults exist and log them
             if (toolResults && toolResults.length > 0) {
-                console.log("TOOLS CALLED & RESULTS:");
+                console.log("TOOL CALLED & RESULTS:");
                 console.log(toolResults);
 
                 // toolResults[0].result.on("message", (message: unknown) => {
                 //     console.log("Received message from DPSN:", message);
                 //     // Add your message processing logic here
                 // });
-                console.log("\n-------------------");
             } else {
                 console.log("NO TOOLS CALLED");
                 console.log("\n-------------------");
@@ -125,7 +124,6 @@ async function setupAndRun() {
         } catch (error) {
             console.error("Error during generation:", error);
         }
-        console.log("\n-------------------");
     }
 }
 

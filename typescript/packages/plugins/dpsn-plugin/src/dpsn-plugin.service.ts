@@ -14,7 +14,6 @@ export class DpsnPluginService {
         description: "Subscribe to the given dpsn_topic",
     })
     async subscribeToDpsnTopic(params: SubscribeToTopicParameters) {
-        console.log("Reached the dpsn tool ,Subscribing to DPSN topic:", params.dpsn_topic);
         await this.dpsnService.subscribe(params.dpsn_topic, (message) => {
             this.DpsnDataStream.emit("message", {
                 topic: params.dpsn_topic,
@@ -30,7 +29,6 @@ export class DpsnPluginService {
         description: "Unsubscribe from given dpsn_topic",
     })
     async unsubscribeToDpsnTopic(params: UnsubscribeFromTopicParameters) {
-        console.log("Reached the dpsn tool ,UnSubscribing to DPSN topic:", params.dpsn_topic);
 
         const res = await this.dpsnService.unsubscribe(params.dpsn_topic);
         if (res) {
