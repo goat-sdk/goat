@@ -1,7 +1,7 @@
+import EventEmitter from "node:events";
 import { PluginBase } from "@goat-sdk/core";
 import { DpsnPluginService } from "./dpsn-plugin.service";
 import { Dpsnservice } from "./dpsnClient";
-import EventEmitter from "events";
 
 // Interface for required plugin options
 export interface DpsnPluginOptions {
@@ -24,13 +24,7 @@ export class DpsnPlugin extends PluginBase {
         const DpsnDataStream = new EventEmitter();
 
         super("dpsn-plugin", [
-            new DpsnPluginService(
-                new Dpsnservice(
-                    options.DPSN_URL,
-                    options.EVM_WALLET_PVT_KEY
-                ),
-                DpsnDataStream,
-            ),
+            new DpsnPluginService(new Dpsnservice(options.DPSN_URL, options.EVM_WALLET_PVT_KEY), DpsnDataStream),
         ]);
         this.DpsnDataStream = DpsnDataStream;
     }

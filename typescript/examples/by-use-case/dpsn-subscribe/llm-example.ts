@@ -3,14 +3,14 @@
 // DPSN_PRIVATE_KEY=your_dpsn_private_key
 // OPENAI_API_KEY=your_openai_key
 
-import { Chain, WalletClientBase, getTools } from "@goat-sdk/core"; // Import necessary core components
-import { dpsnplugin } from "@goat-sdk/dpsn-plugin";
-import * as dotenv from "dotenv";
 import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
+import { Chain, WalletClientBase, getTools } from "@goat-sdk/core"; // Import necessary core components
+import { ToolBase } from "@goat-sdk/core";
+import { dpsnplugin } from "@goat-sdk/dpsn-plugin";
 import { generateText } from "ai";
-import EventEmitter from "node:events";
-import { toNamespacedPath } from "node:path";
+import * as dotenv from "dotenv";
+import { ZodType, ZodTypeDef } from "zod";
 
 // Define a minimal dummy wallet client for the example
 // Replace this with your actual wallet setup (e.g., from @goat-sdk/wallet-evm)
@@ -38,12 +38,12 @@ class DummyWalletClient extends WalletClientBase {
 dotenv.config();
 
 async function setupAndRun() {
-    ; // Use the dummy wallet
+    // Use the dummy wallet
     const wallet = new DummyWalletClient();
     const dpsn_plugin = dpsnplugin({
-        DPSN_URL: process.env.DPSN_URL ?? '',
-        EVM_WALLET_PVT_KEY: process.env.EVM_WALLET_PVT_KEY ?? ''
-    })
+        DPSN_URL: process.env.DPSN_URL ?? "",
+        EVM_WALLET_PVT_KEY: process.env.EVM_WALLET_PVT_KEY ?? "",
+    });
     //declare the dpsn data stream handler for listening to messages on subscribing to dpsn topics
     const DpsnDataStreamHandler = dpsn_plugin.DpsnDataStream;
     DpsnDataStreamHandler.on("message", (message: unknown) => {
@@ -51,21 +51,22 @@ async function setupAndRun() {
         // Add your message processing logic here
     });
     // 1. Get tools array from the core wallet and the DPSN plugin
-    const toolsArray = await getTools({ // Renamed to toolsArray
+    const toolsArray = await getTools({
+        // Renamed to toolsArray
         wallet: wallet,
         plugins: [
             dpsn_plugin, // Add the DPSN plugin
         ],
     });
     // Convert array to the object format expected by generateText (ToolSet)
-    const toolSet: { [key: string]: any } = {};
-    toolsArray.forEach((tool: any) => {
+    type ToolSet = { [key: string]: ToolBase<ZodType<unknown, ZodTypeDef, unknown>, unknown> };
+    const toolSet: ToolSet = {};
+    for (const tool of toolsArray) {
         // Assuming tool object has a 'name' property suitable for keying
-        if (tool && tool.name) {
-
+        if (tool?.name) {
             toolSet[tool.name] = tool;
         }
-    });
+    }
 
     console.log(
         "Tools retrieved:",
@@ -79,7 +80,9 @@ async function setupAndRun() {
     });
 
     console.log("\n--- Agent Setup Complete ---");
-    console.log("Enter prompts like 'subscribe to the 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker topic' or 'exit'");
+    console.log(
+        "Enter prompts like 'subscribe to the 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker topic' or 'exit'",
+    );
     //You can select any topic from the DPSN Streams store
     //https://streams.dpsn.org
     // 3. Start the interaction loop
@@ -98,14 +101,13 @@ async function setupAndRun() {
         console.log("\n-------------------");
 
         try {
-            const { text, toolResults,toolCalls,steps } = await generateText({
+            const { text, toolResults, toolCalls, steps } = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: toolSet, // Use the converted toolSet object
-                maxSteps:1,
+                maxSteps: 1,
                 prompt: prompt,
             });
-        
-           
+
             // Check if toolResults exist and log them
             if (toolResults && toolResults.length > 0) {
                 console.log("TOOLS CALLED & RESULTS:");
@@ -120,13 +122,6 @@ async function setupAndRun() {
                 console.log("NO TOOLS CALLED");
                 console.log("\n-------------------");
             }
-                console.log("FINAL RESPONSE:");
-                console.log("\n-------------------");
-                console.log(text);  
-          
-
-
-
         } catch (error) {
             console.error("Error during generation:", error);
         }

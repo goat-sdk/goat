@@ -7,9 +7,9 @@ export class Dpsnservice {
     private pvtKey: string;
     private dpsnClient!: InstanceType<typeof DpsnClient>;
     private isDpsnClientInitialized!: boolean;
-    constructor(dpsnUrl?: string, pvtKey?: string) {
-        this.dpsnUrl = dpsnUrl ? dpsnUrl : process.env.DPSN_URL!;
-        this.pvtKey = pvtKey ? pvtKey : process.env.DPSN_PRIVATE_KEY!;
+    constructor(dpsnUrl: string, pvtKey: string) {
+        this.dpsnUrl = dpsnUrl ?? process.env.DPSN_URL;
+        this.pvtKey = pvtKey ?? process.env.DPSN_PRIVATE_KEY;
         this.initialize();
     }
 
@@ -34,7 +34,7 @@ export class Dpsnservice {
         this.dpsnClient.on("connect", () => {
             console.log("[DPSN] Connected successfully");
         });
-        this.dpsnClient.on("error", (error: any) => {
+        this.dpsnClient.on("error", (error: Error) => {
             console.error("[DPSN] Error:", error);
         });
         this.dpsnClient.on("disconnect", () => {
@@ -43,7 +43,7 @@ export class Dpsnservice {
         });
     }
 
-    async subscribe(topic: string, callback: (message: any) => void) {
+    async subscribe(topic: string, callback: (message: unknown) => void) {
         try {
             if (!this.isDpsnClientInitialized) {
                 console.log("initializing dpsn client before publishing");
@@ -57,21 +57,20 @@ export class Dpsnservice {
             return false;
         }
     }
-  
-  async unsubscribe(topic:string):Promise<boolean>{
-    try{
-      if(!this.isDpsnClientInitialized){
-        console.log("client is not intitialized cannot unsubscribe");
-        return false;
-      }
-      await this.dpsnClient.unsubscribe(topic);
-      return true
+
+    async unsubscribe(topic: string): Promise<boolean> {
+        try {
+            if (!this.isDpsnClientInitialized) {
+                console.log("client is not intitialized cannot unsubscribe");
+                return false;
+            }
+            await this.dpsnClient.unsubscribe(topic);
+            return true;
+        } catch (err) {
+            console.error("[DPSN ERROR] Error while unsubscribing:", err);
+            return false;
+        }
     }
-    catch(err){
-      console.error("[DPSN ERROR] Error while unsubscribing:", err);
-      return false;
-    }
-  }
 
     async disconnect() {
         try {

@@ -50,16 +50,15 @@ To provide personalized data streams for your agents, you can create and publish
 
 1. Run the plugin and invoke method directly to start consuming message:
 ```bash
-pnpm start
+pnpm example
 ```
-2. Run the interactive CLI:
+2. Run with interactive CLI:
 ```bash
 pnpm llm_example
 ```
-
-2. Chat with the agent:
-- Subscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
-- Unsubscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
+  Chat with the agent:
+  - Subscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
+  - Unsubscribe to topic 0xe14768a6d8798e4390ec4cb8a4c991202c2115a5cd7a6c0a7ababcaf93b4d2d4/BTCUSDT/ticker
 
 
 ## Using in production

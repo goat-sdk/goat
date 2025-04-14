@@ -35,9 +35,9 @@ dotenv.config();
 async function setupAndRun() {
     const wallet = new DummyWalletClient(); // Use the dummy wallet
     const dpsn_plugin = dpsnplugin({
-        DPSN_URL: process.env.DPSN_URL ?? '',
-        EVM_WALLET_PVT_KEY: process.env.EVM_WALLET_PVT_KEY ?? ''
-    }); 
+        DPSN_URL: process.env.DPSN_URL ?? "",
+        EVM_WALLET_PVT_KEY: process.env.EVM_WALLET_PVT_KEY ?? "",
+    });
     // Get tools from the core wallet and the DPSN plugin
     const tools = await getTools({
         wallet: wallet,
@@ -45,11 +45,11 @@ async function setupAndRun() {
             dpsn_plugin, // Add the DPSN plugin
         ],
     });
-    const DpsnDataStreamHandler=dpsn_plugin.DpsnDataStream;
+    const DpsnDataStreamHandler = dpsn_plugin.DpsnDataStream;
     DpsnDataStreamHandler.on("message", (message: unknown) => {
-       console.log("Received message from DPSN:", message);
-       // Add your message processing logic here
-   });
+        console.log("Received message from DPSN:", message);
+        // Add your message processing logic here
+    });
     console.log(
         "Tools retrieved:",
         tools.map((t) => t.name),
@@ -85,7 +85,7 @@ async function setupAndRun() {
             const result = await subscribeTool.execute({ dpsn_topic: topicToSubscribe });
 
             // Set up event listener for messages
-        
+
             console.log(result);
             console.log(`Successfully initiated subscription to topic: ${topicToSubscribe}`);
             console.log("Listening for messages... Press Ctrl+C to exit.");
