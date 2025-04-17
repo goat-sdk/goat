@@ -1,4 +1,5 @@
 import type { Abi } from "abitype";
+import { SerializeTransactionFn, TransactionSerializable } from "viem";
 
 export type EVMTransaction = {
     to: string;
@@ -16,3 +17,5 @@ export type EVMTransactionOptions = {
         input: `0x${string}`;
     };
 };
+
+export type Serializer = SerializeTransactionFn<TransactionSerializable>;

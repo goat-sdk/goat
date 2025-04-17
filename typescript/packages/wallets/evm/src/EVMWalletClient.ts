@@ -6,4 +6,5 @@ export abstract class EVMWalletClient extends WalletClientBase {
     abstract sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }>;
     abstract read(request: EVMReadRequest): Promise<EVMReadResult>;
     abstract signTypedData(data: EVMTypedData): Promise<Signature>;
+    // abstract signTransaction(transaction: EVMTransaction, serializer?: Serializer): Promise<Signature>;
 }
