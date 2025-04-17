@@ -1,5 +1,11 @@
 import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
+import {
+    CallReturnType,
+    type WalletClient as ViemWalletClient,
+    encodeFunctionData,
+    formatUnits,
+    publicActions,
+} from "viem";
 import { mainnet } from "viem/chains";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
@@ -43,6 +49,20 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         } catch (error) {
             throw new Error("Failed to estimate gas for the transaction.");
         }
+    }
+
+    async call(transaction: EVMTransaction): Promise<CallReturnType> {
+        return await this.publicClient.call({
+            account: this.#client.account,
+            to: transaction.to as `0x${string}`,
+            value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
+            data: transaction?.data,
+            maxFeePerGas: transaction?.maxFeePerGas,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas,
+            accessList: transaction?.accessList,
+            nonce: transaction?.nonce,
+            gas: transaction?.gas,
+        });
     }
 
     getAddress() {
