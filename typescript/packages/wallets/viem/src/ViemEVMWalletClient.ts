@@ -1,11 +1,12 @@
+import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import {
-    type EVMReadRequest,
-    type EVMTransaction,
-    type EVMTypedData,
-    EVMWalletClient,
-    Serializer,
-} from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
+    SerializeTransactionFn,
+    TransactionSerializable,
+    type WalletClient as ViemWalletClient,
+    encodeFunctionData,
+    formatUnits,
+    publicActions,
+} from "viem";
 import { mainnet } from "viem/chains";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
@@ -74,22 +75,21 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         return { signature };
     }
 
-    async signTransaction(transaction: EVMTransaction, serializer?: Serializer) {
+    async signTransaction(transaction: EVMTransaction): Promise<{ signature: string }> {
         if (!this.#client.account) throw new Error("No account connected");
 
         const signature = await this.#client.signTransaction({
             to: transaction.to as `0x${string}`,
             value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
-            data: transaction.data ? transaction.data : undefined,
-            options: {
-                paymaster: {
-                    address: transaction.options?.paymaster?.address ?? this.#defaultPaymaster,
-                    input: transaction.options?.paymaster?.input ?? this.#defaultPaymasterInput,
-                },
-            },
+            data: transaction?.data,
             account: this.#client.account,
             chain: this.#client.chain,
-            serializer,
+            maxFeePerGas: transaction?.maxFeePerGas,
+            accessList: transaction?.accessList,
+            nonce: transaction?.nonce,
+            gas: transaction?.gas,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas,
+            // type: transaction?.type,
         });
 
         return { signature };
