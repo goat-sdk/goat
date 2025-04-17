@@ -38,7 +38,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
 
     async estimateGas(transaction: EVMTransaction) {
         try {
-            return this.publicClient.estimateGas({
+            return await this.publicClient.estimateGas({
                 account: this.#client.account,
                 to: transaction.to as `0x${string}`,
                 value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
@@ -62,6 +62,12 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             accessList: transaction?.accessList,
             nonce: transaction?.nonce,
             gas: transaction?.gas,
+        });
+    }
+
+    async getTransactionCount() {
+        return await this.publicClient.getTransactionCount({
+            address: this.#client.account?.address as `0x${string}`,
         });
     }
 
