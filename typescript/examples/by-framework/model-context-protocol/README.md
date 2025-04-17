@@ -3,6 +3,8 @@
 </div>
 
 # Model Context Protocol
+[![smithery badge](https://smithery.ai/badge/@goat-sdk/goat)](https://smithery.ai/server/@goat-sdk/goat)
+
 ## 🚀 Quickstart
 
 This example shows you how to create a MCP Server to connect GOAT with Claude for Desktop.
@@ -28,6 +30,14 @@ pnpm build
 3. Go to the example directory:
 ```bash
 cd examples/by-framework/model-context-protocol
+```
+
+### Installing via Smithery
+
+To install GOAT for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@goat-sdk/goat):
+
+```bash
+npx -y @smithery/cli install @goat-sdk/goat --client claude
 ```
 
 ### Configure the MCP server for Claude
