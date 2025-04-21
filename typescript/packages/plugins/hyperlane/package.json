@@ -31,7 +31,7 @@
         "@hyperlane-xyz/utils": "8.6.1",
         "borsh": "0.7.0",
         "dotenv": "16.4.7",
-        "ethers": "5.7.2",
+        "ethers": "6.13.5",
         "zod": "catalog:"
     },
     "peerDependencies": {

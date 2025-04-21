@@ -1,5 +1,5 @@
 import { Tool } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { HyperlaneViemEVMWalletClient } from "../../../wallets/hyperlane/dist/HyperlaneWalletClient.js";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
@@ -68,11 +68,8 @@ export class HyperlaneService {
         name: "make_hyperlane_warp",
         description: "Deploy a Hyperlane Warp bridge between two chains",
     })
-    async deployBridge(walletClient: EVMWalletClient, parameters: HyperlaneDeployParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async deployBridge(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneDeployParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         const { origin, destination, token } = parameters;
         const owner = walletClient.getAddress();
@@ -130,11 +127,8 @@ export class HyperlaneService {
         name: "hyperlane_send_message",
         description: "Send a message from one chain to another using Hyperlane",
     })
-    async sendMessage(walletClient: EVMWalletClient, parameters: HyperlaneSendMessageParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async sendMessage(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneSendMessageParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         const { originChain, destinationChain, destinationAddress, message } = parameters;
         const chainAddresses = await registry.getAddresses();
@@ -423,11 +417,8 @@ export class HyperlaneService {
         name: "hyperlane_configure_ism",
         description: "Configure Interchain Security Module settings",
     })
-    async configureIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async configureIsm(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneIsmParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, type, config } = parameters;
@@ -551,18 +542,17 @@ export class HyperlaneService {
         name: "hyperlane_manage_validators",
         description: "Manage validator set for multisig ISM",
     })
-    async manageValidators(walletClient: EVMWalletClient, parameters: HyperlaneValidatorParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async manageValidators(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneValidatorParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, action, validator, weight } = parameters;
             const chainAddresses = await registry.getAddresses();
 
             // Set the signer for this chain
-            multiProvider.setSharedSigner(wallet);
+            // TODO: remove signer error
+            // @ts-ignore: Ignore ethers.Signer type error
+            multiProvider.setSharedSigner(walletClient.getSigner());
             const signer = multiProvider.getSigner(chain);
 
             // Get ISM reader
@@ -705,11 +695,8 @@ export class HyperlaneService {
         name: "hyperlane_announce_validator",
         description: "Announce a validator's signing address for a chain",
     })
-    async announceValidator(walletClient: EVMWalletClient, parameters: HyperlaneAnnounceValidatorParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async announceValidator(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneAnnounceValidatorParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, validatorAddress, signingAddress, mailboxAddress } = parameters;
@@ -757,11 +744,8 @@ export class HyperlaneService {
         name: "hyperlane_configure_relayer",
         description: "Configure relayer settings for message delivery",
     })
-    async configureRelayer(walletClient: EVMWalletClient, parameters: HyperlaneRelayerConfigParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async configureRelayer(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneRelayerConfigParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, whitelist, blacklist, gasPaymentConfig } = parameters;
@@ -847,11 +831,8 @@ export class HyperlaneService {
         name: "hyperlane_manage_gas_payment",
         description: "Manage interchain gas payments for relayers",
     })
-    async manageGasPayment(walletClient: EVMWalletClient, parameters: HyperlaneGasPaymentParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async manageGasPayment(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneGasPaymentParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, messageId, gasAmount, recipient } = parameters;
@@ -979,11 +960,8 @@ export class HyperlaneService {
         name: "hyperlane_deploy_chain",
         description: "Deploy Hyperlane core contracts to a new chain",
     })
-    async deployChain(walletClient: EVMWalletClient, parameters: HyperlaneDeployChainParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    async deployChain(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneDeployChainParameters) {
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, chainId, domainId, rpcUrl, contracts, validators } = parameters;
@@ -1003,7 +981,9 @@ export class HyperlaneService {
                 ...multiProvider.metadata,
                 [chain]: chainMetadata,
             });
-            newMultiProvider.setSharedSigner(wallet);
+            // TODO: remove signer error ignore
+            // @ts-ignore: Ignore ethers.Signer type error
+            newMultiProvider.setSharedSigner(walletClient.getSigner());
 
             // Create core config
             const coreConfig: CoreConfig = {
@@ -1171,7 +1151,7 @@ export class HyperlaneService {
     }
 }
 
-async function getMultiProvider(signer?: ethers.Signer) {
+async function getMultiProvider(walletClient?: HyperlaneViemEVMWalletClient) {
     const registry = new GithubRegistry({
         uri: REGISTRY_URL,
         proxyUrl: REGISTRY_PROXY_URL,
@@ -1179,6 +1159,9 @@ async function getMultiProvider(signer?: ethers.Signer) {
 
     const chainMetadata = await registry.getMetadata();
     const multiProvider = new MultiProvider(chainMetadata);
+    const signer = walletClient?.getSigner();
+    // TODO: remove signer error
+    // @ts-ignore: Ignore ethers.Signer type error// @ts-ignore: Ignore ethers.Signer type error
     if (signer) multiProvider.setSharedSigner(signer);
     return { multiProvider, registry };
 }
