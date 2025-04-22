@@ -1050,6 +1050,39 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
 
+  examples/by-use-case/soneium-send-and-receive-tokens:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ~1.0.4
+        version: 1.0.20(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.22(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-erc20':
+        specifier: 0.2.14
+        version: 0.2.14(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@goat-sdk/wallet-evm':
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
+      ai:
+        specifier: ~4.0.3
+        version: 4.0.22(react@18.3.1)(zod@3.23.8)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.5.0
+      viem:
+        specifier: 2.23.4
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+
   examples/by-use-case/zetrix-send-and-receive-tokens:
     dependencies:
       '@ai-sdk/openai':
