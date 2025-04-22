@@ -1,6 +1,6 @@
 import { ViemEVMWalletClient, ViemOptions } from "@goat-sdk/wallet-viem";
-import { WalletClient } from 'viem';
 import { ethers } from "ethers";
+import { WalletClient } from "viem";
 
 export type HyperlaneViemOptions = {
     secretKey: string;

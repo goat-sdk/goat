@@ -1,5 +1,4 @@
 import { Tool } from "@goat-sdk/core";
-import { HyperlaneViemEVMWalletClient } from "../../../wallets/hyperlane/dist/HyperlaneWalletClient.js";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
@@ -26,6 +25,7 @@ import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
 import { ethers } from "ethers";
+import { HyperlaneViemEVMWalletClient } from "../../../wallets/hyperlane/dist/HyperlaneWalletClient.js";
 import {
     HyperlaneAnnounceValidatorParameters,
     HyperlaneDeployChainParameters,
@@ -695,7 +695,10 @@ export class HyperlaneService {
         name: "hyperlane_announce_validator",
         description: "Announce a validator's signing address for a chain",
     })
-    async announceValidator(walletClient: HyperlaneViemEVMWalletClient, parameters: HyperlaneAnnounceValidatorParameters) {
+    async announceValidator(
+        walletClient: HyperlaneViemEVMWalletClient,
+        parameters: HyperlaneAnnounceValidatorParameters,
+    ) {
         const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {

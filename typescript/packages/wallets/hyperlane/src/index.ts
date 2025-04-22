@@ -1,5 +1,5 @@
-export { 
+export {
     type HyperlaneViemOptions,
     HyperlaneViemEVMWalletClient,
-    hyperlaneViem
+    hyperlaneViem,
 } from "./HyperlaneWalletClient.js";
