@@ -3,9 +3,8 @@ import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
-import type { Chain } from "viem";
+import { http, createPublicClient } from "viem";
+import { createWalletClient, defineChain } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
@@ -16,19 +15,25 @@ import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
 
-const soneium: Chain = {
+const soneium = defineChain({
     id: 1868,
     name: "Soneium",
     nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
-    rpcUrls: { default: { http: ["https://rpc.soneium.org/"] } },
-};
+    rpcUrls: { 
+        default: { 
+            http: [process.env.RPC_PROVIDER_URL || "https://rpc.soneium.org/"] 
+        } 
+    },
+});
 
 // 1. Create a wallet client
 const account = privateKeyToAccount(process.env.WALLET_PRIVATE_KEY as `0x${string}`);
 
+const transport = http(process.env.RPC_PROVIDER_URL);
+
 const walletClient = createWalletClient({
     account: account,
-    transport: http(process.env.RPC_PROVIDER_URL),
+    transport: transport,
     chain: soneium,
 });
 

@@ -8,6 +8,8 @@
 
 This example demonstrates how to use GOAT to **send and receive ETH and ERC-20 tokens** on Soneium mainnet. This example uses Soneium's native ETH but you can implement it with any other ERC-20 tokens available on Soneium.
 
+> **Note:** This example currently supports reading wallet balances on Soneium mainnet. However, sending transactions may encounter issues due to RPC URL configuration limitations.
+
 You can use this example with any other agent framework, chain, and wallet of your choice.
 
 ## Setup
