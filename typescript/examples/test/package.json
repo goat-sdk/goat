@@ -1,0 +1,24 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@goat-sdk/adapter-model-context-protocol": "^0.2.11",
+        "@goat-sdk/wallet-viem": "^0.2.12",
+        "@hyperlane-xyz/registry": "13.3.0",
+        "@hyperlane-xyz/sdk": "12.0.0",
+        "@modelcontextprotocol/sdk": "^1.9.0",
+        "dotenv": "16.5.0"
+    },
+    "devDependencies": {
+        "@types/node": "22.7.4",
+        "sdk": "link:@types@hyperlane-xyz/sdk"
+    }
+}
