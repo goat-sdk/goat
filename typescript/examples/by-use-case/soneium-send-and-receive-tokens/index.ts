@@ -3,7 +3,7 @@ import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-import { http, createPublicClient } from "viem";
+import { http } from "viem";
 import { createWalletClient, defineChain } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 
@@ -19,10 +19,10 @@ const soneium = defineChain({
     id: 1868,
     name: "Soneium",
     nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
-    rpcUrls: { 
-        default: { 
-            http: [process.env.RPC_PROVIDER_URL || "https://rpc.soneium.org/"] 
-        } 
+    rpcUrls: {
+        default: {
+            http: [process.env.RPC_PROVIDER_URL || "https://rpc.soneium.org/"],
+        },
     },
 });
 
