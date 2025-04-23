@@ -233,7 +233,23 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         const receipt = await this.publicClient.waitForTransactionReceipt({
             hash: txHash,
         });
-        return { hash: receipt.transactionHash, status: receipt.status };
+        return {
+            hash: receipt.transactionHash,
+            status: receipt.status,
+            blockHash: receipt.blockHash,
+            blockNumber: receipt.blockNumber,
+            contractAddress: receipt.contractAddress,
+            cumulativeGasUsed: receipt.cumulativeGasUsed,
+            effectiveGasPrice: receipt.effectiveGasPrice,
+            from: receipt.from,
+            gasUsed: receipt.gasUsed,
+            logs: receipt.logs,
+            logsBloom: receipt.logsBloom,
+            to: receipt.to,
+            transactionHash: receipt.transactionHash,
+            transactionIndex: receipt.transactionIndex,
+            type: receipt.type,
+        };
     }
 }
 
