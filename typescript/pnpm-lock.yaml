@@ -1711,21 +1711,6 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
-  packages/plugins/erc20:
-    dependencies:
-      '@goat-sdk/core':
-        specifier: workspace:*
-        version: link:../../core
-      '@goat-sdk/wallet-evm':
-        specifier: workspace:*
-        version: link:../../wallets/evm
-      viem:
-        specifier: 'catalog:'
-        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zod:
-        specifier: 'catalog:'
-        version: 3.23.8
-
   packages/plugins/erc721:
     dependencies:
       '@goat-sdk/core':
@@ -2734,6 +2719,9 @@ importers:
 
   packages/wallets/viem:
     dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../evm

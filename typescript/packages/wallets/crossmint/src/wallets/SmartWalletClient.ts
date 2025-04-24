@@ -5,6 +5,8 @@ import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { SupportedSmartWalletChains, getViemChain } from "../chains";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
+import { NativeCurrency } from "@goat-sdk/core";
+import { EvmChain } from "@goat-sdk/core";
 
 export type CustodialSigner = `0x${string}`;
 
@@ -139,10 +141,11 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return this.#address;
     }
 
-    getChain() {
+    getChain(): EvmChain {
         return {
             type: "evm" as const,
             id: this.#viemClient.chain?.id ?? 0,
+            nativeCurrency: this.#viemClient.chain?.nativeCurrency as NativeCurrency,
         };
     }
 
@@ -262,18 +265,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return { value: result };
     }
 
-    async balanceOf(address: string) {
+    async getNativeBalance() {
         const balance = await this.#viemClient.getBalance({
-            address: address as `0x${string}`,
+            address: this.#address as `0x${string}`,
         });
 
-        return {
-            decimals: 18,
-            symbol: "ETH",
-            name: "Ethereum",
-            value: formatUnits(balance, 18),
-            inBaseUnits: balance.toString(),
-        };
+        return BigInt(balance);
     }
 
     private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {
