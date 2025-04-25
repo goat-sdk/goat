@@ -1,374 +1,442 @@
-import { type Balance, type SolanaChain, type ToolBase, WalletClientBase, createTool } from "@goat-sdk/core";
 import {
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-    TOKEN_PROGRAM_ID,
-    createAssociatedTokenAccountInstruction,
-    createTransferCheckedInstruction,
-    getAssociatedTokenAddressSync,
-    getMint,
+	type Balance,
+	type SolanaChain,
+	type ToolBase,
+	WalletClientBase,
+	createTool,
+} from "@goat-sdk/core";
+import {
+	ASSOCIATED_TOKEN_PROGRAM_ID,
+	TOKEN_PROGRAM_ID,
+	createAssociatedTokenAccountInstruction,
+	createTransferCheckedInstruction,
+	getAssociatedTokenAddressSync,
+	getMint,
 } from "@solana/spl-token";
 import {
-    AddressLookupTableAccount,
-    type Connection,
-    type Keypair,
-    PublicKey,
-    SystemProgram,
-    type TransactionInstruction,
-    TransactionMessage,
-    type VersionedTransaction,
+	AddressLookupTableAccount,
+	type Connection,
+	type Keypair,
+	PublicKey,
+	SystemProgram,
+	type TransactionInstruction,
+	TransactionMessage,
+	type VersionedTransaction,
 } from "@solana/web3.js";
 import { formatUnits, parseUnits } from "viem";
 import {
-    convertFromBaseUnitsParametersSchema,
-    convertToBaseUnitsParametersSchema,
-    getTokenInfoBySymbolParametersSchema,
-    sendTokenParametersSchema,
+	convertFromBaseUnitsParametersSchema,
+	convertToBaseUnitsParametersSchema,
+	getTokenInfoBySymbolParametersSchema,
+	sendTokenParametersSchema,
 } from "./params.js";
 import { SPL_TOKENS, type SolanaNetwork, type Token } from "./tokens.js";
 import type { SolanaTransaction } from "./types";
 import { doesAccountExist } from "./utils.js";
 
 export type SolanWalletClientCtorParams = {
-    connection: Connection;
-    network?: SolanaNetwork;
-    tokens?: Token[];
-    enableSend?: boolean;
+	connection: Connection;
+	network?: SolanaNetwork;
+	tokens?: Token[];
+	enableSend?: boolean;
 };
 
 export abstract class SolanaWalletClient extends WalletClientBase {
-    protected connection: Connection;
-    protected network: SolanaNetwork;
-    protected tokens: Token[];
-    protected enableSend: boolean;
+	protected connection: Connection;
+	protected network: SolanaNetwork;
+	protected tokens: Token[];
+	protected enableSend: boolean;
 
-    constructor(params: SolanWalletClientCtorParams) {
-        super();
-        this.connection = params.connection;
-        this.network = params.network || "mainnet";
-        this.tokens = params.tokens || SPL_TOKENS[this.network] || [];
-        this.enableSend = params.enableSend !== false;
-    }
+	constructor(params: SolanWalletClientCtorParams) {
+		super();
+		this.connection = params.connection;
+		this.network = params.network || "mainnet";
+		this.tokens = params.tokens || SPL_TOKENS[this.network] || [];
+		this.enableSend = params.enableSend !== false;
+	}
 
-    getChain(): SolanaChain {
-        return {
-            type: "solana",
-            nativeCurrency: {
-                name: "Solana",
-                symbol: "SOL",
-                decimals: 9,
-            },
-        };
-    }
+	getChain(): SolanaChain {
+		return {
+			type: "solana",
+			nativeCurrency: {
+				name: "Solana",
+				symbol: "SOL",
+				decimals: 9,
+			},
+		};
+	}
 
-    getConnection() {
-        return this.connection;
-    }
+	getConnection() {
+		return this.connection;
+	}
 
-    async balanceOf(address: string, tokenAddress?: string): Promise<Balance> {
-        const ownerPublicKey = new PublicKey(address);
+	async balanceOf(address: string, tokenAddress?: string): Promise<Balance> {
+		const ownerPublicKey = new PublicKey(address);
 
-        if (tokenAddress) {
-            const mintPublicKey = new PublicKey(tokenAddress);
-            try {
-                const mintInfo = await getMint(this.connection, mintPublicKey);
+		console.log("balanceOf", address, tokenAddress);
 
-                const tokenAccount = getAssociatedTokenAddressSync(
-                    mintPublicKey,
-                    ownerPublicKey,
-                    true,
-                    TOKEN_PROGRAM_ID,
-                    ASSOCIATED_TOKEN_PROGRAM_ID,
-                );
+		if (tokenAddress) {
+			const mintPublicKey = new PublicKey(tokenAddress);
+			try {
+				console.log("getMint", mintPublicKey);
 
-                let balanceInBaseUnits = "0";
-                const accountExists = await doesAccountExist(this.connection, tokenAccount);
+				console.log(
+					"getAssociatedTokenAddressSync",
+					mintPublicKey,
+					ownerPublicKey,
+					true,
+					TOKEN_PROGRAM_ID,
+					ASSOCIATED_TOKEN_PROGRAM_ID,
+				);
 
-                if (accountExists) {
-                    const balanceResponse = await this.connection.getTokenAccountBalance(tokenAccount);
-                    balanceInBaseUnits = balanceResponse.value.amount;
-                }
+				const tokenAccount = getAssociatedTokenAddressSync(
+					mintPublicKey,
+					ownerPublicKey,
+					true,
+					TOKEN_PROGRAM_ID,
+					ASSOCIATED_TOKEN_PROGRAM_ID,
+				);
 
-                const configuredToken = this.tokens.find((t) => t.mintAddress === tokenAddress);
+				let balanceInBaseUnits = "0";
+				const accountExists = await doesAccountExist(
+					this.connection,
+					tokenAccount,
+				);
 
-                const decimals = mintInfo.decimals;
-                const symbol = configuredToken?.symbol || "TOKEN";
-                const name = configuredToken?.name || "Unknown Token";
-                const value = formatUnits(BigInt(balanceInBaseUnits), decimals);
+				console.log("accountExists", accountExists);
 
-                return {
-                    decimals,
-                    symbol,
-                    name,
-                    value,
-                    inBaseUnits: balanceInBaseUnits,
-                };
-            } catch (error) {
-                console.error(`Failed to fetch SPL token balance for ${tokenAddress}: ${error}`);
-                throw new Error(
-                    `Failed to fetch balance for token ${tokenAddress}: ${error instanceof Error ? error.message : String(error)}`,
-                );
-            }
-        } else {
-            const balance = await this.connection.getBalance(ownerPublicKey);
-            const chain = this.getChain();
+				if (accountExists) {
+					const balanceResponse =
+						await this.connection.getTokenAccountBalance(tokenAccount);
+					balanceInBaseUnits = balanceResponse.value.amount;
+				}
 
-            return {
-                decimals: chain.nativeCurrency.decimals,
-                symbol: chain.nativeCurrency.symbol,
-                name: chain.nativeCurrency.name,
-                value: formatUnits(BigInt(balance), chain.nativeCurrency.decimals),
-                inBaseUnits: balance.toString(),
-            };
-        }
-    }
+				console.log("balanceInBaseUnits", balanceInBaseUnits);
 
-    async decompileVersionedTransactionToInstructions(versionedTransaction: VersionedTransaction) {
-        const lookupTableAddresses = versionedTransaction.message.addressTableLookups.map(
-            (lookup) => lookup.accountKey,
-        );
-        const addressLookupTableAccounts = await Promise.all(
-            lookupTableAddresses.map((address) =>
-                this.connection.getAddressLookupTable(address).then((lookupTable) => lookupTable.value),
-            ),
-        );
-        const nonNullAddressLookupTableAccounts = addressLookupTableAccounts.filter(
-            (lookupTable) => lookupTable != null,
-        );
-        const decompileArgs = {
-            addressLookupTableAccounts: nonNullAddressLookupTableAccounts,
-        };
-        return TransactionMessage.decompile(versionedTransaction.message, decompileArgs).instructions;
-    }
+				const configuredToken = this.tokens.find(
+					(t) => t.mintAddress === tokenAddress,
+				);
 
-    abstract sendTransaction(transaction: SolanaTransaction, additionalSigners?: Keypair[]): Promise<{ hash: string }>;
+				const decimals = configuredToken?.decimals || 9;
+				const symbol = configuredToken?.symbol || "TOKEN";
+				const name = configuredToken?.name || "Unknown Token";
+				const value = formatUnits(BigInt(balanceInBaseUnits), decimals);
 
-    abstract sendRawTransaction(
-        transaction: string,
-        signer?: Keypair,
-        additionalSigners?: Keypair[],
-    ): Promise<{ hash: string }>;
+				return {
+					decimals,
+					symbol,
+					name,
+					value,
+					inBaseUnits: balanceInBaseUnits,
+				};
+			} catch (error) {
+				console.error(
+					`Failed to fetch SPL token balance for ${tokenAddress}: ${error}`,
+				);
+				throw new Error(
+					`Failed to fetch balance for token ${tokenAddress}: ${error instanceof Error ? error.message : String(error)}`,
+				);
+			}
+		} else {
+			const balance = await this.connection.getBalance(ownerPublicKey);
+			const chain = this.getChain();
 
-    protected async getAddressLookupTableAccounts(keys: string[]): Promise<AddressLookupTableAccount[]> {
-        const addressLookupTableAccountInfos = await this.connection.getMultipleAccountsInfo(
-            keys.map((key) => new PublicKey(key)),
-        );
+			return {
+				decimals: chain.nativeCurrency.decimals,
+				symbol: chain.nativeCurrency.symbol,
+				name: chain.nativeCurrency.name,
+				value: formatUnits(BigInt(balance), chain.nativeCurrency.decimals),
+				inBaseUnits: balance.toString(),
+			};
+		}
+	}
 
-        return addressLookupTableAccountInfos.reduce((acc, accountInfo, index) => {
-            const addressLookupTableAddress = keys[index];
-            if (accountInfo) {
-                const addressLookupTableAccount = new AddressLookupTableAccount({
-                    key: new PublicKey(addressLookupTableAddress),
-                    state: AddressLookupTableAccount.deserialize(accountInfo.data),
-                });
-                acc.push(addressLookupTableAccount);
-            }
+	async decompileVersionedTransactionToInstructions(
+		versionedTransaction: VersionedTransaction,
+	) {
+		const lookupTableAddresses =
+			versionedTransaction.message.addressTableLookups.map(
+				(lookup) => lookup.accountKey,
+			);
+		const addressLookupTableAccounts = await Promise.all(
+			lookupTableAddresses.map((address) =>
+				this.connection
+					.getAddressLookupTable(address)
+					.then((lookupTable) => lookupTable.value),
+			),
+		);
+		const nonNullAddressLookupTableAccounts = addressLookupTableAccounts.filter(
+			(lookupTable) => lookupTable != null,
+		);
+		const decompileArgs = {
+			addressLookupTableAccounts: nonNullAddressLookupTableAccounts,
+		};
+		return TransactionMessage.decompile(
+			versionedTransaction.message,
+			decompileArgs,
+		).instructions;
+	}
 
-            return acc;
-        }, new Array<AddressLookupTableAccount>());
-    }
+	abstract sendTransaction(
+		transaction: SolanaTransaction,
+		additionalSigners?: Keypair[],
+	): Promise<{ hash: string }>;
 
-    async sendToken(params: {
-        recipient: string;
-        amount: string /* User-friendly amount */;
-        tokenAddress?: string /* Mint Address - Optional */;
-    }): Promise<{ hash: string }> {
-        if (!this.enableSend) {
-            throw new Error("Sending transactions is disabled for this wallet.");
-        }
+	abstract sendRawTransaction(
+		transaction: string,
+		signer?: Keypair,
+		additionalSigners?: Keypair[],
+	): Promise<{ hash: string }>;
 
-        const { recipient, amount, tokenAddress } = params;
-        const ownerPublicKey = new PublicKey(this.getAddress());
-        const destinationPublicKey = new PublicKey(recipient);
+	protected async getAddressLookupTableAccounts(
+		keys: string[],
+	): Promise<AddressLookupTableAccount[]> {
+		const addressLookupTableAccountInfos =
+			await this.connection.getMultipleAccountsInfo(
+				keys.map((key) => new PublicKey(key)),
+			);
 
-        const instructions: TransactionInstruction[] = [];
+		return addressLookupTableAccountInfos.reduce((acc, accountInfo, index) => {
+			const addressLookupTableAddress = keys[index];
+			if (accountInfo) {
+				const addressLookupTableAccount = new AddressLookupTableAccount({
+					key: new PublicKey(addressLookupTableAddress),
+					state: AddressLookupTableAccount.deserialize(accountInfo.data),
+				});
+				acc.push(addressLookupTableAccount);
+			}
 
-        try {
-            if (tokenAddress) {
-                // --- SPL Token Transfer Logic ---
-                const mintPublicKey = new PublicKey(tokenAddress);
-                const mintInfo = await getMint(this.connection, mintPublicKey);
-                if (!mintInfo) {
-                    throw new Error(`Token with mint address ${tokenAddress} not found`);
-                }
+			return acc;
+		}, new Array<AddressLookupTableAccount>());
+	}
 
-                const amountInBaseUnits = parseUnits(amount, mintInfo.decimals);
+	async sendToken(params: {
+		recipient: string;
+		amount: string /* User-friendly amount */;
+		tokenAddress?: string /* Mint Address - Optional */;
+	}): Promise<{ hash: string }> {
+		if (!this.enableSend) {
+			throw new Error("Sending transactions is disabled for this wallet.");
+		}
 
-                const sourceTokenAccount = getAssociatedTokenAddressSync(
-                    mintPublicKey,
-                    ownerPublicKey,
-                    true,
-                    TOKEN_PROGRAM_ID,
-                    ASSOCIATED_TOKEN_PROGRAM_ID,
-                );
+		const { recipient, amount, tokenAddress } = params;
+		const ownerPublicKey = new PublicKey(this.getAddress());
+		const destinationPublicKey = new PublicKey(recipient);
 
-                const destinationTokenAccount = getAssociatedTokenAddressSync(
-                    mintPublicKey,
-                    destinationPublicKey,
-                    true,
-                    TOKEN_PROGRAM_ID,
-                    ASSOCIATED_TOKEN_PROGRAM_ID,
-                );
+		const instructions: TransactionInstruction[] = [];
 
-                const sourceAccountExists = await doesAccountExist(this.connection, sourceTokenAccount);
-                if (!sourceAccountExists) {
-                    throw new Error(`Source token account does not exist for mint ${tokenAddress}`);
-                }
+		try {
+			if (tokenAddress) {
+				// --- SPL Token Transfer Logic ---
+				const mintPublicKey = new PublicKey(tokenAddress);
+				const mintInfo = await getMint(this.connection, mintPublicKey);
+				if (!mintInfo) {
+					throw new Error(`Token with mint address ${tokenAddress} not found`);
+				}
 
-                const destinationAccountExists = await doesAccountExist(this.connection, destinationTokenAccount);
+				const amountInBaseUnits = parseUnits(amount, mintInfo.decimals);
 
-                if (!destinationAccountExists) {
-                    instructions.push(
-                        createAssociatedTokenAccountInstruction(
-                            ownerPublicKey,
-                            destinationTokenAccount,
-                            destinationPublicKey,
-                            mintPublicKey,
-                            TOKEN_PROGRAM_ID,
-                            ASSOCIATED_TOKEN_PROGRAM_ID,
-                        ),
-                    );
-                }
+				const sourceTokenAccount = getAssociatedTokenAddressSync(
+					mintPublicKey,
+					ownerPublicKey,
+					true,
+					TOKEN_PROGRAM_ID,
+					ASSOCIATED_TOKEN_PROGRAM_ID,
+				);
 
-                instructions.push(
-                    createTransferCheckedInstruction(
-                        sourceTokenAccount,
-                        mintPublicKey,
-                        destinationTokenAccount,
-                        ownerPublicKey,
-                        amountInBaseUnits,
-                        mintInfo.decimals,
-                    ),
-                );
-            } else {
-                // --- Native SOL Transfer Logic ---
-                const nativeDecimals = this.getChain().nativeCurrency.decimals;
-                const lamports = parseUnits(amount, nativeDecimals);
+				const destinationTokenAccount = getAssociatedTokenAddressSync(
+					mintPublicKey,
+					destinationPublicKey,
+					true,
+					TOKEN_PROGRAM_ID,
+					ASSOCIATED_TOKEN_PROGRAM_ID,
+				);
 
-                const transferInstruction = SystemProgram.transfer({
-                    fromPubkey: ownerPublicKey,
-                    toPubkey: destinationPublicKey,
-                    lamports: BigInt(lamports.toString()),
-                });
-                instructions.push(transferInstruction);
-            }
+				const sourceAccountExists = await doesAccountExist(
+					this.connection,
+					sourceTokenAccount,
+				);
+				if (!sourceAccountExists) {
+					throw new Error(
+						`Source token account does not exist for mint ${tokenAddress}`,
+					);
+				}
 
-            // Use the existing abstract sendTransaction method
-            return this.sendTransaction({ instructions });
-        } catch (error) {
-            const assetType = tokenAddress ? `token ${tokenAddress}` : "native currency";
-            console.error(`Failed to send ${assetType}: ${error}`);
-            throw new Error(`Failed to send ${assetType}: ${error instanceof Error ? error.message : String(error)}`);
-        }
-    }
+				const destinationAccountExists = await doesAccountExist(
+					this.connection,
+					destinationTokenAccount,
+				);
 
-    async getTokenInfoBySymbol(symbol: string): Promise<Token | undefined> {
-        const upperCaseSymbol = symbol.toUpperCase();
-        return this.tokens.find((t) => t.symbol.toUpperCase() === upperCaseSymbol);
-    }
+				if (!destinationAccountExists) {
+					instructions.push(
+						createAssociatedTokenAccountInstruction(
+							ownerPublicKey,
+							destinationTokenAccount,
+							destinationPublicKey,
+							mintPublicKey,
+							TOKEN_PROGRAM_ID,
+							ASSOCIATED_TOKEN_PROGRAM_ID,
+						),
+					);
+				}
 
-    async _getTokenDecimals(tokenAddress?: string): Promise<number> {
-        if (tokenAddress) {
-            try {
-                const mintInfo = await getMint(this.connection, new PublicKey(tokenAddress));
-                return mintInfo.decimals;
-            } catch (error) {
-                console.error(`Failed to fetch decimals for token ${tokenAddress}: ${error}`);
-                const configuredToken = this.tokens.find((t) => t.mintAddress === tokenAddress);
-                if (configuredToken) {
-                    return configuredToken.decimals;
-                }
-                throw new Error(
-                    `Failed to fetch decimals for token ${tokenAddress}: ${error instanceof Error ? error.message : String(error)}`,
-                );
-            }
-        }
-        return this.getChain().nativeCurrency.decimals;
-    }
+				instructions.push(
+					createTransferCheckedInstruction(
+						sourceTokenAccount,
+						mintPublicKey,
+						destinationTokenAccount,
+						ownerPublicKey,
+						amountInBaseUnits,
+						mintInfo.decimals,
+					),
+				);
+			} else {
+				// --- Native SOL Transfer Logic ---
+				const nativeDecimals = this.getChain().nativeCurrency.decimals;
+				const lamports = parseUnits(amount, nativeDecimals);
 
-    async convertToBaseUnits(params: {
-        amount: string;
-        tokenAddress?: string;
-    }): Promise<string> {
-        const { amount, tokenAddress } = params;
-        const decimals = await this._getTokenDecimals(tokenAddress);
+				const transferInstruction = SystemProgram.transfer({
+					fromPubkey: ownerPublicKey,
+					toPubkey: destinationPublicKey,
+					lamports: BigInt(lamports.toString()),
+				});
+				instructions.push(transferInstruction);
+			}
 
-        try {
-            const baseUnitAmount = parseUnits(amount, decimals);
-            return baseUnitAmount.toString();
-        } catch (error) {
-            console.error(`Failed to convert amount ${amount} to base units with ${decimals} decimals: ${error}`);
-            throw new Error(
-                `Failed to convert amount to base units: ${error instanceof Error ? error.message : String(error)}`,
-            );
-        }
-    }
+			// Use the existing abstract sendTransaction method
+			return this.sendTransaction({ instructions });
+		} catch (error) {
+			const assetType = tokenAddress
+				? `token ${tokenAddress}`
+				: "native currency";
+			console.error(`Failed to send ${assetType}: ${error}`);
+			throw new Error(
+				`Failed to send ${assetType}: ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
+	}
 
-    async convertFromBaseUnits(params: {
-        amount: string;
-        tokenAddress?: string;
-    }): Promise<string> {
-        const { amount, tokenAddress } = params;
-        const decimals = await this._getTokenDecimals(tokenAddress);
+	async getTokenInfoBySymbol(symbol: string): Promise<Token | undefined> {
+		const upperCaseSymbol = symbol.toUpperCase();
+		return this.tokens.find((t) => t.symbol.toUpperCase() === upperCaseSymbol);
+	}
 
-        try {
-            const formattedAmount = formatUnits(BigInt(amount), decimals);
-            return formattedAmount;
-        } catch (error) {
-            console.error(`Failed to format amount ${amount} from base units with ${decimals} decimals: ${error}`);
-            throw new Error(
-                `Failed to format amount from base units: ${error instanceof Error ? error.message : String(error)}`,
-            );
-        }
-    }
+	async _getTokenDecimals(tokenAddress?: string): Promise<number> {
+		if (tokenAddress) {
+			try {
+				const mintInfo = await getMint(
+					this.connection,
+					new PublicKey(tokenAddress),
+				);
+				return mintInfo.decimals;
+			} catch (error) {
+				console.error(
+					`Failed to fetch decimals for token ${tokenAddress}: ${error}`,
+				);
+				const configuredToken = this.tokens.find(
+					(t) => t.mintAddress === tokenAddress,
+				);
+				if (configuredToken) {
+					return configuredToken.decimals;
+				}
+				throw new Error(
+					`Failed to fetch decimals for token ${tokenAddress}: ${error instanceof Error ? error.message : String(error)}`,
+				);
+			}
+		}
+		return this.getChain().nativeCurrency.decimals;
+	}
 
-    abstract getAddress(): string;
+	async convertToBaseUnits(params: {
+		amount: string;
+		tokenAddress?: string;
+	}): Promise<string> {
+		const { amount, tokenAddress } = params;
+		const decimals = await this._getTokenDecimals(tokenAddress);
 
-    override getCoreTools(): ToolBase[] {
-        const baseTools = super.getCoreTools();
+		try {
+			const baseUnitAmount = parseUnits(amount, decimals);
+			return baseUnitAmount.toString();
+		} catch (error) {
+			console.error(
+				`Failed to convert amount ${amount} to base units with ${decimals} decimals: ${error}`,
+			);
+			throw new Error(
+				`Failed to convert amount to base units: ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
+	}
 
-        const solanaTools: ToolBase[] = [
-            createTool(
-                {
-                    name: "send_token",
-                    description: "Send SOL or an SPL token to a recipient.",
-                    parameters: sendTokenParametersSchema,
-                },
-                (params) => {
-                    if (!this.enableSend) {
-                        throw new Error("Sending transactions is disabled for this wallet.");
-                    }
-                    return this.sendToken(params);
-                },
-            ),
-            createTool(
-                {
-                    name: "get_token_info_by_symbol",
-                    description:
-                        "Get information about a configured token (like mint address and decimals) by its symbol.",
-                    parameters: getTokenInfoBySymbolParametersSchema,
-                },
-                (params) => this.getTokenInfoBySymbol(params.symbol),
-            ),
-            createTool(
-                {
-                    name: "convert_to_base_units",
-                    description:
-                        "Convert a token amount from human-readable units to its smallest unit (e.g., lamports).",
-                    parameters: convertToBaseUnitsParametersSchema,
-                },
-                (params) => this.convertToBaseUnits(params),
-            ),
-            createTool(
-                {
-                    name: "convert_from_base_units",
-                    description:
-                        "Convert a token amount from its smallest unit (e.g., lamports) to human-readable units.",
-                    parameters: convertFromBaseUnitsParametersSchema,
-                },
-                (params) => this.convertFromBaseUnits(params),
-            ),
-        ];
+	async convertFromBaseUnits(params: {
+		amount: string;
+		tokenAddress?: string;
+	}): Promise<string> {
+		const { amount, tokenAddress } = params;
+		const decimals = await this._getTokenDecimals(tokenAddress);
 
-        return [...baseTools, ...solanaTools];
-    }
+		try {
+			const formattedAmount = formatUnits(BigInt(amount), decimals);
+			return formattedAmount;
+		} catch (error) {
+			console.error(
+				`Failed to format amount ${amount} from base units with ${decimals} decimals: ${error}`,
+			);
+			throw new Error(
+				`Failed to format amount from base units: ${error instanceof Error ? error.message : String(error)}`,
+			);
+		}
+	}
+
+	abstract getAddress(): string;
+
+	override getCoreTools(): ToolBase[] {
+		const baseTools = super.getCoreTools();
+
+		const solanaTools: ToolBase[] = [
+			createTool(
+				{
+					name: "send_token",
+					description: "Send SOL or an SPL token to a recipient.",
+					parameters: sendTokenParametersSchema,
+				},
+				(params) => {
+					if (!this.enableSend) {
+						throw new Error(
+							"Sending transactions is disabled for this wallet.",
+						);
+					}
+					return this.sendToken(params);
+				},
+			),
+			createTool(
+				{
+					name: "get_token_info_by_symbol",
+					description:
+						"Get information about a configured token (like mint address and decimals) by its symbol.",
+					parameters: getTokenInfoBySymbolParametersSchema,
+				},
+				(params) => this.getTokenInfoBySymbol(params.symbol),
+			),
+			createTool(
+				{
+					name: "convert_to_base_units",
+					description:
+						"Convert a token amount from human-readable units to its smallest unit (e.g., lamports).",
+					parameters: convertToBaseUnitsParametersSchema,
+				},
+				(params) => this.convertToBaseUnits(params),
+			),
+			createTool(
+				{
+					name: "convert_from_base_units",
+					description:
+						"Convert a token amount from its smallest unit (e.g., lamports) to human-readable units.",
+					parameters: convertFromBaseUnitsParametersSchema,
+				},
+				(params) => this.convertFromBaseUnits(params),
+			),
+		];
+
+		return [...baseTools, ...solanaTools];
+	}
 }
