@@ -73,22 +73,9 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 	async balanceOf(address: string, tokenAddress?: string): Promise<Balance> {
 		const ownerPublicKey = new PublicKey(address);
 
-		console.log("balanceOf", address, tokenAddress);
-
 		if (tokenAddress) {
 			const mintPublicKey = new PublicKey(tokenAddress);
 			try {
-				console.log("getMint", mintPublicKey);
-
-				console.log(
-					"getAssociatedTokenAddressSync",
-					mintPublicKey,
-					ownerPublicKey,
-					true,
-					TOKEN_PROGRAM_ID,
-					ASSOCIATED_TOKEN_PROGRAM_ID,
-				);
-
 				const tokenAccount = getAssociatedTokenAddressSync(
 					mintPublicKey,
 					ownerPublicKey,
@@ -103,15 +90,11 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 					tokenAccount,
 				);
 
-				console.log("accountExists", accountExists);
-
 				if (accountExists) {
 					const balanceResponse =
 						await this.connection.getTokenAccountBalance(tokenAccount);
 					balanceInBaseUnits = balanceResponse.value.amount;
 				}
-
-				console.log("balanceInBaseUnits", balanceInBaseUnits);
 
 				const configuredToken = this.tokens.find(
 					(t) => t.mintAddress === tokenAddress,
