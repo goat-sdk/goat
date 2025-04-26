@@ -5,70 +5,70 @@
 
 // Structure for native currency info (mirroring viem)
 export type NativeCurrency = {
-	name: string;
-	symbol: string;
-	decimals: number;
+    name: string;
+    symbol: string;
+    decimals: number;
 };
 
 export type Chain =
-	| EvmChain
-	| SolanaChain
-	| AptosChain
-	| ChromiaChain
-	| FuelChain
-	| SuiChain
-	| ZilliqaChain
-	| CosmosChain
-	| StarknetChain
-	| RadixChain
-	| ZetrixChain;
+    | EvmChain
+    | SolanaChain
+    | AptosChain
+    | ChromiaChain
+    | FuelChain
+    | SuiChain
+    | ZilliqaChain
+    | CosmosChain
+    | StarknetChain
+    | RadixChain
+    | ZetrixChain;
 
 export type SuiChain = {
-	type: "sui";
+    type: "sui";
 };
 
 export type EvmChain = {
-	type: "evm";
-	id: number;
-	nativeCurrency: NativeCurrency;
+    type: "evm";
+    id: number;
+    nativeCurrency: NativeCurrency;
 };
 
 export type SolanaChain = {
-	type: "solana";
-	nativeCurrency: NativeCurrency;
+    type: "solana";
+    nativeCurrency: NativeCurrency;
 };
 
 export type AptosChain = {
-	type: "aptos";
+    type: "aptos";
 };
 
 export type ChromiaChain = {
-	type: "chromia";
+    type: "chromia";
 };
 
 export type FuelChain = {
-	type: "fuel";
+    type: "fuel";
 };
 
 export type ZilliqaChain = {
-	type: "zilliqa";
-	id: number;
-	evmId: number;
+    type: "zilliqa";
+    id: number;
+    evmId: number;
 };
 
 export type CosmosChain = {
-	type: "cosmos";
+    type: "cosmos";
 };
 
 export type StarknetChain = {
-	type: "starknet";
+    type: "starknet";
 };
 
 export type RadixChain = {
-	type: "radix";
-	id: number;
+    type: "radix";
+    id: number;
 };
 
 export type ZetrixChain = {
-	type: "zetrix";
+    type: "zetrix";
 };

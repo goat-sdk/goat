@@ -1,12 +1,12 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
+import { NativeCurrency } from "@goat-sdk/core";
+import { EvmChain } from "@goat-sdk/core";
 import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
-import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
+import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { SupportedSmartWalletChains, getViemChain } from "../chains";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
-import { NativeCurrency } from "@goat-sdk/core";
-import { EvmChain } from "@goat-sdk/core";
 
 export type CustodialSigner = `0x${string}`;
 
