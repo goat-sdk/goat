@@ -10,7 +10,9 @@ export const getBalanceParametersSchema = z.object({
 
 export const sendTokenParametersSchema = z.object({
     recipient: z.string().describe("The recipient's Solana address (wallet address)."),
-    amount: z.string().describe("The amount of the token/SOL to send (in human-readable units, e.g., '0.5')."),
+    baseUnitsAmount: z
+        .string()
+        .describe("The amount of the token/SOL to send (in base units, e.g., '1000000000000000000')."),
     tokenAddress: z
         .string()
         .optional()

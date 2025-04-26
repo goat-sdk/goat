@@ -195,18 +195,20 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 
 	async sendToken(params: {
 		recipient: string;
-		amount: string /* User-friendly amount */;
-		tokenAddress?: string /* Mint Address - Optional */;
+		baseUnitsAmount: string;
+		tokenAddress?: string;
 	}): Promise<{ hash: string }> {
 		if (!this.enableSend) {
 			throw new Error("Sending transactions is disabled for this wallet.");
 		}
 
-		const { recipient, amount, tokenAddress } = params;
+		const { recipient, baseUnitsAmount, tokenAddress } = params;
 		const ownerPublicKey = new PublicKey(this.getAddress());
 		const destinationPublicKey = new PublicKey(recipient);
 
 		const instructions: TransactionInstruction[] = [];
+
+		const amountInBaseUnits = BigInt(baseUnitsAmount);
 
 		try {
 			if (tokenAddress) {
@@ -216,8 +218,6 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 				if (!mintInfo) {
 					throw new Error(`Token with mint address ${tokenAddress} not found`);
 				}
-
-				const amountInBaseUnits = parseUnits(amount, mintInfo.decimals);
 
 				const sourceTokenAccount = getAssociatedTokenAddressSync(
 					mintPublicKey,
@@ -274,14 +274,10 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 					),
 				);
 			} else {
-				// --- Native SOL Transfer Logic ---
-				const nativeDecimals = this.getChain().nativeCurrency.decimals;
-				const lamports = parseUnits(amount, nativeDecimals);
-
 				const transferInstruction = SystemProgram.transfer({
 					fromPubkey: ownerPublicKey,
 					toPubkey: destinationPublicKey,
-					lamports: BigInt(lamports.toString()),
+					lamports: amountInBaseUnits,
 				});
 				instructions.push(transferInstruction);
 			}
@@ -311,6 +307,7 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 					this.connection,
 					new PublicKey(tokenAddress),
 				);
+				console.log("mintInfo", mintInfo.supply, mintInfo.decimals);
 				return mintInfo.decimals;
 			} catch (error) {
 				console.error(
@@ -379,7 +376,8 @@ export abstract class SolanaWalletClient extends WalletClientBase {
 			createTool(
 				{
 					name: "send_token",
-					description: "Send SOL or an SPL token to a recipient.",
+					description:
+						"Send SOL or an SPL token to a recipient, in base units.",
 					parameters: sendTokenParametersSchema,
 				},
 				(params) => {
