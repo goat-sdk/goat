@@ -367,7 +367,7 @@ export abstract class EVMWalletClient extends WalletClientBase {
     override getCoreTools(): ToolBase[] {
         const baseTools = super.getCoreTools().filter((tool) => tool.name !== "get_balance"); // Remove generic base balance tool
 
-        const evmTools: ToolBase[] = [
+        const commonEvmTools: ToolBase[] = [
             // Override get_balance with EVM specifics
             createTool(
                 {
@@ -376,20 +376,6 @@ export abstract class EVMWalletClient extends WalletClientBase {
                     parameters: getBalanceParametersSchema,
                 },
                 (params) => this.balanceOf(params.address, params.tokenAddress),
-            ),
-            // Add send_token tool
-            createTool(
-                {
-                    name: "send_token",
-                    description: "Send native currency or an ERC20 token to a recipient, in base units.",
-                    parameters: sendTokenParametersSchema,
-                },
-                (params) => {
-                    if (!this.enableSend) {
-                        throw new Error("Sending transactions is disabled for this wallet.");
-                    }
-                    return this.sendToken(params);
-                },
             ),
             // Add get_token_info_by_ticker tool
             createTool(
@@ -437,51 +423,76 @@ export abstract class EVMWalletClient extends WalletClientBase {
                 },
                 (params) => this.getTokenAllowance(params),
             ),
-            // Tool for approve
-            createTool(
-                {
-                    name: "approve_token_evm",
-                    description: "Approve an amount (specified in base units) of an ERC20 token for a spender",
-                    parameters: approveParametersSchema,
-                },
-                (params) => {
-                    if (!this.enableSend) {
-                        throw new Error("Approval operations are disabled for this wallet instance.");
-                    }
-                    return this.approve(params);
-                },
-            ),
-            // Tool for revokeApproval
-            createTool(
-                {
-                    name: "revoke_token_approval_evm",
-                    description: "Revoke approval for an ERC20 token from a spender (sets allowance to 0)",
-                    parameters: revokeApprovalParametersSchema,
-                },
-                (params) => {
-                    if (!this.enableSend) {
-                        throw new Error("Approval operations are disabled for this wallet instance.");
-                    }
-                    return this.revokeApproval(params);
-                },
-            ),
-            // Tool for transferFrom
-            createTool(
-                {
-                    name: "transfer_token_from_evm",
-                    description:
-                        "Transfer an amount (specified in base units) of an ERC20 token from one address to another (requires prior approval)",
-                    parameters: transferFromParametersSchema,
-                },
-                (params) => {
-                    if (!this.enableSend) {
-                        throw new Error("Sending transactions is disabled for this wallet.");
-                    }
-                    return this.transferFrom(params);
-                },
-            ),
         ];
 
-        return [...baseTools, ...evmTools];
+        const sendingEvmTools: ToolBase[] = [];
+
+        if (this.enableSend) {
+            sendingEvmTools.push(
+                // Add send_token tool
+                createTool(
+                    {
+                        name: "send_token",
+                        description: "Send native currency or an ERC20 token to a recipient, in base units.",
+                        parameters: sendTokenParametersSchema,
+                    },
+                    (params) => {
+                        // Double check, though the tool shouldn't be registered if false
+                        if (!this.enableSend) {
+                            throw new Error("Sending transactions is disabled for this wallet.");
+                        }
+                        return this.sendToken(params);
+                    },
+                ),
+                // Tool for approve
+                createTool(
+                    {
+                        name: "approve_token_evm",
+                        description: "Approve an amount (specified in base units) of an ERC20 token for a spender",
+                        parameters: approveParametersSchema,
+                    },
+                    (params) => {
+                        // Double check
+                        if (!this.enableSend) {
+                            throw new Error("Approval operations are disabled for this wallet instance.");
+                        }
+                        return this.approve(params);
+                    },
+                ),
+                // Tool for revokeApproval
+                createTool(
+                    {
+                        name: "revoke_token_approval_evm",
+                        description: "Revoke approval for an ERC20 token from a spender (sets allowance to 0)",
+                        parameters: revokeApprovalParametersSchema,
+                    },
+                    (params) => {
+                        // Double check
+                        if (!this.enableSend) {
+                            throw new Error("Approval operations are disabled for this wallet instance.");
+                        }
+                        return this.revokeApproval(params);
+                    },
+                ),
+                // Tool for transferFrom
+                createTool(
+                    {
+                        name: "transfer_token_from_evm",
+                        description:
+                            "Transfer an amount (specified in base units) of an ERC20 token from one address to another (requires prior approval)",
+                        parameters: transferFromParametersSchema,
+                    },
+                    (params) => {
+                        // Double check
+                        if (!this.enableSend) {
+                            throw new Error("Sending transactions is disabled for this wallet.");
+                        }
+                        return this.transferFrom(params);
+                    },
+                ),
+            );
+        }
+
+        return [...baseTools, ...commonEvmTools, ...sendingEvmTools];
     }
 }
