@@ -254,21 +254,16 @@ export abstract class EVMWalletClient extends WalletClientBase {
 
     async sendToken(params: {
         recipient: `0x${string}`;
-        amount: string;
+        amountInBaseUnits: string;
         tokenAddress?: `0x${string}`;
     }): Promise<{ hash: string }> {
         if (!this.enableSend) {
             throw new Error("Sending tokens is disabled for this wallet instance.");
         }
 
-        const { recipient, amount, tokenAddress } = params;
+        const { recipient, amountInBaseUnits, tokenAddress } = params;
 
         try {
-            const amountInBaseUnits = await this.convertToBaseUnits({
-                amount,
-                tokenAddress,
-            });
-
             if (tokenAddress) {
                 // ERC20 Transfer
                 return this.sendTransaction({
@@ -386,7 +381,7 @@ export abstract class EVMWalletClient extends WalletClientBase {
             createTool(
                 {
                     name: "send_token",
-                    description: "Send native currency or an ERC20 token to a recipient.",
+                    description: "Send native currency or an ERC20 token to a recipient, in base units.",
                     parameters: sendTokenParametersSchema,
                 },
                 (params) => {

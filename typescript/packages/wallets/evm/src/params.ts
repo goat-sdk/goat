@@ -25,9 +25,9 @@ export const sendTokenParametersSchema = z.object({
         .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid EVM address format")
         .describe("The recipient's EVM address.")
         .transform((addr) => addr as `0x${string}`),
-    amount: z
+    amountInBaseUnits: z
         .string()
-        .describe("The amount of the token/native currency to send (in human-readable units, e.g., '0.5')."),
+        .describe("The amount of the token/native currency to send (in base units, e.g., '1000000000000000000')."),
     tokenAddress: z
         .string()
         .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid EVM address format")
