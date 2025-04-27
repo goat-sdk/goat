@@ -47,6 +47,7 @@ def main():
     # Initialize tools with Solana wallet
     tools = get_on_chain_tools(
         wallet=wallet,
+        plugins=[]
     )
 
     agent = create_tool_calling_agent(llm, tools, prompt)

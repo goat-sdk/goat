@@ -1,4 +1,14 @@
 from pydantic import BaseModel, Field
+from typing import Optional
+
+class GetBalanceParameters(BaseModel):
+    address: str = Field(
+        description="The address to check balance for"
+    )
+    tokenAddress: Optional[str] = Field(
+        description="The token mint address to check balance for, omit for native SOL",
+        default=None
+    )
 
 class GetTokenInfoBySymbolParameters(BaseModel):
     symbol: str = Field(

@@ -1,4 +1,14 @@
 from pydantic import BaseModel, Field
+from typing import Optional, Dict, List, Any
+
+class GetBalanceParameters(BaseModel):
+    address: str = Field(
+        description="The address to check balance for"
+    )
+    tokenAddress: Optional[str] = Field(
+        description="The token address to check balance for, omit for native currency",
+        default=None
+    )
 
 class GetTokenInfoByTickerParameters(BaseModel):
     ticker: str = Field(
@@ -9,7 +19,7 @@ class ConvertToBaseUnitsParameters(BaseModel):
     amount: str = Field(
         description="The amount of tokens to convert to base units"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token address to convert for, omit for native currency",
         default=None
     )
@@ -18,7 +28,7 @@ class ConvertFromBaseUnitsParameters(BaseModel):
     amount: str = Field(
         description="The amount in base units to convert to human-readable format"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token address to convert for, omit for native currency",
         default=None
     )
@@ -30,7 +40,7 @@ class SendTokenParameters(BaseModel):
     amountInBaseUnits: str = Field(
         description="The amount of tokens to send in base units"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token address to send, omit for native currency",
         default=None
     )
@@ -78,4 +88,18 @@ class TransferFromParameters(BaseModel):
     )
     amount: str = Field(
         description="The amount to transfer in base units"
+    )
+
+class SignTypedDataParameters(BaseModel):
+    types: Dict[str, List[Dict[str, str]]] = Field(
+        description="The type definitions for the typed data"
+    )
+    primaryType: str = Field(
+        description="The primary type being signed"
+    )
+    domain: Dict[str, Any] = Field(
+        description="The domain data for the signature"
+    )
+    message: Dict[str, Any] = Field(
+        description="The message data being signed"
     )

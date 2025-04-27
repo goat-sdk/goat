@@ -5,12 +5,12 @@ import re
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
 from goat.types.chain import EvmChain
-from goat.classes.tool_base import ToolBase
-from goat.utils.create_tool import create_tool
+from goat.classes.tool_base import ToolBase, create_tool
 
 from .abi import ERC20_ABI
 from .tokens import PREDEFINED_TOKENS, Token
 from .params import (
+    GetBalanceParameters,
     GetTokenInfoByTickerParameters,
     ConvertToBaseUnitsParameters,
     ConvertFromBaseUnitsParameters,
@@ -19,6 +19,7 @@ from .params import (
     ApproveParameters,
     RevokeApprovalParameters,
     TransferFromParameters,
+    SignTypedDataParameters,
 )
 
 class EVMTransaction(TypedDict, total=False):
@@ -116,17 +117,23 @@ class EVMWalletClient(WalletClientBase, ABC):
         """Get the native balance of the wallet in wei."""
         pass
 
-    async def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
+    async def balance_of(self, params: Union[Dict[str, Any], str], token_address: Optional[str] = None) -> Balance:
         """Get the balance of an address for native or ERC20 tokens.
         
         Args:
-            address: The address to check balance for
-            token_address: The token address, if None checks native balance
+            params: Either an address string or a dict with address and optional tokenAddress
+            token_address: The token address, if None checks native balance (used when params is a string)
             
         Returns:
             Balance information
         """
         chain = self.get_chain()
+        
+        if isinstance(params, dict):
+            address = params["address"]
+            token_address = params.get("tokenAddress")
+        else:
+            address = params
         
         if token_address:
             try:
@@ -141,18 +148,21 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "address": token_address,
                     "abi": ERC20_ABI,
                     "functionName": "decimals",
+                    "args": []
                 })
                 
                 name_result = self.read({
                     "address": token_address,
                     "abi": ERC20_ABI,
                     "functionName": "name",
+                    "args": []
                 })
                 
                 symbol_result = self.read({
                     "address": token_address,
                     "abi": ERC20_ABI,
                     "functionName": "symbol",
+                    "args": []
                 })
                 
                 balance_in_base_units = str(balance_result["value"])
@@ -236,6 +246,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "address": token_address,
                     "abi": ERC20_ABI,
                     "functionName": "decimals",
+                    "args": []
                 })
                 return int(decimals_result["value"])
             except Exception as e:
@@ -423,46 +434,86 @@ class EVMWalletClient(WalletClientBase, ABC):
         Returns:
             List of tool definitions
         """
+        import asyncio
+        
+        def balance_of_sync(params):
+            return asyncio.run(self.balance_of(params))
+            
+        def get_token_info_by_ticker_sync(params):
+            return asyncio.run(self.get_token_info_by_ticker(params))
+            
+        def convert_to_base_units_sync(params):
+            return asyncio.run(self.convert_to_base_units(params))
+            
+        def convert_from_base_units_sync(params):
+            return asyncio.run(self.convert_from_base_units(params))
+            
+        def get_token_allowance_sync(params):
+            return asyncio.run(self.get_token_allowance(params))
+            
+        def send_token_sync(params):
+            return asyncio.run(self.send_token(params))
+            
+        def approve_sync(params):
+            return asyncio.run(self.approve(params))
+            
+        def revoke_approval_sync(params):
+            return asyncio.run(self.revoke_approval(params))
+            
+        def transfer_from_sync(params):
+            return asyncio.run(self.transfer_from(params))
+        
         base_tools = [tool for tool in super().get_core_tools() 
                       if tool.name != "get_balance"]
         
         common_evm_tools = [
             create_tool(
-                name="get_balance",
-                description="Get the balance of the wallet for native currency or a specific ERC20 token.",
-                parameters_schema={"address": "string", "tokenAddress": "string?"},
-                func=self.balance_of
+                {
+                    "name": "get_balance",
+                    "description": "Get the balance of the wallet for native currency or a specific ERC20 token.",
+                    "parameters": GetBalanceParameters
+                },
+                balance_of_sync
             ),
             create_tool(
-                name="get_token_info_by_ticker",
-                description="Get information about a token by its ticker symbol.",
-                parameters_schema=GetTokenInfoByTickerParameters,
-                func=self.get_token_info_by_ticker
+                {
+                    "name": "get_token_info_by_ticker",
+                    "description": "Get information about a token by its ticker symbol.",
+                    "parameters": GetTokenInfoByTickerParameters
+                },
+                get_token_info_by_ticker_sync
             ),
             create_tool(
-                name="convert_to_base_units",
-                description="Convert a token amount from human-readable units to base units.",
-                parameters_schema=ConvertToBaseUnitsParameters,
-                func=self.convert_to_base_units
+                {
+                    "name": "convert_to_base_units",
+                    "description": "Convert a token amount from human-readable units to base units.",
+                    "parameters": ConvertToBaseUnitsParameters
+                },
+                convert_to_base_units_sync
             ),
             create_tool(
-                name="convert_from_base_units",
-                description="Convert a token amount from base units to human-readable units.",
-                parameters_schema=ConvertFromBaseUnitsParameters,
-                func=self.convert_from_base_units
+                {
+                    "name": "convert_from_base_units",
+                    "description": "Convert a token amount from base units to human-readable units.",
+                    "parameters": ConvertFromBaseUnitsParameters
+                },
+                convert_from_base_units_sync
             ),
             create_tool(
-                name="get_token_allowance_evm",
-                description="Get the allowance of an ERC20 token for a spender.",
-                parameters_schema=GetTokenAllowanceParameters,
-                func=self.get_token_allowance
+                {
+                    "name": "get_token_allowance_evm",
+                    "description": "Get the allowance of an ERC20 token for a spender.",
+                    "parameters": GetTokenAllowanceParameters
+                },
+                get_token_allowance_sync
             ),
             create_tool(
-                name="sign_typed_data_evm",
-                description="Sign an EIP-712 typed data structure.",
-                parameters_schema={"types": "object", "primaryType": "string", 
-                                  "domain": "object", "message": "object"},
-                func=self.sign_typed_data
+                {
+                    "name": "sign_typed_data_evm",
+                    "description": "Sign an EIP-712 typed data structure.",
+                    "parameters": SignTypedDataParameters
+                },
+                self.sign_typed_data
             ),
         ]
         
@@ -470,28 +521,36 @@ class EVMWalletClient(WalletClientBase, ABC):
         if self.enable_send:
             sending_evm_tools = [
                 create_tool(
-                    name="send_token",
-                    description="Send native currency or an ERC20 token to a recipient.",
-                    parameters_schema=SendTokenParameters,
-                    func=self.send_token
+                    {
+                        "name": "send_token",
+                        "description": "Send native currency or an ERC20 token to a recipient.",
+                        "parameters": SendTokenParameters
+                    },
+                    send_token_sync
                 ),
                 create_tool(
-                    name="approve_token_evm",
-                    description="Approve an amount of an ERC20 token for a spender.",
-                    parameters_schema=ApproveParameters,
-                    func=self.approve
+                    {
+                        "name": "approve_token_evm",
+                        "description": "Approve an amount of an ERC20 token for a spender.",
+                        "parameters": ApproveParameters
+                    },
+                    approve_sync
                 ),
                 create_tool(
-                    name="revoke_token_approval_evm",
-                    description="Revoke approval for an ERC20 token from a spender.",
-                    parameters_schema=RevokeApprovalParameters,
-                    func=self.revoke_approval
+                    {
+                        "name": "revoke_token_approval_evm",
+                        "description": "Revoke approval for an ERC20 token from a spender.",
+                        "parameters": RevokeApprovalParameters
+                    },
+                    revoke_approval_sync
                 ),
                 create_tool(
-                    name="transfer_token_from_evm",
-                    description="Transfer an ERC20 token from one address to another using allowance.",
-                    parameters_schema=TransferFromParameters,
-                    func=self.transfer_from
+                    {
+                        "name": "transfer_token_from_evm",
+                        "description": "Transfer an ERC20 token from one address to another using allowance.",
+                        "parameters": TransferFromParameters
+                    },
+                    transfer_from_sync
                 ),
             ]
         

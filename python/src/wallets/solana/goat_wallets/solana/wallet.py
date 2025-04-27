@@ -17,8 +17,7 @@ import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
 from goat.types.chain import Chain
-from goat.classes.tool_base import ToolBase
-from goat.utils.create_tool import create_tool
+from goat.classes.tool_base import ToolBase, create_tool
 
 from .tokens import SPL_TOKENS, Token, SolanaNetwork
 from .params import (
@@ -102,16 +101,23 @@ class SolanaWalletClient(WalletClientBase, ABC):
         """Send a raw transaction on the Solana chain."""
         pass
 
-    async def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
+    async def balance_of(self, params: Union[Dict[str, Any], str], token_address: Optional[str] = None) -> Balance:
         """Get the balance of an address for SOL or SPL tokens.
         
         Args:
-            address: The address to check balance for
-            token_address: The token mint address, if None checks SOL balance
+            params: Either an address string or a dict with address and optional tokenAddress
+            token_address: The token mint address, if None checks SOL balance (used when params is a string)
             
         Returns:
             Balance information
         """
+        # Handle both string and dict parameters
+        if isinstance(params, dict):
+            address = params["address"]
+            token_address = params.get("tokenAddress")
+        else:
+            address = params
+            
         owner_pubkey = Pubkey.from_string(address)
         
         if token_address:
@@ -309,12 +315,18 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     instructions.append(create_ata_ix)
                 
                 # Create transfer instruction
-                from spl.token.instructions import transfer as spl_transfer
-                transfer_ix = spl_transfer(
-                    source_token_account,
-                    destination_token_account,
-                    int(amount_in_base_units),
-                    owner_pubkey
+                from spl.token.instructions import transfer, TransferParams
+                from spl.token.constants import TOKEN_PROGRAM_ID
+                
+                transfer_ix = transfer(
+                    TransferParams(
+                        program_id=TOKEN_PROGRAM_ID,
+                        source=source_token_account,
+                        dest=destination_token_account,
+                        owner=owner_pubkey,
+                        amount=int(amount_in_base_units),
+                        signers=[]
+                    )
                 )
                 instructions.append(transfer_ix)
             else:
@@ -348,27 +360,68 @@ class SolanaWalletClient(WalletClientBase, ABC):
         Returns:
             List of tool definitions
         """
+        import asyncio
+        
+        def run_async_safely(coro):
+            """Helper function to run async functions safely in any context."""
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop = asyncio.new_event_loop()
+                    result = loop.run_until_complete(coro)
+                    loop.close()
+                    return result
+                else:
+                    return loop.run_until_complete(coro)
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(coro)
+                loop.close()
+                return result
+        
+        def balance_of_sync(params):
+            return run_async_safely(self.balance_of(params))
+            
+        def get_token_info_by_symbol_sync(params):
+            return run_async_safely(self.get_token_info_by_symbol(params))
+            
+        def convert_to_base_units_sync(params):
+            return run_async_safely(self.convert_to_base_units(params))
+            
+        def convert_from_base_units_sync(params):
+            return run_async_safely(self.convert_from_base_units(params))
+            
+        def send_token_sync(params):
+            return run_async_safely(self.send_token(params))
+        
         base_tools = super().get_core_tools()
         
         common_solana_tools = [
             create_tool(
-                name="get_token_info_by_symbol",
-                description="Get information about a token by its symbol.",
-                parameters_schema=GetTokenInfoBySymbolParameters,
-                func=self.get_token_info_by_symbol
+                {
+                    "name": "get_token_info_by_symbol",
+                    "description": "Get information about a token by its symbol.",
+                    "parameters": GetTokenInfoBySymbolParameters
+                },
+                get_token_info_by_symbol_sync
             ),
             # Convert to/from base units
             create_tool(
-                name="convert_to_base_units",
-                description="Convert a token amount from human-readable units to base units.",
-                parameters_schema=ConvertToBaseUnitsParameters,
-                func=self.convert_to_base_units
+                {
+                    "name": "convert_to_base_units",
+                    "description": "Convert a token amount from human-readable units to base units.",
+                    "parameters": ConvertToBaseUnitsParameters
+                },
+                convert_to_base_units_sync
             ),
             create_tool(
-                name="convert_from_base_units",
-                description="Convert a token amount from base units to human-readable units.",
-                parameters_schema=ConvertFromBaseUnitsParameters,
-                func=self.convert_from_base_units
+                {
+                    "name": "convert_from_base_units",
+                    "description": "Convert a token amount from base units to human-readable units.",
+                    "parameters": ConvertFromBaseUnitsParameters
+                },
+                convert_from_base_units_sync
             ),
         ]
         
@@ -376,10 +429,12 @@ class SolanaWalletClient(WalletClientBase, ABC):
         if self.enable_send:
             sending_solana_tools = [
                 create_tool(
-                    name="send_token",
-                    description="Send SOL or an SPL token to a recipient.",
-                    parameters_schema=SendTokenParameters,
-                    func=self.send_token
+                    {
+                        "name": "send_token",
+                        "description": "Send SOL or an SPL token to a recipient.",
+                        "parameters": SendTokenParameters
+                    },
+                    send_token_sync
                 ),
             ]
         
@@ -522,14 +577,15 @@ class SolanaWalletClient(WalletClientBase, ABC):
 class SolanaKeypairWalletClient(SolanaWalletClient):
     """Solana wallet implementation using a keypair."""
 
-    def __init__(self, client: SolanaClient, keypair: Keypair):
+    def __init__(self, client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None):
         """Initialize the Solana keypair wallet client.
 
         Args:
             client: A Solana RPC client instance
             keypair: A Solana keypair for signing transactions
+            options: Configuration options
         """
-        super().__init__(client)
+        super().__init__(client, options)
         self.keypair = keypair
 
     def get_address(self) -> str:
@@ -542,18 +598,44 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         signed = nacl.signing.SigningKey(self.keypair.secret()).sign(message_bytes)
         return {"signature": signed.signature.hex()}
 
-    def balance_of(self, address: str) -> Balance:
-        """Get the SOL balance of an address."""
-        pubkey = Pubkey.from_string(address)
-        balance_lamports = self.client.get_balance(pubkey).value
-        # Convert lamports (1e9 lamports in 1 SOL)
-        return {
-            "decimals": 9,
-            "symbol": "SOL",
-            "name": "Solana",
-            "value": str(balance_lamports / 10**9),
-            "in_base_units": str(balance_lamports),
-        }
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
+        """Get the balance of an address for SOL or SPL tokens.
+        
+        Args:
+            address: The address to check balance for
+            token_address: The token mint address, if None checks SOL balance
+            
+        Returns:
+            Balance information
+        """
+        if token_address:
+            import asyncio
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    loop = asyncio.new_event_loop()
+                    result = loop.run_until_complete(super().balance_of(address, token_address))
+                    loop.close()
+                    return result
+                else:
+                    return loop.run_until_complete(super().balance_of(address, token_address))
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                result = loop.run_until_complete(super().balance_of(address, token_address))
+                loop.close()
+                return result
+        else:
+            pubkey = Pubkey.from_string(address)
+            balance_lamports = self.client.get_balance(pubkey).value
+            # Convert lamports (1e9 lamports in 1 SOL)
+            return {
+                "decimals": 9,
+                "symbol": "SOL",
+                "name": "Solana",
+                "value": str(balance_lamports / 10**9),
+                "in_base_units": str(balance_lamports),
+            }
 
     def send_transaction(self, transaction: SolanaTransaction) -> Dict[str, str]:
         """Send a transaction on the Solana chain."""
@@ -625,14 +707,15 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         return {"hash": str(result.value)}
 
 
-def solana(client: SolanaClient, keypair: Keypair) -> SolanaKeypairWalletClient:
+def solana(client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None) -> SolanaKeypairWalletClient:
     """Create a new SolanaKeypairWalletClient instance.
 
     Args:
         client: A Solana RPC client instance
         keypair: A Solana keypair for signing transactions
+        options: Configuration options
 
     Returns:
         A new SolanaKeypairWalletClient instance
     """
-    return SolanaKeypairWalletClient(client, keypair)
+    return SolanaKeypairWalletClient(client, keypair, options)
