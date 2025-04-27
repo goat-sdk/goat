@@ -1,0 +1,36 @@
+from pydantic import BaseModel, Field
+
+class GetTokenInfoBySymbolParameters(BaseModel):
+    symbol: str = Field(
+        description="The symbol of the token to get information for (e.g., USDC, USDT)"
+    )
+
+class ConvertToBaseUnitsParameters(BaseModel):
+    amount: str = Field(
+        description="The amount of tokens to convert to base units"
+    )
+    tokenAddress: str = Field(
+        description="The token mint address to convert for, omit for native SOL",
+        default=None
+    )
+
+class ConvertFromBaseUnitsParameters(BaseModel):
+    amount: str = Field(
+        description="The amount in base units to convert to human-readable format"
+    )
+    tokenAddress: str = Field(
+        description="The token mint address to convert for, omit for native SOL",
+        default=None
+    )
+
+class SendTokenParameters(BaseModel):
+    recipient: str = Field(
+        description="The address to send tokens to"
+    )
+    baseUnitsAmount: str = Field(
+        description="The amount of tokens to send in base units"
+    )
+    tokenAddress: str = Field(
+        description="The token mint address to send, omit for native SOL",
+        default=None
+    )
