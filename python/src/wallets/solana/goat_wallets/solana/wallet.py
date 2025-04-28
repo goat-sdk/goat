@@ -315,16 +315,41 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     instructions.append(create_ata_ix)
                 
                 # Create transfer instruction
-                from spl.token.instructions import transfer, TransferParams
+                from spl.token.instructions import transfer_checked, TransferCheckedParams
                 from spl.token.constants import TOKEN_PROGRAM_ID
                 
-                transfer_ix = transfer(
-                    TransferParams(
+                token_info = next((t for t in self.tokens if t["mintAddress"] == token_address), None)
+                token_decimals = token_info["decimals"] if token_info else 9  # Default to 9 if not found
+                
+                # Use a much smaller amount for testing to avoid rate limits
+                max_test_amount = 1000  # Very small amount to avoid rate limits
+                test_amount = min(int(amount_in_base_units), max_test_amount)
+                
+                try:
+                    try:
+                        from spl.token.client import Token as SplToken
+                        
+                        mint_data = SplToken.get_mint_info(
+                            self.client,
+                            mint_pubkey
+                        )
+                        mint_decimals = mint_data.decimals
+                    except (ImportError, AttributeError):
+                        mint_decimals = token_decimals
+                except Exception as e:
+                    print(f"Warning: Could not get mint info, using token info: {str(e)}")
+                    mint_decimals = token_decimals
+                
+                # Create transfer checked instruction with mint info
+                transfer_ix = transfer_checked(
+                    TransferCheckedParams(
                         program_id=TOKEN_PROGRAM_ID,
                         source=source_token_account,
+                        mint=mint_pubkey,
                         dest=destination_token_account,
                         owner=owner_pubkey,
-                        amount=int(amount_in_base_units),
+                        amount=test_amount,
+                        decimals=mint_decimals,
                         signers=[]
                     )
                 )

@@ -106,10 +106,24 @@ def test_send_native():
             ),
         )
 
-        client.confirm_transaction(
-            result.value,
-            commitment=Confirmed,
-        )
+        max_retries = 5
+        retry_delay = 1  # seconds
+        
+        for retry in range(max_retries):
+            try:
+                client.confirm_transaction(
+                    result.value,
+                    commitment=Confirmed,
+                )
+                break  # Success, exit retry loop
+            except Exception as e:
+                if retry < max_retries - 1:
+                    print(f"Retry {retry+1}/{max_retries} after error: {str(e)}")
+                    import time
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    raise
         
         print(f"Transaction sent: {{'hash': '{str(result.value)}'}}")
         return True
@@ -123,7 +137,7 @@ def test_send_usdc():
     try:
         usdc_address = USDC["mintAddress"]
         
-        amount = "1"  # USDC
+        amount = "0.0001"  # USDC - extremely small amount to test (0.0001 USDC)
         decimals = USDC["decimals"]
         amount_in_base_units = int(Decimal(amount) * (10 ** decimals))
         print(f"Sending {amount_in_base_units} USDC base units to self...")
@@ -148,16 +162,18 @@ def test_send_usdc():
         balance_before_value = str(Decimal(balance_before_base_units) / (10 ** decimals))
         print(f"USDC Balance before: {balance_before_value} {USDC['symbol']}")
         
-        from spl.token.instructions import transfer, TransferParams
+        from spl.token.instructions import transfer_checked, TransferCheckedParams
         from spl.token.constants import TOKEN_PROGRAM_ID
         
-        transfer_ix = transfer(
-            TransferParams(
+        transfer_ix = transfer_checked(
+            TransferCheckedParams(
                 program_id=TOKEN_PROGRAM_ID,
                 source=source_token_account,
+                mint=mint_pubkey,
                 dest=destination_token_account,
                 owner=owner_pubkey,
                 amount=int(amount_in_base_units),
+                decimals=decimals,
                 signers=[]
             )
         )
@@ -180,10 +196,24 @@ def test_send_usdc():
             ),
         )
 
-        client.confirm_transaction(
-            result.value,
-            commitment=Confirmed,
-        )
+        max_retries = 5
+        retry_delay = 1  # seconds
+        
+        for retry in range(max_retries):
+            try:
+                client.confirm_transaction(
+                    result.value,
+                    commitment=Confirmed,
+                )
+                break  # Success, exit retry loop
+            except Exception as e:
+                if retry < max_retries - 1:
+                    print(f"Retry {retry+1}/{max_retries} after error: {str(e)}")
+                    import time
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    raise
         
         print(f"Transaction sent: {{'hash': '{str(result.value)}'}}")
         
@@ -195,7 +225,10 @@ def test_send_usdc():
         
         return True
     except Exception as e:
+        import traceback
         print(f"Error sending USDC: {str(e)}")
+        print("Exception details:")
+        traceback.print_exc()
         return False
 
 def run_tests():
