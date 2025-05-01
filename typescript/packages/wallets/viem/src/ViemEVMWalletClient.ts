@@ -1,5 +1,12 @@
 import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
+import {
+    SerializeTransactionFn,
+    TransactionSerializable,
+    type WalletClient as ViemWalletClient,
+    encodeFunctionData,
+    formatUnits,
+    publicActions,
+} from "viem";
 import { mainnet } from "viem/chains";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
@@ -9,6 +16,8 @@ export type ViemOptions = {
         defaultInput?: `0x${string}`;
     };
 };
+
+type Serializer = SerializeTransactionFn<TransactionSerializable>;
 
 export class ViemEVMWalletClient extends EVMWalletClient {
     #client: ViemWalletClient;
@@ -63,6 +72,26 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             primaryType: data.primaryType,
             message: data.message,
             account: this.#client.account,
+        });
+
+        return { signature };
+    }
+
+    async signTransaction(transaction: EVMTransaction): Promise<{ signature: string }> {
+        if (!this.#client.account) throw new Error("No account connected");
+
+        const signature = await this.#client.signTransaction({
+            to: transaction.to as `0x${string}`,
+            value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
+            data: transaction?.data,
+            account: this.#client.account,
+            chain: this.#client.chain,
+            maxFeePerGas: transaction?.maxFeePerGas,
+            accessList: transaction?.accessList,
+            nonce: transaction?.nonce,
+            gas: transaction?.gas,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas,
+            // type: transaction?.type,
         });
 
         return { signature };
