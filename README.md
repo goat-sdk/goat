@@ -154,7 +154,7 @@ GOAT is free software, MIT licensed.
 | DPSN |  Push based real time data streams  | [@goat-sdk/dpsn-plugin](https://www.npmjs.com/package/@goat-sdk/dpsn-plugin) | [@goat-sdk/plugin-dpsn](https://pypi.org/project/goat-sdk-plugin-dpsn/) |
 | ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) |
 | Enso | Find the most optimal route between tokens | [@goat-sdk/plugin-enso](https://www.npmjs.com/package/@goat-sdk/plugin-enso) |
-| ERC20 | Interact with any ERC20 token | [@goat-sdk/plugin-erc20](https://www.npmjs.com/package/@goat-sdk/plugin-erc20) | [goat-sdk-plugin-erc20](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/erc20) |
+| ERC20 | Interact with any ERC20 token (now integrated directly into wallets) | [@goat-sdk/plugin-erc20](https://www.npmjs.com/package/@goat-sdk/plugin-erc20) | [Integrated into wallets](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/evm) |
 | ERC721 | Interact with any ERC721 token | [@goat-sdk/plugin-erc721](https://www.npmjs.com/package/@goat-sdk/plugin-erc721) |
 | Etherscan | Get transaction information using Etherscan API | [@goat-sdk/plugin-etherscan](https://www.npmjs.com/package/@goat-sdk/plugin-etherscan) |
 | Farcaster | Read and post casts on Farcaster | [@goat-sdk/plugin-farcaster](https://www.npmjs.com/package/@goat-sdk/plugin-farcaster) | [goat-sdk-plugin-farcaster](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/farcaster) |
@@ -182,7 +182,7 @@ GOAT is free software, MIT licensed.
 | SNS | Interact with SNS | [@goat-sdk/plugin-sns](https://www.npmjs.com/package/@goat-sdk/plugin-sns) |
 | Solana Magic Eden | Purchase NFTs on Magic Eden | [@goat-sdk/plugin-solana-magiceden](https://www.npmjs.com/package/@goat-sdk/plugin-solana-magiceden) |
 | Solana NFTs | Get NFT information using Solana NFTs API | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts) |
-| SPL Tokens | Interact with SPL tokens | [@goat-sdk/plugin-spl-token](https://www.npmjs.com/package/@goat-sdk/plugin-spl-token) | [goat-sdk-plugin-spl-token](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/spl_token) |
+| SPL Tokens | Interact with SPL tokens (now integrated directly into wallets) | [@goat-sdk/plugin-spl-token](https://www.npmjs.com/package/@goat-sdk/plugin-spl-token) | [Integrated into wallets](https://github.com/goat-sdk/goat/tree/main/python/src/wallets/solana) |
 | Starknet Token | Interact with Starknet tokens | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token) |
 | Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) | [goat-sdk-plugin-superfluid](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/superfluid) |
 | Synth | Get synthetic price data using Synth Subnet API | [@goat-sdk/plugin-synth-api](https://www.npmjs.com/package/@goat-sdk/plugin-synth-api) |

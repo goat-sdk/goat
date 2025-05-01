@@ -18,7 +18,7 @@ export abstract class WalletClientBase {
     abstract getAddress(): string;
     abstract getChain(): Chain;
     abstract signMessage(message: string): Promise<Signature>;
-    abstract balanceOf(address: string): Promise<Balance>;
+    abstract balanceOf(address: string, tokenAddress?: string): Promise<Balance>;
 
     getCoreTools(): ToolBase[] {
         return [
@@ -41,10 +41,11 @@ export abstract class WalletClientBase {
             createTool(
                 {
                     name: "get_balance",
-                    description: "Get the balance of the wallet",
-                    parameters: z.object({ address: z.string() }),
+                    description:
+                        "Get the balance of the wallet for the native token or a specific token by passing its address.",
+                    parameters: z.object({ address: z.string(), tokenAddress: z.string().optional() }),
                 },
-                (parameters) => this.balanceOf(parameters.address),
+                (parameters) => this.balanceOf(parameters.address, parameters.tokenAddress),
             ),
             createTool(
                 {

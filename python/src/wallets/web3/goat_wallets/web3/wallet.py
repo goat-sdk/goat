@@ -26,8 +26,8 @@ class Web3Options:
 
 
 class Web3EVMWalletClient(EVMWalletClient):
-    def __init__(self, web3: Web3, options: Optional[Web3Options] = None):
-        super().__init__()
+    def __init__(self, web3: Web3, options: Optional[Web3Options] = None, tokens=None, enable_send=True):
+        super().__init__(tokens=tokens, enable_send=enable_send)
         self._web3 = web3
         self._default_paymaster_address = (
             options.paymaster["address"] if options and options.paymaster else None
@@ -41,9 +41,12 @@ class Web3EVMWalletClient(EVMWalletClient):
             return ""
         return self._web3.eth.default_account
 
+    def get_chain_id(self) -> int:
+        return self._web3.eth.chain_id
+
     def get_chain(self) -> EvmChain:
         chain_id = self._web3.eth.chain_id
-        return {"type": "evm", "id": chain_id}
+        return {"type": "evm", "id": chain_id, "nativeCurrency": {"name": "Ether", "symbol": "ETH", "decimals": 18}}
 
     def resolve_address(self, address: str) -> ChecksumAddress:
         """Resolve an address to its canonical form."""
@@ -168,26 +171,41 @@ class Web3EVMWalletClient(EVMWalletClient):
 
         return {"value": result}
 
-    def balance_of(self, address: str) -> Balance:
-        """Get the balance of an address."""
-        resolved_address = self.resolve_address(address)
-        balance_wei = self._web3.eth.get_balance(resolved_address)
+    def get_native_balance(self) -> int:
+        """Get the native balance of the wallet in wei."""
+        if not self._web3.eth.default_account:
+            raise ValueError("No account connected")
+        return self._web3.eth.get_balance(self._web3.eth.default_account)
 
-        chain_id = self._web3.eth.chain_id
-        # Note: You might want to implement a chain registry to get proper currency details
-        decimals = 18  # ETH decimals
-        symbol = "ETH"
-        name = "Ether"
-
-        formatted_balance = Web3.from_wei(balance_wei, "ether")
-
-        return {
-            "value": str(formatted_balance),
-            "decimals": decimals,
-            "symbol": symbol,
-            "name": name,
-            "in_base_units": str(balance_wei),
-        }
+    def balance_of(self, params, token_address=None):
+        """Get the balance of an address for native or ERC20 tokens."""
+        if isinstance(params, dict):
+            address = params["address"]
+            token_address = params.get("tokenAddress")
+        else:
+            address = params
+            
+        if token_address:
+            import asyncio
+            return asyncio.run(super().balance_of(address, token_address))
+        else:
+            resolved_address = self.resolve_address(address)
+            balance_wei = self._web3.eth.get_balance(resolved_address)
+            
+            chain = self.get_chain()
+            decimals = chain["nativeCurrency"]["decimals"]
+            symbol = chain["nativeCurrency"]["symbol"]
+            name = chain["nativeCurrency"]["name"]
+            
+            formatted_balance = Web3.from_wei(balance_wei, "ether")
+            
+            return {
+                "value": str(formatted_balance),
+                "decimals": decimals,
+                "symbol": symbol,
+                "name": name,
+                "in_base_units": str(balance_wei),
+            }
 
     def _wait_for_receipt(self, tx_hash: HexStr) -> Dict[str, str]:
         """Wait for a transaction receipt and return standardized result."""
@@ -198,6 +216,6 @@ class Web3EVMWalletClient(EVMWalletClient):
         }
 
 
-def web3(client: Web3, options: Optional[Web3Options] = None) -> Web3EVMWalletClient:
+def web3(client: Web3, options: Optional[Web3Options] = None, tokens=None, enable_send=True) -> Web3EVMWalletClient:
     """Create a new Web3EVMWalletClient instance."""
-    return Web3EVMWalletClient(client, options)
+    return Web3EVMWalletClient(client, options, tokens, enable_send)

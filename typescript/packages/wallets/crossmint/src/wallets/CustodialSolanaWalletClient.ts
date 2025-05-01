@@ -1,13 +1,12 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
-import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { type Connection, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { SolanWalletClientCtorParams, type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import { PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import { formatUnits } from "viem";
 import { CrossmintWalletsAPI } from "./CrossmintWalletsAPI";
 
-type CommonParameters = {
+type CommonParameters = SolanWalletClientCtorParams & {
     chain: "solana";
-    connection: Connection;
 };
 
 type EmailLocatorParameters = CommonParameters & {

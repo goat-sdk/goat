@@ -53,9 +53,21 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         api_client: CrossmintWalletsAPI,
         options: SolanaSmartWalletOptions,
         connection: SolanaClient = SolanaClient(
-            "https://api.devnet.solana.com")
+            "https://api.devnet.solana.com"),
+        tokens = None,
+        enable_send = True
     ):
-        SolanaWalletClient.__init__(self, connection)
+        """Initialize Solana smart wallet client.
+        
+        Args:
+            address: Wallet address
+            api_client: Crossmint API client
+            options: Wallet configuration options
+            connection: Solana RPC client
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
+        """
+        SolanaWalletClient.__init__(self, connection, None, tokens, enable_send)
         BaseWalletClient.__init__(self, address, api_client, "solana")
         self._locator = get_locator(address, options.get(
             "linkedUser", None), "solana-smart-wallet")

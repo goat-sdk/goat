@@ -73,7 +73,9 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
         chain: str,
         signer: Signer,
         provider_url: str,
-        ens_provider_url: Optional[str] = None
+        ens_provider_url: Optional[str] = None,
+        tokens = None,
+        enable_send = True
     ):
         """Initialize Smart Wallet client.
         
@@ -84,7 +86,10 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
             signer: Signer configuration (address string or keypair dict)
             provider_url: RPC provider URL
             ens_provider_url: Optional ENS provider URL
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
         """
+        EVMWalletClient.__init__(self, tokens=tokens, enable_send=enable_send)
         BaseWalletClient.__init__(self, address, api_client, chain)
         self._signer = signer
         
@@ -379,7 +384,9 @@ def smart_wallet_factory(api_client: CrossmintWalletsAPI):
             options["chain"],
             options["signer"],
             options["provider"],
-            options.get("options", {}).get("ensProvider")
+            options.get("options", {}).get("ensProvider"),
+            options.get("tokens"),
+            options.get("enable_send", True)
         )
     
     return create_smart_wallet

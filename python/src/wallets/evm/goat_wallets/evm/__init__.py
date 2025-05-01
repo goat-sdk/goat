@@ -5,6 +5,8 @@ from .types import (
 from .evm_wallet_client import EVMWalletClient
 from .evm_smart_wallet_client import EVMSmartWalletClient
 from .send_eth import SendETHPlugin, send_eth
+from .tokens import USDC, PEPE, PREDEFINED_TOKENS, Token
+from .abi import ERC20_ABI
 
 __all__ = [
     "EVMTransaction",
@@ -18,4 +20,9 @@ __all__ = [
     "PaymasterOptions",
     "EVMTransactionOptions",
     "TypedDataDomain",
+    "USDC",
+    "PEPE",
+    "PREDEFINED_TOKENS",
+    "Token",
+    "ERC20_ABI",
 ]
