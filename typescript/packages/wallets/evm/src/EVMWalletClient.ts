@@ -40,11 +40,16 @@ export type TransferFromParameters = {
     amount: string /* In Base Units */;
 };
 
+export type EVMWalletClientCtorParams = {
+    tokens?: Token[];
+    enableSend?: boolean;
+};
+
 export abstract class EVMWalletClient extends WalletClientBase {
     protected tokens: Token[];
     protected enableSend: boolean;
 
-    constructor({ tokens = PREDEFINED_TOKENS, enableSend = true }: { tokens?: Token[]; enableSend?: boolean } = {}) {
+    constructor({ tokens = PREDEFINED_TOKENS, enableSend = true }: EVMWalletClientCtorParams = {}) {
         super();
         this.tokens = tokens;
         this.enableSend = enableSend;

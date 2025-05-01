@@ -51,19 +51,21 @@ class SolanaOptions:
 class SolanaWalletClient(WalletClientBase, ABC):
     """Base class for Solana wallet implementations."""
 
-    def __init__(self, client: SolanaClient, options: Optional[SolanaOptions] = None):
+    def __init__(self, client: SolanaClient, options: Optional[SolanaOptions] = None, tokens: Optional[List[Token]] = None, enable_send: Optional[bool] = None):
         """Initialize the Solana wallet client.
 
         Args:
             client: A Solana RPC client instance
             options: Configuration options
+            tokens: List of token configurations (overrides options.tokens if provided)
+            enable_send: Whether to enable send functionality (overrides options.enable_send if provided)
         """
         super().__init__()
         self.client = client
         self.options = options or SolanaOptions()
         self.network = self.options.network
-        self.tokens = self.options.tokens
-        self.enable_send = self.options.enable_send
+        self.tokens = tokens if tokens is not None else self.options.tokens
+        self.enable_send = enable_send if enable_send is not None else self.options.enable_send
 
     def get_chain(self) -> Chain:
         """Get the chain type for Solana."""
@@ -579,17 +581,19 @@ class SolanaWalletClient(WalletClientBase, ABC):
 
 
 class SolanaKeypairWalletClient(SolanaWalletClient):
-    """Solana wallet implementation using a keypair."""
+    """A Solana wallet client implementation using a local keypair for signing."""
 
-    def __init__(self, client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None):
+    def __init__(self, client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None, tokens: Optional[List[Token]] = None, enable_send: Optional[bool] = None):
         """Initialize the Solana keypair wallet client.
-
+        
         Args:
             client: A Solana RPC client instance
-            keypair: A Solana keypair for signing transactions
+            keypair: A Solders Keypair object
             options: Configuration options
+            tokens: List of token configurations (overrides options.tokens if provided)
+            enable_send: Whether to enable send functionality (overrides options.enable_send if provided)
         """
-        super().__init__(client, options)
+        super().__init__(client, options, tokens, enable_send)
         self.keypair = keypair
 
     def get_address(self) -> str:
@@ -711,15 +715,17 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
         return {"hash": str(result.value)}
 
 
-def solana(client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None) -> SolanaKeypairWalletClient:
-    """Create a new SolanaKeypairWalletClient instance.
-
+def solana(client: SolanaClient, keypair: Keypair, options: Optional[SolanaOptions] = None, tokens: Optional[List[Token]] = None, enable_send: Optional[bool] = None) -> SolanaKeypairWalletClient:
+    """Create a Solana wallet client with keypair.
+    
     Args:
-        client: A Solana RPC client instance
-        keypair: A Solana keypair for signing transactions
+        client: A Solana RPC client
+        keypair: A Solders Keypair object
         options: Configuration options
-
+        tokens: List of token configurations (overrides options.tokens if provided)
+        enable_send: Whether to enable send functionality (overrides options.enable_send if provided)
+        
     Returns:
-        A new SolanaKeypairWalletClient instance
+        A Solana wallet client
     """
-    return SolanaKeypairWalletClient(client, keypair, options)
+    return SolanaKeypairWalletClient(client, keypair, options, tokens, enable_send)

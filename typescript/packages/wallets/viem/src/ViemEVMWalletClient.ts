@@ -5,18 +5,16 @@ import {
     type EVMTransaction,
     type EVMTypedData,
     EVMWalletClient,
+    EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
-import type { Token } from "@goat-sdk/wallet-evm";
 import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
-export type ViemOptions = {
+export type ViemOptions = EVMWalletClientCtorParams & {
     paymaster?: {
         defaultAddress: `0x${string}`;
         defaultInput?: `0x${string}`;
     };
-    tokens?: Token[];
-    enableSend?: boolean;
 };
 
 export class ViemEVMWalletClient extends EVMWalletClient {
