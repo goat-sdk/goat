@@ -122,25 +122,3 @@ export const revokeApprovalParametersSchema = z.object({
         .describe("The address whose approval should be revoked.")
         .transform((addr) => addr as `0x${string}`),
 });
-
-export const transferFromParametersSchema = z.object({
-    tokenAddress: z
-        .string()
-        .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid EVM address format")
-        .describe("The contract address of the ERC20 token.")
-        .transform((addr) => addr as `0x${string}`),
-    from: z
-        .string()
-        .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid EVM address format")
-        .describe("The address to transfer tokens from (must have allowance).")
-        .transform((addr) => addr as `0x${string}`),
-    to: z
-        .string()
-        .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid EVM address format")
-        .describe("The address to transfer tokens to.")
-        .transform((addr) => addr as `0x${string}`),
-    amount: z
-        .string()
-        .regex(/^\d+$/, "Amount must be a non-negative integer string (base units).")
-        .describe("The amount of tokens to transfer (in base units)."),
-});

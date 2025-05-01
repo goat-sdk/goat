@@ -18,7 +18,6 @@ import {
     revokeApprovalParametersSchema,
     sendTokenParametersSchema,
     signTypedDataParametersSchema,
-    transferFromParametersSchema,
 } from "./params.js";
 import { PREDEFINED_TOKENS, type Token } from "./tokens";
 import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "./types";
@@ -167,7 +166,7 @@ export abstract class EVMWalletClient extends WalletClientBase {
         }
 
         // Check if it's the native currency symbol
-        if (upperCaseTicker === chain.nativeCurrency.symbol.toUpperCase()) {
+        if (upperCaseTicker === chain.nativeCurrency.symbol.toUpperCase() || upperCaseTicker === "ETH") {
             return {
                 symbol: chain.nativeCurrency.symbol,
                 contractAddress: "", // Native currency has no contract address
@@ -341,28 +340,6 @@ export abstract class EVMWalletClient extends WalletClientBase {
         return this.approve({ ...params, amount: "0" });
     }
 
-    async transferFrom(params: TransferFromParameters): Promise<{ hash: string }> {
-        if (!this.enableSend) {
-            throw new Error("Sending tokens is disabled for this wallet instance.");
-        }
-        try {
-            const { tokenAddress, from, to, amount } = params;
-            // Validate base amount is a valid integer string
-            if (!/^\d+$/.test(amount)) {
-                throw new Error(`Invalid base unit amount format for transferFrom: ${amount}`);
-            }
-            return this.sendTransaction({
-                to: tokenAddress,
-                abi: ERC20_ABI,
-                functionName: "transferFrom",
-                args: [from, to, BigInt(amount)], // Amount parameter is already in base units
-            });
-        } catch (error) {
-            console.error(`Failed to transfer from: ${error}`);
-            throw Error(`Failed to transfer from: ${error instanceof Error ? error.message : String(error)}`);
-        }
-    }
-
     // Override getCoreTools to add EVM specific tools
     override getCoreTools(): ToolBase[] {
         const baseTools = super.getCoreTools().filter((tool) => tool.name !== "get_balance"); // Remove generic base balance tool
@@ -472,22 +449,6 @@ export abstract class EVMWalletClient extends WalletClientBase {
                             throw new Error("Approval operations are disabled for this wallet instance.");
                         }
                         return this.revokeApproval(params);
-                    },
-                ),
-                // Tool for transferFrom
-                createTool(
-                    {
-                        name: "transfer_token_from_evm",
-                        description:
-                            "Transfer an amount (specified in base units) of an ERC20 token from one address to another (requires prior approval)",
-                        parameters: transferFromParametersSchema,
-                    },
-                    (params) => {
-                        // Double check
-                        if (!this.enableSend) {
-                            throw new Error("Sending transactions is disabled for this wallet.");
-                        }
-                        return this.transferFrom(params);
                     },
                 ),
             );

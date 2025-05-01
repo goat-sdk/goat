@@ -264,7 +264,6 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         if (tokenAddress) {
             try {
                 const mintInfo = await getMint(this.connection, new PublicKey(tokenAddress));
-                console.log("mintInfo", mintInfo.supply, mintInfo.decimals);
                 return mintInfo.decimals;
             } catch (error) {
                 console.error(`Failed to fetch decimals for token ${tokenAddress}: ${error}`);

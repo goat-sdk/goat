@@ -75,21 +75,6 @@ class RevokeApprovalParameters(BaseModel):
         description="The spender address to revoke approval from"
     )
 
-class TransferFromParameters(BaseModel):
-    tokenAddress: str = Field(
-        description="The token address to transfer"
-    )
-    from_: str = Field(
-        alias="from",
-        description="The address to transfer from"
-    )
-    to: str = Field(
-        description="The address to transfer to"
-    )
-    amount: str = Field(
-        description="The amount to transfer in base units"
-    )
-
 class SignTypedDataParameters(BaseModel):
     types: Dict[str, List[Dict[str, str]]] = Field(
         description="The type definitions for the typed data"

@@ -18,7 +18,6 @@ from .params import (
     GetTokenAllowanceParameters,
     ApproveParameters,
     RevokeApprovalParameters,
-    TransferFromParameters,
     SignTypedDataParameters,
 )
 
@@ -221,7 +220,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     }
                 raise ValueError(f"Token {ticker} not configured for chain {chain_id}")
         
-        if upper_ticker == chain["nativeCurrency"]["symbol"].upper():
+        if upper_ticker == chain["nativeCurrency"]["symbol"].upper() or upper_ticker == "ETH":
             return {
                 "symbol": chain["nativeCurrency"]["symbol"],
                 "contractAddress": "",  # Native currency has no contract
@@ -398,36 +397,6 @@ class EVMWalletClient(WalletClientBase, ABC):
             "amount": "0",
         })
 
-    async def transfer_from(self, params: Dict[str, Any]) -> Dict[str, str]:
-        """Transfer ERC20 tokens from one address to another using allowance.
-        
-        Args:
-            params: Parameters including token address, from, to, and amount
-            
-        Returns:
-            Transaction receipt
-        """
-        if not self.enable_send:
-            raise ValueError("Sending tokens is disabled for this wallet")
-            
-        token_address = params["tokenAddress"]
-        from_address = params["from"]
-        to_address = params["to"]
-        amount = params["amount"]
-        
-        try:
-            if not re.match(r'^[0-9]+$', amount):
-                raise ValueError(f"Invalid base unit amount format: {amount}")
-                
-            return self.send_transaction({
-                "to": token_address,
-                "abi": ERC20_ABI,
-                "functionName": "transferFrom",
-                "args": [from_address, to_address, int(amount)],
-            })
-        except Exception as e:
-            raise ValueError(f"Failed to transfer from: {str(e)}")
-
     def get_core_tools(self) -> List[ToolBase]:
         """Get the core tools for this wallet client.
         
@@ -460,9 +429,6 @@ class EVMWalletClient(WalletClientBase, ABC):
         def revoke_approval_sync(params):
             return asyncio.run(self.revoke_approval(params))
             
-        def transfer_from_sync(params):
-            return asyncio.run(self.transfer_from(params))
-        
         base_tools = [tool for tool in super().get_core_tools() 
                       if tool.name != "get_balance"]
         
@@ -543,14 +509,6 @@ class EVMWalletClient(WalletClientBase, ABC):
                         "parameters": RevokeApprovalParameters
                     },
                     revoke_approval_sync
-                ),
-                create_tool(
-                    {
-                        "name": "transfer_token_from_evm",
-                        "description": "Transfer an ERC20 token from one address to another using allowance.",
-                        "parameters": TransferFromParameters
-                    },
-                    transfer_from_sync
                 ),
             ]
         

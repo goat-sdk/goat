@@ -13,6 +13,8 @@ from solders.instruction import Instruction, AccountMeta, CompiledInstruction
 from solders.message import Message, MessageV0
 from solders.address_lookup_table_account import AddressLookupTableAccount
 from solders.transaction import VersionedTransaction, Transaction
+from spl.token.constants import TOKEN_PROGRAM_ID
+from spl.token.instructions import get_associated_token_address, create_associated_token_account, transfer_checked, TransferCheckedParams
 import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
@@ -26,13 +28,6 @@ from .params import (
     ConvertFromBaseUnitsParameters,
     SendTokenParameters,
 )
-
-try:
-    from spl.token.constants import TOKEN_PROGRAM_ID
-    from spl.token.instructions import get_associated_token_address, create_associated_token_account, transfer
-    SPL_TOKEN_AVAILABLE = True
-except ImportError:
-    SPL_TOKEN_AVAILABLE = False
 
 
 class SolanaTransaction(TypedDict):
@@ -121,9 +116,6 @@ class SolanaWalletClient(WalletClientBase, ABC):
         owner_pubkey = Pubkey.from_string(address)
         
         if token_address:
-            if not SPL_TOKEN_AVAILABLE:
-                raise ImportError("SPL token libraries not available. Install with 'pip install spl-token'")
-                
             try:
                 mint_pubkey = Pubkey.from_string(token_address)
                 token_account = get_associated_token_address(owner_pubkey, mint_pubkey)
@@ -221,13 +213,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
             if token_info:
                 return token_info["decimals"]
             
-            try:
-                if not SPL_TOKEN_AVAILABLE:
-                    raise ImportError("SPL token libraries not available")
-                    
-                return 9
-            except Exception as e:
-                raise ValueError(f"Failed to fetch token decimals: {str(e)}")
+            return 9
         
         return self.get_chain()["nativeCurrency"]["decimals"]
 
@@ -298,9 +284,6 @@ class SolanaWalletClient(WalletClientBase, ABC):
             instructions = []
             
             if token_address:
-                if not SPL_TOKEN_AVAILABLE:
-                    raise ImportError("SPL token libraries not available")
-                    
                 mint_pubkey = Pubkey.from_string(token_address)
                 
                 source_token_account = get_associated_token_address(owner_pubkey, mint_pubkey)
@@ -313,10 +296,6 @@ class SolanaWalletClient(WalletClientBase, ABC):
                         owner_pubkey, destination_pubkey, mint_pubkey
                     )
                     instructions.append(create_ata_ix)
-                
-                # Create transfer instruction
-                from spl.token.instructions import transfer_checked, TransferCheckedParams
-                from spl.token.constants import TOKEN_PROGRAM_ID
                 
                 token_info = next((t for t in self.tokens if t["mintAddress"] == token_address), None)
                 token_decimals = token_info["decimals"] if token_info else 9  # Default to 9 if not found
