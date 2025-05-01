@@ -8,10 +8,10 @@
         "lint": "eslint index.ts"
     },
     "dependencies": {
-        "@goat-sdk/core": "^0.1.0",
-        "@goat-sdk/plugins-coingecko-token-discovery": "^0.1.0",
-        "@goat-sdk/wallets-evm": "^0.1.0",
-        "@goat-sdk/wallets-solana": "^0.1.0",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugins-coingecko-token-discovery": "workspace:*",
+        "@goat-sdk/wallets-evm": "workspace:*",
+        "@goat-sdk/wallets-solana": "workspace:*",
         "dotenv": "^16.3.1"
     },
     "devDependencies": {
