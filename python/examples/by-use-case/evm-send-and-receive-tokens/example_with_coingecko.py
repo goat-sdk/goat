@@ -45,14 +45,14 @@ def main():
 )
 
     # Initialize CoinGecko token discovery plugin
-    coingecko_plugin = coingecko_token_discovery(CoinGeckoTokenDiscoveryPluginOptions(
+    coingecko_token_discovery_plugin = coingecko_token_discovery(CoinGeckoTokenDiscoveryPluginOptions(
         api_key=os.environ.get("COINGECKO_API_KEY", "")
     ))
     
     # Initialize tools with web3 wallet and CoinGecko plugin
     tools = get_on_chain_tools(
         wallet=web3(w3),
-        plugins=[coingecko_plugin]
+        plugins=[coingecko_token_discovery_plugin]
     )
     
     agent = create_tool_calling_agent(llm, tools, prompt)
