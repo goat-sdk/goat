@@ -15,10 +15,11 @@ from solders.address_lookup_table_account import AddressLookupTableAccount
 from solders.transaction import VersionedTransaction, Transaction
 from spl.token.constants import TOKEN_PROGRAM_ID
 from spl.token.instructions import get_associated_token_address, create_associated_token_account, transfer_checked, TransferCheckedParams
+from spl.token.client import Token as SplToken
 import nacl.signing
 
 from goat.classes.wallet_client_base import Balance, Signature, WalletClientBase
-from goat.types.chain import Chain
+from goat.types.chain import Chain, SolanaChain
 from goat.classes.tool_base import ToolBase, create_tool
 
 from .tokens import SPL_TOKENS, Token, SolanaNetwork
@@ -67,7 +68,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
         self.tokens = tokens if tokens is not None else self.options.tokens
         self.enable_send = enable_send if enable_send is not None else self.options.enable_send
 
-    def get_chain(self) -> Chain:
+    def get_chain(self) -> SolanaChain:
         """Get the chain type for Solana."""
         return {
             "type": "solana",
@@ -98,23 +99,16 @@ class SolanaWalletClient(WalletClientBase, ABC):
         """Send a raw transaction on the Solana chain."""
         pass
 
-    async def balance_of(self, params: Union[Dict[str, Any], str], token_address: Optional[str] = None) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get the balance of an address for SOL or SPL tokens.
         
         Args:
-            params: Either an address string or a dict with address and optional tokenAddress
-            token_address: The token mint address, if None checks SOL balance (used when params is a string)
+            address: The address to get the balance of
+            token_address: The token mint address, if None checks SOL balance
             
         Returns:
             Balance information
         """
-        # Handle both string and dict parameters
-        if isinstance(params, dict):
-            address = params["address"]
-            token_address = params.get("tokenAddress")
-        else:
-            address = params
-            
         owner_pubkey = Pubkey.from_string(address)
         
         if token_address:
@@ -169,7 +163,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
             except Exception as e:
                 raise ValueError(f"Failed to fetch SOL balance: {str(e)}")
 
-    async def get_token_info_by_symbol(self, symbol: str) -> Dict[str, Any]:
+    def get_token_info_by_symbol(self, symbol: str) -> Token:
         """Get token information by symbol.
         
         Args:
@@ -200,7 +194,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                 
         raise ValueError(f"Token with symbol {symbol} not found")
 
-    async def _get_token_decimals(self, token_address: Optional[str] = None) -> int:
+    def _get_token_decimals(self, token_address: Optional[str] = None) -> int:
         """Get the decimals for a token.
         
         Args:
@@ -219,7 +213,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
         
         return self.get_chain()["nativeCurrency"]["decimals"]
 
-    async def convert_to_base_units(self, params: Dict[str, Any]) -> str:
+    def convert_to_base_units(self, params: Dict[str, Any]) -> str:
         """Convert a token amount to base units.
         
         Args:
@@ -235,13 +229,13 @@ class SolanaWalletClient(WalletClientBase, ABC):
             if not re.match(r'^[0-9]*\.?[0-9]+$', amount):
                 raise ValueError(f"Invalid amount format: {amount}")
             
-            decimals = await self._get_token_decimals(token_address)
+            decimals = self._get_token_decimals(token_address)
             base_units = int(Decimal(amount) * (10 ** decimals))
             return str(base_units)
         except Exception as e:
             raise ValueError(f"Failed to convert to base units: {str(e)}")
 
-    async def convert_from_base_units(self, params: Dict[str, Any]) -> str:
+    def convert_from_base_units(self, params: Dict[str, Any]) -> str:
         """Convert a token amount from base units to decimal.
         
         Args:
@@ -257,13 +251,13 @@ class SolanaWalletClient(WalletClientBase, ABC):
             if not re.match(r'^[0-9]+$', amount):
                 raise ValueError(f"Invalid base unit amount format: {amount}")
             
-            decimals = await self._get_token_decimals(token_address)
+            decimals = self._get_token_decimals(token_address)
             decimal_amount = Decimal(amount) / (10 ** decimals)
             return str(decimal_amount)
         except Exception as e:
             raise ValueError(f"Failed to convert from base units: {str(e)}")
 
-    async def send_token(self, params: Dict[str, Any]) -> Dict[str, str]:
+    def send_token(self, params: Dict[str, Any]) -> Dict[str, str]:
         """Send tokens (SOL or SPL).
         
         Args:
@@ -308,12 +302,16 @@ class SolanaWalletClient(WalletClientBase, ABC):
                 
                 try:
                     try:
-                        from spl.token.client import Token as SplToken
-                        
-                        mint_data = SplToken.get_mint_info(
+                        # We just need mint info, so we can create a dummy keypair for the SplToken
+                        # since we're only going to call get_mint_info() which doesn't require signing
+                        dummy_payer = Keypair()
+                        token = SplToken(
                             self.client,
-                            mint_pubkey
+                            mint_pubkey,
+                            TOKEN_PROGRAM_ID,
+                            dummy_payer
                         )
+                        mint_data = token.get_mint_info()
                         mint_decimals = mint_data.decimals
                     except (ImportError, AttributeError):
                         mint_decimals = token_decimals
@@ -366,41 +364,6 @@ class SolanaWalletClient(WalletClientBase, ABC):
         Returns:
             List of tool definitions
         """
-        import asyncio
-        
-        def run_async_safely(coro):
-            """Helper function to run async functions safely in any context."""
-            try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    loop = asyncio.new_event_loop()
-                    result = loop.run_until_complete(coro)
-                    loop.close()
-                    return result
-                else:
-                    return loop.run_until_complete(coro)
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(coro)
-                loop.close()
-                return result
-        
-        def balance_of_sync(params):
-            return run_async_safely(self.balance_of(params))
-            
-        def get_token_info_by_symbol_sync(params):
-            return run_async_safely(self.get_token_info_by_symbol(params))
-            
-        def convert_to_base_units_sync(params):
-            return run_async_safely(self.convert_to_base_units(params))
-            
-        def convert_from_base_units_sync(params):
-            return run_async_safely(self.convert_from_base_units(params))
-            
-        def send_token_sync(params):
-            return run_async_safely(self.send_token(params))
-        
         base_tools = super().get_core_tools()
         
         common_solana_tools = [
@@ -410,7 +373,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     "description": "Get information about a token by its symbol.",
                     "parameters": GetTokenInfoBySymbolParameters
                 },
-                get_token_info_by_symbol_sync
+                lambda params: self.get_token_info_by_symbol(params["symbol"])
             ),
             # Convert to/from base units
             create_tool(
@@ -419,7 +382,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     "description": "Convert a token amount from human-readable units to base units.",
                     "parameters": ConvertToBaseUnitsParameters
                 },
-                convert_to_base_units_sync
+                self.convert_to_base_units
             ),
             create_tool(
                 {
@@ -427,7 +390,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     "description": "Convert a token amount from base units to human-readable units.",
                     "parameters": ConvertFromBaseUnitsParameters
                 },
-                convert_from_base_units_sync
+                self.convert_from_base_units
             ),
         ]
         
@@ -440,7 +403,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                         "description": "Send SOL or an SPL token to a recipient.",
                         "parameters": SendTokenParameters
                     },
-                    send_token_sync
+                    self.send_token
                 ),
             ]
         
@@ -617,22 +580,7 @@ class SolanaKeypairWalletClient(SolanaWalletClient):
             Balance information
         """
         if token_address:
-            import asyncio
-            try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    loop = asyncio.new_event_loop()
-                    result = loop.run_until_complete(super().balance_of(address, token_address))
-                    loop.close()
-                    return result
-                else:
-                    return loop.run_until_complete(super().balance_of(address, token_address))
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(super().balance_of(address, token_address))
-                loop.close()
-                return result
+            return super().balance_of(address, token_address)
         else:
             pubkey = Pubkey.from_string(address)
             balance_lamports = self.client.get_balance(pubkey).value

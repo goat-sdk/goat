@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TypedDict
+from typing import List, Optional, TypedDict, Dict, Any
 from pydantic import BaseModel, Field
 
 from goat.classes.tool_base import ToolBase, create_tool
@@ -12,6 +12,7 @@ class EmptyParams(BaseModel):
 
 class BalanceParams(BaseModel):
     address: str = Field(description="The wallet address to check the balance of")
+    tokenAddress: Optional[str] = Field(description="The token address to check the balance of", default=None)
 
 
 class Signature(TypedDict):
@@ -40,7 +41,7 @@ class WalletClientBase(ABC):
         pass
 
     @abstractmethod
-    def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         pass
 
     def get_core_tools(self) -> List[ToolBase]:
@@ -67,6 +68,6 @@ class WalletClientBase(ABC):
                     "description": "Get the balance of the wallet",
                     "parameters": BalanceParams
                 },
-                lambda parameters: self.balance_of(parameters["address"]),
+                lambda parameters: self.balance_of(parameters["address"], parameters.get("tokenAddress")),
             ),
         ]

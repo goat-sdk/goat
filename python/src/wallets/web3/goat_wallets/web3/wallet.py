@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 from eth_typing import ChecksumAddress, HexStr
 from goat.classes.wallet_client_base import Balance, Signature
 from web3 import Web3
@@ -74,16 +74,16 @@ class Web3EVMWalletClient(EVMWalletClient):
 
         return {"signature": self._web3.to_hex(signed_message.signature)}
 
-    def sign_typed_data(self, data: EVMTypedData) -> Signature:
+    def sign_typed_data(self, types: Dict[str, Any], primary_type: str, domain: Dict[str, Any], value: Dict[str, Any]) -> Signature:
         """Sign typed data according to EIP-712."""
         if not self._web3.eth.default_account:
             raise ValueError("No account connected")
 
         # Convert chain_id to int if it's present
-        if "chainId" in data["domain"]:
-            data["domain"]["chainId"] = int(data["domain"]["chainId"])
+        if "chainId" in domain:
+            domain["chainId"] = int(domain["chainId"])
         
-        structured_data = encode_typed_data(full_message=data)  # type: ignore
+        structured_data = encode_typed_data(types=types, primary_type=primary_type, domain=domain, value=value)  # type: ignore
         signed_message = self._web3.eth.default_local_account.sign_message(structured_data)  # type: ignore
 
         return {"signature": self._web3.to_hex(signed_message.signature)}
@@ -177,17 +177,10 @@ class Web3EVMWalletClient(EVMWalletClient):
             raise ValueError("No account connected")
         return self._web3.eth.get_balance(self._web3.eth.default_account)
 
-    def balance_of(self, params, token_address=None):
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get the balance of an address for native or ERC20 tokens."""
-        if isinstance(params, dict):
-            address = params["address"]
-            token_address = params.get("tokenAddress")
-        else:
-            address = params
-            
         if token_address:
-            import asyncio
-            return asyncio.run(super().balance_of(address, token_address))
+            return super().balance_of(address, token_address)
         else:
             resolved_address = self.resolve_address(address)
             balance_wei = self._web3.eth.get_balance(resolved_address)
