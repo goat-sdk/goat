@@ -3,7 +3,6 @@ from solana.rpc.api import Client as SolanaClient
 from .api_client import CrossmintWalletsAPI
 from .parameters import AdminSigner, CoreSignerType
 from .solana_smart_wallet import SolanaSmartWalletClient, SolanaSmartWalletConfig, SolanaSmartWalletOptions
-from .types import SolanaFireblocksSigner, SolanaKeypairSigner
 import sys
 import os
 
@@ -20,7 +19,7 @@ class UserLocatorParams(TypedDict, total=False):
 user_locator_identifier_fields = get_type_hints(UserLocatorParams)
 
 
-class SolanaSmartWalletCreationParams(TypedDict, UserLocatorParams, total=False):
+class SolanaSmartWalletCreationParams(UserLocatorParams):
     config: SolanaSmartWalletConfig
 
 
@@ -57,8 +56,7 @@ class SolanaSmartWalletFactory:
                 f"Connection is not set, call {self.__class__.__name__}.set_connection(<connection>) first")
 
         validated_params = self._validate_creation_params(config)
-        wallet_locator = self._get_wallet_locator(
-            validated_params["linkedUser"])
+        wallet_locator = self._get_wallet_locator(validated_params["linkedUser"])
         try:
             wallet = self._get_wallet(wallet_locator)
             if wallet:

@@ -26,7 +26,7 @@ class SolanaSmartWalletConfig(TypedDict):
 class SolanaSmartWalletOptions(TypedDict):
     """Options specific to Solana smart wallets."""
     config: SolanaSmartWalletConfig
-    linkedUser: Optional[LinkedUser]
+    linkedUser: str
 
 
 class SolanaSmartWalletOptionsWithLinkedUser(TypedDict):
@@ -69,8 +69,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         """
         SolanaWalletClient.__init__(self, connection, None, tokens, enable_send)
         BaseWalletClient.__init__(self, address, api_client, "solana")
-        self._locator = get_locator(address, options.get(
-            "linkedUser", None), "solana-smart-wallet")
+        self._locator = get_locator(address, None, "solana-smart-wallet")
         self._admin_signer = options["config"]["adminSigner"]
         if self._admin_signer["type"] == "solana-keypair":
             self._admin_signer["address"] = str(self._admin_signer['keyPair'].pubkey())
@@ -119,7 +118,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
 
         return self.send_raw_transaction(serialized, additional_signers, signer)
     
-    def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         pubkey = Pubkey.from_string(address)
         balance_lamports = self.client.get_balance(pubkey).value
         # Convert lamports (1e9 lamports in 1 SOL)
@@ -347,7 +346,7 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         Args:
             amount: The amount of SOL to fund the wallet with
         """
-        return self.connection.request_airdrop(Pubkey.from_string(self._address), amount_lamports)
+        return self.client.request_airdrop(Pubkey.from_string(self._address), amount_lamports)
 
     def parse_serialized_transaction(self, transaction: str) -> str:
         try:
