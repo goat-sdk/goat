@@ -2,8 +2,8 @@ import aiohttp
 from typing import Dict, Any, Optional, Union
 
 from goat.decorators.tool import Tool
-from goat.wallets.evm.evm_wallet_client import EVMWalletClient
-from goat.wallets.solana.wallet import SolanaWalletClient
+from goat_wallets.evm.evm_wallet_client import EVMWalletClient
+from goat_wallets.solana.wallet import SolanaWalletClient
 
 from .parameters import GetTokenInfoByTickerParameters, GetTokenInfoBySymbolParameters
 
@@ -13,7 +13,7 @@ class CoinGeckoTokenDiscoveryService:
         self.api_key = api_key
         self.base_url = "https://api.coingecko.com/api/v3"
         
-    async def request(self, endpoint: str, params: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def request(self, endpoint: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
         """Make a request to the CoinGecko API.
         
         Args:
@@ -23,8 +23,6 @@ class CoinGeckoTokenDiscoveryService:
         Returns:
             The API response as JSON
         """
-        if params is None:
-            params = {}
             
         params["x_cg_demo_api_key"] = self.api_key
         
@@ -41,7 +39,7 @@ class CoinGeckoTokenDiscoveryService:
         "parameters_schema": GetTokenInfoByTickerParameters,
         "wallet_client": {"index": 1},
     })
-    async def get_token_info_by_ticker(self, wallet_client: EVMWalletClient, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def get_token_info_by_ticker(self, wallet_client: EVMWalletClient, parameters: dict) -> Dict[str, Any]:
         """Get token information by ticker symbol using CoinGecko data.
         
         Args:
@@ -57,7 +55,7 @@ class CoinGeckoTokenDiscoveryService:
             search_result = await self.request("search", {"query": ticker})
             
             if not search_result.get("coins") or len(search_result["coins"]) == 0:
-                return await wallet_client.get_token_info_by_ticker(ticker)
+                return await wallet_client.get_token_info_by_ticker({"ticker": ticker})
             
             exact_match = next(
                 (coin for coin in search_result["coins"] if coin["symbol"].lower() == ticker.lower()),
@@ -75,7 +73,7 @@ class CoinGeckoTokenDiscoveryService:
             })
             
             if not token_details or "platforms" not in token_details:
-                return await wallet_client.get_token_info_by_ticker(ticker)
+                return await wallet_client.get_token_info_by_ticker({"ticker": ticker})
             
             chain = wallet_client.get_chain()
             chain_id = chain["id"]
@@ -95,7 +93,7 @@ class CoinGeckoTokenDiscoveryService:
                     break
             
             if not contract_address:
-                return await wallet_client.get_token_info_by_ticker(ticker)
+                return await wallet_client.get_token_info_by_ticker({"ticker": ticker})
             
             return {
                 "symbol": best_match["symbol"].upper(),
@@ -104,7 +102,7 @@ class CoinGeckoTokenDiscoveryService:
                 "name": best_match["name"],
             }
         except Exception as e:
-            return await wallet_client.get_token_info_by_ticker(ticker)
+            return await wallet_client.get_token_info_by_ticker({"ticker": ticker})
     
     @Tool({
         "name": "get_token_info_by_symbol",
@@ -112,7 +110,7 @@ class CoinGeckoTokenDiscoveryService:
         "parameters_schema": GetTokenInfoBySymbolParameters,
         "wallet_client": {"index": 1},
     })
-    async def get_token_info_by_symbol(self, wallet_client: SolanaWalletClient, parameters: Dict[str, Any]) -> Dict[str, Any]:
+    async def get_token_info_by_symbol(self, wallet_client: SolanaWalletClient, parameters: dict) -> Dict[str, Any]:
         """Get token information by symbol using CoinGecko data.
         
         Args:
@@ -128,7 +126,7 @@ class CoinGeckoTokenDiscoveryService:
             search_result = await self.request("search", {"query": symbol})
             
             if not search_result.get("coins") or len(search_result["coins"]) == 0:
-                return await wallet_client.get_token_info_by_symbol(symbol)
+                return await wallet_client.get_token_info_by_symbol({"symbol": symbol})
             
             exact_match = next(
                 (coin for coin in search_result["coins"] if coin["symbol"].lower() == symbol.lower()),
@@ -146,12 +144,12 @@ class CoinGeckoTokenDiscoveryService:
             })
             
             if not token_details or "platforms" not in token_details:
-                return await wallet_client.get_token_info_by_symbol(symbol)
+                return await wallet_client.get_token_info_by_symbol({"symbol": symbol})
             
             mint_address = token_details.get("platforms", {}).get("solana")
             
             if not mint_address:
-                return await wallet_client.get_token_info_by_symbol(symbol)
+                return await wallet_client.get_token_info_by_symbol({"symbol": symbol})
             
             return {
                 "symbol": best_match["symbol"].upper(),
@@ -160,4 +158,4 @@ class CoinGeckoTokenDiscoveryService:
                 "name": best_match["name"],
             }
         except Exception as e:
-            return await wallet_client.get_token_info_by_symbol(symbol)
+            return await wallet_client.get_token_info_by_symbol({"symbol": symbol})
