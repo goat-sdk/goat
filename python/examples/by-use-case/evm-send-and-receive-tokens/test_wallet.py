@@ -1,5 +1,4 @@
 import os
-import sys
 from decimal import Decimal
 from dotenv import load_dotenv
 from web3 import Web3
@@ -41,7 +40,7 @@ def test_usdc_balance():
     print("\n--- Test 2: Check USDC Balance ---")
     try:
         chain_id = wallet.get_chain_id()
-        if str(chain_id) not in USDC["chains"]:
+        if chain_id not in USDC["chains"]:
             print(f"USDC not configured for chain {chain_id}")
             return False
             
@@ -107,7 +106,7 @@ def test_send_usdc():
     print("\n--- Test 4: Send 1 USDC to Self ---")
     try:
         chain_id = wallet.get_chain_id()
-        if str(chain_id) not in USDC["chains"]:
+        if chain_id not in USDC["chains"]:
             print(f"USDC not configured for chain {chain_id}")
             return False
             
