@@ -24,10 +24,10 @@ from goat.classes.tool_base import ToolBase, create_tool
 
 from .tokens import SPL_TOKENS, Token, SolanaNetwork
 from .params import (
-    GetTokenInfoBySymbolParameters,
     ConvertToBaseUnitsParameters,
     ConvertFromBaseUnitsParameters,
     SendTokenParameters,
+    GetTokenInfoByTickerParameters,
 )
 
 
@@ -163,18 +163,18 @@ class SolanaWalletClient(WalletClientBase, ABC):
             except Exception as e:
                 raise ValueError(f"Failed to fetch SOL balance: {str(e)}")
 
-    def get_token_info_by_symbol(self, symbol: str) -> Token:
-        """Get token information by symbol.
+    def get_token_info_by_ticker(self, ticker: str) -> Token:
+        """Get token information by ticker.
         
         Args:
-            symbol: The token symbol (e.g., USDC, USDT)
+            ticker: The token ticker (e.g., USDC, USDT)
             
         Returns:
             Token information
         """
-        upper_symbol = symbol.upper()
+        upper_ticker = ticker.upper()
         
-        if upper_symbol == "SOL":
+        if upper_ticker == "SOL":
             chain = self.get_chain()
             return {
                 "symbol": chain["nativeCurrency"]["symbol"],
@@ -184,7 +184,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
             }
         
         for token in self.tokens:
-            if token["symbol"].upper() == upper_symbol:
+            if token["symbol"].upper() == upper_ticker:
                 return {
                     "symbol": token["symbol"],
                     "mintAddress": token["mintAddress"],
@@ -192,7 +192,7 @@ class SolanaWalletClient(WalletClientBase, ABC):
                     "name": token["name"],
                 }
                 
-        raise ValueError(f"Token with symbol {symbol} not found")
+        raise ValueError(f"Token with ticker {ticker} not found")
 
     def _get_token_decimals(self, token_address: Optional[str] = None) -> int:
         """Get the decimals for a token.
@@ -369,11 +369,11 @@ class SolanaWalletClient(WalletClientBase, ABC):
         common_solana_tools = [
             create_tool(
                 {
-                    "name": "get_token_info_by_symbol",
-                    "description": "Get information about a token by its symbol.",
-                    "parameters": GetTokenInfoBySymbolParameters
+                    "name": "get_token_info_by_ticker",
+                    "description": "Get information about a token by its ticker symbol.",
+                    "parameters": GetTokenInfoByTickerParameters
                 },
-                lambda params: self.get_token_info_by_symbol(params["symbol"])
+                lambda params: self.get_token_info_by_ticker(params["ticker"])
             ),
             # Convert to/from base units
             create_tool(

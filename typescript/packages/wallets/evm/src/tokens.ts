@@ -1,10 +1,8 @@
 import { arbitrum, base, mainnet, mode, optimism, polygon, sepolia } from "viem/chains";
+import { Token as CoreToken } from "@goat-sdk/core";
 
 // Token definition
-export type Token = {
-    symbol: string;
-    name: string;
-    decimals: number;
+export type Token = CoreToken & {
     chains: {
         [chainId: number]: {
             contractAddress: `0x${string}`;

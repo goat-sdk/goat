@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, TypedDict, Dict, Any
+from typing import List, Optional, TypedDict
 from pydantic import BaseModel, Field
 
 from goat.classes.tool_base import ToolBase, create_tool
+from goat.types.token import Token
 from goat.types.chain import Chain
-
 
 class EmptyParams(BaseModel):
     pass
@@ -43,6 +43,9 @@ class WalletClientBase(ABC):
     @abstractmethod
     def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         pass
+
+    def get_token_info_by_ticker(self, ticker: str) -> Token:
+        raise NotImplementedError("get_token_info_by_ticker is not implemented for this wallet client")
 
     def get_core_tools(self) -> List[ToolBase]:
         return [
