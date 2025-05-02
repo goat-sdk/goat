@@ -162,7 +162,7 @@ class EVMWalletClient(WalletClientBase, ABC):
             except Exception as e:
                 raise ValueError(f"Failed to fetch native balance: {str(e)}")
 
-    def get_token_info_by_ticker(self, params: Dict[str, Any]) -> Dict[str, Any]:
+    def get_token_info_by_ticker(self, ticker: str) -> Dict[str, Any]:
         """Get token information by ticker symbol.
         
         Args:
@@ -171,7 +171,6 @@ class EVMWalletClient(WalletClientBase, ABC):
         Returns:
             Token information
         """
-        ticker = params["ticker"]
         chain = self.get_chain()
         chain_id = chain["id"]
         upper_ticker = ticker.upper()
@@ -388,7 +387,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Get information about a token by its ticker symbol.",
                     "parameters": GetTokenInfoByTickerParameters
                 },
-                self.get_token_info_by_ticker
+                lambda params: self.get_token_info_by_ticker(params["ticker"])
             ),
             create_tool(
                 {

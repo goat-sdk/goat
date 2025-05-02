@@ -10,9 +10,9 @@ class GetBalanceParameters(BaseModel):
         default=None
     )
 
-class GetTokenInfoBySymbolParameters(BaseModel):
-    symbol: str = Field(
-        description="The symbol of the token to get information for (e.g., USDC, USDT)"
+class GetTokenInfoByTickerParameters(BaseModel):
+    ticker: str = Field(
+        description="The ticker symbol of the token to get information for (e.g., USDC, USDT)"
     )
 
 class ConvertToBaseUnitsParameters(BaseModel):

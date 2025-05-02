@@ -1,12 +1,11 @@
 from typing import Dict, List, TypedDict, Literal, Optional
 
+from goat.types.token import Token as CoreToken
+
 class TokenChainInfo(TypedDict):
     contractAddress: str
 
-class Token(TypedDict):
-    name: str
-    symbol: str
-    decimals: int
+class Token(CoreToken):
     chains: Dict[int, TokenChainInfo]  # chain_id -> token info
 
 USDC: Token = {

@@ -1,9 +1,8 @@
-from typing import Dict, List, TypedDict, Literal, Optional
+from typing import Dict, List, Literal
 
-class Token(TypedDict):
-    name: str
-    symbol: str
-    decimals: int
+from goat.types.token import Token as CoreToken
+
+class Token(CoreToken):
     mintAddress: str
 
 SolanaNetwork = Literal["mainnet", "devnet", "testnet"]
