@@ -13,7 +13,7 @@ from eth_account.signers.local import LocalAccount
 from eth_account import Account
 
 from goat_adapters.langchain import get_on_chain_tools
-from goat_wallets.evm import PEPE, USDC, send_eth
+from goat_wallets.evm import PEPE, USDC
 from goat_wallets.web3 import web3
 
 # Initialize Web3 and account
@@ -46,9 +46,7 @@ def main():
     # Initialize tools with web3 wallet
     tools = get_on_chain_tools(
         wallet=web3(w3, tokens=[USDC, PEPE], enable_send=True),
-        plugins=[
-            send_eth(),
-        ],
+        plugins=[],
     )
     
     agent = create_tool_calling_agent(llm, tools, prompt)

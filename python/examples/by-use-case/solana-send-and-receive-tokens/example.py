@@ -25,7 +25,6 @@ wallet = solana(
     keypair, 
     options=SolanaOptions(
         network="mainnet",
-        tokens=SPL_TOKENS["mainnet"]
     )
 )
 

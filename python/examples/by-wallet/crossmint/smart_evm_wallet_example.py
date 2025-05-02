@@ -12,7 +12,6 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.evm import USDC, PEPE
-from goat_wallets.evm.send_eth import send_eth
 from goat_wallets.crossmint import crossmint
 
 def create_smart_wallet(signer_public_key: str, api_key: str, base_url: str = "https://staging.crossmint.com") -> dict:
@@ -64,7 +63,7 @@ def main():
     print(f"Created smart wallet: {wallet_response['address']}")
 
     # Initialize the smart wallet client
-    crossmint_wallet = crossmint_client["smartwallet"]({
+    crossmint_wallet = crossmint_client["evm_smartwallet"]({
         "address": wallet_response["address"],
         "signer": {
             "secretKey": secret_key,
@@ -92,9 +91,7 @@ def main():
     # Initialize tools with EVM wallet
     tools = get_on_chain_tools(
         wallet=crossmint_wallet,
-        plugins=[
-            send_eth(),
-        ],
+        plugins=[]
     )
     
     agent = create_tool_calling_agent(llm, tools, prompt)

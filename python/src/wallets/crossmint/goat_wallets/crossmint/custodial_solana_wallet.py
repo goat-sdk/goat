@@ -1,5 +1,5 @@
 import time
-from typing import Dict
+from typing import Dict, Optional
 import base58
 from solders.instruction import Instruction
 from solders.pubkey import Pubkey
@@ -157,7 +157,7 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
             
             time.sleep(3)
     
-    def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get the SOL balance of an address.
         
         Args:

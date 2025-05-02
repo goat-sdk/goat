@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Optional, TypedDict, List, Any, Tuple, Union
+from typing import Dict, Optional, List, Any
 from decimal import Decimal
 import re
 
@@ -8,7 +8,8 @@ from goat.types.chain import EvmChain
 from goat.classes.tool_base import ToolBase, create_tool
 
 from .abi import ERC20_ABI
-from .tokens import PREDEFINED_TOKENS, Token
+from .tokens import PREDEFINED_TOKENS
+from .types import EVMTransaction, EVMReadRequest, EVMReadResult
 from .params import (
     GetBalanceParameters,
     GetTokenInfoByTickerParameters,
@@ -20,34 +21,6 @@ from .params import (
     RevokeApprovalParameters,
     SignTypedDataParameters,
 )
-
-class EVMTransaction(TypedDict, total=False):
-    """Transaction parameters for EVM transactions."""
-    to: str
-    value: Optional[int]
-    data: Optional[str]
-    abi: Optional[List[Dict[str, Any]]]
-    functionName: Optional[str]
-    args: Optional[List[Any]]
-    options: Optional[Dict[str, Any]]
-
-class EVMReadRequest(TypedDict):
-    """Read request parameters for EVM contracts."""
-    address: str
-    abi: List[Dict[str, Any]]
-    functionName: str
-    args: Optional[List[Any]]
-
-class EVMReadResult(TypedDict):
-    """Result of an EVM contract read."""
-    value: Any
-
-class EVMTypedData(TypedDict):
-    """EIP-712 typed data."""
-    types: Dict[str, List[Dict[str, str]]]
-    primaryType: str
-    domain: Dict[str, Any]
-    message: Dict[str, Any]
 
 class EVMOptions:
     """Configuration options for EVM wallet clients."""
@@ -64,7 +37,7 @@ class EVMWalletClient(WalletClientBase, ABC):
             tokens: List of token configurations
             enable_send: Whether to enable send functionality
         """
-        super().__init__()
+        WalletClientBase.__init__(self)
         self.tokens = tokens or PREDEFINED_TOKENS
         self.enable_send = enable_send
 
@@ -97,7 +70,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         pass
 
     @abstractmethod
-    def sign_typed_data(self, data: EVMTypedData) -> Signature:
+    def sign_typed_data(self, types: Dict[str, Any], primary_type: str, domain: Dict[str, Any], value: Dict[str, Any]) -> Signature:
         """Sign EIP-712 typed data with the wallet's private key."""
         pass
 
@@ -116,23 +89,16 @@ class EVMWalletClient(WalletClientBase, ABC):
         """Get the native balance of the wallet in wei."""
         pass
 
-    async def balance_of(self, params: Union[Dict[str, Any], str], token_address: Optional[str] = None) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get the balance of an address for native or ERC20 tokens.
         
         Args:
-            params: Either an address string or a dict with address and optional tokenAddress
-            token_address: The token address, if None checks native balance (used when params is a string)
+            params: Parameters including address and optional token address
             
         Returns:
             Balance information
         """
         chain = self.get_chain()
-        
-        if isinstance(params, dict):
-            address = params["address"]
-            token_address = params.get("tokenAddress")
-        else:
-            address = params
         
         if token_address:
             try:
@@ -196,7 +162,7 @@ class EVMWalletClient(WalletClientBase, ABC):
             except Exception as e:
                 raise ValueError(f"Failed to fetch native balance: {str(e)}")
 
-    async def get_token_info_by_ticker(self, ticker: str) -> Dict[str, Any]:
+    def get_token_info_by_ticker(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Get token information by ticker symbol.
         
         Args:
@@ -205,13 +171,14 @@ class EVMWalletClient(WalletClientBase, ABC):
         Returns:
             Token information
         """
+        ticker = params["ticker"]
         chain = self.get_chain()
         chain_id = chain["id"]
         upper_ticker = ticker.upper()
         
         for token in self.tokens:
             if token["symbol"].upper() == upper_ticker:
-                if str(chain_id) in token["chains"]:
+                if chain_id in token["chains"]:
                     return {
                         "symbol": token["symbol"],
                         "contractAddress": token["chains"][chain_id]["contractAddress"],
@@ -230,7 +197,7 @@ class EVMWalletClient(WalletClientBase, ABC):
             
         raise ValueError(f"Token with ticker {ticker} not found")
 
-    async def _get_token_decimals(self, token_address: Optional[str] = None) -> int:
+    def _get_token_decimals(self, token_address: Optional[str] = None) -> int:
         """Get the decimals for a token.
         
         Args:
@@ -253,7 +220,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         
         return self.get_chain()["nativeCurrency"]["decimals"]
 
-    async def convert_to_base_units(self, params: Dict[str, Any]) -> str:
+    def convert_to_base_units(self, params: Dict[str, Any]) -> str:
         """Convert a token amount to base units.
         
         Args:
@@ -269,13 +236,13 @@ class EVMWalletClient(WalletClientBase, ABC):
             if not re.match(r'^[0-9]*\.?[0-9]+$', amount):
                 raise ValueError(f"Invalid amount format: {amount}")
             
-            decimals = await self._get_token_decimals(token_address)
+            decimals = self._get_token_decimals(token_address)
             base_units = int(Decimal(amount) * (10 ** decimals))
             return str(base_units)
         except Exception as e:
             raise ValueError(f"Failed to convert to base units: {str(e)}")
 
-    async def convert_from_base_units(self, params: Dict[str, Any]) -> str:
+    def convert_from_base_units(self, params: Dict[str, Any]) -> str:
         """Convert a token amount from base units to decimal.
         
         Args:
@@ -291,13 +258,13 @@ class EVMWalletClient(WalletClientBase, ABC):
             if not re.match(r'^[0-9]+$', amount):
                 raise ValueError(f"Invalid base unit amount format: {amount}")
             
-            decimals = await self._get_token_decimals(token_address)
+            decimals = self._get_token_decimals(token_address)
             decimal_amount = Decimal(amount) / (10 ** decimals)
             return str(decimal_amount)
         except Exception as e:
             raise ValueError(f"Failed to convert from base units: {str(e)}")
 
-    async def send_token(self, params: Dict[str, Any]) -> Dict[str, str]:
+    def send_token(self, params: Dict[str, Any]) -> Dict[str, str]:
         """Send tokens (native or ERC20).
         
         Args:
@@ -329,7 +296,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         except Exception as e:
             raise ValueError(f"Failed to send token: {str(e)}")
 
-    async def get_token_allowance(self, params: Dict[str, Any]) -> str:
+    def get_token_allowance(self, params: Dict[str, Any]) -> str:
         """Get the allowance of an ERC20 token for a spender.
         
         Args:
@@ -353,7 +320,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         except Exception as e:
             raise ValueError(f"Failed to fetch allowance: {str(e)}")
 
-    async def approve(self, params: Dict[str, Any]) -> Dict[str, str]:
+    def approve(self, params: Dict[str, Any]) -> Dict[str, str]:
         """Approve a spender to spend ERC20 tokens.
         
         Args:
@@ -382,7 +349,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         except Exception as e:
             raise ValueError(f"Failed to approve: {str(e)}")
 
-    async def revoke_approval(self, params: Dict[str, Any]) -> Dict[str, str]:
+    def revoke_approval(self, params: Dict[str, Any]) -> Dict[str, str]:
         """Revoke approval for an ERC20 token from a spender.
         
         Args:
@@ -391,7 +358,7 @@ class EVMWalletClient(WalletClientBase, ABC):
         Returns:
             Transaction receipt
         """
-        return await self.approve({
+        return self.approve({
             "tokenAddress": params["tokenAddress"],
             "spender": params["spender"],
             "amount": "0",
@@ -403,34 +370,8 @@ class EVMWalletClient(WalletClientBase, ABC):
         Returns:
             List of tool definitions
         """
-        import asyncio
-        
-        def balance_of_sync(params):
-            return asyncio.run(self.balance_of(params))
-            
-        def get_token_info_by_ticker_sync(params):
-            return asyncio.run(self.get_token_info_by_ticker(params))
-            
-        def convert_to_base_units_sync(params):
-            return asyncio.run(self.convert_to_base_units(params))
-            
-        def convert_from_base_units_sync(params):
-            return asyncio.run(self.convert_from_base_units(params))
-            
-        def get_token_allowance_sync(params):
-            return asyncio.run(self.get_token_allowance(params))
-            
-        def send_token_sync(params):
-            return asyncio.run(self.send_token(params))
-            
-        def approve_sync(params):
-            return asyncio.run(self.approve(params))
-            
-        def revoke_approval_sync(params):
-            return asyncio.run(self.revoke_approval(params))
-            
         base_tools = [tool for tool in super().get_core_tools() 
-                      if tool.name != "get_balance"]
+                      if tool.name != "get_balance"] # we override the get_balance tool
         
         common_evm_tools = [
             create_tool(
@@ -439,7 +380,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Get the balance of the wallet for native currency or a specific ERC20 token.",
                     "parameters": GetBalanceParameters
                 },
-                balance_of_sync
+                lambda params: self.balance_of(params["address"], params.get("tokenAddress"))
             ),
             create_tool(
                 {
@@ -447,7 +388,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Get information about a token by its ticker symbol.",
                     "parameters": GetTokenInfoByTickerParameters
                 },
-                get_token_info_by_ticker_sync
+                self.get_token_info_by_ticker
             ),
             create_tool(
                 {
@@ -455,7 +396,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Convert a token amount from human-readable units to base units.",
                     "parameters": ConvertToBaseUnitsParameters
                 },
-                convert_to_base_units_sync
+                self.convert_to_base_units
             ),
             create_tool(
                 {
@@ -463,7 +404,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Convert a token amount from base units to human-readable units.",
                     "parameters": ConvertFromBaseUnitsParameters
                 },
-                convert_from_base_units_sync
+                self.convert_from_base_units
             ),
             create_tool(
                 {
@@ -471,7 +412,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Get the allowance of an ERC20 token for a spender.",
                     "parameters": GetTokenAllowanceParameters
                 },
-                get_token_allowance_sync
+                self.get_token_allowance
             ),
             create_tool(
                 {
@@ -479,7 +420,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                     "description": "Sign an EIP-712 typed data structure.",
                     "parameters": SignTypedDataParameters
                 },
-                self.sign_typed_data
+                lambda params: self.sign_typed_data(params["types"], params["primaryType"], params["domain"], params["value"])
             ),
         ]
         
@@ -492,7 +433,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                         "description": "Send native currency or an ERC20 token to a recipient.",
                         "parameters": SendTokenParameters
                     },
-                    send_token_sync
+                    self.send_token
                 ),
                 create_tool(
                     {
@@ -500,7 +441,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                         "description": "Approve an amount of an ERC20 token for a spender.",
                         "parameters": ApproveParameters
                     },
-                    approve_sync
+                    self.approve
                 ),
                 create_tool(
                     {
@@ -508,7 +449,7 @@ class EVMWalletClient(WalletClientBase, ABC):
                         "description": "Revoke approval for an ERC20 token from a spender.",
                         "parameters": RevokeApprovalParameters
                     },
-                    revoke_approval_sync
+                    self.revoke_approval
                 ),
             ]
         

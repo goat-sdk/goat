@@ -19,7 +19,7 @@ class ConvertToBaseUnitsParameters(BaseModel):
     amount: str = Field(
         description="The amount of tokens to convert to base units"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token mint address to convert for, omit for native SOL",
         default=None
     )
@@ -28,7 +28,7 @@ class ConvertFromBaseUnitsParameters(BaseModel):
     amount: str = Field(
         description="The amount in base units to convert to human-readable format"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token mint address to convert for, omit for native SOL",
         default=None
     )
@@ -40,7 +40,7 @@ class SendTokenParameters(BaseModel):
     baseUnitsAmount: str = Field(
         description="The amount of tokens to send in base units"
     )
-    tokenAddress: str = Field(
+    tokenAddress: Optional[str] = Field(
         description="The token mint address to send, omit for native SOL",
         default=None
     )

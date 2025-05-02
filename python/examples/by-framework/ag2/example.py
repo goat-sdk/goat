@@ -10,7 +10,7 @@ from web3.middleware import SignAndSendRawMiddlewareBuilder
 from eth_account.signers.local import LocalAccount
 from eth_account import Account
 
-from goat_wallets.evm import PEPE, USDC, send_eth
+from goat_wallets.evm import PEPE, USDC
 from goat_wallets.web3 import web3
 
 from autogen import ConversableAgent, LLMConfig
@@ -48,9 +48,7 @@ def main():
         caller=crypto_agent,
         executor=executor_agent,
         wallet=web3(w3, tokens=[USDC, PEPE], enable_send=True),
-        plugins=[
-            send_eth(),
-        ],
+        plugins=[],
     )
 
     crypto_agent.initiate_chat(
