@@ -1,33 +1,39 @@
 {
-    "name": "@goat-sdk/plugins-coingecko-token-discovery",
+    "name": "@goat-sdk/plugin-coingecko-token-discovery",
     "version": "0.1.0",
+    "files": [
+        "dist/**/*",
+        "README.md",
+        "package.json"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
     "main": "./dist/index.js",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
-    "license": "MIT",
-    "sideEffects": false,
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/goat-sdk/goat.git",
-        "directory": "typescript/packages/plugins/coingecko-token-discovery"
-    },
-    "scripts": {
-        "build": "tsup src/index.ts --format cjs,esm --dts",
-        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-        "lint": "eslint \"src/**/*.ts*\""
-    },
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/wallets-evm": "workspace:*",
-        "@goat-sdk/wallets-solana": "workspace:*",
-        "zod": "^3.22.4"
+        "zod": "catalog:"
     },
-    "devDependencies": {
-        "@goat-sdk/eslint-config": "workspace:*",
-        "@goat-sdk/typescript-config": "workspace:*",
-        "eslint": "^8.56.0",
-        "tsup": "^8.0.1",
-        "typescript": "^5.3.3"
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*"
     },
-    "files": ["dist/**"]
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": [
+        "ai",
+        "agents",
+        "web3"
+    ]
 }

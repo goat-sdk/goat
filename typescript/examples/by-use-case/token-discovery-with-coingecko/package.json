@@ -9,9 +9,9 @@
     },
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@goat-sdk/plugins-coingecko-token-discovery": "workspace:*",
-        "@goat-sdk/wallets-evm": "workspace:*",
-        "@goat-sdk/wallets-solana": "workspace:*",
+        "@goat-sdk/plugin-coingecko-token-discovery": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
         "dotenv": "^16.3.1"
     },
     "devDependencies": {
