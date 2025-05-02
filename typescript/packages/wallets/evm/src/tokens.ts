@@ -1,5 +1,5 @@
-import { arbitrum, base, mainnet, mode, optimism, polygon, sepolia } from "viem/chains";
 import { Token as CoreToken } from "@goat-sdk/core";
+import { arbitrum, base, mainnet, mode, optimism, polygon, sepolia } from "viem/chains";
 
 // Token definition
 export type Token = CoreToken & {
