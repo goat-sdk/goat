@@ -322,6 +322,10 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
     
     def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get ETH balance of an address."""
+        # TODO: Add support for querying token balances via Crossmint API
+        if token_address:
+            return super().balance_of(address, token_address)
+
         resolved = self.resolve_address(address)
         balance = self._w3.eth.get_balance(w3_sync.to_checksum_address(resolved))
         

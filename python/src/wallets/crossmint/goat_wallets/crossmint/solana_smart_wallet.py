@@ -119,6 +119,10 @@ class SolanaSmartWalletClient(SolanaWalletClient, BaseWalletClient):
         return self.send_raw_transaction(serialized, additional_signers, signer)
     
     def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
+        # TODO: Add support for querying token balances via Crossmint API
+        if token_address:
+            return super().balance_of(address, token_address)
+
         pubkey = Pubkey.from_string(address)
         balance_lamports = self.client.get_balance(pubkey).value
         # Convert lamports (1e9 lamports in 1 SOL)

@@ -37,7 +37,7 @@ class EVMWalletClient(WalletClientBase, ABC):
             tokens: List of token configurations
             enable_send: Whether to enable send functionality
         """
-        super().__init__()
+        WalletClientBase.__init__(self)
         self.tokens = tokens or PREDEFINED_TOKENS
         self.enable_send = enable_send
 
