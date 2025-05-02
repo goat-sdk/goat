@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from goat_wallets.crossmint.api_client import CrossmintWalletsAPI
-from goat_wallets.solana.send_sol import send_sol
 from solders.keypair import Keypair
 from solana.rpc.api import Client as SolanaClient
 import base58
@@ -68,7 +67,7 @@ try:
     })
 
     # Get CrewAI-compatible tools from GOAT adapter
-    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[send_sol()])
+    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[])
     if not goat_crewai_tools:
         print("Warning: No GOAT tools were loaded. Check adapter/plugin setup or tool compatibility.")
         # Optionally exit if tools are essential
