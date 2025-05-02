@@ -23,7 +23,7 @@ export class HyperlaneSendMessageParameters extends createToolParameters(
 
 export class HyperlaneReadMessageParameters extends createToolParameters(
     z.object({
-        chain: z.string().describe("Chain name where message was sent"),
+        chain: z.string().describe("Origin chain name where message was sent from"),
         messageId: z.string().describe("Message ID to check"),
     }),
 ) {}
@@ -80,6 +80,9 @@ export class HyperlaneIsmParameters extends createToolParameters(
                 bridge: z.string().optional(),
             })
             .describe("ISM configuration options"),
+        mailbox: z.string().optional().describe("(Optional) Mailbox address"),
+        origin: z.string().optional().describe("(Optional) Origin chain"),
+        existingIsmAddress: z.string().optional().describe("(Optional) Existing ISM address"),
     }),
 ) {}
 
@@ -128,7 +131,7 @@ export class HyperlaneRelayerConfigParameters extends createToolParameters(
 export class HyperlaneRelayerMonitorParameters extends createToolParameters(
     z.object({
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
-        relayer: z.string().describe("Relayer address to monitor"),
+        relayer: z.string().describe("Relayer url to monitor"),
         metrics: z
             .array(z.enum(["messages_delivered", "gas_used", "latency", "success_rate"]))
             .describe("Metrics to monitor (messages_delivered, gas_used, latency, success_rate)"),
@@ -152,18 +155,18 @@ export class HyperlaneDeployChainParameters extends createToolParameters(
         rpcUrl: z.string().describe("RPC endpoint URL"),
         contracts: z
             .object({
-                mailbox: z.string().optional().describe("Optional existing mailbox address"),
-                validatorAnnounce: z.string().optional().describe("Optional existing validator announce address"),
-                interchainGasPaymaster: z.string().optional().describe("Optional existing IGP address"),
-                proxyAdmin: z.string().optional().describe("Optional existing proxy admin address"),
-                defaultIsm: z.string().optional().describe("Optional default ISM address"),
+                mailbox: z.string().optional().describe("(Optional) existing mailbox address"),
+                validatorAnnounce: z.string().optional().describe("(Optional) existing validator announce address"),
+                interchainGasPaymaster: z.string().optional().describe("(Optional) existing IGP address"),
+                proxyAdmin: z.string().optional().describe("(Optional) existing proxy admin address"),
+                defaultIsm: z.string().optional().describe("(Optional) default ISM address"),
             })
             .optional(),
         validators: z
             .array(
                 z.object({
                     address: z.string().describe("Validator address"),
-                    weight: z.number().optional().describe("Optional validator weight"),
+                    weight: z.number().optional().describe("(Optional) validator weight"),
                 }),
             )
             .optional()

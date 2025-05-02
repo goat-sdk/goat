@@ -9,15 +9,14 @@ import {
     HyperlaneContractsMap,
     HyperlaneCore,
     HyperlaneCoreDeployer,
+    HyperlaneFactories,
     HyperlaneIsmFactory,
     IsmType,
     MultiProvider,
     TOKEN_TYPE_TO_STANDARD,
     TokenFactories,
-    TokenType,
     WarpCoreConfig,
     WarpRouteDeployConfig,
-    WarpRouteDeployConfigSchema,
     getTokenConnectionId,
     isCollateralTokenConfig,
     isTokenMetadata,
@@ -25,11 +24,11 @@ import {
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
+import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
 import {
     HyperlaneAnnounceValidatorParameters,
     HyperlaneDeployChainParameters,
-    HyperlaneDeployParameters,
     HyperlaneGasPaymentParameters,
     HyperlaneGetDeployedContractsParameters,
     HyperlaneGetMailboxParameters,
@@ -43,11 +42,9 @@ import {
     HyperlaneValidatorParameters,
 } from "./parameters";
 
-import * as dotenv from "dotenv";
-dotenv.config();
-
 const REGISTRY_URL = "https://github.com/hyperlane-xyz/hyperlane-registry";
 const REGISTRY_PROXY_URL = "https://proxy.hyperlane.xyz";
+const getMultiProvider = createMultiProviderSingleton();
 
 interface ChainAddresses {
     warpRouter?: string;
@@ -64,77 +61,73 @@ interface DeployedContracts {
 }
 
 export class HyperlaneService {
-    @Tool({
-        name: "make_hyperlane_warp",
-        description: "Deploy a Hyperlane Warp bridge between two chains",
-    })
-    async deployBridge(walletClient: EVMWalletClient, parameters: HyperlaneDeployParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
+    // @Tool({
+    //     name: "make_hyperlane_warp",
+    //     description: "Deploy a Hyperlane Warp bridge between two chains",
+    // })
+    // async deployBridge(walletClient: EVMWalletClient, parameters: HyperlaneDeployParameters) {
+    //     const { multiProvider, registry } = await getMultiProvider(walletClient);
 
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+    //     const { origin, destination, token } = parameters;
+    //     const owner = walletClient.getAddress();
 
-        const { origin, destination, token } = parameters;
-        const owner = walletClient.getAddress();
+    //     // Get chain addresses and validate
+    //     const chainAddresses = await registry.getAddresses();
+    //     const originMailbox = chainAddresses[origin]?.mailbox;
+    //     const destinationMailbox = chainAddresses[destination]?.mailbox;
+    //     console.log("Available chains:", Object.keys(chainAddresses));
 
-        // Get chain addresses and validate
-        const chainAddresses = await registry.getAddresses();
-        console.log("Available chains:", Object.keys(chainAddresses));
+    //     if (!originMailbox) {
+    //         throw new Error(
+    //             `No mailbox found for origin chain: ${origin}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
+    //         );
+    //     }
+    //     if (!destinationMailbox) {
+    //         throw new Error(
+    //             `No mailbox found for destination chain: ${destination}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
+    //         );
+    //     }
 
-        if (!chainAddresses[origin]?.mailbox) {
-            throw new Error(
-                `No mailbox found for origin chain: ${origin}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
-            );
-        }
-        if (!chainAddresses[destination]?.mailbox) {
-            throw new Error(
-                `No mailbox found for destination chain: ${destination}. Available chains: ${Object.keys(chainAddresses).join(", ")}`,
-            );
-        }
+    //     const warpDeployConfig: WarpRouteDeployConfig = {
+    //         [origin]: {
+    //             type: TokenType.collateral,
+    //             token,
+    //             owner,
+    //             mailbox: originMailbox as string,
+    //         },
+    //         [destination]: {
+    //             type: TokenType.synthetic,
+    //             owner,
+    //             mailbox: destinationMailbox as string,
+    //         },
+    //     };
 
-        const warpDeployConfig: WarpRouteDeployConfig = {
-            [origin]: {
-                type: TokenType.collateral,
-                token,
-                owner,
-                mailbox: chainAddresses[origin].mailbox,
-            },
-            [destination]: {
-                type: TokenType.synthetic,
-                owner,
-                mailbox: chainAddresses[destination].mailbox,
-            },
-        };
+    //     console.log("Deploy config:", JSON.stringify(warpDeployConfig, null, 2));
+    //     WarpRouteDeployConfigSchema.parse(warpDeployConfig);
 
-        console.log("Deploy config:", JSON.stringify(warpDeployConfig, null, 2));
-        WarpRouteDeployConfigSchema.parse(warpDeployConfig);
+    //     const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
+    //     const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
 
-        const deployedContracts = await new HypERC20Deployer(multiProvider).deploy(warpDeployConfig);
-        const warpCoreConfig = await getWarpCoreConfig(multiProvider, warpDeployConfig, deployedContracts);
-
-        return JSON.stringify(
-            {
-                message: "Warp bridge deployed successfully",
-                contracts: {
-                    origin: warpCoreConfig.tokens.find((t) => t.chainName === origin),
-                    destination: warpCoreConfig.tokens.find((t) => t.chainName === destination),
-                },
-                config: warpCoreConfig,
-            },
-            null,
-            2,
-        );
-    }
+    //     return JSON.stringify(
+    //         {
+    //             message: "Warp bridge deployed successfully",
+    //             contracts: {
+    //                 origin: warpCoreConfig.tokens.find((t) => t.chainName === origin),
+    //                 destination: warpCoreConfig.tokens.find((t) => t.chainName === destination),
+    //             },
+    //             config: warpCoreConfig,
+    //         },
+    //         null,
+    //         2,
+    //     );
+    // }
 
     @Tool({
         name: "hyperlane_send_message",
         description: "Send a message from one chain to another using Hyperlane",
     })
     async sendMessage(walletClient: EVMWalletClient, parameters: HyperlaneSendMessageParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         const { originChain, destinationChain, destinationAddress, message } = parameters;
         const chainAddresses = await registry.getAddresses();
@@ -142,13 +135,13 @@ export class HyperlaneService {
         try {
             // Create HyperlaneCore instance
             const hyperlane = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
-
+            const encodedMessage = utils.hexlify(utils.toUtf8Bytes(message));
             // Send the message using the SDK
             const { dispatchTx, message: dispatchedMessage } = await hyperlane.sendMessage(
                 originChain,
                 destinationChain,
                 destinationAddress,
-                message,
+                encodedMessage,
             );
 
             // Wait for message to be indexed
@@ -170,24 +163,20 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            console.error("Error details:", error);
-            return JSON.stringify(
-                {
-                    message: "Failed to send message",
-                    error: error instanceof Error ? error.message : String(error),
-                    originChain,
-                    destinationChain,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to send message: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to send message: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
 
     @Tool({
         name: "hyperlane_read_message",
-        description: "Check the status and content of a Hyperlane message using chain name and message ID",
+        description: "Check the status and content of a Hyperlane message using the origin chain name and message ID",
     })
     async readMessage(parameters: HyperlaneReadMessageParameters) {
         const { chain, messageId } = parameters;
@@ -250,34 +239,17 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (err: unknown) {
-            const error = err as Error;
-            if (error.message?.includes("No dispatch event found")) {
-                return JSON.stringify(
-                    {
-                        message: "Message not found",
-                        details: {
-                            chain,
-                            messageId,
-                            reason: "Message may be too recent or not exist on this chain",
-                        },
-                    },
-                    null,
-                    2,
-                );
+        } catch (err) {
+            if (err instanceof Error) {
+                if (err.message?.includes("No dispatch event found")) {
+                    err.message = `Message not found: ${err.message}\nParameters: ${JSON.stringify({ reason: "Message may be too recent or not exist on this chain", ...parameters }, null, 2)}`;
+                } else {
+                    err.message = `Failed to send message: ${err.message}\nParameters: ${parameters}, null, 2)}`;
+                }
+                throw err;
             }
-
-            return JSON.stringify(
-                {
-                    message: "Failed to read message",
-                    error: error.message || String(error),
-                    details: {
-                        chain,
-                        messageId,
-                    },
-                },
-                null,
-                2,
+            throw new Error(
+                `Failed to send message: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -323,14 +295,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to retrieve mailbox address",
-                    error: error instanceof Error ? error.message : String(error),
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to retrieve mailbox address: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to retrieve mailbox address: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -405,16 +376,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to retrieve deployed contracts",
-                    error: error instanceof Error ? error.message : String(error),
-                    chain,
-                    contractType,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to retrieve deployed contracts: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to retrieve deployed contracts: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -423,14 +391,34 @@ export class HyperlaneService {
         name: "hyperlane_configure_ism",
         description: "Configure Interchain Security Module settings",
     })
+    /**
+     * Configures an Interchain Security Module (ISM) for a specific blockchain chain
+     *
+     * @param walletClient - The Ethereum wallet client used for transaction signing
+     * @param parameters - Configuration parameters for ISM deployment
+     *
+     * @returns A JSON string containing details of the configured ISM
+     *
+     * @throws {Error} If ISM configuration fails or required parameters are missing
+     *
+     * Supported ISM Types:
+     * - merkleRootMultisigIsm: Requires validators and threshold
+     * - messageIdMultisigIsm: Requires validators and threshold
+     * - storageMerkleRootMultisigIsm: Requires validators and threshold
+     * - storageMessageIdMultisigIsm: Requires validators and threshold
+     * - weightedMerkleRootMultisigIsm: Requires validators and thresholdWeight
+     * - weightedMessageIdMultisigIsm: Requires validators and thresholdWeight
+     * - pausableIsm: Requires owner, optional paused state
+     * - trustedRelayerIsm: Requires relayer address and mailbox
+     * - opStackIsm: Requires origin and nativeBridge
+     * - arbL2ToL1Ism: Requires bridge address
+     * - testIsm: No additional configuration required
+     */
     async configureIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
-            const { chain, type, config } = parameters;
+            const { chain, type, mailbox, config, origin, existingIsmAddress } = parameters;
             const chainAddresses = await registry.getAddresses();
 
             // Create ISM factory
@@ -483,6 +471,9 @@ export class HyperlaneService {
                     if (!config.relayer) {
                         throw new Error("Relayer address required for trusted relayer ISM");
                     }
+                    if (!mailbox) {
+                        throw new Error("Mailbox is required for trusted relayer ISM");
+                    }
                     ismConfig = {
                         type,
                         relayer: config.relayer,
@@ -519,6 +510,9 @@ export class HyperlaneService {
             const deployedIsm = await ismFactory.deploy({
                 destination: chain,
                 config: ismConfig,
+                mailbox: mailbox || undefined,
+                existingIsmAddress: existingIsmAddress || undefined,
+                origin: origin || undefined,
             });
 
             return JSON.stringify(
@@ -527,22 +521,20 @@ export class HyperlaneService {
                     details: {
                         chain,
                         type,
-                        address: deployedIsm.address,
+                        address: deployedIsm?.address,
                         config: ismConfig,
                     },
                 },
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to configure ISM",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to configure ISM: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to configure ISM: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -552,22 +544,11 @@ export class HyperlaneService {
         description: "Manage validator set for multisig ISM",
     })
     async manageValidators(walletClient: EVMWalletClient, parameters: HyperlaneValidatorParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, action, validator, weight } = parameters;
-            const chainAddresses = await registry.getAddresses();
-
-            // Set the signer for this chain
-            multiProvider.setSharedSigner(wallet);
             const signer = multiProvider.getSigner(chain);
-
-            // Get ISM reader
-            const ismReader = new EvmIsmReader(multiProvider, chain);
-            const validatorConfig = await ismReader.deriveMultisigConfig(validator);
 
             // Create transaction based on action
             // biome-ignore lint/suspicious/noExplicitAny: na
@@ -610,15 +591,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to manage validator",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to manage validator: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to manage validator: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -688,15 +667,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to monitor security",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to monitor security: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to monitor security: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -706,10 +683,7 @@ export class HyperlaneService {
         description: "Announce a validator's signing address for a chain",
     })
     async announceValidator(walletClient: EVMWalletClient, parameters: HyperlaneAnnounceValidatorParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, validatorAddress, signingAddress, mailboxAddress } = parameters;
@@ -740,15 +714,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to announce validator",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to announce validator: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to announce validator: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -758,15 +730,13 @@ export class HyperlaneService {
         description: "Configure relayer settings for message delivery",
     })
     async configureRelayer(walletClient: EVMWalletClient, parameters: HyperlaneRelayerConfigParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, whitelist, blacklist, gasPaymentConfig } = parameters;
             const chainAddresses = await registry.getAddresses();
 
+            // * This method is broken because theres no chain address for the relayer
             // Get the relayer contract
             const relayerAddress = chainAddresses[chain]?.relayer;
             if (!relayerAddress) {
@@ -830,15 +800,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to configure relayer",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to configure relayer: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to configure relayer: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -848,10 +816,7 @@ export class HyperlaneService {
         description: "Manage interchain gas payments for relayers",
     })
     async manageGasPayment(walletClient: EVMWalletClient, parameters: HyperlaneGasPaymentParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, messageId, gasAmount, recipient } = parameters;
@@ -889,15 +854,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to process gas payment",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to process gas payment: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to process gas payment: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -962,15 +925,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to monitor relayer",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to retrieve Hyperlane relayer metrics: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to retrieve Hyperlane relayer metrics: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -980,10 +941,7 @@ export class HyperlaneService {
         description: "Deploy Hyperlane core contracts to a new chain",
     })
     async deployChain(walletClient: EVMWalletClient, parameters: HyperlaneDeployChainParameters) {
-        assert(process.env.WALLET_PRIVATE_KEY, "Missing Private Key");
-
-        const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY);
-        const { multiProvider, registry } = await getMultiProvider(wallet);
+        const { multiProvider, registry } = await getMultiProvider(walletClient);
 
         try {
             const { chain, chainId, domainId, rpcUrl, contracts, validators } = parameters;
@@ -1003,7 +961,7 @@ export class HyperlaneService {
                 ...multiProvider.metadata,
                 [chain]: chainMetadata,
             });
-            newMultiProvider.setSharedSigner(wallet);
+            // newMultiProvider.setSharedSigner(wallet);
 
             // Create core config
             const coreConfig: CoreConfig = {
@@ -1040,9 +998,9 @@ export class HyperlaneService {
                         chainId,
                         domainId: chainMetadata.domainId,
                         contracts: {
-                            mailbox: deployedContracts.mailbox.address,
-                            validatorAnnounce: deployedContracts.validatorAnnounce.address,
-                            proxyAdmin: deployedContracts.proxyAdmin.address,
+                            // mailbox: deployedContracts.mailbox.address,
+                            // validatorAnnounce: deployedContracts.validatorAnnounce.address,
+                            // proxyAdmin: deployedContracts.proxyAdmin.address,
                         },
                         validators: validators?.map((v) => ({
                             address: v.address,
@@ -1053,15 +1011,13 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to deploy Hyperlane core contracts",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to deploy Hyperlane core contracts: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(
+                `Failed to deploy Hyperlane core contracts: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`,
             );
         }
     }
@@ -1140,16 +1096,12 @@ export class HyperlaneService {
                 null,
                 2,
             );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to get tokens",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
-            );
+        } catch (err) {
+            if (err instanceof Error) {
+                err.message = `Failed to get tokens: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                throw err;
+            }
+            throw new Error(`Failed to get tokens: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`);
         }
     }
 
@@ -1171,22 +1123,41 @@ export class HyperlaneService {
     }
 }
 
-async function getMultiProvider(signer?: ethers.Signer) {
-    const registry = new GithubRegistry({
-        uri: REGISTRY_URL,
-        proxyUrl: REGISTRY_PROXY_URL,
-    });
+function createMultiProviderSingleton() {
+    let instance: { multiProvider: MultiProvider; registry: GithubRegistry } | null = null;
+    let lastRefresh: number | null = null;
+    const oneDay = 86400000; // milliseconds in one day
 
-    const chainMetadata = await registry.getMetadata();
-    const multiProvider = new MultiProvider(chainMetadata);
-    if (signer) multiProvider.setSharedSigner(signer);
-    return { multiProvider, registry };
+    return async function getMultiProvider(walletClient?: EVMWalletClient) {
+        const now = Date.now();
+
+        const refresh = lastRefresh && now - lastRefresh > oneDay; // refresh daily
+
+        if (!instance || refresh) {
+            const registry = new GithubRegistry({
+                uri: REGISTRY_URL,
+                proxyUrl: REGISTRY_PROXY_URL,
+            });
+            const chainMetadata = await registry.getMetadata();
+            const multiProvider = new MultiProvider<ChainMetadata>(chainMetadata);
+
+            if (walletClient) {
+                const signer = new EVMWalletClientSigner(walletClient);
+                multiProvider.setSharedSigner(signer);
+            }
+
+            instance = { multiProvider, registry };
+            lastRefresh = now;
+        }
+
+        return instance;
+    };
 }
 
 async function getWarpCoreConfig(
     multiProvider: MultiProvider,
     warpDeployConfig: WarpRouteDeployConfig,
-    contracts: HyperlaneContractsMap<TokenFactories>,
+    contracts: HyperlaneContractsMap<TokenFactories & HyperlaneFactories>,
 ): Promise<WarpCoreConfig> {
     const warpCoreConfig: WarpCoreConfig = { tokens: [] };
 
@@ -1205,7 +1176,7 @@ async function getWarpCoreConfig(
 function generateTokenConfigs(
     warpCoreConfig: WarpCoreConfig,
     warpDeployConfig: WarpRouteDeployConfig,
-    contracts: HyperlaneContractsMap<TokenFactories>,
+    contracts: HyperlaneContractsMap<TokenFactories & HyperlaneFactories>,
     symbol: string,
     name: string,
     decimals: number,
@@ -1217,7 +1188,11 @@ function generateTokenConfigs(
         const tokenType = config.type as keyof TokenFactories;
         const tokenContract = contract[tokenType];
 
-        assert(tokenContract?.address, "Missing token contract address");
+        if ("address" in tokenContract && typeof tokenContract.address === "string") {
+            assert(tokenContract.address, "Missing token contract address");
+        } else {
+            throw new Error("Invalid token contract type or missing address");
+        }
 
         warpCoreConfig.tokens.push({
             chainName,
