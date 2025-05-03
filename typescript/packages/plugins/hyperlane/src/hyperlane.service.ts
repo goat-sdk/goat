@@ -1028,7 +1028,8 @@ export class HyperlaneService {
     })
     async getTokens(parameters: HyperlaneGetTokenParameters) {
         try {
-            const { chain, tokenSymbol, standard, routerAddress } = parameters;
+            const { chain, tokenSymbol, standard, tokenRouterAddress } = parameters;
+            // router address isn't used except in response
             const { registry } = await getMultiProvider();
 
             // Get warp route configs
@@ -1043,10 +1044,10 @@ export class HyperlaneService {
 
                 for (const token of config.tokens) {
                     // Skip if doesn't match our filters
-                    if (chain && token.chainName !== chain) continue;
-                    if (tokenSymbol && token.symbol !== tokenSymbol) continue;
-                    if (standard && token.standard !== standard) continue;
-                    if (routerAddress && token.addressOrDenom !== routerAddress) continue;
+                    if (chain && token.chainName.toUpperCase() !== chain.toUpperCase()) continue;
+                    if (tokenSymbol && token.symbol.toUpperCase() !== tokenSymbol.toUpperCase()) continue;
+                    if (standard && token.standard.toUpperCase() !== standard.toUpperCase()) continue;
+                    if (tokenRouterAddress && token.addressOrDenom?.toUpperCase() !== tokenRouterAddress.toUpperCase()) continue;
 
                     // Skip if missing required fields
                     if (
@@ -1067,8 +1068,8 @@ export class HyperlaneService {
                         decimals: token.decimals,
                         chainName: token.chainName,
                         standard: token.standard,
-                        routerAddress: token.addressOrDenom,
-                        tokenAddress: token.collateralAddressOrDenom || null,
+                        tokenRouterAddress: token.addressOrDenom,
+                        underlyingTokenAddress: token.collateralAddressOrDenom || null,
                         connections: token.connections.map((c: { token: string }) => {
                             const [_, chainName, routerAddress] = c.token.split("|");
                             return {
@@ -1088,7 +1089,7 @@ export class HyperlaneService {
                         filters: {
                             tokenSymbol,
                             standard,
-                            routerAddress,
+                            tokenRouterAddress,
                         },
                         tokens,
                     },
@@ -1142,7 +1143,8 @@ function createMultiProviderSingleton() {
             const multiProvider = new MultiProvider<ChainMetadata>(chainMetadata);
 
             if (walletClient) {
-                const signer = new EVMWalletClientSigner(walletClient);
+                // const signer = new EVMWalletClientSigner(walletClient);
+                const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string);
                 multiProvider.setSharedSigner(signer);
             }
 

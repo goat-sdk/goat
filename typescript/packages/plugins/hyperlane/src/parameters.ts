@@ -179,9 +179,30 @@ export class HyperlaneGetTokenParameters extends createToolParameters(
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
         tokenSymbol: z.string().optional().describe("Token symbol to search for (e.g. USDC)"),
         standard: z
-            .enum(["EvmHypCollateral", "EvmHypSynthetic"])
+            .enum([         // ? Should this be an enum? I feel like more values could be added in the future
+                "EvmHypCollateral",
+                "EvmHypSynthetic",
+                "EvmHypNative",
+                'SealevelHypSynthetic',
+                'EvmHypNative',
+                'SealevelHypCollateral',
+                'EvmHypCollateralFiat',
+                'CwHypCollateral',
+                'CosmosIbc',
+                'EvmHypXERC20',
+                'EvmHypXERC20Lockbox',
+                'CwHypNative',
+                'CosmosNativeHypCollateral',
+                'SealevelHypNative',
+                'EvmNative',
+                'EvmHypOwnerCollateral',
+                'EvmHypVSXERC20',
+                'EvmHypVSXERC20Lockbox',
+                'EvmHypSyntheticRebase',
+                'EvmHypRebaseCollateral'
+            ])
             .optional()
-            .describe("Token standard (EvmHypCollateral or EvmHypSynthetic)"),
-        routerAddress: z.string().optional().describe("Specific router address to get token for"),
+            .describe("Token standard (EvmHypCollateral, EvmHypSynthetic, etc.)"),
+        tokenRouterAddress: z.string().optional().describe("Specific router address to get token for"),
     }),
 ) {}
