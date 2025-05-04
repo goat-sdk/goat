@@ -23,9 +23,9 @@ async function chat() {
         wallet: solana({
             keypair,
             connection,
-		}),
-		plugins: [pumpfun()],
-	});
+        }),
+        plugins: [pumpfun()],
+    });
 
     // 3. Create a readline interface to interact with the agent
     type Message = {
