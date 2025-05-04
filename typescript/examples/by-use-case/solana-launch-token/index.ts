@@ -5,8 +5,7 @@ import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { pumpfun } from "@goat-sdk/plugin-pumpfun";
-import { splToken } from "@goat-sdk/plugin-spl-token";
-import { sendSOL, solana } from "@goat-sdk/wallet-solana";
+import { solana } from "@goat-sdk/wallet-solana";
 
 import { Connection, Keypair } from "@solana/web3.js";
 
@@ -24,13 +23,9 @@ async function chat() {
         wallet: solana({
             keypair,
             connection,
-        }),
-        plugins: [
-            sendSOL(), // Enable SOL transfers
-            splToken(), // Enable SPL token operations
-            pumpfun(),
-        ],
-    });
+		}),
+		plugins: [pumpfun()],
+	});
 
     // 3. Create a readline interface to interact with the agent
     type Message = {

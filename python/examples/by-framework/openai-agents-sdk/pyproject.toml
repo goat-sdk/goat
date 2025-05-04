@@ -19,7 +19,6 @@ web3 = ">=6.20.3"
 goat-sdk = "^0.1.0"
 goat-sdk-wallet-evm = "^0.1.0"
 goat-sdk-wallet-web3 = "^0.1.0"
-goat-sdk-plugin-erc20 = "^0.1.0"
 goat-sdk-adapter-openai-agents-sdk = "^0.1.0"
 
 [tool.poetry.group.test.dependencies]
@@ -45,7 +44,6 @@ ruff = "^0.8.6"
 goat-sdk = { path = "../../../src/goat-sdk", develop = true }
 goat-sdk-wallet-evm = { path = "../../../src/wallets/evm", develop = true }
 goat-sdk-wallet-web3 = { path = "../../../src/wallets/web3", develop = true }
-goat-sdk-plugin-erc20 = { path = "../../../src/plugins/erc20", develop = true }
 goat-sdk-adapter-openai-agents-sdk = { path = "../../../src/adapters/openai_agents_sdk", develop = true }
 
 [tool.ruff]
