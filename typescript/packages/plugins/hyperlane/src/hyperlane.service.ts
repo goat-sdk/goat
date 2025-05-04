@@ -1,5 +1,5 @@
 import { Tool } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { EVMReadResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
@@ -25,7 +25,7 @@ import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
 import { ethers, utils } from "ethers";
-import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
+import hyperlaneABI from "./abi/hyperlane.abi";
 import {
     HyperlaneAnnounceValidatorParameters,
     HyperlaneDeployChainParameters,
@@ -869,31 +869,26 @@ export class HyperlaneService {
         name: "hyperlane_monitor_relayer",
         description: "Monitor relayer status and performance",
     })
-    async monitorRelayer(parameters: HyperlaneRelayerMonitorParameters) {
+    async monitorRelayer(walletClient: EVMWalletClient, parameters: HyperlaneRelayerMonitorParameters) {
         try {
             const { chain, relayer, metrics } = parameters;
-            const { multiProvider, registry } = await getMultiProvider();
-            const chainAddresses = await registry.getAddresses();
 
             // Get the relayer contract
-            const relayerAddress = relayer || chainAddresses[chain]?.relayer;
+            const relayerAddress = relayer;
             if (!relayerAddress) {
                 throw new Error(`No relayer found for chain: ${chain}`);
             }
 
-            const relayerContract = new ethers.Contract(
-                relayerAddress,
-                [
-                    "function getDeliveredMessages() external view returns (uint256)",
-                    "function getGasUsed() external view returns (uint256)",
-                    "function getAverageLatency() external view returns (uint256)",
-                    "function getSuccessRate() external view returns (uint256)",
-                ],
-                multiProvider.getProvider(chain),
-            );
-
-            // biome-ignore lint/suspicious/noExplicitAny: na
-            const result: any = {
+            const result: {
+                chain: string;
+                relayer: string;
+                metrics: {
+                    messagesDelivered?: EVMReadResult;
+                    gasUsed?: EVMReadResult;
+                    averageLatency?: EVMReadResult;
+                    successRate?: EVMReadResult;
+                };
+            } = {
                 chain,
                 relayer: relayerAddress,
                 metrics: {},
@@ -903,16 +898,32 @@ export class HyperlaneService {
             for (const metric of metrics) {
                 switch (metric) {
                     case "messages_delivered":
-                        result.metrics.messagesDelivered = await relayerContract.getDeliveredMessages();
+                        result.metrics.messagesDelivered = await walletClient.read({
+                            address: relayerAddress,
+                            functionName: "getDeliveredMessages",
+                            abi: hyperlaneABI,
+                        });
                         break;
                     case "gas_used":
-                        result.metrics.gasUsed = await relayerContract.getGasUsed();
+                        result.metrics.gasUsed = await walletClient.read({
+                            address: relayerAddress,
+                            functionName: "getGasUsed",
+                            abi: hyperlaneABI,
+                        });
                         break;
                     case "latency":
-                        result.metrics.averageLatency = await relayerContract.getAverageLatency();
+                        result.metrics.averageLatency = await walletClient.read({
+                            address: relayerAddress,
+                            functionName: "getAverageLatency",
+                            abi: hyperlaneABI,
+                        });
                         break;
                     case "success_rate":
-                        result.metrics.successRate = await relayerContract.getSuccessRate();
+                        result.metrics.averageLatency = await walletClient.read({
+                            address: relayerAddress,
+                            functionName: "getSuccessRate",
+                            abi: hyperlaneABI,
+                        });
                         break;
                 }
             }
@@ -1047,7 +1058,8 @@ export class HyperlaneService {
                     if (chain && token.chainName.toUpperCase() !== chain.toUpperCase()) continue;
                     if (tokenSymbol && token.symbol.toUpperCase() !== tokenSymbol.toUpperCase()) continue;
                     if (standard && token.standard.toUpperCase() !== standard.toUpperCase()) continue;
-                    if (tokenRouterAddress && token.addressOrDenom?.toUpperCase() !== tokenRouterAddress.toUpperCase()) continue;
+                    if (tokenRouterAddress && token.addressOrDenom?.toUpperCase() !== tokenRouterAddress.toUpperCase())
+                        continue;
 
                     // Skip if missing required fields
                     if (
