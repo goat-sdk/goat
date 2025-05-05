@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { Hex, concat, erc20Abi, maxUint256, numberToHex, size } from "viem";
+import { erc20Abi, maxUint256 } from "viem";
 import { GetPriceParameters } from "./parameters";
 
 export class Referrer {
@@ -58,7 +58,7 @@ export class ZeroExService {
             }),
         };
 
-        return await this.makeRequest("/swap/permit2/price", queryParams);
+        return await this.makeRequest("/swap/allowance-holder/price", queryParams);
     }
 
     @Tool({
@@ -70,14 +70,14 @@ export class ZeroExService {
 
         if (price.issues.allowance !== null) {
             await walletClient.sendTransaction({
-                to: price.issues.allowance.spender,
+                to: parameters.sellToken,
                 abi: erc20Abi,
                 functionName: "approve",
                 args: [price.issues.allowance.spender, maxUint256],
             });
         }
 
-        const quote = await this.makeRequest("/swap/permit2/quote", {
+        const quote = await this.makeRequest("/swap/allowance-holder/quote", {
             chainId: walletClient.getChain().id.toString(),
             sellToken: parameters.sellToken,
             buyToken: parameters.buyToken,
@@ -91,33 +91,6 @@ export class ZeroExService {
                 swapFeeRecipient: this.referrer.swapFeeRecipient,
             }),
         });
-
-        let signature: Hex | undefined;
-
-        if (quote.permit2?.eip712) {
-            signature = (
-                await walletClient.signTypedData({
-                    domain: {
-                        ...quote.permit2.eip712.domain,
-                        version: "1",
-                    },
-                    types: quote.permit2.eip712.types,
-                    primaryType: quote.permit2.eip712.primaryType,
-                    message: quote.permit2.eip712.message,
-                })
-            ).signature as Hex;
-
-            const signatureLengthInHex = numberToHex(size(signature), {
-                signed: false,
-                size: 32,
-            });
-
-            const transactionData = quote.transaction.data as Hex;
-            const sigLengthHex = signatureLengthInHex as Hex;
-            const sig = signature as Hex;
-
-            quote.transaction.data = concat([transactionData, sigLengthHex, sig]);
-        }
 
         const transaction = quote.transaction;
 
