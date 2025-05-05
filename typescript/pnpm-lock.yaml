@@ -135,9 +135,6 @@ importers:
       '@goat-sdk/plugin-crossmint-headless-checkout':
         specifier: workspace:*
         version: link:../../../packages/plugins/crossmint-headless-checkout
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-evm':
         specifier: 0.2.11
         version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)
@@ -1206,9 +1203,6 @@ importers:
       '@goat-sdk/core':
         specifier: 0.4.9
         version: 0.4.9(zod@3.23.8)
-      '@goat-sdk/plugin-erc20':
-        specifier: 0.2.14
-        version: 0.2.14(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
       '@goat-sdk/wallet-evm':
         specifier: 0.2.11
         version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)
