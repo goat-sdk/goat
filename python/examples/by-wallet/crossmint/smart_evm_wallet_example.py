@@ -11,9 +11,7 @@ from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
 
 from goat_adapters.langchain import get_on_chain_tools
-from goat_plugins.erc20 import erc20, ERC20PluginOptions
-from goat_plugins.erc20.token import USDC, PEPE
-from goat_wallets.evm.send_eth import send_eth
+from goat_wallets.evm import USDC, PEPE
 from goat_wallets.crossmint import crossmint
 
 def create_smart_wallet(signer_public_key: str, api_key: str, base_url: str = "https://staging.crossmint.com") -> dict:
@@ -65,7 +63,7 @@ def main():
     print(f"Created smart wallet: {wallet_response['address']}")
 
     # Initialize the smart wallet client
-    crossmint_wallet = crossmint_client["smartwallet"]({
+    crossmint_wallet = crossmint_client["evm_smartwallet"]({
         "address": wallet_response["address"],
         "signer": {
             "secretKey": secret_key,
@@ -73,6 +71,8 @@ def main():
         "provider": os.getenv("EVM_PROVIDER_URL", "https://base-mainnet.g.alchemy.com/v2/demo"),
         "ensProvider": os.getenv("ENS_PROVIDER_URL", "https://base-mainnet.g.alchemy.com/v2/demo"),
         "chain": "base",
+        "tokens": [USDC, PEPE],
+        "enable_send": True
     })
 
     # Initialize LLM
@@ -88,13 +88,10 @@ def main():
         ]
     )
 
-    # Initialize tools with Solana wallet
+    # Initialize tools with EVM wallet
     tools = get_on_chain_tools(
         wallet=crossmint_wallet,
-        plugins=[
-            send_eth(),
-            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
-        ],
+        plugins=[]
     )
     
     agent = create_tool_calling_agent(llm, tools, prompt)

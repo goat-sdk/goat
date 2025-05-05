@@ -1,5 +1,5 @@
 import time
-from typing import Dict
+from typing import Dict, Optional
 import base58
 from solders.instruction import Instruction
 from solders.pubkey import Pubkey
@@ -32,7 +32,9 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
         address: str,
         api_client: CrossmintWalletsAPI,
         connection: SolanaClient,
-        options: Dict
+        options: Dict,
+        tokens=None,
+        enable_send=True
     ):
         """Initialize custodial wallet client.
         
@@ -41,8 +43,10 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
             api_client: Crossmint API client
             connection: Solana RPC connection
             options: Additional options
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
         """
-        super().__init__(connection)
+        super().__init__(connection, None, tokens, enable_send)
         self._address = address
         self._client = api_client
         self._locator = get_custodial_locator(options)
@@ -153,7 +157,7 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
             
             time.sleep(3)
     
-    def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get the SOL balance of an address.
         
         Args:
@@ -209,8 +213,17 @@ class CustodialSolanaWalletClient(SolanaWalletClient):
 
 def custodial_factory(api_client: CrossmintWalletsAPI):
     """Factory function to create custodial wallet instances."""
-    def create_custodial(options: dict) -> CustodialSolanaWalletClient:
-        """Create a new custodial wallet instance."""
+    def create_custodial(options: dict, tokens=None, enable_send=True) -> CustodialSolanaWalletClient:
+        """Create a new custodial wallet instance.
+        
+        Args:
+            options: Wallet configuration options
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
+            
+        Returns:
+            A Solana custodial wallet client instance
+        """
         locator = get_custodial_locator(options)
         wallet = api_client.get_wallet(locator)
         
@@ -218,7 +231,9 @@ def custodial_factory(api_client: CrossmintWalletsAPI):
             wallet["address"],
             api_client,
             options["connection"],
-            options
+            options,
+            tokens,
+            enable_send
         )
     
     return create_custodial

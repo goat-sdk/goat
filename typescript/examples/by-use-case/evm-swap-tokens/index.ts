@@ -3,16 +3,13 @@ import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { uniswap } from "@goat-sdk/plugin-uniswap";
 
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
@@ -31,8 +28,6 @@ const walletClient = createWalletClient({
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
         plugins: [
-            sendETH(), // Enable ETH transfers
-            erc20({ tokens: [USDC, PEPE] }), // Enable ERC20 token operations
             uniswap({
                 baseUrl: process.env.UNISWAP_BASE_URL as string,
                 apiKey: process.env.UNISWAP_API_KEY as string,

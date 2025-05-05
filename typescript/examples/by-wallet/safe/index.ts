@@ -7,7 +7,6 @@ import { baseSepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { getAddressPlugin, safe } from "@goat-sdk/wallet-safe";
 require("dotenv").config();
 
@@ -23,7 +22,7 @@ const llm = new Ollama({
     const tools = await getOnChainTools({
         // The wallet will be deployed on chain and requires eth beforehand.
         wallet: await safe(pk, baseSepolia),
-        plugins: [sendETH(), getAddressPlugin()],
+        plugins: [getAddressPlugin()],
     });
 
     const agent = await createStructuredChatAgent({

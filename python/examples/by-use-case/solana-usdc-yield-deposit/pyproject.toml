@@ -22,7 +22,6 @@ goat-sdk = "*"
 goat-sdk-wallet-solana = "*"
 goat-sdk-adapter-langchain = "*"
 goat-sdk-plugin-lulo = "*"
-goat-sdk-plugin-spl-token = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
@@ -48,7 +47,6 @@ goat-sdk = { path = "../../../src/goat-sdk", develop = true }
 goat-sdk-wallet-solana = { path = "../../../src/wallets/solana", develop = true }
 goat-sdk-adapter-langchain = { path = "../../../src/adapters/langchain", develop = true }
 goat-sdk-plugin-lulo = { path = "../../../src/plugins/lulo", develop = true }
-goat-sdk-plugin-spl-token = { path = "../../../src/plugins/spl_token", develop = true }
 
 [tool.ruff]
 line-length = 120

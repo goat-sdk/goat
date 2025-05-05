@@ -1,4 +1,4 @@
-from typing import NotRequired, TypedDict, Optional, Dict, Union, Literal
+from typing import NotRequired, TypedDict, Optional, Dict, Union, Literal, Any
 from solders.keypair import Keypair
 
 class UnsupportedOperationException(Exception):
@@ -22,7 +22,7 @@ SupportedToken = Literal[
 TokenBalance = TypedDict('TokenBalance', {
     'token': SupportedToken,
     'decimals': int,
-    'balances': Dict[str, any],
+    'balances': Dict[str, Any],
 })
 
 

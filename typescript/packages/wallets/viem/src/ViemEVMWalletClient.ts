@@ -1,9 +1,16 @@
-import { type EVMReadRequest, type EVMTransaction, type EVMTypedData, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, formatUnits, publicActions } from "viem";
-import { mainnet } from "viem/chains";
+import type { EvmChain, Signature } from "@goat-sdk/core";
+import {
+    type EVMReadRequest,
+    type EVMReadResult,
+    type EVMTransaction,
+    type EVMTypedData,
+    EVMWalletClient,
+    EVMWalletClientCtorParams,
+} from "@goat-sdk/wallet-evm";
+import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
-export type ViemOptions = {
+export type ViemOptions = EVMWalletClientCtorParams & {
     paymaster?: {
         defaultAddress: `0x${string}`;
         defaultInput?: `0x${string}`;
@@ -20,7 +27,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
     }
 
     constructor(client: ViemWalletClient, options?: ViemOptions) {
-        super();
+        super({ tokens: options?.tokens, enableSend: options?.enableSend });
         this.#client = client;
         this.#defaultPaymaster = options?.paymaster?.defaultAddress ?? ("" as `0x${string}`);
         this.#defaultPaymasterInput =
@@ -31,44 +38,80 @@ export class ViemEVMWalletClient extends EVMWalletClient {
     }
 
     getAddress() {
-        return this.#client.account?.address ?? "";
+        const address = this.#client.account?.address;
+        if (!address) {
+            console.warn("ViemEVMWalletClient: No account address found.");
+            return "";
+        }
+        return address;
     }
 
-    getChain() {
+    getChain(): EvmChain {
+        const chain = this.#client.chain;
+        if (!chain) {
+            throw new Error("Viem client chain information is not available.");
+        }
+        if (
+            !chain.nativeCurrency ||
+            typeof chain.nativeCurrency.name !== "string" ||
+            typeof chain.nativeCurrency.symbol !== "string" ||
+            typeof chain.nativeCurrency.decimals !== "number"
+        ) {
+            throw new Error("Viem client chain nativeCurrency information is incomplete or invalid.");
+        }
+
         return {
             type: "evm" as const,
-            id: this.#client.chain?.id ?? 0,
+            id: chain.id,
+            nativeCurrency: {
+                name: chain.nativeCurrency.name,
+                symbol: chain.nativeCurrency.symbol,
+                decimals: chain.nativeCurrency.decimals,
+            },
         };
     }
 
-    async signMessage(message: string) {
+    async getNativeBalance(): Promise<bigint> {
+        const address = this.getAddress();
+        if (!address) {
+            throw new Error("Cannot get native balance: Address not available.");
+        }
+        const balance = await this.publicClient.getBalance({
+            address: address as `0x${string}`,
+        });
+        return balance;
+    }
+
+    async signMessage(message: string): Promise<Signature> {
         if (!this.#client.account) throw new Error("No account connected");
         const signature = await this.#client.signMessage({
             message,
             account: this.#client.account,
         });
-
         return { signature };
     }
 
-    async signTypedData(data: EVMTypedData) {
+    async signTypedData(data: EVMTypedData): Promise<Signature> {
         if (!this.#client.account) throw new Error("No account connected");
 
+        const domainChainId =
+            typeof data.domain.chainId === "bigint" ? Number(data.domain.chainId) : data.domain.chainId;
+        const domain = {
+            ...data.domain,
+            ...(domainChainId !== undefined && { chainId: domainChainId }),
+        };
+
         const signature = await this.#client.signTypedData({
-            domain: {
-                ...data.domain,
-                chainId: typeof data.domain.chainId === "bigint" ? Number(data.domain.chainId) : data.domain.chainId,
-            },
+            domain: domain,
             types: data.types,
             primaryType: data.primaryType,
             message: data.message,
             account: this.#client.account,
         });
-
         return { signature };
     }
 
-    async sendTransaction(transaction: EVMTransaction) {
+    async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string; status?: string }> {
         const { to, abi, functionName, args, value, options, data } = transaction;
         if (!this.#client.account) throw new Error("No account connected");
 
@@ -78,10 +121,8 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         const paymasterInput = options?.paymaster?.input ?? this.#defaultPaymasterInput;
         const txHasPaymaster = !!paymaster && !!paymasterInput;
 
-        // If paymaster params exist, extend with EIP712 actions
         const sendingClient = txHasPaymaster ? this.#client.extend(eip712WalletActions()) : this.#client;
 
-        // Simple ETH transfer (no ABI)
         if (!abi) {
             const txParams = {
                 account: this.#client.account,
@@ -91,54 +132,55 @@ export class ViemEVMWalletClient extends EVMWalletClient {
                 data,
                 ...(txHasPaymaster ? { paymaster, paymasterInput } : {}),
             };
-
             const txHash = await sendingClient.sendTransaction(txParams);
             return this.waitForReceipt(txHash);
         }
 
-        // Contract call
         if (!functionName) {
-            throw new Error("Function name is required for contract calls");
+            throw new Error("Function name is required for contract calls with ABI");
         }
 
-        const { request } = await this.publicClient.simulateContract({
-            account: this.#client.account,
-            address: toAddress,
-            abi: abi,
-            functionName,
-            args,
-            chain: this.#client.chain,
-            value: value,
-        });
-
-        if (txHasPaymaster) {
-            const payMasterData = encodeFunctionData({
+        try {
+            const { request } = await this.publicClient.simulateContract({
+                account: this.#client.account,
+                address: toAddress,
                 abi: abi,
                 functionName,
                 args,
-            });
-            // With paymaster, we must use sendTransaction() directly
-            const txParams = {
-                account: this.#client.account,
                 chain: this.#client.chain,
-                to: request.address,
-                data: payMasterData,
-                value: request.value,
-                paymaster,
-                paymasterInput,
-            };
-            const txHash = await sendingClient.sendTransaction(txParams);
-            return this.waitForReceipt(txHash);
-        }
+                value: value,
+            });
 
-        // Without paymaster, use writeContract which handles encoding too,
-        // but since we already have request, let's let writeContract do its thing.
-        // However, writeContract expects the original request format (with abi, functionName, args).
-        const txHash = await this.#client.writeContract(request);
-        return this.waitForReceipt(txHash);
+            if (txHasPaymaster) {
+                const dataToSend = encodeFunctionData({
+                    abi: abi,
+                    functionName,
+                    args: args,
+                });
+                const txParams = {
+                    account: this.#client.account,
+                    chain: this.#client.chain,
+                    to: request.address,
+                    data: dataToSend,
+                    value: request.value,
+                    paymaster,
+                    paymasterInput,
+                };
+                const txHash = await sendingClient.sendTransaction(txParams);
+                return this.waitForReceipt(txHash);
+            }
+
+            const txHash = await sendingClient.writeContract(request);
+            return this.waitForReceipt(txHash);
+        } catch (simError) {
+            console.error("Transaction simulation failed:", simError);
+            throw new Error(
+                `Transaction simulation failed: ${simError instanceof Error ? simError.message : String(simError)}`,
+            );
+        }
     }
 
-    async read(request: EVMReadRequest) {
+    async read(request: EVMReadRequest): Promise<EVMReadResult> {
         const { address, abi, functionName, args } = request;
         if (!abi) throw new Error("Read request must include ABI for EVM");
 
@@ -152,23 +194,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         return { value: result };
     }
 
-    async balanceOf(address: string) {
-        const balance = await this.publicClient.getBalance({
-            address: address as `0x${string}`,
-        });
-
-        const chain = this.#client.chain ?? mainnet;
-
-        return {
-            value: formatUnits(BigInt(balance), chain.nativeCurrency.decimals),
-            decimals: chain.nativeCurrency.decimals,
-            symbol: chain.nativeCurrency.symbol,
-            name: chain.nativeCurrency.name,
-            inBaseUnits: balance.toString(),
-        };
-    }
-
-    private async waitForReceipt(txHash: `0x${string}`) {
+    private async waitForReceipt(txHash: `0x${string}`): Promise<{ hash: string; status: "success" | "reverted" }> {
         const receipt = await this.publicClient.waitForTransactionReceipt({
             hash: txHash,
         });

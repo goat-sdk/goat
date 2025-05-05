@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from goat_wallets.crossmint.api_client import CrossmintWalletsAPI
-from goat_wallets.solana.send_sol import send_sol
 from solders.keypair import Keypair
 from solana.rpc.api import Client as SolanaClient
 import base58
@@ -11,8 +10,7 @@ from crewai import Agent, Task, Crew, Process
 
 # GOAT imports
 from goat_adapters.crewai.adapter import get_crewai_tools
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
+from goat_wallets.solana import SPL_TOKENS
 from goat_wallets.crossmint.parameters import CoreSignerType
 from goat_wallets.crossmint.solana_smart_wallet_factory import SolanaSmartWalletFactory
 from goat_wallets.crossmint.types import SolanaKeypairSigner
@@ -63,18 +61,13 @@ try:
                 keyPair=delegated_keypair
             )
         ),
-        "userId": crossmint_wallet_userid
+        "userId": crossmint_wallet_userid,
+        "tokens": SPL_TOKENS,
+        "enable_send": True
     })
 
-    spl_token_plugin = spl_token(
-        SplTokenPluginOptions(
-            network="devnet",  # Make sure this matches your .env settings and seed key network
-            tokens=SPL_TOKENS,
-        )
-    )
-
     # Get CrewAI-compatible tools from GOAT adapter
-    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[send_sol(), spl_token_plugin])
+    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[])
     if not goat_crewai_tools:
         print("Warning: No GOAT tools were loaded. Check adapter/plugin setup or tool compatibility.")
         # Optionally exit if tools are essential

@@ -1,6 +1,14 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
-import { EVMReadRequest, EVMSmartWalletClient, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
-import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData, formatUnits } from "viem";
+import { NativeCurrency } from "@goat-sdk/core";
+import { EvmChain } from "@goat-sdk/core";
+import {
+    EVMReadRequest,
+    EVMSmartWalletClient,
+    EVMTransaction,
+    EVMTypedData,
+    EVMWalletClientCtorParams,
+} from "@goat-sdk/wallet-evm";
+import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { SupportedSmartWalletChains, getViemChain } from "../chains";
@@ -26,7 +34,7 @@ type UserIdLinkedUser = {
 
 type LinkedUser = EmailLinkedUser | PhoneLinkedUser | UserIdLinkedUser;
 
-export type SmartWalletOptions = {
+export type SmartWalletOptions = EVMWalletClientCtorParams & {
     signer: CustodialSigner | KeyPairSigner;
     address?: string;
     linkedUser?: LinkedUser;
@@ -139,10 +147,11 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return this.#address;
     }
 
-    getChain() {
+    getChain(): EvmChain {
         return {
             type: "evm" as const,
             id: this.#viemClient.chain?.id ?? 0,
+            nativeCurrency: this.#viemClient.chain?.nativeCurrency as NativeCurrency,
         };
     }
 
@@ -262,18 +271,12 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return { value: result };
     }
 
-    async balanceOf(address: string) {
+    async getNativeBalance() {
         const balance = await this.#viemClient.getBalance({
-            address: address as `0x${string}`,
+            address: this.#address as `0x${string}`,
         });
 
-        return {
-            decimals: 18,
-            symbol: "ETH",
-            name: "Ethereum",
-            value: formatUnits(balance, 18),
-            inBaseUnits: balance.toString(),
-        };
+        return BigInt(balance);
     }
 
     private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {

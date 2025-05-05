@@ -5,15 +5,12 @@ import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
@@ -31,7 +28,7 @@ const walletClient = createWalletClient({
     // 2. Get your onchain tools for your wallet
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        plugins: [],
     });
 
     // 3. Create a readline interface to interact with the agent

@@ -1,5 +1,4 @@
-import { splToken } from "@goat-sdk/plugin-spl-token";
-import { sendSOL, solana } from "@goat-sdk/wallet-solana";
+import { solana } from "@goat-sdk/wallet-solana";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
@@ -20,10 +19,7 @@ const toolsPromise = getOnChainTools({
         keypair,
         connection,
     }),
-    plugins: [
-        sendSOL(), // Enable SOL transfers
-        splToken(), // Enable SPL token operations
-    ],
+    plugins: [],
 });
 
 // 3. Create and configure the server

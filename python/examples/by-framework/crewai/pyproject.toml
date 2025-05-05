@@ -17,7 +17,6 @@ crewai = ">=0.108.0"
 python-dotenv = "^1.0.1" 
 goat-sdk = "^0.1.0"
 goat-sdk-wallet-solana = "^0.1.0"
-goat-sdk-plugin-spl-token = "^0.1.0"
 goat-sdk-adapter-crewai = ">=0.1.0"
 goat-sdk-wallet-crossmint = "*"
 
@@ -43,7 +42,6 @@ build-backend = "poetry.core.masonry.api"
 ruff = "^0.8.6"
 goat-sdk = { path = "../../../src/goat-sdk", develop = true }
 goat-sdk-wallet-solana = { path = "../../../src/wallets/solana", develop = true }
-goat-sdk-plugin-spl-token = { path = "../../../src/plugins/spl_token", develop = true }
 goat-sdk-adapter-crewai = { path = "../../../src/adapters/crewai", develop = true }
 goat-sdk-wallet-crossmint = { path = "../../../src/wallets/crossmint", develop = true }
 [tool.ruff]

@@ -3,16 +3,13 @@ import readline from "node:readline";
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mode } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { MODE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { ionic } from "@goat-sdk/plugin-ionic";
 import { kim } from "@goat-sdk/plugin-kim";
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
 require("dotenv").config();
@@ -30,7 +27,7 @@ const walletClient = createWalletClient({
     // 2. Get your onchain tools for your wallet
     const tools = await getOnChainTools({
         wallet: viem(walletClient),
-        plugins: [sendETH(), erc20({ tokens: [USDC, MODE] }), kim(), ionic()],
+        plugins: [kim(), ionic()],
     });
 
     // 3. Create a readline interface to interact with the agent

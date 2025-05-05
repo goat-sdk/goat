@@ -18,7 +18,6 @@ web3 = ">=6.20.3"
 goat-sdk = "*"
 goat-sdk-wallet-evm = "^0.1.1"
 goat-sdk-wallet-web3 = "^0.1.0"
-goat-sdk-plugin-erc20 = "^0.1.0"
 goat-sdk-wallet-crossmint = "*"
 goat-sdk-adapter-langchain = "*"
 goat-sdk-plugin-dpsn = { path = "../../../src/plugins/dpsn", develop = true }

@@ -21,7 +21,6 @@ solders = ">=0.18.0"
 goat-sdk = "*"
 goat-sdk-wallet-solana = "*"
 goat-sdk-adapter-langchain = "*"
-goat-sdk-plugin-spl-token = "*"
 goat-sdk-plugin-jupiter = "*"
 
 [tool.poetry.group.test.dependencies]

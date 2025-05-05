@@ -14,8 +14,7 @@ from solana.rpc.api import Client as SolanaClient
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_plugins.jupiter import jupiter, JupiterPluginOptions
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
+from goat_wallets.solana import SPL_TOKENS
 from goat_wallets.crossmint import crossmint
 
 # Initialize Solana client
@@ -26,7 +25,9 @@ crossmint = crossmint(os.getenv("CROSSMINT_API_KEY"))
 crossmint_wallet = crossmint["custodial"]({
     "chain": "solana",
     "connection": client,
-    "email": os.getenv("CROSSMINT_USER_EMAIL")
+    "email": os.getenv("CROSSMINT_USER_EMAIL"),
+    "tokens": SPL_TOKENS,
+    "enable_send": True
 })
 
 # Initialize LLM
@@ -49,10 +50,6 @@ async def main():
         wallet=crossmint_wallet,
         plugins=[
             jupiter(JupiterPluginOptions()),  # No options needed for Jupiter v6
-            spl_token(SplTokenPluginOptions(
-                network="mainnet",  # Using devnet as specified in .env
-                tokens=SPL_TOKENS
-            )),
         ],
     )
     

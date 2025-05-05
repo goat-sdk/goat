@@ -29,9 +29,6 @@ path = "src/plugins/dexscreener/"
 [tool.poetry.dependencies.goat-sdk-plugin-dpsn]
 path = "src/plugins/dpsn/"
 
-[tool.poetry.dependencies.goat-sdk-plugin-erc20]
-path = "src/plugins/erc20/"
-
 [tool.poetry.dependencies.goat-sdk-plugin-farcaster]
 path = "src/plugins/farcaster/"
 
@@ -49,9 +46,6 @@ path = "src/plugins/opensea/"
 
 [tool.poetry.dependencies.goat-sdk-plugin-rugcheck]
 path = "src/plugins/rugcheck/"
-
-[tool.poetry.dependencies.goat-sdk-plugin-spl-token]
-path = "src/plugins/spl_token/"
 
 [tool.poetry.dependencies.goat-sdk-plugin-lulo]
 path = "src/plugins/lulo/"

@@ -5,8 +5,6 @@ import { generateText } from "ai";
 
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { crossmint } from "@goat-sdk/crossmint";
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { sendETH } from "@goat-sdk/wallet-evm";
 
 require("dotenv").config();
 
@@ -33,7 +31,7 @@ const { evmSmartWallet } = crossmint(apiKey);
             chain: "base-sepolia",
             provider: providerUrl,
         }),
-        plugins: [sendETH(), erc20({ tokens: [USDC] })],
+        plugins: [],
     });
 
     // 3. Create a readline interface to interact with the agent

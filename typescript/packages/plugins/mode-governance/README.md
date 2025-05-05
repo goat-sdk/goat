@@ -8,6 +8,7 @@
 [Mode](https://mode.network/) governance plugin for Goat. Allows you to interact with Mode's governance system including staking MODE and BPT tokens.
 
 ## Installation
+
 ```bash
 npm install @goat-sdk/plugin-mode-governance
 yarn add @goat-sdk/plugin-mode-governance
@@ -28,6 +29,7 @@ const tools = await getOnChainTools({
 ```
 
 ## Tools
+
 - Stake MODE or BPT tokens
 - Get staking information
 - Get balance of MODE, BPT, veMode, or veBPT tokens
@@ -37,15 +39,11 @@ const tools = await getOnChainTools({
 For improved integration with the GPT-4o model and to work seamlessly with the ERC20 plugin, you can configure your tools as follows:
 
 ```typescript
-import { MODE, erc20 } from "@goat-sdk/plugin-erc20";
 import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
 
 const tools = await getOnChainTools({
     wallet: viem(walletClient),
-    plugins: [
-        erc20({ tokens: [MODE] }),
-        modeGovernance()
-    ]
+    plugins: [modeGovernance()],
 });
 ```
 

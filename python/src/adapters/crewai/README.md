@@ -10,6 +10,7 @@
 Integrate the more than +200 onchain tools of GOAT with [CrewAI](https://github.com/crewAIInc/crewAI), a framework for orchestrating role-playing, autonomous AI agents.
 
 ## Installation
+
 ```bash
 poetry add goat-sdk-adapter-crewai
 ```
@@ -19,13 +20,11 @@ poetry add goat-sdk-adapter-crewai
 See a full working example [here](https://github.com/goat-sdk/goat/tree/main/python/examples/by-framework/crewai).
 
 ```python
-# --- Setup GOAT Wallet and Plugins (Example: Solana + SPL Token) --- 
+# --- Setup GOAT Wallet and Plugins (Example: Solana + SPL Token) ---
 import os
 from dotenv import load_dotenv
 from solders.keypair import Keypair
 from solana.rpc.api import Client as SolanaClient
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
 from goat_wallets.solana import solana
 
 load_dotenv()
@@ -40,22 +39,17 @@ client = SolanaClient(solana_rpc_endpoint)
 keypair = Keypair.from_base58_string(solana_wallet_seed)
 wallet = solana(client, keypair)
 
-spl_token_plugin = spl_token(SplTokenPluginOptions(
-    network="mainnet",
-    tokens=SPL_TOKENS
-))
-
-# --- Import CrewAI and the GOAT Adapter --- 
+# --- Import CrewAI and the GOAT Adapter ---
 from crewai import Agent, Task, Crew, Process
 from goat_adapters.crewai.adapter import get_crewai_tools
 
-# --- Generate CrewAI Tools from GOAT --- 
+# --- Generate CrewAI Tools from GOAT ---
 goat_crewai_tools = get_crewai_tools(
     wallet=wallet,
-    plugins=[spl_token_plugin]
+    plugins=[]
 )
 
-# --- Define CrewAI Agent using GOAT Tools --- 
+# --- Define CrewAI Agent using GOAT Tools ---
 # Ensure OPENAI_API_KEY is set in the environment for CrewAI's default LLM
 if not os.getenv("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY must be set in .env for CrewAI")
@@ -81,7 +75,7 @@ crew = Crew(
     process=Process.sequential
 )
 
-# --- Kick off the Crew --- 
+# --- Kick off the Crew ---
 # Note: Ensure you have enough SOL for potential transaction fees if tools perform actions.
 result = crew.kickoff()
 print(result)
