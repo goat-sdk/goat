@@ -23,13 +23,14 @@ pnpm add @goat-sdk/plugin-coingecko
 ```typescript
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 
-const tools = await getOnChainTools({
-    plugins: [
-        coingecko({ 
-            apiKey: process.env.COINGECKO_API_KEY 
-        })
-    ]
+const plugin = coingecko({
+    apiKey: process.env.COINGECKO_API_KEY,
+    isPro: false,
 });
+
+// Use IntelliSense-friendly services object
+const trendingCoins = await plugin.services.getTrendingCoins({});
+console.log("Trending Coins:", trendingCoins);
 ```
 
 ## Setup for the Pro API
@@ -37,15 +38,43 @@ const tools = await getOnChainTools({
 ```typescript
 import { coingecko } from "@goat-sdk/plugin-coingecko";
 
-const tools = await getOnChainTools({
-    plugins: [
-        coingecko({ 
-            apiKey: process.env.COINGECKO_API_KEY,
-            isPro: true
-        })
-    ]
+const plugin = coingecko({
+    apiKey: process.env.COINGECKO_API_KEY,
+    isPro: true,
 });
+
+// Use IntelliSense-friendly services object
+const trendingPools = await plugin.services.getTrendingPoolsByNetwork({ network: "eth" });
+console.log("Trending Pools by Network:", trendingPools);
 ```
+## Examples
+
+We have included example programs to demonstrate how to use the plugin. These examples are located in the `examples` folder.
+
+### Running the Examples
+
+1. **Build the Plugin**:  
+   Before running the examples, make sure to build the plugin:
+   ```bash
+   pnpm build
+   ```
+
+2. **Run the Public API Example**:  
+   Navigate to the `examples` folder and run the `call-common-service.ts` file:
+   ```bash
+   npx ts-node examples/call-common-service.ts
+   ```
+
+3. **Run the Pro API Example**:  
+   Similarly, run the `call-pro-service.ts` file:
+   ```bash
+   npx ts-node examples/call-pro-service.ts
+   ```
+
+### Example Files
+
+- **`call-common-service.ts`**: Demonstrates how to use the public API to fetch trending coins.
+- **`call-pro-service.ts`**: Demonstrates how to use the pro API to fetch trending pools by network.
 
 ## Tools
 
