@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMReadResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { GithubRegistry } from "@hyperlane-xyz/registry";
+import { chainAddresses, GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
     CoreConfig,
@@ -21,6 +21,7 @@ import {
     isCollateralTokenConfig,
     isTokenMetadata,
 } from "@hyperlane-xyz/sdk";
+import { ValidatorAnnounce } from "@hyperlane-xyz/core";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
@@ -41,6 +42,8 @@ import {
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
+import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
+import { encodeFunctionData } from "viem";
 
 const REGISTRY_URL = "https://github.com/hyperlane-xyz/hyperlane-registry";
 const REGISTRY_PROXY_URL = "https://proxy.hyperlane.xyz";
@@ -58,6 +61,14 @@ interface DeployedContracts {
     interchainGasPaymaster?: string;
     mailbox?: string;
     [key: string]: string | undefined;
+}
+
+function stringifyWithBigInts(obj: any, space = 2): string {
+    return JSON.stringify(
+      obj,
+      (_, value) => (typeof value === "bigint" ? value.toString() : value),
+      space
+    );
 }
 
 export class HyperlaneService {
@@ -612,12 +623,36 @@ export class HyperlaneService {
         try {
             const { multiProvider, registry } = await getMultiProvider();
             const chainAddresses = await registry.getAddresses();
+            // const hyperlane = HyperlaneCore.fromAddressesMap(chainAddresses, multiProvider);
+            // const dispatchTx = await hyperlane.getDispatchTx(chain, messageId);
+            // const messages = hyperlane.getDispatchedMessages(dispatchTx);
+            // const message = messages.find((m) => m.id === messageId);
+            // const recipientAddress = message?.parsed?.recipient;
 
             // Create ISM reader
             const ismReader = new EvmIsmReader(multiProvider, chain);
 
-            // biome-ignore lint/suspicious/noExplicitAny: na
-            const result: any = {
+            const result: {
+                chain: string;
+                status: string;
+                details: {
+                    validatorSet?: {
+                        address: string;
+                        validators: string[];
+                        threshold: number;
+                        totalValidators: number;
+                    };
+                    message?: {
+                        id: string;
+                        status: string;
+                        security: {
+                            destination?: string;
+                            mailboxAddress?: string;
+                            isVerified?: boolean;
+                        };
+                    };
+                }
+            } = {
                 chain,
                 status: "SECURE",
                 details: {},
@@ -625,6 +660,7 @@ export class HyperlaneService {
 
             // If validatorSet is provided, check validator set status
             if (validatorSet) {
+                //* chatGPT tells me that deriveMultisigConfig requires the ism address but the validator address is passed here
                 const validatorConfig = await ismReader.deriveMultisigConfig(validatorSet);
                 result.details.validatorSet = {
                     address: validatorSet,
@@ -687,18 +723,34 @@ export class HyperlaneService {
 
         try {
             const { chain, validatorAddress, signingAddress, mailboxAddress } = parameters;
-
+            const chainAddresses = await registry.getAddresses();
+            const locations = await walletClient.read({
+                address: chainAddresses[chain].validatorAnnounce,
+                abi: hyperlaneABI,
+                functionName: "getAnnouncedStorageLocations",
+                args: [[validatorAddress]],
+            });
             // Set up the validator announce contract interface
-            const validatorAnnounceContract = new ethers.Contract(
-                mailboxAddress,
-                ["function announce(address validator, address signingAddress) external"],
-                multiProvider.getSigner(chain),
-            );
-
-            // Announce the validator
-            const tx = await validatorAnnounceContract.announce(validatorAddress, signingAddress);
-
-            const receipt = await tx.wait();
+            // const data = encodeFunctionData({
+            //     abi: hyperlaneABI,
+            //     functionName: 'announce',
+            //     args: [
+            //         validatorAddress as `0x${string}`,
+            //         storageLocation, // e.g., "file:///tmp/hyperlane-validator-signatures-local"
+            //         signature: ,
+            //     ],
+            // });
+            
+            const txReceipt = await walletClient.sendTransaction({
+                to: chainAddresses[chain].validatorAnnounce,
+                // data: data,
+                abi: hyperlaneABI,
+                functionName: 'announce',
+                args: [
+                    validatorAddress as `0x${string}`,
+                    signingAddress as `0x${string}`,
+                ],
+            });
 
             return JSON.stringify(
                 {
@@ -708,7 +760,7 @@ export class HyperlaneService {
                         validatorAddress,
                         signingAddress,
                         mailboxAddress,
-                        transactionHash: receipt.transactionHash,
+                        // transactionHash: txReceipt.hash,
                     },
                 },
                 null,
@@ -802,7 +854,7 @@ export class HyperlaneService {
             );
         } catch (err) {
             if (err instanceof Error) {
-                err.message = `Failed to configure relayer: ${err.message}\nParameters: ${JSON.stringify(parameters, null, 2)}`;
+                err.message = `Failed to configure relayer: ${err.message}\nParameters: ${stringifyWithBigInts(parameters)}`;
                 throw err;
             }
             throw new Error(
@@ -1155,8 +1207,8 @@ function createMultiProviderSingleton() {
             const multiProvider = new MultiProvider<ChainMetadata>(chainMetadata);
 
             if (walletClient) {
-                // const signer = new EVMWalletClientSigner(walletClient);
-                const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string);
+                const signer = new EVMWalletClientSigner(walletClient);
+                // const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string);
                 multiProvider.setSharedSigner(signer);
             }
 
