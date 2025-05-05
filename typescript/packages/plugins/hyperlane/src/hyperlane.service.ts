@@ -1,6 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMReadResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { chainAddresses, GithubRegistry } from "@hyperlane-xyz/registry";
+import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
     CoreConfig,
@@ -21,11 +21,11 @@ import {
     isCollateralTokenConfig,
     isTokenMetadata,
 } from "@hyperlane-xyz/sdk";
-import { ValidatorAnnounce } from "@hyperlane-xyz/core";
 import { EvmIsmReader } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
 import { ethers, utils } from "ethers";
+import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
 import hyperlaneABI from "./abi/hyperlane.abi";
 import {
     HyperlaneAnnounceValidatorParameters,
@@ -42,8 +42,6 @@ import {
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
-import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
-import { encodeFunctionData } from "viem";
 
 const REGISTRY_URL = "https://github.com/hyperlane-xyz/hyperlane-registry";
 const REGISTRY_PROXY_URL = "https://proxy.hyperlane.xyz";
@@ -63,12 +61,8 @@ interface DeployedContracts {
     [key: string]: string | undefined;
 }
 
-function stringifyWithBigInts(obj: any, space = 2): string {
-    return JSON.stringify(
-      obj,
-      (_, value) => (typeof value === "bigint" ? value.toString() : value),
-      space
-    );
+function stringifyWithBigInts(obj: object, space = 2): string {
+    return JSON.stringify(obj, (_, value) => (typeof value === "bigint" ? value.toString() : value), space);
 }
 
 export class HyperlaneService {
@@ -555,38 +549,48 @@ export class HyperlaneService {
         description: "Manage validator set for multisig ISM",
     })
     async manageValidators(walletClient: EVMWalletClient, parameters: HyperlaneValidatorParameters) {
-        const { multiProvider, registry } = await getMultiProvider(walletClient);
-
         try {
             const { chain, action, validator, weight } = parameters;
-            const signer = multiProvider.getSigner(chain);
 
             // Create transaction based on action
             // biome-ignore lint/suspicious/noExplicitAny: na
             let tx: any;
-            const multisigContract = new ethers.Contract(
-                validator,
-                [
-                    "function addValidator(address validator, uint256 weight) external",
-                    "function removeValidator(address validator) external",
-                    "function updateValidatorWeight(address validator, uint256 weight) external",
-                ],
-                signer,
-            );
 
             switch (action) {
                 case "ADD":
-                    tx = await multisigContract.addValidator(validator, weight || 1);
+                    tx = await walletClient.sendTransaction({
+                        to: validator,
+                        abi: hyperlaneABI,
+                        functionName: "addValidator",
+                        args: [validator, weight || 1],
+                        // value: 0,
+                        // options: 
+                        // data
+                    })
                     break;
                 case "REMOVE":
-                    tx = await multisigContract.removeValidator(validator);
+                    tx = await walletClient.sendTransaction({
+                        to: validator,
+                        abi: hyperlaneABI,
+                        functionName: "removeValidator",
+                        // args: [validator, weight || 1],
+                        // value: 0,
+                        // options: 
+                        // data
+                    })
                     break;
                 case "UPDATE":
-                    tx = await multisigContract.updateValidatorWeight(validator, weight || 1);
+                    tx = await walletClient.sendTransaction({
+                        to: validator,
+                        abi: hyperlaneABI,
+                        functionName: "updateValidatorWeight",
+                        // args: [validator, weight || 1],
+                        // value: 0,
+                        // options: 
+                        // data
+                    })
                     break;
             }
-
-            const receipt = await tx.wait();
 
             return JSON.stringify(
                 {
@@ -596,7 +600,7 @@ export class HyperlaneService {
                         action,
                         validator,
                         weight,
-                        transactionHash: receipt.transactionHash,
+                        transactionHash: tx.transactionHash,
                     },
                 },
                 null,
@@ -651,7 +655,7 @@ export class HyperlaneService {
                             isVerified?: boolean;
                         };
                     };
-                }
+                };
             } = {
                 chain,
                 status: "SECURE",
@@ -740,16 +744,13 @@ export class HyperlaneService {
             //         signature: ,
             //     ],
             // });
-            
+
             const txReceipt = await walletClient.sendTransaction({
                 to: chainAddresses[chain].validatorAnnounce,
                 // data: data,
                 abi: hyperlaneABI,
-                functionName: 'announce',
-                args: [
-                    validatorAddress as `0x${string}`,
-                    signingAddress as `0x${string}`,
-                ],
+                functionName: "announce",
+                args: [validatorAddress as `0x${string}`, signingAddress as `0x${string}`],
             });
 
             return JSON.stringify(

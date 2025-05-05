@@ -28,12 +28,12 @@ export default [
         outputs: [{ type: "uint256", name: "" }],
     },
     {
-        type: 'function',
-        name: 'announce',
-        stateMutability: 'nonpayable',
+        type: "function",
+        name: "announce",
+        stateMutability: "nonpayable",
         inputs: [
-          { name: 'validator', type: 'address' },
-          { name: 'signingAddress', type: 'address' },
+            { name: "validator", type: "address" },
+            { name: "signingAddress", type: "address" },
         ],
         outputs: [],
     },
@@ -42,15 +42,44 @@ export default [
         name: "getAnnouncedStorageLocations",
         stateMutability: "view",
         inputs: [
-          {
-            name: "_validators",
-            type: "address[]",
-          },
+            {
+                name: "_validators",
+                type: "address[]",
+            },
         ],
         outputs: [
-          {
-            type: "string[][]",
-          },
+            {
+                type: "string[][]",
+            },
         ],
     },
+    {
+        type: "function",
+        name: "addValidator",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "validator", type: "address" },
+          { name: "weight", type: "uint256" },
+        ],
+        outputs: [],
+      },
+      {
+        type: "function",
+        name: "removeValidator",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "validator", type: "address" },
+        ],
+        outputs: [],
+      },
+      {
+        type: "function",
+        name: "updateValidatorWeight",
+        stateMutability: "nonpayable",
+        inputs: [
+          { name: "validator", type: "address" },
+          { name: "weight", type: "uint256" },
+        ],
+        outputs: [],
+      },
 ] as const;
