@@ -7,7 +7,7 @@
 
 # Lulo GOAT Plugin
 
-Deposit USDC on [Lulo](https://lulo.xyz/).
+Deposit USDC on [Lulo](https://lulo.fi/).
 
 ## Installation
 
@@ -33,6 +33,7 @@ const tools = await getOnChainTools({
 
 ## Tools
 - Deposit USDC
+- Withdraw any supported token by ticker or mint address
 
 <footer>
 <br/>
