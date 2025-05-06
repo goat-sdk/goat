@@ -7,7 +7,7 @@
 
 # Lulo GOAT Plugin
 
-Deposit USDC on [Lulo](https://lulo.fi/).
+Deposit and withdraw USDC on [Lulo](https://lulo.fi/).
 
 ## Installation
 

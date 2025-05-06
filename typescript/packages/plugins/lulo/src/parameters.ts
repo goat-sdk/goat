@@ -5,10 +5,10 @@ export class DepositUSDCParameters extends createToolParameters(
     z.object({
         amount: z.string().describe("Amount of USDC to deposit"),
     }),
-) { }
+) {}
 
 export class WithdrawTokenParameters extends createToolParameters(
     z.object({
         amount: z.string().describe("Amount of USDC to withdraw"),
     }),
-) { }
+) {}
