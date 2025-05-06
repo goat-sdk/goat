@@ -33,7 +33,7 @@ const tools = await getOnChainTools({
 
 ## Tools
 - Deposit USDC
-- Withdraw any supported token by ticker or mint address
+- Withdraw USDC
 
 <footer>
 <br/>
