@@ -54,11 +54,12 @@ export class LitEVMWalletClient extends EVMWalletClient {
         };
     }
 
-    private async waitForReceipt(hash: `0x${string}`): Promise<{ hash: string; status: string }> {
+    private async waitForReceipt(hash: `0x${string}`) {
         const receipt = await this.viemPublicClient.waitForTransactionReceipt({
             hash,
         });
         return {
+            ...receipt,
             hash: receipt.transactionHash,
             status: receipt.status ? "success" : "failure",
         };
@@ -103,7 +104,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
         };
     }
 
-    async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
+    async sendTransaction(transaction: EVMTransaction) {
         const { to, abi, functionName, args, value } = transaction;
         const toAddress = to as `0x${string}`;
 
