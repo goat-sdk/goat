@@ -76,7 +76,7 @@ importers:
         version: 1.0.3
       viem:
         specifier: 2.22.19
-        version: 2.22.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.22.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.3)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -406,6 +406,39 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.7
+      viem:
+        specifier: 2.23.4
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+
+  examples/by-use-case/1shot-mint:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ~1.0.4
+        version: 1.0.20(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-1shot':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/1shot
+      '@goat-sdk/wallet-evm':
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
+      ai:
+        specifier: 4.0.3
+        version: 4.0.3(react@18.3.1)(zod@3.23.8)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.5.0
       viem:
         specifier: 2.23.4
         version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -1323,7 +1356,7 @@ importers:
         version: 1.0.4
       zod-to-json-schema:
         specifier: 'catalog:'
-        version: 3.23.5(zod@3.24.2)
+        version: 3.23.5(zod@3.24.3)
 
   packages/adapters/vercel-ai:
     dependencies:
@@ -1371,6 +1404,21 @@ importers:
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../wallets/evm
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
+  packages/plugins/1shot:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      '@uxly/1shot-client':
+        specifier: 1.0.4
+        version: 1.0.4
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -2639,7 +2687,7 @@ importers:
         version: 5.7.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       viem:
         specifier: 'catalog:'
-        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3)
     devDependencies:
       '@lit-protocol/types':
         specifier: 'catalog:'
@@ -2739,7 +2787,7 @@ importers:
         version: link:../evm
       viem:
         specifier: 'catalog:'
-        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.2)
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3)
 
   packages/wallets/zetrix:
     dependencies:
@@ -6957,6 +7005,7 @@ packages:
 
   '@mixedbread-ai/sdk@2.2.11':
     resolution: {integrity: sha512-NJiY6BVPR+s/DTzUPQS1Pv418trOmII/8hftmIqxXlYaKbIrgJimQfwCW9M6Y21YPcMA8zTQGYZHm4IWlMjIQw==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@modelcontextprotocol/sdk@1.0.4':
     resolution: {integrity: sha512-C+jw1lF6HSGzs7EZpzHbXfzz9rj9him4BaoumlTciW/IDDgIpweF/qiCWKlP02QKg5PPcgY6xY2WCt5y2tpYow==}
@@ -7111,6 +7160,9 @@ packages:
 
   '@noble/ed25519@2.0.0':
     resolution: {integrity: sha512-/extjhkwFupyopDrt80OMWKdLgP429qLZj+z6sYJz90rF2Iz0gjZh2ArMKPImUl13Kx+0EXI2hN9T/KJV0/Zng==}
+
+  '@noble/ed25519@2.2.3':
+    resolution: {integrity: sha512-iHV8eI2mRcUmOx159QNrU8vTpQ/Xm70yJ2cTk3Trc86++02usfqFoNl6x0p3JN81ZDS/1gx6xiK0OwrgqCT43g==}
 
   '@noble/hashes@1.1.2':
     resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
@@ -9586,6 +9638,9 @@ packages:
   '@upstash/vector@1.1.7':
     resolution: {integrity: sha512-yxgXdH/Z2uX8XUVrLeo6ZNci2Z8EzXGwjIZ8EZwctF5+oiBIKwz8tsh/yUesyGrbuQ+ViBPGtZWV5vLFbp649w==}
 
+  '@uxly/1shot-client@1.0.4':
+    resolution: {integrity: sha512-8gbWgMjUcQ4g+vR4vVKfux6WE7KnL+jZPiOJPjWnYZPXx48r33qNsntWKo3P6Vn2uHnl3grPlO5ksE0RvBaqtg==}
+
   '@vitest/expect@2.1.9':
     resolution: {integrity: sha512-UJCIkTBenHeKT1TTlKMJWy1laZewsRIzYighyYiJKZreqtdxSos/S1t+ktRMQWu2CKqaarrkeszJx1cgC5tGZw==}
 
@@ -9701,12 +9756,15 @@ packages:
 
   '@walletconnect/ethereum-provider@2.11.2':
     resolution: {integrity: sha512-BUDqee0Uy2rCZVkW5Ao3q6Ado/3fePYnFdryVF+YL6bPhj+xQZ5OfKodl+uvs7Rwq++O5wTX2RqOTzpW7+v+Mg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.17.0':
     resolution: {integrity: sha512-b+KTAXOb6JjoxkwpgYQQKPUcTwENGmdEdZoIDLeRicUmZTn/IQKfkMoC2frClB4YxkyoVMtj1oMV2JAax+yu9A==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.9.2':
     resolution: {integrity: sha512-eO1dkhZffV1g7vpG19XUJTw09M/bwGUwwhy1mJ3AOPbOSbMPvwiCuRz2Kbtm1g9B0Jv15Dl+TvJ9vTgYF8zoZg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
     peerDependencies:
       '@walletconnect/modal': '>=2'
     peerDependenciesMeta:
@@ -14570,6 +14628,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch-native@1.6.4:
     resolution: {integrity: sha512-IhOigYzAKHd244OC0JIMIUrjzctirCmPkaIfhDeGcEETWof5zKYUW7e7MYvChGWh/4CJeXEgsRyGzuF334rOOQ==}
@@ -18093,6 +18152,9 @@ packages:
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
+  zod@3.24.3:
+    resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
+
   zustand@5.0.0:
     resolution: {integrity: sha512-LE+VcmbartOPM+auOjCCLQOsQ05zUTp8RkgwRzefUk+2jISdMMFnxvyTjA4YNWr5ZGXYbVsEMZosttuxUBkojQ==}
     engines: {node: '>=12.20.0'}
@@ -18206,7 +18268,7 @@ snapshots:
     dependencies:
       '@ai-sdk/provider': 1.0.1
       eventsource-parser: 3.0.0
-      nanoid: 3.3.9
+      nanoid: 3.3.11
       secure-json-parse: 2.7.0
     optionalDependencies:
       zod: 3.23.8
@@ -18251,12 +18313,12 @@ snapshots:
       secure-json-parse: 2.7.0
       zod: 3.24.1
 
-  '@ai-sdk/provider-utils@2.2.6(zod@3.24.2)':
+  '@ai-sdk/provider-utils@2.2.6(zod@3.24.3)':
     dependencies:
       '@ai-sdk/provider': 1.1.2
       nanoid: 3.3.9
       secure-json-parse: 2.7.0
-      zod: 3.24.2
+      zod: 3.24.3
 
   '@ai-sdk/provider@0.0.24':
     dependencies:
@@ -18346,15 +18408,15 @@ snapshots:
     optionalDependencies:
       zod: 3.24.1
 
-  '@ai-sdk/react@1.2.8(react@18.3.1)(zod@3.24.2)':
+  '@ai-sdk/react@1.2.8(react@18.3.1)(zod@3.24.3)':
     dependencies:
-      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.2)
-      '@ai-sdk/ui-utils': 1.2.7(zod@3.24.2)
+      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.3)
+      '@ai-sdk/ui-utils': 1.2.7(zod@3.24.3)
       react: 18.3.1
       swr: 2.3.3(react@18.3.1)
       throttleit: 2.1.0
     optionalDependencies:
-      zod: 3.24.2
+      zod: 3.24.3
 
   '@ai-sdk/solid@0.0.54(zod@3.23.8)':
     dependencies:
@@ -18420,12 +18482,12 @@ snapshots:
       zod: 3.24.1
       zod-to-json-schema: 3.24.1(zod@3.24.1)
 
-  '@ai-sdk/ui-utils@1.2.7(zod@3.24.2)':
+  '@ai-sdk/ui-utils@1.2.7(zod@3.24.3)':
     dependencies:
       '@ai-sdk/provider': 1.1.2
-      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.2)
-      zod: 3.24.2
-      zod-to-json-schema: 3.24.1(zod@3.24.2)
+      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.3)
+      zod: 3.24.3
+      zod-to-json-schema: 3.24.1(zod@3.24.3)
 
   '@ai-sdk/vue@0.0.59(vue@3.5.13(typescript@5.8.2))(zod@3.23.8)':
     dependencies:
@@ -25166,7 +25228,7 @@ snapshots:
       '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.30.0
-      ai: 4.3.5(react@18.3.1)(zod@3.24.2)
+      ai: 4.3.5(react@18.3.1)(zod@3.24.3)
       cohere-ai: 7.16.0(@aws-sdk/client-sso-oidc@3.721.0(@aws-sdk/client-sts@3.721.0))(encoding@0.1.13)
       date-fns: 3.6.0
       dotenv: 16.5.0
@@ -25178,7 +25240,7 @@ snapshots:
       radash: 12.1.0
       sift: 17.1.3
       xstate: 5.19.2
-      zod: 3.24.2
+      zod: 3.24.3
     transitivePeerDependencies:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
@@ -25210,7 +25272,7 @@ snapshots:
       rollup-plugin-esbuild: 6.2.1(esbuild@0.25.1)(rollup@4.37.0)
       rollup-plugin-node-externals: 8.0.0(rollup@4.37.0)
       typescript-paths: 1.5.1(typescript@5.8.2)
-      zod: 3.24.2
+      zod: 3.24.3
     transitivePeerDependencies:
       - '@aws-sdk/client-sso-oidc'
       - aws-crt
@@ -25871,6 +25933,8 @@ snapshots:
   '@noble/ed25519@1.7.3': {}
 
   '@noble/ed25519@2.0.0': {}
+
+  '@noble/ed25519@2.2.3': {}
 
   '@noble/hashes@1.1.2': {}
 
@@ -29419,6 +29483,12 @@ snapshots:
 
   '@upstash/vector@1.1.7': {}
 
+  '@uxly/1shot-client@1.0.4':
+    dependencies:
+      '@noble/ed25519': 2.2.3
+      '@noble/hashes': 1.7.1
+      zod: 3.24.3
+
   '@vitest/expect@2.1.9':
     dependencies:
       '@vitest/spy': 2.1.9
@@ -30612,10 +30682,10 @@ snapshots:
       typescript: 5.6.3
       zod: 3.23.8
 
-  abitype@1.0.8(typescript@5.6.3)(zod@3.24.2):
+  abitype@1.0.8(typescript@5.6.3)(zod@3.24.3):
     optionalDependencies:
       typescript: 5.6.3
-      zod: 3.24.2
+      zod: 3.24.3
 
   abitype@1.0.8(typescript@5.8.2)(zod@3.23.8):
     optionalDependencies:
@@ -30627,10 +30697,10 @@ snapshots:
       typescript: 5.8.2
       zod: 3.24.1
 
-  abitype@1.0.8(typescript@5.8.2)(zod@3.24.2):
+  abitype@1.0.8(typescript@5.8.2)(zod@3.24.3):
     optionalDependencies:
       typescript: 5.8.2
-      zod: 3.24.2
+      zod: 3.24.3
 
   abort-controller-x@0.4.3: {}
 
@@ -30776,15 +30846,15 @@ snapshots:
     optionalDependencies:
       react: 18.3.1
 
-  ai@4.3.5(react@18.3.1)(zod@3.24.2):
+  ai@4.3.5(react@18.3.1)(zod@3.24.3):
     dependencies:
       '@ai-sdk/provider': 1.1.2
-      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.2)
-      '@ai-sdk/react': 1.2.8(react@18.3.1)(zod@3.24.2)
-      '@ai-sdk/ui-utils': 1.2.7(zod@3.24.2)
+      '@ai-sdk/provider-utils': 2.2.6(zod@3.24.3)
+      '@ai-sdk/react': 1.2.8(react@18.3.1)(zod@3.24.3)
+      '@ai-sdk/ui-utils': 1.2.7(zod@3.24.3)
       '@opentelemetry/api': 1.9.0
       jsondiffpatch: 0.6.0
-      zod: 3.24.2
+      zod: 3.24.3
     optionalDependencies:
       react: 18.3.1
 
@@ -36587,14 +36657,14 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.6.7(typescript@5.6.3)(zod@3.24.2):
+  ox@0.6.7(typescript@5.6.3)(zod@3.24.3):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.6.3)(zod@3.24.2)
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.24.3)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.6.3
@@ -36629,14 +36699,14 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.6.7(typescript@5.8.2)(zod@3.24.2):
+  ox@0.6.7(typescript@5.8.2)(zod@3.24.3):
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.8.2)(zod@3.24.2)
+      abitype: 1.0.8(typescript@5.8.2)(zod@3.24.3)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.8.2
@@ -39592,15 +39662,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.22.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.2):
+  viem@2.22.19(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.24.3):
     dependencies:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.6.3)(zod@3.24.2)
+      abitype: 1.0.8(typescript@5.6.3)(zod@3.24.3)
       isows: 1.0.6(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      ox: 0.6.7(typescript@5.6.3)(zod@3.24.2)
+      ox: 0.6.7(typescript@5.6.3)(zod@3.24.3)
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:
       typescript: 5.6.3
@@ -39677,15 +39747,15 @@ snapshots:
       - utf-8-validate
       - zod
 
-  viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.2):
+  viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.24.3):
     dependencies:
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
-      abitype: 1.0.8(typescript@5.8.2)(zod@3.24.2)
+      abitype: 1.0.8(typescript@5.8.2)(zod@3.24.3)
       isows: 1.0.6(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      ox: 0.6.7(typescript@5.8.2)(zod@3.24.2)
+      ox: 0.6.7(typescript@5.8.2)(zod@3.24.3)
       ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
     optionalDependencies:
       typescript: 5.8.2
@@ -40892,9 +40962,9 @@ snapshots:
     dependencies:
       zod: 3.23.8
 
-  zod-to-json-schema@3.23.5(zod@3.24.2):
+  zod-to-json-schema@3.23.5(zod@3.24.3):
     dependencies:
-      zod: 3.24.2
+      zod: 3.24.3
 
   zod-to-json-schema@3.24.1(zod@3.23.8):
     dependencies:
@@ -40908,6 +40978,10 @@ snapshots:
     dependencies:
       zod: 3.24.2
 
+  zod-to-json-schema@3.24.1(zod@3.24.3):
+    dependencies:
+      zod: 3.24.3
+
   zod-to-json-schema@3.24.5(zod@3.24.2):
     dependencies:
       zod: 3.24.2
@@ -40919,6 +40993,8 @@ snapshots:
   zod@3.24.1: {}
 
   zod@3.24.2: {}
+
+  zod@3.24.3: {}
 
   zustand@5.0.0(@types/react@18.3.18)(react@18.3.1)(use-sync-external-store@1.2.0(react@18.3.1)):
     optionalDependencies:
