@@ -1,0 +1,22 @@
+{
+    "name": "token-discovery-with-coingecko",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "tsx watch index.ts",
+        "start": "tsx index.ts",
+        "lint": "eslint index.ts"
+    },
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-coingecko-token-discovery": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
+        "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.56.0",
+        "tsx": "^4.6.2",
+        "typescript": "^5.3.3"
+    }
+}
