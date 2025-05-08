@@ -1,7 +1,7 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { OneShotClient } from "@uxly/1shot-client";
-import { ListEscrowWalletsParams, ListTransactionsParams } from "./parameters.js";
+import { CreateTransactionParams, ListEscrowWalletsParams, ListTransactionsParams } from "./parameters.js";
 
 export class TransactionService {
     public constructor(
@@ -15,6 +15,16 @@ export class TransactionService {
     })
     async listTransactions(_walletClient: EVMWalletClient, parameters: ListTransactionsParams) {
         const transactions = await this.oneShotClient.transactions.list(this.businessId, parameters);
+        console.log(transactions);
+        return transactions;
+    }
+
+    @Tool({
+        name: "create_transaction",
+        description: "Adds a trans ",
+    })
+    async createTransaction(_walletClient: EVMWalletClient, parameters: CreateTransactionParams) {
+        const transactions = await this.oneShotClient.transactions.create(this.businessId, parameters);
         console.log(transactions);
         return transactions;
     }
