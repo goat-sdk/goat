@@ -38,16 +38,25 @@ export class OneShotPlugin extends PluginBase {
                 createTool(
                     {
                         name: this.sanitizeToSafeString(endpoint.name),
+                        // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
                         description: endpoint.description,
                         parameters: endpointSchema,
                     },
                     async (params) => {
-                        // Execute the endpoint
-                        const response = await this.client.transactions.execute(this.businessId, {
-                            ...params,
-                        });
-
-                        console.log(response);
+                        // Depending on the endpoint type, we need to either execute or read
+                        if (endpoint.stateMutability === "pure" || endpoint.stateMutability === "view") {
+                            // Read from the endpoint
+                            const response = await this.client.transactions.read(this.businessId, {
+                                ...params,
+                            });
+                            console.log(response);
+                        } else {
+                            // Execute the endpoint
+                            const response = await this.client.transactions.execute(this.businessId, {
+                                ...params,
+                            });
+                            console.log(response);
+                        }
                     },
                 ),
             );
