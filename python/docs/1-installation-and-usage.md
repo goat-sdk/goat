@@ -14,12 +14,6 @@ pip install goat-sdk
 pip install goat-sdk-wallet-solana
 ```
 
-3. Install the plugins for the protocols you need (see all available plugins [here](https://github.com/goat-sdk/goat/tree/main#tools))
-
-```bash
-pip install goat-sdk-plugin-spl-token
-```
-
 1. Install the adapter for the agent framework you want to use (see all available adapters [here](https://github.com/goat-sdk/goat/tree/main#agent-frameworks))
 
 ```bash
@@ -42,16 +36,10 @@ wallet = solana(client, keypair)
 2. Configure your tools for the framework you want to use
 
 ```python
-# Initialize SPL Token plugin
-spl_token_plugin = spl_token(SplTokenPluginOptions(
-    network="devnet",  # Using devnet as specified in .env
-    tokens=SPL_TOKENS
-))
-
 # Initialize tools with Solana wallet
 tools = get_on_chain_tools(
     wallet=wallet,
-    plugins=[spl_token_plugin]
+    plugins=[]
 )
 ```
 

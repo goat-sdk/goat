@@ -10,6 +10,7 @@
 Swap tokens on [Velodrome](https://velodrome.finance/).
 
 ## Installation
+
 ```
 npm install @goat-sdk/plugin-velodrome
 yarn add @goat-sdk/plugin-velodrome
@@ -17,6 +18,7 @@ pnpm add @goat-sdk/plugin-velodrome
 ```
 
 ## Usage
+
 ```typescript
 import { velodrome } from "@goat-sdk/plugin-velodrome";
 
@@ -31,18 +33,18 @@ const tools = await getOnChainTools({
 For improved integration to work seamlessly with the ERC20 plugin, you can configure your tools as follows:
 
 ```typescript
-import { MODE, erc20 } from "@goat-sdk/plugin-erc20";
 import { modeGovernance } from "@goat-sdk/plugin-mode-governance";
 
 const tools = await getOnChainTools({
     wallet: // ...
     plugins: [
-        erc20({ tokens: [MODE] }),
         modeGovernance()
     ]
 });
 ```
+
 ## Tools
+
 - Add liquidity
 - Swap tokens
 

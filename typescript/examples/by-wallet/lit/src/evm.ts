@@ -3,13 +3,10 @@ import { ChatOpenAI } from "@langchain/openai";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
 
-import { http } from "viem";
-import { createWalletClient } from "viem";
+import { http, createWalletClient } from "viem";
 import { sepolia } from "viem/chains";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { sendETH } from "@goat-sdk/wallet-evm";
 
 import {
     createEthersWallet,
@@ -105,7 +102,7 @@ const llm = new ChatOpenAI({
 
     const tools = await getOnChainTools({
         wallet: litWallet,
-        plugins: [sendETH(), erc20({ tokens: [USDC, PEPE] })],
+        plugins: [],
     });
 
     const agent = await createStructuredChatAgent({
