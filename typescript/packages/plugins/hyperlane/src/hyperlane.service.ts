@@ -1,17 +1,13 @@
 import { Tool } from "@goat-sdk/core";
-import { EVMReadResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { EVMTransactionResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMetadata,
-    CoreConfig,
-    HookType,
     HypERC20Deployer,
     HyperlaneContractsMap,
     HyperlaneCore,
-    HyperlaneCoreDeployer,
     HyperlaneFactories,
     HyperlaneIsmFactory,
-    IsmType,
     MultiProvider,
     TOKEN_TYPE_TO_STANDARD,
     TokenFactories,
@@ -23,7 +19,7 @@ import {
 } from "@hyperlane-xyz/sdk";
 import { ProtocolType } from "@hyperlane-xyz/utils";
 import { assert } from "@hyperlane-xyz/utils";
-import { ethers, utils } from "ethers";
+import { utils } from "ethers";
 import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
 import hyperlaneABI from "./abi/hyperlane.abi";
 import {
@@ -59,7 +55,6 @@ function stringifyWithBigInts(obj: object, space = 2): string {
 }
 
 export class HyperlaneService {
-
     @Tool({
         name: "hyperlane_send_message",
         description: "Send a message from one chain to another using Hyperlane",
@@ -486,8 +481,7 @@ export class HyperlaneService {
             const { chain, action, validator, weight } = parameters;
 
             // Create transaction based on action
-            // biome-ignore lint/suspicious/noExplicitAny: na
-            let tx: any;
+            let tx: EVMTransactionResult;
 
             switch (action) {
                 case "ADD":
@@ -497,9 +491,9 @@ export class HyperlaneService {
                         functionName: "addValidator",
                         args: [validator, weight || 1],
                         // value: 0,
-                        // options: 
+                        // options:
                         // data
-                    })
+                    });
                     break;
                 case "REMOVE":
                     tx = await walletClient.sendTransaction({
@@ -508,9 +502,9 @@ export class HyperlaneService {
                         functionName: "removeValidator",
                         // args: [validator, weight || 1],
                         // value: 0,
-                        // options: 
+                        // options:
                         // data
-                    })
+                    });
                     break;
                 case "UPDATE":
                     tx = await walletClient.sendTransaction({
@@ -519,9 +513,9 @@ export class HyperlaneService {
                         functionName: "updateValidatorWeight",
                         // args: [validator, weight || 1],
                         // value: 0,
-                        // options: 
+                        // options:
                         // data
-                    })
+                    });
                     break;
             }
 
@@ -633,17 +627,6 @@ export class HyperlaneService {
             }
             throw new Error(`Failed to get tokens: ${String(err)}\nParameters: ${JSON.stringify(parameters, null, 2)}`);
         }
-    }
-
-    private async getProvider(chain: string): Promise<ethers.providers.JsonRpcProvider> {
-        const { multiProvider } = await getMultiProvider();
-        const provider = multiProvider.getProvider(chain);
-        // biome-ignore lint/suspicious/noExplicitAny: na
-        const rpcUrl = (provider as any).connection?.url;
-        if (!rpcUrl) {
-            throw new Error(`Could not get RPC URL for chain ${chain}`);
-        }
-        return new ethers.providers.JsonRpcProvider(rpcUrl);
     }
 
     private async getDomainId(chain: string): Promise<number | undefined> {
