@@ -15,7 +15,6 @@ export class TransactionService {
     })
     async listTransactions(_walletClient: EVMWalletClient, parameters: ListTransactionsParams) {
         const transactions = await this.oneShotClient.transactions.list(this.businessId, parameters);
-        console.log(transactions);
         return transactions;
     }
 
@@ -25,7 +24,6 @@ export class TransactionService {
     })
     async createTransaction(_walletClient: EVMWalletClient, parameters: CreateTransactionParams) {
         const transactions = await this.oneShotClient.transactions.create(this.businessId, parameters);
-        console.log(transactions);
         return transactions;
     }
 
@@ -35,7 +33,6 @@ export class TransactionService {
     })
     async listEscrowWallets(_walletClient: EVMWalletClient, parameters: ListEscrowWalletsParams) {
         const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);
-        console.log(wallets);
         return wallets;
     }
 }
