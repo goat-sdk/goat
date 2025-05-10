@@ -24,7 +24,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "@goat-sdk/wallet-evm": "workspace:*",
-        "@uxly/1shot-client": "1.0.13",
+        "@uxly/1shot-client": "1.0.17",
         "zod": "catalog:"
     },
     "peerDependencies": {

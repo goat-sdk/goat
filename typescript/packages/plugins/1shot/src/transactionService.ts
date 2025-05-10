@@ -1,13 +1,136 @@
-import { Tool } from "@goat-sdk/core";
+import { createTool, Tool, ToolBase } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient } from "@uxly/1shot-client";
-import { CreateTransactionParams, ListEscrowWalletsParams, ListTransactionsParams } from "./parameters.js";
+import { OneShotClient, SolidityStructParam, Transaction, transactionSchema } from "@uxly/1shot-client";
+import { AddTransactionToToolsParams, CreateTransactionParams, GetTransactionExecutionParams, ListEscrowWalletsParams, ListTransactionExecutionsParams, ListTransactionsParams } from "./parameters.js";
+import { z, ZodTypeAny } from "zod";
 
 export class TransactionService {
     public constructor(
         protected readonly oneShotClient: OneShotClient,
         protected readonly businessId: string,
-    ) {}
+    ) { }
+
+    protected workingEndpoints: Transaction[] = [];
+
+    public async getTools(): Promise<ToolBase[]> {
+        const tools = new Array<ToolBase>();
+
+        // Add each endpoint as a tool
+        for (const endpoint of this.workingEndpoints) {
+            // Create the parameters for the endpoint
+            const endpointSchema = this.buildTransactionParamSchema(endpoint);
+
+            // Every endpoint has a test tool
+            tools.push(
+                createTool(
+                    {
+                        name: this.sanitizeToSafeString(`test_${endpoint.name}`),
+                        // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
+                        description: `Tests the endpoint without actually executing it. This is useful for debugging and testing. No funds will be spend but the transaction is simulated. Endpoint description: ${endpoint.description}`,
+                        parameters: endpointSchema,
+                    },
+                    async (params) => {
+
+                        // Execute the endpoint
+                        const response = await this.oneShotClient.transactions.test(endpoint.id, {
+                            ...params,
+                        });
+                        console.log(response);
+                        return response;
+                    },
+                ),
+            );
+
+            // Write endpoints get an execute and estimate tool
+            if (endpoint.stateMutability === "payable" || endpoint.stateMutability === "nonpayable") {
+                tools.push(
+                    createTool(
+                        {
+                            name: this.sanitizeToSafeString(`execute_${endpoint.name}`),
+                            // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
+                            description: `This will call the endpoint ${endpoint.name} with the given parameters which will perform a blockchain transaction. 
+                        Endpoints have a predefined escrow wallet, so the escrow wallet ID should only be provided if the user wants to change the default wallet.
+                        1Shot transactions do not require any local wallet or signatures, the keys are managed by the 1Shot service.
+                        Do not provide any private keys or signatures in the parameters unless the parameters require a signature.
+                        It will return the ExecutionID of the transaction, which can be used to retrieve the transaction status and results.
+                        Endpoint description: ${endpoint.description}`,
+                            parameters: endpointSchema,
+                        },
+                        async (params) => {
+                            // Execute the endpoint
+                            const response = await this.oneShotClient.transactions.execute(endpoint.id, {
+                                ...params,
+                            });
+                            console.log(response);
+                            return response;
+
+                        },
+                    ),
+                );
+
+                tools.push(
+                    createTool(
+                        {
+                            name: this.sanitizeToSafeString(`estimate_${endpoint.name}`),
+                            // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
+                            description: `Retrieve an estimate of the gas required to execute the transaction. 
+                            This will not spend any gas or execute any transactions.
+                            Returns the amount of gas estimated to be spent in wei.
+                            Endpoint description: ${endpoint.description}`,
+                            parameters: endpointSchema,
+                        },
+                        async (params) => {
+
+                            // Execute the endpoint
+                            const response = await this.oneShotClient.transactions.estimate(endpoint.id, {
+                                ...params,
+                            });
+                            console.log(response);
+                            return response;
+                        },
+                    ),
+                );
+            }
+
+            // Read endpoints get a read tool
+            if (endpoint.stateMutability === "view" || endpoint.stateMutability === "pure") {
+                tools.push(
+                    createTool(
+                        {
+                            name: this.sanitizeToSafeString(`read_${endpoint.name}`),
+                            // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
+                            description: `This will call the endpoint ${endpoint.name} with the given parameters and return the result of the smart contract call.
+                        This works for endpoints with the stateMutability of view or pure.
+                        This will not spend any gas or execute any transactions.
+                        Returns the result of the smart contract call, which may be a struct or a single value.
+                        Endpoint description: ${endpoint.description}`,
+                            parameters: endpointSchema,
+                        },
+                        async (params) => {
+                            // Read from the endpoint
+                            const response = await this.oneShotClient.transactions.read(endpoint.id, {
+                                ...params,
+                            });
+                            console.log(response);
+                            return response;
+
+                        },
+                    ),
+                );
+            }
+        }
+
+        return tools;
+    }
+
+    @Tool({
+        name: "add_transaction_to_working_endpoints",
+        description: "Adds a transaction to the list of working endpoints. You can use list_transactions to get transactions that are already configured in 1Shot. If you use use create_transaction to create a new transaction it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
+    })
+    async addTransactionToTools(_walletClient: EVMWalletClient, parameters: AddTransactionToToolsParams) {
+        this.workingEndpoints.push(parameters);
+        return this.workingEndpoints;
+    }
 
     @Tool({
         name: "list_transactions",
@@ -34,5 +157,93 @@ export class TransactionService {
     async listEscrowWallets(_walletClient: EVMWalletClient, parameters: ListEscrowWalletsParams) {
         const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);
         return wallets;
+    }
+
+    @Tool({
+        name: "get_transaction_execution",
+        description: "Get the status and results of a single transaction execution. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
+    })
+    async getTransactionExecution(_walletClient: EVMWalletClient, parameters: GetTransactionExecutionParams) {
+        const execution = await this.oneShotClient.executions.get(parameters.executionId);
+        return execution;
+    }
+
+    @Tool({
+        name: "list_transaction_executions",
+        description: "Returns a paginated list of Transaction Execution objects.. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
+    })
+    async listTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
+        const executions = await this.oneShotClient.executions.list(this.businessId, parameters);
+        return executions;
+    }
+
+
+    // Map Solidity types to Zod schemas
+    protected solidityTypeToZod(param: SolidityStructParam): ZodTypeAny {
+        const baseType = (() => {
+            switch (param.type) {
+                case "address":
+                    // Basic Ethereum address check
+                    return z
+                        .string()
+                        .regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address")
+                        .describe(param.description ?? "Ethereum Address");
+                case "bool":
+                    return z.boolean().describe(param.description ?? "Boolean");
+                case "bytes":
+                    return z
+                        .string()
+                        .regex(/^0x([a-fA-F0-9]{2})+$/, "Invalid bytes string")
+                        .describe(param.description ?? "Bytes");
+                case "int":
+                case "uint":
+                    return z
+                        .string()
+                        .regex(/^\d+$/, "Expected numeric string (uint/int)")
+                        .describe(param.description ?? "Int");
+                case "string":
+                    return z.string().describe(param.description ?? "string");
+                case "struct":
+                    if (!param.typeStruct) {
+                        throw new Error(`Missing typeStruct for struct param: ${param.name}`);
+                    }
+                    return this.buildZodSchemaFromParams(param.typeStruct.params);
+                default:
+                    throw new Error(`Unsupported Solidity type: ${param.type}`);
+            }
+        })();
+
+        // Handle arrays
+        if (param.isArray) {
+            if (param.arraySize != null) {
+                return z.array(baseType).length(param.arraySize);
+            }
+            return z.array(baseType);
+        }
+        return baseType;
+    }
+
+    // Build Zod schema from an array of SolidityStructParam
+    protected buildZodSchemaFromParams(params: SolidityStructParam[]): ZodTypeAny {
+        const shape: Record<string, ZodTypeAny> = {};
+
+        for (const param of params) {
+            // We assume all parameter names are unique in the same struct/function
+            shape[param.name] = this.solidityTypeToZod(param);
+        }
+
+        return z.object(shape);
+    }
+
+    // Create schema for a Transaction's `inputs` field
+
+    protected buildTransactionParamSchema(tx: Transaction): ZodTypeAny {
+        return this.buildZodSchemaFromParams(tx.inputs);
+    }
+
+    protected sanitizeToSafeString(input: string): string {
+        return input
+            .replace(/\s+/g, "_") // replace all whitespace with underscores
+            .replace(/[^a-zA-Z0-9_-]/g, ""); // remove all other non-matching characters
     }
 }

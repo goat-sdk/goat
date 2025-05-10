@@ -43,20 +43,18 @@ const walletClient = createWalletClient({
     chain: mode,
 });
 
-(async () => {
-    // 2. Get your onchain tools for your wallet
-    const tools = await getOnChainTools({
-        wallet: viem(walletClient),
-        plugins: [
-            oneshot(apiKey, apiSecret, businessId), // Full access to everything in 1ShotAPI
-        ],
-    });
+// 1. Create the 1Shot plugin. The plugin can change the tools it has available based on your interactions with the agent,
+// so it must be persistent.
+const oneShotPlugin = oneshot(apiKey, apiSecret, businessId);
 
-    // 3. Create a readline interface to interact with the agent
+(async () => {
+    // 2. Create a readline interface to interact with the agent
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
+
+    
 
     while (true) {
         const prompt = await new Promise<string>((resolve) => {
@@ -67,6 +65,15 @@ const walletClient = createWalletClient({
             rl.close();
             break;
         }
+
+        // 3. Get your available tools. 1Shot tools are dynamic, so they can change based on your interactions with the agent.
+        // That's why you must get the tools each time you interact with the agent.
+        const tools = await getOnChainTools({
+            wallet: viem(walletClient),
+            plugins: [
+                oneShotPlugin, // Full access to everything in 1ShotAPI
+            ],
+        });
 
         console.log("\n-------------------\n");
         console.log("TOOLS CALLED");
