@@ -1,5 +1,12 @@
 import { createToolParameters } from "@goat-sdk/core";
-import { createTransactionSchema, getTransactionExecutionSchema, listEscrowWalletsSchema, listTransactionExecutionsSchema, listTransactionsSchema, transactionSchema } from "@uxly/1shot-client";
+import {
+    createTransactionSchema,
+    getTransactionExecutionSchema,
+    listEscrowWalletsSchema,
+    listTransactionExecutionsSchema,
+    listTransactionsSchema,
+    transactionSchema,
+} from "@uxly/1shot-client";
 
 export class ListTransactionsParams extends createToolParameters(listTransactionsSchema.omit({ businessId: true })) {}
 

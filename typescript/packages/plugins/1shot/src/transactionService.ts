@@ -1,14 +1,21 @@
-import { createTool, Tool, ToolBase } from "@goat-sdk/core";
+import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, Transaction, transactionSchema } from "@uxly/1shot-client";
-import { AddTransactionToToolsParams, CreateTransactionParams, GetTransactionExecutionParams, ListEscrowWalletsParams, ListTransactionExecutionsParams, ListTransactionsParams } from "./parameters.js";
-import { z, ZodTypeAny } from "zod";
+import { OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
+import { ZodTypeAny, z } from "zod";
+import {
+    AddTransactionToToolsParams,
+    CreateTransactionParams,
+    GetTransactionExecutionParams,
+    ListEscrowWalletsParams,
+    ListTransactionExecutionsParams,
+    ListTransactionsParams,
+} from "./parameters.js";
 
 export class TransactionService {
     public constructor(
         protected readonly oneShotClient: OneShotClient,
         protected readonly businessId: string,
-    ) { }
+    ) {}
 
     protected workingEndpoints: Transaction[] = [];
 
@@ -30,7 +37,6 @@ export class TransactionService {
                         parameters: endpointSchema,
                     },
                     async (params) => {
-
                         // Execute the endpoint
                         const response = await this.oneShotClient.transactions.test(endpoint.id, {
                             ...params,
@@ -63,7 +69,6 @@ export class TransactionService {
                             });
                             console.log(response);
                             return response;
-
                         },
                     ),
                 );
@@ -80,7 +85,6 @@ export class TransactionService {
                             parameters: endpointSchema,
                         },
                         async (params) => {
-
                             // Execute the endpoint
                             const response = await this.oneShotClient.transactions.estimate(endpoint.id, {
                                 ...params,
@@ -113,7 +117,6 @@ export class TransactionService {
                             });
                             console.log(response);
                             return response;
-
                         },
                     ),
                 );
@@ -125,7 +128,8 @@ export class TransactionService {
 
     @Tool({
         name: "add_transaction_to_working_endpoints",
-        description: "Adds a transaction to the list of working endpoints. You can use list_transactions to get transactions that are already configured in 1Shot. If you use use create_transaction to create a new transaction it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
+        description:
+            "Adds a transaction to the list of working endpoints. You can use list_transactions to get transactions that are already configured in 1Shot. If you use use create_transaction to create a new transaction it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
     })
     async addTransactionToTools(_walletClient: EVMWalletClient, parameters: AddTransactionToToolsParams) {
         this.workingEndpoints.push(parameters);
@@ -161,7 +165,8 @@ export class TransactionService {
 
     @Tool({
         name: "get_transaction_execution",
-        description: "Get the status and results of a single transaction execution. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
+        description:
+            "Get the status and results of a single transaction execution. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
     })
     async getTransactionExecution(_walletClient: EVMWalletClient, parameters: GetTransactionExecutionParams) {
         const execution = await this.oneShotClient.executions.get(parameters.executionId);
@@ -170,13 +175,13 @@ export class TransactionService {
 
     @Tool({
         name: "list_transaction_executions",
-        description: "Returns a paginated list of Transaction Execution objects.. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
+        description:
+            "Returns a paginated list of Transaction Execution objects.. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
     })
     async listTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
         const executions = await this.oneShotClient.executions.list(this.businessId, parameters);
         return executions;
     }
-
 
     // Map Solidity types to Zod schemas
     protected solidityTypeToZod(param: SolidityStructParam): ZodTypeAny {

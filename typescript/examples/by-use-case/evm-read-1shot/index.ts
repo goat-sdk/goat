@@ -54,8 +54,6 @@ const oneShotPlugin = oneshot(apiKey, apiSecret, businessId);
         output: process.stdout,
     });
 
-    
-
     while (true) {
         const prompt = await new Promise<string>((resolve) => {
             rl.question('Enter your prompt (or "exit" to quit): ', resolve);

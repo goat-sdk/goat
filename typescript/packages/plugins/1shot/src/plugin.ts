@@ -1,5 +1,5 @@
-import { PluginBase, ToolBase, WalletClientBase, createTool } from "@goat-sdk/core";
-import { OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
+import { PluginBase, ToolBase, WalletClientBase } from "@goat-sdk/core";
+import { OneShotClient } from "@uxly/1shot-client";
 import { TransactionService } from "./transactionService.js";
 
 export class OneShotPlugin extends PluginBase {
@@ -11,7 +11,7 @@ export class OneShotPlugin extends PluginBase {
     ) {
         const transactionService = new TransactionService(client, businessId);
         super("1shot", [transactionService]);
-        
+
         this.transactionService = transactionService;
     }
 
