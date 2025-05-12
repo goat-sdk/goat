@@ -1,5 +1,5 @@
 ---
-"@goat-sdk/plugin-lulo": minor
+"@goat-sdk/plugin-lulo": patch
 ---
 
 Add USDC withdrawal functionality to Lulo plugin
