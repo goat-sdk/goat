@@ -213,26 +213,65 @@ function replaceAll(str: string, search: string, replace: string): string {
  */
 export function transformMarketOutcomes<
     T extends {
-        outcomePrices: string;
-        outcomes: string;
-        clobTokenIds: string;
+        outcomePrices?: string; // Mark as potentially optional based on schema change
+        outcomes?: string; // Mark as potentially optional for safety
+        clobTokenIds?: string; // Mark as potentially optional for safety
     },
 >(
     market: T,
-): Omit<T, "outcomePrices" | "clobTokenIds"> & { outcomes: Array<{ price: string; name: string; tokenId: string }> } {
-    const outcomePrices_ = JSON.parse(market.outcomePrices);
-    const outcomes_ = JSON.parse(market.outcomes);
-    const clobTokenIds_ = JSON.parse(market.clobTokenIds);
+): Omit<T, "outcomePrices" | "outcomes" | "clobTokenIds"> & {
+    outcomes: Array<{ price: string; name: string; tokenId: string }>;
+} {
+    // Safely parse outcomePrices
+    let outcomePricesParsed: string[] = [];
+    if (typeof market.outcomePrices === "string" && market.outcomePrices.length > 0) {
+        try {
+            outcomePricesParsed = JSON.parse(market.outcomePrices);
+            // Ensure it's an array after parsing
+            if (!Array.isArray(outcomePricesParsed)) outcomePricesParsed = [];
+        } catch (e) {
+            console.error("[Goat SDK Polymarket] Failed to parse outcomePrices for market:", e);
+            outcomePricesParsed = []; // Default to empty on error
+        }
+    }
 
-    const transformedOutcomes = outcomePrices_.map((price: string, index: number) => ({
-        price,
-        name: outcomes_[index],
-        tokenId: clobTokenIds_[index],
+    // Safely parse outcomes
+    let outcomesParsed: string[] = [];
+    if (typeof market.outcomes === "string" && market.outcomes.length > 0) {
+        try {
+            outcomesParsed = JSON.parse(market.outcomes);
+            if (!Array.isArray(outcomesParsed)) outcomesParsed = [];
+        } catch (e) {
+            console.error("[Goat SDK Polymarket] Failed to parse outcomes for market:", e);
+            outcomesParsed = [];
+        }
+    }
+
+    // Safely parse clobTokenIds
+    let clobTokenIdsParsed: string[] = [];
+    if (typeof market.clobTokenIds === "string" && market.clobTokenIds.length > 0) {
+        try {
+            clobTokenIdsParsed = JSON.parse(market.clobTokenIds);
+            if (!Array.isArray(clobTokenIdsParsed)) clobTokenIdsParsed = [];
+        } catch (e) {
+            console.error("[Goat SDK Polymarket] Failed to parse clobTokenIds for market:", e);
+            clobTokenIdsParsed = [];
+        }
+    }
+
+    // Now map using the safely parsed arrays (or empty arrays)
+    // Ensure arrays have the same length or handle mismatches gracefully
+    const transformedOutcomes = outcomePricesParsed.map((price, index) => ({
+        price: String(price ?? "N/A"), // Ensure price is stringified
+        name: String(outcomesParsed[index] ?? "Unknown"),
+        tokenId: String(clobTokenIdsParsed[index] ?? "Unknown"),
     }));
 
-    const { outcomePrices, clobTokenIds, ...rest } = market;
+    // Destructure original market object *after* processing potentially problematic fields
+    const { outcomePrices, outcomes, clobTokenIds, ...rest } = market;
+
     return {
-        ...rest,
-        outcomes: transformedOutcomes,
+        ...rest, // Keep other market properties
+        outcomes: transformedOutcomes, // Add the transformed outcomes array
     };
 }
