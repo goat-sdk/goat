@@ -20,7 +20,7 @@ export const sendTokenParametersSchema = z.object({
 });
 
 export const getTokenInfoBySymbolParametersSchema = z.object({
-    symbol: z.string().describe("The symbol (ticker) of the token (e.g., 'USDC', 'SOL')."),
+    ticker: z.string().describe("The ticker of the token (e.g., 'USDC', 'SOL')."),
 });
 
 export const convertToBaseUnitsParametersSchema = z.object({

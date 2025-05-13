@@ -101,7 +101,7 @@ export class TokenDiscoveryService {
         walletClient: WalletClientBase,
         parameters: GetTokenInfoByTickerParameters,
     ): Promise<T> {
-        const { ticker } = parameters as unknown as { ticker: string };
+        const { ticker } = parameters;
 
         try {
             const searchResult = (await this.api.request("search", {

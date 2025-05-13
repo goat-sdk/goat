@@ -4,7 +4,7 @@ import { viem } from "@goat-sdk/wallet-viem";
 import { Connection, Keypair } from "@solana/web3.js";
 import base58 from "bs58";
 import { config } from "dotenv";
-import { createWalletClient, http } from "viem";
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 
@@ -55,7 +55,7 @@ async function main() {
 
         console.log("\nLooking up EVM tokens:");
 
-        const evmTokens = ["ETH", "USDC", "PEPE"];
+        const evmTokens = ["USDC", "PEPE"];
 
         for (const ticker of evmTokens) {
             console.log(`\nLooking up ${ticker}...`);
@@ -86,15 +86,17 @@ async function main() {
 
         console.log("\nLooking up Solana tokens:");
 
-        const solTokens = ["SOL", "USDC", "BONK"];
+        const solTokens = ["USDC", "BONK"];
 
-        for (const symbol of solTokens) {
-            console.log(`\nLooking up ${symbol}...`);
+        for (const ticker of solTokens) {
+            console.log(`\nLooking up ${ticker}...`);
             try {
-                const tokenInfo = await getTokenInfoBySymbolToolSolana.execute({ symbol });
-                console.log(`Token info for ${symbol}:`, tokenInfo);
+                const tokenInfo = await getTokenInfoBySymbolToolSolana.execute({
+                    ticker,
+                });
+                console.log(`Token info for ${ticker}:`, tokenInfo);
             } catch (error) {
-                console.error(`Error looking up ${symbol}:`, error);
+                console.error(`Error looking up ${ticker}:`, error);
             }
         }
     } catch (error) {
