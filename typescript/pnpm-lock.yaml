@@ -1055,6 +1055,9 @@ importers:
       '@goat-sdk/wallet-solana':
         specifier: workspace:*
         version: link:../../../packages/wallets/solana
+      '@goat-sdk/wallet-viem':
+        specifier: workspace:*
+        version: link:../../../packages/wallets/viem
       dotenv:
         specifier: ^16.3.1
         version: 16.5.0

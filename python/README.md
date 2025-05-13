@@ -93,10 +93,6 @@ GOAT is free software, MIT licensed.
 
 # 🛠️ Supported tools and frameworks
 - See [here the full list of supported tools and frameworks](https://github.com/goat-sdk/goat/tree/main#️-supported-tools-and-frameworks)
-
-## Plugins
-- **CoinGecko Token Discovery**: Dynamically discover token information using CoinGecko API
-
 # 💻 Contributing
 Do you want a protocol, chain, wallet or agent framework to be supported?
 

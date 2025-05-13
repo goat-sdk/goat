@@ -1,7 +1,7 @@
 import type { Token, WalletClientBase } from "@goat-sdk/core";
 import { Tool } from "@goat-sdk/core";
 import type { CoinGeckoTokenDiscoveryAPI } from "./api";
-import type { GetTokenInfoByTickerParameters } from "./parameters";
+import { GetTokenInfoByTickerParameters } from "./parameters";
 
 // Global mapping of CoinGecko platform identifiers to chain IDs or chain names
 const PLATFORM_TO_CHAIN_ID: Record<string, number | string> = {
@@ -72,20 +72,6 @@ const PLATFORM_TO_CHAIN_ID: Record<string, number | string> = {
     terra: "terra",
     vechain: "vechain",
 };
-
-interface EVMTokenInfo {
-    symbol: string;
-    contractAddress: string;
-    decimals: number;
-    name: string;
-}
-
-interface SolanaTokenInfo {
-    symbol: string;
-    mintAddress: string;
-    decimals: number;
-    name: string;
-}
 
 interface CoinGeckoCoin {
     id: string;
