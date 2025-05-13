@@ -1043,6 +1043,9 @@ importers:
 
   examples/by-use-case/token-discovery-with-coingecko:
     dependencies:
+      '@goat-sdk/adapter-langchain':
+        specifier: workspace:*
+        version: link:../../../packages/adapters/langchain
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../../packages/core
@@ -1058,6 +1061,12 @@ importers:
       '@goat-sdk/wallet-viem':
         specifier: workspace:*
         version: link:../../../packages/wallets/viem
+      '@langchain/core':
+        specifier: 0.3.6
+        version: 0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
+      '@langchain/openai':
+        specifier: ^0.3.5
+        version: 0.3.16(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13)
       '@solana/web3.js':
         specifier: 1.98.0
         version: 1.98.0(bufferutil@4.0.9)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -1073,6 +1082,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.5.0
+      langchain:
+        specifier: ^0.3.6
+        version: 0.3.9(@langchain/cohere@0.3.2(@aws-sdk/client-sso-oidc@3.721.0(@aws-sdk/client-sts@3.721.0))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(encoding@0.1.13))(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8)))(@langchain/ollama@0.1.6(@langchain/core@0.3.6(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))))(axios@1.8.4)(encoding@0.1.13)(handlebars@4.7.8)(openai@4.77.3(encoding@0.1.13)(zod@3.23.8))
       viem:
         specifier: 2.23.4
         version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)

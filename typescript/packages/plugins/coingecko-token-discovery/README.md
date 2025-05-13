@@ -1,3 +1,9 @@
+<div align="center">
+<a href="https://github.com/goat-sdk/goat">
+<img src="https://github.com/user-attachments/assets/5fc7f121-259c-492c-8bca-f15fe7eb830c" alt="GOAT" width="100px" height="auto" style="object-fit: contain;">
+</a>
+</div>
+
 # CoinGecko Token Discovery Plugin
 
 A GOAT SDK plugin that uses the CoinGecko API to dynamically discover token information for both EVM and Solana wallets.
@@ -11,82 +17,79 @@ A GOAT SDK plugin that uses the CoinGecko API to dynamically discover token info
 
 ## Installation
 
-### TypeScript
-
 ```bash
-pnpm add @goat-sdk/plugins-coingecko-token-discovery
-```
-
-### Python
-
-```bash
-pip install goat-plugins-coingecko-token-discovery
+npm install @goat-sdk/plugin-coingecko-token-discovery
+yarn add @goat-sdk/plugin-coingecko-token-discovery
+pnpm add @goat-sdk/plugin-coingecko-token-discovery
 ```
 
 ## Usage
 
-### TypeScript
-
 ```typescript
-import { evmKeyPair } from "@goat-sdk/wallets-evm";
-import { coinGeckoTokenDiscovery } from "@goat-sdk/plugins-coingecko-token-discovery";
+import { getOnChainTools } from "@goat-sdk/adapter-langchain";
+import { coinGeckoTokenDiscovery } from "@goat-sdk/plugin-coingecko-token-discovery";
+import { ChatOpenAI } from "@langchain/openai";
+import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
+import { pull } from "langchain/hub";
+import type { ChatPromptTemplate } from "@langchain/core/prompts";
 
-// Create an EVM wallet client
+// Create a wallet client
 const walletClient = evmKeyPair({
   privateKey: process.env.WALLET_PRIVATE_KEY,
   chain: "mainnet",
   rpcUrl: process.env.RPC_PROVIDER_URL,
 });
 
-// Create the CoinGecko token discovery plugin
+// Initialize the CoinGecko plugin
 const coinGeckoPlugin = coinGeckoTokenDiscovery({
   apiKey: process.env.COINGECKO_API_KEY,
 });
 
-// Get the tools from the plugin
-const tools = await coinGeckoPlugin.getTools(walletClient);
+// Get onchain tools for your wallet with the CoinGecko plugin
+const tools = await getOnChainTools({
+  wallet: walletClient,
+  plugins: [coinGeckoPlugin],
+});
 
-// Find the token discovery tool
-const getTokenInfoTool = tools.find(tool => tool.name === "get_token_info_by_ticker");
+// Create a LangChain agent with the tools
+const llm = new ChatOpenAI({
+  model: "gpt-4o-mini",
+});
 
-// Use the tool
-const tokenInfo = await getTokenInfoTool.execute({ ticker: "USDC" });
-console.log(tokenInfo);
-```
+const prompt = await pull<ChatPromptTemplate>(
+  "hwchase17/structured-chat-agent",
+);
 
-### Python
+const agent = await createStructuredChatAgent({
+  llm,
+  tools,
+  prompt,
+});
 
-```python
-from goat.wallets.evm import evm_key_pair
-from goat_plugins.coingecko_token_discovery import coingecko_token_discovery, CoinGeckoTokenDiscoveryPluginOptions
-import os
-import asyncio
+const agentExecutor = new AgentExecutor({
+  agent,
+  tools,
+  returnIntermediateSteps: true,
+});
 
-async def main():
-    # Create an EVM wallet client
-    wallet_client = evm_key_pair({
-        "private_key": os.environ["WALLET_PRIVATE_KEY"],
-        "chain": "mainnet",
-        "rpc_url": os.environ["RPC_PROVIDER_URL"],
-    })
-    
-    # Create the CoinGecko token discovery plugin
-    plugin = coingecko_token_discovery(CoinGeckoTokenDiscoveryPluginOptions(
-        api_key=os.environ["COINGECKO_API_KEY"]
-    ))
-    
-    # Get the tools from the plugin
-    tools = plugin.get_tools(wallet_client)
-    
-    # Find the token discovery tool
-    get_token_info_tool = next((tool for tool in tools if tool.name == "get_token_info_by_ticker"), None)
-    
-    # Use the tool
-    token_info = await get_token_info_tool.execute({"ticker": "USDC"})
-    print(token_info)
+// Use the agent to answer questions about tokens
+const response = await agentExecutor.invoke({
+  input: "Look up information about USDC",
+});
 
-if __name__ == "__main__":
-    asyncio.run(main())
+console.log("Final Response:", response.output);
+
+// Display the intermediate steps with tool invocations
+if (response.intermediateSteps && response.intermediateSteps.length > 0) {
+  console.log("\nIntermediate Steps:");
+  for (const step of response.intermediateSteps) {
+    if (step.action) {
+      console.log(`\nTool: ${step.action.tool}`);
+      console.log(`Tool Input: ${JSON.stringify(step.action.toolInput, null, 2)}`);
+      console.log(`Tool Output: ${step.observation}`);
+    }
+  }
+}
 ```
 
 ## How It Works
@@ -105,8 +108,6 @@ This allows agents to work with a much wider range of tokens than just those har
 
 ## API Reference
 
-### TypeScript
-
 #### `coinGeckoTokenDiscovery(options)`
 
 Creates a new instance of the CoinGecko Token Discovery plugin.
@@ -118,15 +119,19 @@ Creates a new instance of the CoinGecko Token Discovery plugin.
 **Returns:**
 - A plugin instance that can be used with GOAT SDK wallets
 
-### Python
+## Tools
 
-#### `coingecko_token_discovery(options)`
+* Get token info by ticker
+* Token price lookup
+* Token metadata lookup
 
-Creates a new instance of the CoinGecko Token Discovery plugin.
+<footer>
+<br/>
+<br/>
+<div>
+<a href="https://github.com/goat-sdk/goat">
+  <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
+</a>
+</div>
+</footer>
 
-**Parameters:**
-- `options` (CoinGeckoTokenDiscoveryPluginOptions):
-  - `api_key` (str): Your CoinGecko API key
-
-**Returns:**
-- A plugin instance that can be used with GOAT SDK wallets
