@@ -49,7 +49,7 @@ To perform a swap, you MUST follow these steps in order and use the EXACT values
 
 1. Get token addresses:
    For each token (sell and buy), either:
-   - If a symbol is provided (like ETH, USDC, STARK): use get_token_info_by_symbol
+   - If a symbol is provided (like ETH, USDC, STARK): use get_token_info_by_ticker
    - If an address is provided: use that address directly
    Save both addresses for use in step 3
 
@@ -63,9 +63,9 @@ To perform a swap, you MUST follow these steps in order and use the EXACT values
    - sellAmount: Use the EXACT number from step 2
 
 Example flows:
-1. Using symbols:
-   - get_token_info_by_symbol("USDC") -> returns address1
-   - get_token_info_by_symbol("STARK") -> returns address2
+1. Using ticker symbols:
+   - get_token_info_by_ticker("USDC") -> returns address1
+   - get_token_info_by_ticker("STARK") -> returns address2
    - convert_to_base_unit("0.01") -> returns amount
    - executeSwap with {sellTokenAddress: address1, buyTokenAddress: address2, sellAmount: amount}
 

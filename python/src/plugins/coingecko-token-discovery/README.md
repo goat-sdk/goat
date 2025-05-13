@@ -54,8 +54,7 @@ if __name__ == "__main__":
 
 The plugin overrides the default token discovery methods in the wallet clients:
 
-1. For EVM wallets, it overrides `get_token_info_by_ticker`
-2. For Solana wallets, it overrides `get_token_info_by_symbol`
+1. For EVM and Solana wallets, it overrides `get_token_info_by_ticker`
 
 When a token lookup is requested, the plugin:
 1. Searches for the token on CoinGecko

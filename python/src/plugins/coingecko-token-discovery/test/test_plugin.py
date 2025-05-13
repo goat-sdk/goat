@@ -16,16 +16,16 @@ class MockEVMWalletClient:
     async def get_token_info_by_ticker(self, params):
         ticker = params["ticker"]
         print(f"Fallback to wallet's get_token_info_by_ticker for {ticker}")
-        return {"symbol": ticker, "address": f"0xmock{ticker}", "decimals": 18, "name": f"Mock {ticker}"}
+        return {"ticker": ticker, "address": f"0xmock{ticker}", "decimals": 18, "name": f"Mock {ticker}"}
 
 class MockSolanaWalletClient:
     def get_chain(self):
         return {"id": "solana", "name": "Solana"}
     
-    async def get_token_info_by_symbol(self, params):
-        symbol = params["symbol"]
-        print(f"Fallback to wallet's get_token_info_by_symbol for {symbol}")
-        return {"symbol": symbol, "address": f"mock{symbol}", "decimals": 9, "name": f"Mock {symbol}"}
+    async def get_token_info_by_ticker(self, params):
+        ticker = params["ticker"]
+        print(f"Fallback to wallet's get_token_info_by_ticker for {ticker}")
+        return {"ticker": ticker, "address": f"mock{ticker}", "decimals": 9, "name": f"Mock {ticker}"}
 
 async def test_evm_token_discovery():
     print("\n=== Testing EVM Token Discovery ===")
@@ -64,7 +64,7 @@ async def test_solana_token_discovery():
     # Test with valid token
     print("\nTesting with valid token (BTC):")
     try:
-        token_info = await service.get_token_info_by_symbol(wallet_client, {"symbol": "BTC"})
+        token_info = await service.get_token_info_by_ticker(wallet_client, {"ticker": "BTC"})
         print(f"BTC token info: {token_info}")
     except Exception as e:
         print(f"Error getting token info: {str(e)}")
@@ -72,7 +72,7 @@ async def test_solana_token_discovery():
     # Test with invalid token to trigger fallback
     print("\nTesting with invalid token (NONEXISTENT):")
     try:
-        token_info = await service.get_token_info_by_symbol(wallet_client, {"symbol": "NONEXISTENT"})
+        token_info = await service.get_token_info_by_ticker(wallet_client, {"ticker": "NONEXISTENT"})
         print(f"NONEXISTENT token info: {token_info}")
     except Exception as e:
         print(f"Error getting token info: {str(e)}")
