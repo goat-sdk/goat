@@ -46,7 +46,7 @@ async function main() {
 		const evmWalletClient = viem(walletClient);
 
 		const coinGeckoPlugin = coinGeckoTokenDiscovery({
-			apiKey: COINGECKO_API_KEY,
+			apiKey: COINGECKO_API_KEY ?? "",
 		});
 
 		const evmTools = await coinGeckoPlugin.getTools(evmWalletClient);

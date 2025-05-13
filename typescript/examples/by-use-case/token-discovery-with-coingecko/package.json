@@ -13,7 +13,13 @@
         "@goat-sdk/wallet-evm": "workspace:*",
         "@goat-sdk/wallet-solana": "workspace:*",
         "@goat-sdk/wallet-viem": "workspace:*",
-        "dotenv": "^16.3.1"
+        "@solana/web3.js": "1.98.0",
+        "ai": "4.0.3",
+        "bip39": "^3.1.0",
+        "bs58": "^6.0.0",
+        "dotenv": "^16.4.5",
+        "zod": "3.23.8",
+        "viem": "2.23.4"
     },
     "devDependencies": {
         "eslint": "^8.56.0",

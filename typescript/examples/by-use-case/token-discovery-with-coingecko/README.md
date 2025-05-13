@@ -21,10 +21,17 @@ This example demonstrates how to use the CoinGecko Token Discovery plugin to dyn
    cp .env.example .env
    ```
 
-3. Add your CoinGecko API key to the `.env` file:
-   ```
-   COINGECKO_API_KEY=your_coingecko_api_key_here
-   ```
+3. Fill in the required environment variables in your `.env` file. See below for details.
+
+### Required Environment Variables
+
+- `COINGECKO_API_KEY`: Your CoinGecko API key. Required to access the CoinGecko Token Discovery plugin.
+- `WALLET_PRIVATE_KEY`: The private key for your EVM wallet (as a 0x-prefixed hex string). Used to sign transactions and queries on EVM chains.
+- `RPC_PROVIDER_URL`: The RPC endpoint for your EVM chain (e.g., Sepolia testnet). Used to connect to the EVM network.
+- `SOLANA_PRIVATE_KEY`: The private key for your Solana wallet (as a base58-encoded string). Used to sign transactions and queries on Solana.
+- `SOLANA_RPC_URL`: The RPC endpoint for your Solana network (e.g., mainnet-beta). Used to connect to the Solana network.
+
+You can find a template for these variables in the `.env.example` file. Copy it and fill in your own values.
 
 ## Running the Example
 
