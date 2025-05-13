@@ -76,7 +76,7 @@ Always use base units (wei) for amounts. For example:
     assert uniswap_base_url is not None, "You must set UNISWAP_BASE_URL environment variable"
 
     tools = get_on_chain_tools(
-        wallet=web3(w3, tokens=[USDC, PEPE], enable_send=True),
+        wallet=web3(w3),
         plugins=[
             uniswap(options=UniswapPluginOptions(
                 api_key=uniswap_api_key,

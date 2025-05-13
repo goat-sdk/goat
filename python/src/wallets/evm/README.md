@@ -17,8 +17,6 @@ from goat_wallets.evm import evm_wallet, USDC, PEPE
 wallet = evm_wallet(
     private_key="${WALLET_PRIVATE_KEY}",  # Your EVM wallet private key
     rpc_url="${RPC_PROVIDER_URL}",  # Your EVM RPC endpoint
-    tokens=[USDC, PEPE],  # Enable ERC20 token functionality
-    enable_send=True      # Enable token sending capability
 )
 
 # Get wallet address

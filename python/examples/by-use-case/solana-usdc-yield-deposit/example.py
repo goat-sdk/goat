@@ -20,7 +20,7 @@ client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
 
 # Initialize regular Solana wallet with SPL tokens
 keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
-wallet = solana(client, keypair, tokens=SPL_TOKENS, enable_send=True)
+wallet = solana(client, keypair)
 
 # Initialize LLM
 llm = ChatOpenAI(model="gpt-4o-mini")

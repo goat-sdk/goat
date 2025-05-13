@@ -30,7 +30,7 @@ if not openai_api_key:
 try:
     client = SolanaClient(solana_rpc_endpoint)
     keypair = Keypair.from_base58_string(solana_wallet_seed)
-    wallet = solana(client, keypair, tokens=SPL_TOKENS, enable_send=True)
+    wallet = solana(client, keypair)
 
     # Get Smolagents-compatible tools from GOAT adapter
     goat_smolagents_tools = get_smolagents_tools(wallet=wallet, plugins=[])

@@ -80,7 +80,7 @@ GOAT is free software, MIT licensed.
 
 # 🚀 Quickstarts
 
-**\*NOTE**: While a quickstart may be implemented for a specific chain, wallet and agent framework, GOAT's flexibility allows you to easily adapt it to any chain, wallet and agent framework without difficulty.\*
+***NOTE**: While a quickstart may be implemented for a specific chain, wallet and agent framework, GOAT's flexibility allows you to easily adapt it to any chain, wallet and agent framework without difficulty.*
 
 ## 📘 Typescript
 
