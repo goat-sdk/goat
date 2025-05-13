@@ -1,4 +1,4 @@
-import type { Token, WalletClientBase } from "@goat-sdk/core";
+import { Token, WalletClientBase } from "@goat-sdk/core";
 import { Tool } from "@goat-sdk/core";
 import type { CoinGeckoTokenDiscoveryAPI } from "./api";
 import { GetTokenInfoByTickerParameters } from "./parameters";
