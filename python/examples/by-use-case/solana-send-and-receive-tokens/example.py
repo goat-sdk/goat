@@ -12,7 +12,7 @@ from solana.rpc.api import Client as SolanaClient
 from solders.keypair import Keypair
 
 from goat_adapters.langchain import get_on_chain_tools
-from goat_wallets.solana import solana, SolanaOptions, SPL_TOKENS
+from goat_wallets.solana import solana, SolanaOptions
 
 # Initialize Solana client
 client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
