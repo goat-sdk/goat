@@ -255,7 +255,7 @@ export abstract class SolanaWalletClient extends WalletClientBase {
         }
     }
 
-    async getTokenInfoBySymbol(symbol: string): Promise<Token | undefined> {
+    async getTokenInfoByTicker(symbol: string): Promise<Token | undefined> {
         const upperCaseSymbol = symbol.toUpperCase();
         return this.tokens.find((t) => t.symbol.toUpperCase() === upperCaseSymbol);
     }
@@ -328,7 +328,7 @@ export abstract class SolanaWalletClient extends WalletClientBase {
                         "Get information about a configured token (like mint address and decimals) by its symbol.",
                     parameters: getTokenInfoBySymbolParametersSchema,
                 },
-                (params) => this.getTokenInfoBySymbol(params.symbol),
+                (params) => this.getTokenInfoByTicker(params.ticker),
             ),
             createTool(
                 {

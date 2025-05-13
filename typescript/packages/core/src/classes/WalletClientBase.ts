@@ -21,7 +21,7 @@ export abstract class WalletClientBase {
     abstract signMessage(message: string): Promise<Signature>;
     abstract balanceOf(address: string, tokenAddress?: string): Promise<Balance>;
 
-    getTokenInfoByTicker(ticker: string): Promise<Token> {
+    getTokenInfoByTicker(ticker: string): Promise<Token | undefined> {
         throw new Error("getTokenInfoByTicker is not implemented for this wallet client");
     }
 
