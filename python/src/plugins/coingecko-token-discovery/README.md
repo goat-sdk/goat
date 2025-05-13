@@ -33,7 +33,9 @@ async def main():
     
     # Create the CoinGecko token discovery plugin
     plugin = coingecko_token_discovery(CoinGeckoTokenDiscoveryPluginOptions(
-        api_key=os.environ["COINGECKO_API_KEY"]
+        api_key=os.environ["COINGECKO_API_KEY"],
+        # Optionally, set use_pro to True to use the CoinGecko Pro API
+        # use_pro=True 
     ))
     
     # Get the tools from the plugin
@@ -73,6 +75,7 @@ Creates a new instance of the CoinGecko Token Discovery plugin.
 **Parameters:**
 - `options` (CoinGeckoTokenDiscoveryPluginOptions):
   - `api_key` (str): Your CoinGecko API key
+  - `use_pro` (bool, optional): Whether to use the CoinGecko Pro API. Defaults to `False` (uses the demo API).
 
 **Returns:**
 - A plugin instance that can be used with GOAT SDK wallets

@@ -81,9 +81,13 @@ PLATFORM_TO_CHAIN_ID = {
 
 
 class CoinGeckoTokenDiscoveryService:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, use_pro: bool = False):
         self.api_key = api_key
-        self.base_url = "https://api.coingecko.com/api/v3"
+        self.use_pro = use_pro
+        if use_pro:
+            self.base_url = "https://pro-api.coingecko.com/api/v3"
+        else:
+            self.base_url = "https://api.coingecko.com/api/v3"
         
     async def request(self, endpoint: str, params: Dict[str, Any] = {}) -> Dict[str, Any]:
         """Make a request to the CoinGecko API.
@@ -96,7 +100,10 @@ class CoinGeckoTokenDiscoveryService:
             The API response as JSON
         """
             
-        params["x_cg_demo_api_key"] = self.api_key
+        if self.use_pro:
+            params["x_cg_pro_api_key"] = self.api_key
+        else:
+            params["x_cg_demo_api_key"] = self.api_key
         
         async with aiohttp.ClientSession() as session:
             url = f"{self.base_url}/{endpoint}"

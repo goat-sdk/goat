@@ -43,6 +43,8 @@ const walletClient = evmKeyPair({
 // Initialize the CoinGecko plugin
 const coinGeckoPlugin = coinGeckoTokenDiscovery({
   apiKey: process.env.COINGECKO_API_KEY,
+  // Optionally, set usePro to true to use the CoinGecko Pro API
+  // usePro: true, 
 });
 
 // Get onchain tools for your wallet with the CoinGecko plugin
@@ -115,6 +117,7 @@ Creates a new instance of the CoinGecko Token Discovery plugin.
 **Parameters:**
 - `options` (object):
   - `apiKey` (string): Your CoinGecko API key
+  - `usePro` (boolean, optional): Whether to use the CoinGecko Pro API. Defaults to `false` (uses the demo API).
 
 **Returns:**
 - A plugin instance that can be used with GOAT SDK wallets
