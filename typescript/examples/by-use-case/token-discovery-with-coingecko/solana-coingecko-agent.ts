@@ -1,3 +1,4 @@
+import readline from "node:readline";
 import type { ChatPromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { Connection, Keypair } from "@solana/web3.js";
@@ -5,7 +6,6 @@ import base58 from "bs58";
 import { config } from "dotenv";
 import { AgentExecutor, createStructuredChatAgent } from "langchain/agents";
 import { pull } from "langchain/hub";
-import readline from "node:readline";
 
 import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 import { coinGeckoTokenDiscovery } from "@goat-sdk/plugin-coingecko-token-discovery";
