@@ -47,7 +47,7 @@ def main():
     register_tools(
         caller=crypto_agent,
         executor=executor_agent,
-        wallet=web3(w3, tokens=[USDC, PEPE], enable_send=True),
+        wallet=web3(w3),
         plugins=[],
     )
 

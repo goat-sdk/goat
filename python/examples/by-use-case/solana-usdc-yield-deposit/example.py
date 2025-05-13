@@ -12,7 +12,7 @@ from solana.rpc.api import Client as SolanaClient
 from solders.keypair import Keypair
 
 from goat_adapters.langchain import get_on_chain_tools
-from goat_wallets.solana import solana, SPL_TOKENS
+from goat_wallets.solana import solana
 from goat_plugins.lulo import lulo, LuloPluginOptions
 
 # Initialize Solana client
@@ -20,7 +20,7 @@ client = SolanaClient(os.getenv("SOLANA_RPC_ENDPOINT"))
 
 # Initialize regular Solana wallet with SPL tokens
 keypair = Keypair.from_base58_string(os.getenv("SOLANA_WALLET_SEED") or "")
-wallet = solana(client, keypair, tokens=SPL_TOKENS, enable_send=True)
+wallet = solana(client, keypair)
 
 # Initialize LLM
 llm = ChatOpenAI(model="gpt-4o-mini")

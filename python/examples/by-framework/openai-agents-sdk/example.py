@@ -33,7 +33,7 @@ w3.middleware_onion.add(
 async def main():
     # Initialize tools with web3 wallet
     tools = get_on_chain_tools(
-        wallet=web3(w3, tokens=[USDC, PEPE], enable_send=True),
+        wallet=web3(w3),
         plugins=[],
     )
     

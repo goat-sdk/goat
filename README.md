@@ -24,16 +24,16 @@
 
 ## Table of Contents
 
--   [🐐 Overview](#-overview)
--   [🚀 Quickstarts](#-quickstarts)
-    -   [📘 Typescript](#-typescript)
-    -   [🐍 Python](#-python)
--   [🛠️ Supported tools and frameworks](#️-supported-tools-and-frameworks)
-    -   [Tools](#tools)
-    -   [Chains and wallets](#chains-and-wallets)
-    -   [Agent Frameworks](#agent-frameworks)
--   [💻 Contributing](#-contributing)
--   [🤝 Community](#-community)
+- [🐐 Overview](#-overview)
+- [🚀 Quickstarts](#-quickstarts)
+  - [📘 Typescript](#-typescript)
+  - [🐍 Python](#-python)
+- [🛠️ Supported tools and frameworks](#️-supported-tools-and-frameworks)
+  - [Tools](#tools)
+  - [Chains and wallets](#chains-and-wallets)
+  - [Agent Frameworks](#agent-frameworks)
+- [💻 Contributing](#-contributing)
+- [🤝 Community](#-community)
 
 # 🐐 Overview
 
@@ -80,7 +80,7 @@ GOAT is free software, MIT licensed.
 
 # 🚀 Quickstarts
 
-**\*NOTE**: While a quickstart may be implemented for a specific chain, wallet and agent framework, GOAT's flexibility allows you to easily adapt it to any chain, wallet and agent framework without difficulty.\*
+***NOTE**: While a quickstart may be implemented for a specific chain, wallet and agent framework, GOAT's flexibility allows you to easily adapt it to any chain, wallet and agent framework without difficulty.*
 
 ## 📘 Typescript
 
@@ -155,47 +155,48 @@ GOAT is free software, MIT licensed.
 | Cosmosbank                      | Interact with Cosmos tokens                                                   | [@goat-sdk/plugin-cosmosbank](https://www.npmjs.com/package/@goat-sdk/plugin-cosmosbank)                                       |
 | Crossmint Headless Checkout     | Purchase any NFT on any chain using Crossmint                                 | [@goat-sdk/plugin-crossmint-headless-checkout](https://www.npmjs.com/package/@goat-sdk/plugin-crossmint-headless-checkout)     |
 | Crossmint Mint, Faucet, Wallets | Create a wallet, mint tokens and get test tokens on any chain using Crossmint | [@goat-sdk/plugin-crossmint-mint-faucet-wallets](https://www.npmjs.com/package/@goat-sdk/plugin-crossmint-mint-faucet-wallets) |
-| DeBridge                        | Bridge tokens on DeBridge                                                     | [@goat-sdk/plugin-debridge](https://www.npmjs.com/package/@goat-sdk/plugin-debridge)                                           | [goat-sdk-plugin-debridge](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/debridge)         |
-| Dexscreener                     | Get token information using Dexscreener API                                   | [@goat-sdk/plugin-dexscreener](https://www.npmjs.com/package/@goat-sdk/plugin-dexscreener)                                     | [goat-sdk-plugin-dexscreener](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/dexscreener)   |
-| DPSN                            | Push based real time data streams                                             | [@goat-sdk/dpsn-plugin](https://www.npmjs.com/package/@goat-sdk/dpsn-plugin)                                                   | [@goat-sdk/plugin-dpsn](https://pypi.org/project/goat-sdk-plugin-dpsn/)                                    |
-| ENS                             | Resolve ENS names to addresses                                                | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens)                                                     |
-| Enso                            | Find the most optimal route between tokens                                    | [@goat-sdk/plugin-enso](https://www.npmjs.com/package/@goat-sdk/plugin-enso)                                                   |
-| ERC721                          | Interact with any ERC721 token                                                | [@goat-sdk/plugin-erc721](https://www.npmjs.com/package/@goat-sdk/plugin-erc721)                                               |
-| Etherscan                       | Get transaction information using Etherscan API                               | [@goat-sdk/plugin-etherscan](https://www.npmjs.com/package/@goat-sdk/plugin-etherscan)                                         |
-| Farcaster                       | Read and post casts on Farcaster                                              | [@goat-sdk/plugin-farcaster](https://www.npmjs.com/package/@goat-sdk/plugin-farcaster)                                         | [goat-sdk-plugin-farcaster](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/farcaster)       |
-| Hedgey                          | Claim rewards on Hedgey                                                       | [@goat-sdk/plugin-hedgey](https://www.npmjs.com/package/@goat-sdk/plugin-hedgey)                                               |
-| Ionic                           | Borrow and lend on Ionic                                                      | [@goat-sdk/plugin-ionic](https://www.npmjs.com/package/@goat-sdk/plugin-ionic)                                                 |
-| Ironclad                        | Create positions on Ironclad                                                  | [@goat-sdk/plugin-ironclad](https://www.npmjs.com/package/@goat-sdk/plugin-ironclad)                                           |
-| Irys                            | Interact with Irys datachain                                                  | [@goat-sdk/plugin-irys](https://www.npmjs.com/package/@goat-sdk/plugin-irys)                                                   |
-| JSON RPC                        | Call any JSON RPC endpoint                                                    | [@goat-sdk/plugin-jsonrpc](https://www.npmjs.com/package/@goat-sdk/plugin-jsonrpc)                                             | [goat-sdk-plugin-jsonrpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jsonrpc)           |
-| Jupiter                         | Swap tokens on Jupiter                                                        | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter)                                             | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter)           |
-| KIM                             | Swap tokens on KIM                                                            | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim)                                                     |
-| Lulo                            | Deposit USDC on Lulo                                                          | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo)                                                   |
-| Mayan                           | Cross-chain token swap using Mayan SDK (Solana, EVM, SUI)                     | [@goat-sdk/plugin-mayan](https://www.npmjs.com/package/@goat-sdk/plugin-mayan)                                                 |
-| Meteora                         | Create liquidity pools on Meteora                                             | [@goat-sdk/plugin-meteora](https://www.npmjs.com/package/@goat-sdk/plugin-meteora)                                             |
-| Mode Governance                 | Create a governance proposal on Mode                                          | [@goat-sdk/plugin-mode-governance](https://www.npmjs.com/package/@goat-sdk/plugin-mode-governance)                             |
-| Mode Voting                     | Vote on a governance proposal on Mode                                         | [@goat-sdk/plugin-mode-voting](https://www.npmjs.com/package/@goat-sdk/plugin-mode-voting)                                     |
-| Mode Spray                      | Spray tokens on Mode                                                          | [@goat-sdk/plugin-mode-spray](https://www.npmjs.com/package/@goat-sdk/plugin-mode-spray)                                       |
-| Nansen                          | Get Nansen information using Nansen API                                       | [@goat-sdk/plugin-nansen](https://www.npmjs.com/package/@goat-sdk/plugin-nansen)                                               | [goat-sdk-plugin-nansen](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/nansen)             |
-| OpenSea                         | Get nft and sales information using OpenSea API                               | [@goat-sdk/plugin-opensea](https://www.npmjs.com/package/@goat-sdk/plugin-opensea)                                             | [goat-sdk-plugin-opensea](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/opensea)           |
-| Orca                            | Create positions on Orca                                                      | [@goat-sdk/plugin-orca](https://www.npmjs.com/package/@goat-sdk/plugin-orca)                                                   |
-| PlunderSwap                     | Currency exchange on Zilliqa                                                  | [@goat-sdk/plugin-plunderswap](https://www.npmjs.com/package/@goat-sdk/plugin-plunderswap)                                     |
-| Polymarket                      | Bet on Polymarket                                                             | [@goat-sdk/plugin-polymarket](https://www.npmjs.com/package/@goat-sdk/plugin-polymarket)                                       |
-| Pump.fun                        | Launch a token on Pump.fun                                                    | [@goat-sdk/plugin-pump-fun](https://www.npmjs.com/package/@goat-sdk/plugin-pump-fun)                                           |
-| Renzo                           | Create a position on Renzo                                                    | [@goat-sdk/plugin-renzo](https://www.npmjs.com/package/@goat-sdk/plugin-renzo)                                                 |
-| Rugcheck                        | Check SPL token validity on Rugcheck                                          | [@goat-sdk/plugin-rugcheck](https://www.npmjs.com/package/@goat-sdk/plugin-rugcheck)                                           | [goat-sdk-plugin-rugcheck](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/rugcheck)         |
-| SNS                             | Interact with SNS                                                             | [@goat-sdk/plugin-sns](https://www.npmjs.com/package/@goat-sdk/plugin-sns)                                                     |
-| Solana Magic Eden               | Purchase NFTs on Magic Eden                                                   | [@goat-sdk/plugin-solana-magiceden](https://www.npmjs.com/package/@goat-sdk/plugin-solana-magiceden)                           |
-| Solana NFTs                     | Get NFT information using Solana NFTs API                                     | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts)                                     |
-| Starknet Token                  | Interact with Starknet tokens                                                 | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token)                               |
-| Superfluid                      | Create streams with Superfluid                                                | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid)                                       | [goat-sdk-plugin-superfluid](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/superfluid)     |
-| Synth                           | Get synthetic price data using Synth Subnet API                               | [@goat-sdk/plugin-synth-api](https://www.npmjs.com/package/@goat-sdk/plugin-synth-api)                                         |
-| Tensor                          | Purchase tokens on Tensor                                                     | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor)                                               |
-| Uniswap                         | Swap tokens on Uniswap                                                        | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap)                                             | [goat-sdk-plugin-uniswap](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/uniswap)           |
-| Velodrome                       | Create a position on Velodrome                                                | [@goat-sdk/plugin-velodrome](https://www.npmjs.com/package/@goat-sdk/plugin-velodrome)                                         |
-| Worldstore                      | Purchase physical assets on Worldstore                                        | [@goat-sdk/plugin-worldstore](https://www.npmjs.com/package/@goat-sdk/plugin-worldstore)                                       |
-| ZeroDev Global Address          | Create a global address on ZeroDev                                            | [@goat-sdk/plugin-zero-dev-global-address](https://www.npmjs.com/package/@goat-sdk/plugin-zero-dev-global-address)             |
-| Zilliqa                         | Interact with Zilliqa                                                         | [@goat-sdk/plugin-zilliqa](https://www.npmjs.com/package/@goat-sdk/plugin-zilliqa)                                             |
+| DeBridge | Bridge tokens on DeBridge | [@goat-sdk/plugin-debridge](https://www.npmjs.com/package/@goat-sdk/plugin-debridge) | [goat-sdk-plugin-debridge](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/debridge) |
+| Dexscreener | Get token information using Dexscreener API | [@goat-sdk/plugin-dexscreener](https://www.npmjs.com/package/@goat-sdk/plugin-dexscreener) | [goat-sdk-plugin-dexscreener](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/dexscreener) |
+| DPSN |  Push based real time data streams  | [@goat-sdk/dpsn-plugin](https://www.npmjs.com/package/@goat-sdk/dpsn-plugin) | [@goat-sdk/plugin-dpsn](https://pypi.org/project/goat-sdk-plugin-dpsn/) |
+| ENS | Resolve ENS names to addresses | [@goat-sdk/plugin-ens](https://www.npmjs.com/package/@goat-sdk/plugin-ens) |
+| Enso | Find the most optimal route between tokens | [@goat-sdk/plugin-enso](https://www.npmjs.com/package/@goat-sdk/plugin-enso) |
+| ERC721 | Interact with any ERC721 token | [@goat-sdk/plugin-erc721](https://www.npmjs.com/package/@goat-sdk/plugin-erc721) |
+| Etherscan | Get transaction information using Etherscan API | [@goat-sdk/plugin-etherscan](https://www.npmjs.com/package/@goat-sdk/plugin-etherscan) |
+| Farcaster | Read and post casts on Farcaster | [@goat-sdk/plugin-farcaster](https://www.npmjs.com/package/@goat-sdk/plugin-farcaster) | [goat-sdk-plugin-farcaster](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/farcaster) |
+| Hedgey | Claim rewards on Hedgey | [@goat-sdk/plugin-hedgey](https://www.npmjs.com/package/@goat-sdk/plugin-hedgey) |
+| Ionic | Borrow and lend on Ionic | [@goat-sdk/plugin-ionic](https://www.npmjs.com/package/@goat-sdk/plugin-ionic) |
+| Ironclad | Create positions on Ironclad | [@goat-sdk/plugin-ironclad](https://www.npmjs.com/package/@goat-sdk/plugin-ironclad) |
+| Irys | Interact with Irys datachain | [@goat-sdk/plugin-irys](https://www.npmjs.com/package/@goat-sdk/plugin-irys) |
+| JSON RPC | Call any JSON RPC endpoint |[@goat-sdk/plugin-jsonrpc](https://www.npmjs.com/package/@goat-sdk/plugin-jsonrpc) | [goat-sdk-plugin-jsonrpc](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jsonrpc) |
+| Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter) |
+| KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
+| Lulo | Deposit and Withdraw USDC on Lulo | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo) |
+| Mayan | Cross-chain token swap using Mayan SDK (Solana, EVM, SUI) | [@goat-sdk/plugin-mayan](https://www.npmjs.com/package/@goat-sdk/plugin-mayan) |
+| Meteora | Create liquidity pools on Meteora | [@goat-sdk/plugin-meteora](https://www.npmjs.com/package/@goat-sdk/plugin-meteora) |
+| Mode Governance | Create a governance proposal on Mode | [@goat-sdk/plugin-mode-governance](https://www.npmjs.com/package/@goat-sdk/plugin-mode-governance) |
+| Mode Voting | Vote on a governance proposal on Mode | [@goat-sdk/plugin-mode-voting](https://www.npmjs.com/package/@goat-sdk/plugin-mode-voting) |
+| Mode Spray | Spray tokens on Mode | [@goat-sdk/plugin-mode-spray](https://www.npmjs.com/package/@goat-sdk/plugin-mode-spray) |
+| Nansen | Get Nansen information using Nansen API | [@goat-sdk/plugin-nansen](https://www.npmjs.com/package/@goat-sdk/plugin-nansen) | [goat-sdk-plugin-nansen](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/nansen) |
+| OpenSea | Get nft and sales information using OpenSea API | [@goat-sdk/plugin-opensea](https://www.npmjs.com/package/@goat-sdk/plugin-opensea) | [goat-sdk-plugin-opensea](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/opensea) |
+| Orca | Create positions on Orca | [@goat-sdk/plugin-orca](https://www.npmjs.com/package/@goat-sdk/plugin-orca) |
+| PlunderSwap | Currency exchange on Zilliqa | [@goat-sdk/plugin-plunderswap](https://www.npmjs.com/package/@goat-sdk/plugin-plunderswap) |
+| Polymarket | Bet on Polymarket | [@goat-sdk/plugin-polymarket](https://www.npmjs.com/package/@goat-sdk/plugin-polymarket) |
+| Pump.fun | Launch a token on Pump.fun | [@goat-sdk/plugin-pump-fun](https://www.npmjs.com/package/@goat-sdk/plugin-pump-fun) |
+| Renzo | Create a position on Renzo | [@goat-sdk/plugin-renzo](https://www.npmjs.com/package/@goat-sdk/plugin-renzo) |
+| Rugcheck | Check SPL token validity on Rugcheck | [@goat-sdk/plugin-rugcheck](https://www.npmjs.com/package/@goat-sdk/plugin-rugcheck) | [goat-sdk-plugin-rugcheck](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/rugcheck) |
+| SNS | Interact with SNS | [@goat-sdk/plugin-sns](https://www.npmjs.com/package/@goat-sdk/plugin-sns) |
+| Solana Magic Eden | Purchase NFTs on Magic Eden | [@goat-sdk/plugin-solana-magiceden](https://www.npmjs.com/package/@goat-sdk/plugin-solana-magiceden) |
+| Solana NFTs | Get NFT information using Solana NFTs API | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts) |
+| Starknet Token | Interact with Starknet tokens | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token) |
+| Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) | [goat-sdk-plugin-superfluid](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/superfluid) |
+| Synth | Get synthetic price data using Synth Subnet API | [@goat-sdk/plugin-synth-api](https://www.npmjs.com/package/@goat-sdk/plugin-synth-api) |
+| Tensor | Purchase tokens on Tensor | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor) |
+| Uniswap | Swap tokens on Uniswap | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap) | [goat-sdk-plugin-uniswap](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/uniswap) |
+| Velodrome | Create a position on Velodrome | [@goat-sdk/plugin-velodrome](https://www.npmjs.com/package/@goat-sdk/plugin-velodrome) |
+| Worldstore | Purchase physical assets on Worldstore | [@goat-sdk/plugin-worldstore](https://www.npmjs.com/package/@goat-sdk/plugin-worldstore) |
+| ZeroDev Global Address | Create a global address on ZeroDev | [@goat-sdk/plugin-zero-dev-global-address](https://www.npmjs.com/package/@goat-sdk/plugin-zero-dev-global-address) |
+| Zilliqa | Interact with Zilliqa | [@goat-sdk/plugin-zilliqa](https://www.npmjs.com/package/@goat-sdk/plugin-zilliqa) |
+
 
 ## Chains and wallets
 
@@ -249,6 +250,5 @@ See guides on how to do that here:
 | How to add a new wallet provider | [Typescript](https://github.com/goat-sdk/goat/tree/main/typescript/docs/5-add-a-wallet-provider.md) | [Python](https://github.com/goat-sdk/goat/tree/main/python/docs/5-add-a-wallet-provider.md) |
 
 # 🤝 Community
-
--   Follow us on [X](https://x.com/goat_sdk)
--   Join our [Discord](https://discord.gg/goat-sdk)
+- Follow us on [X](https://x.com/goat_sdk)
+- Join our [Discord](https://discord.gg/goat-sdk)

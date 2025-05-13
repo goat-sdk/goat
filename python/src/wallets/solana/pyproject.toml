@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-solana"
-version = "0.1.6"
+version = "0.2.0"
 description = "Goat SDK Solana wallet implementation"
 authors = [
     "Andrea Villa <andreakarimodm@gmail.com>",
@@ -22,7 +22,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-goat-sdk = "^0.1.0"
+goat-sdk = "^0.2.0"
 solana = ">=0.30.2"
 solders = ">=0.18.0"
 PyNaCl = "^1.5.0"
