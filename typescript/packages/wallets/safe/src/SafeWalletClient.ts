@@ -266,6 +266,10 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         };
     }
 
+    async switchChain(chainId: number) {
+        await this.#client.switchChain({ id: chainId });
+    }
+
     async isDeployed() {
         if (!this.#safeAccount) throw new Error("Safe account not initialized");
         if (!this.#safeAddress) throw new Error("Safe address not initialized");
