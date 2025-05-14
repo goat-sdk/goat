@@ -168,6 +168,10 @@ export class LitEVMWalletClient extends EVMWalletClient {
 
         return BigInt(balance);
     }
+
+    async switchChain(chainId: number) {
+        await this.viemPublicClient.switchChain({ id: chainId });
+    }
 }
 
 export function createEVMWallet(options: LitEVMWalletOptions) {
