@@ -194,6 +194,10 @@ export class ViemEVMWalletClient extends EVMWalletClient {
         return { value: result };
     }
 
+    async switchChain(chainId: number) {
+        await this.#client.switchChain({ id: chainId });
+    }
+
     private async waitForReceipt(txHash: `0x${string}`): Promise<{ hash: string; status: "success" | "reverted" }> {
         const receipt = await this.publicClient.waitForTransactionReceipt({
             hash: txHash,

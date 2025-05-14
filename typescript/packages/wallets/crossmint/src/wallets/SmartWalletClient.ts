@@ -279,6 +279,10 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return BigInt(balance);
     }
 
+    async switchChain(chainId: number) {
+        throw new Error("SmartWalletClient does not implement switchChain");
+    }
+
     private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {
         const transactionDatas = transactions.map((transaction) => {
             const { to: recipientAddress, abi, functionName, args, value, data } = transaction;
