@@ -102,7 +102,7 @@ async function generateParameters(runtime: IAgentRuntime, context: string, tool:
         runtime,
         context,
         modelClass: ModelClass.LARGE,
-        schema: tool.parameters,
+        // schema: tool.parameters,     // ! zod incompatibility, can be added back when eliza publishes >0.1.6
     });
 
     return object;
