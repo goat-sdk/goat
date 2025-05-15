@@ -19,6 +19,6 @@
         "dotenv": "^16.4.5",
         "viem": "2.23.4",
         "langchain": "^0.3.6",
-        "zod": "3.23.8"
+        "zod": "catalog:"
     }
 }

@@ -14,7 +14,7 @@
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
         "ajv": "8.17.1",
-        "zod-to-json-schema": "3.24.1"
+        "zod-to-json-schema": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
