@@ -4,6 +4,8 @@ import { OneShotClient, SolidityStructParam, Transaction, TransactionExecution }
 import { ZodTypeAny, z } from "zod";
 import {
     AddTransactionToToolsParams,
+    AssureToolsForSmartContractParams,
+    ContractSearchParams,
     CreateTransactionParams,
     GetTransactionExecutionParams,
     ListEscrowWalletsParams,
@@ -17,7 +19,7 @@ export class TransactionService {
         protected readonly businessId: string,
     ) {}
 
-    protected workingEndpoints: Transaction[] = [];
+    protected workingEndpoints = new Set<Transaction>();
     protected recentTransactionExecutions: TransactionExecution[] = [];
 
     public async getTools(): Promise<ToolBase[]> {
@@ -129,13 +131,34 @@ export class TransactionService {
     }
 
     @Tool({
+        name: "search_smart_contracts",
+        description: "Performs a semantic search for smart contracts on the blockchain using the annotations on 1ShotAPI. It will return up to 5 candidate contract descriptions, which include all the major and/or important methods on the smart contract. After identifying the contract you want to use, you can make sure tools are available for the described methods via the assure_tools_for_smart_contract tool.",
+    })
+    async searchSmartContracts(_walletClient: EVMWalletClient, parameters: ContractSearchParams) {
+        const contracts = await this.oneShotClient.transactions.search(parameters.query, parameters);
+        return contracts;
+    }
+
+    @Tool({
+        name: "assure_tools_for_smart_contract",
+        description: "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract.",
+    })
+    async assureToolsForSmartContract(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
+        const transactions = await this.oneShotClient.transactions.contractTransactions(this.businessId, parameters);
+        for (const transaction of transactions) {
+            this.workingEndpoints.add(transaction);
+        }
+        return Array.from(this.workingEndpoints);
+    }
+
+    @Tool({
         name: "add_transaction_to_working_endpoints",
         description:
             "Adds a transaction to the list of working endpoints. You can use list_transactions to get transactions that are already configured in 1Shot. If you use use create_transaction to create a new transaction it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
     })
     async addTransactionToTools(_walletClient: EVMWalletClient, parameters: AddTransactionToToolsParams) {
-        this.workingEndpoints.push(parameters);
-        return this.workingEndpoints;
+        this.workingEndpoints.add(parameters);
+        return Array.from(this.workingEndpoints);
     }
 
     @Tool({
@@ -149,7 +172,8 @@ export class TransactionService {
 
     @Tool({
         name: "create_transaction",
-        description: "Creates a new transaction for the configured business. Returns the created transaction. You should check whether or not there is already a transaction created via the list_transactions tool first, if there is, you should use the add_transaction_to_working_endpoints tool to add it to the list of working endpoints rather than creating a new transaction.",
+        description:
+            "Creates a new transaction for the configured business. Returns the created transaction. You should check whether or not there is already a transaction created via the list_transactions tool first, if there is, you should use the add_transaction_to_working_endpoints tool to add it to the list of working endpoints rather than creating a new transaction.",
     })
     async createTransaction(_walletClient: EVMWalletClient, parameters: CreateTransactionParams) {
         const transactions = await this.oneShotClient.transactions.create(this.businessId, parameters);

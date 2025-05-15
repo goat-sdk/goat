@@ -1,5 +1,7 @@
 import { createToolParameters } from "@goat-sdk/core";
 import {
+    contractSearchSchema,
+    contractTransactionsSchema,
     createTransactionSchema,
     getTransactionExecutionSchema,
     listEscrowWalletsSchema,
@@ -18,4 +20,12 @@ export class AddTransactionToToolsParams extends createToolParameters(transactio
 
 export class GetTransactionExecutionParams extends createToolParameters(getTransactionExecutionSchema) {}
 
-export class ListTransactionExecutionsParams extends createToolParameters(listTransactionExecutionsSchema.omit({ businessId: true })) {}
+export class ListTransactionExecutionsParams extends createToolParameters(
+    listTransactionExecutionsSchema.omit({ businessId: true }),
+) {}
+
+export class ContractSearchParams extends createToolParameters(contractSearchSchema) {}
+
+export class AssureToolsForSmartContractParams extends createToolParameters(
+    contractTransactionsSchema.omit({ businessId: true }),
+) {}

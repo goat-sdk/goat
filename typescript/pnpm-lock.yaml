@@ -1417,8 +1417,8 @@ importers:
         specifier: workspace:*
         version: link:../../wallets/evm
       '@uxly/1shot-client':
-        specifier: 1.0.17
-        version: 1.0.17(zod@3.23.8)
+        specifier: 1.0.18
+        version: 1.0.18(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -9638,8 +9638,8 @@ packages:
   '@upstash/vector@1.1.7':
     resolution: {integrity: sha512-yxgXdH/Z2uX8XUVrLeo6ZNci2Z8EzXGwjIZ8EZwctF5+oiBIKwz8tsh/yUesyGrbuQ+ViBPGtZWV5vLFbp649w==}
 
-  '@uxly/1shot-client@1.0.17':
-    resolution: {integrity: sha512-KCxN/BgUqsIZ5q6ugYWD+s1D64WfhmNF65R3ksZTAX2rHoy6QOu9I1+4sEtx585KIUXouzPVvWt880N+WhEGyQ==}
+  '@uxly/1shot-client@1.0.18':
+    resolution: {integrity: sha512-m8yhplzTXDb78zRAT+EWNEIe7i8XDAgtsX48fr78jiIjiqo3Shxc1C+pk4EtpxyR6dq57VXdyCk5wNjQTvqTnA==}
     peerDependencies:
       zod: ^3.0.0
 
@@ -29485,7 +29485,7 @@ snapshots:
 
   '@upstash/vector@1.1.7': {}
 
-  '@uxly/1shot-client@1.0.17(zod@3.23.8)':
+  '@uxly/1shot-client@1.0.18(zod@3.23.8)':
     dependencies:
       '@noble/ed25519': 2.2.3
       '@noble/hashes': 1.7.1
