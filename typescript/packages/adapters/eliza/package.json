@@ -12,12 +12,11 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@ai16z/eliza": "0.1.5-alpha.5",
+        "@elizaos/core": "0.25.9",
         "@goat-sdk/core": "workspace:*",
         "zod": "catalog:"
     },
     "peerDependencies": {
-        "@ai16z/eliza": "0.1.5-alpha.5",
         "@goat-sdk/core": "workspace:*"
     },
     "homepage": "https://ohmygoat.dev",
