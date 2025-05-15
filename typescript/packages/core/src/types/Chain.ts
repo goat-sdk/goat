@@ -2,6 +2,14 @@
  * @param type - "evm" or "solana", extend this union as needed (e.g., "sui")
  * @param id - Chain ID, optional for EVM
  */
+
+// Structure for native currency info (mirroring viem)
+export type NativeCurrency = {
+    name: string;
+    symbol: string;
+    decimals: number;
+};
+
 export type Chain =
     | EvmChain
     | SolanaChain
@@ -22,10 +30,12 @@ export type SuiChain = {
 export type EvmChain = {
     type: "evm";
     id: number;
+    nativeCurrency: NativeCurrency;
 };
 
 export type SolanaChain = {
     type: "solana";
+    nativeCurrency: NativeCurrency;
 };
 
 export type AptosChain = {

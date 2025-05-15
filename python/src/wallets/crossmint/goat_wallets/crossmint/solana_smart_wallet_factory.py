@@ -3,7 +3,6 @@ from solana.rpc.api import Client as SolanaClient
 from .api_client import CrossmintWalletsAPI
 from .parameters import AdminSigner, CoreSignerType
 from .solana_smart_wallet import SolanaSmartWalletClient, SolanaSmartWalletConfig, SolanaSmartWalletOptions
-from .types import SolanaFireblocksSigner, SolanaKeypairSigner
 import sys
 import os
 
@@ -20,7 +19,7 @@ class UserLocatorParams(TypedDict, total=False):
 user_locator_identifier_fields = get_type_hints(UserLocatorParams)
 
 
-class SolanaSmartWalletCreationParams(TypedDict, UserLocatorParams, total=False):
+class SolanaSmartWalletCreationParams(UserLocatorParams):
     config: SolanaSmartWalletConfig
 
 
@@ -36,26 +35,40 @@ class SolanaSmartWalletFactory:
                     f"Environment variable SOLANA_RPC_ENDPOINT is not set, using default endpoint: {default_connection_url}", file=sys.stderr)
             self.connection = SolanaClient(connection_url)
 
-    def get_or_create(self, config: SolanaSmartWalletCreationParams, idempotency_key: Optional[str] = None) -> SolanaSmartWalletClient:
+    def get_or_create(self, config: SolanaSmartWalletCreationParams, idempotency_key: Optional[str] = None, tokens=None, enable_send=True) -> SolanaSmartWalletClient:
+        """Get or create a Solana smart wallet.
+        
+        Args:
+            config: Wallet configuration parameters
+            idempotency_key: Optional idempotency key for wallet creation
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
+            
+        Returns:
+            A Solana smart wallet client instance
+            
+        Raises:
+            ValueError: If connection is not set
+            Exception: If wallet creation fails
+        """
         if self.connection is None:
             raise ValueError(
                 f"Connection is not set, call {self.__class__.__name__}.set_connection(<connection>) first")
 
         validated_params = self._validate_creation_params(config)
-        wallet_locator = self._get_wallet_locator(
-            validated_params["linkedUser"])
+        wallet_locator = self._get_wallet_locator(validated_params["linkedUser"])
         try:
             wallet = self._get_wallet(wallet_locator)
             if wallet:
                 print("Wallet found! Returning existing wallet", file=sys.stderr)
-            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"])
+            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"], tokens, enable_send)
         except Exception as e:
             print("Wallet not found, creating new wallet", file=sys.stderr)
 
         try:
             wallet = self.api_client.create_wallet(
                 "solana-smart-wallet", validated_params["linkedUser"], self._project_config_to_api_params(validated_params["config"]), idempotency_key)
-            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"])
+            return self._instantiate_wallet(wallet["address"], validated_params["config"]["adminSigner"], tokens, enable_send)
         except Exception as e:
             raise Exception(
                 f"Failed to create wallet: {e}") from e
@@ -82,13 +95,25 @@ class SolanaSmartWalletFactory:
             return f"{present_fields[0]}:{config[present_fields[0]]}"
         return None
 
-    def _instantiate_wallet(self, address: str, admin_signer: AdminSigner) -> SolanaSmartWalletClient:
-        """Internal method to create wallet instance."""
+    def _instantiate_wallet(self, address: str, admin_signer: AdminSigner, tokens=None, enable_send=True) -> SolanaSmartWalletClient:
+        """Internal method to create wallet instance.
+        
+        Args:
+            address: Wallet address
+            admin_signer: Admin signer configuration
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
+            
+        Returns:
+            A Solana smart wallet client instance
+        """
         return SolanaSmartWalletClient(
             address,
             self.api_client,
             {"config": {"adminSigner": admin_signer}},
-            self.connection
+            self.connection,
+            tokens,
+            enable_send
         )
 
     def _get_wallet_locator(self, linked_user: str) -> str:

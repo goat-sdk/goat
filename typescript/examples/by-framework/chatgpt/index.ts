@@ -1,20 +1,17 @@
-import { http } from "viem";
-import { createWalletClient } from "viem";
+import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
 
 import { getTools } from "@goat-sdk/core";
-import { PEPE, USDC, erc20 } from "@goat-sdk/plugin-erc20";
 
 import { crossmintHeadlessCheckout } from "@goat-sdk/plugin-crossmint-headless-checkout";
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
-import { JSONSchemaType } from "ajv";
-import { z } from "zod";
+import type { JSONSchemaType } from "ajv";
+import type { z } from "zod";
 require("dotenv").config();
 
 // 1. Create a wallet client
@@ -32,8 +29,6 @@ async function createRESTServer() {
         await getTools({
             wallet: viem(walletClient),
             plugins: [
-                sendETH(), // Enable ETH transfers
-                erc20({ tokens: [USDC, PEPE] }), // Enable ERC20 token operations
                 // if crossmint api key is provided, enable amazon purchase
                 ...(process.env.CROSSMINT_API_KEY
                     ? [

@@ -6,10 +6,7 @@ import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { baseSepolia } from "viem/chains";
 
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
-
 import { getOnChainTools } from "@goat-sdk/adapter-model-context-protocol";
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 
 // 1. Create the wallet client
@@ -24,7 +21,7 @@ const walletClient = createWalletClient({
 // 2. Get the onchain tools for the wallet
 const toolsPromise = getOnChainTools({
     wallet: viem(walletClient),
-    plugins: [sendETH(), erc20({ tokens: [USDC] })],
+    plugins: [],
 });
 
 // 3. Create and configure the server

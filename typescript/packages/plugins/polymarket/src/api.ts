@@ -75,7 +75,7 @@ const Event = z.object({
             oneDayPriceChange: z.number().optional(),
             orderMinSize: z.number(),
             orderPriceMinTickSize: z.number(),
-            outcomePrices: z.string(),
+            outcomePrices: z.string().optional(),
             outcomes: z.string(),
             question: z.string().optional(),
             slug: z.string(),

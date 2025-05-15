@@ -10,10 +10,8 @@ from web3.middleware import SignAndSendRawMiddlewareBuilder
 from eth_account.signers.local import LocalAccount
 from eth_account import Account
 
-from goat_plugins.erc20.token import PEPE, USDC
-from goat_plugins.erc20 import erc20, ERC20PluginOptions
-from goat_wallets.evm import send_eth
-from goat_wallets.web3 import Web3EVMWalletClient
+from goat_wallets.evm import PEPE, USDC
+from goat_wallets.web3 import web3
 
 from autogen import ConversableAgent, LLMConfig
 
@@ -49,11 +47,8 @@ def main():
     register_tools(
         caller=crypto_agent,
         executor=executor_agent,
-        wallet=Web3EVMWalletClient(w3),
-        plugins=[
-            send_eth(),
-            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
-        ],
+        wallet=web3(w3),
+        plugins=[],
     )
 
     crypto_agent.initiate_chat(

@@ -8,9 +8,7 @@ from crewai import Agent, Task, Crew, Process
 
 # GOAT imports
 from goat_adapters.crewai.adapter import get_crewai_tools
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
-from goat_wallets.solana import solana
+from goat_wallets.solana import solana, SPL_TOKENS
 
 # Load environment variables
 load_dotenv()
@@ -37,15 +35,8 @@ try:
     keypair = Keypair.from_base58_string(solana_wallet_seed)
     wallet = solana(client, keypair)
 
-    spl_token_plugin = spl_token(
-        SplTokenPluginOptions(
-            network="mainnet",  # Make sure this matches your .env settings and seed key network
-            tokens=SPL_TOKENS,
-        )
-    )
-
     # Get CrewAI-compatible tools from GOAT adapter
-    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[spl_token_plugin])
+    goat_crewai_tools = get_crewai_tools(wallet=wallet, plugins=[])
     if not goat_crewai_tools:
         print("Warning: No GOAT tools were loaded. Check adapter/plugin setup or tool compatibility.")
         # Optionally exit if tools are essential
