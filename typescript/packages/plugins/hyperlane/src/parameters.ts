@@ -117,3 +117,30 @@ export class HyperlaneGetTokenParameters extends createToolParameters(
         tokenRouterAddress: z.string().optional().describe("Specific router address to get token for"),
     }),
 ) {}
+
+export class HyperlaneInspectWarpRouteParameters extends createToolParameters(
+    z.object({
+        warpRouteAddress: z.string().describe("The warp route address to inspect"),
+        chain: z.string().describe("The chain name (e.g. base, arbitrum)"),
+    }),
+) {}
+
+export class HyperlaneSendAssetsParameters extends createToolParameters(
+    z.object({
+        tokenAddress: z
+            .string()
+            .regex(/^0x[a-fA-F0-9]{40}$/)
+            .describe("Token contract address"),
+        warpRouteAddress: z.string().describe("Warp route address"),
+        originChain: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
+        destinationChain: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
+        recipientAddress: z.string().describe("Recipient address"),
+        amount: z.string().describe("Amount to send"),
+    }),
+) {}
+
+export class HyperlaneGetWarpRoutesForChainParameters extends createToolParameters(
+    z.object({
+        chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
+    }),
+) {}
