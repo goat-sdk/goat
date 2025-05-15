@@ -11,7 +11,7 @@ import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { oneshot } from "@goat-sdk/plugin-1shot";
 
 import { viem } from "@goat-sdk/wallet-viem";
-import { mode } from "viem/chains";
+import { sepolia } from "viem/chains";
 
 require("dotenv").config();
 
@@ -40,7 +40,7 @@ const account = privateKeyToAccount(
 const walletClient = createWalletClient({
     account: account,
     transport: http(process.env.RPC_PROVIDER_URL),
-    chain: mode,
+    chain: sepolia,
 });
 
 // 1. Create the 1Shot plugin. The plugin can change the tools it has available based on your interactions with the agent,

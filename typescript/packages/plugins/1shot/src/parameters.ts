@@ -18,4 +18,4 @@ export class AddTransactionToToolsParams extends createToolParameters(transactio
 
 export class GetTransactionExecutionParams extends createToolParameters(getTransactionExecutionSchema) {}
 
-export class ListTransactionExecutionsParams extends createToolParameters(listTransactionExecutionsSchema) {}
+export class ListTransactionExecutionsParams extends createToolParameters(listTransactionExecutionsSchema.omit({ businessId: true })) {}

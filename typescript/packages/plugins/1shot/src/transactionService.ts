@@ -1,6 +1,6 @@
 import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
+import { OneShotClient, SolidityStructParam, Transaction, TransactionExecution } from "@uxly/1shot-client";
 import { ZodTypeAny, z } from "zod";
 import {
     AddTransactionToToolsParams,
@@ -18,6 +18,7 @@ export class TransactionService {
     ) {}
 
     protected workingEndpoints: Transaction[] = [];
+    protected recentTransactionExecutions: TransactionExecution[] = [];
 
     public async getTools(): Promise<ToolBase[]> {
         const tools = new Array<ToolBase>();
@@ -68,6 +69,7 @@ export class TransactionService {
                                 ...params,
                             });
                             console.log(response);
+                            this.recentTransactionExecutions.push(response);
                             return response;
                         },
                     ),
@@ -147,7 +149,7 @@ export class TransactionService {
 
     @Tool({
         name: "create_transaction",
-        description: "Adds a trans ",
+        description: "Creates a new transaction for the configured business. Returns the created transaction. You should check whether or not there is already a transaction created via the list_transactions tool first, if there is, you should use the add_transaction_to_working_endpoints tool to add it to the list of working endpoints rather than creating a new transaction.",
     })
     async createTransaction(_walletClient: EVMWalletClient, parameters: CreateTransactionParams) {
         const transactions = await this.oneShotClient.transactions.create(this.businessId, parameters);
@@ -181,6 +183,15 @@ export class TransactionService {
     async listTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
         const executions = await this.oneShotClient.executions.list(this.businessId, parameters);
         return executions;
+    }
+
+    @Tool({
+        name: "get_recent_transaction_executions",
+        description:
+            "Returns a list of all the Transaction Executions that you have interacted with during the current session. This data will be stale. You must get the most recent data about these Transaction Executions via the get_transaction_execution tool.",
+    })
+    async getRecentTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
+        return this.recentTransactionExecutions;
     }
 
     // Map Solidity types to Zod schemas
