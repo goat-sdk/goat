@@ -1,9 +1,10 @@
 import time
-from typing import Dict, List, Optional, TypedDict, Union, cast, NewType
+from typing import Any, Dict, List, Optional, TypedDict, Union, cast, NewType
 from goat.classes.wallet_client_base import Balance, Signature
-from goat.types.chain import EvmChain
+from goat.types.chain import EvmChain, NativeCurrency
+from goat_wallets.evm.types import EVMTypedData
 from goat_wallets.crossmint.solana_smart_wallet import LinkedUser
-from goat_wallets.evm import EVMWalletClient, EVMTransaction, EVMReadRequest, EVMTypedData, EVMReadResult
+from goat_wallets.evm import EVMWalletClient, EVMTransaction, EVMReadRequest, EVMReadResult
 from web3.main import Web3
 from web3.providers.rpc import HTTPProvider
 from eth_typing import ChecksumAddress
@@ -73,7 +74,9 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
         chain: str,
         signer: Signer,
         provider_url: str,
-        ens_provider_url: Optional[str] = None
+        ens_provider_url: Optional[str] = None,
+        tokens = None,
+        enable_send = True
     ):
         """Initialize Smart Wallet client.
         
@@ -84,7 +87,10 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
             signer: Signer configuration (address string or keypair dict)
             provider_url: RPC provider URL
             ens_provider_url: Optional ENS provider URL
+            tokens: List of token configurations
+            enable_send: Whether to enable send functionality
         """
+        EVMWalletClient.__init__(self, tokens=tokens, enable_send=enable_send)
         BaseWalletClient.__init__(self, address, api_client, chain)
         self._signer = signer
         
@@ -122,8 +128,22 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
         """Get chain information."""
         return EvmChain(
             type="evm",
-            id=self._w3.eth.chain_id
+            id=self._w3.eth.chain_id,
+            nativeCurrency=NativeCurrency(
+                name="Ether",
+                symbol="ETH",
+                decimals=18
+            )
         )
+    
+    def get_chain_id(self) -> int:
+        """Get chain ID."""
+        return self._w3.eth.chain_id
+    
+    def get_native_balance(self) -> int:
+        """Get native balance of this wallet in base units."""
+        balance = self.balance_of(self._address)
+        return int(balance["in_base_units"])
     
     def resolve_address(self, address: str) -> ChecksumAddress:
         """Resolve ENS name to address."""
@@ -209,14 +229,21 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
             
             time.sleep(2)
     
-    def sign_typed_data(self, data: EVMTypedData) -> Signature:
+    def sign_typed_data(self, types: Dict[str, Any], primary_type: str, domain: Dict[str, Any], value: Dict[str, Any]) -> Signature:
         """Sign typed data."""
         if not isinstance(self._signer, dict):
             raise ValueError("Keypair signer is required for typed data signing")
-        
+
+        typed_data: EVMTypedData = {
+            "types": types,
+            "primaryType": primary_type,
+            "domain": domain, # type: ignore
+            "value": value
+        }
+
         response = self._client.sign_typed_data_for_smart_wallet(
             self._address,
-            data,
+            typed_data,
             self._chain,
             Account.from_key(cast(KeyPairSigner, self._signer)["secretKey"]).address
         )
@@ -293,8 +320,12 @@ class EVMSmartWalletClient(EVMWalletClient, BaseWalletClient):
         
         return {"value": result}
     
-    def balance_of(self, address: str) -> Balance:
+    def balance_of(self, address: str, token_address: Optional[str] = None) -> Balance:
         """Get ETH balance of an address."""
+        # TODO: Add support for querying token balances via Crossmint API
+        if token_address:
+            return super().balance_of(address, token_address)
+
         resolved = self.resolve_address(address)
         balance = self._w3.eth.get_balance(w3_sync.to_checksum_address(resolved))
         
@@ -379,7 +410,9 @@ def smart_wallet_factory(api_client: CrossmintWalletsAPI):
             options["chain"],
             options["signer"],
             options["provider"],
-            options.get("options", {}).get("ensProvider")
+            options.get("options", {}).get("ensProvider"),
+            options.get("tokens"),
+            options.get("enable_send", True)
         )
     
     return create_smart_wallet

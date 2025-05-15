@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-evm"
-version = "0.1.2"
+version = "0.2.0"
 description = "Goat SDK EVM wallet implementation"
 authors = [
     "Andrea Villa <andreakarimodm@gmail.com>",
@@ -23,7 +23,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-goat-sdk = "^0.1.0"
+goat-sdk = "^0.2.0"
 evmchains = "^0.1.3"
 typing-extensions = "^4.12.2"
 

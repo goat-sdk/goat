@@ -1,3 +1,4 @@
+import type { EvmChain } from "@goat-sdk/core";
 import {
     type EVMReadRequest,
     EVMSmartWalletClient,
@@ -18,7 +19,6 @@ import {
     type Chain,
     type WalletClient as ViemWalletClient,
     createWalletClient,
-    formatUnits,
     publicActions,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -247,27 +247,22 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         }
     }
 
-    async balanceOf(address: string) {
+    async getNativeBalance() {
         const balance = await this.#client.extend(publicActions).getBalance({
-            address: address as `0x${string}`,
+            address: this.#safeAddress as `0x${string}`,
         });
 
         const chain = this.#client.chain ?? mainnet;
 
-        return {
-            value: formatUnits(BigInt(balance), chain.nativeCurrency.decimals),
-            decimals: chain.nativeCurrency.decimals,
-            symbol: chain.nativeCurrency.symbol,
-            name: chain.nativeCurrency.name,
-            inBaseUnits: balance.toString(),
-        };
+        return BigInt(balance);
     }
 
-    getChain() {
+    getChain(): EvmChain {
         if (!this.#client.chain) throw new Error("Chain not initialized");
         return {
             type: "evm" as const,
             id: this.#client.chain.id,
+            nativeCurrency: this.#client.chain.nativeCurrency,
         };
     }
 

@@ -10,6 +10,7 @@
 Integrate the more than +200 onchain tools of GOAT with [Smolagents](https://github.com/huggingface/smolagents), a framework for building agentic systems with small language models.
 
 ## Installation
+
 ```bash
 poetry add goat-sdk-adapter-smolagents
 ```
@@ -17,13 +18,11 @@ poetry add goat-sdk-adapter-smolagents
 ## Usage
 
 ```python
-# --- Setup GOAT Wallet and Plugins (Example: Solana + SPL Token) --- 
+# --- Setup GOAT Wallet and Plugins (Example: Solana + SPL Token) ---
 import os
 from dotenv import load_dotenv
 from solders.keypair import Keypair
 from solana.rpc.api import Client as SolanaClient
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
 from goat_wallets.solana import solana
 
 # Load environment variables
@@ -43,22 +42,17 @@ client = SolanaClient(solana_rpc_endpoint)
 keypair = Keypair.from_base58_string(solana_wallet_seed)
 wallet = solana(client, keypair)
 
-spl_token_plugin = spl_token(SplTokenPluginOptions(
-    network="mainnet",
-    tokens=SPL_TOKENS
-))
-
-# --- Import Smolagents and the GOAT Adapter --- 
+# --- Import Smolagents and the GOAT Adapter ---
 from smolagents import OpenAIServerModel, ToolCallingAgent
 from goat_adapters.smolagents import get_smolagents_tools
 
-# --- Generate Smolagents Tools from GOAT --- 
+# --- Generate Smolagents Tools from GOAT ---
 goat_smolagents_tools = get_smolagents_tools(
     wallet=wallet,
-    plugins=[spl_token_plugin]
+    plugins=[]
 )
 
-# --- Define Smolagents Agent using GOAT Tools --- 
+# --- Define Smolagents Agent using GOAT Tools ---
 model = OpenAIServerModel(
     model_id="gpt-4o",
 )
@@ -89,7 +83,7 @@ You can also create a Smolagents ToolCollection to manage your GOAT tools:
 from smolagents import ToolCollection, ToolCallingAgent
 
 # Create the tools first
-goat_tools = get_smolagents_tools(wallet=wallet, plugins=[spl_token_plugin])
+goat_tools = get_smolagents_tools(wallet=wallet, plugins=[])
 
 # Create a custom tool collection with your GOAT tools
 my_tool_collection = ToolCollection(

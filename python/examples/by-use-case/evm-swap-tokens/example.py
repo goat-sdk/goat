@@ -1,11 +1,9 @@
 import os
 from dotenv import load_dotenv
-from goat_plugins.erc20.token import PEPE, USDC
 
 # Load environment variables
 load_dotenv()
 
-from goat_plugins.erc20 import ERC20PluginOptions, erc20
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
@@ -16,7 +14,7 @@ from eth_account import Account
 
 from goat_adapters.langchain import get_on_chain_tools
 from goat_plugins.uniswap import uniswap, UniswapPluginOptions
-from goat_wallets.web3 import Web3EVMWalletClient
+from goat_wallets.web3 import web3
 
 # Initialize Web3 and account
 # Connect to Base (Coinbase L2)
@@ -77,9 +75,8 @@ Always use base units (wei) for amounts. For example:
     assert uniswap_base_url is not None, "You must set UNISWAP_BASE_URL environment variable"
 
     tools = get_on_chain_tools(
-        wallet=Web3EVMWalletClient(w3),
+        wallet=web3(w3),
         plugins=[
-            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
             uniswap(options=UniswapPluginOptions(
                 api_key=uniswap_api_key,
                 base_url=uniswap_base_url

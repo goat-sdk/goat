@@ -21,7 +21,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-goat-sdk = "^0.1.0"
+goat-sdk = ">=0.1.0"
 langchain = "^0.3.14"
 
 [tool.poetry.group.test.dependencies]

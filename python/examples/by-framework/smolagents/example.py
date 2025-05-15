@@ -8,9 +8,7 @@ from smolagents import OpenAIServerModel, ToolCallingAgent
 
 # GOAT imports
 from goat_adapters.smolagents import get_smolagents_tools
-from goat_plugins.spl_token import spl_token, SplTokenPluginOptions
-from goat_plugins.spl_token.tokens import SPL_TOKENS
-from goat_wallets.solana import solana
+from goat_wallets.solana import solana, SPL_TOKENS
 
 # Load environment variables
 load_dotenv()
@@ -34,15 +32,8 @@ try:
     keypair = Keypair.from_base58_string(solana_wallet_seed)
     wallet = solana(client, keypair)
 
-    spl_token_plugin = spl_token(
-        SplTokenPluginOptions(
-            network="mainnet",  # Make sure this matches your .env settings and seed key network
-            tokens=SPL_TOKENS,
-        )
-    )
-
     # Get Smolagents-compatible tools from GOAT adapter
-    goat_smolagents_tools = get_smolagents_tools(wallet=wallet, plugins=[spl_token_plugin])
+    goat_smolagents_tools = get_smolagents_tools(wallet=wallet, plugins=[])
     if not goat_smolagents_tools:
         print("Warning: No GOAT tools were loaded. Check adapter/plugin setup or tool compatibility.")
         # Optionally exit if tools are essential

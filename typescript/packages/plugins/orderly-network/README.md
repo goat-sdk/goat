@@ -10,6 +10,7 @@
 Brief description of the OrderlyNetwork plugin and what it does
 
 ## Installation
+
 ```bash
 npm install @goat-sdk/plugin-orderly-network
 yarn add @goat-sdk/plugin-orderly-network
@@ -17,6 +18,7 @@ pnpm add @goat-sdk/plugin-orderly-network
 ```
 
 ## Usage
+
 ```typescript
 import { orderlynetwork } from '@goat-sdk/plugin-orderly-network';
 
@@ -33,18 +35,16 @@ const tools = await getOnChainTools({
 For improved integration to work seamlessly with the ERC20 plugin, you can configure your tools as follows:
 
 ```typescript
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
 import { orderlynetwork } from "@goat-sdk/plugin-orderly-network";
 
 const tools = await getOnChainTools({
     wallet: // ...
-    plugins: [
-        erc20({ tokens: [USDC] }),
-        orderlynetwork()
-    ]
+    plugins: [orderlynetwork()],
 });
 ```
+
 ## Tools
+
 - Deposit USDC into Orderly Network
 - Withdraw USDC from Orderly Network
 - Create an order at Orderly Network
@@ -64,6 +64,7 @@ The plugin requires some common environment variables and additional chain-speci
 ## Common Configuration
 
 ### Core Orderly Configuration
+
 ```bash
 ORDERLY_PRIVATE_KEY=           # Your private key for signing transactions (ed25519 format)
 ORDERLY_BROKER_ID=demo         # Your broker ID (default: demo)
@@ -111,8 +112,9 @@ The plugin will automatically:
 
 - Derive your public key from the private key.
 - Use the appropriate Solana RPC endpoints based on your `ORDERLY_NETWORK` setting:
-  - For `ORDERLY_NETWORK=mainnet`: [https://api.mainnet-beta.solana.com](https://api.mainnet-beta.solana.com)
-  - For `ORDERLY_NETWORK=testnet`: [https://api.devnet.solana.com](https://api.devnet.solana.com)
+    - For `ORDERLY_NETWORK=mainnet`: [https://api.mainnet-beta.solana.com](https://api.mainnet-beta.solana.com)
+    - For `ORDERLY_NETWORK=testnet`: [https://api.devnet.solana.com](https://api.devnet.solana.com)
+
 ```
 
 <footer>
@@ -121,6 +123,7 @@ The plugin will automatically:
 <div>
 <a href="https://github.com/goat-sdk/goat">
   <img src="https://github.com/user-attachments/assets/59fa5ddc-9d47-4d41-a51a-64f6798f94bd" alt="GOAT" width="100%" height="auto" style="object-fit: contain; max-width: 800px;">
-</a> 
+</a>
 </div>
 </footer>
+```
