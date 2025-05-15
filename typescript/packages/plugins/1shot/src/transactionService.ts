@@ -132,7 +132,8 @@ export class TransactionService {
 
     @Tool({
         name: "search_smart_contracts",
-        description: "Performs a semantic search for smart contracts on the blockchain using the annotations on 1ShotAPI. It will return up to 5 candidate contract descriptions, which include all the major and/or important methods on the smart contract. After identifying the contract you want to use, you can make sure tools are available for the described methods via the assure_tools_for_smart_contract tool.",
+        description:
+            "Performs a semantic search for smart contracts on the blockchain using the annotations on 1ShotAPI. It will return up to 5 candidate contract descriptions, which include all the major and/or important methods on the smart contract. After identifying the contract you want to use, you can make sure tools are available for the described methods via the assure_tools_for_smart_contract tool.",
     })
     async searchSmartContracts(_walletClient: EVMWalletClient, parameters: ContractSearchParams) {
         const contracts = await this.oneShotClient.transactions.search(parameters.query, parameters);
@@ -141,7 +142,8 @@ export class TransactionService {
 
     @Tool({
         name: "assure_tools_for_smart_contract",
-        description: "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract.",
+        description:
+            "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract.",
     })
     async assureToolsForSmartContract(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
         const transactions = await this.oneShotClient.transactions.contractTransactions(this.businessId, parameters);
