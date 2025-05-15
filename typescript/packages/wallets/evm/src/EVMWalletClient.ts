@@ -20,7 +20,7 @@ import {
     signTypedDataParametersSchema,
 } from "./params.js";
 import { PREDEFINED_TOKENS, type Token } from "./tokens";
-import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "./types";
+import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTransactionResult, EVMTypedData } from "./types";
 
 // Parameter types for EVM-specific methods
 export type ApproveParameters = {
@@ -59,7 +59,7 @@ export abstract class EVMWalletClient extends WalletClientBase {
     // getAddress, getChain, signMessage are already required by WalletClientBase
 
     // Abstract methods specific to EVM interaction layer
-    abstract sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }>;
+    abstract sendTransaction(transaction: EVMTransaction): Promise<EVMTransactionResult>;
     abstract read(request: EVMReadRequest): Promise<EVMReadResult>;
     abstract getNativeBalance(): Promise<bigint>;
     abstract signTypedData(data: EVMTypedData): Promise<Signature>;
