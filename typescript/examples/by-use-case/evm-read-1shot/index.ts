@@ -54,34 +54,110 @@ const oneShotPlugin = oneshot(apiKey, apiSecret, businessId);
         output: process.stdout,
     });
 
+    // 3. Get your available tools; this is a static list
+    const staticTools = await getOnChainTools({
+        wallet: viem(walletClient),
+        plugins: [
+            oneShotPlugin, // Full access to everything in 1ShotAPI
+        ],
+    });
+
+    console.log("Welcome to the 1ShotAPI example agent. This agent will help you perform any on-chain action you want. If you describe your goal, it will formulate a plan, identify the smart contracts to use, and then use the tools to carry out the plan.")
     while (true) {
-        const prompt = await new Promise<string>((resolve) => {
+        const userPrompt = await new Promise<string>((resolve) => {
             rl.question('Enter your prompt (or "exit" to quit): ', resolve);
         });
 
-        if (prompt === "exit") {
+        if (userPrompt === "exit") {
             rl.close();
             break;
         }
 
-        // 3. Get your available tools. 1Shot tools are dynamic, so they can change based on your interactions with the agent.
-        // That's why you must get the tools each time you interact with the agent.
-        const tools = await getOnChainTools({
-            wallet: viem(walletClient),
-            plugins: [
-                oneShotPlugin, // Full access to everything in 1ShotAPI
-            ],
-        });
+        // There is a 4-part plan in order to be able to carry out any possible task on the blockchain:
+        // 1. Create a plan
+        // 2. Identify the smart contracts to use
+        // 3. Creat the tools
+        // 4. Execute the plan
+
+        const planningPrompt = `
+You are a planning agent for a blockchain assistant.
+
+Your job is to take the user's request and break it into a sequence of on-chain actions. Each step should be atomic and should reference specific contract actions where known, or describe what kind of contract would be needed otherwise.
+
+Return the result as a JSON array with the fields: step_number, action, token, protocol (if known), wallet (if applicable), notes.
+
+User request: "${userPrompt}"
+`;
 
         console.log("\n-------------------\n");
-        console.log("TOOLS CALLED");
+        console.log("PLANNING");
         console.log("\n-------------------\n");
+        console.log(planningPrompt);
+
         try {
-            const result = await generateText({
+            const planningResult = await generateText({
+                model: openai("gpt-4o-mini"),
+                tools: staticTools,
+                maxSteps: 10, // Maximum number of tool invocations per request
+                prompt: planningPrompt,
+                onStepFinish: (event) => {
+                    console.log(event.toolResults);
+                },
+            });
+
+            const discoveryPrompt = `
+You are a smart contract discovery agent.
+
+For each of the following planned steps, use your knowledge base to find one or more matching contracts and methods. Formulate a semantic query that describes the type of contract you want and use the search_smart_contracts tool to locate candidate contracts. After identifying the contract you want to use, use the assure_tools_for_smart_contract tool to ensure that the tools are available for the described methods.
+
+Return a short description of the contracts you chose and the methods you want to use.
+
+Steps:
+${JSON.stringify(planningResult.text, null, 2)}
+`;
+
+            console.log("\n-------------------\n");
+            console.log("CONTRACT DISCOVERY");
+            console.log("\n-------------------\n");
+            console.log(discoveryPrompt);
+
+            const contractDiscoveryResult = await generateText({
+                model: openai("gpt-4o-mini"),
+                tools: staticTools,
+                maxSteps: 10, // Maximum number of tool invocations per request
+                prompt: discoveryPrompt,
+                onStepFinish: (event) => {
+                    console.log(event.toolResults);
+                },
+            });
+
+            const finalExecutionPrompt = `
+The user wants to: "${userPrompt}".
+
+The original plan was: ${JSON.stringify(planningResult.text, null, 2)}.
+
+The contract discovery results were: "${contractDiscoveryResult.text}".
+
+You now have access to blockchain tools that can help complete this goal. Use the tools to complete each step in the plan. Be explicit about each call and explain what you're doing as you go.
+`;
+
+            console.log("\n-------------------\n");
+            console.log("FINAL EXECUTION");
+            console.log("\n-------------------\n");
+            console.log(finalExecutionPrompt);
+
+            const tools = await getOnChainTools({
+                wallet: viem(walletClient),
+                plugins: [
+                    oneShotPlugin, // Full access to everything in 1ShotAPI
+                ],
+            });
+
+            const finalExecutionResult = await generateText({
                 model: openai("gpt-4o-mini"),
                 tools: tools,
                 maxSteps: 10, // Maximum number of tool invocations per request
-                prompt: prompt,
+                prompt: finalExecutionPrompt,
                 onStepFinish: (event) => {
                     console.log(event.toolResults);
                 },
@@ -90,7 +166,7 @@ const oneShotPlugin = oneshot(apiKey, apiSecret, businessId);
             console.log("\n-------------------\n");
             console.log("RESPONSE");
             console.log("\n-------------------\n");
-            console.log(result.text);
+            console.log(finalExecutionResult.text);
         } catch (error) {
             console.error(error);
         }
