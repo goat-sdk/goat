@@ -26,6 +26,7 @@ import {
     HyperlaneValidatorParameters,
 } from "./parameters";
 import { type WarpRoutes } from "./types";
+import { stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
 
@@ -664,11 +665,11 @@ export class HyperlaneService {
      * @description Sends tokens across chains using an approved Hyperlane warp route
      * @param {EVMWalletClient} walletClient The wallet client to approve and send the transfer
      * @param {HyperlaneSendAssetsParameters} parameters Parameters for the cross-chain asset transfer
-     * @param {string} parameters.tokenAddress Origin chain token contract address
      * @param {string} parameters.warpRouteAddress Warp route contract address
      * @param {string} parameters.originChain Origin chain
      * @param {string} parameters.destinationChain Destination chain
      * @param {string} parameters.recipientAddress Destination address
+     * @param {string} parameters.tokenAddress Origin chain token contract address
      * @param {string} parameters.amount Amount to transfer (in human-readable units)
      * @returns {Object} An object with success message and transaction hash
      * @throws {Error} If approval or transfer fails
@@ -679,12 +680,51 @@ export class HyperlaneService {
     })
     async sendAssets(walletClient: EVMWalletClient, parameters: HyperlaneSendAssetsParameters): Promise<string> {
         const { originChain, tokenAddress, warpRouteAddress, destinationChain, recipientAddress, amount } = parameters;
-
         const { multiProvider } = await this.getMultiProvider(walletClient);
         const originReader = new EvmERC20WarpRouteReader(multiProvider, originChain);
-        const originTokenType = await originReader.deriveTokenType(warpRouteAddress); // TODO: remove this and get from warpRouteConfig
         const readerWarpRouteConfig = await originReader.deriveWarpRouteConfig(warpRouteAddress);
-
+        //
+        //    {
+        //        mailbox: "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766",
+        //        owner: "0x9a2D8681FfCc45b0c18E72b16FBA9b2270B911eD",
+        //        hook: "0x0000000000000000000000000000000000000000",
+        //        interchainSecurityModule: {
+        //            address: "0x1d80B4eA89Ea345a1A8eE25acf623084A77101EC",
+        //            type: "staticAggregationIsm",
+        //            modules: [
+        //                {
+        //                    owner: "0x9a2D8681FfCc45b0c18E72b16FBA9b2270B911eD",
+        //                    address: "0x27de9B2fd78DB2d44A457a4D5b798dd492e4D0cb",
+        //                    type: "defaultFallbackRoutingIsm",
+        //                    domains: {},
+        //                },
+        //                {
+        //                    address: "0x67dd445BB22174F57d5706B60C80B8d16b21a0E0",
+        //                    relayer: "0x9a2D8681FfCc45b0c18E72b16FBA9b2270B911eD",
+        //                    type: "trustedRelayerIsm",
+        //                },
+        //            ],
+        //            threshold: 1,
+        //        },
+        //        type: "native",
+        //        name: "Ether",
+        //        symbol: "ETH",
+        //        decimals: 18,
+        //        remoteRouters: {
+        //            "44787": {
+        //                address: "0x78fe869f19f917fde4192c51c446Fbd3721788ee",
+        //            },
+        //        },
+        //        proxyAdmin: {
+        //            address: "0x387A32a5CE85114C10DFE684a9F67cB6e00d6153",
+        //            owner: "0x9a2D8681FfCc45b0c18E72b16FBA9b2270B911eD",
+        //        },
+        //        destinationGas: {
+        //            "44787": "64000",
+        //        },
+        //    }
+        //
+        const originTokenType = readerWarpRouteConfig.type;
         const weiAmount = await this.toWeiAmount({
             amount: String(amount),
             tokenType: originTokenType,
@@ -692,48 +732,46 @@ export class HyperlaneService {
             walletClient,
         });
 
-        const domainId = (await this.getDomainId(destinationChain)) as number;
-        const recipientBytes32 = utils.hexZeroPad(recipientAddress, 32);
+        const destinationDomainId = (await this.getDomainId(destinationChain)) as number;
+        const recipientAddressBytes32 = utils.hexZeroPad(recipientAddress, 32);
 
-        let transferTx;
+        let transferTx: EVMTransactionResult;
         if (originTokenType === TokenType.native) {
-
-            const recipientContract = readerWarpRouteConfig.remoteRouters
-                ? readerWarpRouteConfig.remoteRouters[domainId].address
-                : undefined;
-            const recipientContractBytes32 = utils.hexZeroPad(recipientContract as string, 32); // ? possibly undefined
+            const recipientContractAddress = readerWarpRouteConfig.remoteRouters
+                ? readerWarpRouteConfig.remoteRouters[destinationDomainId].address
+                : undefined; // TODO: What if it's undefined
+            const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress as string, 32); // ? possibly undefined
 
             const protocolFee = await this.getQuoteDispatchFee({
                 mailboxAddress: readerWarpRouteConfig.mailbox,
                 warpRouteAddress,
                 destinationChain,
                 amount: weiAmount,
-                recipientBytes32,
-                recipientContractBytes32,
+                recipientAddressBytes32,
+                recipientContractAddressBytes32,
                 walletClient,
             });
-            
+
             transferTx = await walletClient.sendTransaction({
                 to: warpRouteAddress,
                 functionName: "transferRemote",
-                args: [domainId, recipientBytes32, weiAmount],
+                args: [destinationDomainId, recipientAddressBytes32, weiAmount],
                 abi: transferRemoteNativeAbi,
                 value: weiAmount + protocolFee,
             });
-
         } else {
             await this.approveTransfer(walletClient, { tokenAddress, warpRouteAddress, amount: weiAmount });
             transferTx = await walletClient.sendTransaction({
                 to: warpRouteAddress,
                 functionName: "transferRemote",
-                args: [domainId, recipientBytes32, weiAmount],
+                args: [destinationDomainId, recipientAddressBytes32, weiAmount],
                 abi: transferRemoteCollateralAbi,
             });
         }
 
-        return JSON.stringify({
+        return stringifyWithBigInts({
             message: "Cross-chain asset transfer initiated",
-            transactionHash: transferTx.hash,
+            transaction: transferTx,
         });
     }
 
@@ -838,7 +876,7 @@ export class HyperlaneService {
                   ).value,
               );
 
-        return ethers.utils.parseUnits(amount, 18).toBigInt();
+        return ethers.utils.parseUnits(amount, decimals).toBigInt();
     }
 
     private async getDomainId(chain: string): Promise<number | undefined> {
@@ -852,25 +890,31 @@ export class HyperlaneService {
         destinationChain: string;
         warpRouteAddress: string;
         amount: bigint; // amount in wei
-        recipientBytes32: string;
-        recipientContractBytes32: string;
+        recipientAddressBytes32: string;
+        recipientContractAddressBytes32: string;
         walletClient: EVMWalletClient;
     }): Promise<bigint> {
-        const { mailboxAddress, destinationChain, walletClient, recipientContractBytes32, amount, recipientBytes32 } =
-            parameters;
+        const {
+            mailboxAddress,
+            destinationChain,
+            walletClient,
+            recipientContractAddressBytes32,
+            amount,
+            recipientAddressBytes32,
+        } = parameters;
 
         const destinationDomain = (await this.getDomainId(destinationChain)) as number;
 
         const messageBody = encodePacked(
             ["bytes32", "uint256", "bytes"],
-            [recipientBytes32 as `0x${string}`, amount, "0x"],
+            [recipientAddressBytes32 as `0x${string}`, amount, "0x"],
         );
 
         const { value } = await walletClient.read({
             address: mailboxAddress,
             abi: hyperlaneABI,
             functionName: "quoteDispatch",
-            args: [destinationDomain, recipientContractBytes32, messageBody],
+            args: [destinationDomain, recipientContractAddressBytes32, messageBody],
         });
 
         return BigNumber.from(value).toBigInt();
@@ -907,7 +951,7 @@ function createMultiProviderSingleton() {
                 uri: REGISTRY_URL,
                 proxyUrl: REGISTRY_PROXY_URL,
             });
-            const chainMetadata = await registry.getMetadata();
+            const chainMetadata = await registry.getMetadata(); // * Gives "Error: Failed to fetch from github: 429 Too Many Requests" sometimes
             //
             //    {
             //        'ethereum': {

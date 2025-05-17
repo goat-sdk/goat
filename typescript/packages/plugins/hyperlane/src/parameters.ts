@@ -130,11 +130,11 @@ export class HyperlaneSendAssetsParameters extends createToolParameters(
         tokenAddress: z
             .string()
             .regex(/^0x[a-fA-F0-9]{40}$/)
-            .describe("Token contract address"),
+            .describe("Origin chain token contract address"),
         warpRouteAddress: z.string().describe("Warp route address"),
         originChain: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
         destinationChain: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
-        recipientAddress: z.string().describe("Recipient address"),
+        recipientAddress: z.string().describe("The address of the wallet receiving assets"),
         amount: z.string().describe("Amount to send"),
     }),
 ) {}

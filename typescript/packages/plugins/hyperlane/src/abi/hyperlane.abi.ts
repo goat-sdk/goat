@@ -60,26 +60,30 @@ export default [
     },
 ] as const;
 
-export const transferRemoteNativeAbi = [{
-    type: "function",
-    name: "transferRemote",
-    stateMutability: "payable",
-    inputs: [
-        { name: "destination", type: "uint32" },
-        { name: "recipient", type: "bytes32" },
-        { name: "amount", type: "uint256" },
-    ],
-    outputs: [],
-}] as const;
+export const transferRemoteNativeAbi = [
+    {
+        type: "function",
+        name: "transferRemote",
+        stateMutability: "payable",
+        inputs: [
+            { name: "destination", type: "uint32" },
+            { name: "recipient", type: "bytes32" },
+            { name: "amount", type: "uint256" },
+        ],
+        outputs: [],
+    },
+] as const;
 
-export const transferRemoteCollateralAbi = [{
-    type: "function",
-    name: "transferRemote",
-    stateMutability: "nonpayable",
-    inputs: [
-        { name: "destination", type: "uint32" },
-        { name: "recipient", type: "bytes32" },
-        { name: "amount", type: "uint256" },
-    ],
-    outputs: [],
-}] as const;
+export const transferRemoteCollateralAbi = [
+    {
+        type: "function",
+        name: "transferRemote",
+        stateMutability: "nonpayable",
+        inputs: [
+            { name: "destination", type: "uint32" },
+            { name: "recipient", type: "bytes32" },
+            { name: "amount", type: "uint256" },
+        ],
+        outputs: [],
+    },
+] as const;
