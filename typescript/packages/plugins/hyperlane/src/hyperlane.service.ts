@@ -2,6 +2,7 @@ import { Tool } from "@goat-sdk/core";
 import { EVMTransactionResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { GithubRegistry } from "@hyperlane-xyz/registry";
 import {
+    ChainMap,
     ChainMetadata,
     EvmERC20WarpRouteReader,
     HyperlaneCore,
@@ -27,6 +28,7 @@ import {
 } from "./parameters";
 import { type WarpRoutes } from "./types";
 import { stringifyWithBigInts } from "./utils";
+import { defaultAbiCoder } from "ethers/lib/utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
 
@@ -680,7 +682,8 @@ export class HyperlaneService {
     })
     async sendAssets(walletClient: EVMWalletClient, parameters: HyperlaneSendAssetsParameters): Promise<string> {
         const { originChain, tokenAddress, warpRouteAddress, destinationChain, recipientAddress, amount } = parameters;
-        const { multiProvider } = await this.getMultiProvider(walletClient);
+        const { multiProvider, registry } = await this.getMultiProvider(walletClient);
+        const addresses: ChainMap<Record<string, string>> = await registry.getAddresses();
         const originReader = new EvmERC20WarpRouteReader(multiProvider, originChain);
         const readerWarpRouteConfig = await originReader.deriveWarpRouteConfig(warpRouteAddress);
         //
@@ -724,23 +727,27 @@ export class HyperlaneService {
         //        },
         //    }
         //
+        const destinationDomainId = (await this.getDomainId(destinationChain)) as number;
         const originTokenType = readerWarpRouteConfig.type;
         const weiAmount = await this.toWeiAmount({
             amount: String(amount),
-            tokenType: originTokenType,
+            tokenType: originTokenType,  // TODO: check if this is right for reverse direction
             tokenAddress,
             walletClient,
         });
 
-        const destinationDomainId = (await this.getDomainId(destinationChain)) as number;
         const recipientAddressBytes32 = utils.hexZeroPad(recipientAddress, 32);
 
+
         let transferTx: EVMTransactionResult;
-        if (originTokenType === TokenType.native) {
-            const recipientContractAddress = readerWarpRouteConfig.remoteRouters
-                ? readerWarpRouteConfig.remoteRouters[destinationDomainId].address
-                : undefined; // TODO: What if it's undefined
-            const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress as string, 32); // ? possibly undefined
+        if (warpRouteAddress === tokenAddress) {
+            // if ((originTokenType === TokenType.native) || (destinationTokenType === TokenType.native))
+            const remoteRouters = readerWarpRouteConfig.remoteRouters;
+            if (!remoteRouters) { // TODO: What to do if undefined? needed to check tokenType and get protocolFee
+                throw new Error ('Remote Routers is undefined')
+            }
+            const recipientContractAddress = remoteRouters[destinationDomainId].address;
+            const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress, 32); // ? possibly undefined
 
             const protocolFee = await this.getQuoteDispatchFee({
                 mailboxAddress: readerWarpRouteConfig.mailbox,
@@ -761,10 +768,18 @@ export class HyperlaneService {
             });
         } else {
             await this.approveTransfer(walletClient, { tokenAddress, warpRouteAddress, amount: weiAmount });
+            const destinationGas = readerWarpRouteConfig.destinationGas;
+            const gasLimit = Number(destinationGas![destinationDomainId]); // TODO: what if undefined
+            const refundAddress = walletClient.getAddress(); // Or some fallback
+
+            // encode hook metadata
+            const hookMetadata = this.encodeHookMetadata(gasLimit, refundAddress);
+            const hookAddress = addresses[originChain].interchainGasPaymaster;  // TODO: lineasepolia is undefined, is there another way to get this?
+
             transferTx = await walletClient.sendTransaction({
                 to: warpRouteAddress,
                 functionName: "transferRemote",
-                args: [destinationDomainId, recipientAddressBytes32, weiAmount],
+                args: [destinationDomainId, recipientAddressBytes32, weiAmount, hookMetadata, hookAddress],
                 abi: transferRemoteCollateralAbi,
             });
         }
@@ -773,6 +788,18 @@ export class HyperlaneService {
             message: "Cross-chain asset transfer initiated",
             transaction: transferTx,
         });
+    }
+
+    private encodeHookMetadata(gasLimit: number, refundAddress: string): string {
+        const variant = 1; // StandardHookMetadata variant
+        const msgValue = BigNumber.from(0); // Typically 0 unless sending native tokens
+        const hookMetadata = utils.hexConcat([
+            utils.hexZeroPad(utils.hexlify(variant), 2), // uint16 -> 2 bytes
+            utils.hexZeroPad(utils.hexlify(msgValue), 32), // uint256
+            utils.hexZeroPad(utils.hexlify(gasLimit), 32), // uint256
+            utils.hexZeroPad(refundAddress, 20), // address (already 20 bytes)
+        ]);
+        return hookMetadata
     }
 
     private async approveTransfer(
@@ -791,6 +818,37 @@ export class HyperlaneService {
             abi: hyperlaneABI,
         });
         console.log(`transaction approved: ${approveTx.hash}`);
+    }
+
+    async getBidirectionalWarpRouteInfo({
+            warpRouteAddress,
+            originChain,
+            destinationChain,
+            multiProvider,
+        }: {
+            warpRouteAddress: string;
+            originChain: string;
+            destinationChain: string;
+            multiProvider: any;
+    }) {
+        const originReader = new EvmERC20WarpRouteReader(multiProvider, originChain);
+        const originConfig = await originReader.deriveWarpRouteConfig(warpRouteAddress);
+        const destinationDomainId = await multiProvider.getDomainId(destinationChain);
+        const remoteRoutes = originConfig.remoteRouters;
+        
+        if (!remoteRoutes) {
+            throw new Error(`No remote router found for ${destinationChain}`);
+        }
+        const remoteRouterAddress = remoteRoutes[destinationDomainId]?.address;
+
+
+        const destinationReader = new EvmERC20WarpRouteReader(multiProvider, destinationChain);
+        const destinationConfig = await destinationReader.deriveWarpRouteConfig(remoteRouterAddress);
+
+        return {
+            origin: originConfig,
+            destination: destinationConfig,
+        };
     }
 
     /**
