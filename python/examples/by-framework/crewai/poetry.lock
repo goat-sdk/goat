@@ -1754,26 +1754,6 @@ type = "directory"
 url = "../../../src/adapters/crewai"
 
 [[package]]
-name = "goat-sdk-plugin-spl-token"
-version = "0.1.4"
-description = "Goat plugin for spl_token"
-optional = false
-python-versions = "^3.10"
-groups = ["main", "dev"]
-files = []
-develop = true
-
-[package.dependencies]
-goat-sdk = "*"
-goat-sdk-wallet-solana = "*"
-solana = {version = ">=0.30.2", extras = ["spl"]}
-solders = ">=0.18.0"
-
-[package.source]
-type = "directory"
-url = "../../../src/plugins/spl_token"
-
-[[package]]
 name = "goat-sdk-wallet-crossmint"
 version = "0.1.11"
 description = "Crossmint wallet implementation for GOAT SDK"
@@ -4684,14 +4664,14 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "78.1.0"
+version = "78.1.1"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "setuptools-78.1.0-py3-none-any.whl", hash = "sha256:3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8"},
-    {file = "setuptools-78.1.0.tar.gz", hash = "sha256:18fd474d4a82a5f83dac888df697af65afa82dec7323d09c3e37d1f14288da54"},
+    {file = "setuptools-78.1.1-py3-none-any.whl", hash = "sha256:c3a9c4211ff4c309edb8b8c4f1cbfa7ae324c4ba9f91ff254e3d305b9fd54561"},
+    {file = "setuptools-78.1.1.tar.gz", hash = "sha256:fcc17fd9cd898242f6b4adfaca46137a9edef687f43e6f78469692a5e70d851d"},
 ]
 
 [package.extras]
@@ -5659,4 +5639,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "615d9351015c938cf1f9e4dada2f99f1b5084064e08dc1785e9882bb7208f37b"
+content-hash = "64e0e5b0b5e89086a2e17a18da662ad535f7b4015247d8d9fc2bf5794f789948"
