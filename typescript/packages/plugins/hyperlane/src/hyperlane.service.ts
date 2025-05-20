@@ -13,7 +13,7 @@ import {
 import { BigNumber, ethers, utils } from "ethers";
 import { encodePacked } from "viem";
 import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
-import hyperlaneABI, { transferRemoteNativeAbi, transferRemoteCollateralAbi } from "./abi/hyperlane.abi";
+import hyperlaneABI from "./abi/hyperlane.abi";
 import {
     HyperlaneGetDeployedContractsParameters,
     HyperlaneGetMailboxParameters,
@@ -746,7 +746,7 @@ export class HyperlaneService {
         const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress, 32); // ? possibly undefined
 
         let transferTx: EVMTransactionResult;
-        if (warpRouteAddress === tokenAddress) {
+        if (originTokenType === TokenType.native) {
             const protocolFee = await this.getQuoteDispatchFee(
                 readerWarpRouteConfig.mailbox,
                 destinationChain,
@@ -760,11 +760,13 @@ export class HyperlaneService {
                 to: warpRouteAddress,
                 functionName: "transferRemote",
                 args: [destinationDomainId, recipientAddressBytes32, weiAmount],
-                abi: transferRemoteNativeAbi,
+                abi: hyperlaneABI,
                 value: weiAmount + protocolFee,
             });
         } else {
-            await this.approveTransfer(walletClient, { tokenAddress, warpRouteAddress, amount: weiAmount });
+            if (warpRouteAddress !== tokenAddress) {
+                await this.approveTransfer(walletClient, { tokenAddress, warpRouteAddress, amount: weiAmount });
+            }
             const destinationGas = readerWarpRouteConfig.destinationGas;
             const gasLimit = Number(destinationGas?.[destinationDomainId]); // TODO: what if undefined
             const refundAddress = walletClient.getAddress(); // Or some fallback
@@ -788,7 +790,7 @@ export class HyperlaneService {
                 to: warpRouteAddress,
                 functionName: "transferRemote",
                 args: [destinationDomainId, recipientAddressBytes32, weiAmount, hookMetadata, hookAddress],
-                abi: transferRemoteCollateralAbi,
+                abi: hyperlaneABI,
                 value: protocolFee,
             });
         }
