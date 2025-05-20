@@ -58,6 +58,19 @@ export default [
         ],
         outputs: [{ name: "fee", type: "uint256" }],
     },
+    {
+        type: "function",
+        name: "quoteDispatch",
+        stateMutability: "view",
+        inputs: [
+            { name: "_destinationDomain", type: "uint32" },
+            { name: "_recipientAddress", type: "bytes32" },
+            { name: "_messageBody", type: "bytes" },
+            { name: "_hookMetadata", type: "bytes" },
+            { name: "_hook", type: "address" },
+        ],
+        outputs: [{ name: "fee", type: "uint256" }],
+    },
 ] as const;
 
 export const transferRemoteNativeAbi = [
@@ -69,8 +82,6 @@ export const transferRemoteNativeAbi = [
             { name: "destination", type: "uint32" },
             { name: "recipient", type: "bytes32" },
             { name: "amount", type: "uint256" },
-            { name: "hookMetadata", type: "bytes" },
-            { name: "hook", type: "address" },
         ],
         outputs: [],
     },
