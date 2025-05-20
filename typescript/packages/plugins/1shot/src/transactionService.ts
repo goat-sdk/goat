@@ -1,6 +1,6 @@
 import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, transactionSchema, TransactionExecution, Transaction } from "@uxly/1shot-client";
+import { OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
 import { ZodTypeAny, z } from "zod";
 import {
     AddTransactionToToolsParams,
@@ -184,7 +184,8 @@ export class TransactionService {
 
     @Tool({
         name: "list_escrow_wallets",
-        description: "Returns a paginated list of Escrow Wallets for the configured business. Escrow wallets are hot wallets controlled by 1Shot. All transactions are executed via an escrow wallet. Escrow wallets are tied to a particular chain so you should always include a chain Id when getting a listing. ",
+        description:
+            "Returns a paginated list of Escrow Wallets for the configured business. Escrow wallets are hot wallets controlled by 1Shot. All transactions are executed via an escrow wallet. Escrow wallets are tied to a particular chain so you should always include a chain Id when getting a listing. ",
     })
     async listEscrowWallets(_walletClient: EVMWalletClient, parameters: ListEscrowWalletsParams) {
         const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);
