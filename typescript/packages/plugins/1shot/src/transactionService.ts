@@ -1,6 +1,6 @@
 import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, Transaction, TransactionExecution } from "@uxly/1shot-client";
+import { OneShotClient, SolidityStructParam, transactionSchema, TransactionExecution, Transaction } from "@uxly/1shot-client";
 import { ZodTypeAny, z } from "zod";
 import {
     AddTransactionToToolsParams,
@@ -20,7 +20,7 @@ export class TransactionService {
     ) {}
 
     protected workingEndpoints = new Set<Transaction>();
-    protected recentTransactionExecutions: TransactionExecution[] = [];
+    protected recentTransactionExecutions: Transaction[] = [];
 
     public async getTools(): Promise<ToolBase[]> {
         const tools = new Array<ToolBase>();
@@ -143,7 +143,7 @@ export class TransactionService {
     @Tool({
         name: "assure_tools_for_smart_contract",
         description:
-            "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract.",
+            "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract. Make sure to use a valid escrow wallet ID for the chain you want via the list_escrow_wallets tool.",
     })
     async assureToolsForSmartContract(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
         const transactions = await this.oneShotClient.transactions.contractTransactions(this.businessId, parameters);
@@ -184,7 +184,7 @@ export class TransactionService {
 
     @Tool({
         name: "list_escrow_wallets",
-        description: "Returns a paginated list of Escrow Wallets for the configured business. ",
+        description: "Returns a paginated list of Escrow Wallets for the configured business. Escrow wallets are hot wallets controlled by 1Shot. All transactions are executed via an escrow wallet. Escrow wallets are tied to a particular chain so you should always include a chain Id when getting a listing. ",
     })
     async listEscrowWallets(_walletClient: EVMWalletClient, parameters: ListEscrowWalletsParams) {
         const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);

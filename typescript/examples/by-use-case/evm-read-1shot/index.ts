@@ -62,7 +62,9 @@ const oneShotPlugin = oneshot(apiKey, apiSecret, businessId);
         ],
     });
 
-    console.log("Welcome to the 1ShotAPI example agent. This agent will help you perform any on-chain action you want. If you describe your goal, it will formulate a plan, identify the smart contracts to use, and then use the tools to carry out the plan.")
+    console.log(
+        "Welcome to the 1ShotAPI example agent. This agent will help you perform any on-chain action you want. If you describe your goal, it will formulate a plan, identify the smart contracts to use, and then use the tools to carry out the plan.",
+    );
     while (true) {
         const userPrompt = await new Promise<string>((resolve) => {
             rl.question('Enter your prompt (or "exit" to quit): ', resolve);
@@ -84,7 +86,41 @@ You are a planning agent for a blockchain assistant.
 
 Your job is to take the user's request and break it into a sequence of on-chain actions. Each step should be atomic and should reference specific contract actions where known, or describe what kind of contract would be needed otherwise.
 
-Return the result as a JSON array with the fields: step_number, action, token, protocol (if known), wallet (if applicable), notes.
+You will need to decide what chain you want to use. If the user doesn't specify a chain, default to Ethereum Mainnet. 1Shot supports the following chains:
+
+EthereumMainnet = 1,
+Sepolia = 11155111,
+Kovan = 42,
+Polygon = 137,
+DevTest = 31337,
+Avalanche = 43114,
+Fuji = 43113,
+Amoy = 80002,
+Solana = -1,
+SolanaTestnet = -2,
+Gnosis = 100,
+Binance = 56,
+Moonbeam = 1284,
+Arbitrum = 42161,
+Optimism = 10,
+Astar = 592,
+Shibuya = 81,
+BinanceTestnet = 97,
+Sui = 101,
+ZkSyncEra = 324,
+Base = 8453,
+BaseSepolia = 84532,
+Chiliz = 88888,
+Palm = 11297108109,
+Celo = 42220,
+Unichain = 130,
+Worldchain = 480,
+Blast = 81457,
+
+Once you have decided on a chain, use the list_escrow_wallets tool to get the escrow wallet IDs for the chain you want to use for each step, or create a new escrow wallet if none exists.
+Do not try and create any new transaction endpoints.
+
+Return the result as a JSON array with the fields: step_number, action, token, protocol (if known), escrow wallet ID, notes.
 
 User request: "${userPrompt}"
 `;
@@ -108,7 +144,9 @@ User request: "${userPrompt}"
             const discoveryPrompt = `
 You are a smart contract discovery agent.
 
-For each of the following planned steps, use your knowledge base to find one or more matching contracts and methods. Formulate a semantic query that describes the type of contract you want and use the search_smart_contracts tool to locate candidate contracts. After identifying the contract you want to use, use the assure_tools_for_smart_contract tool to ensure that the tools are available for the described methods.
+For each of the following planned steps, use your knowledge base to find one or more matching contracts and methods. 
+Formulate a semantic query that describes the type of contract you want and use the search_smart_contracts tool to locate candidate contracts. 
+After identifying the contract you want to use, use the assure_tools_for_smart_contract tool to ensure that the tools are available for the described methods.
 
 Return a short description of the contracts you chose and the methods you want to use.
 
@@ -138,7 +176,9 @@ The original plan was: ${JSON.stringify(planningResult.text, null, 2)}.
 
 The contract discovery results were: "${contractDiscoveryResult.text}".
 
-You now have access to blockchain tools that can help complete this goal. Use the tools to complete each step in the plan. Be explicit about each call and explain what you're doing as you go.
+You now have access to blockchain tools that can help complete this goal. 
+Do not try and create any new transactions.
+Use the tools to complete each step in the plan. Be explicit about each call and explain what you're doing as you go.
 `;
 
             console.log("\n-------------------\n");
