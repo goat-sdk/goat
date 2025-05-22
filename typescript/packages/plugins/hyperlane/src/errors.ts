@@ -7,3 +7,13 @@ export class InvalidChainError extends Error {
         Object.setPrototypeOf(this, InvalidChainError.prototype);
     }
 }
+
+export class ParametersRequiredError extends Error {
+    constructor(message?: string) {
+        super(message || "Invalid Parameters");
+        this.name = "ParametersRequiredError";
+
+        // Set the prototype explicitly (necessary for Error subclassing in TS)
+        Object.setPrototypeOf(this, ParametersRequiredError.prototype);
+    }
+}

@@ -1,4 +1,5 @@
 import { createToolParameters } from "@goat-sdk/core";
+import { TokenType } from "@hyperlane-xyz/sdk";
 import { z } from "zod";
 
 export class HyperlaneSendMessageParameters extends createToolParameters(
@@ -122,6 +123,65 @@ export class HyperlaneInspectWarpRouteParameters extends createToolParameters(
     z.object({
         warpRouteAddress: z.string().describe("The warp route address to inspect"),
         chain: z.string().describe("The chain name (e.g. base, arbitrum)"),
+    }),
+) {}
+
+export class HyperlaneDeployWarpRouteParameters extends createToolParameters(
+    z.object({
+        origin: z.object({
+            chain: z.string().min(1).describe("The origin chain name (e.g. ethereum, baseSepolia)"),
+            tokenAddress: z
+                .string()
+                .regex(/^0x[a-fA-F0-9]{40}$/)
+                .describe("ERC20 token address on the origin chain"),
+            type: z
+                .enum(
+                    Object.values(TokenType).filter((v): v is TokenType => typeof v === "string") as [
+                        TokenType,
+                        ...TokenType[],
+                    ],
+                )
+                .describe("Token type, default='collateral'"),
+            isNft: z.boolean().optional().describe("If using collateral for an ERC721 contract, set to true."),
+            symbol: z.string().optional().describe("The token symbol"),
+            name: z.string().optional().describe("The token name"),
+            decimals: z.number().optional().describe("The number of decimal places for the token"),
+            scale: z.number().optional().describe("The scale of the token"),
+            mailbox: z
+                .string()
+                .optional()
+                .describe("The address of the mailbox contract to use to send and receive messages"),
+            interchainSecurityModule: z
+                .string()
+                .optional()
+                .describe("The address of an interchain security modules to verify interchain messages"),
+        }),
+        destination: z.object({
+            chain: z.string().describe("Destination chain names"),
+            type: z
+                .enum(
+                    Object.values(TokenType).filter((v): v is TokenType => typeof v === "string") as [
+                        TokenType,
+                        ...TokenType[],
+                    ],
+                )
+                .describe("Token type, default='synthentic'"),
+            isNft: z.boolean().optional().describe("If using collateral for an ERC721 contract, set to true."),
+            symbol: z.string().optional().describe("The token symbol"),
+            name: z.string().optional().describe("The token name"),
+            decimals: z.number().optional().describe("The number of decimal places for the token"),
+            scale: z.number().optional().describe("The scale of the token"),
+            mailbox: z
+                .string()
+                .optional()
+                .describe("The address of the mailbox contract to use to send and receive messages"),
+            interchainSecurityModule: z
+                .string()
+                .optional()
+                .describe("The address of an interchain security modules to verify interchain messages"),
+        }),
+
+        // tokenType: z.enum(["synthetic", "collateral"]).describe("Type of warp token deployment (e.g. synthetic, collateral)"),
     }),
 ) {}
 

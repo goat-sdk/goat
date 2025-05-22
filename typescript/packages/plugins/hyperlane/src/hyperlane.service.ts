@@ -1,20 +1,24 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMTransactionResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { GithubRegistry } from "@hyperlane-xyz/registry";
+import { ChainAddresses, GithubRegistry } from "@hyperlane-xyz/registry";
 import {
     ChainMap,
     ChainMetadata,
     EvmERC20WarpRouteReader,
+    HypERC20Deployer,
     HyperlaneCore,
     HyperlaneIsmFactory,
     MultiProvider,
     TokenType,
+    WarpRouteDeployConfigMailboxRequired,
 } from "@hyperlane-xyz/sdk";
 import { BigNumber, ethers, utils } from "ethers";
 import { encodePacked } from "viem";
 import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
 import hyperlaneABI from "./abi/hyperlane.abi";
+import { ParametersRequiredError } from "./errors";
 import {
+    HyperlaneDeployWarpRouteParameters,
     HyperlaneGetDeployedContractsParameters,
     HyperlaneGetMailboxParameters,
     HyperlaneGetTokenParameters,
@@ -27,7 +31,7 @@ import {
     HyperlaneValidatorParameters,
 } from "./parameters";
 import { type WarpRoutes } from "./types";
-import { stringifyWithBigInts } from "./utils";
+import { setIfDefined, stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
 
@@ -662,6 +666,179 @@ export class HyperlaneService {
 
     /**
      * @method
+     * @name HyperlaneService#deployWarpRoute
+     * @description Deploys a Hyperlane warp route from an origin chain to a destination chain, using the provided mailbox-aware warp route configuration.
+     * @param {EVMWalletClient} walletClient The wallet client used to sign and send the deployment transaction.
+     * @param {HyperlaneDeployWarpRouteParameters} parameters
+     * @param {string} parameters.originChain Origin chain name (e.g. base, arbitrum).
+     * @param {string} parameters.destinationChain Destination chain name (e.g. base, arbitrum).
+     * @param {WarpRouteDeployConfigMailboxRequired} parameters.config Warp route deployment configuration including mailbox, ISM, token metadata, and any necessary security modules.
+     * @returns {Promise<string>} A promise that resolves to the transaction hash or deployed contract address.
+     * @throws {Error} If warp route deployment fails
+     */
+    @Tool({
+        name: "hyperlane_deploy_warp_route",
+        description: "Deploys a Warp Route using HypERC20Deployer from the Hyperlane SDK",
+    })
+    async deployWarpRoute(
+        walletClient: EVMWalletClient,
+        parameters: HyperlaneDeployWarpRouteParameters,
+    ): Promise<string> {
+        const { origin, destination } = parameters;
+        const {
+            type: originType,
+            chain: originChain,
+            tokenAddress,
+            isNft: originIsNft,
+            symbol: originSymbol,
+            name: originName,
+            decimals: originDecimals,
+            scale: originScale,
+            mailbox: originMailbox,
+            interchainSecurityModule: originInterchainSecurityModule,
+        } = origin;
+        const {
+            type: destinationType,
+            chain: destinationChain,
+            isNft: destinationIsNft,
+            symbol: destinationSymbol,
+            name: destinationName,
+            decimals: destinationDecimals,
+            scale: destinationScale,
+            mailbox: destinationMailbox,
+            interchainSecurityModule: destinationInterchainSecurityModule,
+        } = destination;
+
+        const owner = walletClient.getAddress();
+        const { multiProvider, registry } = await this.getMultiProvider(walletClient);
+        const chainAddresses = await registry.getAddresses();
+
+        const originAddress = chainAddresses[originChain];
+        const destinationAddress = chainAddresses[destinationChain];
+
+        if (!originAddress) {
+            throw new Error(`No address found for origin chain: ${originChain}`);
+        }
+        if (!destinationAddress) {
+            throw new Error(`No address found for destination chain: ${destinationChain}`);
+        }
+
+        const config: WarpRouteDeployConfigMailboxRequired = {
+            [originChain]: this.buildChainConfig(
+                originType,
+                originAddress,
+                originChain,
+                owner,
+                originMailbox,
+                tokenAddress,
+            ),
+            [destinationChain]: this.buildChainConfig(
+                destinationType,
+                destinationAddress,
+                destinationChain,
+                owner,
+                destinationMailbox,
+            ),
+        };
+
+        setIfDefined(config[originChain], "isNft", originIsNft);
+        setIfDefined(config[originChain], "symbol", originSymbol);
+        setIfDefined(config[originChain], "name", originName);
+        setIfDefined(config[originChain], "decimals", originDecimals);
+        setIfDefined(config[originChain], "scale", originScale);
+        setIfDefined(config[originChain], "interchainSecurityModule", originInterchainSecurityModule);
+
+        setIfDefined(config[destinationChain], "isNft", destinationIsNft);
+        setIfDefined(config[destinationChain], "symbol", destinationSymbol);
+        setIfDefined(config[destinationChain], "name", destinationName);
+        setIfDefined(config[destinationChain], "decimals", destinationDecimals);
+        setIfDefined(config[destinationChain], "scale", destinationScale);
+        setIfDefined(config[destinationChain], "interchainSecurityModule", destinationInterchainSecurityModule);
+
+        const metadata = await HypERC20Deployer.deriveTokenMetadata(multiProvider, config);
+        const finalConfig: WarpRouteDeployConfigMailboxRequired = {};
+
+        for (const chain in config) {
+            if (metadata !== undefined) {
+                finalConfig[chain] = {
+                    ...(metadata as unknown as Record<string, typeof metadata>)[chain],
+                    ...config[chain],
+                };
+            } else {
+                finalConfig[chain] = {
+                    ...config[chain],
+                };
+            }
+        }
+
+        const deployer = new HypERC20Deployer(multiProvider);
+        const result = await deployer.deploy(finalConfig);
+
+        return JSON.stringify(
+            {
+                message: "Warp route deployed successfully",
+                result: result,
+                config: config,
+            },
+            null,
+            2,
+        );
+    }
+
+    // Build config objects with correct discriminated union for each chain
+    // Helper to build config for each chain
+    private buildChainConfig(
+        type: TokenType,
+        chainAddress: ChainAddresses,
+        chain: string,
+        owner: string,
+        mailbox?: string,
+        tokenAddress?: string,
+    ) {
+        const baseConfig = {
+            owner,
+            mailbox: mailbox || (chainAddress.mailbox as string),
+            proxyAdmin: {
+                // TODO: probably shouldn't always be part of the config
+                owner,
+                address: chainAddress.proxyAdmin as string,
+            },
+        };
+
+        if (
+            type === TokenType.collateral ||
+            type === TokenType.collateralVault ||
+            type === TokenType.collateralVaultRebase ||
+            type === TokenType.collateralFiat ||
+            type === TokenType.collateralUri ||
+            type === TokenType.XERC20 ||
+            type === TokenType.XERC20Lockbox
+        ) {
+            if (!tokenAddress) {
+                throw new ParametersRequiredError(`tokenAddress is required for warp routes with type ${type}`);
+            }
+            return {
+                ...baseConfig,
+                type,
+                token: tokenAddress,
+            };
+        }
+        if (type === TokenType.syntheticRebase) {
+            return {
+                ...baseConfig,
+                type,
+                collateralChainName: chain,
+            };
+        }
+        // For native, synthetic, syntheticUri, nativeScaled, etc.
+        return {
+            ...baseConfig,
+            type,
+        };
+    }
+
+    /**
+     * @method
      * @name HyperlaneService#sendAssets
      * @description Sends tokens across chains using an approved Hyperlane warp route
      * @param {EVMWalletClient} walletClient The wallet client to approve and send the transfer
@@ -1048,3 +1225,9 @@ function createMultiProviderSingleton() {
         return instance;
     };
 }
+
+type Flatten<T> = {
+    [K in keyof T]: T[K] extends object ? Flatten<T[K]> : T[K];
+};
+
+type FullView = Flatten<WarpRouteDeployConfigMailboxRequired>;
