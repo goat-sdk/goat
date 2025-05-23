@@ -1,4 +1,5 @@
 import { createToolParameters } from "@goat-sdk/core";
+import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { TokenType } from "@hyperlane-xyz/sdk";
 import { z } from "zod";
 
@@ -47,6 +48,7 @@ export class HyperlaneIsmParameters extends createToolParameters(
                 "testIsm",
                 "opStackIsm",
                 "arbL2ToL1Ism",
+                // TODO: get the enum from hyperlane and stringify the options
             ])
             .describe("Type of ISM to configure"),
         config: z
@@ -79,7 +81,7 @@ export class HyperlaneIsmParameters extends createToolParameters(
 export class HyperlaneValidatorParameters extends createToolParameters(
     z.object({
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
-        action: z.enum(["ADD", "REMOVE", "UPDATE"]).describe("Action to perform on validator"),
+        action: z.enum(["ADD", "REMOVE", "UPDATE"]).describe("The action to perform on the validator"),
         validator: z.string().describe("Validator address"),
         weight: z.number().optional().describe("Validator weight for weighted multisig"),
     }),
@@ -112,6 +114,7 @@ export class HyperlaneGetTokenParameters extends createToolParameters(
                 "EvmHypVSXERC20Lockbox",
                 "EvmHypSyntheticRebase",
                 "EvmHypRebaseCollateral",
+                // TODO: get the enum from hyperlane and stringify
             ])
             .optional()
             .describe("Token standard (EvmHypCollateral, EvmHypSynthetic, etc.)"),
@@ -128,60 +131,62 @@ export class HyperlaneInspectWarpRouteParameters extends createToolParameters(
 
 export class HyperlaneDeployWarpRouteParameters extends createToolParameters(
     z.object({
-        origin: z.object({
-            chain: z.string().min(1).describe("The origin chain name (e.g. ethereum, baseSepolia)"),
-            tokenAddress: z
-                .string()
-                .regex(/^0x[a-fA-F0-9]{40}$/)
-                .describe("ERC20 token address on the origin chain"),
-            type: z
-                .enum(
-                    Object.values(TokenType).filter((v): v is TokenType => typeof v === "string") as [
-                        TokenType,
-                        ...TokenType[],
-                    ],
-                )
-                .describe("Token type, default='collateral'"),
-            isNft: z.boolean().optional().describe("If using collateral for an ERC721 contract, set to true."),
-            symbol: z.string().optional().describe("The token symbol"),
-            name: z.string().optional().describe("The token name"),
-            decimals: z.number().optional().describe("The number of decimal places for the token"),
-            scale: z.number().optional().describe("The scale of the token"),
-            mailbox: z
-                .string()
-                .optional()
-                .describe("The address of the mailbox contract to use to send and receive messages"),
-            interchainSecurityModule: z
-                .string()
-                .optional()
-                .describe("The address of an interchain security modules to verify interchain messages"),
-        }),
-        destination: z.object({
-            chain: z.string().describe("Destination chain names"),
-            type: z
-                .enum(
-                    Object.values(TokenType).filter((v): v is TokenType => typeof v === "string") as [
-                        TokenType,
-                        ...TokenType[],
-                    ],
-                )
-                .describe("Token type, default='synthentic'"),
-            isNft: z.boolean().optional().describe("If using collateral for an ERC721 contract, set to true."),
-            symbol: z.string().optional().describe("The token symbol"),
-            name: z.string().optional().describe("The token name"),
-            decimals: z.number().optional().describe("The number of decimal places for the token"),
-            scale: z.number().optional().describe("The scale of the token"),
-            mailbox: z
-                .string()
-                .optional()
-                .describe("The address of the mailbox contract to use to send and receive messages"),
-            interchainSecurityModule: z
-                .string()
-                .optional()
-                .describe("The address of an interchain security modules to verify interchain messages"),
-        }),
-
-        // tokenType: z.enum(["synthetic", "collateral"]).describe("Type of warp token deployment (e.g. synthetic, collateral)"),
+        chains: z.array(
+            z.object({
+                walletClient: z
+                    .custom<EVMWalletClient>()
+                    .describe("An EVMWalletClient instance for the destination chain in the warp route"),
+                chainName: z.string().min(1).describe("The origin chain name (e.g. ethereum, baseSepolia)"),
+                type: z.enum(Object.values(TokenType) as [string, ...string[]]).describe("Token type"),
+                tokenAddress: z
+                    .string()
+                    .regex(/^0x[a-fA-F0-9]{40}$/)
+                    .optional()
+                    .describe("ERC20 token address on the origin chain (not required for native token type)"),
+                isNft: z.boolean().optional().describe("If using collateral for an ERC721 contract, set to true."),
+                proxyAdmin: z
+                    .object({
+                        // TODO: ask if they want a proxy admin fist
+                        address: z
+                            .string()
+                            .describe(
+                                "The specific deployed ProxyAdmin contract address. If omitted, it may be deployed automatically",
+                            ),
+                        owner: z
+                            .string()
+                            .optional()
+                            .describe("The default address with administrative rights over the proxy."), // owner address by default
+                        ownerOverrides: z
+                            .record(z.any())
+                            .optional()
+                            .describe("A per-chain mapping to override the default owner on specific networks"),
+                    })
+                    .optional()
+                    .describe("Defines the administrative controller of the proxy contract"),
+                useTrustedIsm: z.boolean().describe("Do you want to use a trusted ISM for warp route?"),
+                interchainSecurityModule: z
+                    .string()
+                    .optional()
+                    .describe("Address of an interchain security modules to verify interchain messages"),
+                // TODO: update to ism type, ask for it if the answer to useTrustedIsm is false
+                // interchainSecurityModule:
+                //         modules:
+                //         - relayer: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3"
+                //             type: trustedRelayerIsm
+                //         - domains: {}
+                //             owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3"
+                //             type: defaultFallbackRoutingIsm
+                //         threshold: 1
+                //         type: staticAggregationIsm
+                //
+                // The following parameters aren't ask for in `hyperlane warp init` but can be added to the config
+                mailbox: z.string().optional().describe("Address of the mailbox contract to send/receive messages"),
+                symbol: z.string().optional().describe("Token symbol"),
+                name: z.string().optional().describe("Token name"),
+                decimals: z.number().optional().describe("Number of decimal places for the token"),
+                scale: z.number().optional().describe("Scale of the token"),
+            }),
+        ),
     }),
 ) {}
 

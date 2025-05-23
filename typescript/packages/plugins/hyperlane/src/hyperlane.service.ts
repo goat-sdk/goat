@@ -30,7 +30,7 @@ import {
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
-import { type WarpRoutes } from "./types";
+import { WarpRouteConfig, type WarpRoutes } from "./types";
 import { setIfDefined, stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
@@ -684,76 +684,67 @@ export class HyperlaneService {
         walletClient: EVMWalletClient,
         parameters: HyperlaneDeployWarpRouteParameters,
     ): Promise<string> {
-        const { origin, destination } = parameters;
-        const {
-            type: originType,
-            chain: originChain,
-            tokenAddress,
-            isNft: originIsNft,
-            symbol: originSymbol,
-            name: originName,
-            decimals: originDecimals,
-            scale: originScale,
-            mailbox: originMailbox,
-            interchainSecurityModule: originInterchainSecurityModule,
-        } = origin;
-        const {
-            type: destinationType,
-            chain: destinationChain,
-            isNft: destinationIsNft,
-            symbol: destinationSymbol,
-            name: destinationName,
-            decimals: destinationDecimals,
-            scale: destinationScale,
-            mailbox: destinationMailbox,
-            interchainSecurityModule: destinationInterchainSecurityModule,
-        } = destination;
-
-        const owner = walletClient.getAddress();
         const { multiProvider, registry } = await this.getMultiProvider(walletClient);
         const chainAddresses = await registry.getAddresses();
+        const { chains } = parameters;
+        const config: WarpRouteDeployConfigMailboxRequired = {};
+        const signerBackups: { chainName: string; signer: EVMWalletClientSigner }[] = [];
 
-        const originAddress = chainAddresses[originChain];
-        const destinationAddress = chainAddresses[destinationChain];
-
-        if (!originAddress) {
-            throw new Error(`No address found for origin chain: ${originChain}`);
-        }
-        if (!destinationAddress) {
-            throw new Error(`No address found for destination chain: ${destinationChain}`);
-        }
-
-        const config: WarpRouteDeployConfigMailboxRequired = {
-            [originChain]: this.buildChainConfig(
-                originType,
-                originAddress,
-                originChain,
-                owner,
-                originMailbox,
+        for (const chain of chains) {
+            const {
+                type,
                 tokenAddress,
-            ),
-            [destinationChain]: this.buildChainConfig(
-                destinationType,
-                destinationAddress,
-                destinationChain,
+                chainName, // TODO: Would be better to get the chain from the wallet, but the chain object on the wallet doesn't have the name
+                isNft,
+                symbol,
+                name,
+                decimals,
+                scale,
+                mailbox,
+                interchainSecurityModule,
+                proxyAdmin,
+                walletClient: destinationWalletClient, // TODO: not sure if this should be a parameter like this
+            } = chain;
+            const walletDefined = destinationWalletClient !== undefined;
+            const owner = walletDefined ? destinationWalletClient.getAddress() : walletClient.getAddress();
+            if (walletDefined) {
+                // don't do it for main wallet
+                const signerBackup = multiProvider.getSigner(chainName);
+                signerBackups.push({
+                    chainName,
+                    signer: signerBackup as EVMWalletClientSigner,
+                });
+                const signer = new EVMWalletClientSigner(destinationWalletClient);
+                multiProvider.setSigner(chainName, signer); // TODO: could use switchChain, once merged, if both chain are on the same wallet
+            }
+            const address = chainAddresses[chainName];
+            if (!address) {
+                throw new Error(`No address found for origin chain: ${chainName}`);
+            }
+            config[chainName] = this.buildChainConfig(
+                TokenType[type as keyof typeof TokenType],
+                address,
+                chainName,
                 owner,
-                destinationMailbox,
-            ),
-        };
-
-        setIfDefined(config[originChain], "isNft", originIsNft);
-        setIfDefined(config[originChain], "symbol", originSymbol);
-        setIfDefined(config[originChain], "name", originName);
-        setIfDefined(config[originChain], "decimals", originDecimals);
-        setIfDefined(config[originChain], "scale", originScale);
-        setIfDefined(config[originChain], "interchainSecurityModule", originInterchainSecurityModule);
-
-        setIfDefined(config[destinationChain], "isNft", destinationIsNft);
-        setIfDefined(config[destinationChain], "symbol", destinationSymbol);
-        setIfDefined(config[destinationChain], "name", destinationName);
-        setIfDefined(config[destinationChain], "decimals", destinationDecimals);
-        setIfDefined(config[destinationChain], "scale", destinationScale);
-        setIfDefined(config[destinationChain], "interchainSecurityModule", destinationInterchainSecurityModule);
+                mailbox,
+                tokenAddress,
+            );
+            setIfDefined(config[chainName], "isNft", isNft);
+            setIfDefined(config[chainName], "symbol", symbol);
+            setIfDefined(config[chainName], "name", name);
+            setIfDefined(config[chainName], "decimals", decimals);
+            setIfDefined(config[chainName], "scale", scale);
+            setIfDefined(config[chainName], "interchainSecurityModule", interchainSecurityModule);
+            if (proxyAdmin?.address) {
+                setIfDefined(config[chainName], "proxyAdmin", {
+                    address: proxyAdmin.address,
+                    owner: owner, // ensure owner is always defined
+                    ...(proxyAdmin.ownerOverrides
+                        ? { ownerOverrides: proxyAdmin.ownerOverrides as Record<string, string> }
+                        : {}),
+                });
+            }
+        }
 
         const metadata = await HypERC20Deployer.deriveTokenMetadata(multiProvider, config);
         const finalConfig: WarpRouteDeployConfigMailboxRequired = {};
@@ -774,15 +765,40 @@ export class HyperlaneService {
         const deployer = new HypERC20Deployer(multiProvider);
         const result = await deployer.deploy(finalConfig);
 
-        return JSON.stringify(
-            {
-                message: "Warp route deployed successfully",
-                result: result,
-                config: config,
-            },
-            null,
-            2,
-        );
+        for (const { chainName, signer } of signerBackups) {
+            multiProvider.setSigner(chainName, signer); // cleanup so that one signer isn't on a different wallet
+        }
+
+        const returnConfig: WarpRouteConfig = {
+            tokens: [],
+        };
+        for (const [chainName, tokenConfig] of Object.entries(result)) {
+            const { type } = config[chainName];
+            let tokenAddress = undefined;
+            if ("token" in config[chainName]) {
+                tokenAddress = config[chainName];
+            }
+            returnConfig.tokens.push({
+                chainName: chainName,
+                addressOrDenom: tokenConfig[type].address,
+                // @ts-expect-error TS2322: Value is not assignable to type 'string | null | undefined'
+                collateralAddressOrDenom: tokenAddress,
+                type: type,
+                // TODO: maybe add these properties?
+                // standard: tokenConfig.standard,
+                // decimals: tokenConfig.decimals,
+                // symbol: tokenConfig.symbol,
+                // name: tokenConfig.name,
+                // connections: [{
+                //     token: connection,
+                // }],
+            });
+        }
+
+        return JSON.stringify({
+            message: "Warp route deployed successfully",
+            result: returnConfig,
+        });
     }
 
     // Build config objects with correct discriminated union for each chain
@@ -1214,7 +1230,9 @@ function createMultiProviderSingleton() {
             if (walletClient) {
                 const signer = new EVMWalletClientSigner(walletClient);
                 // const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string);
-                multiProvider.setSharedSigner(signer);
+                for (const chainName of Object.keys(chainMetadata)) {
+                    multiProvider.setSigner(chainName, signer);
+                }
             }
 
             instance = { multiProvider, registry };
@@ -1225,9 +1243,3 @@ function createMultiProviderSingleton() {
         return instance;
     };
 }
-
-type Flatten<T> = {
-    [K in keyof T]: T[K] extends object ? Flatten<T[K]> : T[K];
-};
-
-type FullView = Flatten<WarpRouteDeployConfigMailboxRequired>;

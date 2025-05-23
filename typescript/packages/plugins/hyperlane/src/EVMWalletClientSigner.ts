@@ -4,12 +4,10 @@ import { BigNumber, ethers } from "ethers";
 import { AccessList, BlockTag } from "viem";
 
 export class EVMWalletClientSigner extends ethers.Signer {
+    walletClient: EVMWalletClient;
     provider?: ethers.providers.Provider = undefined;
 
-    constructor(
-        private readonly walletClient: EVMWalletClient,
-        provider?: ethers.providers.Provider,
-    ) {
+    constructor(walletClient: EVMWalletClient, provider?: ethers.providers.Provider) {
         super();
         this.walletClient = walletClient;
         if (provider) {
