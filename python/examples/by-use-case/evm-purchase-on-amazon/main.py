@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
 import os
-import asyncio
 import sys
-import json
 from dotenv import load_dotenv
 
-# OpenAI imports
-from openai import OpenAI
+# Add the src directory to Python path so we can import local GOAT SDK modules
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/goat-sdk'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/wallets/web3'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/adapters/langchain'))
 
-# For terminal interaction
-import readline
+# LangChain imports
+from langchain_openai import ChatOpenAI
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import HumanMessage, AIMessage
+
+# Web3 imports
+from web3 import Web3
+from web3.middleware import SignAndSendRawMiddlewareBuilder
+from eth_account.signers.local import LocalAccount
+from eth_account import Account
 
 # GOAT imports
-from goat import get_tools
-from goat_wallets.web3.wallet import web3
-from web3 import Web3
-from web3.providers.rpc import HTTPProvider
+from goat_adapters.langchain import get_on_chain_tools
+from goat_wallets.web3 import web3
 
 # Import our local CrossmintHeadlessCheckoutPlugin
-from crossmint_plugin import CrossmintHeadlessCheckoutService, CrossmintHeadlessCheckoutPlugin, CrossmintHeadlessCheckoutPluginOptions
+from crossmint_plugin import CrossmintHeadlessCheckoutPlugin, CrossmintHeadlessCheckoutPluginOptions
 
 # Load environment variables from .env file
 load_dotenv()
@@ -46,17 +53,26 @@ Once the order is executed via the buy_token, consider the purchase complete, an
 
 Don't ask to confirm payment to finalize orders."""
 
-async def main():
+def main():
     # 1. Create an EVM wallet client for Base Sepolia
     # Initialize Web3 provider
     provider_url = os.environ.get("RPC_PROVIDER_URL")
-    w3 = Web3(HTTPProvider(provider_url))
+    w3 = Web3(Web3.HTTPProvider(provider_url))
     
-    # Create wallet using the web3 factory function
-    wallet_client = web3(
-        client=w3,
-        options=None  # Use default options
-    )
+    # Setup account from private key
+    private_key = os.environ.get("WALLET_PRIVATE_KEY")
+    if not private_key.startswith("0x"):
+        private_key = "0x" + private_key
+    assert private_key is not None, "You must set WALLET_PRIVATE_KEY environment variable"
+
+    account: LocalAccount = Account.from_key(private_key)
+    w3.eth.default_account = account.address  # Set the default account
+    w3.middleware_onion.add(
+        SignAndSendRawMiddlewareBuilder.build(account)
+    )  # Add middleware
+    
+    # Create wallet using the GOAT SDK web3 factory function
+    wallet_client = web3(w3)
     
     # Create plugin options and plugin instance
     plugin_options = CrossmintHeadlessCheckoutPluginOptions(api_key=os.environ.get("CROSSMINT_API_KEY"))
@@ -64,46 +80,29 @@ async def main():
     print("Using CrossmintHeadlessCheckoutPlugin")
               
     # 2. Get your onchain tools for your wallet
-    tools = get_tools(
+    tools = get_on_chain_tools(
         wallet=wallet_client,
         plugins=[plugin]
     )
     
-    # Convert tools to OpenAI Assistant format
-    # Ensure all parameters are properly serializable
-    assistant_tools = []
-    for tool in tools:
-        # Convert parameters to dict if it's a pydantic model or other complex type
-        if hasattr(tool, 'parameters') and hasattr(tool.parameters, 'model_json_schema'):
-            parameters = tool.parameters.model_json_schema()
-        else:
-            parameters = tool.parameters
-            
-        assistant_tools.append({
-            "type": "function",
-            "function": {
-                "name": tool.name,
-                "description": tool.description,
-                "parameters": parameters
-            }
-        })
+    # 3. Initialize LLM
+    llm = ChatOpenAI(model="gpt-4o-mini")
     
-    # 3. Create an OpenAI client
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    
-    # Create an assistant
-    assistant = client.beta.assistants.create(
-        name="Amazon Purchase Assistant",
-        instructions=SYSTEM_PROMPT,
-        model="gpt-4o-mini",
-        tools=assistant_tools
+    # Get the prompt template
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", SYSTEM_PROMPT),
+        ("placeholder", "{chat_history}"),
+        ("human", "{input}"),
+        ("placeholder", "{agent_scratchpad}"),
+    ])
+
+    agent = create_tool_calling_agent(llm, tools, prompt)
+    agent_executor = AgentExecutor(
+        agent=agent, tools=tools, handle_parsing_errors=True, verbose=True
     )
     
-    # Create a thread for conversation
-    thread = client.beta.threads.create()
-    
-    # Store conversation history
-    messages = []
+    # Initialize conversation history
+    chat_history = []
     
     # 4. Run the interactive chat loop
     print("Welcome to the Amazon Purchase Agent!")
@@ -111,93 +110,36 @@ async def main():
     print('Enter "exit" to quit the program.')
     
     while True:
-        # Get user input
-        prompt = input('\nEnter your prompt (or "exit" to quit): ')
+        user_input = input('\nEnter your prompt (or "exit" to quit): ')
         
-        if prompt.lower() == 'exit':
+        if user_input.lower() == 'exit':
+            print("Goodbye!")
             break
         
-        # Add the user message to the thread
-        client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=prompt
-        )
-        
-        print("\n-------------------\n")
-        print("TOOLS CALLED")
-        print("\n-------------------\n")
-        
-        # Run the assistant
-        run = client.beta.threads.runs.create(
-            thread_id=thread.id,
-            assistant_id=assistant.id
-        )
-        
-        # Wait for the run to complete
-        while True:
-            run_status = client.beta.threads.runs.retrieve(
-                thread_id=thread.id,
-                run_id=run.id
-            )
+        try:
+            # Invoke agent with chat history
+            response = agent_executor.invoke({
+                "input": user_input,
+                "chat_history": chat_history,
+            })
+
+            assistant_response = response["output"]
+            print("\nAssistant:", assistant_response)
             
-            if run_status.status == "completed":
-                break
+            # Add the conversation to history
+            chat_history.extend([
+                HumanMessage(content=user_input),
+                AIMessage(content=assistant_response)
+            ])
             
-            if run_status.status == "requires_action":
-                tool_calls = run_status.required_action.submit_tool_outputs.tool_calls
-                tool_outputs = []
+            # Keep history manageable (last 20 messages = 10 exchanges)
+            if len(chat_history) > 20:
+                chat_history = chat_history[-20:]
                 
-                for tool_call in tool_calls:
-                    # Print tool call information
-                    print(f"Tool: {tool_call.function.name}")
-                    print(f"Arguments: {tool_call.function.arguments}")
-                    
-                    # Find the matching tool
-                    for tool in tools:
-                        if tool.name == tool_call.function.name:
-                            try:
-                                # Execute the tool
-                                result = await tool(wallet_client, tool_call.function.arguments)
-                                print(f"Result: {result}")
-                                
-                                tool_outputs.append({
-                                    "tool_call_id": tool_call.id,
-                                    "output": str(result)
-                                })
-                            except Exception as e:
-                                print(f"Error executing tool: {e}")
-                                tool_outputs.append({
-                                    "tool_call_id": tool_call.id,
-                                    "output": f"Error: {str(e)}"
-                                })
-                
-                # Submit the tool outputs
-                client.beta.threads.runs.submit_tool_outputs(
-                    thread_id=thread.id,
-                    run_id=run.id,
-                    tool_outputs=tool_outputs
-                )
-            
-            # Wait a bit before checking again
-            await asyncio.sleep(1)
-        
-        # Get the assistant's response
-        messages = client.beta.threads.messages.list(
-            thread_id=thread.id
-        )
-        
-        # Display the last message from the assistant
-        assistant_messages = [m for m in messages.data if m.role == "assistant"]
-        if assistant_messages:
-            last_message = assistant_messages[0]
-            
-            print("\n-------------------\n")
-            print("RESPONSE")
-            print("\n-------------------\n")
-            print(last_message.content[0].text.value)
-        
-        print("\n-------------------\n")
+        except Exception as e:
+            print("\nError:", str(e))
+            # Still add user message to history even if there was an error
+            chat_history.append(HumanMessage(content=user_input))
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    main() 

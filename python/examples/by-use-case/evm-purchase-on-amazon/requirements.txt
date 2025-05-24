@@ -1,16 +1,20 @@
 python-dotenv>=1.0.0
-openai>=1.7.0
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
 eth_typing>=5.2.1
 aiohttp>=3.9.5
 base58>=2.1.0
 pydantic>=2.0.0
 web3>=6.0.0
 goat-sdk-wallet-web3>=0.1.0
+goat-sdk-adapter-langchain>=0.1.0
 
 # Note: readline and asyncio are part of the Python standard library so they don't need installation
 
 # For local development, install goat packages from local directory:
-# pip install -e ../../..
+# pip install -e ../../../src/goat-sdk
 # pip install -e ../../../src/wallets/evm
 # pip install -e ../../../src/wallets/web3
+# pip install -e ../../../src/adapters/langchain
 # pip install -e ../../../src/plugins/crossmint-headless-checkout 
