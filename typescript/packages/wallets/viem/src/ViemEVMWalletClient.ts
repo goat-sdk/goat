@@ -7,7 +7,12 @@ import {
     EVMWalletClient,
     EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
-import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
+
+import {
+    type WalletClient as ViemWalletClient,
+    encodeFunctionData,
+    publicActions,
+} from "viem";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
 export type ViemOptions = EVMWalletClientCtorParams & {
@@ -206,6 +211,26 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             ...receipt,
             hash: txHash,
         };
+    }
+
+    async signTransaction(transaction: EVMTransaction): Promise<{ signature: string }> {
+        if (!this.#client.account) throw new Error("No account connected");
+
+        const signature = await this.#client.signTransaction({
+            to: transaction.to as `0x${string}`,
+            value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
+            data: transaction?.data,
+            account: this.#client.account,
+            chain: this.#client.chain,
+            maxFeePerGas: transaction?.maxFeePerGas,
+            accessList: transaction?.accessList,
+            nonce: transaction?.nonce,
+            gas: transaction?.gas,
+            maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas,
+            // type: transaction?.type,
+        });
+
+        return { signature };
     }
 }
 
