@@ -8,11 +8,7 @@ import {
     EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
 
-import {
-    type WalletClient as ViemWalletClient,
-    encodeFunctionData,
-    publicActions,
-} from "viem";
+import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
 export type ViemOptions = EVMWalletClientCtorParams & {
