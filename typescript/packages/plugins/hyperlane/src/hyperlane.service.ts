@@ -93,8 +93,8 @@ export class HyperlaneService {
                 transactionHash: dispatchTx.transactionHash,
                 dispatchedMessage,
                 isDelivered,
-                originDomain: multiProvider.getDomainId(originChain),
-                destinationDomain: multiProvider.getDomainId(destinationChain),
+                originDomain: multiProvider.getChainId(originChain),
+                destinationDomain: multiProvider.getChainId(destinationChain),
             },
             null,
             2,
@@ -157,7 +157,7 @@ export class HyperlaneService {
                     status: isDelivered ? "DELIVERED" : "PENDING",
                     chain: {
                         name: chain,
-                        domainId: multiProvider.getDomainId(chain),
+                        domainId: multiProvider.getChainId(chain),
                     },
                     content: {
                         raw: message.message,
@@ -703,20 +703,8 @@ export class HyperlaneService {
                 mailbox,
                 interchainSecurityModule,
                 proxyAdmin,
-                walletClient: destinationWalletClient, // TODO: not sure if this should be a parameter like this
             } = chain;
-            const walletDefined = destinationWalletClient !== undefined;
-            const owner = walletDefined ? destinationWalletClient.getAddress() : walletClient.getAddress();
-            if (walletDefined) {
-                // don't do it for main wallet
-                const signerBackup = multiProvider.getSigner(chainName);
-                signerBackups.push({
-                    chainName,
-                    signer: signerBackup as EVMWalletClientSigner,
-                });
-                const signer = new EVMWalletClientSigner(destinationWalletClient);
-                multiProvider.setSigner(chainName, signer); // TODO: could use switchChain, once merged, if both chain are on the same wallet
-            }
+            const owner = walletClient.getAddress();
             const address = chainAddresses[chainName];
             if (!address) {
                 throw new Error(`No address found for origin chain: ${chainName}`);
@@ -919,7 +907,7 @@ export class HyperlaneService {
         //        },
         //    }
         //
-        const destinationDomainId = (await this.getDomainId(destinationChain)) as number;
+        const destinationDomainId = (await this.getChainId(destinationChain)) as number;
         const originTokenType = readerWarpRouteConfig.type;
         const weiAmount = await this.toWeiAmount({
             amount: String(amount),
@@ -1110,10 +1098,10 @@ export class HyperlaneService {
         return ethers.utils.parseUnits(amount, decimals).toBigInt();
     }
 
-    private async getDomainId(chain: string): Promise<number | undefined> {
+    private async getChainId(chain: string): Promise<number> {
         const { multiProvider } = await this.getMultiProvider();
         const chainConfig = multiProvider.getChainMetadata(chain);
-        return chainConfig?.domainId;
+        return chainConfig.domainId; // TODO: will this ever be undefined?
     }
 
     private async getQuoteDispatchFee(
@@ -1126,7 +1114,7 @@ export class HyperlaneService {
         hookMetadata?: `0x${string}`,
         hookAddress?: string,
     ): Promise<bigint> {
-        const destinationDomain = (await this.getDomainId(destinationChain)) as number;
+        const destinationDomain = (await this.getChainId(destinationChain)) as number;
 
         const messageBody = encodePacked(
             ["bytes32", "uint256", "bytes"],

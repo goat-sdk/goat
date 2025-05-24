@@ -1,5 +1,4 @@
 import { createToolParameters } from "@goat-sdk/core";
-import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { TokenType } from "@hyperlane-xyz/sdk";
 import { z } from "zod";
 
@@ -133,9 +132,6 @@ export class HyperlaneDeployWarpRouteParameters extends createToolParameters(
     z.object({
         chains: z.array(
             z.object({
-                walletClient: z
-                    .custom<EVMWalletClient>()
-                    .describe("An EVMWalletClient instance for the destination chain in the warp route"),
                 chainName: z.string().min(1).describe("The origin chain name (e.g. ethereum, baseSepolia)"),
                 type: z.enum(Object.values(TokenType) as [string, ...string[]]).describe("Token type"),
                 tokenAddress: z
