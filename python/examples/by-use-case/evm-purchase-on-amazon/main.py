@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 import os
-import sys
 from dotenv import load_dotenv
-
-# Add the src directory to Python path so we can import local GOAT SDK modules
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/goat-sdk'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/wallets/web3'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../src/adapters/langchain'))
 
 # LangChain imports
 from langchain_openai import ChatOpenAI
@@ -20,12 +14,12 @@ from web3.middleware import SignAndSendRawMiddlewareBuilder
 from eth_account.signers.local import LocalAccount
 from eth_account import Account
 
-# GOAT imports
+# GOAT imports - using properly installed packages
 from goat_adapters.langchain import get_on_chain_tools
 from goat_wallets.web3 import web3
 
-# Import our local CrossmintHeadlessCheckoutPlugin
-from crossmint_plugin import CrossmintHeadlessCheckoutPlugin, CrossmintHeadlessCheckoutPluginOptions
+# Import the official CrossmintHeadlessCheckoutPlugin (now properly installed)
+from goat_plugins.crossmint_headless_checkout import crossmint_headless_checkout, CrossmintHeadlessCheckoutPluginOptions
 
 # Load environment variables from .env file
 load_dotenv()
@@ -76,7 +70,7 @@ def main():
     
     # Create plugin options and plugin instance
     plugin_options = CrossmintHeadlessCheckoutPluginOptions(api_key=os.environ.get("CROSSMINT_API_KEY"))
-    plugin = CrossmintHeadlessCheckoutPlugin(plugin_options)
+    plugin = crossmint_headless_checkout(plugin_options)
     print("Using CrossmintHeadlessCheckoutPlugin")
               
     # 2. Get your onchain tools for your wallet
