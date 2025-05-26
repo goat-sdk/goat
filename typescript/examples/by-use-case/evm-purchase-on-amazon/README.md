@@ -60,7 +60,13 @@ To integrate Agent Wallets with GOAT, check out the following quickstarts:
 1. Agent Wallets Quickstart [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)]
 2. [Agent Launchpad Starter Kit](https://github.com/Crossmint/agent-launchpad-starter-kit/)
 
+## Demo Results
 
+| Step | User Input | Agent Response | Transaction Result |
+|------|------------|----------------|-------------------|
+| 1 | "I want to buy https://www.amazon.com/dp/B07SPZ2HGT on amazon" | Requests required information (name, address, email, payment method, chain) | N/A |
+| 2 | Provides details: email: arshroop@paella.dev, address: 1211 Walsh avenue, Coral Gables, FL 33146, payment: USDC on Base Sepolia | Processes purchase with Crossmint API | Order created successfully |
+| 3 | N/A | Confirms purchase completion | Transaction ID: 0xc1872b40d5c1ad8064f3fc372906779258889a8405baa4132e4a488bda4e08236 |
 
 
 <footer>
