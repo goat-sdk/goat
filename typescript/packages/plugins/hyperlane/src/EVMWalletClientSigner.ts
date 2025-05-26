@@ -38,6 +38,15 @@ export class EVMWalletClientSigner extends ethers.Signer {
     };
 
     async ethersToEVMTransaction(tx: ethers.providers.TransactionRequest): Promise<EVMTransaction> {
+        let gas = undefined;
+        if (tx.gasLimit) {
+            gas = BigInt(tx.gasLimit.toString());
+        } else {
+            if (this.provider === undefined) {
+                throw new Error("Provider is not set");
+            }
+            gas = (await this.provider.estimateGas(tx)).toBigInt();
+        }
         return {
             to: tx.to as string,
             value: tx.value ? BigInt(tx.value.toString()) : undefined,
@@ -48,6 +57,7 @@ export class EVMWalletClientSigner extends ethers.Signer {
             nonce: tx.nonce ? Number(tx.nonce) : undefined,
             from: tx.from as `0x${string}`,
             // gas: 3000000n,
+            gas: gas,
             // gasPrice: tx?.gasPrice,
             chainId: tx.chainId,
             type: this.typeNumberToString(tx?.type) as "legacy" | "eip2930" | "eip1559" | undefined,
