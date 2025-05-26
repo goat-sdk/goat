@@ -40,19 +40,19 @@ export class EVMWalletClientSigner extends ethers.Signer {
     async ethersToEVMTransaction(tx: ethers.providers.TransactionRequest): Promise<EVMTransaction> {
         return {
             to: tx.to as string,
-            value: tx?.value ? BigInt(tx.value.toString()) : undefined,
-            data: tx?.data ? (ethers.utils.hexlify(tx.data) as `0x${string}`) : undefined,
-            maxFeePerGas: tx?.maxFeePerGas ? BigInt(tx.maxFeePerGas.toString()) : undefined,
-            maxPriorityFeePerGas: tx?.maxPriorityFeePerGas ? BigInt(tx.maxPriorityFeePerGas.toString()) : undefined,
-            accessList: tx?.accessList ? (tx.accessList as AccessList) : undefined,
-            nonce: tx?.nonce ? Number(tx.nonce) : undefined,
-            from: tx?.from as `0x${string}`,
-            // gasLimit: tx?.gasLimit,
+            value: tx.value ? BigInt(tx.value.toString()) : undefined,
+            data: tx.data ? (ethers.utils.hexlify(tx.data) as `0x${string}`) : undefined,
+            maxFeePerGas: tx.maxFeePerGas ? BigInt(tx.maxFeePerGas.toString()) : undefined,
+            maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? BigInt(tx.maxPriorityFeePerGas.toString()) : undefined,
+            accessList: tx.accessList ? (tx.accessList as AccessList) : undefined,
+            nonce: tx.nonce ? Number(tx.nonce) : undefined,
+            from: tx.from as `0x${string}`,
+            // gas: 3000000n,
             // gasPrice: tx?.gasPrice,
-            chainId: tx?.chainId,
+            chainId: tx.chainId,
             type: this.typeNumberToString(tx?.type) as "legacy" | "eip2930" | "eip1559" | undefined,
-            customData: tx?.customData,
-            ccipReadEnabled: tx?.ccipReadEnabled,
+            customData: tx.customData,
+            ccipReadEnabled: tx.ccipReadEnabled,
         };
     }
 
@@ -77,7 +77,6 @@ export class EVMWalletClientSigner extends ethers.Signer {
         const transactionResponse = await this.walletClient.sendTransaction({
             ...evmTransaction,
         });
-        this.walletClient;
         const sender = await this.getAddress();
         return {
             hash: transactionResponse.hash,
