@@ -251,7 +251,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     }
 
     async signTransaction(transaction: EVMTransaction) {
-        throw new Error('signTransaction not yet implemented on LitEVMWalletClient');
+        throw new Error("signTransaction not yet implemented on LitEVMWalletClient");
     }
 
     async sendTransaction(transaction: EVMTransaction) {
