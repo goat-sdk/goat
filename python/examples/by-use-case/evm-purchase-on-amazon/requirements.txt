@@ -20,4 +20,4 @@ goat-sdk-plugin-crossmint-headless-checkout>=0.1.0
 # pip install -e ../../../src/wallets/evm
 # pip install -e ../../../src/wallets/web3
 # pip install -e ../../../src/adapters/langchain
-# pip install -e ../../../src/plugins/crossmint-headless-checkout 
+# pip install -e ../../../src/plugins/headless
