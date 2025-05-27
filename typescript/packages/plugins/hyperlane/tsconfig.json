@@ -1,7 +1,7 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
     "extends": "../../../tsconfig.base.json",
-    "include": ["src/**/*"],
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "include": ["src/**/*", "test/**/*"],
     "exclude": ["dist", "node_modules"],
     "compilerOptions": {
         "module": "ESNext",
@@ -9,10 +9,10 @@
         "moduleResolution": "node",
         "sourceMap": true,
         "inlineSources": true,
-        "rootDir": "./src",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "types": ["node", "jest"]
     }
 }

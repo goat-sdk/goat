@@ -1,0 +1,520 @@
+import { viem } from "@goat-sdk/wallet-viem";
+import { http, createWalletClient } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import {
+    baseSepolia,
+    celoAlfajores,
+    optimismSepolia,
+    sepolia,
+    zksyncSepoliaTestnet,
+} from "viem/chains";
+import { HyperlaneService } from "../dist/hyperlane.service.js";
+// import * as dotenv from 'dotenv';
+
+require("dotenv").config();
+
+const {
+    WALLET_PRIVATE_KEY,
+    WALLET_ADDRESS: WALLET_ADDRESS_UNTYPED,
+    SEPOLIA_RPC,
+    BASE_RPC,
+    ALFAJORES_RPC,
+    OPTIMISM_RPC,
+    ZKSYNC_RPC,
+} = process.env;
+
+if (
+    !WALLET_PRIVATE_KEY ||
+    !WALLET_ADDRESS_UNTYPED ||
+    !SEPOLIA_RPC ||
+    !BASE_RPC ||
+    !ALFAJORES_RPC ||
+    !OPTIMISM_RPC ||
+    !ZKSYNC_RPC
+) {
+    throw new Error(
+        "Testing hyperlane requires the following environment variables to be set: " +
+            " WALLET_PRIVATE_KEY, WALLET_ADDRESS, SEPOLIA_RPC, BASE_RPC, ALFAJORES_RPC, OPTIMISM_RPC, ZKSYNC_RPC",
+    );
+}
+
+const account = privateKeyToAccount(WALLET_PRIVATE_KEY as `0x${string}`);
+const WALLET_ADDRESS = WALLET_ADDRESS_UNTYPED as `0x${string}`;
+
+const clients = {
+    sepolia: viem(createWalletClient({ account, transport: http(SEPOLIA_RPC), chain: sepolia })),
+    base: viem(createWalletClient({ account, transport: http(BASE_RPC), chain: baseSepolia })),
+    alfajores: viem(createWalletClient({ account, transport: http(ALFAJORES_RPC), chain: celoAlfajores })),
+    optimism: viem(createWalletClient({ account, transport: http(OPTIMISM_RPC), chain: optimismSepolia })),
+    zksync: viem(createWalletClient({ account, transport: http(ZKSYNC_RPC), chain: zksyncSepoliaTestnet })),
+};
+
+const hyperlane = new HyperlaneService();
+
+const walletAddressRegex = new RegExp(`^0x[0-9a-f]+${WALLET_ADDRESS.slice(2)}$`);
+const hex40 = /^0x[0-9a-fA-F]{40}$/;
+const hex60 = /^0x[0-9a-fA-F]{64}$/;
+const sepoliaMailbox = "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766";
+const sepoliaTestnetValidator = "0x28b91d3dc0d0e138adf914105d88c8830cc66f4e";
+const baseLinkTokenContractAddress = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410";
+
+describe("hyperlane.sendMessage and hyperlane.readMessage", () => {
+    const originChain = "sepolia";
+    const destinationChain = "basesepolia";
+
+    it("sends a message and verifies origin readMessage response", async () => {
+        const sendMessageResponse = await hyperlane.sendMessage(clients.sepolia, {
+            originChain,
+            destinationChain,
+            destinationAddress: WALLET_ADDRESS,
+            message: "hello",
+        });
+
+        const parsedSend = JSON.parse(sendMessageResponse);
+
+        expect(parsedSend).toMatchObject({
+            message: "Message sent successfully",
+            messageId: expect.stringMatching(hex40),
+            transactionHash: expect.stringMatching(hex40),
+            isDelivered: false,
+            originDomain: 11155111,
+            destinationDomain: 59144,
+            dispatchedMessage: {
+                id: expect.stringMatching(hex40),
+                message: expect.stringMatching(hex40),
+                parsed: {
+                    version: expect.any(Number),
+                    nonce: expect.any(Number),
+                    origin: 11155111,
+                    sender: expect.stringMatching(walletAddressRegex),
+                    destination: 84532,
+                    recipient: expect.stringMatching(walletAddressRegex),
+                    body: "0x68656c6c6f",
+                    originChain: "sepolia",
+                    destinationChain: "basesepolia",
+                },
+            },
+        });
+
+        const messageId = parsedSend.messageId;
+
+        const readMessageResponseOrig = await hyperlane.readMessage({
+            chain: originChain,
+            messageId,
+        });
+
+        expect(readMessageResponseOrig).toMatchObject({
+            message: "Message is pending delivery",
+            details: {
+                id: messageId,
+                status: "PENDING",
+                chain: {
+                    name: "sepolia",
+                    domainId: 11155111,
+                },
+                content: {
+                    raw: expect.stringMatching(hex40),
+                    decoded: "0x68656c6c6f",
+                },
+                metadata: {
+                    sender: expect.stringMatching(walletAddressRegex),
+                    recipient: expect.stringMatching(walletAddressRegex),
+                    nonce: expect.any(Number),
+                    originChain: "sepolia",
+                    destinationChain: "basesepolia",
+                },
+            },
+        });
+
+        // TODO: verify destination chain response structure
+        // const readMessageResponseDest = await hyperlane.readMessage({
+        //     chain: destinationChain,
+        //     messageId,
+        // });
+
+        // expect(readMessageResponseDest).toBeDefined(); // Add more specific assertions if desired
+    });
+});
+
+describe("hyperlane.getMailbox", () => {
+    it("retrieves the mailbox for a given chain", async () => {
+        const originChain = "sepolia";
+
+        const response = await hyperlane.getMailbox({
+            chain: originChain,
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "Mailbox address retrieved successfully",
+            details: {
+                chain: "sepolia",
+                mailboxAddress: sepoliaMailbox,
+                chainInfo: {
+                    name: "sepolia",
+                    chainId: 11155111,
+                    domainId: 11155111,
+                    protocol: "ethereum",
+                    rpcUrls: expect.arrayContaining([
+                        expect.objectContaining({
+                            http: expect.stringMatching(/^https?:\/\/.+/),
+                        }),
+                    ]),
+                },
+            },
+        });
+    });
+});
+
+describe("hyperlane.getDeployedContracts", () => {
+    it("retrieves deployed contracts for a given chain and contract type", async () => {
+        const response = await hyperlane.getDeployedContracts({
+            chain: "sepolia",
+            contractType: "mailbox",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "Deployed contracts retrieved successfully",
+            details: {
+                chain: "sepolia",
+                chainInfo: {
+                    name: "sepolia",
+                    chainId: 11155111,
+                    domainId: 11155111,
+                },
+                contracts: {
+                    mailbox: expect.stringMatching(hex40),
+                },
+            },
+        });
+    });
+});
+
+describe("hyperlane.configureIsm", () => {
+    // TODO: test all ISM types
+    it("sets up a trustedRelayerIsm correctly on sepolia", async () => {
+        const originChain = "sepolia";
+
+        const response = await hyperlane.configureIsm(clients.sepolia, {
+            chain: originChain,
+            type: "trustedRelayerIsm",
+            mailbox: sepoliaMailbox,
+            config: {
+                relayer: WALLET_ADDRESS,
+            },
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM configured successfully",
+            details: {
+                chain: "sepolia",
+                type: "trustedRelayerIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "trustedRelayerIsm",
+                    relayer: WALLET_ADDRESS,
+                },
+            },
+        });
+    });
+});
+
+describe("hyperlane.manageValidators", () => {
+    it("adds a validator on sepolia", async () => {
+        const response = await hyperlane.manageValidators(clients.sepolia, {
+            chain: "sepolia",
+            action: "ADD",
+            validator: sepoliaTestnetValidator,
+            weight: 1,
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "Validator added successfully",
+            details: {
+                chain: "sepolia",
+                action: "ADD",
+                validator: sepoliaTestnetValidator,
+                weight: 1,
+                transactionHash: expect.stringMatching(hex60),
+            },
+        });
+    });
+});
+
+describe("hyperlane.getTokens", () => {
+    it('retrieves token metadata from chain "soon"', async () => {
+        const response = await hyperlane.getTokens({ chain: "soon" });
+
+        const parsed = JSON.parse(response);
+
+        expect(parsed).toHaveProperty("message", "Tokens found");
+        expect(parsed.details).toHaveProperty("chain", "soon");
+        expect(parsed.details.tokens).toBeInstanceOf(Array);
+        expect(parsed.details.tokens.length).toBeGreaterThan(0);
+
+        parsed.details.tokens.forEach((token: any) => {
+            expect(token).toHaveProperty("name");
+            expect(token).toHaveProperty("symbol");
+            expect(token).toHaveProperty("decimals");
+            expect(token).toHaveProperty("chainName", "soon");
+            expect(token).toHaveProperty("standard");
+            expect(typeof token.tokenRouterAddress).toBe("string");
+            expect(typeof token.underlyingTokenAddress).toBe("string");
+            expect(Array.isArray(token.connections)).toBe(true);
+        });
+    });
+});
+
+describe("hyperlane.getWarpRoutesForChain", () => {
+    it('retrieves warp routes for chain "soon"', async () => {
+        const response = await hyperlane.getWarpRoutesForChain(clients.sepolia, { chain: "soon" });
+        const parsed = JSON.parse(response) as Record<string, { tokens: any[] }>;
+
+        expect(typeof parsed).toBe("object");
+        expect(Object.keys(parsed).length).toBeGreaterThan(0);
+
+        for (const [route, routeData] of Object.entries(parsed)) {
+            expect(Array.isArray(routeData.tokens)).toBe(true);
+            expect(routeData.tokens.length).toBeGreaterThan(0);
+
+            routeData.tokens.forEach((token) => {
+                expect(token).toHaveProperty("addressOrDenom");
+                expect(token).toHaveProperty("chainName");
+                expect(token).toHaveProperty("collateralAddressOrDenom");
+                expect(token).toHaveProperty("connections");
+                expect(token).toHaveProperty("decimals");
+                expect(token).toHaveProperty("logoURI");
+                expect(token).toHaveProperty("name");
+                expect(token).toHaveProperty("standard");
+                expect(token).toHaveProperty("symbol");
+            });
+        }
+    });
+});
+
+describe("hyperlane.inspectWarpRoute", () => {
+    it("inspects a warp route on a given chain", async () => {
+        const response = await hyperlane.inspectWarpRoute(clients.sepolia, {
+            warpRouteAddress: "0x753e7AafFA0eB3bB352753e5c0f0F5Bb807e3752",
+            chain: "basesepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            tokenType: "collateral",
+            warpRouteConfig: {
+                mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039",
+                owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
+                hook: "0x0000000000000000000000000000000000000000",
+                interchainSecurityModule: "0x0000000000000000000000000000000000000000",
+                type: "collateral",
+                name: "ChainLink Token",
+                symbol: "LINK",
+                decimals: 18,
+                token: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+                remoteRouters: {
+                    "11155420": {
+                        address: "0xe97e8fA57540fAF2617EFceE30506aF559c4Ac88",
+                    },
+                },
+                proxyAdmin: {
+                    address: "0x3aFE3e53f4174Dc7e145795f69b3FFd5eb911ABD",
+                    owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
+                },
+                destinationGas: {
+                    "11155420": "64000",
+                },
+            },
+            tokenConfig: {
+                type: "collateral",
+                name: "ChainLink Token",
+                symbol: "LINK",
+                decimals: 18,
+                token: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+            },
+            mailboxConfig: {
+                mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039",
+                owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
+                hook: "0x0000000000000000000000000000000000000000",
+                interchainSecurityModule: "0x0000000000000000000000000000000000000000",
+            },
+        });
+    });
+});
+
+describe("hyperlane.sendAssets", () => {
+    it("initiates a native to synthetic asset transfer from sepolia to alfajores", async () => {
+        const response = await hyperlane.sendAssets(clients.sepolia, {
+            warpRouteAddress: "0xeDF994D49F865D3a4bd6F74AeFbe1DcCAE7204F2",
+            tokenAddress: "0xeDF994D49F865D3a4bd6F74AeFbe1DcCAE7204F2",
+            originChain: "sepolia",
+            destinationChain: "alfajores",
+            recipientAddress: WALLET_ADDRESS,
+            amount: "0.001",
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toHaveProperty("message", "Cross-chain asset transfer initiated");
+        expect(parsed).toHaveProperty("transaction");
+        expect(parsed.transaction).toHaveProperty("transactionHash");
+        expect(parsed.transaction.status).toBe("success");
+    });
+
+    it("initiates a synthetic to native asset return from alfajores to sepolia", async () => {
+        const response = await hyperlane.sendAssets(clients.alfajores, {
+            warpRouteAddress: "0x78fe869f19f917fde4192c51c446Fbd3721788ee",
+            tokenAddress: "0x78fe869f19f917fde4192c51c446Fbd3721788ee",
+            originChain: "alfajores",
+            destinationChain: "sepolia",
+            recipientAddress: WALLET_ADDRESS,
+            amount: "0.001",
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Cross-chain asset transfer initiated",
+            transaction: expect.objectContaining({
+                transactionHash: expect.stringMatching(hex60),
+                status: "success",
+                to: "0x78fe869f19f917fde4192c51c446Fbd3721788ee",
+                type: "eip1559",
+                from: WALLET_ADDRESS,
+            }),
+        });
+    });
+
+    it("initiates a collateral to synthetic asset transfer from basesepolia to optimismsepolia for LINK", async () => {
+        const response = await hyperlane.sendAssets(clients.base, {
+            warpRouteAddress: "0x753e7AafFA0eB3bB352753e5c0f0F5Bb807e3752",
+            tokenAddress: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+            originChain: "basesepolia",
+            destinationChain: "optimismsepolia",
+            recipientAddress: WALLET_ADDRESS,
+            amount: "1",
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Cross-chain asset transfer initiated",
+            transaction: expect.objectContaining({
+                transactionHash: expect.stringMatching(hex60),
+                status: "success",
+                to: "0x753e7AafFA0eB3bB352753e5c0f0F5Bb807e3752",
+                type: "eip1559",
+                from: WALLET_ADDRESS,
+            }),
+        });
+    });
+
+    it("initiates a synthetic to collateral asset return from optimismsepolia to basesepolia for LINK", async () => {
+        const response = await hyperlane.sendAssets(clients.optimism, {
+            warpRouteAddress: "0xe97e8fA57540fAF2617EFceE30506aF559c4Ac88",
+            tokenAddress: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+            originChain: "optimismsepolia",
+            destinationChain: "basesepolia",
+            recipientAddress: WALLET_ADDRESS,
+            amount: "0.0001",
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Cross-chain asset transfer initiated",
+            transaction: expect.objectContaining({
+                transactionHash: expect.stringMatching(hex60),
+                status: "success",
+                to: "0xe97e8fA57540fAF2617EFceE30506aF559c4Ac88",
+                type: "eip1559",
+                from: WALLET_ADDRESS,
+            }),
+        });
+    });
+});
+
+describe('hyperlane.deployWarpRoute', () => {
+    // TODO: test third warp route type
+    it('deploys a warp route from native to synthetic between sepolia and alfajores', async () => {
+        const response = await hyperlane.deployWarpRoute(clients.sepolia, {
+            chains: [
+                {
+                    walletClient: clients.sepolia,
+                    type: "native",
+                    chainName: "sepolia",
+                    useTrustedIsm: true
+                },
+                {
+                    walletClient: clients.alfajores,
+                    type: "synthetic",
+                    chainName: "alfajores",
+                    useTrustedIsm: true
+                }
+            ]
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Warp route deployed successfully",
+            result: {
+                tokens: expect.arrayContaining([
+                    expect.objectContaining({
+                        chainName: "sepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        // collateralAddressOrDenom: expect.stringMatching(hex40),
+                        collateralAddressOrDenom: undefined,
+                        type: "native"
+                    }),
+                    expect.objectContaining({
+                        chainName: "alfajores",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        collateralAddressOrDenom: undefined,
+                        type: "synthetic"
+                    })
+                ])
+            }
+        });
+    });
+
+    it('deploys a warp route from collateral to synthetic between basesepolia and zksyncsepolia', async () => {
+        const response = await hyperlane.deployWarpRoute(clients.base, {
+            chains: [
+                {
+                    walletClient: clients.base,
+                    chainName: "basesepolia",
+                    type: "collateral",
+                    useTrustedIsm: true,
+                    tokenAddress: baseLinkTokenContractAddress,
+                    symbol: "LINK",
+                    name: "ChainLink",
+                    decimals: 18
+                },
+                {
+                    walletClient: clients.zksync,
+                    chainName: "zksyncsepolia",
+                    type: "synthetic",
+                    useTrustedIsm: true,
+                    symbol: "LINK",
+                    name: "Chainlink",
+                    decimals: 18
+                }
+            ]
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Warp route deployed successfully",
+            result: {
+                tokens: [
+                    {
+                        chainName: "basesepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        collateralAddressOrDenom: baseLinkTokenContractAddress,
+                        type: "collateral"
+                    },
+                    {
+                        chainName: "zksyncsepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        collateralAddressOrDenom: undefined,
+                        type: "synthetic"
+                    }
+                ]
+            }
+        });
+    });
+});
