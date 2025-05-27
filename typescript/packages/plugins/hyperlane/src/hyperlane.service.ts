@@ -30,7 +30,8 @@ import {
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
-import { WarpRouteConfig, type WarpRoutes } from "./types";
+import { type WarpRouteConfig, type WarpRoutes } from "./types";
+export type { WarpRouteConfig, WarpRoutes } from "./types";
 import { setIfDefined, stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
@@ -767,18 +768,21 @@ export class HyperlaneService {
             // let name = undefined;
             // let decimals = undefined;
             if ("token" in config[chainName]) {
-                tokenAddress = config[chainName]['token'];
+                tokenAddress = config[chainName].token;
             }
             returnConfig.tokens.push({
                 chainName: chainName,
                 addressOrDenom: tokenConfig[type].address,
                 collateralAddressOrDenom: tokenAddress,
-                type: type,
-                // TODO: maybe add these properties?
-                // standard: tokenConfig.standard,
-                // decimals: config[chainName]['decimals'],
-                // symbol: config[chainName]['symbol'],
-                // name: config[chainName]['name'],
+                // type: type,
+                // TODO: these values might not be real
+                standard: String(tokenConfig.standard),
+                decimals:
+                    typeof tokenConfig.decimals === "object" && "toNumber" in tokenConfig.decimals
+                        ? tokenConfig.decimals.toNumber()
+                        : Number(tokenConfig.decimals),
+                symbol: String(tokenConfig.symbol),
+                name: String(tokenConfig.name),
                 // connections: [{
                 //     token: connection,
                 // }],
