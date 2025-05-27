@@ -1023,9 +1023,9 @@ export class HyperlaneService {
      * @throws {Error} If warp route retrieval fails
      */
     async getWarpRoutesForChain(
-        walletClient: EVMWalletClient,
+        walletClient: EVMWalletClient, // TODO: remove walletClient?
         parameters: HyperlaneGetWarpRoutesForChainParameters,
-    ): Promise<WarpRoutes> {
+    ): Promise<string> {
         const { chain } = parameters;
         const { multiProvider, registry } = await this.getMultiProvider(walletClient);
 
@@ -1059,7 +1059,7 @@ export class HyperlaneService {
                 routes[warpRoute] = data;
             }
         }
-        return routes;
+        return JSON.stringify(routes);
     }
 
     /**
