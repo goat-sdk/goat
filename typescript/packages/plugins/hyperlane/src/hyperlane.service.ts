@@ -763,20 +763,22 @@ export class HyperlaneService {
         for (const [chainName, tokenConfig] of Object.entries(result)) {
             const { type } = config[chainName];
             let tokenAddress = undefined;
+            // let symbol = undefined;
+            // let name = undefined;
+            // let decimals = undefined;
             if ("token" in config[chainName]) {
-                tokenAddress = config[chainName];
+                tokenAddress = config[chainName]['token'];
             }
             returnConfig.tokens.push({
                 chainName: chainName,
                 addressOrDenom: tokenConfig[type].address,
-                // @ts-expect-error TS2322: Value is not assignable to type 'string | null | undefined'
                 collateralAddressOrDenom: tokenAddress,
                 type: type,
                 // TODO: maybe add these properties?
                 // standard: tokenConfig.standard,
-                // decimals: tokenConfig.decimals,
-                // symbol: tokenConfig.symbol,
-                // name: tokenConfig.name,
+                // decimals: config[chainName]['decimals'],
+                // symbol: config[chainName]['symbol'],
+                // name: config[chainName]['name'],
                 // connections: [{
                 //     token: connection,
                 // }],
