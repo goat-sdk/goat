@@ -1,7 +1,7 @@
 {
     "extends": "../../../tsconfig.base.json",
     "$schema": "https://json.schemastore.org/tsconfig",
-    "include": ["src/**/*", "test/**/*"],
+    "include": ["src/**/*", "src/__tests__/**/*"],
     "exclude": ["dist", "node_modules"],
     "compilerOptions": {
         "module": "ESNext",
@@ -13,6 +13,6 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "types": ["node", "jest"]
+        "types": ["node", "vitest/globals"]
     }
 }

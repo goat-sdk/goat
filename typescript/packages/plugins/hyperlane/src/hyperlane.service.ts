@@ -31,7 +31,6 @@ import {
     HyperlaneValidatorParameters,
 } from "./parameters";
 import { type WarpRouteConfig, type WarpRoutes } from "./types";
-export type { WarpRouteConfig, WarpRoutes } from "./types";
 import { setIfDefined, stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
@@ -1237,3 +1236,5 @@ function createMultiProviderSingleton() {
         return instance;
     };
 }
+
+export type { WarpRouteConfig, WarpRoutes } from "./types";
