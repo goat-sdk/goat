@@ -78,7 +78,9 @@ export class EVMWalletClientSigner extends ethers.Signer {
     }
 
     async signTransaction(transaction: ethers.providers.TransactionRequest): Promise<string> {
-        throw new Error("signTransaction is not supported");
+        const evmTransaction = await this.ethersToEVMTransaction(transaction);
+        const { signature } = await this.walletClient.signTransaction(evmTransaction);
+        return signature;
     }
 
     async sendTransaction(
@@ -90,6 +92,10 @@ export class EVMWalletClientSigner extends ethers.Signer {
             await this.walletClient.switchChain(this.providerChainId);
         }
         const tx = await this.populateTransaction(transaction);
+        if (this.provider) {
+            const signedTransaction = await this.signTransaction(tx);
+            return await this.provider.sendTransaction(signedTransaction);
+        }
         const evmTransaction = await this.ethersToEVMTransaction(tx);
         const transactionResponse = await this.walletClient.sendTransaction({
             ...evmTransaction,
