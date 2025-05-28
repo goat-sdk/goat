@@ -37,7 +37,7 @@ class Payment(BaseModel):
         description="The blockchain network to use for the transaction (e.g., 'ethereum', 'ethereum-sepolia', 'base', 'base-sepolia', 'polygon', 'polygon-amoy', 'solana')"
     )
     currency: str = Field(
-        description="The currency to use for payment (e.g., 'usdc')"
+        description="The currency to use for payment (e.g., 'usdc' or 'eth' or 'sol')"
     )
     payerAddress: str = Field(
         description="The address that will pay for the transaction"
@@ -56,7 +56,7 @@ class Payment(BaseModel):
 
     @validator('currency')
     def validate_currency(cls, v):
-        allowed_currencies = ["usdc"]
+        allowed_currencies = ["usdc", "eth", "sol"]
         if v not in allowed_currencies:
             raise ValueError(f"Currency must be one of: {', '.join(allowed_currencies)}")
         return v
@@ -80,9 +80,19 @@ class BuyTokenParameters(BaseModel):
     recipient: Recipient = Field(
         description="Where the tokens will be sent to - either a wallet address or email, if email is provided a Crossmint wallet will be created and associated with the email"
     )
+    locale: str = Field(
+        default="en-US",
+        description="The locale for the order (e.g., 'en-US')"
+    )
     payment: Payment = Field(
         description="Payment configuration - the desired blockchain, currency and address of the payer - optional receipt email, if an email recipient was not provided"
     )
     lineItems: List[Union[CollectionLineItem, ProductLineItem]] = Field(
         description="Array of items to purchase"
+    )
+
+
+class GetOrderParameters(BaseModel):
+    order_id: str = Field(
+        description="The unique identifier of the order to retrieve"
     )
