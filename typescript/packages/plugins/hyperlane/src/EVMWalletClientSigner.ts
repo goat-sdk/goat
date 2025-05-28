@@ -6,12 +6,14 @@ import { AccessList, BlockTag } from "viem";
 export class EVMWalletClientSigner extends ethers.Signer {
     walletClient: EVMWalletClient;
     provider?: ethers.providers.Provider = undefined;
+    providerChainId?: number = undefined
 
     constructor(walletClient: EVMWalletClient, provider?: ethers.providers.Provider) {
         super();
         this.walletClient = walletClient;
         if (provider) {
             this.provider = provider;
+            this.providerChainId = await provider.getNetwork().chainId;
         }
     }
 
@@ -82,12 +84,20 @@ export class EVMWalletClientSigner extends ethers.Signer {
     async sendTransaction(
         transaction: ethers.providers.TransactionRequest,
     ): Promise<ethers.providers.TransactionResponse> {
+        const walletChainId = this.walletClient.getChain().id;
+        const shouldSwitchChain = this.providerChainId !== walletChainId;
+        if (this.providerChainId && shouldSwitchChain) {
+            await this.walletClient.switchChain(this.providerChainId);
+        }
         const tx = await this.populateTransaction(transaction);
         const evmTransaction = await this.ethersToEVMTransaction(tx);
         const transactionResponse = await this.walletClient.sendTransaction({
             ...evmTransaction,
         });
         const sender = await this.getAddress();
+        if (shouldSwitchChain) {
+            await this.walletClient.switchChain(walletChainId);
+        }
         return {
             hash: transactionResponse.hash,
             confirmations: 0,
