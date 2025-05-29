@@ -217,7 +217,7 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             value: transaction.value ? BigInt(transaction.value.toString()) : undefined,
             data: transaction?.data,
             account: this.#client.account,
-            chain: this.#client.chain,
+            chain: transaction.chain ? transaction.chain : this.#client.chain,
             maxFeePerGas: transaction?.maxFeePerGas,
             accessList: transaction?.accessList,
             nonce: transaction?.nonce,

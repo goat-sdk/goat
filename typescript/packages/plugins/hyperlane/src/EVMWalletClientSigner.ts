@@ -1,19 +1,43 @@
 import { EVMTransaction, TransactionLog } from "@goat-sdk/wallet-evm";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { HyperlaneSmartProvider } from "@hyperlane-xyz/sdk";
 import { BigNumber, ethers } from "ethers";
-import { AccessList, BlockTag } from "viem";
+import { BlockTag } from "viem";
+import * as chains from "viem/chains";
 
 export class EVMWalletClientSigner extends ethers.Signer {
     walletClient: EVMWalletClient;
-    provider?: ethers.providers.Provider = undefined;
-    providerChainId?: number = undefined
+    provider?: HyperlaneSmartProvider = undefined;
+    chainId?: number;
+    getProviderNetwork?: () => Promise<ethers.providers.Network> = undefined;
 
-    constructor(walletClient: EVMWalletClient, provider?: ethers.providers.Provider) {
+    constructor(walletClient: EVMWalletClient, provider?: HyperlaneSmartProvider) {
         super();
         this.walletClient = walletClient;
         if (provider) {
             this.provider = provider;
-            this.providerChainId = await provider.getNetwork().chainId;
+            this.getProviderNetwork = this.providerNetworkSingleton();
+            this.getProviderNetwork();
+        }
+    }
+
+    private providerNetworkSingleton() {
+        let providerNetwork: ethers.providers.Network | undefined;
+
+        return async (): Promise<ethers.providers.Network> => {
+            if (providerNetwork === undefined) {
+                providerNetwork = await this.provider?.getNetwork();
+                this.chainId = providerNetwork?.chainId;
+            }
+            return providerNetwork as ethers.providers.Network;
+        };
+    }
+
+    private getChain(id: number) {
+        for (const chain of Object.values(chains)) {
+            if (chain.id === id) {
+                return chain;
+            }
         }
     }
 
@@ -49,18 +73,45 @@ export class EVMWalletClientSigner extends ethers.Signer {
             }
             gas = (await this.provider.estimateGas(tx)).toBigInt();
         }
+        debugger;
+        const chain = this.getChain(this.chainId!);
         return {
             to: tx.to as string,
             value: tx.value ? BigInt(tx.value.toString()) : undefined,
             data: tx.data ? (ethers.utils.hexlify(tx.data) as `0x${string}`) : undefined,
             maxFeePerGas: tx.maxFeePerGas ? BigInt(tx.maxFeePerGas.toString()) : undefined,
             maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? BigInt(tx.maxPriorityFeePerGas.toString()) : undefined,
-            accessList: tx.accessList ? (tx.accessList as AccessList) : undefined,
+            // accessList: tx?.accessList.,
             nonce: tx.nonce ? Number(tx.nonce) : undefined,
             from: tx.from as `0x${string}`,
             // gas: 3000000n,
             gas: gas,
             // gasPrice: tx?.gasPrice,
+            chain: {
+                // blockExplorers?: {
+                //     [key: string]: ChainBlockExplorer;
+                //     default: ChainBlockExplorer;
+                // } | undefined;
+                // contracts?: {
+                //     [x: string]: ChainContract | {
+                //         [sourceId: number]: ChainContract | undefined;
+                //     } | undefined;
+                //     ensRegistry?: ChainContract | undefined;
+                //     ensUniversalResolver?: ChainContract | undefined;
+                //     multicall3?: ChainContract | undefined;
+                //     universalSignatureVerifier?: ChainContract | undefined;
+                // } | undefined;
+                id: chain!.id,
+                name: chain!.name,
+                nativeCurrency: chain!.nativeCurrency,
+                rpcUrls: {
+                    default: {
+                        http: this.provider!.rpcProviders.map((rpcProvider) => rpcProvider.rpcConfig.http), // Replace with actual RPC URL(s)
+                    },
+                },
+                // sourceId?: number | undefined;
+                testnet: chain!.testnet,
+            },
             chainId: tx.chainId,
             type: this.typeNumberToString(tx?.type) as "legacy" | "eip2930" | "eip1559" | undefined,
             customData: tx.customData,
@@ -86,11 +137,6 @@ export class EVMWalletClientSigner extends ethers.Signer {
     async sendTransaction(
         transaction: ethers.providers.TransactionRequest,
     ): Promise<ethers.providers.TransactionResponse> {
-        const walletChainId = this.walletClient.getChain().id;
-        const shouldSwitchChain = this.providerChainId !== walletChainId;
-        if (this.providerChainId && shouldSwitchChain) {
-            await this.walletClient.switchChain(this.providerChainId);
-        }
         const tx = await this.populateTransaction(transaction);
         if (this.provider) {
             const signedTransaction = await this.signTransaction(tx);
@@ -101,9 +147,6 @@ export class EVMWalletClientSigner extends ethers.Signer {
             ...evmTransaction,
         });
         const sender = await this.getAddress();
-        if (shouldSwitchChain) {
-            await this.walletClient.switchChain(walletChainId);
-        }
         return {
             hash: transactionResponse.hash,
             confirmations: 0,
@@ -152,6 +195,6 @@ export class EVMWalletClientSigner extends ethers.Signer {
     }
 
     connect(provider: ethers.providers.Provider): ethers.Signer {
-        return new EVMWalletClientSigner(this.walletClient, provider);
+        return new EVMWalletClientSigner(this.walletClient, provider as HyperlaneSmartProvider);
     }
 }
