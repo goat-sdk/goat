@@ -1,5 +1,4 @@
 import type { Abi } from "abitype";
-import { Chain } from "viem";
 
 type Address = `0x${string}`;
 
@@ -23,7 +22,6 @@ export type EVMTransaction = {
     gas?: bigint; // gas limit
     from?: Address;
     chainId?: number;
-    chain?: Chain;
     type?: "legacy" | "eip2930" | "eip1559" | "eip4844" | "eip7702" | undefined; // 0: legacy, 1: EIP-2930, 2: EIP-1559
     customData?: Record<string, unknown>;
     ccipReadEnabled?: boolean;
