@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 import os
+import logging
 from dotenv import load_dotenv
+
+# Configure logging to show INFO level messages
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+# Set specific logger levels if needed
+logger = logging.getLogger(__name__)
 
 # LangChain imports
 from langchain_openai import ChatOpenAI
@@ -35,6 +46,12 @@ Always ask for ALL required information in the first response:
 3) Recipient email address
 4) Payment method (USDC, SOL, or ETH)
 5) Preferred chain (EVM or Solana)
+
+IMPORTANT: When calling buy_token, ONLY include fields that have actual values. 
+DO NOT include any fields with null, None, or empty values.
+If optional information is not provided, simply omit those fields entirely from the request.
+The locale will be automatically set to "en-US" if not provided.
+This is critical for API compatibility.
             
 Only proceed with the purchase when all information is provided.
 1) Use productLocator format 'amazon:B08SVZ775L'
@@ -42,6 +59,8 @@ Only proceed with the purchase when all information is provided.
 3) Require and parse valid shipping address (in format 'Name, Street, City, State ZIP, Country') and email
 4) The recipient WILL be the email provided by the user
 5) You can get the payer address using the get_wallet_address tool
+
+After successfully creating an order with buy_token, you can use get_order with the order_id to retrieve and show the order details, including order status and transaction information.
             
 Once the order is executed via the buy_token, consider the purchase complete, and the payment sent. You can ask the user if they want to purchase something else
 
@@ -68,6 +87,13 @@ def main():
     # Create wallet using the GOAT SDK web3 factory function
     wallet_client = web3(w3)
     
+    # Debug logging for wallet creation
+    logger.info(f"=== WALLET CREATION DEBUG ===")
+    logger.info(f"wallet_client: {wallet_client}")
+    logger.info(f"wallet_client type: {type(wallet_client)}")
+    logger.info(f"wallet_client address: {wallet_client.get_address()}")
+    logger.info("=== END WALLET CREATION DEBUG ===")
+    
     # Create plugin options and plugin instance
     plugin_options = CrossmintHeadlessCheckoutPluginOptions(api_key=os.environ.get("CROSSMINT_API_KEY"))
     plugin = crossmint_headless_checkout(plugin_options)
@@ -79,8 +105,15 @@ def main():
         plugins=[plugin]
     )
     
+    # Debug logging for tools
+    logger.info(f"=== TOOLS DEBUG ===")
+    logger.info(f"Number of tools: {len(tools)}")
+    for i, tool in enumerate(tools):
+        logger.info(f"Tool {i}: {tool.name} - {type(tool)}")
+    logger.info("=== END TOOLS DEBUG ===")
+    
     # 3. Initialize LLM
-    llm = ChatOpenAI(model="gpt-4o-mini")
+    llm = ChatOpenAI(model="gpt-4o")
     
     # Get the prompt template
     prompt = ChatPromptTemplate.from_messages([
