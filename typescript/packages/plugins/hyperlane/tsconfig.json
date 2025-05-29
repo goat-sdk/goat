@@ -8,6 +8,7 @@
         "target": "ESNext",
         "moduleResolution": "node",
         "sourceMap": true,
+        "rootDir": "src",
         "inlineSources": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
