@@ -8,7 +8,14 @@ import {
     EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
 
-import { type WalletClient as ViemWalletClient, encodeFunctionData, publicActions } from "viem";
+import {
+    http,
+    Chain,
+    type WalletClient as ViemWalletClient,
+    createWalletClient,
+    encodeFunctionData,
+    publicActions,
+} from "viem";
 import { eip712WalletActions, getGeneralPaymasterInput } from "viem/zksync";
 
 export type ViemOptions = EVMWalletClientCtorParams & {
@@ -45,6 +52,19 @@ export class ViemEVMWalletClient extends EVMWalletClient {
             return "";
         }
         return address;
+    }
+
+    cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
+        if (rpcUrls?.default === undefined) {
+            throw new Error("rpcUrls.default is required for ViemEVMWalletClient.cloneWithNewChainAndRpc");
+        }
+        return new ViemEVMWalletClient(
+            createWalletClient({
+                account: this.#client.account,
+                chain,
+                transport: http(rpcUrls.default),
+            }),
+        );
     }
 
     getChain(): EvmChain {

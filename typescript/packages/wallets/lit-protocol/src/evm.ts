@@ -1,7 +1,7 @@
 import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
 import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
 import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
-import { formatEther, isAddress, publicActions } from "viem";
+import { createWalletClient, formatEther, isAddress, publicActions } from "viem";
 import { signEip712MessageLitActionCode } from "./litActions/evmWrappedKeySignEip712Message";
 import type { LitEVMWalletOptions } from "./types";
 
@@ -9,7 +9,7 @@ import { type EvmChain, NativeCurrency, type Signature } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { LitNodeClient } from "@lit-protocol/lit-node-client";
 
-import { WalletClient as ViemWalletClient } from "viem";
+import { http, type Chain, WalletClient as ViemWalletClient } from "viem";
 
 const { signMessageWithEncryptedKey, signTransactionWithEncryptedKey } = api;
 
@@ -163,6 +163,25 @@ export class LitEVMWalletClient extends EVMWalletClient {
         });
 
         return { value: result };
+    }
+
+    cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
+        if (rpcUrls?.default === undefined) {
+            throw new Error("rpcUrls.default is required for LitEVMWalletClient.cloneWithNewChainAndRpc");
+        }
+        return new LitEVMWalletClient({
+            litNodeClient: this.litNodeClient,
+            pkpSessionSigs: this.pkpSessionSigs,
+            wrappedKeyMetadata: this.wrappedKeyMetadata,
+            chainId: chain.id,
+            litEVMChainIdentifier: this.litEVMChainIdentifier,
+            network: "evm",
+            viemWalletClient: createWalletClient({
+                account: this.viemWalletClient.account,
+                chain,
+                transport: http(rpcUrls.default),
+            }),
+        });
     }
 
     async getNativeBalance() {

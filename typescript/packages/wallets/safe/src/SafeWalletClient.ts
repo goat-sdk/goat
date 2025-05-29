@@ -4,6 +4,7 @@ import {
     EVMSmartWalletClient,
     type EVMTransaction,
     type EVMTypedData,
+    EVMWalletClient,
 } from "@goat-sdk/wallet-evm";
 import { SigningMethod } from "@safe-global/protocol-kit";
 import {
@@ -283,6 +284,10 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         if (this.#isDeployed) return true;
 
         return await this.#safeAccount.isDeployed();
+    }
+
+    cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
+        return new SafeWalletClient(this.#privateKey, chain, this.#saltNonce);
     }
 }
 

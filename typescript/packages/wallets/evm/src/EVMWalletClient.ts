@@ -6,7 +6,7 @@ import {
     WalletClientBase,
     createTool,
 } from "@goat-sdk/core";
-import { formatUnits, parseUnits } from "viem";
+import { Chain, formatUnits, parseUnits } from "viem";
 import { ERC20_ABI } from "./abi";
 import {
     approveParametersSchema,
@@ -64,6 +64,7 @@ export abstract class EVMWalletClient extends WalletClientBase {
     abstract getNativeBalance(): Promise<bigint>;
     abstract signTypedData(data: EVMTypedData): Promise<Signature>;
     abstract signTransaction(transaction: EVMTransaction): Promise<{ signature: string }>;
+    abstract cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient;
     // Abstract method for getting native balance (needs implementation in concrete class)
     abstract getChain(): EvmChain;
 
