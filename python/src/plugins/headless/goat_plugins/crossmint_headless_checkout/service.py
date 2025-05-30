@@ -10,6 +10,10 @@ from goat_wallets.solana import SolanaWalletClient
 # Import the base wallet client type for proper typing
 from goat.classes.wallet_client_base import WalletClientBase
 
+# Minimal imports for EVM transaction parsing (essential for functionality)
+import rlp
+from eth_utils import to_checksum_address, to_hex
+
 
 def clean_null_values(obj):
     """Recursively remove null/None values from dictionaries and lists."""
@@ -19,6 +23,56 @@ def clean_null_values(obj):
         return [clean_null_values(item) for item in obj if item is not None and item != ""]
     else:
         return obj
+
+
+def parse_evm_transaction(serialized_tx: str) -> Dict[str, Any]:
+    """Parse EVM transaction to extract to, value, and data (handles legacy and EIP-1559)."""
+    if not serialized_tx.startswith("0x"):
+        serialized_tx = f"0x{serialized_tx}"
+    
+    raw_bytes = bytes.fromhex(serialized_tx[2:])
+    
+    # Check if it's a typed transaction (EIP-1559, EIP-2930, etc.)
+    if raw_bytes[0] <= 0x7f:  # Typed transaction
+        tx_type = raw_bytes[0]
+        print(f"Detected typed transaction: type {tx_type}")
+        
+        if tx_type == 0x02:  # EIP-1559
+            # Remove type byte and decode the rest
+            rlp_data = raw_bytes[1:]
+            decoded = rlp.decode(rlp_data)
+            
+            # EIP-1559 format: [chainId, nonce, maxPriorityFeePerGas, maxFeePerGas, gasLimit, to, value, data, accessList, yParity, r, s]
+            if len(decoded) >= 8:
+                to_bytes = decoded[5]      # to at position 5
+                value_bytes = decoded[6]   # value at position 6  
+                data_bytes = decoded[7]    # data at position 7
+                
+                return {
+                    "to": to_checksum_address(to_bytes) if to_bytes else None,
+                    "value": int.from_bytes(value_bytes, 'big') if value_bytes else 0,
+                    "data": to_hex(data_bytes) if data_bytes else "0x"
+                }
+        else:
+            raise Exception(f"Unsupported transaction type: {tx_type}")
+    else:
+        # Legacy transaction
+        print("Detected legacy transaction")
+        decoded = rlp.decode(raw_bytes)
+        
+        # Legacy format: [nonce, gasPrice, gasLimit, to, value, data, v, r, s]
+        if len(decoded) >= 6:
+            to_bytes = decoded[3]      # to at position 3
+            value_bytes = decoded[4]   # value at position 4
+            data_bytes = decoded[5]    # data at position 5
+            
+            return {
+                "to": to_checksum_address(to_bytes) if to_bytes else None,
+                "value": int.from_bytes(value_bytes, 'big') if value_bytes else 0,
+                "data": to_hex(data_bytes) if data_bytes else "0x"
+            }
+    
+    raise Exception("Invalid transaction format")
 
 
 class CrossmintApiClient:
@@ -70,6 +124,12 @@ class CrossmintHeadlessCheckoutService:
             # Convert parameters to JSON-serializable dict and clean null values
             api_request = clean_null_values(parameters)
 
+            # Debug: show the API request being sent
+            print(f"\n=== CROSSMINT API REQUEST ===")
+            print(f"Endpoint: /api/2022-06-09/orders")
+            print(f"Request body: {json.dumps(api_request, indent=2)}")
+            print("============================\n")
+
             # Call the Crossmint API to create the order
             response_data = await self.api_client.post("/api/2022-06-09/orders", api_request)
 
@@ -90,6 +150,16 @@ class CrossmintHeadlessCheckoutService:
             if not serialized_transaction:
                 raise Exception("No serialized transaction found for order, this item may not be available for purchase")
 
+            # Debug: show what we got from Crossmint
+            print(f"\n=== TRANSACTION DEBUG ===")
+            print(f"Serialized transaction: {serialized_transaction[:100]}...")
+            print(f"Transaction length: {len(serialized_transaction)}")
+            print(f"Starts with 0x: {serialized_transaction.startswith('0x')}")
+            if serialized_transaction.startswith('0x') and len(serialized_transaction) > 2:
+                first_byte = serialized_transaction[2:4]
+                print(f"First byte: {first_byte} (indicates transaction type)")
+            print("=========================\n")
+
             # Process based on payment method
             payment_method = order.get("payment", {}).get("method")
 
@@ -98,7 +168,7 @@ class CrossmintHeadlessCheckoutService:
                 if not isinstance(wallet_client, SolanaWalletClient):
                     raise Exception("Solana wallet client required. Use a solana wallet client, or change the payment method to one supported by your wallet client")
 
-                # Send the raw transaction using Solana wallet (as manager requested)
+                # Send the raw transaction using Solana wallet
                 result = wallet_client.send_raw_transaction(serialized_transaction)
                 return {"order": order, "txId": result["hash"]}
 
@@ -107,10 +177,20 @@ class CrossmintHeadlessCheckoutService:
                 if not isinstance(wallet_client, EVMWalletClient):
                     raise Exception("EVM wallet client required. Use an evm wallet client, or change the payment method to one supported by your wallet client")
 
-                # Manager said: "should just use the base EVMWallet object" and "checkout Uniswap plugin"
-                # But Crossmint gives raw serialized transaction, not parameters like Uniswap
-                # Following manager's feedback to remove all parsing - this may need adjustment
-                raise Exception("EVM transaction handling needs clarification - Crossmint provides raw serialized transaction but manager requested no parsing")
+                # Parse the raw transaction (essential for EVM compatibility)
+                parsed_tx = parse_evm_transaction(serialized_transaction)
+                
+                if not parsed_tx["to"]:
+                    raise Exception("Transaction to address is required")
+
+                transaction_params = {
+                    "to": parsed_tx["to"],
+                    "value": parsed_tx["value"],
+                    "data": parsed_tx["data"]
+                }
+                
+                result = wallet_client.send_transaction(transaction_params)
+                return {"order": order, "txId": result["hash"]}
 
             # Unsupported payment method
             raise Exception(f"Unsupported payment method: {payment_method}")

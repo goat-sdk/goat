@@ -31,7 +31,7 @@ class PhysicalAddress(BaseModel):
         
         return v
     
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_state_for_us(cls, values):
         country = values.get('country')
         state = values.get('state')
