@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, root_validator
 from typing import List, Optional, Union, Dict, Any
 
 
@@ -7,21 +7,40 @@ class PhysicalAddress(BaseModel):
     line1: str = Field(description="Street address, P.O. box, company name, c/o")
     line2: Optional[str] = Field(None, description="Apartment, suite, unit, building, floor, etc.")
     city: str = Field(description="City, district, suburb, town, or village")
-    state: Optional[str] = Field(None, description="State, county, province, or region. Required for US addresses.")
+    state: Optional[str] = Field(None, description="State/Province/Region - optional")
     postalCode: str = Field(description="ZIP or postal code")
     country: str = Field(description="Two-letter country code (ISO 3166-1 alpha-2). Currently only US is supported.")
 
     @validator('country')
     def validate_country(cls, v):
+        if not v:
+            raise ValueError("Country is required for physical address")
+        
+        # Convert to uppercase
+        v = v.upper()
+        
+        # Validate length (must be exactly 2 characters for ISO 3166-1 alpha-2)
+        if len(v) < 2:
+            raise ValueError("Country must be a 2-letter ISO code for physical address")
+        if len(v) > 2:
+            raise ValueError("Country must be a 2-letter ISO code for physical address")
+        
+        # Currently only US is supported
         if v != "US":
             raise ValueError("Only 'US' country code is supported at this time")
-        return v.upper()
-    
-    @validator('state')
-    def validate_state(cls, v, values):
-        if values.get('country') == "US" and not v:
-            raise ValueError("State is required for US physical address")
+        
         return v
+    
+    @root_validator(skip_on_failure=True)
+    def validate_state_for_us(cls, values):
+        country = values.get('country')
+        state = values.get('state')
+        
+        # State is required for US addresses
+        if country == "US" and not state:
+            raise ValueError("State is required for US physical address")
+        
+        return values
 
 
 class Recipient(BaseModel):
@@ -34,7 +53,7 @@ class Recipient(BaseModel):
 
 class Payment(BaseModel):
     method: str = Field(
-        description="The blockchain network to use for the transaction (e.g., 'ethereum', 'ethereum-sepolia', 'base', 'base-sepolia', 'polygon', 'polygon-amoy', 'solana')"
+        description="The blockchain network to use for the transaction (e.g., 'ethereum', 'ethereum-sepolia', 'base', 'base-sepolia', 'polygon', 'polygon-amoy', 'solana', 'solana-devnet', 'solana-testnet')"
     )
     currency: str = Field(
         description="The currency to use for payment (e.g., 'usdc' or 'eth' or 'sol')"
@@ -49,7 +68,12 @@ class Payment(BaseModel):
 
     @validator('method')
     def validate_method(cls, v):
-        allowed_methods = ["ethereum", "ethereum-sepolia", "base", "base-sepolia", "polygon", "polygon-amoy", "solana"]
+        allowed_methods = [
+            "ethereum", "ethereum-sepolia", 
+            "base", "base-sepolia", 
+            "polygon", "polygon-amoy", 
+            "solana", "solana-devnet", "solana-testnet"
+        ]
         if v not in allowed_methods:
             raise ValueError(f"Method must be one of: {', '.join(allowed_methods)}")
         return v
