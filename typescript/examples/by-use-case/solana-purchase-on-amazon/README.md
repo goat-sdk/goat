@@ -35,7 +35,7 @@ cp mcp-solana.example.json mcp-solana.json
 ```
 
 2. Update the json file with your values for either EVM or Solana:
-- Absolute path to the parent folder of the `model-context-protocol` folder, you can get it by running `pwd` in the `model-context-protocol` folder
+- Absolute path to the parent folder of the `model-context-protocol` folder, you can get it by running `pwd` in the `model-context-protocol` folder. (Replace .../build/index.js in the path with .../build/evm.js or .../build/solana.js depending on the type of wallet you are using for running this example.)
 - `WALLET_PRIVATE_KEY`
 - `RPC_PROVIDER_URL`
 - `CROSSMINT_API_KEY` (Note: The project configured for CROSSMINT_API_KEY should be a project that has MPC wallets configured instead of smart wallets. To do this, go to https://www.staging.crossmint.com/console or https://www.crossmint.com/console, and configure type of wallets in the Wallets dropdown.)

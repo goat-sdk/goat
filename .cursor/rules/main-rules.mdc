@@ -1,0 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+for ANY operations you need to do with Crossmint Documentation, use the mcp servers you have access to like the mcp server or the documentation mcp server to help answer -- 
++ RUN ANY operation on supabase like migrations etc.
++ call list_doc_sources tool to get the available llms.txt file
++ call fetch_docs tool to read it
++ reflect on the urls in llms.txt 
++ reflect on the input question 
++ call fetch_docs on any urls relevant to the question
++ use this to answer the question
