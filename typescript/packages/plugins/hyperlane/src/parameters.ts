@@ -205,3 +205,19 @@ export class HyperlaneGetWarpRoutesForChainParameters extends createToolParamete
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
     }),
 ) {}
+
+export class HyperlaneRelayerConfigParameters extends createToolParameters(
+    z.object({
+        chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
+        whitelist: z.array(z.string()).optional().describe("Whitelisted addresses for message processing"),
+        blacklist: z.array(z.string()).optional().describe("Blacklisted addresses for message processing"),
+        gasPaymentConfig: z
+            .object({
+                minGas: z.number().describe("Minimum gas required for message processing"),
+                maxGas: z.number().describe("Maximum gas allowed for message processing"),
+                gasToken: z.string().describe("Gas token address for payments"),
+            })
+            .optional()
+            .describe("Gas payment configuration"),
+    }),
+) {}

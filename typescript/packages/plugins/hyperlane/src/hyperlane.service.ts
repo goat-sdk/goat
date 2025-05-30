@@ -26,6 +26,7 @@ import {
     HyperlaneInspectWarpRouteParameters,
     HyperlaneIsmParameters,
     HyperlaneReadMessageParameters,
+    HyperlaneRelayerConfigParameters,
     HyperlaneSendAssetsParameters,
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
@@ -794,6 +795,102 @@ export class HyperlaneService {
             message: "Warp route deployed successfully",
             result: returnConfig,
         });
+    }
+
+    @Tool({
+        name: "hyperlane_configure_relayer",
+        description: "Configure relayer settings for message delivery",
+    })
+    async configureRelayer(walletClient: EVMWalletClient, parameters: HyperlaneRelayerConfigParameters) {
+
+        const { registry } = await this.getMultiProvider(walletClient);
+
+        try {
+            const { chain, whitelist, blacklist, gasPaymentConfig } = parameters;
+            const chainAddresses = await registry.getAddresses();
+
+            // Get the relayer contract
+            const relayerAddress = chainAddresses[chain]?.relayer;
+            if (!relayerAddress) {
+                throw new Error(`No relayer found for chain: ${chain}`);
+            };
+
+            const transactions = [];
+
+            // Configure whitelist if provided
+            if (whitelist && whitelist.length > 0) {
+                transactions.push(
+                    await walletClient.sendTransaction({
+                        to: relayerAddress,
+                        functionName: "setWhitelist",
+                        args: [
+                            whitelist,
+                            whitelist.map(() => true)
+                        ],
+                        abi: hyperlaneABI,
+                    })
+                );
+            }
+
+            // Configure blacklist if provided
+            if (blacklist && blacklist.length > 0) {
+                transactions.push(
+                    await walletClient.sendTransaction({
+                        to: relayerAddress,
+                        functionName: "setBlacklist",
+                        args: [
+                            blacklist,
+                            blacklist.map(() => true)
+                        ],
+                        abi: hyperlaneABI,
+                    })
+                );
+            }
+
+            // Configure gas payment if provided
+            if (gasPaymentConfig) {
+                transactions.push(
+                    await walletClient.sendTransaction({
+                        to: relayerAddress,
+                        functionName: "setGasPaymentConfiguration",
+                        args: [
+                            gasPaymentConfig.minGas,
+                            gasPaymentConfig.maxGas,
+                            gasPaymentConfig.gasToken,
+                        ],
+                        abi: hyperlaneABI,
+                    })
+                );
+            }
+
+            return JSON.stringify(
+                {
+                    message: "Relayer configured successfully",
+                    details: {
+                        chain,
+                        relayerAddress,
+                        transactions: transactions.map((tx) => tx.transactionHash),
+                        config: {
+                            whitelist,
+                            blacklist,
+                            gasPaymentConfig,
+                        },
+                    },
+                },
+                null,
+                2,
+            );
+        } catch (error) {
+            return JSON.stringify(
+                {
+                    message: "Failed to configure relayer",
+                    error: error instanceof Error ? error.message : String(error),
+                    parameters,
+                },
+                null,
+                2,
+            );
+        }
     }
 
     // Build config objects with correct discriminated union for each chain

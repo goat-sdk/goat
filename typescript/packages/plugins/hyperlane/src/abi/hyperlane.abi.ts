@@ -95,4 +95,35 @@ export default [
         ],
         outputs: [],
     },
+    {
+        type: "function",
+        name: "setWhitelist",
+        stateMutability: "nonpayable",
+        inputs: [
+            { name: "addresses", type: "address[]" },
+            { name: "statuses", type: "bool[]" },
+        ],
+        outputs: [],
+    },
+    {
+        type: "function",
+        name: "setBlacklist",
+        stateMutability: "nonpayable",
+        inputs: [
+            { name: "addresses", type: "address[]" },
+            { name: "statuses", type: "bool[]" },
+        ],
+        outputs: [],
+    },
+    {
+        type: "function",
+        name: "setGasPaymentConfiguration",
+        stateMutability: "nonpayable",
+        inputs: [
+            { name: "minGas", type: "uint256" },
+            { name: "maxGas", type: "uint256" },
+            { name: "gasToken", type: "address" },
+        ],
+        outputs: [],
+    },
 ] as const;
