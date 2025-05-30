@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { resolve } from "node:path";
 import * as dotenv from "dotenv";
 import { defineConfig } from "vitest/config";
 

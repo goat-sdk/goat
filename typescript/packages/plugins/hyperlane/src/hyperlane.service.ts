@@ -2,15 +2,22 @@ import { Tool } from "@goat-sdk/core";
 import { EVMTransactionResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { ChainAddresses, GithubRegistry } from "@hyperlane-xyz/registry";
 import {
+    ArbL2ToL1IsmConfig,
     ChainMap,
     ChainMetadata,
     EvmERC20WarpRouteReader,
     HypERC20Deployer,
     HyperlaneCore,
     HyperlaneIsmFactory,
+    IsmConfig,
     MultiProvider,
+    MultisigIsmConfig,
+    OpStackIsmConfig,
+    PausableIsmConfig,
     TokenType,
+    TrustedRelayerIsmConfig,
     WarpRouteDeployConfigMailboxRequired,
+    WeightedMultisigIsmConfig,
 } from "@hyperlane-xyz/sdk";
 import { BigNumber, ethers, utils } from "ethers";
 import { Chain, encodePacked } from "viem";
@@ -20,10 +27,12 @@ import { ParametersRequiredError } from "./errors";
 import {
     HyperlaneDeployWarpRouteParameters,
     HyperlaneGetDeployedContractsParameters,
+    HyperlaneGetIsmsForChainParameters,
     HyperlaneGetMailboxParameters,
     HyperlaneGetTokenParameters,
     HyperlaneGetWarpRoutesForChainParameters,
     HyperlaneInspectWarpRouteParameters,
+    HyperlaneIsmConfigParameters,
     HyperlaneIsmParameters,
     HyperlaneReadMessageParameters,
     HyperlaneRelayerConfigParameters,
@@ -31,7 +40,7 @@ import {
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
 } from "./parameters";
-import { type WarpRouteConfig, type WarpRoutes } from "./types";
+import { type Isms, type WarpRouteConfig, type WarpRouteToken, type WarpRoutes } from "./types";
 import { setIfDefined, stringifyWithBigInts } from "./utils";
 
 let globalRefresh = false; // for manually setting a refresh to the multiProvider
@@ -39,7 +48,7 @@ let globalRefresh = false; // for manually setting a refresh to the multiProvide
 export class HyperlaneService {
     getMultiProvider: (
         walletClient?: EVMWalletClient,
-    ) => Promise<{ multiProvider: MultiProvider; registry: GithubRegistry }>;
+    ) => Promise<{ multiProvider: MultiProvider; registry: GithubRegistry; chainMetadata: ChainMap<ChainMetadata> }>;
     getWarpRoutes: (registry: GithubRegistry) => Promise<WarpRoutes>;
 
     constructor() {
@@ -117,6 +126,7 @@ export class HyperlaneService {
         description: "Check the status and content of a Hyperlane message using the origin chain name and message ID",
     })
     async readMessage(parameters: HyperlaneReadMessageParameters): Promise<string> {
+        // TODO: cannot read on destination chain
         const { chain, messageId } = parameters;
 
         const { multiProvider, registry } = await this.getMultiProvider();
@@ -192,7 +202,7 @@ export class HyperlaneService {
         description: "Get the Hyperlane mailbox address for a specific chain",
     })
     async getMailbox(parameters: HyperlaneGetMailboxParameters): Promise<string> {
-        const { registry } = await this.getMultiProvider();
+        const { registry, chainMetadata } = await this.getMultiProvider();
         const { chain } = parameters;
 
         // Get addresses from registry
@@ -206,7 +216,6 @@ export class HyperlaneService {
         }
 
         // Get chain metadata for additional information
-        const chainMetadata = await registry.getMetadata();
         const chainInfo = chainMetadata[chain];
 
         return JSON.stringify(
@@ -244,7 +253,7 @@ export class HyperlaneService {
         description: "Get all deployed Hyperlane contract addresses for a specific chain",
     })
     async getDeployedContracts(parameters: HyperlaneGetDeployedContractsParameters): Promise<string> {
-        const { registry } = await this.getMultiProvider();
+        const { registry, chainMetadata } = await this.getMultiProvider();
         const { chain, contractType } = parameters;
 
         // Get addresses from registry
@@ -255,7 +264,6 @@ export class HyperlaneService {
         }
 
         // Get chain metadata for additional information
-        const chainMetadata = await registry.getMetadata();
         const chainInfo = chainMetadata[chain];
 
         // Filter contracts by type if specified
@@ -312,7 +320,7 @@ export class HyperlaneService {
 
     /**
      * @method
-     * @name HyperlaneService#configureISM
+     * @name HyperlaneService#deployISM
      * @description Configures an Interchain Security Module (ISM) for a specific blockchain chain
      * @param {EVMWalletClient} walletClient The Ethereum wallet client used for transaction signing
      * @param {HyperlaneIsmParameters} parameters Configuration parameters for ISM deployment
@@ -347,10 +355,10 @@ export class HyperlaneService {
      * @throws {Error} If ISM configuration fails or required parameters are missing
      */
     @Tool({
-        name: "hyperlane_configure_ism",
-        description: "Configure Interchain Security Module settings",
+        name: "hyperlane_deploy_ism",
+        description: "Deploy Interchain Security Module settings",
     })
-    async configureIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmParameters): Promise<string> {
+    async deployIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmParameters): Promise<string> {
         const { multiProvider, registry } = await this.getMultiProvider(walletClient);
 
         const { chain, type, mailbox, config, origin, existingIsmAddress } = parameters;
@@ -359,8 +367,7 @@ export class HyperlaneService {
         // Create ISM factory
         const ismFactory = HyperlaneIsmFactory.fromAddressesMap(chainAddresses, multiProvider);
 
-        // biome-ignore lint/suspicious/noExplicitAny: na
-        let ismConfig: any = { type };
+        let ismConfig: IsmConfig;
 
         // Configure based on ISM type
         switch (type) {
@@ -375,7 +382,7 @@ export class HyperlaneService {
                     type,
                     validators: config.validators.map((v) => v.signingAddress),
                     threshold: config.threshold,
-                };
+                } as MultisigIsmConfig;
                 break;
 
             case "weightedMerkleRootMultisigIsm":
@@ -387,7 +394,7 @@ export class HyperlaneService {
                     type,
                     validators: config.validators,
                     thresholdWeight: config.thresholdWeight,
-                };
+                } as WeightedMultisigIsmConfig;
                 break;
 
             case "pausableIsm":
@@ -399,7 +406,7 @@ export class HyperlaneService {
                     owner: config.owner,
                     paused: config.paused || false,
                     ownerOverrides: config.ownerOverrides,
-                };
+                } as PausableIsmConfig;
                 break;
 
             case "trustedRelayerIsm":
@@ -412,7 +419,7 @@ export class HyperlaneService {
                 ismConfig = {
                     type,
                     relayer: config.relayer,
-                };
+                } as TrustedRelayerIsmConfig;
                 break;
 
             case "opStackIsm":
@@ -423,7 +430,7 @@ export class HyperlaneService {
                     type,
                     origin: config.origin,
                     nativeBridge: config.nativeBridge,
-                };
+                } as OpStackIsmConfig;
                 break;
 
             case "arbL2ToL1Ism":
@@ -433,11 +440,11 @@ export class HyperlaneService {
                 ismConfig = {
                     type,
                     bridge: config.bridge,
-                };
+                } as ArbL2ToL1IsmConfig;
                 break;
 
             case "testIsm":
-                ismConfig = { type };
+                ismConfig = { type } as IsmConfig;
                 break;
         }
 
@@ -797,100 +804,60 @@ export class HyperlaneService {
         });
     }
 
+    /**
+     * @method
+     * @name HyperlaneService#configureISM
+     * @description Pairs an ISM with a warp route on the destination chain
+     * @param {EVMWalletClient} walletClient The wallet client used to sign and send the deployment transaction.
+     * @param {HyperlaneConfigureIsmParameters} parameters
+     * @param parameters.destinationWarpRouteAddress Address of the warp route on the destination chain
+     * @param parameters.ismAddress Address of the ISM to configure
+     * @returns {Promise<string>} A promise that resolves to the transaction object
+     */
     @Tool({
-        name: "hyperlane_configure_relayer",
-        description: "Configure relayer settings for message delivery",
+        name: "hyperlane_configure_ism",
+        description: "Configure ism settings for message delivery",
     })
-    async configureRelayer(walletClient: EVMWalletClient, parameters: HyperlaneRelayerConfigParameters) {
+    async configureISM(walletClient: EVMWalletClient, parameters: HyperlaneIsmConfigParameters): Promise<string> {
+        const { destinationWarpRouteAddress, ismAddress } = parameters;
 
-        const { registry } = await this.getMultiProvider(walletClient);
+        // Set the relayer as the ISM for the warp route
+        const tx = await walletClient.sendTransaction({
+            to: destinationWarpRouteAddress,
+            functionName: "setInterchainSecurityModule",
+            args: [ismAddress],
+            abi: hyperlaneABI,
+        });
 
-        try {
-            const { chain, whitelist, blacklist, gasPaymentConfig } = parameters;
-            const chainAddresses = await registry.getAddresses();
+        return JSON.stringify({
+            message: "ISM configured successfully",
+            transaction: tx,
+        });
+    }
 
-            // Get the relayer contract
-            const relayerAddress = chainAddresses[chain]?.relayer;
-            if (!relayerAddress) {
-                throw new Error(`No relayer found for chain: ${chain}`);
-            };
-
-            const transactions = [];
-
-            // Configure whitelist if provided
-            if (whitelist && whitelist.length > 0) {
-                transactions.push(
-                    await walletClient.sendTransaction({
-                        to: relayerAddress,
-                        functionName: "setWhitelist",
-                        args: [
-                            whitelist,
-                            whitelist.map(() => true)
-                        ],
-                        abi: hyperlaneABI,
-                    })
-                );
-            }
-
-            // Configure blacklist if provided
-            if (blacklist && blacklist.length > 0) {
-                transactions.push(
-                    await walletClient.sendTransaction({
-                        to: relayerAddress,
-                        functionName: "setBlacklist",
-                        args: [
-                            blacklist,
-                            blacklist.map(() => true)
-                        ],
-                        abi: hyperlaneABI,
-                    })
-                );
-            }
-
-            // Configure gas payment if provided
-            if (gasPaymentConfig) {
-                transactions.push(
-                    await walletClient.sendTransaction({
-                        to: relayerAddress,
-                        functionName: "setGasPaymentConfiguration",
-                        args: [
-                            gasPaymentConfig.minGas,
-                            gasPaymentConfig.maxGas,
-                            gasPaymentConfig.gasToken,
-                        ],
-                        abi: hyperlaneABI,
-                    })
-                );
-            }
-
-            return JSON.stringify(
-                {
-                    message: "Relayer configured successfully",
-                    details: {
-                        chain,
-                        relayerAddress,
-                        transactions: transactions.map((tx) => tx.transactionHash),
-                        config: {
-                            whitelist,
-                            blacklist,
-                            gasPaymentConfig,
-                        },
-                    },
-                },
-                null,
-                2,
-            );
-        } catch (error) {
-            return JSON.stringify(
-                {
-                    message: "Failed to configure relayer",
-                    error: error instanceof Error ? error.message : String(error),
-                    parameters,
-                },
-                null,
-                2,
-            );
-        }
+    /**
+     * @method
+     * @name HyperlaneService#configureTrustedRelayer
+     * @description Pairs a relayer for a trusted relayer ism with a warp route on the destination chain
+     * @param {EVMWalletClient} walletClient The wallet client used to sign and send the deployment transaction.
+     * @param {HyperlaneConfigureIsmParameters} parameters
+     * @param parameters.destinationWarpRouteAddress Address of the warp route on the destination chain
+     * @param parameters.ismAddress Address of the ISM to configure
+     * @returns {Promise<string>} A promise that resolves to the transaction object
+     */
+    @Tool({
+        name: "hyperlane_configure_trusted_relayer",
+        description: "Configure trusted relayer settings for message delivery",
+    })
+    async configureTrustedRelayer(
+        walletClient: EVMWalletClient,
+        parameters: HyperlaneRelayerConfigParameters,
+    ): Promise<string> {
+        const { destinationWarpRouteAddress, relayerAddress } = parameters;
+        return this.configureISM(walletClient, {
+            destinationWarpRouteAddress,
+            ismAddress: relayerAddress,
+        });
     }
 
     // Build config objects with correct discriminated union for each chain
@@ -1131,7 +1098,7 @@ export class HyperlaneService {
         parameters: HyperlaneGetWarpRoutesForChainParameters,
     ): Promise<string> {
         const { chain } = parameters;
-        const { multiProvider, registry } = await this.getMultiProvider(walletClient);
+        const { registry } = await this.getMultiProvider(walletClient);
 
         const allWarpRoutes = await this.getWarpRoutes(registry);
         //
@@ -1167,11 +1134,57 @@ export class HyperlaneService {
     }
 
     /**
+     * @method
+     * @name HyperlaneService#getIsmsForChain
+     * @description Returns all ISMs deployed on a given chain from the Hyperlane registry
+     * @param {EVMWalletClient} walletClient The wallet client used to access the registry
+     * @param {object} parameters Parameters to filter ISMs by chain
+     * @param {string} parameters.chain Chain name (e.g. "base", "arbitrum")
+     * @returns {Promise<string>} A JSON string containing ISM addresses and their configurations
+     * @throws {Error} If ISM retrieval fails
+     */
+    @Tool({
+        name: "hyperlane_get_isms_for_chain",
+        description: "Get all ISMs deployed on a given chain from the registry",
+    })
+    async getIsmsForChain(
+        walletClient: EVMWalletClient,
+        parameters: HyperlaneGetIsmsForChainParameters,
+    ): Promise<string> {
+        const { chain } = parameters;
+        const { registry, chainMetadata } = await this.getMultiProvider(walletClient);
+
+        const chainAddresses = await registry.getAddresses();
+
+        if (!chainAddresses[chain]) {
+            throw new Error(`No addresses found for chain: ${chain}`);
+        }
+
+        // Filter and organize ISM-related contracts
+        const isms: Isms = Object.entries(chainAddresses[chain])
+            .filter(([key]) => key.toLowerCase().includes("ism"))
+            .reduce((acc, [key, value]) => {
+                acc[key.toLowerCase()] = {
+                    address: value as `0x${string}`,
+                    chainId: Number(chainMetadata[chain].chainId),
+                    domainId: Number(chainMetadata[chain].domainId),
+                };
+                return acc;
+            }, {} as Isms);
+
+        return JSON.stringify({
+            message: Object.keys(isms).length > 0 ? "ISMs found" : "No ISMs found for chain",
+            details: isms,
+        });
+    }
+
+    /**
      * @ignore
      * @method
-     * @name HyperlaneService#convertAmount
+     * @name HyperlaneService#toWeiAmount
      * @description Converts a currency amount to a wei amount
      * @param {string} tokenAddress The on-chain address of the ERC-20 token contract, must implement the standard `decimals()` view method
+     * @param {TokenType} tokenType Here to check for native tokens
      * @param {string} amount The human-readable token amount (e.g., "1.5"). Must be a valid string representation of a numeric value
      * @param {EVMWalletClient} walletClient users wallet
      * @returns {Promise<ethers.BigNumber>} The amount in wei
@@ -1203,11 +1216,25 @@ export class HyperlaneService {
     }
 
     private async getChainId(chain: string): Promise<number> {
-        const { multiProvider } = await this.getMultiProvider();
-        const chainConfig = multiProvider.getChainMetadata(chain);
-        return chainConfig.domainId; // TODO: will this ever be undefined?
+        const { chainMetadata } = await this.getMultiProvider();
+        return Number(chainMetadata[chain].chainId);
     }
 
+    /**
+     * @ignore
+     * @method
+     * @name HyperlaneService#getQuoteDispatchFee
+     * @description Gets the quote dispatch fee for a given mailbox address, destination chain, amount, recipient address, recipient contract address, wallet client, hook metadata, and hook address
+     * @param {string} mailboxAddress The address of the mailbox contract
+     * @param {string} destinationChain The name of the destination chain
+     * @param {bigint} amount The amount to transfer in wei
+     * @param {string} recipientAddressBytes32 The bytes32 representation of the recipient address
+     * @param {string} recipientContractAddressBytes32 The bytes32 representation of the recipient contract address
+     * @param {EVMWalletClient} walletClient The wallet client used to read the mailbox contract
+     * @param {`0x${string}`} hookMetadata The hook metadata
+     * @param {string} hookAddress The address of the hook contract
+     * @returns {Promise<bigint>} The quote dispatch fee in wei
+     */
     private async getQuoteDispatchFee(
         mailboxAddress: string,
         destinationChain: string,
@@ -1255,7 +1282,11 @@ function createWarpRoutesSingleton() {
 }
 
 function createMultiProviderSingleton() {
-    let instance: { multiProvider: MultiProvider; registry: GithubRegistry } | null = null;
+    let instance: {
+        multiProvider: MultiProvider;
+        registry: GithubRegistry;
+        chainMetadata: ChainMap<ChainMetadata>;
+    } | null = null;
     let lastRefresh: number | null = null;
     const oneDay = 86400000; // milliseconds in one day
     const REGISTRY_URL: string = "https://github.com/hyperlane-xyz/hyperlane-registry";
@@ -1271,7 +1302,7 @@ function createMultiProviderSingleton() {
                 uri: REGISTRY_URL,
                 proxyUrl: REGISTRY_PROXY_URL,
             });
-            const chainMetadata = await registry.getMetadata(); // * Gives "Error: Failed to fetch from github: 429 Too Many Requests" sometimes
+            const chainMetadata: ChainMap<ChainMetadata> = await registry.getMetadata(); // * Gives "Error: Failed to fetch from github: 429 Too Many Requests" sometimes
             //
             //    {
             //        'ethereum': {
@@ -1327,8 +1358,9 @@ function createMultiProviderSingleton() {
                         id: chainId,
                         name: chainName,
                         nativeCurrency: chainMetadata[chainName].nativeToken ?? {
-                            name: "Ether",
-                            symbol: "ETH",
+                            // TODO: what to do if undefined
+                            name: "",
+                            symbol: "",
                             decimals: 18,
                         },
                         rpcUrls: {
@@ -1343,7 +1375,7 @@ function createMultiProviderSingleton() {
                 }
             }
 
-            instance = { multiProvider, registry };
+            instance = { multiProvider, registry, chainMetadata };
             lastRefresh = now;
             globalRefresh = false;
         }
@@ -1352,4 +1384,4 @@ function createMultiProviderSingleton() {
     };
 }
 
-export type { WarpRouteConfig, WarpRoutes } from "./types";
+export type { Isms, WarpRouteConfig, WarpRoutes, WarpRouteToken };

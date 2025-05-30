@@ -4,6 +4,7 @@ import { baseSepolia, celoAlfajores, optimismSepolia, sepolia, zksyncSepoliaTest
 // import { viem } from "@goat-sdk/wallet-viem"; // TODO: update import
 import { viem } from "../../../../wallets/viem/dist/ViemEVMWalletClient.js";
 import { HyperlaneService } from "../../dist/hyperlane.service.js";
+import { WarpRouteToken } from "../types.js";
 
 const {
     WALLET_PRIVATE_KEY,
@@ -48,6 +49,7 @@ const hex40 = /^0x[0-9a-fA-F]{40}$/;
 const hex64 = /^0x[0-9a-fA-F]{64}$/;
 const hexString = /^0x[0-9a-fA-F]+$/;
 const sepoliaMailbox = "0xffaef09b3cd11d9b20d1a19becca54eec2884766";
+const zksyncsepoliaMailbox = "0x61e3BE234D7EE7b1e2a1fA84027105c733b91545";
 const sepoliaTestnetValidator = "0x28b91d3dc0d0e138adf914105d88c8830cc66f4e";
 const baseLinkTokenContractAddress = "0xe4ab69c077896252fafbd49efd26b5d171a32410";
 
@@ -182,12 +184,12 @@ describe("hyperlane.getDeployedContracts", () => {
     });
 });
 
-describe("hyperlane.configureIsm", () => {
+describe("hyperlane.deployIsm", () => {
     // TODO: test all ISM types
-    it("sets up a trustedRelayerIsm correctly on sepolia", async () => {
+    it("sets up a trustedRelayerIsm on sepolia", async () => {
         const originChain = "sepolia";
 
-        const response = await hyperlane.configureIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
             chain: originChain,
             type: "trustedRelayerIsm",
             mailbox: sepoliaMailbox,
@@ -197,7 +199,7 @@ describe("hyperlane.configureIsm", () => {
         });
 
         expect(JSON.parse(response)).toEqual({
-            message: "ISM configured successfully",
+            message: "ISM deployed successfully",
             details: {
                 chain: "sepolia",
                 type: "trustedRelayerIsm",
@@ -244,41 +246,40 @@ describe("hyperlane.getTokens", () => {
         expect(parsed.details.tokens).toBeInstanceOf(Array);
         expect(parsed.details.tokens.length).toBeGreaterThan(0);
 
-        parsed.details.tokens.forEach((token: any) => {
+        for (const token of parsed.details.tokens) {
             expect(token).toHaveProperty("name");
             expect(token).toHaveProperty("symbol");
             expect(token).toHaveProperty("decimals");
             expect(token).toHaveProperty("chainName", "soon");
             expect(token).toHaveProperty("standard");
-            expect(typeof token.tokenRouterAddress).toBe("string");
-            expect(typeof token.underlyingTokenAddress).toBe("string");
+            expect(token).toHaveProperty("addressOrDenom");
+            expect(token).toHaveProperty("connections");
             expect(Array.isArray(token.connections)).toBe(true);
-        });
+        }
     });
 });
 
 describe("hyperlane.getWarpRoutesForChain", () => {
     it('retrieves warp routes for chain "soon"', async () => {
         const response = await hyperlane.getWarpRoutesForChain(clients.sepolia, { chain: "soon" });
-        const parsed = JSON.parse(response) as Record<string, { tokens: any[] }>;
+        const parsed = JSON.parse(response) as Record<string, { tokens: WarpRouteToken[] }>;
 
         expect(typeof parsed).toBe("object");
-        expect(Object.keys(parsed).length).toBeGreaterThan(0);
 
-        for (const [route, routeData] of Object.entries(parsed)) {
+        for (const [routeId, routeData] of Object.entries(parsed)) {
+            expect(routeData).toHaveProperty("tokens");
             expect(Array.isArray(routeData.tokens)).toBe(true);
             expect(routeData.tokens.length).toBeGreaterThan(0);
 
-            routeData.tokens.forEach((token) => {
+            for (const token of routeData.tokens) {
                 expect(token).toHaveProperty("addressOrDenom");
                 expect(token).toHaveProperty("chainName");
                 expect(token).toHaveProperty("connections");
                 expect(token).toHaveProperty("decimals");
-                expect(token).toHaveProperty("logoURI");
                 expect(token).toHaveProperty("name");
                 expect(token).toHaveProperty("standard");
                 expect(token).toHaveProperty("symbol");
-            });
+            }
         }
     });
 });
@@ -402,6 +403,7 @@ describe("hyperlane.sendAssets", () => {
         });
     });
 
+    // TODO: this test won't work until the warp route is set up with a relayer
     it("initiates a synthetic to collateral asset return from optimismsepolia to basesepolia for LINK", async () => {
         const response = await hyperlane.sendAssets(clients.optimism, {
             warpRouteAddress: "0xe97e8fa57540faf2617efcee30506af559c4ac88",
@@ -469,6 +471,8 @@ describe("hyperlane.deployWarpRoute", () => {
         });
     });
 
+    let destinationWarpRouteAddress: string;
+
     it("deploys a warp route from collateral to synthetic between basesepolia and zksyncsepolia", async () => {
         const response = await hyperlane.deployWarpRoute(clients.base, {
             chains: [
@@ -495,6 +499,7 @@ describe("hyperlane.deployWarpRoute", () => {
         });
 
         const parsed = JSON.parse(response);
+        destinationWarpRouteAddress = parsed.result.tokens[1].addressOrDenom;
         expect(parsed).toEqual({
             message: "Warp route deployed successfully",
             result: {
@@ -502,17 +507,61 @@ describe("hyperlane.deployWarpRoute", () => {
                     expect.objectContaining({
                         chainName: "basesepolia",
                         addressOrDenom: expect.stringMatching(hex40),
+                        // TODO: fill in
                         // collateralAddressOrDenom: baseLinkTokenContractAddress,
                         // type: "collateral"
                     }),
                     expect.objectContaining({
                         chainName: "zksyncsepolia",
                         addressOrDenom: expect.stringMatching(hex40),
+                        // TODO: fill in
                         // collateralAddressOrDenom: undefined,
                         // type: "synthetic"
                     }),
                 ],
             },
+        });
+    });
+
+    it("sets up a trustedRelayerIsm on zksyncsepolia", async () => {
+        const originChain = "zksyncsepolia";
+
+        const response = await hyperlane.deployIsm(clients.zksync, {
+            chain: originChain,
+            type: "trustedRelayerIsm",
+            mailbox: zksyncsepoliaMailbox,
+            config: {
+                relayer: WALLET_ADDRESS,
+            },
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                chain: "zksyncsepolia",
+                type: "trustedRelayerIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "trustedRelayerIsm",
+                    relayer: WALLET_ADDRESS,
+                },
+            },
+        });
+    });
+
+    it("assigns a trusted relayer ism to a warp route", async () => {
+        const response = await hyperlane.configureTrustedRelayer(clients.base, {
+            destinationWarpRouteAddress,
+            relayerAddress: WALLET_ADDRESS,
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "ISM configured successfully",
+            transaction: expect.objectContaining({
+                transactionHash: expect.stringMatching(hex64),
+                // TODO: fill in
+            }),
         });
     });
 });

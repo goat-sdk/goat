@@ -126,4 +126,11 @@ export default [
         ],
         outputs: [],
     },
+    {
+        type: "function",
+        name: "setInterchainSecurityModule",
+        stateMutability: "nonpayable",
+        inputs: [{ name: "module", type: "address" }],
+        outputs: [],
+    },
 ] as const;

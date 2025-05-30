@@ -16,6 +16,7 @@ export type WarpRouteConfig = {
 };
 
 export type WarpRoutes = Record<string, WarpRouteConfig>;
+export type Isms = Record<string, { address: `0x${string}`; chainId: number; domainId: number }>;
 
 // export type DeployWarpRouteResponse = HyperlaneContractsMap<{
 //     synthetic: HypERC20__factory;

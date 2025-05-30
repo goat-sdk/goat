@@ -206,18 +206,48 @@ export class HyperlaneGetWarpRoutesForChainParameters extends createToolParamete
     }),
 ) {}
 
-export class HyperlaneRelayerConfigParameters extends createToolParameters(
+export class HyperlaneGetIsmsForChainParameters extends createToolParameters(
     z.object({
         chain: z.string().describe("Chain name (e.g. base, arbitrum)"),
-        whitelist: z.array(z.string()).optional().describe("Whitelisted addresses for message processing"),
-        blacklist: z.array(z.string()).optional().describe("Blacklisted addresses for message processing"),
-        gasPaymentConfig: z
-            .object({
-                minGas: z.number().describe("Minimum gas required for message processing"),
-                maxGas: z.number().describe("Maximum gas allowed for message processing"),
-                gasToken: z.string().describe("Gas token address for payments"),
-            })
-            .optional()
-            .describe("Gas payment configuration"),
+    }),
+) {}
+
+export class HyperlaneIsmConfigParameters extends createToolParameters(
+    z.object({
+        destinationWarpRouteAddress: z.string().describe("Address of the warp route on the destination chain"),
+        ismAddress: z.string().describe("Address of the ISM"),
+        // originChain: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
+        // destinationChain: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
+        // relayerAddress: z.string().describe("Address of the relayer to configure"),
+        // whitelist: z.array(z.string()).optional().describe("Whitelisted addresses for message processing"),
+        // blacklist: z.array(z.string()).optional().describe("Blacklisted addresses for message processing"),
+        // gasPaymentConfig: z
+        //     .object({
+        //         minGas: z.number().describe("Minimum gas required for message processing"),
+        //         maxGas: z.number().describe("Maximum gas allowed for message processing"),
+        //         gasToken: z.string().describe("Gas token address for payments"),
+        //     })
+        //     .optional()
+        //     .describe("Gas payment configuration"),
+    }),
+) {}
+
+export class HyperlaneRelayerConfigParameters extends createToolParameters(
+    z.object({
+        destinationWarpRouteAddress: z.string().describe("Address of the warp route on the destination chain"),
+        relayerAddress: z.string().describe("Address of the relayer on the trusted relayer ism"),
+        // originChain: z.string().describe("Origin chain name (e.g. base, arbitrum)"),
+        // destinationChain: z.string().describe("Destination chain name (e.g. base, arbitrum)"),
+        // relayerAddress: z.string().describe("Address of the relayer to configure"),
+        // whitelist: z.array(z.string()).optional().describe("Whitelisted addresses for message processing"),
+        // blacklist: z.array(z.string()).optional().describe("Blacklisted addresses for message processing"),
+        // gasPaymentConfig: z
+        //     .object({
+        //         minGas: z.number().describe("Minimum gas required for message processing"),
+        //         maxGas: z.number().describe("Maximum gas allowed for message processing"),
+        //         gasToken: z.string().describe("Gas token address for payments"),
+        //     })
+        //     .optional()
+        //     .describe("Gas payment configuration"),
     }),
 ) {}
