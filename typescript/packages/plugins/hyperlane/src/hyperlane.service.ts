@@ -13,7 +13,7 @@ import {
     WarpRouteDeployConfigMailboxRequired,
 } from "@hyperlane-xyz/sdk";
 import { BigNumber, ethers, utils } from "ethers";
-import { encodePacked } from "viem";
+import { Chain, encodePacked } from "viem";
 import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
 import hyperlaneABI from "./abi/hyperlane.abi";
 import { ParametersRequiredError } from "./errors";
@@ -769,17 +769,19 @@ export class HyperlaneService {
             if ("token" in config[chainName]) {
                 tokenAddress = config[chainName].token;
             }
+            const decimals =
+                typeof tokenConfig.decimals === "object" && "toNumber" in tokenConfig.decimals
+                    ? tokenConfig.decimals.toNumber()
+                    : Number(tokenConfig.decimals);
             returnConfig.tokens.push({
                 chainName: chainName,
                 addressOrDenom: tokenConfig[type].address,
-                collateralAddressOrDenom: tokenAddress,
+                collateralAddressOrDenom: tokenAddress, // TODO: for some reason this doesn't show up in the response
                 // type: type,
                 // TODO: these values might not be real
-                standard: String(tokenConfig.standard),
-                decimals:
-                    typeof tokenConfig.decimals === "object" && "toNumber" in tokenConfig.decimals
-                        ? tokenConfig.decimals.toNumber()
-                        : Number(tokenConfig.decimals),
+                standard: String(tokenConfig.standard), // TODO: get from type somehow
+                decimals: decimals || undefined,
+
                 symbol: String(tokenConfig.symbol),
                 name: String(tokenConfig.name),
                 // connections: [{
@@ -1221,9 +1223,25 @@ function createMultiProviderSingleton() {
             const multiProvider = new MultiProvider<ChainMetadata>(chainMetadata);
 
             if (walletClient) {
-                const signer = new EVMWalletClientSigner(walletClient);
                 // const signer = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY as string);
                 for (const chainName of Object.keys(chainMetadata)) {
+                    const chainId = chainMetadata[chainName].domainId;
+                    const chain: Chain = {
+                        id: chainId,
+                        name: chainName,
+                        nativeCurrency: chainMetadata[chainName].nativeToken ?? {
+                            name: "Ether",
+                            symbol: "ETH",
+                            decimals: 18,
+                        },
+                        rpcUrls: {
+                            default: {
+                                http: chainMetadata[chainName].rpcUrls.map((url) => url.http),
+                            },
+                        },
+                        testnet: chainMetadata[chainName].blocks?.confirmations === 1, // Assuming testnet has 1 confirmation  // TODO: is this correct?
+                    };
+                    const signer = new EVMWalletClientSigner(walletClient, chain);
                     multiProvider.setSigner(chainName, signer);
                 }
             }

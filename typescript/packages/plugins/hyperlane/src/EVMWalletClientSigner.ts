@@ -1,15 +1,19 @@
 import { EVMTransaction, TransactionLog } from "@goat-sdk/wallet-evm";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { HyperlaneSmartProvider } from "@hyperlane-xyz/sdk";
 import { BigNumber, ethers } from "ethers";
-import { AccessList, BlockTag } from "viem";
+import { BlockTag, Chain } from "viem";
 
 export class EVMWalletClientSigner extends ethers.Signer {
     walletClient: EVMWalletClient;
-    provider?: ethers.providers.Provider = undefined;
+    chain: Chain;
+    provider?: HyperlaneSmartProvider = undefined;
+    getProviderNetwork?: () => Promise<ethers.providers.Network> = undefined;
 
-    constructor(walletClient: EVMWalletClient, provider?: ethers.providers.Provider) {
+    constructor(walletClient: EVMWalletClient, chain: Chain, provider?: HyperlaneSmartProvider) {
         super();
         this.walletClient = walletClient;
+        this.chain = chain;
         if (provider) {
             this.provider = provider;
         }
@@ -53,7 +57,7 @@ export class EVMWalletClientSigner extends ethers.Signer {
             data: tx.data ? (ethers.utils.hexlify(tx.data) as `0x${string}`) : undefined,
             maxFeePerGas: tx.maxFeePerGas ? BigInt(tx.maxFeePerGas.toString()) : undefined,
             maxPriorityFeePerGas: tx.maxPriorityFeePerGas ? BigInt(tx.maxPriorityFeePerGas.toString()) : undefined,
-            accessList: tx.accessList ? (tx.accessList as AccessList) : undefined,
+            // accessList: tx?.accessList.,
             nonce: tx.nonce ? Number(tx.nonce) : undefined,
             from: tx.from as `0x${string}`,
             // gas: 3000000n,
@@ -76,13 +80,19 @@ export class EVMWalletClientSigner extends ethers.Signer {
     }
 
     async signTransaction(transaction: ethers.providers.TransactionRequest): Promise<string> {
-        throw new Error("signTransaction is not supported");
+        const evmTransaction = await this.ethersToEVMTransaction(transaction);
+        const { signature } = await this.walletClient.signTransaction(evmTransaction);
+        return signature;
     }
 
     async sendTransaction(
         transaction: ethers.providers.TransactionRequest,
     ): Promise<ethers.providers.TransactionResponse> {
         const tx = await this.populateTransaction(transaction);
+        if (this.provider) {
+            const signedTransaction = await this.signTransaction(tx);
+            return await this.provider.sendTransaction(signedTransaction);
+        }
         const evmTransaction = await this.ethersToEVMTransaction(tx);
         const transactionResponse = await this.walletClient.sendTransaction({
             ...evmTransaction,
@@ -136,6 +146,16 @@ export class EVMWalletClientSigner extends ethers.Signer {
     }
 
     connect(provider: ethers.providers.Provider): ethers.Signer {
-        return new EVMWalletClientSigner(this.walletClient, provider);
+        const providerUrls = (provider as HyperlaneSmartProvider).rpcProviders.map(
+            (rpcProvider) => rpcProvider.rpcConfig.http,
+        );
+        return new EVMWalletClientSigner(
+            this.walletClient.cloneWithNewChainAndRpc(this.chain, {
+                default: providerUrls[0], // TODO: is 0 good enough?
+                // ? TODO: maybe add ens rpc provider here for SmartWalletClient
+            }),
+            this.chain,
+            provider as HyperlaneSmartProvider,
+        );
     }
 }

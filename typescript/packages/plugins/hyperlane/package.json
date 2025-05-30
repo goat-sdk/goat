@@ -39,7 +39,7 @@
     },
     "devDependencies": {
         "@goat-sdk/wallet-viem": "workspace:*",
-        "viem": "2.30.1",
+        "viem": "catalog:",
         "vitest": "3.1.4"
     }
 }
