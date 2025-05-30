@@ -194,10 +194,6 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         }
     }
 
-    async signTransaction(transaction: EVMTransaction) {
-        throw new Error("signTransaction not yet implemented on LitEVMWalletClient");
-    }
-
     async #createTypedDataDomain(data: EVMTypedData) {
         const domainFields = Object.entries(data.domain)
             .filter(([key]) => key !== "chainId")

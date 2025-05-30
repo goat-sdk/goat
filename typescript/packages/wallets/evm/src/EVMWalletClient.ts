@@ -63,7 +63,6 @@ export abstract class EVMWalletClient extends WalletClientBase {
     abstract read(request: EVMReadRequest): Promise<EVMReadResult>;
     abstract getNativeBalance(): Promise<bigint>;
     abstract signTypedData(data: EVMTypedData): Promise<Signature>;
-    abstract signTransaction(transaction: EVMTransaction): Promise<{ signature: string }>;
     abstract cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient;
     // Abstract method for getting native balance (needs implementation in concrete class)
     abstract getChain(): EvmChain;

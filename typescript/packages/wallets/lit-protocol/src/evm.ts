@@ -1,4 +1,10 @@
-import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "@goat-sdk/wallet-evm";
+import type {
+    EVMReadRequest,
+    EVMReadResult,
+    EVMTransaction,
+    EVMTransactionResult,
+    EVMTypedData,
+} from "@goat-sdk/wallet-evm";
 import type { AccsDefaultParams, SessionSigsMap } from "@lit-protocol/types";
 import { type EthereumLitTransaction, StoredKeyData, api } from "@lit-protocol/wrapped-keys";
 import { createWalletClient, formatEther, isAddress, publicActions } from "viem";
@@ -104,11 +110,7 @@ export class LitEVMWalletClient extends EVMWalletClient {
         };
     }
 
-    async signTransaction(transaction: EVMTransaction) {
-        throw new Error("signTransaction not yet implemented on LitEVMWalletClient");
-    }
-
-    async sendTransaction(transaction: EVMTransaction) {
+    async sendTransaction(transaction: EVMTransaction): Promise<EVMTransactionResult> {
         const { to, abi, functionName, args, value } = transaction;
         const toAddress = to as `0x${string}`;
 
