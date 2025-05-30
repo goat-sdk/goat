@@ -4,7 +4,7 @@ import { baseSepolia, celoAlfajores, optimismSepolia, sepolia, zksyncSepoliaTest
 // import { viem } from "@goat-sdk/wallet-viem"; // TODO: update import
 import { viem } from "../../../../wallets/viem/dist/ViemEVMWalletClient.js";
 import { HyperlaneService } from "../../dist/hyperlane.service.js";
-import { WarpRouteToken } from "../types.js";
+import { Isms, WarpRouteToken } from "../types.js";
 
 const {
     WALLET_PRIVATE_KEY,
@@ -262,11 +262,14 @@ describe("hyperlane.getTokens", () => {
 describe("hyperlane.getWarpRoutesForChain", () => {
     it('retrieves warp routes for chain "soon"', async () => {
         const response = await hyperlane.getWarpRoutesForChain(clients.sepolia, { chain: "soon" });
-        const parsed = JSON.parse(response) as Record<string, { tokens: WarpRouteToken[] }>;
+        const parsed = JSON.parse(response) as {
+            message: string;
+            warpRoutes: Record<string, { tokens: WarpRouteToken[] }>;
+        };
 
         expect(typeof parsed).toBe("object");
 
-        for (const [routeId, routeData] of Object.entries(parsed)) {
+        for (const [routeId, routeData] of Object.entries(parsed.warpRoutes)) {
             expect(routeData).toHaveProperty("tokens");
             expect(Array.isArray(routeData.tokens)).toBe(true);
             expect(routeData.tokens.length).toBeGreaterThan(0);
@@ -280,6 +283,27 @@ describe("hyperlane.getWarpRoutesForChain", () => {
                 expect(token).toHaveProperty("standard");
                 expect(token).toHaveProperty("symbol");
             }
+        }
+    });
+});
+
+describe("hyperlane.getIsmsForChain", () => {
+    it('retrieves Isms for chain "soon"', async () => {
+        const response = await hyperlane.getIsmsForChain(clients.sepolia, { chain: "soon" });
+        const parsed = JSON.parse(response) as {
+            message: string;
+            isms: Record<string, Isms>;
+        };
+
+        expect(typeof parsed).toBe("object");
+        expect(Object.keys(parsed.isms).length).toBeGreaterThan(0);
+
+        for (const [ismId, ismData] of Object.entries(parsed.isms)) {
+            expect(ismData).toHaveProperty("isms");
+
+            expect(ismData).toHaveProperty("address");
+            expect(ismData).toHaveProperty("chainId");
+            expect(ismData).toHaveProperty("domainId");
         }
     });
 });

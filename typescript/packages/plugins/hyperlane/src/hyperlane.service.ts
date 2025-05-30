@@ -1130,7 +1130,10 @@ export class HyperlaneService {
                 routes[warpRoute] = data;
             }
         }
-        return JSON.stringify(routes);
+        return JSON.stringify({
+            message: Object.keys(routes).length > 0 ? "Warp routes found" : "No warp routes found for chain",
+            warpRoutes: routes,
+        });
     }
 
     /**
@@ -1174,7 +1177,7 @@ export class HyperlaneService {
 
         return JSON.stringify({
             message: Object.keys(isms).length > 0 ? "ISMs found" : "No ISMs found for chain",
-            details: isms,
+            isms: isms,
         });
     }
 
