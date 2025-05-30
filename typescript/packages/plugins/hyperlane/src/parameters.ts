@@ -251,3 +251,12 @@ export class HyperlaneRelayerConfigParameters extends createToolParameters(
         //     .describe("Gas payment configuration"),
     }),
 ) {}
+
+export class HyperlaneConfigureIgpParameters extends createToolParameters(
+    z.object({
+        originChain: z.string().describe("Origin chain name where the IGP is deployed (e.g. base, arbitrum)"),
+        destinationChain: z.string().describe("Destination chain name to configure gas for (e.g. base, arbitrum)"),
+        gasAmount: z.string().describe("Default gas amount for messages to this destination"),
+        gasToken: z.string().optional().describe("Optional gas token address (defaults to native token)"),
+    }),
+) {}

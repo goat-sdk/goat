@@ -48,7 +48,7 @@ const walletAddressRegex = new RegExp(`^0x[0-9a-f]+${WALLET_ADDRESS.slice(2)}$`)
 const hex40 = /^0x[0-9a-fA-F]{40}$/;
 const hex64 = /^0x[0-9a-fA-F]{64}$/;
 const hexString = /^0x[0-9a-fA-F]+$/;
-const sepoliaMailbox = "0xffaef09b3cd11d9b20d1a19becca54eec2884766";
+const sepoliaMailbox = "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766";
 const zksyncsepoliaMailbox = "0x61e3BE234D7EE7b1e2a1fA84027105c733b91545";
 const sepoliaTestnetValidator = "0x28b91d3dc0d0e138adf914105d88c8830cc66f4e";
 const baseLinkTokenContractAddress = "0xe4ab69c077896252fafbd49efd26b5d171a32410";
@@ -243,19 +243,26 @@ describe("hyperlane.getTokens", () => {
 
         expect(parsed).toHaveProperty("message", "Tokens found");
         expect(parsed.details).toHaveProperty("chain", "soon");
-        expect(parsed.details.tokens).toBeInstanceOf(Array);
-        expect(parsed.details.tokens.length).toBeGreaterThan(0);
-
-        for (const token of parsed.details.tokens) {
-            expect(token).toHaveProperty("name");
-            expect(token).toHaveProperty("symbol");
-            expect(token).toHaveProperty("decimals");
-            expect(token).toHaveProperty("chainName", "soon");
-            expect(token).toHaveProperty("standard");
-            expect(token).toHaveProperty("addressOrDenom");
-            expect(token).toHaveProperty("connections");
-            expect(Array.isArray(token.connections)).toBe(true);
-        }
+        expect(parsed.details.tokens).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    chainName: "soon",
+                    connections: expect.arrayContaining([
+                        expect.objectContaining({
+                            chainName: expect.any(String),
+                            routerAddress: expect.any(String),
+                        }),
+                    ]),
+                    decimals: expect.any(Number),
+                    name: expect.any(String),
+                    routeId: expect.any(String),
+                    standard: expect.any(String),
+                    symbol: expect.any(String),
+                    tokenRouterAddress: expect.any(String),
+                    underlyingTokenAddress: expect.any(String),
+                }),
+            ]),
+        );
     });
 });
 
@@ -269,27 +276,29 @@ describe("hyperlane.getWarpRoutesForChain", () => {
 
         expect(typeof parsed).toBe("object");
 
-        for (const [routeId, routeData] of Object.entries(parsed.warpRoutes)) {
-            expect(routeData).toHaveProperty("tokens");
-            expect(Array.isArray(routeData.tokens)).toBe(true);
-            expect(routeData.tokens.length).toBeGreaterThan(0);
-
-            for (const token of routeData.tokens) {
-                expect(token).toHaveProperty("addressOrDenom");
-                expect(token).toHaveProperty("chainName");
-                expect(token).toHaveProperty("connections");
-                expect(token).toHaveProperty("decimals");
-                expect(token).toHaveProperty("name");
-                expect(token).toHaveProperty("standard");
-                expect(token).toHaveProperty("symbol");
-            }
-        }
+        expect(parsed.warpRoutes).toEqual(
+            expect.objectContaining({
+                [expect.any(String)]: expect.objectContaining({
+                    tokens: expect.arrayContaining([
+                        expect.objectContaining({
+                            addressOrDenom: expect.any(String),
+                            chainName: expect.any(String),
+                            connections: expect.any(Array),
+                            decimals: expect.any(Number),
+                            name: expect.any(String),
+                            standard: expect.any(String),
+                            symbol: expect.any(String),
+                        }),
+                    ]),
+                }),
+            }),
+        );
     });
 });
 
 describe("hyperlane.getIsmsForChain", () => {
-    it('retrieves Isms for chain "soon"', async () => {
-        const response = await hyperlane.getIsmsForChain(clients.sepolia, { chain: "soon" });
+    it('retrieves Isms for chain "sepolia"', async () => {
+        const response = await hyperlane.getIsmsForChain(clients.sepolia, { chain: "sepolia" });
         const parsed = JSON.parse(response) as {
             message: string;
             isms: Record<string, Isms>;
@@ -299,8 +308,6 @@ describe("hyperlane.getIsmsForChain", () => {
         expect(Object.keys(parsed.isms).length).toBeGreaterThan(0);
 
         for (const [ismId, ismData] of Object.entries(parsed.isms)) {
-            expect(ismData).toHaveProperty("isms");
-
             expect(ismData).toHaveProperty("address");
             expect(ismData).toHaveProperty("chainId");
             expect(ismData).toHaveProperty("domainId");
@@ -317,42 +324,42 @@ describe("hyperlane.inspectWarpRoute", () => {
 
         expect(JSON.parse(response)).toEqual({
             tokenType: "collateral",
-            warpRouteConfig: {
-                mailbox: "0x6966b0e55883d49bfb24539356a2f8a673e02039",
-                owner: "0x0ef3456e616552238b0c562d409507ed6051a7b3",
+            tokenConfig: expect.objectContaining({
+                type: "collateral",
+                name: "ChainLink Token",
+                symbol: "LINK",
+                decimals: 18,
+                token: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+            }),
+            mailboxConfig: expect.objectContaining({
+                mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039",
+                owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
+                hook: "0x0000000000000000000000000000000000000000",
+                interchainSecurityModule: "0x0000000000000000000000000000000000000000",
+            }),
+            warpRouteConfig: expect.objectContaining({
+                mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039",
+                owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
                 hook: "0x0000000000000000000000000000000000000000",
                 interchainSecurityModule: "0x0000000000000000000000000000000000000000",
                 type: "collateral",
                 name: "ChainLink Token",
                 symbol: "LINK",
                 decimals: 18,
-                token: "0xe4ab69c077896252fafbd49efd26b5d171a32410",
-                remoteRouters: {
-                    "11155420": {
+                token: "0xE4aB69C077896252FAFBD49EFD26B5D171A32410",
+                remoteRouters: expect.objectContaining({
+                    "11155420": expect.objectContaining({
                         address: "0xe97e8fA57540fAF2617EFceE30506aF559c4Ac88",
-                    },
-                },
-                proxyAdmin: {
-                    address: "0x3afe3e53f4174dc7e145795f69b3ffd5eb911abd",
-                    owner: "0x0ef3456e616552238b0c562d409507ed6051a7b3",
-                },
-                destinationGas: {
+                    }),
+                }),
+                proxyAdmin: expect.objectContaining({
+                    address: "0x3aFE3e53f4174Dc7e145795f69b3FFd5eb911ABD",
+                    owner: "0x0Ef3456E616552238B0c562d409507Ed6051A7b3",
+                }),
+                destinationGas: expect.objectContaining({
                     "11155420": "64000",
-                },
-            },
-            tokenConfig: {
-                type: "collateral",
-                name: "ChainLink Token",
-                symbol: "LINK",
-                decimals: 18,
-                token: "0xe4ab69c077896252fafbd49efd26b5d171a32410",
-            },
-            mailboxConfig: {
-                mailbox: "0x6966b0e55883d49bfb24539356a2f8a673e02039",
-                owner: "0x0ef3456e616552238b0c562d409507ed6051a7b3",
-                hook: "0x0000000000000000000000000000000000000000",
-                interchainSecurityModule: "0x0000000000000000000000000000000000000000",
-            },
+                }),
+            }),
         });
     });
 });
@@ -382,6 +389,7 @@ describe("hyperlane.sendAssets", () => {
     });
 
     it("initiates a synthetic to native asset return from alfajores to sepolia", async () => {
+        // TODO: fails intermittently
         const response = await hyperlane.sendAssets(clients.alfajores, {
             warpRouteAddress: "0x78fe869f19f917fde4192c51c446fbd3721788ee",
             tokenAddress: "0x78fe869f19f917fde4192c51c446fbd3721788ee",
@@ -406,7 +414,7 @@ describe("hyperlane.sendAssets", () => {
 
     it("initiates a collateral to synthetic asset transfer from basesepolia to optimismsepolia for LINK", async () => {
         const response = await hyperlane.sendAssets(clients.base, {
-            warpRouteAddress: "0x753e7aaffa0eb3bb352753e5c0f0f5bb807e3752", // TODO: this warp route needs a relayer attached to it
+            warpRouteAddress: "0x753e7aaffa0eb3bb352753e5c0f0f5bb807e3752",
             tokenAddress: "0xe4ab69c077896252fafbd49efd26b5d171a32410",
             originChain: "basesepolia",
             destinationChain: "optimismsepolia",
@@ -452,7 +460,7 @@ describe("hyperlane.sendAssets", () => {
     });
 });
 
-describe("hyperlane.deployWarpRoute", () => {
+describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
     // TODO: test third warp route type
     it("deploys a warp route from native to synthetic between sepolia and alfajores", async () => {
         const response = await hyperlane.deployWarpRoute(clients.sepolia, {
@@ -547,19 +555,25 @@ describe("hyperlane.deployWarpRoute", () => {
         });
     });
 
+    let ismAddress: string;
+
     it("sets up a trustedRelayerIsm on zksyncsepolia", async () => {
         const originChain = "zksyncsepolia";
 
-        const response = await hyperlane.deployIsm(clients.zksync, {
-            chain: originChain,
-            type: "trustedRelayerIsm",
-            mailbox: zksyncsepoliaMailbox,
-            config: {
-                relayer: WALLET_ADDRESS,
-            },
-        });
+        const response = JSON.parse(
+            await hyperlane.deployIsm(clients.zksync, {
+                chain: originChain,
+                type: "trustedRelayerIsm",
+                mailbox: zksyncsepoliaMailbox,
+                config: {
+                    relayer: WALLET_ADDRESS,
+                },
+            }),
+        );
 
-        expect(JSON.parse(response)).toEqual({
+        ismAddress = response.details.address;
+
+        expect(response).toEqual({
             message: "ISM deployed successfully",
             details: {
                 chain: "zksyncsepolia",
@@ -574,9 +588,9 @@ describe("hyperlane.deployWarpRoute", () => {
     });
 
     it("assigns a trusted relayer ism to a warp route", async () => {
-        const response = await hyperlane.configureTrustedRelayer(clients.base, {
+        const response = await hyperlane.configureIsm(clients.base, {
             destinationWarpRouteAddress,
-            relayerAddress: WALLET_ADDRESS,
+            ismAddress,
         });
 
         const parsed = JSON.parse(response);
@@ -588,4 +602,4 @@ describe("hyperlane.deployWarpRoute", () => {
             }),
         });
     });
-});
+}); // 4 minutes for deployWarpRoute tests

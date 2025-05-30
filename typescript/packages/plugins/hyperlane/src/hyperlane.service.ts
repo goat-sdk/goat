@@ -35,7 +35,6 @@ import {
     HyperlaneIsmConfigParameters,
     HyperlaneIsmParameters,
     HyperlaneReadMessageParameters,
-    HyperlaneRelayerConfigParameters,
     HyperlaneSendAssetsParameters,
     HyperlaneSendMessageParameters,
     HyperlaneValidatorParameters,
@@ -459,7 +458,7 @@ export class HyperlaneService {
 
         return JSON.stringify(
             {
-                message: "ISM configured successfully",
+                message: "ISM deployed successfully",
                 details: {
                     chain,
                     type,
@@ -806,7 +805,7 @@ export class HyperlaneService {
 
     /**
      * @method
-     * @name HyperlaneService#configureISM
+     * @name HyperlaneService#configureIsm
      * @description Pairs an ISM with a warp route on the destination chain
      * @param {EVMWalletClient} walletClient The wallet client used to sign and send the deployment transaction.
      * @param {HyperlaneConfigureIsmParameters} parameters
@@ -816,47 +815,23 @@ export class HyperlaneService {
      */
     @Tool({
         name: "hyperlane_configure_ism",
-        description: "Configure ism settings for message delivery",
+        description: "Assign an ISM to a warp route",
     })
-    async configureISM(walletClient: EVMWalletClient, parameters: HyperlaneIsmConfigParameters): Promise<string> {
+    async configureIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmConfigParameters): Promise<string> {
         const { destinationWarpRouteAddress, ismAddress } = parameters;
+        // TODO: add options to edit ISM settings
 
-        // Set the relayer as the ISM for the warp route
+        // Configure the warp route with the ISM
         const tx = await walletClient.sendTransaction({
             to: destinationWarpRouteAddress,
+            abi: hyperlaneABI,
             functionName: "setInterchainSecurityModule",
             args: [ismAddress],
-            abi: hyperlaneABI,
         });
 
-        return JSON.stringify({
+        return stringifyWithBigInts({
             message: "ISM configured successfully",
             transaction: tx,
-        });
-    }
-
-    /**
-     * @method
-     * @name HyperlaneService#configureTrustedRelayer
-     * @description Pairs a relayer for a trusted relayer ism with a warp route on the destination chain
-     * @param {EVMWalletClient} walletClient The wallet client used to sign and send the deployment transaction.
-     * @param {HyperlaneConfigureIsmParameters} parameters
-     * @param parameters.destinationWarpRouteAddress Address of the warp route on the destination chain
-     * @param parameters.ismAddress Address of the ISM to configure
-     * @returns {Promise<string>} A promise that resolves to the transaction object
-     */
-    @Tool({
-        name: "hyperlane_configure_trusted_relayer",
-        description: "Configure trusted relayer settings for message delivery",
-    })
-    async configureTrustedRelayer(
-        walletClient: EVMWalletClient,
-        parameters: HyperlaneRelayerConfigParameters,
-    ): Promise<string> {
-        const { destinationWarpRouteAddress, relayerAddress } = parameters;
-        return this.configureISM(walletClient, {
-            destinationWarpRouteAddress,
-            ismAddress: relayerAddress,
         });
     }
 
@@ -1165,7 +1140,9 @@ export class HyperlaneService {
 
         // Filter and organize ISM-related contracts
         const isms: Isms = Object.entries(chainAddresses[chain])
-            .filter(([key]) => key.toLowerCase().includes("ism"))
+            .filter(
+                ([key]) => key.toLowerCase().includes("ism") || key.toLowerCase().includes("interchainsecuritymodule"),
+            )
             .reduce((acc, [key, value]) => {
                 acc[key.toLowerCase()] = {
                     address: value as `0x${string}`,
