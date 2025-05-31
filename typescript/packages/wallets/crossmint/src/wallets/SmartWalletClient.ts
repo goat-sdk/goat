@@ -275,6 +275,31 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return { value: result };
     }
 
+    private chainNameToSupportedSmartWalletChain(chainName: string): SupportedSmartWalletChains {
+        if (chainName === "sepolia") {
+            return "ethereum-sepolia" as SupportedSmartWalletChains;
+        }
+        const knownSuffixes = [
+            "amoy",
+            "sepolia",
+            "testnet",
+            "fuji",
+            "hoodi",
+            "devnet",
+            "goerli",
+            "holesky",
+            "mumbai",
+            "chiado",
+            "caldera",
+            "chapel",
+            "sandstorm",
+        ];
+
+        return chainName
+            .toLowerCase()
+            .replace(new RegExp(`-?(${knownSuffixes.join("|")})`, "i"), "-$1") as SupportedSmartWalletChains;
+    }
+
     cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
         if (rpcUrls?.default === undefined) {
             throw new Error("rpcUrls.default is required for SmartWalletClient.cloneWithNewChainAndRpc");
@@ -283,7 +308,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             provider: rpcUrls.default,
             signer: this.#signer,
             address: this.#address,
-            chain: chain.nativeCurrency.name as SupportedSmartWalletChains, // TODO: might be chain.name or something else because the name might not have a - in it, which means it wont match exactly
+            chain: this.chainNameToSupportedSmartWalletChain(chain.name),
             options: {
                 ensProvider: rpcUrls?.ens,
             },
