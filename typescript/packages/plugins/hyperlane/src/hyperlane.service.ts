@@ -569,10 +569,7 @@ export class HyperlaneService {
                     to: validator,
                     abi: hyperlaneABI,
                     functionName: "removeValidator",
-                    // args: [validator, weight || 1],
-                    // value: 0,
-                    // options:
-                    // data
+                    args: [validator],
                 });
                 break;
             case "UPDATE":
@@ -580,17 +577,14 @@ export class HyperlaneService {
                     to: validator,
                     abi: hyperlaneABI,
                     functionName: "updateValidatorWeight",
-                    // args: [validator, weight || 1],
-                    // value: 0,
-                    // options:
-                    // data
+                    args: [validator, weight || 1],
                 });
                 break;
         }
 
         return JSON.stringify(
             {
-                message: `Validator ${action.toLowerCase()}ed successfully`,
+                message: `Validator ${action.toLowerCase()} was successful`,
                 details: {
                     chain,
                     action,

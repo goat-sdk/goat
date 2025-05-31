@@ -590,9 +590,9 @@ describe("hyperlane.manageValidators", () => {
             validator: sepoliaTestnetValidator,
             weight: 1,
         });
-        
+
         expect(JSON.parse(response)).toEqual({
-            message: "Validator added successfully",
+            message: "Validator add was successful",
             details: {
                 chain: "sepolia",
                 action: "ADD",
@@ -612,7 +612,7 @@ describe("hyperlane.manageValidators", () => {
         });
 
         expect(JSON.parse(updateResponse)).toEqual({
-            message: "Validator updated successfully",
+            message: "Validator update was successful",
             details: {
                 chain: "sepolia",
                 action: "UPDATE",
@@ -630,12 +630,12 @@ describe("hyperlane.manageValidators", () => {
             validator: sepoliaTestnetValidator,
             weight: 1,
         });
-        
+
         expect(JSON.parse(removeResponse)).toEqual({
-            message: "Validator removed successfully",
+            message: "Validator remove was successful",
             details: {
                 chain: "sepolia",
-                action: "ADD",
+                action: "REMOVE",
                 validator: sepoliaTestnetValidator,
                 weight: 1,
                 transactionHash: expect.stringMatching(hex64),
@@ -1053,7 +1053,6 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
             },
         });
     });
-
 });
 
 describe("hyperlane.configureIsm", () => {
