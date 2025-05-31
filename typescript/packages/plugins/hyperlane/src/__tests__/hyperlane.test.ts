@@ -1,46 +1,24 @@
 import { http, createWalletClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseSepolia, celoAlfajores, optimismSepolia, sepolia, zksyncSepoliaTestnet } from "viem/chains";
+import { sepolia } from "viem/chains";
 // import { viem } from "@goat-sdk/wallet-viem"; // TODO: update import
 import { viem } from "../../../../wallets/viem/dist/ViemEVMWalletClient.js";
 import { HyperlaneService } from "../../dist/hyperlane.service.js";
 import { Isms, WarpRouteToken } from "../types.js";
 
-const {
-    WALLET_PRIVATE_KEY,
-    WALLET_ADDRESS: WALLET_ADDRESS_UNTYPED,
-    SEPOLIA_RPC,
-    BASE_RPC,
-    ALFAJORES_RPC,
-    OPTIMISM_RPC,
-    ZKSYNC_RPC,
-} = process.env;
+const { WALLET_PRIVATE_KEY, WALLET_ADDRESS: WALLET_ADDRESS_UNTYPED, SEPOLIA_RPC } = process.env;
 
-if (
-    !WALLET_PRIVATE_KEY ||
-    !WALLET_ADDRESS_UNTYPED ||
-    !SEPOLIA_RPC ||
-    !BASE_RPC ||
-    !ALFAJORES_RPC ||
-    !OPTIMISM_RPC ||
-    !ZKSYNC_RPC
-) {
+if (!WALLET_PRIVATE_KEY || !WALLET_ADDRESS_UNTYPED || !SEPOLIA_RPC) {
     throw new Error(
         "Testing hyperlane requires the following environment variables to be set: " +
-            " WALLET_PRIVATE_KEY, WALLET_ADDRESS, SEPOLIA_RPC, BASE_RPC, ALFAJORES_RPC, OPTIMISM_RPC, ZKSYNC_RPC",
+            " WALLET_PRIVATE_KEY, WALLET_ADDRESS, SEPOLIA_RPC",
     );
 }
 
 const account = privateKeyToAccount(WALLET_PRIVATE_KEY as `0x${string}`);
 const WALLET_ADDRESS = WALLET_ADDRESS_UNTYPED.toLowerCase() as `0x${string}`;
 
-const clients = {
-    sepolia: viem(createWalletClient({ account, transport: http(SEPOLIA_RPC), chain: sepolia })),
-    base: viem(createWalletClient({ account, transport: http(BASE_RPC), chain: baseSepolia })),
-    alfajores: viem(createWalletClient({ account, transport: http(ALFAJORES_RPC), chain: celoAlfajores })),
-    optimism: viem(createWalletClient({ account, transport: http(OPTIMISM_RPC), chain: optimismSepolia })),
-    zksync: viem(createWalletClient({ account, transport: http(ZKSYNC_RPC), chain: zksyncSepoliaTestnet })),
-};
+const walletClient = viem(createWalletClient({ account, transport: http(SEPOLIA_RPC), chain: sepolia }));
 
 const hyperlane = new HyperlaneService();
 
@@ -61,7 +39,7 @@ describe("hyperlane.sendMessage and hyperlane.readMessage", () => {
     const destinationChain = "basesepolia";
 
     it("sends a message and verifies origin readMessage response", async () => {
-        const sendMessageResponse = await hyperlane.sendMessage(clients.sepolia, {
+        const sendMessageResponse = await hyperlane.sendMessage(walletClient, {
             originChain,
             destinationChain,
             destinationAddress: WALLET_ADDRESS,
@@ -190,7 +168,7 @@ describe("hyperlane.getDeployedContracts", () => {
 describe("hyperlane.deployIsm", () => {
     // Test all ISM types
     it("sets up a trustedRelayerIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "trustedRelayerIsm",
             mailbox: sepoliaMailbox,
             relayer: WALLET_ADDRESS,
@@ -212,7 +190,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a merkleRootMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "merkleRootMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -239,7 +217,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a messageIdMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "messageIdMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -266,7 +244,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a storageMerkleRootMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "storageMerkleRootMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -293,7 +271,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a storageMessageIdMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "storageMessageIdMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -320,7 +298,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a weightedMerkleRootMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "weightedMerkleRootMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -350,7 +328,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a weightedMessageIdMultisigIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "weightedMessageIdMultisigIsm",
             mailbox: sepoliaMailbox,
             validators: [
@@ -380,7 +358,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a pausableIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "pausableIsm",
             mailbox: sepoliaMailbox,
             owner: WALLET_ADDRESS,
@@ -410,7 +388,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a testIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "testIsm",
             mailbox: sepoliaMailbox,
             destinationChain: "sepolia",
@@ -431,7 +409,7 @@ describe("hyperlane.deployIsm", () => {
 
     // TODO: deployIsm tests below this fail
     it("sets up an opStackIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "opStackIsm",
             mailbox: optimismsepoliaMailbox,
             originChain: "optimismsepolia",
@@ -455,7 +433,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up an arbL2ToL1Ism on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "arbL2ToL1Ism",
             mailbox: sepoliaMailbox,
             nativeBridge: "0x4200000000000000000000000000000000000007",
@@ -477,7 +455,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a routingIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "routingIsm",
             mailbox: sepoliaMailbox,
             domains: {
@@ -503,7 +481,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up an aggregationIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "aggregationIsm",
             mailbox: sepoliaMailbox,
             modules: ["0x1234567890123456789012345678901234567890", "0x1234567890123456789012345678901234567890"],
@@ -528,7 +506,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a defaultFallbackRoutingIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "defaultFallbackRoutingIsm",
             mailbox: sepoliaMailbox,
             domains: {
@@ -556,7 +534,7 @@ describe("hyperlane.deployIsm", () => {
     });
 
     it("sets up a staticAggregationIsm on sepolia", async () => {
-        const response = await hyperlane.deployIsm(clients.sepolia, {
+        const response = await hyperlane.deployIsm(walletClient, {
             type: "staticAggregationIsm",
             mailbox: sepoliaMailbox,
             modules: ["0x1234567890123456789012345678901234567890", "0x1234567890123456789012345678901234567890"],
@@ -585,13 +563,12 @@ describe("hyperlane.deployIsm", () => {
 
 describe("hyperlane.manageValidators", () => {
     it("adds a validator on sepolia", async () => {
-        const response = await hyperlane.manageValidators(clients.sepolia, {
+        const response = await hyperlane.manageValidators(walletClient, {
             chain: "sepolia",
             action: "ADD",
             validator: sepoliaTestnetValidator,
             weight: 1,
         });
-
         expect(JSON.parse(response)).toEqual({
             message: "Validator add was successful",
             details: {
@@ -605,7 +582,7 @@ describe("hyperlane.manageValidators", () => {
     });
 
     it("updates a validator on sepolia", async () => {
-        const updateResponse = await hyperlane.manageValidators(clients.sepolia, {
+        const updateResponse = await hyperlane.manageValidators(walletClient, {
             chain: "sepolia",
             action: "UPDATE",
             validator: sepoliaTestnetValidator,
@@ -625,7 +602,7 @@ describe("hyperlane.manageValidators", () => {
     });
 
     it("removes a validator on sepolia", async () => {
-        const removeResponse = await hyperlane.manageValidators(clients.sepolia, {
+        const removeResponse = await hyperlane.manageValidators(walletClient, {
             chain: "sepolia",
             action: "REMOVE",
             validator: sepoliaTestnetValidator,
@@ -678,7 +655,7 @@ describe("hyperlane.getTokens", () => {
 
 describe("hyperlane.getWarpRoutesForChain", () => {
     it('retrieves warp routes for chain "soon"', async () => {
-        const response = await hyperlane.getWarpRoutesForChain(clients.sepolia, { chain: "soon" });
+        const response = await hyperlane.getWarpRoutesForChain(walletClient, { chain: "soon" });
         const parsed = JSON.parse(response) as {
             message: string;
             warpRoutes: Record<string, { tokens: WarpRouteToken[] }>;
@@ -708,7 +685,7 @@ describe("hyperlane.getWarpRoutesForChain", () => {
 
 describe("hyperlane.getIsmsForChain", () => {
     it('retrieves Isms for chain "sepolia"', async () => {
-        const response = await hyperlane.getIsmsForChain(clients.sepolia, { chain: "sepolia" });
+        const response = await hyperlane.getIsmsForChain(walletClient, { chain: "sepolia" });
         const parsed = JSON.parse(response) as {
             message: string;
             isms: Record<string, Isms>;
@@ -727,7 +704,7 @@ describe("hyperlane.getIsmsForChain", () => {
 
 describe("hyperlane.inspectWarpRoute", () => {
     it("inspects a warp route on a given chain", async () => {
-        const response = await hyperlane.inspectWarpRoute(clients.sepolia, {
+        const response = await hyperlane.inspectWarpRoute(walletClient, {
             warpRouteAddress: "0x753e7AafFA0eB3bB352753e5c0f0F5Bb807e3752",
             chain: "basesepolia",
         });
@@ -776,7 +753,7 @@ describe("hyperlane.inspectWarpRoute", () => {
 
 describe("hyperlane.sendAssets", () => {
     it("initiates a native to synthetic asset transfer from sepolia to alfajores", async () => {
-        const response = await hyperlane.sendAssets(clients.sepolia, {
+        const response = await hyperlane.sendAssets(walletClient, {
             warpRouteAddress: "0xedf994d49f865d3a4bd6f74aefbe1dccae7204f2",
             tokenAddress: "0xedf994d49f865d3a4bd6f74aefbe1dccae7204f2",
             originChain: "sepolia",
@@ -800,7 +777,7 @@ describe("hyperlane.sendAssets", () => {
 
     it("initiates a synthetic to native asset return from alfajores to sepolia", async () => {
         // TODO: fails intermittently
-        const response = await hyperlane.sendAssets(clients.alfajores, {
+        const response = await hyperlane.sendAssets(walletClient, {
             warpRouteAddress: "0x78fe869f19f917fde4192c51c446fbd3721788ee",
             tokenAddress: "0x78fe869f19f917fde4192c51c446fbd3721788ee",
             originChain: "alfajores",
@@ -823,7 +800,7 @@ describe("hyperlane.sendAssets", () => {
     });
 
     it("initiates a collateral to synthetic asset transfer from basesepolia to optimismsepolia for LINK", async () => {
-        const response = await hyperlane.sendAssets(clients.base, {
+        const response = await hyperlane.sendAssets(walletClient, {
             warpRouteAddress: "0x753e7aaffa0eb3bb352753e5c0f0f5bb807e3752",
             tokenAddress: "0xe4ab69c077896252fafbd49efd26b5d171a32410",
             originChain: "basesepolia",
@@ -847,7 +824,7 @@ describe("hyperlane.sendAssets", () => {
 
     // TODO: this test won't work until the warp route is set up with a relayer
     it("initiates a synthetic to collateral asset return from optimismsepolia to basesepolia for LINK", async () => {
-        const response = await hyperlane.sendAssets(clients.optimism, {
+        const response = await hyperlane.sendAssets(walletClient, {
             warpRouteAddress: "0xe97e8fa57540faf2617efcee30506af559c4ac88",
             tokenAddress: "0xe4ab69c077896252fafbd49efd26b5d171a32410",
             originChain: "optimismsepolia",
@@ -872,16 +849,16 @@ describe("hyperlane.sendAssets", () => {
 
 describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
     it("deploys a warp route from native to synthetic between sepolia and alfajores", async () => {
-        const response = await hyperlane.deployWarpRoute(clients.sepolia, {
+        const response = await hyperlane.deployWarpRoute(walletClient, {
             chains: [
                 {
-                    // walletClient: clients.sepolia,
+                    // walletClient: walletClient,
                     type: "native",
                     chainName: "sepolia",
                     useTrustedIsm: true,
                 },
                 {
-                    // walletClient: clients.alfajores,
+                    // walletClient: walletClient,
                     type: "synthetic",
                     chainName: "alfajores",
                     useTrustedIsm: true,
@@ -913,16 +890,16 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
     });
 
     it("deploys a warp route from native to native between sepolia and alfajores", async () => {
-        const response = await hyperlane.deployWarpRoute(clients.sepolia, {
+        const response = await hyperlane.deployWarpRoute(walletClient, {
             chains: [
                 {
-                    // walletClient: clients.sepolia,
+                    // walletClient: walletClient,
                     type: "native",
                     chainName: "sepolia",
                     useTrustedIsm: true,
                 },
                 {
-                    // walletClient: clients.alfajores,
+                    // walletClient: walletClient,
                     type: "native",
                     chainName: "alfajores",
                     useTrustedIsm: true,
@@ -956,10 +933,10 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
     let destinationWarpRouteAddress: string;
 
     it("deploys a warp route from collateral to synthetic between basesepolia and zksyncsepolia", async () => {
-        const response = await hyperlane.deployWarpRoute(clients.base, {
+        const response = await hyperlane.deployWarpRoute(walletClient, {
             chains: [
                 {
-                    // walletClient: clients.base,
+                    // walletClient: walletClient,
                     chainName: "basesepolia",
                     type: "collateral",
                     useTrustedIsm: true,
@@ -969,7 +946,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
                     decimals: 18,
                 },
                 {
-                    // walletClient: clients.zksync,
+                    // walletClient: walletClient,
                     chainName: "zksyncsepolia",
                     type: "synthetic",
                     useTrustedIsm: true,
@@ -1006,10 +983,10 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
     });
 
     it("deploys a warp route from collateral to collateral between basesepolia and zksyncsepolia", async () => {
-        const response = await hyperlane.deployWarpRoute(clients.base, {
+        const response = await hyperlane.deployWarpRoute(walletClient, {
             chains: [
                 {
-                    // walletClient: clients.base,
+                    // walletClient: walletClient,
                     chainName: "basesepolia",
                     type: "collateral",
                     useTrustedIsm: true,
@@ -1019,7 +996,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
                     decimals: 18,
                 },
                 {
-                    // walletClient: clients.zksync,
+                    // walletClient: walletClient,
                     chainName: "zksyncsepolia",
                     type: "collateral",
                     useTrustedIsm: true,
@@ -1061,7 +1038,7 @@ describe("hyperlane.configureIsm", () => {
 
     it("sets up a trustedRelayerIsm on zksyncsepolia", async () => {
         const response = JSON.parse(
-            await hyperlane.deployIsm(clients.zksync, {
+            await hyperlane.deployIsm(walletClient, {
                 type: "trustedRelayerIsm",
                 mailbox: zksyncsepoliaMailbox,
                 relayer: WALLET_ADDRESS,
@@ -1086,7 +1063,7 @@ describe("hyperlane.configureIsm", () => {
     });
 
     it("assigns a trusted relayer ism to a warp route", async () => {
-        const response = await hyperlane.configureIsm(clients.base, {
+        const response = await hyperlane.configureIsm(walletClient, {
             destinationWarpRouteAddress: "0xe97e8fa57540faf2617efcee30506af559c4ac88",
             ismAddress,
         });

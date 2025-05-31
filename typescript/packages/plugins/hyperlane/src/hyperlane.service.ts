@@ -548,13 +548,14 @@ export class HyperlaneService {
     })
     async manageValidators(walletClient: EVMWalletClient, parameters: HyperlaneValidatorParameters): Promise<string> {
         const { chain, action, validator, weight } = parameters;
+        const walletClientForChain = await this.getWalletClientForChain(chain, walletClient);
 
         // Create transaction based on action
         let tx: EVMTransactionResult;
 
         switch (action) {
             case "ADD":
-                tx = await walletClient.sendTransaction({
+                tx = await walletClientForChain.sendTransaction({
                     to: validator,
                     abi: hyperlaneABI,
                     functionName: "addValidator",
@@ -565,7 +566,7 @@ export class HyperlaneService {
                 });
                 break;
             case "REMOVE":
-                tx = await walletClient.sendTransaction({
+                tx = await walletClientForChain.sendTransaction({
                     to: validator,
                     abi: hyperlaneABI,
                     functionName: "removeValidator",
@@ -573,7 +574,7 @@ export class HyperlaneService {
                 });
                 break;
             case "UPDATE":
-                tx = await walletClient.sendTransaction({
+                tx = await walletClientForChain.sendTransaction({
                     to: validator,
                     abi: hyperlaneABI,
                     functionName: "updateValidatorWeight",
@@ -951,6 +952,7 @@ export class HyperlaneService {
     async sendAssets(walletClient: EVMWalletClient, parameters: HyperlaneSendAssetsParameters): Promise<string> {
         const { originChain, tokenAddress, warpRouteAddress, destinationChain, recipientAddress, amount } = parameters;
         const { multiProvider, registry } = await this.getMultiProvider(walletClient);
+        const walletClientForChain = await this.getWalletClientForChain(originChain, walletClient);
         const addresses: ChainMap<Record<string, string>> = await registry.getAddresses();
         const originReader = new EvmERC20WarpRouteReader(multiProvider, originChain);
         const readerWarpRouteConfig = await originReader.deriveWarpRouteConfig(warpRouteAddress);
@@ -1001,7 +1003,7 @@ export class HyperlaneService {
             amount: String(amount),
             tokenType: originTokenType,
             tokenAddress,
-            walletClient,
+            walletClient: walletClientForChain,
         });
 
         const recipientAddressBytes32 = utils.hexZeroPad(recipientAddress, 32);
@@ -1022,10 +1024,10 @@ export class HyperlaneService {
                 weiAmount, // amount in wei
                 recipientAddressBytes32,
                 recipientContractAddressBytes32,
-                walletClient,
+                walletClientForChain,
             );
 
-            transferTx = await walletClient.sendTransaction({
+            transferTx = await walletClientForChain.sendTransaction({
                 to: warpRouteAddress,
                 functionName: "transferRemote",
                 args: [destinationDomainId, recipientAddressBytes32, weiAmount],
@@ -1034,11 +1036,11 @@ export class HyperlaneService {
             });
         } else {
             if (warpRouteAddress !== tokenAddress) {
-                await this.approveTransfer(walletClient, { tokenAddress, warpRouteAddress, amount: weiAmount });
+                await this.approveTransfer(walletClientForChain, { tokenAddress, warpRouteAddress, amount: weiAmount });
             }
             const destinationGas = readerWarpRouteConfig.destinationGas;
             const gasLimit = Number(destinationGas?.[destinationDomainId]); // TODO: what if undefined
-            const refundAddress = walletClient.getAddress(); // Or some fallback
+            const refundAddress = walletClientForChain.getAddress(); // Or some fallback
 
             // encode hook metadata
             const hookMetadata = this.encodeHookMetadata(gasLimit, refundAddress);
@@ -1050,12 +1052,12 @@ export class HyperlaneService {
                 weiAmount, // amount in wei
                 recipientAddressBytes32,
                 recipientContractAddressBytes32,
-                walletClient,
+                walletClientForChain,
                 hookMetadata,
                 hookAddress,
             );
 
-            transferTx = await walletClient.sendTransaction({
+            transferTx = await walletClientForChain.sendTransaction({
                 to: warpRouteAddress,
                 functionName: "transferRemote",
                 args: [destinationDomainId, recipientAddressBytes32, weiAmount, hookMetadata, hookAddress],
@@ -1287,6 +1289,29 @@ export class HyperlaneService {
         });
 
         return BigNumber.from(value).toBigInt();
+    }
+
+    /**
+     * @ignore
+     * @method
+     * @name HyperlaneService#getWalletClientForChain
+     * @description The multiprovider creates a wallet client for each signer,
+     *             and creates a signer for each chain, so this method returns
+     *             the wallet client for a given chain so that transactions are
+     *             performed on the correct chain.
+     *             This should be used before calling walletClient.sendTransaction
+     *             to obtain the correct wallet client
+     * @param chain The chain that transaction will be performed on
+     * @param originalWalletClient The original wallet client that was passed into the Tool
+     * @returns {EVMWalletClient} The wallet client for the given chain
+     */
+    private async getWalletClientForChain(
+        chain: string,
+        originalWalletClient: EVMWalletClient,
+    ): Promise<EVMWalletClient> {
+        const { multiProvider } = await this.getMultiProvider(originalWalletClient);
+        const signer = multiProvider.getSigner(chain) as EVMWalletClientSigner;
+        return signer.walletClient;
     }
 }
 
