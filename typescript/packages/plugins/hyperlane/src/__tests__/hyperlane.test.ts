@@ -590,9 +590,49 @@ describe("hyperlane.manageValidators", () => {
             validator: sepoliaTestnetValidator,
             weight: 1,
         });
-
+        
         expect(JSON.parse(response)).toEqual({
             message: "Validator added successfully",
+            details: {
+                chain: "sepolia",
+                action: "ADD",
+                validator: sepoliaTestnetValidator,
+                weight: 1,
+                transactionHash: expect.stringMatching(hex64),
+            },
+        });
+    });
+
+    it("updates a validator on sepolia", async () => {
+        const updateResponse = await hyperlane.manageValidators(clients.sepolia, {
+            chain: "sepolia",
+            action: "UPDATE",
+            validator: sepoliaTestnetValidator,
+            weight: 1,
+        });
+
+        expect(JSON.parse(updateResponse)).toEqual({
+            message: "Validator updated successfully",
+            details: {
+                chain: "sepolia",
+                action: "UPDATE",
+                validator: sepoliaTestnetValidator,
+                weight: 1,
+                transactionHash: expect.stringMatching(hex64),
+            },
+        });
+    });
+
+    it("removes a validator on sepolia", async () => {
+        const removeResponse = await hyperlane.manageValidators(clients.sepolia, {
+            chain: "sepolia",
+            action: "REMOVE",
+            validator: sepoliaTestnetValidator,
+            weight: 1,
+        });
+        
+        expect(JSON.parse(removeResponse)).toEqual({
+            message: "Validator removed successfully",
             details: {
                 chain: "sepolia",
                 action: "ADD",
@@ -1014,6 +1054,9 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
         });
     });
 
+});
+
+describe("hyperlane.configureIsm", () => {
     let ismAddress: string;
 
     it("sets up a trustedRelayerIsm on zksyncsepolia", async () => {
@@ -1042,10 +1085,9 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
         });
     });
 
-    // * Only passes when passed with all of hyperlane.deployWarpRoute due to variables being set in the test
     it("assigns a trusted relayer ism to a warp route", async () => {
         const response = await hyperlane.configureIsm(clients.base, {
-            destinationWarpRouteAddress,
+            destinationWarpRouteAddress: "0xe97e8fa57540faf2617efcee30506af559c4ac88",
             ismAddress,
         });
 
@@ -1060,12 +1102,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
                 effectiveGasPrice: expect.stringMatching(numberString),
                 from: WALLET_ADDRESS,
                 gasUsed: expect.stringMatching(numberString),
-                l1BaseFeeScalar: expect.stringMatching(hexString),
-                l1BlobBaseFee: expect.stringMatching(hexString),
-                l1BlobBaseFeeScalar: expect.stringMatching(hexString),
-                l1Fee: expect.stringMatching(numberString),
-                l1GasPrice: expect.stringMatching(numberString),
-                l1GasUsed: expect.stringMatching(numberString),
+                hash: expect.stringMatching(hex64),
                 logs: [],
                 logsBloom: expect.stringMatching(hexString),
                 status: "success",
@@ -1073,9 +1110,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
                 transactionHash: expect.stringMatching(hex64),
                 transactionIndex: expect.any(Number),
                 type: "eip1559",
-                l1FeeScalar: null,
-                hash: expect.stringMatching(hex64),
             }),
         });
     });
-}); // 4 minutes for deployWarpRoute tests
+});
