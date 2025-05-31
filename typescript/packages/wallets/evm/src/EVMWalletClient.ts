@@ -462,5 +462,4 @@ export abstract class EVMWalletClient extends WalletClientBase {
 
         return [...baseTools, ...commonEvmTools, ...sendingEvmTools];
     }
-    abstract switchChain(chainId: number): Promise<void>;
 }
