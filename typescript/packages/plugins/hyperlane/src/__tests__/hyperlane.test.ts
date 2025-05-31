@@ -48,10 +48,12 @@ const walletAddressRegex = new RegExp(`^0x[0-9a-f]+${WALLET_ADDRESS.slice(2)}$`)
 const hex40 = /^0x[0-9a-fA-F]{40}$/;
 const hex64 = /^0x[0-9a-fA-F]{64}$/;
 const hexString = /^0x[0-9a-fA-F]+$/;
+const numberString = /^\d+$/;
 const sepoliaMailbox = "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766";
 const zksyncsepoliaMailbox = "0x61e3BE234D7EE7b1e2a1fA84027105c733b91545";
 const sepoliaTestnetValidator = "0x28b91d3dc0d0e138adf914105d88c8830cc66f4e";
-const baseLinkTokenContractAddress = "0xe4ab69c077896252fafbd49efd26b5d171a32410";
+const basesepoliaLinkTokenContractAddress = "0xe4ab69c077896252fafbd49efd26b5d171a32410";
+const zksyncsepoliaLinkTokenContractAddress = "0x23A1aFD896c8c8876AF46aDc38521f4432658d1e";
 
 describe("hyperlane.sendMessage and hyperlane.readMessage", () => {
     const originChain = "sepolia";
@@ -185,28 +187,395 @@ describe("hyperlane.getDeployedContracts", () => {
 });
 
 describe("hyperlane.deployIsm", () => {
-    // TODO: test all ISM types
+    // Test all ISM types
     it("sets up a trustedRelayerIsm on sepolia", async () => {
-        const originChain = "sepolia";
-
         const response = await hyperlane.deployIsm(clients.sepolia, {
-            chain: originChain,
             type: "trustedRelayerIsm",
             mailbox: sepoliaMailbox,
-            config: {
-                relayer: WALLET_ADDRESS,
-            },
+            relayer: WALLET_ADDRESS,
+            destinationChain: "sepolia",
         });
 
         expect(JSON.parse(response)).toEqual({
             message: "ISM deployed successfully",
             details: {
-                chain: "sepolia",
                 type: "trustedRelayerIsm",
                 address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
                 config: {
                     type: "trustedRelayerIsm",
                     relayer: WALLET_ADDRESS,
+                },
+            },
+        });
+    });
+
+    it("sets up a merkleRootMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "merkleRootMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS },
+                { signingAddress: "0x1234567890123456789012345678901234567890" },
+            ],
+            threshold: 1,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "merkleRootMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "merkleRootMultisigIsm",
+                    validators: [WALLET_ADDRESS, "0x1234567890123456789012345678901234567890"],
+                    threshold: 1,
+                },
+            },
+        });
+    });
+
+    it("sets up a messageIdMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "messageIdMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS },
+                { signingAddress: "0x1234567890123456789012345678901234567890" },
+            ],
+            threshold: 1,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "messageIdMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "messageIdMultisigIsm",
+                    validators: [WALLET_ADDRESS, "0x1234567890123456789012345678901234567890"],
+                    threshold: 1,
+                },
+            },
+        });
+    });
+
+    it("sets up a storageMerkleRootMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "storageMerkleRootMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS },
+                { signingAddress: "0x1234567890123456789012345678901234567890" },
+            ],
+            threshold: 1,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "storageMerkleRootMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "storageMerkleRootMultisigIsm",
+                    validators: [WALLET_ADDRESS, "0x1234567890123456789012345678901234567890"],
+                    threshold: 1,
+                },
+            },
+        });
+    });
+
+    it("sets up a storageMessageIdMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "storageMessageIdMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS },
+                { signingAddress: "0x1234567890123456789012345678901234567890" },
+            ],
+            threshold: 1,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "storageMessageIdMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "storageMessageIdMultisigIsm",
+                    validators: [WALLET_ADDRESS, "0x1234567890123456789012345678901234567890"],
+                    threshold: 1,
+                },
+            },
+        });
+    });
+
+    it("sets up a weightedMerkleRootMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "weightedMerkleRootMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS, weight: 2 },
+                { signingAddress: "0x1234567890123456789012345678901234567890", weight: 1 },
+            ],
+            thresholdWeight: 2,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "weightedMerkleRootMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "weightedMerkleRootMultisigIsm",
+                    validators: [
+                        { signingAddress: WALLET_ADDRESS, weight: 2 },
+                        { signingAddress: "0x1234567890123456789012345678901234567890", weight: 1 },
+                    ],
+                    thresholdWeight: 2,
+                },
+            },
+        });
+    });
+
+    it("sets up a weightedMessageIdMultisigIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "weightedMessageIdMultisigIsm",
+            mailbox: sepoliaMailbox,
+            validators: [
+                { signingAddress: WALLET_ADDRESS, weight: 2 },
+                { signingAddress: "0x1234567890123456789012345678901234567890", weight: 1 },
+            ],
+            thresholdWeight: 2,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "weightedMessageIdMultisigIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "weightedMessageIdMultisigIsm",
+                    validators: [
+                        { signingAddress: WALLET_ADDRESS, weight: 2 },
+                        { signingAddress: "0x1234567890123456789012345678901234567890", weight: 1 },
+                    ],
+                    thresholdWeight: 2,
+                },
+            },
+        });
+    });
+
+    it("sets up a pausableIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "pausableIsm",
+            mailbox: sepoliaMailbox,
+            owner: WALLET_ADDRESS,
+            paused: false,
+            ownerOverrides: {
+                "11155420": "0x1234567890123456789012345678901234567890",
+            },
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "pausableIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "pausableIsm",
+                    owner: WALLET_ADDRESS,
+                    paused: false,
+                    ownerOverrides: {
+                        "11155420": "0x1234567890123456789012345678901234567890",
+                    },
+                },
+            },
+        });
+    });
+
+    it("sets up a testIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "testIsm",
+            mailbox: sepoliaMailbox,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "testIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "testIsm",
+                },
+            },
+        });
+    });
+
+    // TODO: deployIsm tests below this fail
+    it("sets up an opStackIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "opStackIsm",
+            mailbox: sepoliaMailbox,
+            originChain: "optimism",
+            nativeBridge: "0x1234567890123456789012345678901234567890",
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "opStackIsm",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "opStackIsm",
+                    originChain: "optimism",
+                    nativeBridge: "0x1234567890123456789012345678901234567890",
+                },
+            },
+        });
+    });
+
+    it("sets up an arbL2ToL1Ism on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "arbL2ToL1Ism",
+            mailbox: sepoliaMailbox,
+            bridge: "0x1234567890123456789012345678901234567890",
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "arbL2ToL1Ism",
+                address: expect.stringMatching(hex40),
+                destinationChain: "sepolia",
+                config: {
+                    type: "arbL2ToL1Ism",
+                    bridge: "0x1234567890123456789012345678901234567890",
+                },
+            },
+        });
+    });
+
+    it("sets up a routingIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "routingIsm",
+            mailbox: sepoliaMailbox,
+            domains: {
+                "11155420": "0x1234567890123456789012345678901234567890",
+            },
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "routingIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "routingIsm",
+                    domains: {
+                        "11155420": "0x1234567890123456789012345678901234567890",
+                    },
+                    destinationChain: "sepolia",
+                },
+            },
+        });
+    });
+
+    it("sets up an aggregationIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "aggregationIsm",
+            mailbox: sepoliaMailbox,
+            modules: ["0x1234567890123456789012345678901234567890", "0x1234567890123456789012345678901234567890"],
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "aggregationIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "aggregationIsm",
+                    modules: [
+                        "0x1234567890123456789012345678901234567890",
+                        "0x1234567890123456789012345678901234567890",
+                    ],
+                    destinationChain: "sepolia",
+                },
+            },
+        });
+    });
+
+    it("sets up a defaultFallbackRoutingIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "defaultFallbackRoutingIsm",
+            mailbox: sepoliaMailbox,
+            domains: {
+                "11155420": "0x1234567890123456789012345678901234567890",
+            },
+            owner: WALLET_ADDRESS,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "defaultFallbackRoutingIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "defaultFallbackRoutingIsm",
+                    domains: {
+                        "11155420": "0x1234567890123456789012345678901234567890",
+                    },
+                    owner: WALLET_ADDRESS,
+                    destinationChain: "sepolia",
+                },
+            },
+        });
+    });
+
+    it("sets up a staticAggregationIsm on sepolia", async () => {
+        const response = await hyperlane.deployIsm(clients.sepolia, {
+            type: "staticAggregationIsm",
+            mailbox: sepoliaMailbox,
+            modules: ["0x1234567890123456789012345678901234567890", "0x1234567890123456789012345678901234567890"],
+            threshold: 2,
+            destinationChain: "sepolia",
+        });
+
+        expect(JSON.parse(response)).toEqual({
+            message: "ISM deployed successfully",
+            details: {
+                type: "staticAggregationIsm",
+                address: expect.stringMatching(hex40),
+                config: {
+                    type: "staticAggregationIsm",
+                    modules: [
+                        "0x1234567890123456789012345678901234567890",
+                        "0x1234567890123456789012345678901234567890",
+                    ],
+                    threshold: 2,
+                    destinationChain: "sepolia",
                 },
             },
         });
@@ -460,8 +829,7 @@ describe("hyperlane.sendAssets", () => {
     });
 });
 
-describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
-    // TODO: test third warp route type
+describe("hyperlane.deployWarpRoute", { timeout: 300000 }, () => {
     it("deploys a warp route from native to synthetic between sepolia and alfajores", async () => {
         const response = await hyperlane.deployWarpRoute(clients.sepolia, {
             chains: [
@@ -503,6 +871,47 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
         });
     });
 
+    it("deploys a warp route from native to native between sepolia and alfajores", async () => {
+        const response = await hyperlane.deployWarpRoute(clients.sepolia, {
+            chains: [
+                {
+                    // walletClient: clients.sepolia,
+                    type: "native",
+                    chainName: "sepolia",
+                    useTrustedIsm: true,
+                },
+                {
+                    // walletClient: clients.alfajores,
+                    type: "native",
+                    chainName: "alfajores",
+                    useTrustedIsm: true,
+                },
+            ],
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Warp route deployed successfully",
+            result: {
+                tokens: expect.arrayContaining([
+                    expect.objectContaining({
+                        chainName: "sepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        // collateralAddressOrDenom: expect.stringMatching(hex40),
+                        // collateralAddressOrDenom: undefined,
+                        // type: "native",
+                    }),
+                    expect.objectContaining({
+                        chainName: "alfajores",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        // collateralAddressOrDenom: undefined,
+                        // type: "synthetic",
+                    }),
+                ]),
+            },
+        });
+    });
+
     let destinationWarpRouteAddress: string;
 
     it("deploys a warp route from collateral to synthetic between basesepolia and zksyncsepolia", async () => {
@@ -513,7 +922,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
                     chainName: "basesepolia",
                     type: "collateral",
                     useTrustedIsm: true,
-                    tokenAddress: baseLinkTokenContractAddress,
+                    tokenAddress: basesepoliaLinkTokenContractAddress,
                     symbol: "LINK",
                     name: "ChainLink",
                     decimals: 18,
@@ -540,7 +949,57 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
                         chainName: "basesepolia",
                         addressOrDenom: expect.stringMatching(hex40),
                         // TODO: fill in
-                        // collateralAddressOrDenom: baseLinkTokenContractAddress,
+                        // collateralAddressOrDenom: basesepoliaLinkTokenContractAddress,
+                        // type: "collateral"
+                    }),
+                    expect.objectContaining({
+                        chainName: "zksyncsepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        // TODO: fill in
+                        // collateralAddressOrDenom: undefined,
+                        // type: "synthetic"
+                    }),
+                ],
+            },
+        });
+    });
+
+    it("deploys a warp route from collateral to collateral between basesepolia and zksyncsepolia", async () => {
+        const response = await hyperlane.deployWarpRoute(clients.base, {
+            chains: [
+                {
+                    // walletClient: clients.base,
+                    chainName: "basesepolia",
+                    type: "collateral",
+                    useTrustedIsm: true,
+                    tokenAddress: basesepoliaLinkTokenContractAddress,
+                    symbol: "LINK",
+                    name: "ChainLink",
+                    decimals: 18,
+                },
+                {
+                    // walletClient: clients.zksync,
+                    chainName: "zksyncsepolia",
+                    type: "collateral",
+                    useTrustedIsm: true,
+                    tokenAddress: zksyncsepoliaLinkTokenContractAddress,
+                    symbol: "LINK",
+                    name: "Chainlink",
+                    decimals: 18,
+                },
+            ],
+        });
+
+        const parsed = JSON.parse(response);
+        expect(parsed).toEqual({
+            message: "Warp route deployed successfully",
+            result: {
+                tokens: [
+                    expect.objectContaining({
+                        chainName: "basesepolia",
+                        addressOrDenom: expect.stringMatching(hex40),
+                        // TODO: fill in
+                        // collateralAddressOrDenom: basesepoliaLinkTokenContractAddress,
                         // type: "collateral"
                     }),
                     expect.objectContaining({
@@ -558,16 +1017,12 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
     let ismAddress: string;
 
     it("sets up a trustedRelayerIsm on zksyncsepolia", async () => {
-        const originChain = "zksyncsepolia";
-
         const response = JSON.parse(
             await hyperlane.deployIsm(clients.zksync, {
-                chain: originChain,
                 type: "trustedRelayerIsm",
                 mailbox: zksyncsepoliaMailbox,
-                config: {
-                    relayer: WALLET_ADDRESS,
-                },
+                relayer: WALLET_ADDRESS,
+                destinationChain: "zksyncsepolia",
             }),
         );
 
@@ -576,9 +1031,9 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
         expect(response).toEqual({
             message: "ISM deployed successfully",
             details: {
-                chain: "zksyncsepolia",
                 type: "trustedRelayerIsm",
                 address: expect.stringMatching(hex40),
+                destinationChain: "zksyncsepolia",
                 config: {
                     type: "trustedRelayerIsm",
                     relayer: WALLET_ADDRESS,
@@ -587,6 +1042,7 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
         });
     });
 
+    // * Only passes when passed with all of hyperlane.deployWarpRoute due to variables being set in the test
     it("assigns a trusted relayer ism to a warp route", async () => {
         const response = await hyperlane.configureIsm(clients.base, {
             destinationWarpRouteAddress,
@@ -597,8 +1053,28 @@ describe("hyperlane.deployWarpRoute", { timeout: 240000 }, () => {
         expect(parsed).toEqual({
             message: "ISM configured successfully",
             transaction: expect.objectContaining({
+                blockHash: expect.stringMatching(hex64),
+                blockNumber: expect.stringMatching(numberString),
+                contractAddress: null,
+                cumulativeGasUsed: expect.stringMatching(numberString),
+                effectiveGasPrice: expect.stringMatching(numberString),
+                from: WALLET_ADDRESS,
+                gasUsed: expect.stringMatching(numberString),
+                l1BaseFeeScalar: expect.stringMatching(hexString),
+                l1BlobBaseFee: expect.stringMatching(hexString),
+                l1BlobBaseFeeScalar: expect.stringMatching(hexString),
+                l1Fee: expect.stringMatching(numberString),
+                l1GasPrice: expect.stringMatching(numberString),
+                l1GasUsed: expect.stringMatching(numberString),
+                logs: [],
+                logsBloom: expect.stringMatching(hexString),
+                status: "success",
+                to: expect.stringMatching(hex40),
                 transactionHash: expect.stringMatching(hex64),
-                // TODO: fill in
+                transactionIndex: expect.any(Number),
+                type: "eip1559",
+                l1FeeScalar: null,
+                hash: expect.stringMatching(hex64),
             }),
         });
     });

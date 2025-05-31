@@ -283,7 +283,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
             provider: rpcUrls.default,
             signer: this.#signer,
             address: this.#address,
-            chain: chain.nativeCurrency.name as SupportedSmartWalletChains, // TODO: might be chain.name or something else because the name might not have a - in it
+            chain: chain.nativeCurrency.name as SupportedSmartWalletChains, // TODO: might be chain.name or something else because the name might not have a - in it, which means it wont match exactly
             options: {
                 ensProvider: rpcUrls?.ens,
             },

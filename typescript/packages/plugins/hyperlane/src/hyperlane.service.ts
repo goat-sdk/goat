@@ -2,6 +2,7 @@ import { Tool } from "@goat-sdk/core";
 import { EVMTransactionResult, EVMWalletClient } from "@goat-sdk/wallet-evm";
 import { ChainAddresses, GithubRegistry } from "@hyperlane-xyz/registry";
 import {
+    AggregationIsmConfig,
     ArbL2ToL1IsmConfig,
     ChainMap,
     ChainMetadata,
@@ -14,11 +15,13 @@ import {
     MultisigIsmConfig,
     OpStackIsmConfig,
     PausableIsmConfig,
+    RoutingIsmConfig,
     TokenType,
     TrustedRelayerIsmConfig,
     WarpRouteDeployConfigMailboxRequired,
     WeightedMultisigIsmConfig,
 } from "@hyperlane-xyz/sdk";
+import { CCIPIsmConfig } from "@hyperlane-xyz/sdk/dist/ism/types";
 import { BigNumber, ethers, utils } from "ethers";
 import { Chain, encodePacked } from "viem";
 import { EVMWalletClientSigner } from "./EVMWalletClientSigner";
@@ -41,8 +44,6 @@ import {
 } from "./parameters";
 import { type Isms, type WarpRouteConfig, type WarpRouteToken, type WarpRoutes } from "./types";
 import { setIfDefined, stringifyWithBigInts } from "./utils";
-
-let globalRefresh = false; // for manually setting a refresh to the multiProvider
 
 export class HyperlaneService {
     getMultiProvider: (
@@ -319,7 +320,7 @@ export class HyperlaneService {
 
     /**
      * @method
-     * @name HyperlaneService#deployISM
+     * @name HyperlaneService#deployIsm
      * @description Configures an Interchain Security Module (ISM) for a specific blockchain chain
      * @param {EVMWalletClient} walletClient The Ethereum wallet client used for transaction signing
      * @param {HyperlaneIsmParameters} parameters Configuration parameters for ISM deployment
@@ -360,7 +361,24 @@ export class HyperlaneService {
     async deployIsm(walletClient: EVMWalletClient, parameters: HyperlaneIsmParameters): Promise<string> {
         const { multiProvider, registry } = await this.getMultiProvider(walletClient);
 
-        const { chain, type, mailbox, config, origin, existingIsmAddress } = parameters;
+        const {
+            originChain,
+            type,
+            validators,
+            threshold,
+            thresholdWeight,
+            owner,
+            paused,
+            ownerOverrides,
+            relayer,
+            nativeBridge,
+            bridge,
+            mailbox,
+            existingIsmAddress,
+            destinationChain,
+            domains,
+            modules,
+        } = parameters;
         const chainAddresses = await registry.getAddresses();
 
         // Create ISM factory
@@ -374,93 +392,133 @@ export class HyperlaneService {
             case "messageIdMultisigIsm":
             case "storageMerkleRootMultisigIsm":
             case "storageMessageIdMultisigIsm":
-                if (!config.validators || !config.threshold) {
-                    throw new Error("Validators and threshold required for multisig ISM");
+                if (!validators || !threshold) {
+                    throw new Error("validators and threshold required for multisig ISM");
                 }
                 ismConfig = {
                     type,
-                    validators: config.validators.map((v) => v.signingAddress),
-                    threshold: config.threshold,
+                    validators: validators.map((v) => v.signingAddress),
+                    threshold,
                 } as MultisigIsmConfig;
                 break;
 
             case "weightedMerkleRootMultisigIsm":
             case "weightedMessageIdMultisigIsm":
-                if (!config.validators || !config.thresholdWeight) {
-                    throw new Error("Validators and thresholdWeight required for weighted multisig ISM");
+                if (!validators || !thresholdWeight) {
+                    throw new Error("validators and thresholdWeight required for weighted multisig ISM");
                 }
                 ismConfig = {
                     type,
-                    validators: config.validators,
-                    thresholdWeight: config.thresholdWeight,
+                    validators,
+                    thresholdWeight,
                 } as WeightedMultisigIsmConfig;
                 break;
 
             case "pausableIsm":
-                if (!config.owner) {
-                    throw new Error("Owner required for pausable ISM");
+                if (!owner) {
+                    throw new Error("owner required for pausable ISM");
                 }
                 ismConfig = {
                     type,
-                    owner: config.owner,
-                    paused: config.paused || false,
-                    ownerOverrides: config.ownerOverrides,
+                    owner,
+                    paused: paused || false,
+                    ownerOverrides,
                 } as PausableIsmConfig;
                 break;
 
             case "trustedRelayerIsm":
-                if (!config.relayer) {
-                    throw new Error("Relayer address required for trusted relayer ISM");
+                if (!relayer) {
+                    throw new Error("relayer address required for trusted relayer ISM");
                 }
                 if (!mailbox) {
-                    throw new Error("Mailbox is required for trusted relayer ISM");
+                    throw new Error("mailbox is required for trusted relayer ISM");
                 }
-                ismConfig = {
-                    type,
-                    relayer: config.relayer,
-                } as TrustedRelayerIsmConfig;
+                ismConfig = { type, relayer } as TrustedRelayerIsmConfig;
                 break;
 
             case "opStackIsm":
-                if (!config.origin || !config.nativeBridge) {
-                    throw new Error("Origin and nativeBridge required for OP Stack ISM");
+                if (!originChain || !nativeBridge) {
+                    throw new Error("originChain and nativeBridge required for OP Stack ISM");
                 }
                 ismConfig = {
                     type,
-                    origin: config.origin,
-                    nativeBridge: config.nativeBridge,
+                    origin: originChain,
+                    nativeBridge,
                 } as OpStackIsmConfig;
                 break;
 
             case "arbL2ToL1Ism":
-                if (!config.bridge) {
-                    throw new Error("Bridge address required for Arbitrum L2 to L1 ISM");
+                if (!bridge) {
+                    throw new Error("bridge address required for Arbitrum L2 to L1 ISM");
                 }
-                ismConfig = {
-                    type,
-                    bridge: config.bridge,
-                } as ArbL2ToL1IsmConfig;
+                ismConfig = { type, bridge } as ArbL2ToL1IsmConfig;
                 break;
 
             case "testIsm":
                 ismConfig = { type } as IsmConfig;
                 break;
+
+            // New cases for routing ISMs
+            case "domainRoutingIsm":
+            case "defaultFallbackRoutingIsm":
+            case "icaRoutingIsm":
+            case "amountRoutingIsm":
+                if (!domains) {
+                    throw new Error("domains is required for routing ISM");
+                }
+                ismConfig = {
+                    type,
+                    domains,
+                    owner,
+                } as RoutingIsmConfig;
+                break;
+
+            // New cases for aggregation ISMs
+            case "staticAggregationIsm":
+            case "storageAggregationIsm":
+                if (!modules || !threshold) {
+                    throw new Error("modules and threshold required for aggregation ISM");
+                }
+                ismConfig = {
+                    type,
+                    modules,
+                    threshold,
+                } as AggregationIsmConfig;
+                break;
+
+            // New case for CCIP ISM
+            case "ccipIsm":
+                if (!originChain) {
+                    throw new Error("originChain required for CCIP ISM");
+                }
+                ismConfig = {
+                    type,
+                    originChain,
+                } as CCIPIsmConfig;
+                break;
+
+            // New case for custom ISM
+            case "custom":
+                throw new Error("Custom ISM type is not supported for deployment");
+
+            default:
+                throw new Error(`Unsupported ISM type: ${type}`);
         }
 
         // Deploy ISM
         const deployedIsm = await ismFactory.deploy({
-            destination: chain,
+            destination: destinationChain,
             config: ismConfig,
             mailbox: mailbox || undefined,
             existingIsmAddress: existingIsmAddress || undefined,
-            origin: origin || undefined,
+            origin: originChain || undefined,
         });
 
         return JSON.stringify(
             {
                 message: "ISM deployed successfully",
                 details: {
-                    chain,
+                    destinationChain,
                     type,
                     address: deployedIsm?.address,
                     config: ismConfig,
@@ -695,13 +753,12 @@ export class HyperlaneService {
         const chainAddresses = await registry.getAddresses();
         const { chains } = parameters;
         const config: WarpRouteDeployConfigMailboxRequired = {};
-        const signerBackups: { chainName: string; signer: EVMWalletClientSigner }[] = [];
 
         for (const chain of chains) {
             const {
                 type,
                 tokenAddress,
-                chainName, // TODO: Would be better to get the chain from the wallet, but the chain object on the wallet doesn't have the name
+                chainName,
                 isNft,
                 symbol,
                 name,
@@ -759,10 +816,6 @@ export class HyperlaneService {
 
         const deployer = new HypERC20Deployer(multiProvider);
         const result = await deployer.deploy(finalConfig);
-
-        for (const { chainName, signer } of signerBackups) {
-            multiProvider.setSigner(chainName, signer); // cleanup so that one signer isn't on a different wallet
-        }
 
         const returnConfig: WarpRouteConfig = {
             tokens: [],
@@ -848,11 +901,6 @@ export class HyperlaneService {
         const baseConfig = {
             owner,
             mailbox: mailbox || (chainAddress.mailbox as string),
-            proxyAdmin: {
-                // TODO: probably shouldn't always be part of the config
-                owner,
-                address: chainAddress.proxyAdmin as string,
-            },
         };
 
         if (
@@ -957,7 +1005,7 @@ export class HyperlaneService {
         const originTokenType = readerWarpRouteConfig.type;
         const weiAmount = await this.toWeiAmount({
             amount: String(amount),
-            tokenType: originTokenType, // TODO: check if this is right for reverse direction
+            tokenType: originTokenType,
             tokenAddress,
             walletClient,
         });
@@ -970,7 +1018,7 @@ export class HyperlaneService {
             throw new Error("Remote Routers is undefined");
         }
         const recipientContractAddress = remoteRouters[destinationDomainId].address;
-        const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress, 32); // ? possibly undefined
+        const recipientContractAddressBytes32 = utils.hexZeroPad(recipientContractAddress, 32); // TODO: possibly undefined
 
         let transferTx: EVMTransactionResult;
         if (originTokenType === TokenType.native) {
@@ -1272,17 +1320,16 @@ function createMultiProviderSingleton() {
     const REGISTRY_URL: string = "https://github.com/hyperlane-xyz/hyperlane-registry";
     const REGISTRY_PROXY_URL: string = "https://proxy.hyperlane.xyz";
 
-    return async (walletClient?: EVMWalletClient) => {
+    return async (walletClient?: EVMWalletClient, forceRefresh = false) => {
         const now = Date.now();
         const refresh = lastRefresh && now - lastRefresh > oneDay; // refresh daily
 
-        if (!instance || refresh || globalRefresh) {
-            // TODO: make a forceRefresh variable instead of globalRefresh
+        if (!instance || refresh || forceRefresh) {
             const registry = new GithubRegistry({
                 uri: REGISTRY_URL,
                 proxyUrl: REGISTRY_PROXY_URL,
             });
-            const chainMetadata: ChainMap<ChainMetadata> = await registry.getMetadata(); // * Gives "Error: Failed to fetch from github: 429 Too Many Requests" sometimes
+            const chainMetadata: ChainMap<ChainMetadata> = await registry.getMetadata(); // TODO Gives "Error: Failed to fetch from github: 429 Too Many Requests" sometimes
             //
             //    {
             //        'ethereum': {
@@ -1357,7 +1404,6 @@ function createMultiProviderSingleton() {
 
             instance = { multiProvider, registry, chainMetadata };
             lastRefresh = now;
-            globalRefresh = false;
         }
 
         return instance;
