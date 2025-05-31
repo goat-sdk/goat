@@ -51,6 +51,7 @@ const hexString = /^0x[0-9a-fA-F]+$/;
 const numberString = /^\d+$/;
 const sepoliaMailbox = "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766";
 const zksyncsepoliaMailbox = "0x61e3BE234D7EE7b1e2a1fA84027105c733b91545";
+const optimismsepoliaMailbox = "0x6966b0E55883d49BFB24539356a2f8A673E02039";
 const sepoliaTestnetValidator = "0x28b91d3dc0d0e138adf914105d88c8830cc66f4e";
 const basesepoliaLinkTokenContractAddress = "0xe4ab69c077896252fafbd49efd26b5d171a32410";
 const zksyncsepoliaLinkTokenContractAddress = "0x23A1aFD896c8c8876AF46aDc38521f4432658d1e";
@@ -432,9 +433,9 @@ describe("hyperlane.deployIsm", () => {
     it("sets up an opStackIsm on sepolia", async () => {
         const response = await hyperlane.deployIsm(clients.sepolia, {
             type: "opStackIsm",
-            mailbox: sepoliaMailbox,
-            originChain: "optimism",
-            nativeBridge: "0x1234567890123456789012345678901234567890",
+            mailbox: optimismsepoliaMailbox,
+            originChain: "optimismsepolia",
+            nativeBridge: "0x4200000000000000000000000000000000000007",
             destinationChain: "sepolia",
         });
 
@@ -446,8 +447,8 @@ describe("hyperlane.deployIsm", () => {
                 destinationChain: "sepolia",
                 config: {
                     type: "opStackIsm",
-                    originChain: "optimism",
-                    nativeBridge: "0x1234567890123456789012345678901234567890",
+                    originChain: "optimismsepolia",
+                    nativeBridge: "0x4200000000000000000000000000000000000007",
                 },
             },
         });
@@ -457,7 +458,7 @@ describe("hyperlane.deployIsm", () => {
         const response = await hyperlane.deployIsm(clients.sepolia, {
             type: "arbL2ToL1Ism",
             mailbox: sepoliaMailbox,
-            bridge: "0x1234567890123456789012345678901234567890",
+            nativeBridge: "0x4200000000000000000000000000000000000007",
             destinationChain: "sepolia",
         });
 
@@ -469,7 +470,7 @@ describe("hyperlane.deployIsm", () => {
                 destinationChain: "sepolia",
                 config: {
                     type: "arbL2ToL1Ism",
-                    bridge: "0x1234567890123456789012345678901234567890",
+                    nativeBridge: "0x4200000000000000000000000000000000000007",
                 },
             },
         });
