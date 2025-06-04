@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, validator, root_validator
 from typing import List, Optional, Union, Dict, Any
+import re
 
 
 class PhysicalAddress(BaseModel):
@@ -10,6 +11,30 @@ class PhysicalAddress(BaseModel):
     state: Optional[str] = Field(None, description="State/Province/Region - optional")
     postalCode: str = Field(description="ZIP or postal code")
     country: str = Field(description="Two-letter country code (ISO 3166-1 alpha-2). Currently only US is supported.")
+
+    @validator('name')
+    def validate_name(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError("Name is required for physical address")
+        return v
+
+    @validator('line1')
+    def validate_line1(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError("Line 1 is required for physical address")
+        return v
+
+    @validator('city')
+    def validate_city(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError("City is required for physical address")
+        return v
+
+    @validator('postalCode')
+    def validate_postal_code(cls, v):
+        if not v or len(v.strip()) == 0:
+            raise ValueError("Postal/ZIP code is required for physical address")
+        return v
 
     @validator('country')
     def validate_country(cls, v):
@@ -49,6 +74,18 @@ class Recipient(BaseModel):
         None, 
         description="Physical shipping address for the recipient. Required when purchasing physical products."
     )
+
+    @validator('email')
+    def validate_email(cls, v):
+        if not v:
+            raise ValueError("Email is required")
+        
+        # Basic email validation regex that matches common email formats
+        email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_pattern, v):
+            raise ValueError("value is not a valid email address")
+        
+        return v
 
 
 class Payment(BaseModel):
