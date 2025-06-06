@@ -11,9 +11,8 @@ import {
     fetchTokenList,
     getSwapFromEvmTxPayload,
 } from "@mayanfinance/swap-sdk";
-import { TypedDataDomain } from "abitype";
 import { Signature, TypedDataEncoder } from "ethers";
-import { parseAbi } from "viem";
+import { TypedDataDomain, parseAbi } from "viem";
 import { EVMSwapParameters, SwapParameters } from "./parameters";
 
 const ERC20_ABI = parseAbi([
