@@ -21,8 +21,8 @@
         "express": "4.21.2",
         "swagger-ui-express": "5.0.1",
         "viem": "2.23.4",
-        "zod": "catalog:",
-        "zod-to-json-schema": "catalog:"
+        "zod": "3.23.8",
+        "zod-to-json-schema": "3.24.1"
     },
     "devDependencies": {
         "@types/express": "5.0.0",
