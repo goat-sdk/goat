@@ -30,7 +30,6 @@
         "@mayanfinance/swap-sdk": "10.2.0",
         "@mysten/sui": "^1.18.0",
         "@solana/web3.js": "catalog:",
-        "abitype": "1.0.8",
         "bs58": "^6.0.0",
         "ethers": "6.13.5",
         "viem": "catalog:",
