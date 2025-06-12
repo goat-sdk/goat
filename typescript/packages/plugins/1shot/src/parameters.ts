@@ -1,31 +1,34 @@
 import { createToolParameters } from "@goat-sdk/core";
+import { z } from "zod";
 import {
     contractSearchSchema,
-    contractTransactionsSchema,
-    createTransactionSchema,
-    getTransactionExecutionSchema,
-    listEscrowWalletsSchema,
-    listTransactionExecutionsSchema,
+    contractContractMethodsSchema,
+    createContractMethodSchema,
+    getTransactionSchema,
+    listWalletsSchema,
     listTransactionsSchema,
-    transactionSchema,
+    listContractMethodsSchema,
+    contractMethodSchema,
 } from "@uxly/1shot-client";
 
-export class ListTransactionsParams extends createToolParameters(listTransactionsSchema.omit({ businessId: true })) {}
+export class ListContractMethodsParams extends createToolParameters(listContractMethodsSchema.omit({ businessId: true })) {}
 
-export class ListEscrowWalletsParams extends createToolParameters(listEscrowWalletsSchema.omit({ businessId: true })) {}
+export class ListWalletsParams extends createToolParameters(listWalletsSchema.omit({ businessId: true })) {}
 
-export class CreateTransactionParams extends createToolParameters(createTransactionSchema.omit({ businessId: true })) {}
+export class CreateContractMethodParams extends createToolParameters(createContractMethodSchema.omit({ businessId: true })) {}
 
-export class AddTransactionToToolsParams extends createToolParameters(transactionSchema) {}
+export class AddContractMethodToToolsParams extends createToolParameters(contractMethodSchema) {}
 
-export class GetTransactionExecutionParams extends createToolParameters(getTransactionExecutionSchema) {}
+export class GetTransactionParams extends createToolParameters(getTransactionSchema) {}
 
-export class ListTransactionExecutionsParams extends createToolParameters(
-    listTransactionExecutionsSchema.omit({ businessId: true }),
+export class ListTransactionsParams extends createToolParameters(
+    listTransactionsSchema.omit({ businessId: true }),
 ) {}
+
+export class GetRecentTransactionParams extends createToolParameters(z.object({})) {}
 
 export class ContractSearchParams extends createToolParameters(contractSearchSchema) {}
 
 export class AssureToolsForSmartContractParams extends createToolParameters(
-    contractTransactionsSchema.omit({ businessId: true }),
+    contractContractMethodsSchema.omit({ businessId: true }),
 ) {}

@@ -5,13 +5,13 @@
 </a>
 </div>
 
-# 1shot GOAT Plugin
+# 1Shot API GOAT Plugin
 
 This plugin provides integration with your 1Shot API subscription. The plugin provides a tool for each defined endpoint in 1Shot, as well as the ability to create more endpoints dynamically and do contract discovery. 1Shot provides 1Stop for all your blockchain + AI needs!
 
-Using this plugin, your AI agent of choice can utilize any of your predefined endpoints of choice in 1Shot out of the box. You only need your API key, secret, and a business ID. If you need to interact with multiple businesses, just instantiate multiple instances of the plugin. The more interesting case is if the agent needs to interact with smart contracts you have not already setup in 1Shot. In that case, the agent is provided tools to search 1Shot's contract repository and look for the contracts it needs, and then to create the endpoints it needs from the repository, before using them. The agent can thus figure out how to achieve your aims. When you prompt sometihng like, "Trade 10 USDC for WEth", the agent can find a contract such as Uniswap, create the endpoints for that contract, and execute your intention.
+Using this plugin, your AI agent of choice can utilize any of your predefined endpoints of choice in 1Shot API out of the box. You only need your API key, secret, and a business ID. If you need to interact with multiple businesses, just instantiate multiple instances of the plugin. The more interesting case is if the agent needs to interact with smart contracts you have not already setup in 1Shot API. In that case, the agent is provided tools to search 1Shot API's contract prompt repository and look for the contracts it needs, and then to create the endpoints it needs from the repository, before using them. The agent can thus figure out how to achieve your aims. When you prompt something like, "Trade 10 USDC for WEth", the agent can find a contract such as Uniswap, create the endpoints for that contract, and execute your intention.
 
-1Shot provides great advantages for the average AI user in that you do not need to maintain a wallet on your local machine. Using 1Shot's Escrow Wallets (a custodial hot wallet), you don't have to worry about protecting your funds. Using the API Credentials system, you can also limit the agent's access to only pre-approved endpoints.
+1Shot API provides great advantages for the average AI user in that you do not need to maintain a wallet on your local machine. Using 1Shot API's Wallets (a custodial hot wallet), you don't have to worry about protecting your funds. Using the API Credentials system, you can also limit the agent's access to only pre-approved endpoints.
 
 ## Installation
 ```bash

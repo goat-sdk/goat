@@ -1,18 +1,18 @@
 import { PluginBase, ToolBase, WalletClientBase } from "@goat-sdk/core";
 import { OneShotClient } from "@uxly/1shot-client";
-import { TransactionService } from "./transactionService.js";
+import { ContractMethodService } from "./contractMethodService.js";
 
 export class OneShotPlugin extends PluginBase {
-    protected transactionService: TransactionService;
+    protected contractMethodService: ContractMethodService;
 
     constructor(
         protected readonly client: OneShotClient,
         protected readonly businessId: string,
     ) {
-        const transactionService = new TransactionService(client, businessId);
-        super("1shot", [transactionService]);
+        const contractMethodService = new ContractMethodService(client, businessId);
+        super("1shot", [contractMethodService]);
 
-        this.transactionService = transactionService;
+        this.contractMethodService = contractMethodService;
     }
 
     supportsChain = () => true;
@@ -27,7 +27,7 @@ export class OneShotPlugin extends PluginBase {
         // Start with the tools from the base class, using the @Tool decorator
         const tools = await super.getTools(walletClient);
 
-        tools.push(...(await this.transactionService.getTools()));
+        tools.push(...(await this.contractMethodService.getTools()));
 
         return tools;
     }

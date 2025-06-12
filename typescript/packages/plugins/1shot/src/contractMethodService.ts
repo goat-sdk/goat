@@ -1,26 +1,27 @@
 import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
+import { OneShotClient, SolidityStructParam, ContractMethod, Transaction } from "@uxly/1shot-client";
 import { ZodTypeAny, z } from "zod";
 import {
-    AddTransactionToToolsParams,
+    AddContractMethodToToolsParams,
     AssureToolsForSmartContractParams,
     ContractSearchParams,
-    CreateTransactionParams,
-    GetTransactionExecutionParams,
-    ListEscrowWalletsParams,
-    ListTransactionExecutionsParams,
+    CreateContractMethodParams,
+    GetTransactionParams,
+    ListWalletsParams,
     ListTransactionsParams,
+    ListContractMethodsParams,
+    GetRecentTransactionParams,
 } from "./parameters.js";
 
-export class TransactionService {
+export class ContractMethodService {
     public constructor(
         protected readonly oneShotClient: OneShotClient,
         protected readonly businessId: string,
     ) {}
 
-    protected workingEndpoints = new Set<Transaction>();
-    protected recentTransactionExecutions: Transaction[] = [];
+    protected workingEndpoints = new Set<ContractMethod>();
+    protected recentTransactions: Transaction[] = [];
 
     public async getTools(): Promise<ToolBase[]> {
         const tools = new Array<ToolBase>();
@@ -28,7 +29,7 @@ export class TransactionService {
         // Add each endpoint as a tool
         for (const endpoint of this.workingEndpoints) {
             // Create the parameters for the endpoint
-            const endpointSchema = this.buildTransactionParamSchema(endpoint);
+            const endpointSchema = this.buildContractMethodParamSchema(endpoint);
 
             // Every endpoint has a test tool
             tools.push(
@@ -36,12 +37,12 @@ export class TransactionService {
                     {
                         name: this.sanitizeToSafeString(`test_${endpoint.name}`),
                         // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
-                        description: `Tests the endpoint without actually executing it. This is useful for debugging and testing. No funds will be spend but the transaction is simulated. Endpoint description: ${endpoint.description}`,
+                        description: `Tests the endpoint without actually executing it. This is useful for debugging and testing. No funds will be spend but the contractMethod is simulated. Endpoint description: ${endpoint.description}`,
                         parameters: endpointSchema,
                     },
                     async (params) => {
                         // Execute the endpoint
-                        const response = await this.oneShotClient.transactions.test(endpoint.id, {
+                        const response = await this.oneShotClient.contractMethods.test(endpoint.id, {
                             ...params,
                         });
                         console.log(response);
@@ -57,21 +58,21 @@ export class TransactionService {
                         {
                             name: this.sanitizeToSafeString(`execute_${endpoint.name}`),
                             // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
-                            description: `This will call the endpoint ${endpoint.name} with the given parameters which will perform a blockchain transaction. 
+                            description: `This will call the endpoint ${endpoint.name} with the given parameters which will perform a blockchain contractMethod. 
                         Endpoints have a predefined escrow wallet, so the escrow wallet ID should only be provided if the user wants to change the default wallet.
-                        1Shot transactions do not require any local wallet or signatures, the keys are managed by the 1Shot service.
+                        1Shot contractMethods do not require any local wallet or signatures, the keys are managed by the 1Shot service.
                         Do not provide any private keys or signatures in the parameters unless the parameters require a signature.
-                        It will return the ExecutionID of the transaction, which can be used to retrieve the transaction status and results.
+                        It will return the TransactionID of the contractMethod, which can be used to retrieve the contractMethod status and results.
                         Endpoint description: ${endpoint.description}`,
                             parameters: endpointSchema,
                         },
                         async (params) => {
                             // Execute the endpoint
-                            const response = await this.oneShotClient.transactions.execute(endpoint.id, {
+                            const response = await this.oneShotClient.contractMethods.execute(endpoint.id, {
                                 ...params,
                             });
                             console.log(response);
-                            this.recentTransactionExecutions.push(response);
+                            this.recentTransactions.push(response);
                             return response;
                         },
                     ),
@@ -82,15 +83,15 @@ export class TransactionService {
                         {
                             name: this.sanitizeToSafeString(`estimate_${endpoint.name}`),
                             // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
-                            description: `Retrieve an estimate of the gas required to execute the transaction. 
-                            This will not spend any gas or execute any transactions.
+                            description: `Retrieve an estimate of the gas required to execute the contractMethod. 
+                            This will not spend any gas or execute any contractMethods.
                             Returns the amount of gas estimated to be spent in wei.
                             Endpoint description: ${endpoint.description}`,
                             parameters: endpointSchema,
                         },
                         async (params) => {
                             // Execute the endpoint
-                            const response = await this.oneShotClient.transactions.estimate(endpoint.id, {
+                            const response = await this.oneShotClient.contractMethods.estimate(endpoint.id, {
                                 ...params,
                             });
                             console.log(response);
@@ -109,14 +110,14 @@ export class TransactionService {
                             // TODO: Enhance the description to include basic information about the endpoint such as whether it's a read or write endpoint
                             description: `This will call the endpoint ${endpoint.name} with the given parameters and return the result of the smart contract call.
                         This works for endpoints with the stateMutability of view or pure.
-                        This will not spend any gas or execute any transactions.
+                        This will not spend any gas or execute any contractMethods.
                         Returns the result of the smart contract call, which may be a struct or a single value.
                         Endpoint description: ${endpoint.description}`,
                             parameters: endpointSchema,
                         },
                         async (params) => {
                             // Read from the endpoint
-                            const response = await this.oneShotClient.transactions.read(endpoint.id, {
+                            const response = await this.oneShotClient.contractMethods.read(endpoint.id, {
                                 ...params,
                             });
                             console.log(response);
@@ -136,36 +137,76 @@ export class TransactionService {
             "Performs a semantic search for smart contracts on the blockchain using the annotations on 1ShotAPI. It will return up to 5 candidate contract descriptions, which include all the major and/or important methods on the smart contract. After identifying the contract you want to use, you can make sure tools are available for the described methods via the assure_tools_for_smart_contract tool.",
     })
     async searchSmartContracts(_walletClient: EVMWalletClient, parameters: ContractSearchParams) {
-        const contracts = await this.oneShotClient.transactions.search(parameters.query, parameters);
+        const contracts = await this.oneShotClient.contractMethods.search(parameters.query, parameters);
         return contracts;
     }
 
     @Tool({
-        name: "assure_tools_for_smart_contract",
+        name: "assure_contract_methods_from_prompt",
         description:
-            "This assures that tools are available for the described methods on the smart contract. If Transactions already exists for all the described methods, it will do nothing. If it needs to it will create new transacitons based on the highest-rated ContractDescription available, using those annotations. All described methods will be converted to tools with defined parameters. It will return a list of Transacation objects for the smart contract. Make sure to use a valid escrow wallet ID for the chain you want via the list_escrow_wallets tool.",
+            "This assures that tools (in the form of Contract Methods) are available for the described methods on in the Prompt. If Contract Methods already exists for all the described methods, it will do nothing. If it needs to it will create new Contract Methods based on either the highest-rated Prompt or on the chosen Prompt ID, using those annotations. All described methods will be converted to Contract Methods with defined parameters. It will return a list of Contract Method objects for the smart contract. Make sure to use a valid wallet ID for the chain you want via the list_wallets tool.",
     })
-    async assureToolsForSmartContract(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
-        const transactions = await this.oneShotClient.transactions.contractTransactions(this.businessId, parameters);
-        for (const transaction of transactions) {
-            this.workingEndpoints.add(transaction);
+    async assureContractMethodsFromPrompt(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
+        const contractMethods = await this.oneShotClient.contractMethods.assureContractMethodsFromPrompt(this.businessId, parameters);
+        for (const contractMethod of contractMethods) {
+            this.workingEndpoints.add(contractMethod);
         }
         return Array.from(this.workingEndpoints);
     }
 
     @Tool({
-        name: "add_transaction_to_working_endpoints",
+        name: "add_contractMethod_to_working_endpoints",
         description:
-            "Adds a transaction to the list of working endpoints. You can use list_transactions to get transactions that are already configured in 1Shot. If you use use create_transaction to create a new transaction it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
+            "Adds a contractMethod to the list of working endpoints. You can use list_contractMethods to get contractMethods that are already configured in 1Shot. If you use use create_contractMethod to create a new contractMethod it will automatically be added to the list of working endpoints. Returns the updated list of working endpoints.",
     })
-    async addTransactionToTools(_walletClient: EVMWalletClient, parameters: AddTransactionToToolsParams) {
+    async addContractMethodToTools(_walletClient: EVMWalletClient, parameters: AddContractMethodToToolsParams) {
         this.workingEndpoints.add(parameters);
         return Array.from(this.workingEndpoints);
     }
 
     @Tool({
+        name: "list_contractMethods",
+        description: "Returns a paginated list of contractMethods for the configured business. ",
+    })
+    async listContractMethods(_walletClient: EVMWalletClient, parameters: ListContractMethodsParams) {
+        const contractMethods = await this.oneShotClient.contractMethods.list(this.businessId, parameters);
+        return contractMethods;
+    }
+
+    @Tool({
+        name: "create_contractMethod",
+        description:
+            "Creates a new contractMethod for the configured business. Returns the created contractMethod. You should check whether or not there is already a contractMethod created via the list_contractMethods tool first, if there is, you should use the add_contractMethod_to_working_endpoints tool to add it to the list of working endpoints rather than creating a new contractMethod.",
+    })
+    async createContractMethod(_walletClient: EVMWalletClient, parameters: CreateContractMethodParams) {
+        const contractMethods = await this.oneShotClient.contractMethods.create(this.businessId, parameters);
+        return contractMethods;
+    }
+
+    @Tool({
+        name: "list_wallets",
+        description:
+            "Returns a paginated list of Escrow Wallets for the configured business. Wallets are hot wallets controlled by 1Shot. All contractMethods are executed via an escrow wallet. Wallets are tied to a particular chain so you should always include a chain Id when getting a listing. ",
+    })
+    async listWallets(_walletClient: EVMWalletClient, parameters: ListWalletsParams) {
+        const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);
+        return wallets;
+    }
+
+    @Tool({
+        name: "get_transaction",
+        description:
+            "Get the status and results of a single Transaction. It needs the Transaction ID, which is the id field on a Transaction object.",
+    })
+    async getTransaction(_walletClient: EVMWalletClient, parameters: GetTransactionParams) {
+        const transaction = await this.oneShotClient.transactions.get(parameters.transactionId);
+        return transaction;
+    }
+
+    @Tool({
         name: "list_transactions",
-        description: "Returns a paginated list of transactions for the configured business. ",
+        description:
+            "Returns a paginated list of Transaction objects. It accepts a businessId and a list of filters. The filters are optional and can be used to filter the transactions by status, chainId, contractMethodId, walletId, or userId. The filters are ANDed together.",
     })
     async listTransactions(_walletClient: EVMWalletClient, parameters: ListTransactionsParams) {
         const transactions = await this.oneShotClient.transactions.list(this.businessId, parameters);
@@ -173,52 +214,12 @@ export class TransactionService {
     }
 
     @Tool({
-        name: "create_transaction",
+        name: "get_recent_transactions",
         description:
-            "Creates a new transaction for the configured business. Returns the created transaction. You should check whether or not there is already a transaction created via the list_transactions tool first, if there is, you should use the add_transaction_to_working_endpoints tool to add it to the list of working endpoints rather than creating a new transaction.",
+            "Returns a list of all the Transactions that you have interacted with during the current session. This data will be stale. You must get the most recent data about these Transactions via the get_transaction tool.",
     })
-    async createTransaction(_walletClient: EVMWalletClient, parameters: CreateTransactionParams) {
-        const transactions = await this.oneShotClient.transactions.create(this.businessId, parameters);
-        return transactions;
-    }
-
-    @Tool({
-        name: "list_escrow_wallets",
-        description:
-            "Returns a paginated list of Escrow Wallets for the configured business. Escrow wallets are hot wallets controlled by 1Shot. All transactions are executed via an escrow wallet. Escrow wallets are tied to a particular chain so you should always include a chain Id when getting a listing. ",
-    })
-    async listEscrowWallets(_walletClient: EVMWalletClient, parameters: ListEscrowWalletsParams) {
-        const wallets = await this.oneShotClient.wallets.list(this.businessId, parameters);
-        return wallets;
-    }
-
-    @Tool({
-        name: "get_transaction_execution",
-        description:
-            "Get the status and results of a single transaction execution. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
-    })
-    async getTransactionExecution(_walletClient: EVMWalletClient, parameters: GetTransactionExecutionParams) {
-        const execution = await this.oneShotClient.executions.get(parameters.executionId);
-        return execution;
-    }
-
-    @Tool({
-        name: "list_transaction_executions",
-        description:
-            "Returns a paginated list of Transaction Execution objects.. It needs the Transaction Execution ID, which is the id field on a TransactionExecution object.",
-    })
-    async listTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
-        const executions = await this.oneShotClient.executions.list(this.businessId, parameters);
-        return executions;
-    }
-
-    @Tool({
-        name: "get_recent_transaction_executions",
-        description:
-            "Returns a list of all the Transaction Executions that you have interacted with during the current session. This data will be stale. You must get the most recent data about these Transaction Executions via the get_transaction_execution tool.",
-    })
-    async getRecentTransactionExecutions(_walletClient: EVMWalletClient, parameters: ListTransactionExecutionsParams) {
-        return this.recentTransactionExecutions;
+    async getRecentTransaction(_walletClient: EVMWalletClient, parameters: GetRecentTransactionParams) {
+        return this.recentTransactions;
     }
 
     // Map Solidity types to Zod schemas
@@ -278,9 +279,9 @@ export class TransactionService {
         return z.object(shape);
     }
 
-    // Create schema for a Transaction's `inputs` field
+    // Create schema for a ContractMethod's `inputs` field
 
-    protected buildTransactionParamSchema(tx: Transaction): ZodTypeAny {
+    protected buildContractMethodParamSchema(tx: ContractMethod): ZodTypeAny {
         return this.buildZodSchemaFromParams(tx.inputs);
     }
 
