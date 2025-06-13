@@ -1,17 +1,17 @@
 import { Tool, ToolBase, createTool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { OneShotClient, SolidityStructParam, ContractMethod, Transaction } from "@uxly/1shot-client";
+import { ContractMethod, OneShotClient, SolidityStructParam, Transaction } from "@uxly/1shot-client";
 import { ZodTypeAny, z } from "zod";
 import {
     AddContractMethodToToolsParams,
     AssureToolsForSmartContractParams,
     ContractSearchParams,
     CreateContractMethodParams,
-    GetTransactionParams,
-    ListWalletsParams,
-    ListTransactionsParams,
-    ListContractMethodsParams,
     GetRecentTransactionParams,
+    GetTransactionParams,
+    ListContractMethodsParams,
+    ListTransactionsParams,
+    ListWalletsParams,
 } from "./parameters.js";
 
 export class ContractMethodService {
@@ -146,8 +146,14 @@ export class ContractMethodService {
         description:
             "This assures that tools (in the form of Contract Methods) are available for the described methods on in the Prompt. If Contract Methods already exists for all the described methods, it will do nothing. If it needs to it will create new Contract Methods based on either the highest-rated Prompt or on the chosen Prompt ID, using those annotations. All described methods will be converted to Contract Methods with defined parameters. It will return a list of Contract Method objects for the smart contract. Make sure to use a valid wallet ID for the chain you want via the list_wallets tool.",
     })
-    async assureContractMethodsFromPrompt(_walletClient: EVMWalletClient, parameters: AssureToolsForSmartContractParams) {
-        const contractMethods = await this.oneShotClient.contractMethods.assureContractMethodsFromPrompt(this.businessId, parameters);
+    async assureContractMethodsFromPrompt(
+        _walletClient: EVMWalletClient,
+        parameters: AssureToolsForSmartContractParams,
+    ) {
+        const contractMethods = await this.oneShotClient.contractMethods.assureContractMethodsFromPrompt(
+            this.businessId,
+            parameters,
+        );
         for (const contractMethod of contractMethods) {
             this.workingEndpoints.add(contractMethod);
         }
