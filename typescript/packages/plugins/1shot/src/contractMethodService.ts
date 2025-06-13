@@ -131,8 +131,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "search_smart_contracts",
-        description:
-            `Performs a semantic search for smart contracts on the blockchain using the annotations on 1Shot API. 
+        description: `Performs a semantic search for smart contracts on the blockchain using the annotations on 1Shot API. 
             It will return up to 5 candidate 1Shot Prompts, which include all the major and/or important methods on the smart contract. 
             After identifying the contract you want to use, you can make sure tools are available for the described methods via the assure_contract_methods_from_prompt tool.`,
     })
@@ -143,8 +142,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "assure_contract_methods_from_prompt",
-        description:
-            `This assures that tools (in the form of Contract Methods) are available for the described methods on in the 1ShotPrompt. 
+        description: `This assures that tools (in the form of Contract Methods) are available for the described methods on in the 1ShotPrompt. 
             If Contract Methods already exists for all the described methods, it will do nothing. 
             If it needs to it will create new Contract Methods based on either the highest-rated Prompt or on the chosen Prompt ID, using those annotations. 
             All described methods will be converted to tools with defined parameters. 
@@ -167,8 +165,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "add_contract_method_to_working_tools",
-        description:
-            `Adds a Contract Method to the list of working tools.
+        description: `Adds a Contract Method to the list of working tools.
             The working tools are the tools that are available to the agent on the next instantiation.
             You can use list_contract_methods to get Contract Methods that are already configured in 1Shot API. 
             Returns the updated list of working tools.`,
@@ -189,8 +186,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "list_wallets",
-        description:
-            `Returns a paginated list of Wallets for the configured business.
+        description: `Returns a paginated list of Wallets for the configured business.
             Wallets are hot wallets controlled by 1Shot API.
             All Contract Methods are executed via a Wallet.
             Wallets are tied to a particular chain so you should always include a chain Id when getting a listing.`,
@@ -202,8 +198,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "get_transaction",
-        description:
-            `Get the status and results of a single Transaction.
+        description: `Get the status and results of a single Transaction.
             It needs the Transaction ID, which is the id field on a Transaction object.`,
     })
     async getTransaction(_walletClient: EVMWalletClient, parameters: GetTransactionParams) {
@@ -213,8 +208,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "list_transactions",
-        description:
-            `Returns a paginated list of Transaction objects.
+        description: `Returns a paginated list of Transaction objects.
             It accepts a businessId and a list of filters.
             The filters are optional and can be used to filter the transactions by status, chainId, contractMethodId, walletId, or userId.
             The filters are ANDed together.`,
@@ -226,8 +220,7 @@ export class ContractMethodService {
 
     @Tool({
         name: "get_recent_transactions",
-        description:
-            `Returns a list of all the Transactions that you have interacted with during the current session.
+        description: `Returns a list of all the Transactions that you have interacted with during the current session.
             This data will be stale.
             You must get the most recent data about these Transactions via the get_transaction tool.
             Transactions take a while to be processed, so you may need to poll for the most recent data.`,
