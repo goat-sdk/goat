@@ -21,7 +21,8 @@ export type Chain =
     | CosmosChain
     | StarknetChain
     | RadixChain
-    | ZetrixChain;
+    | ZetrixChain
+    | TronChain;
 
 export type SuiChain = {
     type: "sui";
@@ -71,4 +72,8 @@ export type RadixChain = {
 
 export type ZetrixChain = {
     type: "zetrix";
+};
+
+export type TronChain = {
+    type: "tron";
 };
