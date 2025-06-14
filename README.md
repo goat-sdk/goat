@@ -142,6 +142,7 @@ GOAT is free software, MIT licensed.
 | --- | --- | --- | --- |
 | 0x | Get quotes and swap on 0x | [@goat-sdk/plugin-0x](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/0x) |
 | 1inch | Get the balances of a wallet using 1inch API | [@goat-sdk/plugin-1inch](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/1inch) | [goat-sdk-plugin-1inch](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/1inch) |
+| 1Shot API | General purpose transaction execution | [@goat-sdk/plugin-1shot](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/1shot) | |
 | Allora | Get price predictions using Allora API | [@goat-sdk/plugin-allora](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/allora) | [goat-sdk-plugin-allora](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/allora) |
 | Avnu | Swap tokens on Starknet | [@goat-sdk/plugin-avnu](https://www.npmjs.com/package/@goat-sdk/plugin-avnu) |
 | Balancer | Swap tokens and provide liquidity on Balancer | [@goat-sdk/plugin-balancer](https://www.npmjs.com/package/@goat-sdk/plugin-balancer) |
