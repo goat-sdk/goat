@@ -14,12 +14,14 @@ poetry add goat-sdk-wallet-evm
 ## Usage
 
 ```python
-from goat_wallets.web3 import web3_wallet
+from goat_wallets.web3 import web3
+from goat_wallets.evm import USDC, PEPE
 
-# Initialize wallet with private key
-wallet = web3_wallet(
-    private_key="${WALLET_PRIVATE_KEY}",  # Your EVM wallet private key
-    rpc_url="${RPC_PROVIDER_URL}"  # Your EVM RPC endpoint
+# Initialize wallet with private key and token support
+wallet = web3(
+    w3_provider="${RPC_PROVIDER_URL}",  # Your EVM RPC endpoint
+    tokens=[USDC, PEPE],  # Enable ERC20 token functionality
+    enable_send=True      # Enable token sending capability
 )
 
 # Get wallet address

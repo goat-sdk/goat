@@ -6,8 +6,7 @@ import { generateText } from "ai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { jupiter } from "@goat-sdk/plugin-jupiter";
 import { orca } from "@goat-sdk/plugin-orca";
-import { splToken } from "@goat-sdk/plugin-spl-token";
-import { sendSOL, solana } from "@goat-sdk/wallet-solana";
+import { solana } from "@goat-sdk/wallet-solana";
 
 import { Connection, Keypair } from "@solana/web3.js";
 
@@ -26,12 +25,7 @@ async function chat() {
             keypair,
             connection,
         }),
-        plugins: [
-            sendSOL(), // Enable SOL transfers
-            splToken(), // Enable SPL token operations
-            jupiter(),
-            orca(),
-        ],
+        plugins: [jupiter(), orca()],
     });
 
     // 3. Create a readline interface to interact with the agent

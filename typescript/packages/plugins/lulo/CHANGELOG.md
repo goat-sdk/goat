@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-lulo
 
+## 0.1.6
+
+### Patch Changes
+
+- a716c34: Add USDC withdrawal functionality to Lulo plugin
+
 ## 0.1.5
 
 ### Patch Changes

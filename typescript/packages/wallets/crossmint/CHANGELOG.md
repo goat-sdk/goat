@@ -1,5 +1,11 @@
 # @goat-sdk/crossmint
 
+## 0.5.1
+
+### Patch Changes
+
+- f62fb36: Add story
+
 ## 0.4.5
 
 ### Patch Changes

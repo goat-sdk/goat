@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-0x
 
+## 0.1.11
+
+### Patch Changes
+
+- a97a614: Fix allowance bug
+
 ## 0.1.10
 
 ### Patch Changes

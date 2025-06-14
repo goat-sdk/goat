@@ -1,5 +1,11 @@
 # @goat-sdk/plugin-polymarket
 
+## 0.3.14
+
+### Patch Changes
+
+- e2e50ca: Fix small bug
+
 ## 0.3.13
 
 ### Patch Changes

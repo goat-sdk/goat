@@ -56,6 +56,8 @@ const smartWalletChains = [
     "mode-sepolia",
     "optimism",
     "optimism-sepolia",
+    "story-mainnet",
+    "story-testnet",
 ] as const;
 
 export type SupportedSmartWalletChains = (typeof smartWalletChains)[number];

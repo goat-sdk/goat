@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "goat-sdk-wallet-crossmint"
-version = "0.1.14"
+version = "0.2.0"
 description = "Crossmint wallet implementation for GOAT SDK"
 authors = [
     "GOAT SDK Team",
@@ -23,9 +23,9 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-goat-sdk = "^0.1.0"
-goat-sdk-wallet-evm = "^0.1.0"
-goat-sdk-wallet-solana = "^0.1.0"
+goat-sdk = "^0.2.0"
+goat-sdk-wallet-evm = "^0.2.0"
+goat-sdk-wallet-solana = "^0.2.0"
 web3 = ">=6.0.0"
 eth-account = ">=0.8"
 base58 = ">=2.1"

@@ -1,13 +1,12 @@
 import { CrossmintApiClient } from "@crossmint/common-sdk-base";
 import { Signature } from "@goat-sdk/core";
-import { type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
-import { type Connection, Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { SolanWalletClientCtorParams, type SolanaTransaction, SolanaWalletClient } from "@goat-sdk/wallet-solana";
+import { Keypair, PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import bs58 from "bs58";
 import nacl from "tweetnacl";
 import { CreateTransactionResponse, CrossmintWalletsAPI, SolanaDelegatedSignerResponse } from "./CrossmintWalletsAPI";
 
-export type SolanaSmartWalletOptions = {
-    connection: Connection;
+export type SolanaSmartWalletOptions = SolanWalletClientCtorParams & {
     config: {
         adminSigner:
             | {
@@ -19,19 +18,19 @@ export type SolanaSmartWalletOptions = {
               };
     };
 } & (
-    | {
-          linkedUser: {
-              email?: string;
-              phone?: string;
-              userId?: number;
-          };
-          address?: never;
-      }
-    | {
-          address: string;
-          linkedUser?: never;
-      }
-);
+        | {
+              linkedUser: {
+                  email?: string;
+                  phone?: string;
+                  userId?: number;
+              };
+              address?: never;
+          }
+        | {
+              address: string;
+              linkedUser?: never;
+          }
+    );
 
 function getLocator(address: string | undefined, linkedUser: SolanaSmartWalletOptions["linkedUser"]): string {
     if (linkedUser) {

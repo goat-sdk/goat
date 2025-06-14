@@ -7,8 +7,6 @@ import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { crossmint } from "@goat-sdk/crossmint";
 import { Connection, Keypair } from "@solana/web3.js";
 
-import { splToken } from "@goat-sdk/plugin-spl-token";
-import { sendSOL } from "@goat-sdk/wallet-solana";
 import base58 from "bs58";
 
 require("dotenv").config();
@@ -40,7 +38,7 @@ const { solanaSmartWallet } = crossmint(apiKey);
             },
             connection,
         }),
-        plugins: [sendSOL(), splToken({ network: "devnet" })],
+        plugins: [],
     });
 
     // 3. Create a readline interface to interact with the agent

@@ -5,8 +5,7 @@ from .wallet import (
     SolanaOptions,
     solana,
 )
-# Import the new plugin and factory
-from .send_sol import send_sol
+from .tokens import USDC, USDT, BONK, SPL_TOKENS, Token, SolanaNetwork
 
 __all__ = [
     "SolanaWalletClient",
@@ -14,5 +13,10 @@ __all__ = [
     "SolanaTransaction",
     "SolanaOptions",
     "solana",
-    "send_sol",
+    "USDC",
+    "USDT",
+    "BONK",
+    "SPL_TOKENS",
+    "Token",
+    "SolanaNetwork"
 ]

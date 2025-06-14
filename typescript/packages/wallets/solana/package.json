@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/wallet-solana",
-    "version": "0.2.16",
+    "version": "0.3.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
@@ -13,6 +13,7 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@solana/spl-token": "catalog:",
         "@solana/web3.js": "catalog:",
         "tweetnacl": "^1.0.3",
         "viem": "catalog:",
@@ -20,6 +21,7 @@
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*",
+        "@solana/spl-token": "catalog:",
         "@solana/web3.js": "catalog:"
     },
     "homepage": "https://ohmygoat.dev",

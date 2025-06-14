@@ -1,6 +1,6 @@
 {
     "name": "@goat-sdk/core",
-    "version": "0.4.9",
+    "version": "0.5.0",
     "sideEffects": false,
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {

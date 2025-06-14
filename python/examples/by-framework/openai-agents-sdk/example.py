@@ -14,10 +14,8 @@ from eth_account.signers.local import LocalAccount
 from eth_account import Account
 
 from goat_adapters.openai_agents_sdk.adapter import get_on_chain_tools
-from goat_plugins.erc20.token import PEPE, USDC
-from goat_plugins.erc20 import erc20, ERC20PluginOptions
-from goat_wallets.evm import send_eth
-from goat_wallets.web3 import Web3EVMWalletClient
+from goat_wallets.evm import PEPE, USDC
+from goat_wallets.web3 import web3
 
 # Initialize Web3 and account
 w3 = Web3(Web3.HTTPProvider(os.getenv("RPC_PROVIDER_URL")))
@@ -35,11 +33,8 @@ w3.middleware_onion.add(
 async def main():
     # Initialize tools with web3 wallet
     tools = get_on_chain_tools(
-        wallet=Web3EVMWalletClient(w3),
-        plugins=[
-            send_eth(),
-            erc20(options=ERC20PluginOptions(tokens=[USDC, PEPE])),
-        ],
+        wallet=web3(w3),
+        plugins=[],
     )
     
     agent = Agent(

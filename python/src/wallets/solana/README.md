@@ -11,11 +11,20 @@ poetry add goat-sdk-wallet-solana
 ## Usage
 
 ```python
-from goat_wallets.solana import solana_wallet
+from goat_wallets.solana import solana, SPL_TOKENS
+from solana.rpc.api import Client as SolanaClient
+from solders.keypair import Keypair
 
-# Initialize wallet with seed phrase
-wallet = solana_wallet(
-    seed="${SOLANA_WALLET_SEED}"  # Your base58-encoded seed phrase
+# Initialize Solana client
+client = SolanaClient("https://api.mainnet-beta.solana.com")
+
+# Initialize wallet with seed phrase and token support
+keypair = Keypair.from_base58_string("${SOLANA_WALLET_SEED}")  # Your base58-encoded seed phrase
+wallet = solana(
+    client, 
+    keypair,
+    tokens=SPL_TOKENS,  # Enable SPL token functionality
+    enable_send=True    # Enable token sending capability
 )
 
 # Get wallet address

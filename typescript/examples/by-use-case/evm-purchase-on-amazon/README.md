@@ -6,7 +6,7 @@
 # Purchase any item on Amazon using EVM
 ## 🚀 Quickstart
 
-This example demonstrates how to use GOAT to **purchase any item on Amazon US** using EVM and Crossmint's headless checkout API. This example uses [Base](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
+This example demonstrates how to use GOAT to **purchase any item on Amazon US** using EVM and Crossmint's headless checkout API. This example uses [Base Sepolia](https://base.org) but you can implement it with any other EVM network by changing the chain and RPC URL.
 
 You can use this example with any other agent framework, chain, and wallet of your choice.
 
@@ -59,9 +59,6 @@ In production, developers require advanced wallet setups that utilize [smart wal
 To integrate Agent Wallets with GOAT, check out the following quickstarts:
 1. Agent Wallets Quickstart [[EVM](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets), [Solana](https://github.com/goat-sdk/goat/tree/main/typescript/examples/by-wallet/crossmint-smart-wallets)]
 2. [Agent Launchpad Starter Kit](https://github.com/Crossmint/agent-launchpad-starter-kit/)
-
-
-
 
 <footer>
 <br/>
