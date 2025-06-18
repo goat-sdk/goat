@@ -1,7 +1,7 @@
-import { PluginBase, Chain } from "@goat-sdk/core";
+import { Chain, PluginBase } from "@goat-sdk/core";
 import { PropyService } from "./propy.service";
 
-import { mainnet, arbitrum, base, sepolia, baseSepolia } from "viem/chains";
+import { arbitrum, base, baseSepolia, mainnet, sepolia } from "viem/chains";
 
 const SUPPORTED_CHAINS = [mainnet, arbitrum, base, sepolia, baseSepolia];
 
