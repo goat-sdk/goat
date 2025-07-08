@@ -1,5 +1,6 @@
 import { Tool } from "@goat-sdk/core";
 import { EVMWalletClient } from "@goat-sdk/wallet-evm";
+import { fromHex } from "viem";
 import { CheckApprovalBodySchema, GetQuoteParameters } from "./parameters";
 import type { UniswapCtorParams } from "./types/UniswapCtorParams";
 
@@ -47,7 +48,7 @@ export class UniswapService {
 
         const transaction = await walletClient.sendTransaction({
             to: approval.to,
-            value: approval.value,
+            value: fromHex(approval.value, 'bigint'),
             data: approval.data,
         });
 
@@ -101,7 +102,7 @@ export class UniswapService {
 
         const tx = await walletClient.sendTransaction({
             to: swap.to,
-            value: swap.value,
+            value: fromHex(swap.value, 'bigint'),
             data: swap.data,
         });
 
