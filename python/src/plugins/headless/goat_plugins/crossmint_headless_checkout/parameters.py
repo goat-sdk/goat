@@ -10,7 +10,7 @@ class PhysicalAddress(BaseModel):
     city: str = Field(description="City, district, suburb, town, or village")
     state: Optional[str] = Field(None, description="State/Province/Region - optional")
     postalCode: str = Field(description="ZIP or postal code")
-    country: str = Field(description="Two-letter country code (ISO 3166-1 alpha-2). Currently only US is supported.")
+    country: str = Field(description="Two-letter country code (ISO 3166-1 alpha-2)")
 
     @validator('name')
     def validate_name(cls, v):
@@ -50,10 +50,7 @@ class PhysicalAddress(BaseModel):
         if len(v) > 2:
             raise ValueError("Country must be a 2-letter ISO code for physical address")
         
-        # Currently only US is supported
-        if v != "US":
-            raise ValueError("Only 'US' country code is supported at this time")
-        
+        # Removed the US-only restriction - let the API handle country validation
         return v
     
     @root_validator(skip_on_failure=True)
@@ -61,7 +58,7 @@ class PhysicalAddress(BaseModel):
         country = values.get('country')
         state = values.get('state')
         
-        # State is required for US addresses
+        # State is required for US addresses, but don't enforce for other countries
         if country == "US" and not state:
             raise ValueError("State is required for US physical address")
         
