@@ -2406,14 +2406,14 @@ importers:
   packages/wallets/chromia:
     dependencies:
       '@chromia/ft4':
-        specifier: 1.0.1
-        version: 1.0.1(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@1.20.1(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)
+        specifier: 2.0.2
+        version: 2.0.2(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@2.0.2(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)
       '@goat-sdk/core':
         specifier: workspace:*
         version: link:../../core
       postchain-client:
-        specifier: 1.20.1
-        version: 1.20.1(buffer@6.0.3)(events@3.3.0)
+        specifier: 2.0.2
+        version: 2.0.2(buffer@6.0.3)(events@3.3.0)
       viem:
         specifier: 'catalog:'
         version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -4356,6 +4356,13 @@ packages:
       buffer: ^5.x || ^6.x
       events: ^3.3.0
       postchain-client: ^1.16.1
+
+  '@chromia/ft4@2.0.2':
+    resolution: {integrity: sha512-JkW2anUAziu/XrCX3TlgV4rmdFED2KOSS52Hz8Ml4bzxlW8OlRDvSVyaYFlzJREUqVoggu/IuMEKe19n78fBEA==}
+    peerDependencies:
+      buffer: ^5.x || ^6.x
+      events: ^3.3.0
+      postchain-client: ^2.0.2
 
   '@clack/core@0.3.5':
     resolution: {integrity: sha512-5cfhQNH+1VQ2xLQlmzXMqUoiaH0lRBq9/CLW9lTyMbuKLC3+xEK01tHVvyut++mLOn5urSHmkm6I0Lg9MaJSTQ==}
@@ -13905,6 +13912,11 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
+  merklehashts@1.0.5:
+    resolution: {integrity: sha512-SAo3RZbj6u19x1LzMN4cDquxvxCOC9aCYU7B7cmuwoG8CM3T81Imqs0f0WmNSdEIryBjuJ6Mqc8m0hq0lDE1zw==}
+    peerDependencies:
+      buffer: ^5.x || ^6.x
+
   merkletreejs@0.3.11:
     resolution: {integrity: sha512-LJKTl4iVNTndhL+3Uz/tfkjD0klIWsHlUzgtuNnNrsf7bAlXR30m+xYB7lHr5Z/l6e/yAIsr26Dabx6Buo4VGQ==}
     engines: {node: '>= 7.6.0'}
@@ -15019,6 +15031,12 @@ packages:
 
   postchain-client@1.20.1:
     resolution: {integrity: sha512-xZVPBUsa/DxyDiOn41cs7LQ/aXu8gXdeyaaa9XNJq/O/acCqyD4Djs7ETb/BZqqH/PKVz17n9dP6hVGlwGJB5Q==}
+    peerDependencies:
+      buffer: ^5.x || ^6.x
+      events: ^3.3.0
+
+  postchain-client@2.0.2:
+    resolution: {integrity: sha512-kjEtGUIIZq2q//c6mHLx5eQoDp7YVZN6w2tQrW09+uCwkjrU2H2fbRV3w4iZl+P948jUDRBeLut/Az0TVrxwNA==}
     peerDependencies:
       buffer: ^5.x || ^6.x
       events: ^3.3.0
@@ -20672,6 +20690,16 @@ snapshots:
       ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       events: 3.3.0
       postchain-client: 1.20.1(buffer@6.0.3)(events@3.3.0)
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@chromia/ft4@2.0.2(buffer@6.0.3)(bufferutil@4.0.9)(events@3.3.0)(postchain-client@2.0.2(buffer@6.0.3)(events@3.3.0))(utf-8-validate@5.0.10)':
+    dependencies:
+      buffer: 6.0.3
+      ethers: 6.13.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      events: 3.3.0
+      postchain-client: 2.0.2(buffer@6.0.3)(events@3.3.0)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -35626,6 +35654,11 @@ snapshots:
 
   merge2@1.4.1: {}
 
+  merklehashts@1.0.5(buffer@6.0.3):
+    dependencies:
+      '@chromia/asn1': 1.0.1
+      buffer: 6.0.3
+
   merkletreejs@0.3.11:
     dependencies:
       bignumber.js: 9.1.2
@@ -37005,6 +37038,23 @@ snapshots:
       secp256k1: 4.0.4
       stream-browserify: 3.0.0
       zod: 3.24.1
+
+  postchain-client@2.0.2(buffer@6.0.3)(events@3.3.0):
+    dependencies:
+      '@chromia/asn1': 1.0.1
+      '@types/bn.js': 5.1.6
+      axios: 1.9.0
+      buffer: 6.0.3
+      crypto-browserify: 3.12.1
+      events: 3.3.0
+      lodash: 4.17.21
+      merklehashts: 1.0.5(buffer@6.0.3)
+      secp256k1: 4.0.4
+      stream-browserify: 3.0.0
+      uuid: 11.1.0
+      zod: 3.24.1
+    transitivePeerDependencies:
+      - debug
 
   postcss-import@15.1.0(postcss@8.5.3):
     dependencies:
