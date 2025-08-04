@@ -10,7 +10,7 @@
     "license": "MIT",
     "dependencies": {
         "@ai-sdk/openai": "~1.0.4",
-        "@chromia/ft4": "1.0.1",
+        "@chromia/ft4": "2.0.2",
         "@goat-sdk/adapter-vercel-ai": "0.2.10",
         "@goat-sdk/core": "0.4.9",
         "@goat-sdk/wallet-chromia": "0.2.11",
@@ -18,7 +18,7 @@
         "ai": "4.0.3",
         "chalk": "5.3.0",
         "dotenv": "^16.4.5",
-        "postchain-client": "1.20.1",
+        "postchain-client": "2.0.2",
         "zod": "3.23.8"
     }
 }
