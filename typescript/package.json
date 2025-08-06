@@ -57,5 +57,10 @@
         "commander": "13.0.0",
         "tweetnacl": "^1.0.3",
         "viem": "2.22.19"
+    },
+    "pnpm": {
+        "overrides": {
+            "@solana/web3.js": "1.98.4"
+        }
     }
 }
