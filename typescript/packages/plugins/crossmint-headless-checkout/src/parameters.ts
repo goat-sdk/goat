@@ -67,13 +67,7 @@ export const physicalAddressSchema = z
             .toUpperCase(),
     })
     .superRefine((data, ctx) => {
-        // TODO: allow more countries
-        if (data.country !== "US") {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Only 'US' country code is supported at this time",
-            });
-        }
+        // TODO: allow more countries // Arsh update --> done!
 
         if (data.country === "US" && !data.state) {
             ctx.addIssue({
