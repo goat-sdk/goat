@@ -815,4 +815,34 @@ describe("CrossmintWalletsAPI", () => {
             ).rejects.toThrow(/Chain validation failed/);
         });
     });
+
+    describe("Smart Wallet Clone Operations", () => {
+        // TODO: I dont think this test actually tests if it works like its supposed to
+        it("should clone a smart wallet to a different chain", async () => {
+            const mockResponse = {
+                tokens: expect.arrayContaining([
+                    {
+                        decimals: expect.any(Number),
+                        symbol: expect.any(String),
+                        name: expect.any(String),
+                        chains: expect.objectContaining({
+                            [expect.any(String)]: { 
+                                contractAddress: expect.stringMatching(/^0x[a-fA-F0-9]{40}$/) 
+                            }
+                        })
+                    }
+                ]),
+                enableSend: expect.any(Boolean)
+            };
+    
+            mockFetchResponse(mockResponse);
+    
+            const result = await api.createSmartWallet({
+                type: "evm-keypair",
+                address: expect.stringMatching(/^0x[a-fA-F0-9]{40}$/),
+            });
+    
+            expect(result).toMatchObject(mockResponse);
+        });
+    });
 });

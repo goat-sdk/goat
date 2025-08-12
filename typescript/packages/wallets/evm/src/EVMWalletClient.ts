@@ -6,7 +6,7 @@ import {
     WalletClientBase,
     createTool,
 } from "@goat-sdk/core";
-import { formatUnits, parseUnits } from "viem";
+import { Chain, formatUnits, parseUnits } from "viem";
 import { ERC20_ABI } from "./abi";
 import {
     approveParametersSchema,
@@ -20,7 +20,7 @@ import {
     signTypedDataParametersSchema,
 } from "./params.js";
 import { PREDEFINED_TOKENS, type Token } from "./tokens";
-import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTypedData } from "./types";
+import type { EVMReadRequest, EVMReadResult, EVMTransaction, EVMTransactionResult, EVMTypedData } from "./types";
 
 // Parameter types for EVM-specific methods
 export type ApproveParameters = {
@@ -59,10 +59,11 @@ export abstract class EVMWalletClient extends WalletClientBase {
     // getAddress, getChain, signMessage are already required by WalletClientBase
 
     // Abstract methods specific to EVM interaction layer
-    abstract sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }>;
+    abstract sendTransaction(transaction: EVMTransaction): Promise<EVMTransactionResult>;
     abstract read(request: EVMReadRequest): Promise<EVMReadResult>;
     abstract getNativeBalance(): Promise<bigint>;
     abstract signTypedData(data: EVMTypedData): Promise<Signature>;
+    abstract cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient;
     // Abstract method for getting native balance (needs implementation in concrete class)
     abstract getChain(): EvmChain;
 
