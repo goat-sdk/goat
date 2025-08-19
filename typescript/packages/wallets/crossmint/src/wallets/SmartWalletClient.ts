@@ -5,6 +5,7 @@ import {
     EVMReadRequest,
     EVMSmartWalletClient,
     EVMTransaction,
+    EVMTransactionResult,
     EVMTypedData,
     EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
@@ -279,7 +280,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return BigInt(balance);
     }
 
-    private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {
+    private async _sendBatchOfTransactions(transactions: EVMTransaction[]): Promise<EVMTransactionResult> {
         const transactionDatas = transactions.map((transaction) => {
             const { to: recipientAddress, abi, functionName, args, value, data } = transaction;
 
@@ -334,8 +335,8 @@ export class SmartWalletClient extends EVMSmartWalletClient {
 
             if (latestTransaction.status === "success" || latestTransaction.status === "failed") {
                 return {
+                    ...latestTransaction,
                     hash: latestTransaction.onChain?.txId ?? "",
-                    status: latestTransaction.status,
                 };
             }
 
