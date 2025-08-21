@@ -4,8 +4,10 @@
     "files": ["dist/**/*", "README.md", "package.json"],
     "scripts": {
         "build": "tsup",
+        "build:eval": "INCLUDE_EVAL=true tsup",
         "clean": "rm -rf dist",
-        "test": "vitest run --passWithNoTests"
+        "test": "vitest run --passWithNoTests",
+        "eval": "npm run build:eval && node dist/eval/index.js"
     },
     "sideEffects": false,
     "main": "./dist/index.js",
