@@ -656,6 +656,39 @@ importers:
         specifier: 3.23.8
         version: 3.23.8
 
+  examples/by-use-case/evm-read-1shot:
+    dependencies:
+      '@ai-sdk/openai':
+        specifier: ~1.0.4
+        version: 1.0.20(zod@3.23.8)
+      '@goat-sdk/adapter-vercel-ai':
+        specifier: 0.2.10
+        version: 0.2.10(@goat-sdk/core@0.4.9(zod@3.23.8))(ai@4.0.3(react@18.3.1)(zod@3.23.8))(zod@3.23.8)
+      '@goat-sdk/core':
+        specifier: 0.4.9
+        version: 0.4.9(zod@3.23.8)
+      '@goat-sdk/plugin-1shot':
+        specifier: workspace:*
+        version: link:../../../packages/plugins/1shot
+      '@goat-sdk/wallet-evm':
+        specifier: 0.2.11
+        version: 0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)
+      '@goat-sdk/wallet-viem':
+        specifier: 0.2.12
+        version: 0.2.12(@goat-sdk/wallet-evm@0.2.11(@goat-sdk/core@0.4.9(zod@3.23.8))(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10))(viem@2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8))
+      ai:
+        specifier: 4.0.3
+        version: 4.0.3(react@18.3.1)(zod@3.23.8)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.5.0
+      viem:
+        specifier: 2.23.4
+        version: 2.23.4(bufferutil@4.0.9)(typescript@5.8.2)(utf-8-validate@5.0.10)(zod@3.23.8)
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
+
   examples/by-use-case/evm-send-and-receive-tokens:
     dependencies:
       '@ai-sdk/openai':
@@ -1359,6 +1392,21 @@ importers:
       '@goat-sdk/wallet-evm':
         specifier: workspace:*
         version: link:../../wallets/evm
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+
+  packages/plugins/1shot:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@goat-sdk/wallet-evm':
+        specifier: workspace:*
+        version: link:../../wallets/evm
+      '@uxly/1shot-client':
+        specifier: 1.1.2
+        version: 1.1.2(zod@3.23.8)
       zod:
         specifier: 'catalog:'
         version: 3.23.8
@@ -6990,6 +7038,9 @@ packages:
   '@noble/ed25519@2.0.0':
     resolution: {integrity: sha512-/extjhkwFupyopDrt80OMWKdLgP429qLZj+z6sYJz90rF2Iz0gjZh2ArMKPImUl13Kx+0EXI2hN9T/KJV0/Zng==}
 
+  '@noble/ed25519@2.2.3':
+    resolution: {integrity: sha512-iHV8eI2mRcUmOx159QNrU8vTpQ/Xm70yJ2cTk3Trc86++02usfqFoNl6x0p3JN81ZDS/1gx6xiK0OwrgqCT43g==}
+
   '@noble/hashes@1.1.2':
     resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
 
@@ -9461,6 +9512,11 @@ packages:
   '@upstash/vector@1.1.7':
     resolution: {integrity: sha512-yxgXdH/Z2uX8XUVrLeo6ZNci2Z8EzXGwjIZ8EZwctF5+oiBIKwz8tsh/yUesyGrbuQ+ViBPGtZWV5vLFbp649w==}
 
+  '@uxly/1shot-client@1.1.2':
+    resolution: {integrity: sha512-Qx7VFC6K+yUGQatsPhd/6sB1dI90wf1eVzfHOyO1XWYu5ZCYbISO2Ei5VyhuWbkTJlemUi0+B4Vpk6mCk1zhng==}
+    peerDependencies:
+      zod: ^3.0.0
+
   '@vitest/expect@2.1.9':
     resolution: {integrity: sha512-UJCIkTBenHeKT1TTlKMJWy1laZewsRIzYighyYiJKZreqtdxSos/S1t+ktRMQWu2CKqaarrkeszJx1cgC5tGZw==}
 
@@ -9580,12 +9636,14 @@ packages:
 
   '@walletconnect/ethereum-provider@2.11.2':
     resolution: {integrity: sha512-BUDqee0Uy2rCZVkW5Ao3q6Ado/3fePYnFdryVF+YL6bPhj+xQZ5OfKodl+uvs7Rwq++O5wTX2RqOTzpW7+v+Mg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.20.0':
     resolution: {integrity: sha512-TSu1nr+AzCjM5u7xdnWTGX8ryKuHHb1Za56BD6UU0UPS7ZC2fZ99TVa5Q3Sng9JyksY5p99Iwg7fOtlozc3QYQ==}
 
   '@walletconnect/ethereum-provider@2.9.2':
     resolution: {integrity: sha512-eO1dkhZffV1g7vpG19XUJTw09M/bwGUwwhy1mJ3AOPbOSbMPvwiCuRz2Kbtm1g9B0Jv15Dl+TvJ9vTgYF8zoZg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
     peerDependencies:
       '@walletconnect/modal': '>=2'
     peerDependenciesMeta:
@@ -25619,6 +25677,8 @@ snapshots:
 
   '@noble/ed25519@2.0.0': {}
 
+  '@noble/ed25519@2.2.3': {}
+
   '@noble/hashes@1.1.2': {}
 
   '@noble/hashes@1.3.0': {}
@@ -29356,6 +29416,12 @@ snapshots:
       zhead: 2.2.4
 
   '@upstash/vector@1.1.7': {}
+
+  '@uxly/1shot-client@1.1.2(zod@3.23.8)':
+    dependencies:
+      '@noble/ed25519': 2.2.3
+      '@noble/hashes': 1.7.1
+      zod: 3.23.8
 
   '@vitest/expect@2.1.9':
     dependencies:
