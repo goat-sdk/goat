@@ -17,7 +17,6 @@
         "@goat-sdk/wallet-viem": "workspace:*",
         "@zilliqa-js/account": "3.5.0",
         "@zilliqa-js/zilliqa": "3.5.0",
-        "abitype": "^1.0.8",
         "viem": "catalog:",
         "zod": "catalog:"
     },
