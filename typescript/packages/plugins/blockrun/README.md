@@ -43,9 +43,11 @@ const tools = await getOnChainTools({
 
 ## How x402 Payments Work
 
+This plugin uses the official `@blockrun/llm` SDK which handles payments automatically:
+
 1. Your agent makes an API request to BlockRun
 2. BlockRun returns a 402 Payment Required with USDC amount
-3. The plugin signs a USDC transfer authorization using your private key (locally)
+3. The SDK signs a USDC transfer authorization using your private key (locally)
 4. The signed payment is sent with the retry request
 5. BlockRun processes the payment and returns the AI response
 
