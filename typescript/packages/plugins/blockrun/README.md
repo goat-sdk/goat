@@ -7,7 +7,12 @@ Access 31+ AI models (GPT-4, Claude, Gemini, and more) with pay-per-use USDC mic
 - **No API Keys Required**: Agents pay directly with USDC, no need to manage OpenAI/Anthropic API keys
 - **31+ AI Models**: Access GPT-4, Claude 3.5, Gemini 2.0, and more through a single endpoint
 - **Pay-Per-Use**: Only pay for what you use via x402 USDC micropayments on Base
+- **Base Network Only**: All payments are in USDC on Base (chain ID 8453)
 - **OpenAI Compatible**: Drop-in replacement for OpenAI API
+
+## Security
+
+Your private key **NEVER leaves your machine**. It is only used locally to sign EIP-712 payment authorizations. Only the signature is transmitted to BlockRun - we never see your private key. This is the same security model as signing any on-chain transaction with MetaMask.
 
 ## Installation
 
