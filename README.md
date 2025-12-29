@@ -148,6 +148,7 @@ GOAT is free software, MIT licensed.
 | Balmy | Swap tokens on Balmy | [@goat-sdk/plugin-balmy](https://www.npmjs.com/package/@goat-sdk/plugin-balmy) |
 | BetSwirl | Play casino games | [@goat-sdk/plugin-betswirl](https://www.npmjs.com/package/@goat-sdk/plugin-betswirl) |
 | BirdEye | Get token insights using BirdEye API | [@goat-sdk/plugin-birdeye](https://www.npmjs.com/package/@goat-sdk/plugin-birdeye) |
+| BlockRun | Access 31+ AI models (GPT-4, Claude, Gemini) with USDC micropayments via x402 | [@goat-sdk/plugin-blockrun](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/blockrun) |
 | BMX | Get token insights using BMX API | [@goat-sdk/plugin-bmx](https://www.npmjs.com/package/@goat-sdk/plugin-bmx) |
 | CoinGecko | Get coin information using CoinGecko API | [@goat-sdk/plugin-coingecko](https://www.npmjs.com/package/@goat-sdk/plugin-coingecko) | [goat-sdk-plugin-coingecko](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/coingecko) |
 | Coinmarketcap | Get coin information using Coinmarketcap API | [@goat-sdk/plugin-coinmarketcap](https://www.npmjs.com/package/@goat-sdk/plugin-coinmarketcap) |

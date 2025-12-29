@@ -1,0 +1,33 @@
+{
+    "name": "@goat-sdk/plugin-blockrun",
+    "version": "0.1.0",
+    "description": "BlockRun plugin for GOAT SDK - AI Gateway with x402 USDC payments",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "zod": "catalog:",
+        "@blockrun/llm": "^0.1.0"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*"
+    },
+    "homepage": "https://blockrun.ai",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3", "x402", "usdc", "payments", "llm", "openai", "claude", "blockrun"]
+}
