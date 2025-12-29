@@ -3,21 +3,25 @@ import { BlockRunAPIClient, ChatMessage } from "./api";
 import { ChatCompletionParameters, GenerateImageParameters, GetModelsParameters } from "./parameters";
 
 export interface BlockRunServiceOptions {
+    privateKey: `0x${string}`;
     baseUrl?: string;
 }
 
 export class BlockRunService {
     private readonly client: BlockRunAPIClient;
 
-    constructor(opts: BlockRunServiceOptions = {}) {
-        this.client = new BlockRunAPIClient(opts);
+    constructor(opts: BlockRunServiceOptions) {
+        this.client = new BlockRunAPIClient({
+            privateKey: opts.privateKey,
+            baseUrl: opts.baseUrl,
+        });
     }
 
     @Tool({
         description:
             "Send a prompt to an AI model and get a response using BlockRun's x402 payment gateway. " +
             "Supports 31+ models including GPT-4, Claude, Gemini. " +
-            "Payment is handled automatically via USDC micropayments.",
+            "Payment is handled automatically via USDC micropayments on Base.",
     })
     async chatCompletion(parameters: ChatCompletionParameters) {
         const { model, prompt, systemPrompt, maxTokens, temperature } = parameters;
@@ -45,7 +49,7 @@ export class BlockRunService {
     @Tool({
         description:
             "Generate an image using AI models like DALL-E 3 via BlockRun's x402 payment gateway. " +
-            "Payment is handled automatically via USDC micropayments.",
+            "Payment is handled automatically via USDC micropayments on Base.",
     })
     async generateImage(parameters: GenerateImageParameters) {
         const { model, prompt, size, n } = parameters;

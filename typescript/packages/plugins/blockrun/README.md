@@ -27,9 +27,24 @@ import { getOnChainTools } from "@goat-sdk/adapter-langchain";
 
 const tools = await getOnChainTools({
     wallet: myWallet,
-    plugins: [blockrun()],
+    plugins: [
+        blockrun({
+            // Private key for signing x402 payments (used locally, never transmitted)
+            privateKey: process.env.PRIVATE_KEY as `0x${string}`,
+        }),
+    ],
 });
 ```
+
+## How x402 Payments Work
+
+1. Your agent makes an API request to BlockRun
+2. BlockRun returns a 402 Payment Required with USDC amount
+3. The plugin signs a USDC transfer authorization using your private key (locally)
+4. The signed payment is sent with the retry request
+5. BlockRun processes the payment and returns the AI response
+
+Your private key is **never transmitted** - it's only used locally to sign the EIP-712 payment authorization.
 
 ## Available Tools
 
