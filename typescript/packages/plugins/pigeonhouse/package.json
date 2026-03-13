@@ -1,0 +1,33 @@
+{
+  "name": "@goat-sdk/plugin-pigeonhouse",
+  "version": "0.1.0",
+  "files": ["dist/**/*", "README.md", "package.json"],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "test": "vitest run --passWithNoTests"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@goat-sdk/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@goat-sdk/wallet-solana": ">=0.2.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "homepage": "https://ohmygoat.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goat-sdk/goat.git",
+    "directory": "typescript/packages/plugins/pigeonhouse"
+  },
+  "license": "MIT",
+  "keywords": ["goat", "solana", "pigeonhouse", "defi", "bonding-curve", "burn", "ai"]
+}
