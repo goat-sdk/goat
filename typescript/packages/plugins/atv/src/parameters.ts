@@ -7,14 +7,8 @@ export class NoParams extends createToolParameters(z.object({})) {}
 
 export class ListVaultsParameters extends createToolParameters(
     z.object({
-        chain: z
-            .string()
-            .optional()
-            .describe("Filter by chain name or ID (e.g. 'ethereum', 'base', '8453')"),
-        userAddress: z
-            .string()
-            .optional()
-            .describe("EVM address to include token balances for each deposit token"),
+        chain: z.string().optional().describe("Filter by chain name or ID (e.g. 'ethereum', 'base', '8453')"),
+        userAddress: z.string().optional().describe("EVM address to include token balances for each deposit token"),
     }),
 ) {}
 
@@ -55,9 +49,7 @@ export class DepositParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
         depositTokenAddress: z.string().describe("ERC20 token address to deposit"),
-        depositAmount: z
-            .string()
-            .describe("Human-readable deposit amount, e.g. '100' for 100 USDC"),
+        depositAmount: z.string().describe("Human-readable deposit amount, e.g. '100' for 100 USDC"),
     }),
 ) {}
 
@@ -67,21 +59,15 @@ export class StakeParameters extends createToolParameters(
         lockPeriodIndex: z
             .string()
             .describe("0-indexed lock period to select from the timelock contract (e.g. '0', '1', '2')"),
-        stakeAmount: z
-            .string()
-            .describe("Human-readable vault token amount to stake, e.g. '100'"),
+        stakeAmount: z.string().describe("Human-readable vault token amount to stake, e.g. '100'"),
     }),
 ) {}
 
 export class UnstakeParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
-        stakeIndex: z
-            .string()
-            .describe("0-indexed position in the user's stake array to unstake from"),
-        unstakeAmount: z
-            .string()
-            .describe("Human-readable vault token amount to unstake, e.g. '100'"),
+        stakeIndex: z.string().describe("0-indexed position in the user's stake array to unstake from"),
+        unstakeAmount: z.string().describe("Human-readable vault token amount to unstake, e.g. '100'"),
     }),
 ) {}
 
@@ -89,49 +75,31 @@ export class WithdrawParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
         oTokenAddress: z.string().describe("Output token address to receive"),
-        sharesToWithdraw: z
-            .string()
-            .describe("Human-readable share amount to withdraw, e.g. '100'"),
-        slippage: z
-            .string()
-            .optional()
-            .describe("Slippage tolerance as a percentage, e.g. '0.5'"),
+        sharesToWithdraw: z.string().describe("Human-readable share amount to withdraw, e.g. '100'"),
+        slippage: z.string().optional().describe("Slippage tolerance as a percentage, e.g. '0.5'"),
     }),
 ) {}
 
 export class QueueWithdrawParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
-        withdrawTokenAddress: z
-            .string()
-            .describe("Output token address to receive when the withdrawal is redeemed"),
-        tokensToWithdraw: z
-            .string()
-            .describe("Human-readable vault share amount to queue for withdrawal"),
+        withdrawTokenAddress: z.string().describe("Output token address to receive when the withdrawal is redeemed"),
+        tokensToWithdraw: z.string().describe("Human-readable vault share amount to queue for withdrawal"),
     }),
 ) {}
 
 export class UnqueueWithdrawParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
-        oTokenAddress: z
-            .string()
-            .describe("Output token address of the queued request to cancel"),
-        requestId: z
-            .string()
-            .optional()
-            .describe("Specific request ID to cancel (omit to cancel the latest request)"),
+        oTokenAddress: z.string().describe("Output token address of the queued request to cancel"),
+        requestId: z.string().optional().describe("Specific request ID to cancel (omit to cancel the latest request)"),
     }),
 ) {}
 
 export class RedeemWithdrawParameters extends createToolParameters(
     z.object({
         vaultAddress: z.string().describe("Vault contract address"),
-        oTokens: z
-            .string()
-            .describe("Human-readable amount of output tokens to redeem"),
-        batchCounter: z
-            .string()
-            .describe("Batch identifier from the queue contract for this withdrawal"),
+        oTokens: z.string().describe("Human-readable amount of output tokens to redeem"),
+        batchCounter: z.string().describe("Batch identifier from the queue contract for this withdrawal"),
     }),
 ) {}

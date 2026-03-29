@@ -24,9 +24,7 @@ export class ATVAPI {
         const response = await fetch(url.toString(), { headers });
 
         if (!response.ok) {
-            throw new Error(
-                `ATV API error ${response.status} on GET ${endpoint}: ${await response.text()}`,
-            );
+            throw new Error(`ATV API error ${response.status} on GET ${endpoint}: ${await response.text()}`);
         }
 
         return response.json() as Promise<T>;
@@ -47,9 +45,7 @@ export class ATVAPI {
         });
 
         if (!response.ok) {
-            throw new Error(
-                `ATV API error ${response.status} on POST ${endpoint}: ${await response.text()}`,
-            );
+            throw new Error(`ATV API error ${response.status} on POST ${endpoint}: ${await response.text()}`);
         }
 
         return response.json() as Promise<T>;

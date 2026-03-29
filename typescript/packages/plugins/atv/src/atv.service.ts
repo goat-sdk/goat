@@ -36,8 +36,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_vault_apy",
-        description:
-            "Get the current APY breakdown (base + reward + total) for an ATV vault.",
+        description: "Get the current APY breakdown (base + reward + total) for an ATV vault.",
     })
     async getVaultApy(parameters: VaultAddressParameters) {
         return this.api.get(`/vaults/${parameters.address}/apy`);
@@ -45,8 +44,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_vault_tvl",
-        description:
-            "Get the current Total Value Locked (TVL) of an ATV vault in USD.",
+        description: "Get the current Total Value Locked (TVL) of an ATV vault in USD.",
     })
     async getVaultTvl(parameters: VaultAddressParameters) {
         return this.api.get(`/vaults/${parameters.address}/tvl`);
@@ -62,8 +60,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_vault_nav",
-        description:
-            "Get the current Net Asset Value (NAV) of an ATV vault in USD.",
+        description: "Get the current Net Asset Value (NAV) of an ATV vault in USD.",
     })
     async getVaultNav(parameters: VaultAddressParameters) {
         return this.api.get(`/vaults/${parameters.address}/nav`);
@@ -93,8 +90,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_vault_portfolio",
-        description:
-            "Get the underlying token portfolio and breakdown data for an ATV vault.",
+        description: "Get the underlying token portfolio and breakdown data for an ATV vault.",
     })
     async getVaultPortfolio(parameters: VaultAddressParameters) {
         return this.api.get(`/vaults/${parameters.address}/portfolio`);
@@ -102,8 +98,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_user_investments",
-        description:
-            "Get a user's investment portfolio and position data for a specific ATV vault.",
+        description: "Get a user's investment portfolio and position data for a specific ATV vault.",
     })
     async getUserInvestments(parameters: UserInvestmentsParameters) {
         return this.api.get(`/vaults/${parameters.vaultAddress}/investments`, {
@@ -131,8 +126,7 @@ export class ATVService {
 
     @Tool({
         name: "atv_get_queue_withdraw_status",
-        description:
-            "Check whether queued (delayed) withdrawals are currently paused on an ATV vault.",
+        description: "Check whether queued (delayed) withdrawals are currently paused on an ATV vault.",
     })
     async getQueueWithdrawStatus(parameters: VaultAddressParameters) {
         return this.api.get(`/vaults/${parameters.address}/withdraw/queue/status`);

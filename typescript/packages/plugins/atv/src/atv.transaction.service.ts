@@ -56,8 +56,7 @@ export class ATVTransactionService {
 
     @Tool({
         name: "atv_unstake",
-        description:
-            "Unstake vault tokens from a timelock contract. Returns the transaction hash.",
+        description: "Unstake vault tokens from a timelock contract. Returns the transaction hash.",
     })
     async unstake(walletClient: EVMWalletClient, parameters: UnstakeParameters) {
         const userAddress = walletClient.getAddress();
@@ -108,8 +107,7 @@ export class ATVTransactionService {
 
     @Tool({
         name: "atv_unqueue_withdraw",
-        description:
-            "Cancel a pending queued withdrawal request from an ATV vault. Returns the transaction hash.",
+        description: "Cancel a pending queued withdrawal request from an ATV vault. Returns the transaction hash.",
     })
     async unqueueWithdraw(walletClient: EVMWalletClient, parameters: UnqueueWithdrawParameters) {
         const userAddress = walletClient.getAddress();
@@ -125,8 +123,7 @@ export class ATVTransactionService {
 
     @Tool({
         name: "atv_redeem_withdraw",
-        description:
-            "Claim (redeem) a completed queued withdrawal from an ATV vault. Returns the transaction hash.",
+        description: "Claim (redeem) a completed queued withdrawal from an ATV vault. Returns the transaction hash.",
     })
     async redeemWithdraw(walletClient: EVMWalletClient, parameters: RedeemWithdrawParameters) {
         const userAddress = walletClient.getAddress();
