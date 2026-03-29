@@ -1,5 +1,5 @@
 export class ATVAPI {
-    public static readonly DEFAULT_BASE_URL = "https://api.aarna.finance";
+    public static readonly DEFAULT_BASE_URL = "https://atv-api.aarna.ai";
 
     constructor(
         private readonly baseUrl: string,

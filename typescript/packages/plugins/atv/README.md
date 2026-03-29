@@ -19,7 +19,7 @@ const tools = await getOnChainTools({
     wallet: viem(walletClient),
     plugins: [
         atv({
-            baseUrl: "https://api.aarna.finance", // optional, this is the default
+            baseUrl: "https://atv-api.aarna.ai", // optional, this is the default
             apiKey: process.env.ATV_API_KEY,      // optional
         }),
     ],
