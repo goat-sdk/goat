@@ -1,32 +1,39 @@
 import { Tool } from "@goat-sdk/core";
 
+const API = "https://cryptogenesis.duckdns.org/token";
+
 export class SafeAgentService {
     @Tool({
-        name: "check_token_safety",
-        description: "Check if a token is safe before buying. Detects honeypots, rug pulls, 17 scam patterns. Returns score 0-100. Use this BEFORE any swap.",
+        name: "shield",
+        description: "THE FIREWALL — Check any crypto action before executing. Returns GO or BLOCK. Runs safety check + real honeypot simulation via DEX swap. Without Shield, agent might lose everything.",
     })
-    async checkTokenSafety(parameters: {
-        tokenAddress: string;
+    async shield(parameters: {
+        token: string;
+        action?: string;
         chain?: string;
     }): Promise<string> {
-        const chain = parameters.chain || "base";
-        const response = await fetch(
-            `https://cryptogenesis.duckdns.org/token/scan?address=${parameters.tokenAddress}&chain=${chain}`
-        );
-        const data = await response.json();
+        const { token, action = "check", chain = "base" } = parameters;
 
-        const score = data.safety_score ?? 0;
-        const verdict = data.verdict ?? "UNKNOWN";
-        const flags = data.flags ?? [];
-        const token = data.token ?? {};
+        // Safety check
+        const safety = await fetch(`${API}/scan?address=${token}&chain=${chain}`);
+        const sd = await safety.json();
+        const score = sd.safety_score ?? 0;
 
-        let result = `${token.name || "?"} (${token.symbol || "?"}): ${score}/100 — ${verdict}\n`;
+        // Honeypot sim
+        const hp = await fetch(`${API}/honeypot?address=${token}&chain=${chain}`);
+        const hd = await hp.json();
 
-        if (score < 40) result += "🚫 DO NOT BUY — likely scam\n";
-        else if (score < 70) result += "⚠️ CAUTION — risks detected\n";
-        else result += "✅ Safe to trade\n";
+        let result = `🛡️ SHIELD — ${sd.token?.name || "?"} (${sd.token?.symbol || "?"})\n`;
+        result += `Safety: ${score}/100 — ${sd.verdict}\n`;
 
-        if (flags.length > 0) result += `Risks: ${flags.join(", ")}\n`;
+        if (hd.simulated) {
+            if (hd.honeypot) return result + `🚫 HONEYPOT — BLOCKED. Cannot sell.\n`;
+            result += `✅ Sell OK — tax: ${hd.total_tax_pct}%\n`;
+        }
+
+        if (score >= 70) result += `DECISION: ✅ GO`;
+        else if (score >= 40) result += `DECISION: ⚠️ CAUTION`;
+        else result += `DECISION: ❌ BLOCKED`;
 
         return result;
     }
