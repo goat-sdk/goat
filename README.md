@@ -181,6 +181,7 @@ GOAT is free software, MIT licensed.
 | PlunderSwap | Currency exchange on Zilliqa | [@goat-sdk/plugin-plunderswap](https://www.npmjs.com/package/@goat-sdk/plugin-plunderswap) |
 | Polymarket | Bet on Polymarket | [@goat-sdk/plugin-polymarket](https://www.npmjs.com/package/@goat-sdk/plugin-polymarket) |
 | Pump.fun | Launch a token on Pump.fun | [@goat-sdk/plugin-pump-fun](https://www.npmjs.com/package/@goat-sdk/plugin-pump-fun) |
+| QuantOracle | Deterministic quant finance math — Black-Scholes, Kelly, Monte Carlo, risk audit, hedge recommender, IL, liquidation price. Free tier + x402 paid composites on Base & Solana | [@quantoracle/goat-plugin](https://www.npmjs.com/package/@quantoracle/goat-plugin) |
 | Renzo | Create a position on Renzo | [@goat-sdk/plugin-renzo](https://www.npmjs.com/package/@goat-sdk/plugin-renzo) |
 | Rugcheck | Check SPL token validity on Rugcheck | [@goat-sdk/plugin-rugcheck](https://www.npmjs.com/package/@goat-sdk/plugin-rugcheck) | [goat-sdk-plugin-rugcheck](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/rugcheck) |
 | SNS | Interact with SNS | [@goat-sdk/plugin-sns](https://www.npmjs.com/package/@goat-sdk/plugin-sns) |
