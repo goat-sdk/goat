@@ -64,7 +64,7 @@ class CreateOrderTransactionParameters(BaseModel):
     )
     dstIntermediaryTokenSpenderAddress: Optional[str] = Field(
         description=
-        "Applicable to a EVM-compatible destination chain. An address (on a EVM-compatible destination chain) assumed as a spender of the intermediary token (set as dstIntermediaryTokenAddress) during order fulfillment"
+        "Applicable to an EVM-compatible destination chain. An address (on an EVM-compatible destination chain) assumed as a spender of the intermediary token (set as dstIntermediaryTokenAddress) during order fulfillment"
     )
     intermediaryTokenUSDPrice: Optional[float] = Field(
         description=
