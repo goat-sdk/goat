@@ -170,6 +170,7 @@ GOAT is free software, MIT licensed.
 | Jupiter | Swap tokens on Jupiter | [@goat-sdk/plugin-jupiter](https://www.npmjs.com/package/@goat-sdk/plugin-jupiter) | [goat-sdk-plugin-jupiter](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/jupiter) |
 | KIM | Swap tokens on KIM | [@goat-sdk/plugin-kim](https://www.npmjs.com/package/@goat-sdk/plugin-kim) |
 | Lulo | Deposit and Withdraw USDC on Lulo | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo) |
+| MadeOnSol | Solana memecoin intelligence: KOL trade feeds, coordination signals, pump.fun deployer reputation, buyer-quality scoring | [@goat-sdk/plugin-madeonsol](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/madeonsol) |
 | Mayan | Cross-chain token swap using Mayan SDK (Solana, EVM, SUI) | [@goat-sdk/plugin-mayan](https://www.npmjs.com/package/@goat-sdk/plugin-mayan) |
 | Meteora | Create liquidity pools on Meteora | [@goat-sdk/plugin-meteora](https://www.npmjs.com/package/@goat-sdk/plugin-meteora) |
 | Mode Governance | Create a governance proposal on Mode | [@goat-sdk/plugin-mode-governance](https://www.npmjs.com/package/@goat-sdk/plugin-mode-governance) |
