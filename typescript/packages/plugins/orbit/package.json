@@ -1,0 +1,40 @@
+{
+  "name": "@goat-sdk/plugin-orbit",
+  "version": "0.1.0",
+  "description": "GOAT SDK plugin for Orbit Finance DLMM — swap, liquidity, and price tools for any AI agent",
+  "license": "MIT",
+  "files": ["dist/**/*", "README.md", "package.json"],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "test": "vitest run --passWithNoTests"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "@goat-sdk/wallet-solana": "workspace:*",
+    "@solana/web3.js": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "@goat-sdk/core": "workspace:*",
+    "orbit-dlmm": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "orbit-dlmm": {
+      "optional": true
+    }
+  },
+  "homepage": "https://ohmygoat.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goat-sdk/goat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/goat-sdk/goat/issues"
+  },
+  "keywords": ["ai", "agents", "web3"]
+}
