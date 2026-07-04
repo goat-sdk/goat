@@ -20,7 +20,7 @@
         "@goat-sdk/plugin-crossmint-headless-checkout": "0.0.14",
         "@goat-sdk/plugin-spl-token": "0.2.19",
         "@goat-sdk/wallet-solana": "0.3.1",
-        "@modelcontextprotocol/sdk": "1.6.0",
+        "@modelcontextprotocol/sdk": "1.26.0",
         "@solana/web3.js": "1.98.0",
         "bip39": "^3.1.0",
         "bs58": "^6.0.0",
