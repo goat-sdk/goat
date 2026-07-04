@@ -108,16 +108,7 @@ export async function getPosition(
 }
 
 function base64EncodeURL(byteArray: Uint8Array) {
-    return btoa(
-        Array.from(new Uint8Array(byteArray))
-            .map((val) => {
-                return String.fromCharCode(val);
-            })
-            .join(""),
-    )
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=/g, "");
+    return Buffer.from(byteArray).toString("base64url");
 }
 
 export function getBaseUrlFromNetwork(network: "mainnet" | "testnet"): string {
