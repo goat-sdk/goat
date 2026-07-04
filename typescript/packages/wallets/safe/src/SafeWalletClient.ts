@@ -4,6 +4,7 @@ import {
     EVMSmartWalletClient,
     type EVMTransaction,
     type EVMTypedData,
+    EVMWalletClient,
 } from "@goat-sdk/wallet-evm";
 import { SigningMethod } from "@safe-global/protocol-kit";
 import {
@@ -145,7 +146,7 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         }
     }
 
-    async sendTransaction(transaction: EVMTransaction): Promise<{ hash: string }> {
+    async sendTransaction(transaction: EVMTransaction) {
         try {
             const metaTransaction = {
                 to: transaction.to,
@@ -154,7 +155,10 @@ export class SafeWalletClient extends EVMSmartWalletClient {
             };
 
             const result = await this.#createAndExecuteTransaction([metaTransaction]);
-            return { hash: result.transactions?.ethereumTxHash ?? "" };
+            return {
+                ...result,
+                hash: result.transactions?.ethereumTxHash ?? "",
+            };
         } catch (error) {
             throw new SafeWalletError(
                 `Failed to send transaction: ${error instanceof Error ? error.message : String(error)}`,
@@ -272,6 +276,10 @@ export class SafeWalletClient extends EVMSmartWalletClient {
         if (this.#isDeployed) return true;
 
         return await this.#safeAccount.isDeployed();
+    }
+
+    cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
+        return new SafeWalletClient(this.#privateKey, chain, this.#saltNonce);
     }
 }
 

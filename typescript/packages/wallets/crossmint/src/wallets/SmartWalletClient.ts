@@ -5,10 +5,12 @@ import {
     EVMReadRequest,
     EVMSmartWalletClient,
     EVMTransaction,
+    EVMTransactionResult,
     EVMTypedData,
+    EVMWalletClient,
     EVMWalletClientCtorParams,
 } from "@goat-sdk/wallet-evm";
-import { http, Abi, type PublicClient, createPublicClient, encodeFunctionData } from "viem";
+import { http, Abi, Chain, type PublicClient, createPublicClient, encodeFunctionData } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { mainnet } from "viem/chains";
 import { SupportedSmartWalletChains, getViemChain } from "../chains";
@@ -103,6 +105,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
     #chain: SupportedSmartWalletChains;
     #signer: CustodialSigner | KeyPairSigner;
     #address: string;
+    #linkedUser: LinkedUser | undefined;
     #viemClient: PublicClient;
     #ensClient: PublicClient;
 
@@ -131,6 +134,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         this.#client = apiClient;
         this.#chain = options.chain;
         this.#signer = options.signer;
+        this.#linkedUser = options.linkedUser;
 
         this.#viemClient = createPublicClient({
             chain: getViemChain(options.chain),
@@ -271,6 +275,53 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return { value: result };
     }
 
+    private chainNameToSupportedSmartWalletChain(chainName: string): SupportedSmartWalletChains {
+        if (chainName === "sepolia") {
+            return "ethereum-sepolia" as SupportedSmartWalletChains;
+        }
+        const knownSuffixes = [
+            "amoy",
+            "sepolia",
+            "testnet",
+            "fuji",
+            "hoodi",
+            "devnet",
+            "goerli",
+            "holesky",
+            "mumbai",
+            "chiado",
+            "caldera",
+            "chapel",
+            "sandstorm",
+        ];
+
+        return chainName
+            .toLowerCase()
+            .replace(new RegExp(`-?(${knownSuffixes.join("|")})`, "i"), "-$1") as SupportedSmartWalletChains;
+    }
+
+    cloneWithNewChainAndRpc(chain: Chain, rpcUrls?: { default: string; ens?: string }): EVMWalletClient {
+        if (rpcUrls?.default === undefined) {
+            throw new Error("rpcUrls.default is required for SmartWalletClient.cloneWithNewChainAndRpc");
+        }
+        const walletClient = new SmartWalletClient(this.#address, this.#client, {
+            provider: rpcUrls.default,
+            signer: this.#signer,
+            address: this.#address,
+            chain: this.chainNameToSupportedSmartWalletChain(chain.name),
+            options: {
+                ensProvider: rpcUrls?.ens,
+            },
+            linkedUser: this.#linkedUser,
+            tokens: this.tokens, // * not set in constructor
+            enableSend: this.enableSend, // * not set in constructor
+        });
+        if (rpcUrls?.ens !== undefined) {
+            walletClient.#ensClient = this.#ensClient;
+        }
+        return walletClient;
+    }
+
     async getNativeBalance() {
         const balance = await this.#viemClient.getBalance({
             address: this.#address as `0x${string}`,
@@ -279,7 +330,7 @@ export class SmartWalletClient extends EVMSmartWalletClient {
         return BigInt(balance);
     }
 
-    private async _sendBatchOfTransactions(transactions: EVMTransaction[]) {
+    private async _sendBatchOfTransactions(transactions: EVMTransaction[]): Promise<EVMTransactionResult> {
         const transactionDatas = transactions.map((transaction) => {
             const { to: recipientAddress, abi, functionName, args, value, data } = transaction;
 
@@ -334,8 +385,8 @@ export class SmartWalletClient extends EVMSmartWalletClient {
 
             if (latestTransaction.status === "success" || latestTransaction.status === "failed") {
                 return {
+                    ...latestTransaction,
                     hash: latestTransaction.onChain?.txId ?? "",
-                    status: latestTransaction.status,
                 };
             }
 
