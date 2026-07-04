@@ -6,7 +6,7 @@
 
 <div>
 <img src="https://img.shields.io/npm/dm/%40goat-sdk%2Fcore" alt="NPM Downloads">
-
+<a href="https://github.com/goat-sdk/goat/blob/main/LICENSE">
 <img src="https://img.shields.io/github/license/goat-sdk/goat" alt="GitHub License">
 </div>
 <div>
