@@ -16,7 +16,7 @@
         "@goat-sdk/wallet-evm": "0.2.11",
         "@goat-sdk/wallet-viem": "0.2.12",
         "ai": "~4.0.3",
-        "ajv": "8.17.1",
+        "ajv": "8.18.0",
         "dotenv": "^16.4.5",
         "express": "4.21.2",
         "swagger-ui-express": "5.0.1",
