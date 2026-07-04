@@ -17,7 +17,7 @@
         "@goat-sdk/core": "0.5.0",
         "@goat-sdk/plugin-polymarket": "0.3.14",
         "@goat-sdk/wallet-viem": "0.3.0",
-        "ai": "4.0.22",
+        "ai": "5.0.52",
         "dotenv": "^16.4.5",
         "viem": "2.23.4",
         "zod": "3.23.8"
