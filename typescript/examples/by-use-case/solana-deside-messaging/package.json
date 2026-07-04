@@ -1,0 +1,22 @@
+{
+    "name": "goat-examples-solana-deside-messaging",
+    "version": "0.0.0",
+    "description": "Smoke harness for the GOAT Deside messaging plugin",
+    "private": true,
+    "scripts": {
+        "example": "tsx index.ts",
+        "smoke": "tsx smoke.ts",
+        "test": "vitest run --passWithNoTests"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@desideapp/mcp-sdk": "^0.1.0",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/plugin-deside": "workspace:*",
+        "@goat-sdk/wallet-solana": "workspace:*",
+        "@solana/web3.js": "catalog:",
+        "bs58": "^6.0.0",
+        "dotenv": "^16.4.5",
+        "zod": "3.23.8"
+    }
+}
