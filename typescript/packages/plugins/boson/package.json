@@ -1,0 +1,39 @@
+{
+    "name": "@goat-sdk/plugin-boson",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "dependencies": {
+        "@bosonprotocol/agentic-commerce": "^1.2.4",
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:",
+        "zod": "catalog:"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "viem": "catalog:"
+    },
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    },
+    "keywords": ["ai", "agents", "web3", "boson", "commerce", "ecommerce"],
+    "devDependencies": {
+        "@swc/core": "1.10.1",
+        "unplugin-swc": "^1.5.9"
+    }
+}

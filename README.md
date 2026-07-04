@@ -152,6 +152,7 @@ GOAT is free software, MIT licensed.
 | BetSwirl | Play casino games | [@goat-sdk/plugin-betswirl](https://www.npmjs.com/package/@goat-sdk/plugin-betswirl) |
 | BirdEye | Get token insights using BirdEye API | [@goat-sdk/plugin-birdeye](https://www.npmjs.com/package/@goat-sdk/plugin-birdeye) |
 | BMX | Get token insights using BMX API | [@goat-sdk/plugin-bmx](https://www.npmjs.com/package/@goat-sdk/plugin-bmx) |
+| Boson | Buy physical and digital goods on Boson Protocol | [@goat-sdk/plugin-boson](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/boson) |
 | CoinGecko | Get coin information using CoinGecko API | [@goat-sdk/plugin-coingecko](https://www.npmjs.com/package/@goat-sdk/plugin-coingecko) | [goat-sdk-plugin-coingecko](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/coingecko) |
 | Coinmarketcap | Get coin information using Coinmarketcap API | [@goat-sdk/plugin-coinmarketcap](https://www.npmjs.com/package/@goat-sdk/plugin-coinmarketcap) |
 | Cosmosbank | Interact with Cosmos tokens | [@goat-sdk/plugin-cosmosbank](https://www.npmjs.com/package/@goat-sdk/plugin-cosmosbank) |

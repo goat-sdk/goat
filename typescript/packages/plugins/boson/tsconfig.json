@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "../../../tsconfig.base.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@goat-sdk/core": ["./node_modules/@goat-sdk/core/src/index.ts"],
+            "@goat-sdk/wallet-evm": ["./node_modules/@goat-sdk/wallet-evm/src/index.ts"]
+        }
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}
