@@ -1,0 +1,16 @@
+{
+  "name": "@goat-sdk/plugin-safeagent",
+  "version": "0.1.0",
+  "description": "SafeAgent plugin for GOAT SDK — Token safety checks across 6 EVM chains",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist/**/*"],
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@goat-sdk/core": "workspace:*"
+  },
+  "keywords": ["goat", "plugin", "token-safety", "honeypot", "scam-detection"],
+  "license": "MIT"
+}
