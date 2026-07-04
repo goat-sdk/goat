@@ -6,9 +6,9 @@ import {
     ModelClass,
     type State,
     composeContext,
-    generateObjectV2,
+    generateObject,
     generateText,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import {
     type PluginBase,
     type ToolBase,
@@ -98,7 +98,7 @@ ${addParametersToDescription("", tool.parameters)}
 }
 
 async function generateParameters(runtime: IAgentRuntime, context: string, tool: ToolBase): Promise<unknown> {
-    const { object } = await generateObjectV2({
+    const { object } = await generateObject({
         runtime,
         context,
         modelClass: ModelClass.LARGE,

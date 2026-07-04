@@ -1,4 +1,4 @@
-import type { TypedDataDomain } from "abitype";
+import type { TypedDataDomain } from "viem";
 
 export type EVMTypedData = {
     domain: TypedDataDomain;
