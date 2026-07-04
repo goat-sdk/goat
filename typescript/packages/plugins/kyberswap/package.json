@@ -1,0 +1,35 @@
+{
+    "name": "@goat-sdk/plugin-kyberswap",
+    "version": "0.1.0",
+    "description": "GOAT plugin for KyberSwap DEX Aggregator — swap tokens and add liquidity across 15+ EVM chains",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": {
+        "build": "tsup",
+        "clean": "rm -rf dist",
+        "test": "vitest run --passWithNoTests"
+    },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "dependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "@goat-sdk/wallet-evm": "workspace:*",
+        "viem": "catalog:",
+        "zod": "catalog:"
+    },
+    "peerDependencies": {
+        "@goat-sdk/core": "workspace:*",
+        "viem": "catalog:"
+    },
+    "keywords": ["ai", "agents", "web3", "kyberswap", "defi", "dex", "swap", "aggregator", "evm"],
+    "license": "MIT",
+    "homepage": "https://ohmygoat.dev",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/goat-sdk/goat.git"
+    },
+    "bugs": {
+        "url": "https://github.com/goat-sdk/goat/issues"
+    }
+}
