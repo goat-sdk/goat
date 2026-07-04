@@ -254,3 +254,63 @@ See guides on how to do that here:
 # 🤝 Community
 - Follow us on [X](https://x.com/goat_sdk)
 - Join our [Discord](https://discord.gg/goat-sdk)
+
+## FAQ
+
+### What is GOAT?
+
+GOAT (Great Onchain Agent Toolkit) is the largest agentic finance toolkit for AI agents. It enables AI agents to become economic actors by giving them wallets and access to +200 financial tools for sending/receiving payments, purchasing digital goods, investing, earning yield, and more.
+
+### What can AI agents do with GOAT?
+
+| Capability | Description |
+|------------|-------------|
+| **Payments** | Send and receive payments via blockchain |
+| **Purchases** | Buy digital goods and services |
+| **Investments** | Engage in various investment strategies |
+| **Yield** | Earn yield on assets |
+| **Prediction Markets** | Participate in prediction markets |
+| **Tokenization** | Tokenize and manage assets |
+
+### How do I get started?
+
+1. **Give your agent a wallet** - Configure wallet integration
+2. **Let it transact** - Choose supported chains
+3. **Use +200 tools** - Install only the tools you need
+4. **Choose your agent framework** - Works with any framework
+
+### What languages are supported?
+
+- **TypeScript**: npm install @goat-sdk/core
+- **Python**: pip install goat-sdk
+
+### What are the key features?
+
+| Feature | Description |
+|---------|-------------|
+| **Lightweight** | Minimal core, install only needed tools |
+| **Extendable** | Easy to create plugins and integrations |
+| **Modular** | Pick and choose specific tools |
+| **Multi-chain** | Support for multiple blockchains |
+| **Multi-wallet** | Various wallet integrations |
+| **Framework-agnostic** | Works with any agent framework |
+
+### What chains and wallets are supported?
+
+GOAT supports major blockchains (Ethereum, Solana, Base, etc.) and wallet providers. See the Tools and Chains and wallets sections for details.
+
+### What agent frameworks work with GOAT?
+
+GOAT works with any agent framework including LangChain, AutoGen, CrewAI, and more.
+
+### How can I extend GOAT?
+
+You can easily create a custom plugin, integrate a new chain, integrate a new wallet, or integrate a new agent framework. See Contributing for details.
+
+### What license does GOAT use?
+
+GOAT is MIT licensed - free for commercial and personal use.
+
+### Where can I get help?
+
+Documentation, examples, issues, and community discussions are available.
