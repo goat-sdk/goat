@@ -6,7 +6,7 @@
 </div>
 
 # YieldSignal GOAT Plugin
-Get a real-time, risk-weighted USDC or WETH lending APY signal across Aave, Compound, Morpho, Moonwell, Euler and Fluid on Base — paid per call ($0.01 USDC) via the [x402](https://x402.org) protocol through [YieldSignal](https://yieldsignal.vercel.app).
+Get a real-time, risk-weighted yield signal — ETH liquid staking APY on Ethereum mainnet (Lido, Rocket Pool, Coinbase Wrapped Staked ETH, Frax Ether, Binance Staked ETH), or USDC/WETH lending APY on Base (Aave, Compound, Morpho, Moonwell, Euler, Fluid) — paid per call ($0.01 USDC) via the [x402](https://x402.org) protocol through [YieldSignal](https://yieldsignal.vercel.app).
 
 Every response is signed (EIP-712 typed data) by the payment-receiving address, which also holds an [ERC-8004](https://eips.ethereum.org/EIPS/eip-8004) agent identity (`/agent-card.json`) and periodically publishes [EAS](https://base.easscan.org) attestations of past readings on Base mainnet (`/track-record`) — a public, permanent track record that doesn't depend on trusting the server's uptime.
 
@@ -34,7 +34,9 @@ const tools = await getOnChainTools({
 ```
 
 ## Tools
-1. `get_yield_signal` — returns the current best lending protocol and risk-weighted APY (bps) for USDC or WETH on Base, plus the full per-protocol breakdown used to compute it.
+1. `get_yield_signal` — returns the current best protocol and risk-weighted APY (bps) for the requested market (`ETH_STAKING`, `USDC` or `WETH`), plus the full per-protocol breakdown used to compute it. Every protocol is compared on one basis — base interest **plus** incentives — and the response lists any protocol it could not read (`omittedProtocols`/`coverage`), so "best" is never silently "best of whatever answered".
+
+Per-asset accuracy, computed from the public on-chain attestations, is free and unpaid at [`/accuracy.json`](https://yieldsignal.vercel.app/accuracy.json) — including how long a call typically stays the leader per market, which differs sharply (13h for staking, 1h for USDC lending on Base).
 
 ## Why a dedicated wallet instead of the agent's own signer?
 x402 payment signing (`@x402/fetch` + `@coinbase/cdp-sdk/x402`) is asset/network-specific and independent from the on-chain actions the agent's own `WalletClientBase` performs — this plugin pays for the API call the same way it's already proven against production (see the [service's own test scripts](https://github.com/Stakemate369/yieldsignal/blob/main/scripts/testPaidCall.mts)), rather than adapting a second signing path into the agent's primary wallet.
