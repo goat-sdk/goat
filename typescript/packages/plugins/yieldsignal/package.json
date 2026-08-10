@@ -13,12 +13,17 @@
     "types": "./dist/index.d.ts",
     "dependencies": {
         "@goat-sdk/core": "workspace:*",
-        "@coinbase/cdp-sdk": "^1.53.0",
-        "@x402/fetch": "^2.18.0",
+        "yieldsignal-client": "^1.2.0",
         "zod": "catalog:"
     },
     "peerDependencies": {
         "@goat-sdk/core": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "tsup": "^8.3.5",
+        "typescript": "^5.2.2",
+        "vitest": "^2.1.9"
     },
     "homepage": "https://yieldsignal.vercel.app",
     "repository": {
@@ -29,5 +34,5 @@
     "bugs": {
         "url": "https://github.com/goat-sdk/goat/issues"
     },
-    "keywords": ["ai", "agents", "web3", "x402", "defi", "yield", "lending"]
+    "keywords": ["ai", "agents", "web3", "defi", "yield", "risk", "x402", "base", "yieldsignal"]
 }

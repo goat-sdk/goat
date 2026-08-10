@@ -1,30 +1,52 @@
-import { PluginBase, Tool } from "@goat-sdk/core";
-import type { Chain } from "@goat-sdk/core";
-import { fetchYieldSignal } from "./client";
-import { GetYieldSignalParameters } from "./parameters";
+import { PluginBase } from "@goat-sdk/core";
+import type { Chain, WalletClientBase } from "@goat-sdk/core";
+import { YieldSignalService } from "./yieldsignal.service";
 
-class YieldSignalToolset {
-    @Tool({
-        name: "get_yield_signal",
-        description:
-            "Real-time risk-weighted yield signal: ETH liquid staking APY on Ethereum mainnet (Lido, Rocket Pool, Coinbase Wrapped Staked ETH, Frax Ether, Binance Staked ETH), or USDC/WETH lending APY on Base (Aave, Compound, Morpho, Moonwell, Euler, Fluid). Every protocol is compared on one basis (base interest plus incentives) and the response says which protocols could not be read. Costs $0.01 USDC per call via x402; per-asset accuracy is free at /accuracy.json.",
-    })
-    async getYieldSignal(parameters: GetYieldSignalParameters): Promise<string> {
-        const signal = await fetchYieldSignal(parameters.asset);
-        return JSON.stringify(signal);
-    }
+/**
+ * The x402 client that settles the per-call payment. Any implementation
+ * accepted by `@x402/fetch` works — for example `CdpX402Client` from
+ * `@coinbase/cdp-sdk/x402`, backed by a funded Base wallet.
+ *
+ * Typed structurally instead of importing the concrete class so this plugin
+ * does not force a specific x402 client (or its dependency tree) on consumers
+ * who already have one wired up.
+ */
+// biome-ignore lint/suspicious/noExplicitAny: structural handoff to @x402/fetch, which owns the real type.
+type X402Client = any;
+
+export interface YieldSignalOptions {
+    /** Funded x402 client used to pay for each call. */
+    x402Client: X402Client;
+    /** Override the API base URL. Defaults to the public deployment. */
+    baseUrl?: string;
 }
 
-export class YieldSignalPlugin extends PluginBase {
-    constructor() {
-        super("yieldsignal", [new YieldSignalToolset()]);
+/**
+ * Paid yield and risk intelligence for lending on Base and liquid staking on
+ * Ethereum, delivered over x402 — no API key and no account, the agent's wallet
+ * pays per call.
+ *
+ * Six tools: the raw signal, a MOVE/HOLD decision, and four risk reports
+ * (incentive durability, exit capacity, borrow-rate sensitivity, shared
+ * exposure). Every response is EIP-712 signed by the payment-receiving address
+ * and readings are attested on-chain via EAS, so an agent can verify what it
+ * paid for without trusting the server.
+ */
+export class YieldSignalPlugin extends PluginBase<WalletClientBase> {
+    constructor(options: YieldSignalOptions) {
+        super("yieldsignal", [new YieldSignalService(options)]);
     }
 
-    // Payment is routed via an EVM CDP wallet on Base specifically — not
-    // chain-agnostic like a plain read-only price API.
-    supportsChain = (chain: Chain): boolean => chain.type === "evm";
+    /**
+     * Supports every chain: payment settles in USDC on Base through the x402
+     * client, independently of whatever chain the agent's wallet is pointed at.
+     */
+    supportsChain = (_chain: Chain) => true;
 }
 
-export function yieldsignal(): YieldSignalPlugin {
-    return new YieldSignalPlugin();
+/**
+ * Utility factory function for creating a YieldSignalPlugin instance
+ */
+export function yieldsignal(options: YieldSignalOptions) {
+    return new YieldSignalPlugin(options);
 }
