@@ -2289,6 +2289,22 @@ importers:
         specifier: 'catalog:'
         version: 3.23.8
 
+  packages/plugins/taskmarket:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+    devDependencies:
+      '@swc/core':
+        specifier: 1.10.1
+        version: 1.10.1(@swc/helpers@0.5.17)
+      unplugin-swc:
+        specifier: 1.5.11
+        version: 1.5.11(@swc/core@1.10.1(@swc/helpers@0.5.17))(esbuild@0.25.4)(rollup@4.40.2)(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0))
+
   packages/plugins/tensor:
     dependencies:
       '@goat-sdk/core':
@@ -2736,9 +2752,11 @@ packages:
 
   '@11labs/client@0.0.4':
     resolution: {integrity: sha512-BldXyZsTtiS8Db3RTDxuk1B+Gx7pj7xxUWS5MJA3CfvKegDJeX979l3s3ZJ4StBLM2VaOTf3b2c5NUTy41a3nQ==}
+    deprecated: This package is no longer maintained. Please use @elevenlabs/client for the latest version
 
   '@11labs/react@0.0.4':
     resolution: {integrity: sha512-ZXkAfB3+BAb78Q3N8gM5NVk/RLpi8WCpZBYRzj+wquXw3CkIIzvdL5S3sieMqtDccdWLV3Wn4MC273RHdAdUUQ==}
+    deprecated: This package is no longer maintained. Please use @elevenlabs/react for the latest version
     peerDependencies:
       react: '>=16.8.0'
 
@@ -3045,11 +3063,12 @@ packages:
   '@aptos-labs/aptos-client@0.1.1':
     resolution: {integrity: sha512-kJsoy4fAPTOhzVr7Vwq8s/AUg6BQiJDa7WOqRzev4zsuIS3+JCuIZ6vUd7UBsjnxtmguJJulMRs9qWCzVBt2XA==}
     engines: {node: '>=15.10.0'}
-    deprecated: <1.0.0 is no longer supported please upgrade to the latest version
+    deprecated: This version is deprecated.  Please upgrade to version 2.1.0 or later.
 
   '@aptos-labs/ts-sdk@1.33.1':
     resolution: {integrity: sha512-d6nWtUI//fyEN8DeLjm3+ro87Ad6+IKwR9pCqfrs/Azahso1xR1Llxd/O6fj/m1DDsuDj/HAsCsy5TC/aKD6Eg==}
     engines: {node: '>=11.0.0'}
+    deprecated: This version is deprecated, please upgrade to 5.2.1, or the latest version
 
   '@avnu/avnu-sdk@3.0.0':
     resolution: {integrity: sha512-BqqazrXDKn5RE1anyl9Ba+Kd/4VaKNsdKTl0ryTfXhMIYp+R4dXMaLD40emfXd+25kxM00xPKiZOiGHl2ntG5g==}
@@ -4429,9 +4448,11 @@ packages:
 
   '@cosmjs/crypto@0.32.4':
     resolution: {integrity: sha512-zicjGU051LF1V9v7bp8p7ovq+VyC91xlaHdsFOTo2oVry3KQikp8L/81RkXmUIT8FxMwdx1T7DmFwVQikcSDIw==}
+    deprecated: This uses elliptic for cryptographic operations, which contains several security-relevant bugs. To what degree this affects your application is something you need to carefully investigate. See https://github.com/cosmos/cosmjs/issues/1708 for further pointers. Starting with version 0.34.0 the cryptographic library has been replaced. However, private keys might still be at risk.
 
   '@cosmjs/crypto@0.33.0':
     resolution: {integrity: sha512-kkt06t+cFW2XRGDGUZ0cVf5yoQ2OhZnubwbYbz3QXdyhf1qOXYVPRThfFPsko7dssr+e8Yy4OJKlh5SLA8DXTQ==}
+    deprecated: This uses elliptic for cryptographic operations, which contains several security-relevant bugs. To what degree this affects your application is something you need to carefully investigate. See https://github.com/cosmos/cosmjs/issues/1708 for further pointers. Starting with version 0.34.0 the cryptographic library has been replaced. However, private keys might still be at risk.
 
   '@cosmjs/encoding@0.32.4':
     resolution: {integrity: sha512-tjvaEy6ZGxJchiizzTn7HVRiyTg1i4CObRRaTRPknm5EalE13SV+TCHq38gIDfyUeden4fCuaBVEdBR5+ti7Hw==}
@@ -4556,20 +4577,25 @@ packages:
 
   '@dynamic-labs/assert-package-version@4.0.0-alpha.45':
     resolution: {integrity: sha512-HBadqi9Z36pPBoTS4qhufrwagj8Ysg5lnpuytmiRUmdakf0zq5iY02h6+sebU3bTA/nPx1wCyX2KVyC3aU+33A==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/embedded-wallet-evm@4.0.0-alpha.45':
     resolution: {integrity: sha512-q98kFRbOQC1XqGV2DbenRIu7mtJ5N0yFXUIipvZcTmPRYRrh7Hya6peJ9jyRuiS7cWcn9rfXUFAi45Y42cXn+w==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       viem: ^2.7.12
 
   '@dynamic-labs/embedded-wallet-solana@4.0.0-alpha.45':
     resolution: {integrity: sha512-pPifGEHCrU3T4CriBBcBKMTbkZS3/aYmOzLcQD3HladxpXJv00kIOM1qGHGT/lFJp01OGKpp7iH9UnhZQCmZWg==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/embedded-wallet@4.0.0-alpha.45':
     resolution: {integrity: sha512-hqS0W2PcufjVa13/Es2DWepyCaikglTHNuQDM5UcM1tcuL27WQ6dHP3h5xZa//kzRmbe9+T+PX9ed+J4zrhq5g==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/ethereum-core@4.0.0-alpha.45':
     resolution: {integrity: sha512-qnimtl8/SxhuOkmn91R/DXPX5YynBjWBPn0AgcMz6v0RYY+Tgm6FPuks3ivPrjIhx+XDc7ZlvIweki8V3Br+fw==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       '@dynamic-labs/assert-package-version': 4.0.0-alpha.45
       '@dynamic-labs/logger': 4.0.0-alpha.45
@@ -4582,22 +4608,26 @@ packages:
 
   '@dynamic-labs/ethereum@4.0.0-alpha.45':
     resolution: {integrity: sha512-YD0NqDstiolx0vl2iAgtueCkPk+6CN7c8Ii6n9lLQ+wJqGgi8BFNYRNVAFHAIxA6JS6uOxKc81WnLAlRKYsROQ==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       viem: ^2.7.12
 
   '@dynamic-labs/iconic@4.0.0-alpha.45':
     resolution: {integrity: sha512-yur66KtXeTDxiCe8a40TIgBBnLcofTUTbQK2nYM81F5plMk6PADbKT2ArihUn604X0O+DSpPqE+3xpkUT26urA==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
 
   '@dynamic-labs/logger@4.0.0-alpha.45':
     resolution: {integrity: sha512-grwBkrzD3iK9nfR4slTjMBSSaWHjnIq7Qgzi+vMbL6fupzo9TsCSYaGwkQUTySRjQF7R277ROsV77Pg/vtkv3g==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       eventemitter3: 5.0.1
 
   '@dynamic-labs/multi-wallet@4.0.0-alpha.45':
     resolution: {integrity: sha512-/mxaqYAKdTOb5GOOURPC05mTDW15u6B2B5/dj+Vxx+AFM6EUwSvkWuV7ys+xXqlHNaAzKb9/YPgb5znx4aSFUg==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/rpc-providers@4.0.0-alpha.45':
     resolution: {integrity: sha512-kpNxzfLBY2VfQvvAhPeeieF6ney5OAcVqweURhQ+tuSxbVRrYmCsEvDyiGkluenZ4TtKz2gBShRJtSJM9hu3Aw==}
@@ -4607,12 +4637,14 @@ packages:
 
   '@dynamic-labs/sdk-react-core@4.0.0-alpha.45':
     resolution: {integrity: sha512-B2Llv1L5wE873jrC6feaAQA5hClDVjpAWqif2L+dJCO5pE/GqBJ0ue11TCM3ZZT04SKRuSNt7dvjRy1KCn9RaQ==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
 
   '@dynamic-labs/solana-core@3.9.2':
     resolution: {integrity: sha512-GObREKEpPGvHPvKOcIEBW00MYma2D+wovehUC0KLtAzgjcfFjd9yruTLxRiCJKAJB86oKkfPmaAF1wiCObRsIQ==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       '@dynamic-labs/assert-package-version': 3.9.2
       '@dynamic-labs/rpc-providers': 3.9.2
@@ -4624,6 +4656,7 @@ packages:
 
   '@dynamic-labs/solana-core@4.0.0-alpha.45':
     resolution: {integrity: sha512-GBb0NcZWIwO+A2MAM4cjYKVwsrMaMfvdRCz90Shtkum641lee5bRFR4Su/sAmrEQFJT+optKUIX+Kbqg9qz74Q==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       '@dynamic-labs/assert-package-version': 4.0.0-alpha.45
       '@dynamic-labs/rpc-providers': 4.0.0-alpha.45
@@ -4635,18 +4668,23 @@ packages:
 
   '@dynamic-labs/solana@4.0.0-alpha.45':
     resolution: {integrity: sha512-WzH/zW+xWKtoRhhN1Op1k9qlKQBk47zGHKvDTby+lqqd96Gxv3HDF20kxpCeCSvAqhFfUdjTTBVD/pnFD3iqyA==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/store@4.0.0-alpha.45':
     resolution: {integrity: sha512-hYhGqGA+YK/yMj36IECYvr8UmbjsyoDjoyQS8Ksfm5PW9Xi/P0F6MF8/snFbtmRo4EkYHDNiIO74DTONFr+1hA==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/types@4.0.0-alpha.45':
     resolution: {integrity: sha512-5Aw4HzT/NZJTfzJc0pV8U8odZVQ2xMoAYuYHxQUr6iHY1PAMfJ4mXWk+SA4vX+IXKibTX0/k+cLIAYoAjaZt+Q==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/utils@4.0.0-alpha.45':
     resolution: {integrity: sha512-poCpv4UT3w1YH6s6TNORcBF6jmRdWPQF4EKlFQjjO6mKnOtkx/Oc3qv0wOO0Db8InVU2bmHnO8fh4uBE5Cunnw==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@dynamic-labs/wagmi-connector@4.0.0-alpha.45':
     resolution: {integrity: sha512-AIR01nUJMcuJLAuWKXz2iP6WghJmeRvkTtC/74vxq396gKClTN+A42BU/6Co8fVq7yNIiWF8qC0YZeaNYyERqQ==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       '@dynamic-labs/assert-package-version': 4.0.0-alpha.45
       '@dynamic-labs/ethereum-core': 4.0.0-alpha.45
@@ -4663,12 +4701,14 @@ packages:
 
   '@dynamic-labs/wallet-book@4.0.0-alpha.45':
     resolution: {integrity: sha512-buOP1HKM9s194VIVlRpFwFBbpjwMGXqgCqk75uYctII745/rO/QprmwHXWKwYRkI+GG/p+uMLZZBJOVlFUMkRg==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
 
   '@dynamic-labs/wallet-connector-core@4.0.0-alpha.45':
     resolution: {integrity: sha512-FLSRhPlXLcYWKE1tj/5M2WQM98mckxsqEN4mUv78Gdkfmq76Ou9anoblAZQL/t9RAaROacY9KPyXl8h6ZoEwjA==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
     peerDependencies:
       '@dynamic-labs/assert-package-version': 4.0.0-alpha.45
       '@dynamic-labs/logger': 4.0.0-alpha.45
@@ -4680,6 +4720,7 @@ packages:
 
   '@dynamic-labs/webauthn@4.0.0-alpha.45':
     resolution: {integrity: sha512-WJERTWIGcGd6aCuT9QOD7sj+9GLZQVB1DzuNQJrC5hiJqrCcJL6+aYjLKeMfsB3dH/6B7k2CCXiaolmJZZHN3Q==}
+    deprecated: This version is deprecated and no longer maintained. Please upgrade to v4 or later. See https://www.dynamic.xyz/docs for more info.
 
   '@ecies/ciphers@0.2.3':
     resolution: {integrity: sha512-tapn6XhOueMwht3E2UzY0ZZjYokdaw9XtL9kEyjhQ/Fb9vL9xTFbOaI+fV0AWvTpYu4BNloC6getKW6NtSg4mA==}
@@ -5547,6 +5588,7 @@ packages:
   '@fuel-ts/interfaces@0.97.2':
     resolution: {integrity: sha512-yBmSsvjxJiZRBlLkU04Sre4bBNELUGETp79bq2q5eHz6WgfaDQlwgy7fwewDTviV63ZXCa736LTkgL1duL00NA==}
     engines: {node: ^18.20.3 || ^20.0.0 || ^22.0.0}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@fuel-ts/math@0.97.2':
     resolution: {integrity: sha512-btagAIqahRT0ml7lKWZfG9IXEhmEK6OtuBytiHfUVPNhHWqEYeoZ021eJjimJSPU6FOCnXuAVpvk6gmyK7kXSQ==}
@@ -5589,6 +5631,7 @@ packages:
   '@gelatonetwork/relay-sdk@5.6.0':
     resolution: {integrity: sha512-pSXE9xdPj6wmdcmoT7ETlbEjpvQvyFIZT1CoyzcUEupPplugm59ieUiX5E41oLeByQ7M1dliq2b96d/iIIA3kw==}
     engines: {node: '>=14.0.0'}
+    deprecated: This package is deprecated. Use @gelatocloud/gasless instead.
 
   '@goat-sdk/adapter-eleven-labs@0.2.10':
     resolution: {integrity: sha512-6HmeUVHQCHWjR/yIF34gX96Z8UCCpv5v1PCfCeOVenhNmKWv7q+5x/LerLFV8M7QT+M+Dd/nEFJAg4jow5t3tw==}
@@ -6247,6 +6290,9 @@ packages:
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
     engines: {node: '>=6.0.0'}
 
+  '@jridgewell/remapping@2.3.5':
+    resolution: {integrity: sha512-LI9u/+laYG4Ds1TDKSJW2YPrIlcVYOwi2fUC6xB43lueCjgxV4lffOCZCtYFiH6TNOX+tQKXx97T4IKHbhyHEQ==}
+
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -6399,12 +6445,15 @@ packages:
 
   '@lit-protocol/access-control-conditions@7.0.2':
     resolution: {integrity: sha512-didWaPND1kCGzGNPI8S9lvQriMf2wIKZHCJIecofAT3JLolrcNk6LqXfIBgPSeZbyOAbH91kpHKN7PI0zyQtEQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/accs-schemas@0.0.20':
     resolution: {integrity: sha512-JHHX0q45nq1uQ4olkg4VIGLW9lzMnRRldeTDuOrOaoPVztz+2iSOjwzb+QmuSuKFQpP5SOej2zoQB+K8b22KDw==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/auth-browser@7.0.2':
     resolution: {integrity: sha512-zXNxJTmQle2rzede2x8L9m0ai72yRwtfye1ugJMBptSaiWMhkZHN3kiwBvXWusy35COOeq08NDVdvr2nsf9pGw==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
     peerDependencies:
       '@lit-protocol/contracts': ^0.0.74
       '@walletconnect/ethereum-provider': 2.9.2
@@ -6417,67 +6466,85 @@ packages:
 
   '@lit-protocol/auth-helpers@7.0.2':
     resolution: {integrity: sha512-8917XgmuAEzXWPsyYSQcAlzmDWJ4xKabMroGObduY1RtsD0yq1o3azt+8kW0J7YDLmGRBGTGvVh2c1IQpCzXfQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/constants@7.0.2':
     resolution: {integrity: sha512-A2tpsB7pCGHiC+VrPAHBaEGyb/9crCkcSIj8BtGPrLRszFZO8EHKWziM7WiMM2c2mYb+B4dKtGGUkxxCAarqaQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/contracts-sdk@7.0.2':
     resolution: {integrity: sha512-EQs0l3v+tRdItuRamo675obkAPHGmQnef0WZ1cY0nNn97zRBGbkYPfkHMBxrUoGwbcsFQPMHDynrGTzAiUM7Zw==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
     peerDependencies:
       date-and-time: ^2.4.1
       multiformats: ^9.7.1
 
   '@lit-protocol/contracts@0.0.74':
     resolution: {integrity: sha512-8uV038gzBp7ew7a4884SVt9Zhu8CtiTb+A8dKNnByxVoT1kFt4O4DmsaniV8p9AGjNR13IWfpU1NFChmPHVIpQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
     peerDependencies:
       typescript: ^5.0.0
 
   '@lit-protocol/core@7.0.2':
     resolution: {integrity: sha512-BANcnKQyqBD5ZGfDAPEJBhtzhc4bYuka8xyb2/ueCleaWOe0NgwW/z/CJ6Q/eSysO9smi0Z7bQy5a4xDBGNjHA==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/crypto@7.0.2':
     resolution: {integrity: sha512-zgnOo3+LnRkIxGHro3QSsDmS3PPIH6nLrkBDp/+DigHL41H0zehdQbHMGxTQqzxtqpMFt9FARdAN0/CfHm/9Ow==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/encryption@7.0.2':
     resolution: {integrity: sha512-OeHDPkvVMiY86vkQ1LTNog06QLXmKXMleaz+WmJy4Qc6GkOARuuJtJW/1uZjOcwcaCGzvPSWjBasb8O1K6t4FQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/lit-auth-client@7.0.2':
     resolution: {integrity: sha512-D2BcHvLnws9aHl2flRrhxo5O7cCsBxeciWa3po1mH+qhGcMRfezuA9oLFlOOn3DlK1E4O2WKyAj2VjMC0/Wx2Q==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
     peerDependencies:
       '@simplewebauthn/browser': ^7.2.0
       '@simplewebauthn/typescript-types': ^7.0.0
 
   '@lit-protocol/lit-node-client-nodejs@7.0.2':
     resolution: {integrity: sha512-HUPCKRFxObK+XM9lPlWtbx+PqQoQl4OrRN7Lw/sIXew+wdozYgcMAMEbrB/xlCmJB+eFccu/06V4URSXQ22jXQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/lit-node-client@7.0.2':
     resolution: {integrity: sha512-8zESXAA9HdRBLsjyljLuIpS2yzDv7jspW0MUe54XmHYHo87WE4G/q4WCjkKwRnKaeG0Jh5+/kb6j81AnLpWKFQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
     peerDependencies:
       tslib: ^2.3.0
 
   '@lit-protocol/logger@7.0.2':
     resolution: {integrity: sha512-44VsSlLWVxIVG9m5GIkvdXSfd4gyCNToNN0uor41cQTYLbyvasgTfyi12XPNwfFZU7FNMrYpt+Jgig2SqrzXVg==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/misc-browser@7.0.2':
     resolution: {integrity: sha512-T9L4j3U6P+/0uI30NB2lCZM2PVPDI6G9JkrBn7PBIgzwynK9jtUHxwmxMk16qrUV9MvVCYSEt+tqEvOI5S/gMg==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/misc@7.0.2':
     resolution: {integrity: sha512-ZUU4j3E+VnCY11oPLGop95UkAUzTiBmPfiCXwFYGmh6PDvHXZlRC1Qc+3aC5lFpocoBTTJ/uE2MQZpHyN0kRlQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/nacl@7.0.2':
     resolution: {integrity: sha512-jdtquJ1iZCgIdKlVP0zAJlVfttLWLG2T6EsKFDp3o1lxEKtiUkKqbM1VGXihQVJQ6kFtmb3PJdMDRYDkOq1bhw==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/types@7.0.2':
     resolution: {integrity: sha512-rEBZoeSByaMxXiP7w3g6/d180d8AbL4xpLqIlZchfJfAcSFkTseByV1d4h/J3LHl+3Q10wQsJT0N+qIi9kZbqA==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/uint8arrays@7.0.2':
     resolution: {integrity: sha512-lwytcoJOQGtwrAU5qdRc3nkNWy4uND17HZux447eljgwJUGYeLFxNDfx8qtveues1MKAbvSOHtUmxmhpN1aHyQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/wasm@7.0.2':
     resolution: {integrity: sha512-e5sRe6Oi0ZSCjZZjL96jkbPE6UbxM1OYIrL3CFUo6IeoNZ/ZyYudHrM92v3ZEhiTfJDRnJDv0t3b2hpUz88cIQ==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit-protocol/wrapped-keys@7.0.2':
     resolution: {integrity: sha512-3tl6hZuB2Gh18uL0H68nxpYI4Tyr3MYO9LnIKR+SNoNweS+eA7GfZ5y0p9c3zdX1O0uvVJuaxkAaUUH0QWoV8Q==}
+    deprecated: This package targets a retired Lit Protocol network and is no longer maintained. See https://developer.litprotocol.com for the current SDK.
 
   '@lit/reactive-element@1.6.3':
     resolution: {integrity: sha512-QuTgnG52Poic7uM1AN5yJ09QMe0O28e10XzSvWDz02TJiiKee4stsiownEIadWm8nYzyDAyT+gKzUoZmiWQtsQ==}
@@ -6594,6 +6661,7 @@ packages:
 
   '@mastra/server@1.0.3':
     resolution: {integrity: sha512-VfzmaHbbsMFdOkqn3iH6CwByreIPRHXHcn0YZG32W4OUJ2oNl2AplFSDA1Fxn2dLJy+KYWuM8NUnRxXvhOJSbQ==}
+    deprecated: bad publish
     peerDependencies:
       '@mastra/core': ^0.8.3
 
@@ -6643,6 +6711,7 @@ packages:
 
   '@metamask/sdk-communication-layer@0.30.0':
     resolution: {integrity: sha512-q5nbdYkAf76MsZxi1l5MJEAyd8sY9jLRapC8a7x1Q1BNV4rzQeFeux/d0mJ/jTR2LAwbnLZs2rL226AM75oK4w==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
     peerDependencies:
       cross-fetch: ^4.0.0
       eciesjs: ^0.3.16
@@ -6652,6 +6721,7 @@ packages:
 
   '@metamask/sdk-communication-layer@0.32.0':
     resolution: {integrity: sha512-dmj/KFjMi1fsdZGIOtbhxdg3amxhKL/A5BqSU4uh/SyDKPub/OT+x5pX8bGjpTL1WPWY/Q0OIlvFyX3VWnT06Q==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
     peerDependencies:
       cross-fetch: ^4.0.0
       eciesjs: '*'
@@ -6661,6 +6731,7 @@ packages:
 
   '@metamask/sdk-install-modal-web@0.30.0':
     resolution: {integrity: sha512-1gT533Huja9tK3cmttvcpZirRAtWJ7vnYH+lnNRKEj2xIP335Df2cOwS+zqNC4GlRCZw7A3IsTjIzlKoxBY1uQ==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
     peerDependencies:
       i18next: 23.11.5
       react: ^18.2.0
@@ -6676,9 +6747,11 @@ packages:
 
   '@metamask/sdk-install-modal-web@0.32.0':
     resolution: {integrity: sha512-TFoktj0JgfWnQaL3yFkApqNwcaqJ+dw4xcnrJueMP3aXkSNev2Ido+WVNOg4IIMxnmOrfAC9t0UJ0u/dC9MjOQ==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
 
   '@metamask/sdk@0.30.1':
     resolution: {integrity: sha512-NelEjJZsF5wVpSQELpmvXtnS9+C6HdxGQ4GB9jMRzeejphmPyKqmrIGM6XtaPrJtlpX+40AcJ2dtBQcjJVzpbQ==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -6690,6 +6763,7 @@ packages:
 
   '@metamask/sdk@0.32.0':
     resolution: {integrity: sha512-WmGAlP1oBuD9hk4CsdlG1WJFuPtYJY+dnTHJMeCyohTWD2GgkcLMUUuvu9lO1/NVzuOoSi1OrnjbuY1O/1NZ1g==}
+    deprecated: No longer maintained, superseded by https://docs.metamask.io/metamask-connect
 
   '@metamask/superstruct@3.2.1':
     resolution: {integrity: sha512-fLgJnDOXFmuVlB38rUN5SmU7hAFQcCjrg3Vrxz67KTY7YHFnSNEKvX4avmEBdOI0yTCxZjwMCFEqsC8k2+Wd3g==}
@@ -6876,6 +6950,7 @@ packages:
   '@msgpack/msgpack@3.0.0-beta2':
     resolution: {integrity: sha512-y+l1PNV0XDyY8sM3YtuMLK5vE3/hkfId+Do8pLo/OPxfxuFAUwcGz3oiiUuV46/aBpwTzZ+mRWVMtlSKbradhw==}
     engines: {node: '>= 14'}
+    deprecated: too old
 
   '@mysten/bcs@1.2.0':
     resolution: {integrity: sha512-LuKonrGdGW7dq/EM6U2L9/as7dFwnhZnsnINzB/vu08Xfrj0qzWwpLOiXagAa5yZOPLK7anRZydMonczFkUPzA==}
@@ -7489,6 +7564,7 @@ packages:
   '@opentelemetry/propagation-utils@0.30.16':
     resolution: {integrity: sha512-ZVQ3Z/PQ+2GQlrBfbMMMT0U7MzvYZLCPP800+ooyaBqm4hMvuQHfP028gB9/db0mwkmyEAMad9houukUVxhwcw==}
     engines: {node: '>=14'}
+    deprecated: The use of process spans has been removed from Messaging Semantic Conventions. It is now recommended to connect pub/sub spans via Span Links. See https://opentelemetry.io/docs/specs/semconv/messaging/messaging-spans/ for details.
     peerDependencies:
       '@opentelemetry/api': ^1.0.0
 
@@ -7661,7 +7737,7 @@ packages:
 
   '@paulmillr/qr@0.2.1':
     resolution: {integrity: sha512-IHnV6A+zxU7XwmKFinmYjUcwlyK9+xkG3/s9KcQhI9BjQKycrJ1JRO+FbNYPwZiPKW3je/DR0k7w8/gLa5eaxQ==}
-    deprecated: 'The package is now available as "qr": npm install qr'
+    deprecated: 'Switch to "qr" (new package name) for security updates: npm install qr'
 
   '@peculiar/asn1-schema@2.3.15':
     resolution: {integrity: sha512-QPeD8UA8axQREpgR5UTAfu2mqQmm97oUqahDtNdBcfj3qAnoXzFdQW+aNf/tD2WVXF8Fhmftxoj0eMIT++gX2w==}
@@ -7957,6 +8033,15 @@ packages:
       rollup:
         optional: true
 
+  '@rollup/pluginutils@5.4.0':
+    resolution: {integrity: sha512-MfPp06CjRLfXQ3wY0R8vJDYBy/MvVcc9OulEfR0B8Iv9ko+GCNaRZ+EpJYFl27LhKsZK0o420sYCRHCjfCgeUg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+
   '@rollup/rollup-android-arm-eabi@4.34.9':
     resolution: {integrity: sha512-qZdlImWXur0CFakn2BJ2znJOdqYZKiedEPEVNTBrpfPjc/YuTGcaYZcdmNFTkUj3DU0ZM/AElcM8Ybww3xVLzA==}
     cpu: [arm]
@@ -8183,6 +8268,7 @@ packages:
   '@safe-global/safe-gateway-typescript-sdk@3.23.1':
     resolution: {integrity: sha512-6ORQfwtEJYpalCeVO21L4XXGSdbEMfyp2hEv6cP82afKXSwvse6d3sdelgaPWUxHIsFRkWvHDdzh8IyyKHZKxw==}
     engines: {node: '>=16'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@safe-global/safe-modules-deployments@2.2.5':
     resolution: {integrity: sha512-rkKqj6gGKokjBX2JshH1EwjPkzFD14oOk2vY3LSxKhpkQyjdqxcj+OlWkjzpi613HzCtxY0mHgMiyLID7nzueA==}
@@ -8315,6 +8401,7 @@ packages:
 
   '@simplewebauthn/types@9.0.1':
     resolution: {integrity: sha512-tGSRP1QvsAvsJmnOlRQyw/mvK9gnPtjEc5fg2+m8n+QUa+D7rvrKkOYyfpy42GTs90X3RDOnqJgfHt+qO67/+w==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@simplewebauthn/typescript-types@7.4.0':
     resolution: {integrity: sha512-8/ZjHeUPe210Bt5oyaOIGx4h8lHdsQs19BiOT44gi/jBEgK7uBGA0Fy7NRsyh777al3m6WM0mBf0UR7xd4R7WQ==}
@@ -9101,9 +9188,6 @@ packages:
   '@swc/helpers@0.5.17':
     resolution: {integrity: sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A==}
 
-  '@swc/types@0.1.17':
-    resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
-
   '@swc/types@0.1.19':
     resolution: {integrity: sha512-WkAZaAfj44kh/UFdAQcrMP1I0nwRqpt27u+08LMBYMqmQfwwMofYoMh/48NGkMMRfC4ynpfwRbJuu8ErfNloeA==}
 
@@ -9125,6 +9209,7 @@ packages:
 
   '@thumbmarkjs/thumbmarkjs@0.16.0':
     resolution: {integrity: sha512-NKyqCvP6DZKlRf6aGfnKS6Kntn2gnuBxa/ztstjy+oo1t23EHzQ54shtli0yV5WAtygmK1tti/uL2C2p/kW3HQ==}
+    deprecated: Please upgrade to v1
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -9454,6 +9539,7 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+    deprecated: Potential CWE-502 - Update to 1.3.1 or higher
 
   '@unhead/schema@1.11.20':
     resolution: {integrity: sha512-0zWykKAaJdm+/Y7yi/Yds20PrUK7XabLe9c3IRcjnwYmSWY6z0Cr19VIs3ozCj8P+GhR+/TI2mwtGlueCEYouA==}
@@ -9580,12 +9666,15 @@ packages:
 
   '@walletconnect/ethereum-provider@2.11.2':
     resolution: {integrity: sha512-BUDqee0Uy2rCZVkW5Ao3q6Ado/3fePYnFdryVF+YL6bPhj+xQZ5OfKodl+uvs7Rwq++O5wTX2RqOTzpW7+v+Mg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.20.0':
     resolution: {integrity: sha512-TSu1nr+AzCjM5u7xdnWTGX8ryKuHHb1Za56BD6UU0UPS7ZC2fZ99TVa5Q3Sng9JyksY5p99Iwg7fOtlozc3QYQ==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/ethereum-provider@2.9.2':
     resolution: {integrity: sha512-eO1dkhZffV1g7vpG19XUJTw09M/bwGUwwhy1mJ3AOPbOSbMPvwiCuRz2Kbtm1g9B0Jv15Dl+TvJ9vTgYF8zoZg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
     peerDependencies:
       '@walletconnect/modal': '>=2'
     peerDependenciesMeta:
@@ -9667,9 +9756,11 @@ packages:
 
   '@walletconnect/sign-client@2.19.2':
     resolution: {integrity: sha512-a/K5PRIFPCjfHq5xx3WYKHAAF8Ft2I1LtxloyibqiQOoUtNLfKgFB1r8sdMvXM7/PADNPe4iAw4uSE6PrARrfg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/sign-client@2.20.0':
     resolution: {integrity: sha512-5Ao9RVGsgpMTLjVByFfjMbX7RwJM0HvKV7P9ONJwPPo4OiviNyneeOufr2KKZhuwF+QUu5mTE0Lj/euGWSNaOQ==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/sign-client@2.9.2':
     resolution: {integrity: sha512-anRwnXKlR08lYllFMEarS01hp1gr6Q9XUgvacr749hoaC/AwGVlxYFdM8+MyYr3ozlA+2i599kjbK/mAebqdXg==}
@@ -9695,15 +9786,19 @@ packages:
 
   '@walletconnect/universal-provider@2.11.2':
     resolution: {integrity: sha512-cNtIn5AVoDxKAJ4PmB8m5adnf5mYQMUamEUPKMVvOPscfGtIMQEh9peKsh2AN5xcRVDbgluC01Id545evFyymw==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/universal-provider@2.19.2':
     resolution: {integrity: sha512-LkKg+EjcSUpPUhhvRANgkjPL38wJPIWumAYD8OK/g4OFuJ4W3lS/XTCKthABQfFqmiNbNbVllmywiyE44KdpQg==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/universal-provider@2.20.0':
     resolution: {integrity: sha512-kzMWXao+RyWfv46nS/owJ99/QhObGkYHhpMxdzl4bae98JXdQ0xhmov3Rvy3GRt5csgJXldoM2VO44B/Fsuj4Q==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/universal-provider@2.9.2':
     resolution: {integrity: sha512-JmaolkO8D31UdRaQCHwlr8uIFUI5BYhBzqYFt54Mc6gbIa1tijGOmdyr6YhhFO70LPmS6gHIjljwOuEllmlrxw==}
+    deprecated: 'Reliability and performance improvements. See: https://github.com/WalletConnect/walletconnect-monorepo/releases'
 
   '@walletconnect/utils@2.11.2':
     resolution: {integrity: sha512-LyfdmrnZY6dWqlF4eDrx5jpUwsB2bEPjoqR5Z6rXPiHJKUOdJt7az+mNOn5KTSOlRpd1DmozrBrWr+G9fFLYVw==}
@@ -9742,6 +9837,7 @@ packages:
   '@xmldom/xmldom@0.8.10':
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version has critical issues, please update to the latest version
 
   '@zerodev/global-address@0.0.22':
     resolution: {integrity: sha512-f4NBnsbyHlnZoJyAwrYAcJkn38JHEKj9uWLi/yROD5NQgc6D9dAwKoaR6AKeWYHevE9Z9FY/AD9InSSn4zXieg==}
@@ -11054,9 +11150,11 @@ packages:
 
   crypto-js@3.3.0:
     resolution: {integrity: sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==}
+    deprecated: Active development of CryptoJS has been discontinued. This library is no longer maintained.
 
   crypto-js@4.2.0:
     resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
+    deprecated: Active development of CryptoJS has been discontinued. This library is no longer maintained.
 
   crypto@1.0.1:
     resolution: {integrity: sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==}
@@ -11349,6 +11447,7 @@ packages:
   discord.js@14.18.0:
     resolution: {integrity: sha512-SvU5kVUvwunQhN2/+0t55QW/1EHfB1lp0TtLZUSXVHDmyHTrdOj5LRKdR0zLcybaA15F+NtdWuWmGOX9lE+CAw==}
     engines: {node: '>=18'}
+    deprecated: This version is deprecated. Please use a newer version
 
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
@@ -12314,16 +12413,18 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.0.0:
     resolution: {integrity: sha512-9UiX/Bl6J2yaBbxKoEBRm4Cipxgok8kQYcOPEhScPwebu2I0HoQOuYdIO6S3hLuWoZgpDpwQZMzTFxgpkyT76g==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   global-agent@3.0.0:
     resolution: {integrity: sha512-PT6XReJ+D07JvGoxQMkT6qji/jVNfX/h364XHZOWeRzy64sSFr+xJ5OX7LI3b4MPQzdL4H8Y8M0xzPpsVMwA8Q==}
@@ -13655,6 +13756,7 @@ packages:
 
   libsql@0.4.7:
     resolution: {integrity: sha512-T9eIRCs6b0J1SHKYIvD8+KCJMcWZ900iZyxdnSCdqxN12Z1ijzT+jY5nrk72Jw4B0HGzms2NgpryArlJqvc3Lw==}
+    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lie@3.3.0:
@@ -14334,6 +14436,7 @@ packages:
   next@15.2.4:
     resolution: {integrity: sha512-VwL+LAaPSxEkd3lU2xWbgEOtrM8oedmyhBqaVNmgKB+GvZlCy9rgaEc+y2on0wv+l0oSFqLtYD6dcC1eAedUaQ==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -14955,6 +15058,10 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.5:
+    resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
+    engines: {node: '>=12'}
+
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -15166,6 +15273,7 @@ packages:
   prebuild-install@7.1.2:
     resolution: {integrity: sha512-UnNke3IQb6sgarcZIDU3gbMeTp/9SSU1DAIkil7PrqG1vZlBtY5msYccSKSHDqa3hNg436IXK+SNImReuA1wEQ==}
     engines: {node: '>=10'}
+    deprecated: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
     hasBin: true
 
   prepend-http@1.0.4:
@@ -16073,6 +16181,7 @@ packages:
 
   sliced@1.0.1:
     resolution: {integrity: sha512-VZBmZP8WU3sMOZm1bdgTadsQbcscK0UM8oKxKVBs4XAhUo2Xxzm/OFMGBkPusxw9xL3Uy8LrzEqGqJhclsr0yA==}
+    deprecated: Unsupported
 
   smart-buffer@4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
@@ -16144,6 +16253,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -16438,14 +16548,17 @@ packages:
   tar@4.4.19:
     resolution: {integrity: sha512-a20gEsvHnWe0ygBY8JbxoM4w3SJdhc7ZAuxkLqh+nvNQN2IOt0B5lLgM490X5Hl8FF0dl0tOf2ewFYAlIFgzVA==}
     engines: {node: '>=4.5'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   tar@7.4.3:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   tcp-port-used@1.0.2:
     resolution: {integrity: sha512-l7ar8lLUD3XS1V2lfoJlCBaeoaWo/2xfYt81hM7VlvR4RrMVFqfmzfhLVk40hAb368uitje5gPtBRL1m/DGvLA==}
@@ -16976,9 +17089,47 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
+  unplugin-swc@1.5.11:
+    resolution: {integrity: sha512-R7U4GbfrESPnYLn3nXREZrwhKQk3BAmTBoKJ5lmo7btTc/yJpNsDzavBWo+XpQTjDSIogiZEAxC5ig/vfMWxWg==}
+    peerDependencies:
+      '@swc/core': ^1.2.108
+
   unplugin-utils@0.2.4:
     resolution: {integrity: sha512-8U/MtpkPkkk3Atewj1+RcKIjb5WBimZ/WSLhhR3w6SsIj8XJuKTacSP8g+2JhfSGw0Cb125Y+2zA/IzJZDVbhA==}
     engines: {node: '>=18.12.0'}
+
+  unplugin@3.3.0:
+    resolution: {integrity: sha512-qa66K+crbfyE6JK10GjvbJeRrOsuC/JpbnHctfyp/i4oBTxWOzJfRZyDiOk1PtErMFRu8JhsU/wPvOdBNWe5Rg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      '@farmfe/core': '*'
+      '@rspack/core': '*'
+      bun-types-no-globals: '*'
+      esbuild: '*'
+      rolldown: '*'
+      rollup: '*'
+      unloader: '*'
+      vite: '*'
+      webpack: '*'
+    peerDependenciesMeta:
+      '@farmfe/core':
+        optional: true
+      '@rspack/core':
+        optional: true
+      bun-types-no-globals:
+        optional: true
+      esbuild:
+        optional: true
+      rolldown:
+        optional: true
+      rollup:
+        optional: true
+      unloader:
+        optional: true
+      vite:
+        optional: true
+      webpack:
+        optional: true
 
   unset-value@1.0.0:
     resolution: {integrity: sha512-PcA2tsuGSF9cnySLHTLSh2qrQiJ70mn+r+Glzxv2TWZblxsxCC52BDlZoPCsz7STd9pN7EZetkWZBAvk4cgZdQ==}
@@ -17142,6 +17293,7 @@ packages:
 
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@11.0.3:
@@ -17154,15 +17306,17 @@ packages:
 
   uuid@3.4.0:
     resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
-    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuidv7@0.6.3:
@@ -17569,6 +17723,9 @@ packages:
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
+
+  webpack-virtual-modules@0.6.2:
+    resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
   websocket@1.0.35:
     resolution: {integrity: sha512-/REy6amwPZl44DDzvRCkaI1q1bIiQB0mEFQLUrhz3z2EK91cp3n72rAjUlrTP0zV22HJIUOVHQGPxhFRjxjt+Q==}
@@ -23707,6 +23864,11 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.0
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@jridgewell/remapping@2.3.5':
+    dependencies:
+      '@jridgewell/gen-mapping': 0.3.8
+      '@jridgewell/trace-mapping': 0.3.25
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/set-array@1.2.1': {}
@@ -27217,6 +27379,14 @@ snapshots:
     optionalDependencies:
       rollup: 4.40.2
 
+  '@rollup/pluginutils@5.4.0(rollup@4.40.2)':
+    dependencies:
+      '@types/estree': 1.0.7
+      estree-walker: 2.0.2
+      picomatch: 4.0.2
+    optionalDependencies:
+      rollup: 4.40.2
+
   '@rollup/rollup-android-arm-eabi@4.34.9':
     optional: true
 
@@ -28840,7 +29010,7 @@ snapshots:
   '@swc/core@1.10.1(@swc/helpers@0.5.17)':
     dependencies:
       '@swc/counter': 0.1.3
-      '@swc/types': 0.1.17
+      '@swc/types': 0.1.19
     optionalDependencies:
       '@swc/core-darwin-arm64': 1.10.1
       '@swc/core-darwin-x64': 1.10.1
@@ -28880,10 +29050,6 @@ snapshots:
   '@swc/helpers@0.5.17':
     dependencies:
       tslib: 2.8.1
-
-  '@swc/types@0.1.17':
-    dependencies:
-      '@swc/counter': 0.1.3
 
   '@swc/types@0.1.19':
     dependencies:
@@ -29363,38 +29529,6 @@ snapshots:
       '@vitest/utils': 2.1.9
       chai: 5.1.2
       tinyrainbow: 1.2.0
-
-  '@vitest/mocker@2.1.9(vite@5.4.11(@types/node@18.19.69)(terser@5.37.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-    optionalDependencies:
-      vite: 5.4.11(@types/node@18.19.69)(terser@5.37.0)
-
-  '@vitest/mocker@2.1.9(vite@5.4.11(@types/node@18.19.74)(terser@5.37.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-    optionalDependencies:
-      vite: 5.4.11(@types/node@18.19.74)(terser@5.37.0)
-
-  '@vitest/mocker@2.1.9(vite@5.4.11(@types/node@20.17.11)(terser@5.37.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-    optionalDependencies:
-      vite: 5.4.11(@types/node@20.17.11)(terser@5.37.0)
-
-  '@vitest/mocker@2.1.9(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0))':
-    dependencies:
-      '@vitest/spy': 2.1.9
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-    optionalDependencies:
-      vite: 5.4.11(@types/node@22.13.13)(terser@5.37.0)
 
   '@vitest/mocker@2.1.9(vite@5.4.11(@types/node@22.7.4)(terser@5.37.0))':
     dependencies:
@@ -32864,7 +32998,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   esutils@2.0.3: {}
 
@@ -36990,6 +37124,8 @@ snapshots:
 
   picomatch@4.0.2: {}
 
+  picomatch@4.0.5: {}
+
   pify@2.3.0: {}
 
   pify@3.0.0: {}
@@ -39451,10 +39587,37 @@ snapshots:
 
   unpipe@1.0.0: {}
 
+  unplugin-swc@1.5.11(@swc/core@1.10.1(@swc/helpers@0.5.17))(esbuild@0.25.4)(rollup@4.40.2)(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0)):
+    dependencies:
+      '@rollup/pluginutils': 5.4.0(rollup@4.40.2)
+      '@swc/core': 1.10.1(@swc/helpers@0.5.17)
+      load-tsconfig: 0.2.5
+      unplugin: 3.3.0(esbuild@0.25.4)(rollup@4.40.2)(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0))
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
   unplugin-utils@0.2.4:
     dependencies:
       pathe: 2.0.3
       picomatch: 4.0.2
+
+  unplugin@3.3.0(esbuild@0.25.4)(rollup@4.40.2)(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0)):
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      picomatch: 4.0.5
+      webpack-virtual-modules: 0.6.2
+    optionalDependencies:
+      esbuild: 0.25.4
+      rollup: 4.40.2
+      vite: 5.4.11(@types/node@22.13.13)(terser@5.37.0)
 
   unset-value@1.0.0:
     dependencies:
@@ -39945,7 +40108,7 @@ snapshots:
   vitest@2.1.9(@types/node@18.19.69)(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@18.19.69)(terser@5.37.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@22.7.4)(terser@5.37.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
@@ -39980,7 +40143,7 @@ snapshots:
   vitest@2.1.9(@types/node@18.19.74)(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@18.19.74)(terser@5.37.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@22.7.4)(terser@5.37.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
@@ -40015,7 +40178,7 @@ snapshots:
   vitest@2.1.9(@types/node@20.17.11)(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@20.17.11)(terser@5.37.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@22.7.4)(terser@5.37.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
@@ -40050,7 +40213,7 @@ snapshots:
   vitest@2.1.9(@types/node@22.13.13)(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.9
-      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@22.13.13)(terser@5.37.0))
+      '@vitest/mocker': 2.1.9(vite@5.4.11(@types/node@22.7.4)(terser@5.37.0))
       '@vitest/pretty-format': 2.1.9
       '@vitest/runner': 2.1.9
       '@vitest/snapshot': 2.1.9
@@ -40652,6 +40815,8 @@ snapshots:
   webidl-conversions@4.0.2: {}
 
   webidl-conversions@7.0.0: {}
+
+  webpack-virtual-modules@0.6.2: {}
 
   websocket@1.0.35:
     dependencies:
