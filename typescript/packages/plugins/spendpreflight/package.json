@@ -1,0 +1,17 @@
+{
+    "name": "@goat-sdk/plugin-spendpreflight",
+    "version": "0.1.0",
+    "files": ["dist/**/*", "README.md", "package.json"],
+    "scripts": { "build": "tsup", "test": "vitest run", "typecheck": "tsc --noEmit" },
+    "sideEffects": false,
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "dependencies": { "@goat-sdk/core": "workspace:*", "zod": "catalog:" },
+    "peerDependencies": { "@goat-sdk/core": "workspace:*" },
+    "homepage": "https://spendpreflight.com",
+    "repository": { "type": "git", "url": "git+https://github.com/goat-sdk/goat.git" },
+    "license": "MIT",
+    "bugs": { "url": "https://github.com/goat-sdk/goat/issues" },
+    "keywords": ["ai", "agents", "x402", "sanctions", "spend-control"]
+}
