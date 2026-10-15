@@ -34,3 +34,24 @@ export class ListDatasetsParameters extends createToolParameters(
         limit: z.number().int().min(1).max(200).optional().describe("Maximum results, default 50"),
     }),
 ) {}
+
+export class CheckAgentParameters extends createToolParameters(
+    z.object({
+        agent: z
+            .string()
+            .describe(
+                "The agent to check: name or alias, MIZAN credential id, wallet address, ERC-8004 id, agent-card URL or proof-bundle sha256",
+            ),
+        action: z.string().optional().describe("What you are about to do, e.g. 'copy', 'pay', 'allocate', 'follow'"),
+    }),
+) {}
+
+export class ListProvenAgentsParameters extends createToolParameters(
+    z.object({
+        limit: z.number().int().min(1).max(200).optional().describe("Maximum results, default 25"),
+        realOnly: z
+            .boolean()
+            .optional()
+            .describe("Only Bitcoin-confirmed credentials (default true). Set false to include unconfirmed ones."),
+    }),
+) {}

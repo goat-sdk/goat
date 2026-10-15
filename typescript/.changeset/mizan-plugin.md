@@ -2,4 +2,4 @@
 "@goat-sdk/plugin-mizan": patch
 ---
 
-Add MIZAN plugin: verify zero-knowledge track-record credentials before paying, copying or allocating
+Add MIZAN plugin: check an agent's zero-knowledge track-record credential before following, copying, paying or allocating

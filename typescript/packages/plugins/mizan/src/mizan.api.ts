@@ -1,4 +1,10 @@
-import type { ListDatasetsParameters, SearchCredentialsParameters, VerifyCredentialParameters } from "./parameters";
+import type {
+    CheckAgentParameters,
+    ListDatasetsParameters,
+    ListProvenAgentsParameters,
+    SearchCredentialsParameters,
+    VerifyCredentialParameters,
+} from "./parameters";
 
 export const MIZAN_STUDIO_URL = "https://studio.mizan.market";
 export const MIZAN_CAVEAT =
@@ -27,6 +33,35 @@ type RegistryCredential = {
     anchor?: { sha256?: string } | null;
     disclosed_metrics?: Record<string, number | null> | null;
     links?: Record<string, string | undefined> | null;
+};
+
+/** Row returned by /api/agents/check (matches) and /api/agents/proven (proven). */
+export type MizanAgentMatch = {
+    id: string;
+    alias?: string;
+    verdict?: string;
+    verdict_raw?: string;
+    kind?: string | null;
+    issuer?: string;
+    dataset?: string;
+    minted_utc?: string;
+    bitcoin_confirmed?: boolean;
+    engine_era?: string | null;
+    page?: string;
+};
+
+/** PROVEN, REFUSED, NOT_SIGNIFICANT or UNVERIFIED (unproven, which is not the same as false). */
+export type MizanCheckAgentResult = {
+    query: string;
+    status: string;
+    found: boolean;
+    match?: string;
+    matches: MizanAgentMatch[];
+    summary: string;
+    advice?: string;
+    forward_to_counterparty?: string;
+    how_to_prove?: Record<string, string>;
+    caveat: string;
 };
 
 type Registry = { credentials: RegistryCredential[]; registry_root?: string };
@@ -207,5 +242,28 @@ export class MizanApi {
             maxPositions: d.max_positions,
             csv: `${this.baseUrl}/api/catalog/{key}.csv`,
         };
+    }
+
+    async checkAgent(parameters: CheckAgentParameters): Promise<MizanCheckAgentResult> {
+        const agent = (parameters.agent || "").trim();
+        if (!agent) {
+            throw new Error("Provide the agent to check");
+        }
+        const qs = new URLSearchParams({ q: agent });
+        if (parameters.action?.trim()) qs.set("action", parameters.action.trim());
+        const r = await this.getJson<MizanCheckAgentResult>(`/api/agents/check?${qs.toString()}`, "check the agent");
+        return { ...r, matches: r.matches || [], caveat: r.caveat || MIZAN_CAVEAT };
+    }
+
+    async listProvenAgents(parameters: ListProvenAgentsParameters) {
+        const limit = parameters.limit ?? 25;
+        const realOnly = parameters.realOnly ?? true;
+        const r = await this.getJson<{
+            count: number;
+            proven?: MizanAgentMatch[];
+            disclosure?: string;
+            caveat?: string;
+        }>(`/api/agents/proven?limit=${limit}&real_only=${realOnly}`, "list proven agents");
+        return { ...r, proven: r.proven || [], caveat: r.caveat || MIZAN_CAVEAT };
     }
 }

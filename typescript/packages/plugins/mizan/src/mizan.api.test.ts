@@ -150,3 +150,56 @@ describe("MizanApi.listDatasets", () => {
         expect(r.maxPositions).toBe(13000);
     });
 });
+
+describe("MizanApi.checkAgent / listProvenAgents", () => {
+    it("passes q and action and relays UNVERIFIED with the forward text", async () => {
+        route({
+            "/api/agents/check?q=0xabc123&action=pay": () =>
+                json({
+                    query: "0xabc123",
+                    status: "UNVERIFIED",
+                    found: false,
+                    matches: [],
+                    summary: "Its claimed performance is unproven, which is not the same as false.",
+                    forward_to_counterparty: "You can prove your returns are real.",
+                    caveat: "c",
+                }),
+        });
+        const r = await new MizanApi().checkAgent({ agent: " 0xabc123 ", action: "pay" });
+        expect(r.status).toBe("UNVERIFIED");
+        expect(r.forward_to_counterparty).toBeTruthy();
+        await expect(new MizanApi().checkAgent({ agent: " " })).rejects.toThrow(/agent to check/);
+    });
+
+    it("returns REFUSED matches and fills a missing caveat", async () => {
+        route({
+            "/api/agents/check?q=zkml12": () =>
+                json({
+                    query: "zkml12",
+                    status: "REFUSED",
+                    found: true,
+                    matches: [{ id: "zkml12-a", verdict: "FAIL" }],
+                    summary: "s",
+                }),
+        });
+        const r = await new MizanApi().checkAgent({ agent: "zkml12" });
+        expect(r.status).toBe("REFUSED");
+        expect(r.matches[0].id).toBe("zkml12-a");
+        expect(r.caveat).toBe(MIZAN_CAVEAT);
+    });
+
+    it("lists proven agents with default limit and real_only", async () => {
+        route({
+            "/api/agents/proven?limit=25&real_only=true": () =>
+                json({
+                    count: 1,
+                    proven: [{ id: "v12-btc-trend-4h", verdict: "PASS" }],
+                    disclosure: "minted by MIZAN itself",
+                }),
+        });
+        const r = await new MizanApi().listProvenAgents({});
+        expect(r.proven[0].id).toBe("v12-btc-trend-4h");
+        expect(r.disclosure).toMatch(/MIZAN itself/);
+        expect(r.caveat).toBe(MIZAN_CAVEAT);
+    });
+});

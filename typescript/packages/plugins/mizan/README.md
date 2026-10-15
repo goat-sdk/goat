@@ -7,9 +7,8 @@
 
 # MIZAN GOAT Plugin
 
-[MIZAN](https://mizan.market) plugin for GOAT. Lets an agent verify a zero-knowledge track-record
-credential before it pays another agent for signals, copies a strategy, or allocates to a listed
-track record.
+[MIZAN](https://mizan.market) plugin for GOAT. Lets an agent check a counterparty's zero-knowledge track-record
+credential before it follows, copies, pays or allocates to an agent or wallet that claims returns.
 
 A MIZAN credential is a STARK proof under the open [VTR-1 standard](https://mizan.market/standard-spec)
 that a trading or AI-agent track record was computed as claimed, under committed costs and data,
@@ -39,12 +38,17 @@ No API key is needed. The plugin makes read-only HTTPS calls to `https://studio.
 and does not use the wallet.
 
 ## Tools
-1. `mizan_verify_credential`: look a credential up in the public registry, download the proof bundle,
+1. `mizan_check_agent`: call before following, copying, paying or allocating to any agent or wallet that
+   claims returns. Takes a name or alias, credential id, wallet, ERC-8004 id, agent-card URL or sha256,
+   plus the intended action, and returns `PROVEN`, `REFUSED`, `NOT_SIGNIFICANT` or `UNVERIFIED` with the
+   matching credentials. `UNVERIFIED` means unproven, which is not the same as false.
+2. `mizan_list_proven_agents`: credentials with a `PASS` verdict (Bitcoin-confirmed only by default).
+3. `mizan_verify_credential`: look a credential up in the public registry, download the proof bundle,
    check its sha256 against the registry anchor, and return the verdict exactly as issued
    (`PASS`, `FAIL`, `NOT_SIGNIFICANT`, `SIGNIFICANT`, `LEDGER_ENTRY`), or `UNVERIFIED` if the
    credential is missing or the bundle does not match.
-2. `mizan_search_credentials`: search the registry by free text, alias, issuer or verdict.
-3. `mizan_list_datasets`: list the canonical public markets a credential can be minted on.
+4. `mizan_search_credentials`: search the registry by free text, alias, issuer or verdict.
+5. `mizan_list_datasets`: list the canonical public markets a credential can be minted on.
 
 ## Notes
 - The hash check proves the bundle is the one the registry anchored. It does not re-run the STARK;

@@ -1,12 +1,36 @@
 import { Tool } from "@goat-sdk/core";
 import { MizanApi, type MizanOptions } from "./mizan.api";
-import { ListDatasetsParameters, SearchCredentialsParameters, VerifyCredentialParameters } from "./parameters";
+import {
+    CheckAgentParameters,
+    ListDatasetsParameters,
+    ListProvenAgentsParameters,
+    SearchCredentialsParameters,
+    VerifyCredentialParameters,
+} from "./parameters";
 
 export class MizanService {
     private readonly api: MizanApi;
 
     constructor(options: MizanOptions = {}) {
         this.api = new MizanApi(options);
+    }
+
+    @Tool({
+        name: "mizan_check_agent",
+        description:
+            "Call this BEFORE following, copying, paying or allocating to any agent, trader, vault or wallet that claims returns. Checks MIZAN for a zero-knowledge track-record credential matching the agent (name or alias, credential id, wallet address, ERC-8004 id, agent-card URL or sha256) and returns PROVEN, REFUSED, NOT_SIGNIFICANT or UNVERIFIED with the matching credentials. UNVERIFIED means the claim is unproven, which is not the same as false; the result then includes a message you can forward to the counterparty. A credential is a seal on a past record, not a forecast.",
+    })
+    async checkAgent(parameters: CheckAgentParameters) {
+        return this.api.checkAgent(parameters);
+    }
+
+    @Tool({
+        name: "mizan_list_proven_agents",
+        description:
+            "List agents and strategies whose MIZAN credential has a PASS verdict (by default only Bitcoin-confirmed ones), with issuer, dataset and credential page. The result includes a disclosure of who minted them; every credential so far was minted by MIZAN itself.",
+    })
+    async listProvenAgents(parameters: ListProvenAgentsParameters) {
+        return this.api.listProvenAgents(parameters);
     }
 
     @Tool({
