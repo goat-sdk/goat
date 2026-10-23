@@ -191,6 +191,7 @@ GOAT is free software, MIT licensed.
 | Solana NFTs | Get NFT information using Solana NFTs API | [@goat-sdk/plugin-solana-nfts](https://www.npmjs.com/package/@goat-sdk/plugin-solana-nfts) |
 | Starknet Token | Interact with Starknet tokens | [@goat-sdk/plugin-starknet-token](https://www.npmjs.com/package/@goat-sdk/plugin-starknet-token) |
 | Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) | [goat-sdk-plugin-superfluid](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/superfluid) |
+| SwapChan | Best-price same-chain and cross-chain swaps across 10+ aggregators and bridges | [@goat-sdk/plugin-swapchan](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/swapchan) |
 | Synth | Get synthetic price data using Synth Subnet API | [@goat-sdk/plugin-synth-api](https://www.npmjs.com/package/@goat-sdk/plugin-synth-api) |
 | Tensor | Purchase tokens on Tensor | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor) |
 | Uniswap | Swap tokens on Uniswap | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap) | [goat-sdk-plugin-uniswap](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/uniswap) |
