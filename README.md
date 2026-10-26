@@ -193,6 +193,7 @@ GOAT is free software, MIT licensed.
 | Superfluid | Create streams with Superfluid | [@goat-sdk/plugin-superfluid](https://www.npmjs.com/package/@goat-sdk/plugin-superfluid) | [goat-sdk-plugin-superfluid](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/superfluid) |
 | Synth | Get synthetic price data using Synth Subnet API | [@goat-sdk/plugin-synth-api](https://www.npmjs.com/package/@goat-sdk/plugin-synth-api) |
 | Tensor | Purchase tokens on Tensor | [@goat-sdk/plugin-tensor](https://www.npmjs.com/package/@goat-sdk/plugin-tensor) |
+| TRNCH | Trade new Robinhood Chain tokens: launch feed screened for rugs and honeypots, best route across six routers | [@goat-sdk/plugin-trnch](https://github.com/goat-sdk/goat/tree/main/typescript/packages/plugins/trnch) |
 | Uniswap | Swap tokens on Uniswap | [@goat-sdk/plugin-uniswap](https://www.npmjs.com/package/@goat-sdk/plugin-uniswap) | [goat-sdk-plugin-uniswap](https://github.com/goat-sdk/goat/tree/main/python/src/plugins/uniswap) |
 | Velodrome | Create a position on Velodrome | [@goat-sdk/plugin-velodrome](https://www.npmjs.com/package/@goat-sdk/plugin-velodrome) |
 | Worldstore | Purchase physical assets on Worldstore | [@goat-sdk/plugin-worldstore](https://www.npmjs.com/package/@goat-sdk/plugin-worldstore) |
