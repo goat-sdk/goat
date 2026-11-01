@@ -1,4 +1,4 @@
-import { type Keypair, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import { type Keypair, SendTransactionError, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import { type SolanWalletClientCtorParams, SolanaWalletClient } from "./SolanaWalletClient";
 import type { SolanaTransaction } from "./types";
@@ -45,7 +45,7 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
             preflightCommitment: "confirmed",
         });
 
-        await this.connection.confirmTransaction(
+        const confirmation = await this.connection.confirmTransaction(
             {
                 blockhash: latestBlockhash.blockhash,
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
@@ -53,6 +53,13 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
             },
             "confirmed",
         );
+        if (confirmation.value.err !== null) {
+            throw new SendTransactionError({
+                action: "send",
+                signature: hash,
+                transactionMessage: JSON.stringify(confirmation.value.err),
+            });
+        }
 
         return {
             hash,
@@ -73,7 +80,7 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
             preflightCommitment: "confirmed",
         });
 
-        await this.connection.confirmTransaction(
+        const confirmation = await this.connection.confirmTransaction(
             {
                 blockhash: latestBlockhash.blockhash,
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
@@ -81,6 +88,13 @@ export class SolanaKeypairWalletClient extends SolanaWalletClient {
             },
             "confirmed",
         );
+        if (confirmation.value.err !== null) {
+            throw new SendTransactionError({
+                action: "send",
+                signature: hash,
+                transactionMessage: JSON.stringify(confirmation.value.err),
+            });
+        }
 
         return {
             hash,
