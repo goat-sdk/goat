@@ -36,7 +36,7 @@ export class MizanService {
     @Tool({
         name: "mizan_verify_credential",
         description:
-            "Verify a MIZAN zero-knowledge track-record credential (VTR-1 standard) BEFORE paying another agent for signals, copying a strategy, or allocating to a listed track record. Looks the credential up in the public registry, downloads the proof bundle and checks its sha256 against the registry anchor. Returns the verdict exactly as issued (PASS, FAIL, NOT_SIGNIFICANT, SIGNIFICANT, LEDGER_ENTRY) or UNVERIFIED if the credential is missing or its bundle does not match. A FAIL is a result, not a secret. If a performance claim has no credential, treat it as unverified. A credential is a seal on a past record, not a forecast.",
+            "Verify a MIZAN zero-knowledge track-record credential BEFORE paying another agent for signals, copying a strategy, or allocating to a listed track record. Looks the credential up in the public registry, downloads the proof bundle and checks its sha256 against the registry anchor. Returns the verdict exactly as issued (PASS, FAIL, NOT_SIGNIFICANT, SIGNIFICANT, LEDGER_ENTRY) or UNVERIFIED if the credential is missing or its bundle does not match. A FAIL is a result, not a secret. If a performance claim has no credential, treat it as unverified. A credential is a seal on a past record, not a forecast.",
     })
     async verifyCredential(parameters: VerifyCredentialParameters) {
         return this.api.verifyCredential(parameters);
