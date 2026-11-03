@@ -175,6 +175,7 @@ GOAT is free software, MIT licensed.
 | Lulo | Deposit and Withdraw USDC on Lulo | [@goat-sdk/plugin-lulo](https://www.npmjs.com/package/@goat-sdk/plugin-lulo) |
 | Mayan | Cross-chain token swap using Mayan SDK (Solana, EVM, SUI) | [@goat-sdk/plugin-mayan](https://www.npmjs.com/package/@goat-sdk/plugin-mayan) |
 | Meteora | Create liquidity pools on Meteora | [@goat-sdk/plugin-meteora](https://www.npmjs.com/package/@goat-sdk/plugin-meteora) |
+| MIZAN | Check an agent's track-record credential before following, copying, paying or allocating | [@goat-sdk/plugin-mizan](https://www.npmjs.com/package/@goat-sdk/plugin-mizan) |
 | Mode Governance | Create a governance proposal on Mode | [@goat-sdk/plugin-mode-governance](https://www.npmjs.com/package/@goat-sdk/plugin-mode-governance) |
 | Mode Voting | Vote on a governance proposal on Mode | [@goat-sdk/plugin-mode-voting](https://www.npmjs.com/package/@goat-sdk/plugin-mode-voting) |
 | Mode Spray | Spray tokens on Mode | [@goat-sdk/plugin-mode-spray](https://www.npmjs.com/package/@goat-sdk/plugin-mode-spray) |

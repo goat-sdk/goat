@@ -1962,6 +1962,28 @@ importers:
         specifier: 5.1.6
         version: 5.1.6
 
+  packages/plugins/mizan:
+    dependencies:
+      '@goat-sdk/core':
+        specifier: workspace:*
+        version: link:../../core
+      zod:
+        specifier: 'catalog:'
+        version: 3.23.8
+    devDependencies:
+      '@types/node':
+        specifier: ^18.0.0
+        version: 18.19.74
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(@swc/core@1.11.13(@swc/helpers@0.5.17))(jiti@1.21.7)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.7.0)
+      typescript:
+        specifier: ^5.2.2
+        version: 5.6.3
+      vitest:
+        specifier: ^2.1.9
+        version: 2.1.9(@types/node@18.19.74)(terser@5.37.0)
+
   packages/plugins/mode-governance:
     dependencies:
       '@goat-sdk/core':
