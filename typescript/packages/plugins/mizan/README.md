@@ -40,8 +40,9 @@ and does not use the wallet.
 ## Tools
 1. `mizan_check_agent`: call before following, copying, paying or allocating to any agent or wallet that
    claims returns. Takes a name or alias, credential id, wallet, ERC-8004 id, agent-card URL or sha256,
-   plus the intended action, and returns `PROVEN`, `REFUSED`, `NOT_SIGNIFICANT` or `UNVERIFIED` with the
-   matching credentials. `UNVERIFIED` means unproven, which is not the same as false.
+   plus the intended action, and returns `PROVEN`, `FORWARD_UNSEALED`, `PASSED_BACKTEST`, `REFUSED`, `NOT_SIGNIFICANT` or
+   `UNVERIFIED` with the matching credentials. `PASSED_BACKTEST` and `FORWARD_UNSEALED` mean a record
+   passed but no forward track has passed after its Bitcoin seal, so they are weaker than `PROVEN`. `UNVERIFIED` means unproven, which is not the same as false.
 2. `mizan_list_proven_agents`: credentials with a `PASS` verdict (Bitcoin-confirmed only by default).
 3. `mizan_verify_credential`: look a credential up in the public registry, download the proof bundle,
    check its sha256 against the registry anchor, and return the verdict exactly as issued

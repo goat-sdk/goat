@@ -18,7 +18,7 @@ export class MizanService {
     @Tool({
         name: "mizan_check_agent",
         description:
-            "Call this BEFORE following, copying, paying or allocating to any agent, trader, vault or wallet that claims returns. Checks MIZAN for a zero-knowledge track-record credential matching the agent (name or alias, credential id, wallet address, ERC-8004 id, agent-card URL or sha256) and returns PROVEN, REFUSED, NOT_SIGNIFICANT or UNVERIFIED with the matching credentials. UNVERIFIED means the claim is unproven, which is not the same as false; the result then includes a message you can forward to the counterparty. A credential is a seal on a past record, not a forecast.",
+            "Call this BEFORE following, copying, paying or allocating to any agent, trader, vault or wallet that claims returns. Checks MIZAN for a zero-knowledge track-record credential matching the agent (name or alias, credential id, wallet address, ERC-8004 id, agent-card URL or sha256) and returns PROVEN, FORWARD_UNSEALED, PASSED_BACKTEST, REFUSED, NOT_SIGNIFICANT or UNVERIFIED with the matching credentials. UNVERIFIED means the claim is unproven, which is not the same as false; the result then includes a message you can forward to the counterparty. A credential is a seal on a past record, not a forecast.",
     })
     async checkAgent(parameters: CheckAgentParameters) {
         return this.api.checkAgent(parameters);

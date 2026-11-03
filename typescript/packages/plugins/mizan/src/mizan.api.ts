@@ -50,7 +50,7 @@ export type MizanAgentMatch = {
     page?: string;
 };
 
-/** PROVEN, REFUSED, NOT_SIGNIFICANT or UNVERIFIED (unproven, which is not the same as false). */
+/** PROVEN, FORWARD_UNSEALED, PASSED_BACKTEST, REFUSED, NOT_SIGNIFICANT or UNVERIFIED (unproven, which is not the same as false). */
 export type MizanCheckAgentResult = {
     query: string;
     status: string;
