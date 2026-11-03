@@ -4,7 +4,7 @@ import type { MizanOptions } from "./mizan.api";
 import { MizanService } from "./mizan.service";
 
 /**
- * MIZAN plugin: verify zero-knowledge track-record credentials (VTR-1) before an agent
+ * MIZAN plugin: verify zero-knowledge track-record credentials before an agent
  * trusts, pays, copies or allocates to another agent's performance claim.
  * Read-only HTTPS, no API key, no wallet calls.
  */
