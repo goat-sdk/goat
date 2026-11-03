@@ -10,7 +10,7 @@
 [MIZAN](https://mizan.market) plugin for GOAT. Lets an agent check a counterparty's zero-knowledge track-record
 credential before it follows, copies, pays or allocates to an agent or wallet that claims returns.
 
-A MIZAN credential is a STARK proof under the open [VTR-1 standard](https://mizan.market/standard-spec)
+A MIZAN credential is a STARK proof under the open [Counted Claim Standard](https://github.com/muaviamohammed/mizan/tree/main/specs)
 that a trading or AI-agent track record was computed as claimed, under committed costs and data,
 without revealing the strategy. FAIL verdicts are published alongside passes. A credential is a seal
 on a past record, not a forecast.
