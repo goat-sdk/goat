@@ -44,7 +44,7 @@ function fixture() {
     };
 }
 describe("QHooksPlugin", () => {
-    it("provides 25 native tools without touching a wallet", () => {
+    it("provides 31 native tools without touching a wallet", () => {
         const f = fixture();
         const wallet = new Proxy(
             {},
@@ -55,13 +55,11 @@ describe("QHooksPlugin", () => {
             },
         );
         const tools = f.plugin.getTools(wallet as never);
-        expect(tools).toHaveLength(25);
+        expect(tools).toHaveLength(31);
         expect(tools.every((t) => t instanceof ToolBase)).toBe(true);
-        expect(
-            tools.some((t) =>
-                /agreement_jar|send_feedback|prepare_tpsl|prepare_limit_order|orders_status/.test(t.name),
-            ),
-        ).toBe(false);
+        expect(tools.some((t) => /agreement_jar|prepare_tpsl|prepare_limit_order|orders_status/.test(t.name))).toBe(
+            false,
+        );
         expect(f.calls).toHaveLength(0);
     });
     it("returns exact plans and preserves explicit referral", async () => {
