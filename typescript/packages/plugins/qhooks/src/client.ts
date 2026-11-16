@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { DEFINITIONS, type ToolName } from "./definitions";
+import { validateTradePlan } from "./trade-plan";
 export interface QHooksOptions {
     referrer?: string;
     transport?: "mcp" | "rest";
@@ -307,6 +308,16 @@ export class QHooksClient {
                 "tool_unavailable",
                 "QHooks data is unavailable or the tool refused the request. Preserve unknown values.",
             );
+        if (name === "prepare_trade") {
+            try {
+                validateTradePlan(data, input);
+            } catch {
+                throw new QHooksError(
+                    "unsafe_trade_plan",
+                    "The unsigned trade plan does not match this request. Prepare it again before wallet review.",
+                );
+            }
+        }
         // Preserve raw integer amounts, partial/unknown costs, cache coverage and unsigned plan fields exactly.
         return data;
     }

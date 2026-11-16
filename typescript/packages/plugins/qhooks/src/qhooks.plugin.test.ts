@@ -1,6 +1,7 @@
 import { ToolBase } from "@goat-sdk/core";
 import { describe, expect, it } from "vitest";
 import { qhooks } from "./qhooks.plugin";
+import { validTrade } from "./trade-fixture.cjs";
 const address = (n: number) => `0x${n.toString(16).padStart(40, "0")}`;
 const args = {
     chain: "4663",
@@ -11,19 +12,14 @@ const args = {
 };
 function fixture() {
     const calls: Record<string, unknown>[] = [];
-    const result = {
-        amountIn: args.amountIn,
-        minOut: "9007199254740993000",
-        transactions: [{ to: address(3), data: "0xf5ec7c4b", value: args.amountIn }],
-        partial: true,
-        costUsd: null,
-    };
+    const result = validTrade({ ...args, referrer: address(4) });
     let status = 200;
     const plugin = qhooks({
         referrer: address(4),
         fetchImpl: async (_url, init) => {
             const body = JSON.parse(init?.body as string);
             calls.push(body);
+            if (body.params.name === "prepare_trade") Object.assign(result, validTrade(body.params.arguments));
             if (status !== 200) return new Response("", { status, headers: { "retry-after": "7" } });
             return Response.json({
                 jsonrpc: "2.0",

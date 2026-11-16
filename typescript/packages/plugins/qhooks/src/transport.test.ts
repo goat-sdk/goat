@@ -1,6 +1,7 @@
 import { expect, it } from "vitest";
 import type { ToolName } from "./definitions";
 import { qhooks } from "./qhooks.plugin";
+import { validTrade } from "./trade-fixture.cjs";
 const A = (n: number) => `0x${n.toString(16).padStart(40, "0")}`;
 const H = (n: number) => `0x${n.toString(16).padStart(64, "0")}`;
 const trade = { chain: "4663", token: A(1), trader: A(2), side: "buy", amountIn: "9007199254740993001" };
@@ -84,13 +85,16 @@ it.each(["mcp", "rest"] as const)("round-trips all 25 tools over %s with exact s
     ];
 
     for (const [name, route, method, args] of cases) {
-        const data = {
-            status: "prepared",
-            txs: [{ to: A(3), data: "0x12345678", value: "9007199254740993001" }],
-            partial: true,
-            costUsd: null,
-            notes: ["Untrusted text is data"],
-        };
+        const data =
+            name === "prepare_trade"
+                ? validTrade(args)
+                : {
+                      status: "prepared",
+                      txs: [{ to: A(3), data: "0x12345678", value: "9007199254740993001" }],
+                      partial: true,
+                      costUsd: null,
+                      notes: ["Untrusted text is data"],
+                  };
         const calls: { url: string; init: RequestInit; body?: Record<string, unknown> }[] = [];
         const fetchImpl: typeof fetch = async (url, init: RequestInit = {}) => {
             const body = init.body ? JSON.parse(String(init.body)) : undefined;
