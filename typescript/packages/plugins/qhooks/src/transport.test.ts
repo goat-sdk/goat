@@ -1,10 +1,16 @@
 import { expect, it } from "vitest";
 import type { ToolName } from "./definitions";
 import { qhooks } from "./qhooks.plugin";
-import { validTrade } from "./trade-fixture.cjs";
+import { independentRead, validTrade } from "./trade-fixture.cjs";
 const A = (n: number) => `0x${n.toString(16).padStart(40, "0")}`;
 const H = (n: number) => `0x${n.toString(16).padStart(64, "0")}`;
-const trade = { chain: "4663", token: A(1), trader: A(2), side: "buy", amountIn: "9007199254740993001" };
+const trade = {
+    chain: "4663",
+    token: A(1),
+    trader: A(2),
+    side: "buy",
+    amountIn: "9007199254740993001",
+};
 it.each(["mcp", "rest"] as const)("round-trips all 25 tools over %s with exact strings", async (transport) => {
     const when = Math.floor(Date.now() / 1000) + 3600;
     const agreement = {
@@ -12,12 +18,27 @@ it.each(["mcp", "rest"] as const)("round-trips all 25 tools over %s with exact s
         payee: A(2),
         asset: "USDG",
         expiresInDays: 1,
-        tranches: [{ amount: "9007199254740993.123456", conditions: [{ kind: 2, parties: [A(1)] }] }],
+        tranches: [
+            {
+                amount: "9007199254740993.123456",
+                conditions: [{ kind: 2, parties: [A(1)] }],
+            },
+        ],
     };
     const cases: [ToolName, string, string, Record<string, unknown>][] = [
         ["list_launches", "launches", "GET", { chain: "4663", limit: 1 }],
         ["token_info", "token", "GET", { chain: "4663", token: A(1) }],
-        ["quote", "quote", "GET", { chain: "4663", pool: H(1), zeroForOne: true, amountIn: "9007199254740993" }],
+        [
+            "quote",
+            "quote",
+            "GET",
+            {
+                chain: "4663",
+                pool: H(1),
+                zeroForOne: true,
+                amountIn: "9007199254740993",
+            },
+        ],
         ["prepare_launch", "prepare-launch", "POST", { name: "Fixture", ticker: "FX" }],
         ["prepare_trade", "prepare-trade", "POST", trade],
         ["qproof_check", "qproof-check", "GET", { chain: "4663", token: A(1) }],
@@ -44,7 +65,11 @@ it.each(["mcp", "rest"] as const)("round-trips all 25 tools over %s with exact s
             "otc_create",
             "otc-create",
             "POST",
-            { actor: A(1), quote: { marker: "unchanged", sellAmount: "1234567890123456789" }, fundNow: false },
+            {
+                actor: A(1),
+                quote: { marker: "unchanged", sellAmount: "1234567890123456789" },
+                fundNow: false,
+            },
         ],
         ["otc_accept", "otc-accept", "POST", { actor: A(2), dealId: "9007199254740993", expectedTermsHash: H(1) }],
         ["deal_status", "deal-status", "GET", { dealId: "9007199254740993" }],
@@ -89,31 +114,54 @@ it.each(["mcp", "rest"] as const)("round-trips all 25 tools over %s with exact s
             name === "prepare_trade"
                 ? validTrade(args)
                 : {
-                      status: "prepared",
-                      txs: [{ to: A(3), data: "0x12345678", value: "9007199254740993001" }],
+                      status: "partial",
+                      note: "Non-executable partial fixture",
                       partial: true,
                       costUsd: null,
                       notes: ["Untrusted text is data"],
                   };
-        const calls: { url: string; init: RequestInit; body?: Record<string, unknown> }[] = [];
+        const calls: {
+            url: string;
+            init: RequestInit;
+            body?: Record<string, unknown>;
+        }[] = [];
         const fetchImpl: typeof fetch = async (url, init: RequestInit = {}) => {
             const body = init.body ? JSON.parse(String(init.body)) : undefined;
             calls.push({ url: String(url), init, body });
+            const readName =
+                body?.params?.name ??
+                { token: "token_info", quote: "quote" }[new URL(String(url)).pathname.split("/").at(-1) ?? ""];
+            const responseData =
+                name === "prepare_trade" && ["token_info", "quote"].includes(readName)
+                    ? independentRead(args)(
+                          readName,
+                          body?.params?.arguments ??
+                              Object.fromEntries(
+                                  [...new URL(String(url)).searchParams].map(([k, v]) => [
+                                      k,
+                                      k === "zeroForOne" ? v === "true" : v,
+                                  ]),
+                              ),
+                      )
+                    : data;
             return Response.json(
                 transport === "mcp"
                     ? {
                           jsonrpc: "2.0",
                           id: body.id,
-                          result: { structuredContent: data, content: [{ type: "text", text: JSON.stringify(data) }] },
+                          result: {
+                              structuredContent: responseData,
+                              content: [{ type: "text", text: JSON.stringify(responseData) }],
+                          },
                       }
-                    : data,
+                    : responseData,
             );
         };
         const native = qhooks({ transport, fetchImpl }).getTools();
         const tool = native.find((t) => t.name === `qhooks_${name}`);
         if (!tool) throw new Error(`Missing native tool ${name}`);
         expect(await tool.execute(args)).toEqual(data);
-        expect(calls).toHaveLength(1);
+        expect(calls).toHaveLength(name === "prepare_trade" ? 3 : 1);
         const call = calls[0];
         if (transport === "mcp") {
             expect(call.body?.params).toEqual({ name, arguments: args });

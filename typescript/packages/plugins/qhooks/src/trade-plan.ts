@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 import { createHash } from "node:crypto";
+import { QHOOKS_SECURITY } from "./plan-security";
 
 type Row = Record<string, unknown>;
 type Policy = { manager: string; feeRouter: string | null; permit2: string };
@@ -110,7 +111,7 @@ export function tradePlanHash(value: unknown): string {
 export function validateTradePlan(
     value: unknown,
     originalRequest: unknown,
-    { now = Date.now() }: { now?: number } = {},
+    { now = Date.now(), evidence }: { now?: number; evidence?: unknown } = {},
 ): void {
     const input = row(originalRequest);
     const plan = row(value);
@@ -235,6 +236,19 @@ export function validateTradePlan(
         weiValue(swap.value) !== (inputCurrency === ZERO ? amount : 0n)
     )
         fail();
+
+    QHOOKS_SECURITY.checkTrade(
+        plan,
+        input,
+        {
+            currency0,
+            currency1,
+            fee: Number(number(w[13])),
+            tickSpacing: Number(signed24(w[14])),
+            hooks: wordAddress(w[15]),
+        },
+        evidence,
+    );
     // swap outputs to msg.sender; no encoded trader/recipient is fabricated.
     const integrity = row(plan.integrity);
     if (

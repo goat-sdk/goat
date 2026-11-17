@@ -1,7 +1,7 @@
 import { ToolBase } from "@goat-sdk/core";
 import { describe, expect, it } from "vitest";
 import { qhooks } from "./qhooks.plugin";
-import { validTrade } from "./trade-fixture.cjs";
+import { independentRead, validTrade } from "./trade-fixture.cjs";
 const address = (n: number) => `0x${n.toString(16).padStart(40, "0")}`;
 const args = {
     chain: "4663",
@@ -12,6 +12,7 @@ const args = {
 };
 function fixture() {
     const calls: Record<string, unknown>[] = [];
+    let tradeInput: Record<string, unknown>;
     const result = validTrade({ ...args, referrer: address(4) });
     let status = 200;
     const plugin = qhooks({
@@ -19,14 +20,20 @@ function fixture() {
         fetchImpl: async (_url, init) => {
             const body = JSON.parse(init?.body as string);
             calls.push(body);
-            if (body.params.name === "prepare_trade") Object.assign(result, validTrade(body.params.arguments));
+            if (body.params.name === "prepare_trade") {
+                tradeInput = body.params.arguments;
+                Object.assign(result, validTrade(tradeInput));
+            }
             if (status !== 200) return new Response("", { status, headers: { "retry-after": "7" } });
+            const data = ["token_info", "quote"].includes(body.params.name)
+                ? independentRead(tradeInput)(body.params.name, body.params.arguments)
+                : result;
             return Response.json({
                 jsonrpc: "2.0",
                 id: body.id,
                 result: {
-                    structuredContent: result,
-                    content: [{ type: "text", text: JSON.stringify(result) }],
+                    structuredContent: data,
+                    content: [{ type: "text", text: JSON.stringify(data) }],
                 },
             });
         },
@@ -67,7 +74,7 @@ describe("QHooksPlugin", () => {
         expect(await f.tool.execute(args)).toEqual(f.result);
         expect((f.calls[0].params as { arguments: Record<string, unknown> }).arguments.referrer).toBe(address(4));
         await f.tool.execute({ ...args, referrer: address(5) });
-        expect((f.calls[1].params as { arguments: Record<string, unknown> }).arguments.referrer).toBe(address(5));
+        expect((f.calls[3].params as { arguments: Record<string, unknown> }).arguments.referrer).toBe(address(5));
     });
     it("refuses malformed referral before transport", async () => {
         const f = fixture();
