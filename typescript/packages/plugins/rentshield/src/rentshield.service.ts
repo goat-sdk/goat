@@ -48,6 +48,25 @@ function assertPublicAddress(value: string, label: string): string {
     return trimmed;
 }
 
+type ReflectWithMetadata = typeof Reflect & {
+    getMetadata?: (metadataKey: string, target: object, propertyKey: string | symbol) => unknown;
+    defineMetadata?: (
+        metadataKey: string,
+        metadataValue: unknown,
+        target: object,
+        propertyKey: string | symbol,
+    ) => void;
+};
+
+function ParamTypes(...types: unknown[]): MethodDecorator {
+    return (target, propertyKey) => {
+        const reflectMeta = Reflect as ReflectWithMetadata;
+        if (reflectMeta.defineMetadata && !reflectMeta.getMetadata?.("design:paramtypes", target, propertyKey)) {
+            reflectMeta.defineMetadata("design:paramtypes", types, target, propertyKey);
+        }
+    };
+}
+
 export class RentShieldService {
     private readonly explicitBaseUrl?: string;
     private readonly apiKey?: string;
@@ -120,6 +139,7 @@ export class RentShieldService {
         description:
             "Run a read-only 11-layer pre-buy rug and scam safety check on a Solana token mint (SPL, Token-2022, or pump.fun) via Rent & Rug Shield",
     })
+    @ParamTypes(CheckTokenRugShieldParameters)
     async checkTokenRug(parameters: CheckTokenRugShieldParameters) {
         const cleanMint = assertPublicAddress(parameters.mint, "mint address");
         const data = await this.requestJson(`/api/v1/shield-check?mint=${encodeURIComponent(cleanMint)}`, {
@@ -149,6 +169,7 @@ export class RentShieldService {
         description:
             "Read-only, non-custodial scan for reclaimable rent-exempt SOL locked in empty SPL and Token-2022 Associated Token Accounts (0% fee on first claim)",
     })
+    @ParamTypes(ScanWalletRentParameters)
     async scanWalletRent(parameters: ScanWalletRentParameters) {
         const cleanWallet = assertPublicAddress(parameters.wallet, "wallet address");
         const data = await this.requestJson("/api/scan-wallet", {
